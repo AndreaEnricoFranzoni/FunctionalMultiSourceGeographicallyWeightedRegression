@@ -2,10 +2,11 @@
 
 **`fdagwr`**  is a C++ based R package for performing geographically weighted regression in the case of a functional response and functional covariates. The model has been proposed in a scalar setting by [Caramenti et Al.](#ref-caramenti). [Bortolotti et Al.](#ref-bortolotti) extended the work for the functional case if having only stationary coefficients (i.e. not varying with respect to the geographical position). [Fervari, Menafoglio and Bortolotti](#ref-fervari) propose a union of the previous twos, in the form of:
 
-$y_{i}(t) = \sum _{j \in C} x_{C,ij}(t) \beta_{C,j}(t) + \sum _{j \in E} x_{E,ij}(t) \beta_{E,j}(p_{E,i},t) + \sum _{j \in S} x_{S,ij}(t) \beta_{S,j}(p_{S,i},t) + \epsilon_{i}(t), \;\; t \in T, i \in 1,\dots,n $
+$y_i(t) = \sum_{j \in C} x_{C,ij}(t) \beta_{C,j}(t) + \sum_{j \in E} x_{E,ij}(t) \beta_{E,j}(p_{E,i},t) + \sum_{j \in S} x_{S,ij}(t) \beta_{S,j}(p_{S,i},t) + \epsilon_i (t) \quad t \in T, \quad i \in 1,\dots,n$  
+
 
 The geographical domains of events (where the event occurs) and stations (where the events is measured) are $D_E$ and $D_S$, and may not necessarily coincide. Consequently,
-the specific spatial location of the i-th event pE,i = (uE,i,vE,i) ∈DE and i-th station pS,i = (uS,i,vS,i) ∈DS.
+the specific spatial location of the i-th event $p_{E,i} = (u_{E,i},v_{E,i}) \in D_E$ and i-th station $p_{S,i} = (u_{S,i},v_{S,i}) \in D_S$.
 
 
 
