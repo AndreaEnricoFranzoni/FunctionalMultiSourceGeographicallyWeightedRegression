@@ -1,0 +1,55 @@
+###############
+## NO OPENMP ##
+###############
+#PKG_LIBS = $(LAPACK_LIBS) $(FLIBS) $(BLAS_LIBS)
+
+#CXX_STD = CXX20
+
+
+
+
+
+###############
+## OPENMP    ##
+###############
+
+#CXX_STD = CXX20
+#for retaining operative system
+OS = $(shell uname -s)
+#for retaining architecture
+ARCH = $(shell uname -m)
+
+        # macOS
+ifeq ($(OS),Darwin)
+    # Homebrew path depending on the architecture
+    ifeq ($(ARCH),arm64)
+        HOMEBREW_PREFIX = /opt/homebrew
+    else
+        HOMEBREW_PREFIX = /usr/local
+    endif
+
+    #CC = $(HOMEBREW_PREFIX)/opt/llvm/bin/clang
+    #CXX = $(HOMEBREW_PREFIX)/opt/llvm/bin/clang++
+    PKG_CXXFLAGS = -Xpreprocessor -fopenmp -I$(HOMEBREW_PREFIX)/opt/libomp/include -O3
+    PKG_CFLAGS = -fopenmp
+    PKG_LIBS = $(LAPACK_LIBS) $(FLIBS) $(BLAS_LIBS)
+    PKG_LIBS += -L$(HOMEBREW_PREFIX)/opt/libomp/lib -lomp
+endif
+
+# Linux
+ifeq ($(OS),Linux)
+    CC = gcc
+    CXX = g++
+    PKG_CXXFLAGS = -fopenmp
+    PKG_LIBS = $(LAPACK_LIBS) $(FLIBS) $(BLAS_LIBS)
+    PKG_LIBS += -fopenmp
+endif
+
+# Windows (RTools)
+ifeq ($(OS),Windows)
+    CC = gcc
+    CXX = g++
+    PKG_CXXFLAGS = -fopenmp
+    PKG_LIBS = $(LAPACK_LIBS) $(FLIBS) $(BLAS_LIBS)
+    PKG_LIBS += -fopenmp
+endif

@@ -1,0 +1,18 @@
+###############
+## NO OPENMP ##
+###############
+#PKG_LIBS = $(LAPACK_LIBS) $(FLIBS) $(BLAS_LIBS)
+
+#CXX_STD = CXX20
+
+
+
+
+###############
+## OPENMP    ##
+###############
+PKG_CXXFLAGS = -fopenmp
+PKG_LIBS = $(LAPACK_LIBS) $(FLIBS) $(BLAS_LIBS)
+PKG_LIBS += -fopenmp
+
+CXX_STD = CXX20
