@@ -1,0 +1,65 @@
+// Copyright (c) 2025 Andrea Enrico Franzoni (andreaenrico.franzoni@gmail.com)
+//
+// This file is part of fdagwr
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of fdagwr and associated documentation files (the fdagwr software), to deal
+// fdagwr without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of fdagwr, and to permit persons to whom fdagwr is
+// furnished to do so, subject to the following conditions:
+//
+// fdagwr IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// fdagwr.
+
+
+#ifndef FDAGWR_TRAITS_HPP
+#define FDAGWR_TRAITS_HPP
+
+
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
+#include <tuple>
+#include <vector>
+#include <array>
+#include <variant>
+#include <type_traits>
+#include <cmath>
+#include <string>
+
+
+/*!
+* @file traits_fdagwr.hpp
+* @brief Contains customized types and enumerator for customized template parameters, used during the model's fitting
+* @author Andrea Enrico Franzoni
+*/
+
+
+
+/*!
+* @struct fdagwr_traits
+* @brief Contains the customized types for fts, covariances, PPCs, etc...
+* @details Data are stored in dynamic matrices (easily very big dimensions) of doubles
+*/
+struct fdagwr_traits
+{
+public:
+  
+  using Dense_Matrix = Eigen::MatrixXd;                 ///< Matrix data structure.
+
+  using Sparse_Matrix = Eigen::SparseMatrix<double>;    ///< Sparse matrix data structure.
+  
+  using Dense_Vector = Eigen::VectorXd;                 ///< Vector data structure.
+  
+  using Dense_Array  = Eigen::ArrayXd;                  ///< Array data structure: more efficient for coefficient-wise operations.
+
+};
+
+
+
+#endif  /*FDAGWR_TRAITS_HPP*/

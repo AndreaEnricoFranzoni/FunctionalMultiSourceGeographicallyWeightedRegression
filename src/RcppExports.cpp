@@ -12,19 +12,59 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // fdagwr_test_function
-double fdagwr_test_function(std::string input_string);
+void fdagwr_test_function(std::string input_string);
 RcppExport SEXP _fdagwr_fdagwr_test_function(SEXP input_stringSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type input_string(input_stringSEXP);
+    fdagwr_test_function(input_string);
+    return R_NilValue;
+END_RCPP
+}
+// fmsgwr
+Rcpp::List fmsgwr(double input_el, Rcpp::NumericMatrix distances_events, Rcpp::NumericMatrix distances_stations, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_fmsgwr(SEXP input_elSEXP, SEXP distances_eventsSEXP, SEXP distances_stationsSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type input_string(input_stringSEXP);
-    rcpp_result_gen = Rcpp::wrap(fdagwr_test_function(input_string));
+    Rcpp::traits::input_parameter< double >::type input_el(input_elSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type distances_events(distances_eventsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type distances_stations(distances_stationsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(fmsgwr(input_el, distances_events, distances_stations, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fsgwr
+Rcpp::List fsgwr(double input_el, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_fsgwr(SEXP input_elSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type input_el(input_elSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(fsgwr(input_el, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// fgwr
+Rcpp::List fgwr(double input_el, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_fgwr(SEXP input_elSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type input_el(input_elSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(fgwr(input_el, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_fdagwr_test_function", (DL_FUNC) &_fdagwr_fdagwr_test_function, 1},
+    {"_fdagwr_fmsgwr", (DL_FUNC) &_fdagwr_fmsgwr, 4},
+    {"_fdagwr_fsgwr", (DL_FUNC) &_fdagwr_fsgwr, 2},
+    {"_fdagwr_fgwr", (DL_FUNC) &_fdagwr_fgwr, 2},
     {NULL, NULL, 0}
 };
 

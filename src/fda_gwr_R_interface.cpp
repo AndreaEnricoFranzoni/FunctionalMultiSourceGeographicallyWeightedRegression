@@ -21,6 +21,8 @@
 #include <RcppEigen.h>
 
 #include <string>
+#include "parameters_wrapper_fdagwr.hpp"
+#include "traits_fdagwr.hpp"
 
 
 using namespace Rcpp;
@@ -28,12 +30,68 @@ using namespace Rcpp;
 //
 // [[Rcpp::depends(RcppEigen)]]
 
+
+
+
+//
 // [[Rcpp::export]]
-double fdagwr_test_function(std::string input_string) {
+void fdagwr_test_function(std::string input_string) {
 
-    Rcout << "First draft of fdagwr" << std::endl;
+    Rcout << "First draft of fdagwr.1: " << input_string << std::endl;
+}
 
-    double output_double = 5.0;
 
-    return output_double;
+
+//
+// [[Rcpp::export]]
+Rcpp::List fmsgwr(double input_el,
+                  Rcpp::NumericMatrix distances_events,
+                  Rcpp::NumericMatrix distances_stations,
+                  Rcpp::Nullable<int> num_threads = R_NilValue){
+    //funzione per il multi-source gwr
+
+    //checking and wrapping input parameters
+    int number_threads = wrap_num_thread(num_threads);
+
+    //returning element
+    Rcpp::List l;
+
+    l["Type of gwr"] = "fmsgwr";
+
+    return l;
+}
+
+
+//
+// [[Rcpp::export]]
+Rcpp::List fsgwr(double input_el = 1,
+                 Rcpp::Nullable<int> num_threads = R_NilValue){
+    //funzione per il source gwr
+
+    //checking and wrapping input parameters
+    int number_threads = wrap_num_thread(num_threads);
+
+    //returning element
+    Rcpp::List l;
+
+    l["Type of gwr"] = "fsgwr";
+    return l;
+}
+
+
+//
+// [[Rcpp::export]]
+Rcpp::List fgwr(double input_el=1,
+                Rcpp::Nullable<int> num_threads = R_NilValue){
+    //funzione per il gwr
+
+    //checking and wrapping input parameters
+    int number_threads = wrap_num_thread(num_threads);
+
+    //returning element
+    Rcpp::List l;
+
+    l["Type of gwr"] = "fgwr";
+
+    return l;
 }

@@ -2,6 +2,18 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 fdagwr_test_function <- function(input_string) {
-    .Call(`_fdagwr_fdagwr_test_function`, input_string)
+    invisible(.Call(`_fdagwr_fdagwr_test_function`, input_string))
+}
+
+fmsgwr <- function(input_el, distances_events, distances_stations, num_threads = NULL) {
+    .Call(`_fdagwr_fmsgwr`, input_el, distances_events, distances_stations, num_threads)
+}
+
+fsgwr <- function(input_el = 1, num_threads = NULL) {
+    .Call(`_fdagwr_fsgwr`, input_el, num_threads)
+}
+
+fgwr <- function(input_el = 1, num_threads = NULL) {
+    .Call(`_fdagwr_fgwr`, input_el, num_threads)
 }
 
