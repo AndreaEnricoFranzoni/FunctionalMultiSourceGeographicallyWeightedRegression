@@ -54,7 +54,7 @@ public:
                            int n,
                            int number_threads)
                     : weight_matrix_base<kernel_func>(data,n,number_threads)    {}
-}
+},
 
 
 
