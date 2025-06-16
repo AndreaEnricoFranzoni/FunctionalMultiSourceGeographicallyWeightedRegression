@@ -74,7 +74,7 @@ public:
     * @details Universal constructor: move semantic used to optimazing handling big size objects
     */
     weight_matrix_base(const std::vector<double> &data, int n, int number_threads)
-        : m_n(n), m_number_threads(number_threads)  {
+        : m_data(n,n), m_n(n), m_number_threads(number_threads)  {
 
             m_data.reserve(Eigen::VectorXi::Constant(n, 1));
 
