@@ -48,7 +48,7 @@ public:
                         this->weights().reserve(fdagwr_traits::Dense_Vector::Constant(this->n(), 1));
 
 #ifdef _OPENMP
-#pragma omp parallel for num_threads(m_number_threads)
+#pragma omp parallel for num_threads(this->number_threads())
 #endif
                         for (std::size_t i = 0; i < this->n(); ++i) {   this->weights().insert(i, i) = weight_stat[i];}
 
