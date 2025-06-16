@@ -41,7 +41,7 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 void fdagwr_test_function(std::string input_string) {
 
-    Rcout << "First draft of fdagwr.1: " << input_string << std::endl;
+    Rcout << "First draft of fdagwr.2: " << input_string << std::endl;
 }
 
 
@@ -67,7 +67,13 @@ Rcpp::List fmsgwr(double input_el,
                                                               trial.size(),
                                                               number_threads);
 
-    Rcout << trial_sm.data() << std::endl;
+    auto mat = trial_sm.data();
+    for (int i = 0; i < mat.rows(); ++i) {
+        for (int j = 0; j < mat.cols(); ++j) {
+            Rcout << mat.coeff(i, j) << " ";
+    }}
+    
+}
 
     //returning element
     Rcpp::List l;
