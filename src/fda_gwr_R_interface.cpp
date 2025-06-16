@@ -41,7 +41,7 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 void fdagwr_test_function(std::string input_string) {
 
-    Rcout << "First draft of fdagwr.4: " << input_string << std::endl;
+    Rcout << "First draft of fdagwr.5: " << input_string << std::endl;
 }
 
 
@@ -61,7 +61,7 @@ Rcpp::List fmsgwr(double input_el,
 
 
 
-    std::vector<double> trial{2.0,3.0,7.9};
+    std::vector<double> trial{2.0,8.0,7.9};
 
     weight_matrix_stationary<KERNEL_FUNC::GAUSSIAN> trial_sm(trial,
                                                               trial.size(),

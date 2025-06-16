@@ -18,17 +18,15 @@
 // fdagwr.
 
 
-
 #ifndef FDAGWR_WEIGHT_MATRIX_STATIONARY_HPP
 #define FDAGWR_WEIGHT_MATRIX_STATIONARY_HPP
-
 
 #include "weight_matrix.hpp"
 
 
 /*!
 * @file weight_matrix_stat.hpp
-* @brief Construct the stationary weight matrix for performing the geographically weighted regression
+* @brief Construct the stationary weight matrix for performing the geographically weighted regression. Weights only consist of functional reconstruction weights
 * @author Andrea Enrico Franzoni
 */
 
@@ -38,24 +36,24 @@ class weight_matrix_stationary : public weight_matrix_base< weight_matrix_statio
 {
 public:
 
-
-  
   /*!
-  * @brief Constructor if number of PPCs k is known (k_imp=K_IMP::YES), for derived class: constructs firstly CV_base<CV_alpha,...>
-  * @param Data fts data matrix
-  * @param strategy splitting training/validation strategy
-  * @param params input space for regularization parameter
-  * @param k number of retained PPCs
-  * @param pred_f function to make validation set prediction (overloading with k imposed)
+  * @brief Constructor for the stationary weight matrix: each weight only consists of the reconstruction functional weight
+  * @param data stationary weight, for each statistical unit
+  * @param n number of statistical units
   * @param number_threads number of threads for OMP
-  * @details Universal constructor: move semantic used to optimazing handling big size objects
   */
-  weight_matrix_stationary(const std::vector<double> data,
-                           int n,
-                           int number_threads)
-                    : weight_matrix_base<weight_matrix_stationary,kernel_func>(data,n,number_threads)    {}
+  weight_matrix_stationary(const std::vector<double> weight_stat, std::size_t n, int number_threads)
+                    : weight_matrix_base<weight_matrix_stationary,kernel_func>(n,number_threads) 
+                    {
+                        m_data.reserve(fdagwr_traits::Dense_Vector::Constant(m_n, 1));
+
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(m_number_threads)
+#endif
+                        for (std::size_t i = 0; i < m_n; ++i) {   m_data.insert(i, i) = weight_stat[i];}
+
+                        m_data.makeCompressed();        //compressing the matrix for more efficiency in the operations
+                    }
 };
-
-
 
 #endif  /*FDAGWR_WEIGHT_MATRIX_STATIONARY_HPP*/

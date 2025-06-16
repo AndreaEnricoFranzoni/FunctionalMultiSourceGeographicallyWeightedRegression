@@ -37,12 +37,12 @@
 
 
 /*!
-* @class CV_base
-* @brief Template class for constructing the weight matrix.
+* @class weight_matrix_base
+* @brief Template class for constructing the weight matrix: a squared matrix containing the weight for each unit
 * @tparam D type of the derived class (for static polymorphism thorugh CRTP):
-*         - 'stationary'
-*         - 'non_stationary'
-* @tparam kernel_func kernel function for the evaluation of the weights
+*         - stationary: 'weight_matrix_stat'
+*         - non stationary: 'weight_matrix_no_stat'
+* @tparam kernel_func kernel function for the evaluation of the weights (enumerator)
 * @details It is the base class. Polymorphism is known at compile time thanks to Curiously Recursive Template Pattern (CRTP) 
 */
 template< class D, KERNEL_FUNC kernel_func >
@@ -54,7 +54,7 @@ private:
     fdagwr_traits::Sparse_Matrix m_data;
 
     /*!Number of statistical units*/
-    int m_n;
+    std::size_t m_n;
 
     /*!Number of threads for OMP*/
     int m_number_threads;
@@ -65,27 +65,23 @@ public:
     /*!
     * @brief Constructor for the weight matrix (diagonal matrix containing the weight for each unit)
     * @param data stationary weight, for each statistical unit
-    * @param n number of statistical unit
+    * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    weight_matrix_base(const std::vector<double> &data, int n, int number_threads)
-        : m_data(n,n), m_n(n), m_number_threads(number_threads)  {
-
-            m_data.reserve(fdagwr_traits::Dense_Vector::Constant(n, 1));
-
-#ifdef _OPENMP
-#pragma omp parallel for num_threads(m_number_threads)
-#endif
-            for (int i = 0; i < n; ++i) {       m_data.insert(i, i) = data[i];}
-
-            m_data.makeCompressed();        //compressing the matrix for more efficiency in the operations
-        }
+    weight_matrix_base(std::size_t n, int number_threads)
+        : m_data(n,n), m_n(n), m_number_threads(number_threads)  {}
 
     /*!
     * @brief Getter for the weight matrix
     * @return the private m_data
     */
     fdagwr_traits::Sparse_Matrix data() const {return m_data;}
+
+    /*!
+    * @brief Getter for the number of statistical units
+    * @return the private m_n
+    */
+    std::size_t n() const {return m_n;}
 
 };
 
