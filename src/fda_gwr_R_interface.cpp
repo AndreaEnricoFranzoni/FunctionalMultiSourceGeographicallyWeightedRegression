@@ -66,7 +66,7 @@ Rcpp::List fmsgwr(double input_el,
                                                               trial.size(),
                                                               number_threads);
 
-    Rcout << trial_sm << std::endl;
+    Rcout << trial_sm.data() << std::endl;
 
     //returning element
     Rcpp::List l;
