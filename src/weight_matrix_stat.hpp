@@ -53,8 +53,8 @@ public:
   weight_matrix_stationary(const std::vector<double> data,
                            int n,
                            int number_threads)
-                    : weight_matrix_base<kernel_func>(data,n,number_threads)    {}
-},
+                    : weight_matrix_base<weight_matrix_stationary,kernel_func>(data,n,number_threads)    {}
+};
 
 
 
