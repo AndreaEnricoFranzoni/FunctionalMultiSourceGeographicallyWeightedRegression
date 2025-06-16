@@ -45,14 +45,14 @@ public:
   weight_matrix_stationary(const std::vector<double> weight_stat, std::size_t n, int number_threads)
                     : weight_matrix_base<weight_matrix_stationary,kernel_func>(n,number_threads) 
                     {
-                        m_data.reserve(fdagwr_traits::Dense_Vector::Constant(m_n, 1));
+                        this->weights().reserve(fdagwr_traits::Dense_Vector::Constant(this->n(), 1));
 
 #ifdef _OPENMP
 #pragma omp parallel for num_threads(m_number_threads)
 #endif
-                        for (std::size_t i = 0; i < m_n; ++i) {   m_data.insert(i, i) = weight_stat[i];}
+                        for (std::size_t i = 0; i < this->n(); ++i) {   this->weights().insert(i, i) = weight_stat[i];}
 
-                        m_data.makeCompressed();        //compressing the matrix for more efficiency in the operations
+                        this->weights().makeCompressed();        //compressing the matrix for more efficiency in the operations
                     }
 };
 

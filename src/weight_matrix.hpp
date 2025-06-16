@@ -51,7 +51,7 @@ class weight_matrix_base
 
 private:
     /*!Matrix storing the weights in the diagonal*/
-    fdagwr_traits::Sparse_Matrix m_data;
+    fdagwr_traits::Sparse_Matrix m_weights;
 
     /*!Number of statistical units*/
     std::size_t m_n;
@@ -64,24 +64,35 @@ public:
 
     /*!
     * @brief Constructor for the weight matrix (diagonal matrix containing the weight for each unit)
-    * @param data stationary weight, for each statistical unit
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
     weight_matrix_base(std::size_t n, int number_threads)
-        : m_data(n,n), m_n(n), m_number_threads(number_threads)  {}
+        : m_weights(n,n), m_n(n), m_number_threads(number_threads)  {}
 
     /*!
     * @brief Getter for the weight matrix
     * @return the private m_data
     */
-    fdagwr_traits::Sparse_Matrix data() const {return m_data;}
+    fdagwr_traits::Sparse_Matrix weights() const {return m_weights;}
+
+    /*!
+    * @brief Setter for the weight matrix
+    * @return the private m_data
+    */
+    inline fdagwr_traits::Sparse_Matrix & weights() {return m_weights;}
 
     /*!
     * @brief Getter for the number of statistical units
     * @return the private m_n
     */
     std::size_t n() const {return m_n;}
+
+    /*!
+    * @brief Setter for the number of OMP threads
+    * @return the private m_n
+    */
+    std::size_t number_threads() const {return m_number_threads;}
 
 };
 

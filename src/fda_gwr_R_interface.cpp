@@ -67,7 +67,7 @@ Rcpp::List fmsgwr(double input_el,
                                                               trial.size(),
                                                               number_threads);
 
-    auto mat = trial_sm.data();
+    auto mat = trial_sm.weights();
     for (int i = 0; i < mat.rows(); ++i) {
         for (int j = 0; j < mat.cols(); ++j) {
             Rcout << mat.coeff(i, j) << " ";
