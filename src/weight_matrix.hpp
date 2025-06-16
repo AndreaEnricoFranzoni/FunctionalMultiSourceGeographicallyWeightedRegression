@@ -21,7 +21,7 @@
 #ifndef FDAGWR_WEIGHT_MATRIX_HPP
 #define FDAGWR_WEIGHT_MATRIX_HPP
 
-
+#include "traits_fdagwr.hpp"
 
 
 #ifdef _OPENMP
@@ -29,15 +29,11 @@
 #endif
 
 
-#include "traits_fdagwr.hpp"
-
-
 /*!
 * @file weight_matrix.hpp
 * @brief Construct the weight matrix for performing the geographically weighted regression
 * @author Andrea Enrico Franzoni
 */
-
 
 
 /*!
@@ -67,34 +63,30 @@ private:
 public:
 
     /*!
-    * @brief Constructor for the class
-    * @param Data fts matrix
-    * @param strategy strategy for splitting training/validation sets
+    * @brief Constructor for the weight matrix (diagonal matrix containing the weight for each unit)
+    * @param data stationary weight, for each statistical unit
+    * @param n number of statistical unit
     * @param number_threads number of threads for OMP
-    * @details Universal constructor: move semantic used to optimazing handling big size objects
     */
     weight_matrix_base(const std::vector<double> &data, int n, int number_threads)
         : m_data(n,n), m_n(n), m_number_threads(number_threads)  {
 
-            m_data.reserve(Eigen::VectorXi::Constant(n, 1));
+            m_data.reserve(fdagwr_traits::Dense_Vector::Constant(n, 1));
 
-            for (int i = 0; i < n; ++i) {
-                m_data.insert(i, i) = data[i];  // inserisci solo la diagonale
-            }
-            m_data.makeCompressed();
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(m_number_threads)
+#endif
+            for (int i = 0; i < n; ++i) {       m_data.insert(i, i) = data[i];}
+
+            m_data.makeCompressed();        //compressing the matrix for more efficiency in the operations
         }
 
     /*!
-    * @brief Getter for the data matrix
-    * @return the private m_Data
+    * @brief Getter for the weight matrix
+    * @return the private m_data
     */
     fdagwr_traits::Sparse_Matrix data() const {return m_data;}
 
-
-
 };
-
-
-
 
 #endif  /*FDAGWR_WEIGHT_MATRIX_HPP*/
