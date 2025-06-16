@@ -63,7 +63,7 @@ Rcpp::List fmsgwr(double input_el,
 
     std::vector<double> trial{2.0,3.0,7.9};
 
-    weight_matrix_stationary<KERNEL_W_MAT::GAUSSIAN> trial_sm(trial,
+    weight_matrix_stationary<KERNEL_FUNC::GAUSSIAN> trial_sm(trial,
                                                               trial.size(),
                                                               number_threads);
 
