@@ -5,8 +5,8 @@ fdagwr_test_function <- function(input_string) {
     invisible(.Call(`_fdagwr_fdagwr_test_function`, input_string))
 }
 
-fmsgwr <- function(input_el, distances_events, distances_stations, num_threads = NULL) {
-    .Call(`_fdagwr_fmsgwr`, input_el, distances_events, distances_stations, num_threads)
+fmsgwr <- function(input_el, x_points, distances_events, distances_stations, num_threads = NULL) {
+    .Call(`_fdagwr_fmsgwr`, input_el, x_points, distances_events, distances_stations, num_threads)
 }
 
 fsgwr <- function(input_el = 1, num_threads = NULL) {

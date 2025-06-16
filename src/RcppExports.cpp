@@ -22,16 +22,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // fmsgwr
-Rcpp::List fmsgwr(double input_el, Rcpp::NumericMatrix distances_events, Rcpp::NumericMatrix distances_stations, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_fmsgwr(SEXP input_elSEXP, SEXP distances_eventsSEXP, SEXP distances_stationsSEXP, SEXP num_threadsSEXP) {
+Rcpp::List fmsgwr(double input_el, //Rcpp::NumericVector x_points, //Rcpp::NumericMatrix distances_events, //Rcpp::NumericMatrix distances_stations, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_fmsgwr(SEXP input_elSEXP, SEXP x_pointsSEXP, SEXP distances_eventsSEXP, SEXP distances_stationsSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type input_el(input_elSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type distances_events(distances_eventsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type distances_stations(distances_stationsSEXP);
+    Rcpp::traits::input_parameter< //Rcpp::NumericVector >::type x_points(x_pointsSEXP);
+    Rcpp::traits::input_parameter< //Rcpp::NumericMatrix >::type distances_events(distances_eventsSEXP);
+    Rcpp::traits::input_parameter< //Rcpp::NumericMatrix >::type distances_stations(distances_stationsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(fmsgwr(input_el, distances_events, distances_stations, num_threads));
+    rcpp_result_gen = Rcpp::wrap(fmsgwr(input_el, x_points, distances_events, distances_stations, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -62,7 +63,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_fdagwr_test_function", (DL_FUNC) &_fdagwr_fdagwr_test_function, 1},
-    {"_fdagwr_fmsgwr", (DL_FUNC) &_fdagwr_fmsgwr, 4},
+    {"_fdagwr_fmsgwr", (DL_FUNC) &_fdagwr_fmsgwr, 5},
     {"_fdagwr_fsgwr", (DL_FUNC) &_fdagwr_fsgwr, 2},
     {"_fdagwr_fgwr", (DL_FUNC) &_fdagwr_fgwr, 2},
     {NULL, NULL, 0}
