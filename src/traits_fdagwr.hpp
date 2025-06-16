@@ -62,4 +62,16 @@ public:
 
 
 
+
+/*!
+* @enum KERNEL_W_MAT
+* @brief Kernel for evaluating the distances within different locations. Functions defined in "kernel_functions.hpp"
+*/
+enum KERNEL_W_MAT
+{
+  GAUSSIAN = 0,  ///< Gaussian Kernel to evaluate the distances within different locations
+};
+
+
+
 #endif  /*FDAGWR_TRAITS_HPP*/

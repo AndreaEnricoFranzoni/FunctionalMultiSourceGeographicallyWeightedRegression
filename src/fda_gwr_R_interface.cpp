@@ -25,6 +25,10 @@
 #include "traits_fdagwr.hpp"
 
 
+
+#include "weight_matrix_stat.hpp"
+
+
 using namespace Rcpp;
 
 //
@@ -45,13 +49,24 @@ void fdagwr_test_function(std::string input_string) {
 //
 // [[Rcpp::export]]
 Rcpp::List fmsgwr(double input_el,
-                  Rcpp::NumericMatrix distances_events,
-                  Rcpp::NumericMatrix distances_stations,
+                  //Rcpp::NumericVector x_points,
+                  //Rcpp::NumericMatrix distances_events,
+                  //Rcpp::NumericMatrix distances_stations,
                   Rcpp::Nullable<int> num_threads = R_NilValue){
     //funzione per il multi-source gwr
 
     //checking and wrapping input parameters
     int number_threads = wrap_num_thread(num_threads);
+
+
+
+    std::vector<double> trial{2.0,3.0,7.9};
+
+    weight_matrix_stationary<KERNEL_W_MAT::GAUSSIAN> trial_sm(trial,
+                                                              trial.size(),
+                                                              number_threads);
+
+    Rcout << trial_sm << std::endl;
 
     //returning element
     Rcpp::List l;
