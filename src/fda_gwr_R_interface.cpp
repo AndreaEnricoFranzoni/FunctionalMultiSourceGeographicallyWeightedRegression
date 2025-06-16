@@ -49,11 +49,12 @@ void fdagwr_test_function(std::string input_string) {
 //
 // [[Rcpp::export]]
 Rcpp::List fmsgwr(double input_el,
-                  //Rcpp::NumericVector x_points,
-                  //Rcpp::NumericMatrix distances_events,
-                  //Rcpp::NumericMatrix distances_stations,
                   Rcpp::Nullable<int> num_threads = R_NilValue){
     //funzione per il multi-source gwr
+
+                      //Rcpp::NumericVector x_points,
+                  //Rcpp::NumericMatrix distances_events,
+                  //Rcpp::NumericMatrix distances_stations,
 
     //checking and wrapping input parameters
     int number_threads = wrap_num_thread(num_threads);
