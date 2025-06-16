@@ -73,7 +73,7 @@ Rcpp::List fmsgwr(double input_el,
             Rcout << mat.coeff(i, j) << " ";
     }}
     
-}
+
 
     //returning element
     Rcpp::List l;
