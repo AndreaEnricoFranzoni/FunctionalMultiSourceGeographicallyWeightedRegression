@@ -24,9 +24,11 @@
 
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-#include <tuple>
+
 #include <vector>
 #include <array>
+#include <tuple>
+#include <map>
 #include <variant>
 #include <type_traits>
 #include <cmath>

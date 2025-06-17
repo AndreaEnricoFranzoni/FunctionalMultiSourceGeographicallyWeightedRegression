@@ -18,11 +18,11 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_WEIGHT_MATRIX_HPP
-#define FDAGWR_WEIGHT_MATRIX_HPP
+#ifndef FDAGWR_FUNC_WEIGHT_MATRIX_HPP
+#define FDAGWR_FUNC_WEIGHT_MATRIX_HPP
+
 
 #include "traits_fdagwr.hpp"
-#include "kernel_functions.hpp"
 
 
 #ifdef _OPENMP
@@ -31,75 +31,64 @@
 
 
 /*!
-* @file weight_matrix.hpp
-* @brief Construct the weight matrix for performing the geographically weighted regression
+* @file functional_weight_matrix.hpp
+* @brief Construct the functional weight matrix for performing the geographically weighted regression
 * @author Andrea Enrico Franzoni
 */
 
 
-
-/*!
-* Doing tag dispatching for the correct way of evaluating the non stationary weights (kernel function for the distances)
-* @tparam err_eval: template parameter for the error evaluation strategy
-*/
-template <KERNEL_FUNC kernel_func>
-using KERNEL_FUNC_T = std::integral_constant<KERNEL_FUNC, kernel_func>;
-
+//define the type of the functional weight matrix
+typedef std::map<double,fdagwr_traits::Sparse_Matrix> func_weight_mat_t
 
 
 /*!
-* @class weight_matrix_base
-* @brief Template class for constructing the weight matrix: a squared matrix containing the weight for each unit
+* @class functional_weight_matrix_base
+* @brief Template class for constructing the fucntional weight matrix: for each abscissa available, a squared matrix containing the weight for each unit
 * @tparam D type of the derived class (for static polymorphism thorugh CRTP):
-*         - stationary: 'weight_matrix_stat'
-*         - non stationary: 'weight_matrix_no_stat'
+*         - stationary: 'functional_weight_matrix_stationary'
+*         - non stationary: 'functional_weight_matrix_no_stationary'
 * @tparam kernel_func kernel function for the evaluation of the weights (enumerator)
 * @details It is the base class. Polymorphism is known at compile time thanks to Curiously Recursive Template Pattern (CRTP) 
 */
 template< class D, KERNEL_FUNC kernel_func >
-class weight_matrix_base
+class functional_weight_matrix_base
 {
 
 private:
-    /*!Matrix storing the weights in the diagonal*/
-    fdagwr_traits::Sparse_Matrix m_weights;
+    /*!Functional weight matrix: key is the abscissa point, value is the weight matrix for that abscissa*/
+    func_weight_mat_t m_functional_weights;
 
     /*!Number of statistical units*/
     std::size_t m_n;
 
+    /*!Number of abscissa points of the functional object known*/
+    std::size_t m_T;
+
     /*!Number of threads for OMP*/
     int m_number_threads;
-
-    /*!
-    * @brief Evaluation of the kernel function for the non stationary weights
-    * @param distance distance between two locations
-    * @param bandwith kernel bandwith
-    * @return the evaluation of the kernel function
-    */
-    double kernel_eval(double distance, double bandwith, KERNEL_FUNC_T<KERNEL_FUNC::GAUSSIAN>) const;
 
 
 public:
 
     /*!
-    * @brief Constructor for the weight matrix (diagonal matrix containing the weight for each unit)
+    * @brief Constructor for the functional weight matrix
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    weight_matrix_base(std::size_t n, int number_threads)
-        : m_weights(n,n), m_n(n), m_number_threads(number_threads)  {}
+    functional_weight_matrix_base(std::size_t n, std::size_t T, int number_threads)
+        : m_n(n), m_T(T), m_number_threads(number_threads)  {}
 
     /*!
     * @brief Getter for the weight matrix
     * @return the private m_data
     */
-    fdagwr_traits::Sparse_Matrix weights() const {return m_weights;}
+    func_weight_mat_t functional_weights() const {return m_functional_weights;}
 
     /*!
     * @brief Setter for the weight matrix
     * @return the private m_data
     */
-    inline fdagwr_traits::Sparse_Matrix & weights() {return m_weights;}
+    inline func_weight_mat_t & functional_weights() {return m_functional_weights;}
 
     /*!
     * @brief Getter for the number of statistical units
@@ -108,21 +97,17 @@ public:
     std::size_t n() const {return m_n;}
 
     /*!
+    * @brief Getter for the number of abscissa points
+    * @return the private m_T
+    */
+    std::size_t T() const {return m_T;}
+
+    /*!
     * @brief Getter for the number of OMP threads
     * @return the private m_number_threads
     */
     std::size_t number_threads() const {return m_number_threads;}
 
-    /*!
-    * @brief Evaluation of kernel function for the non-stationary weights. Tag-dispacther.
-    * @param distance distance between two locations
-    * @param bandwith kernel bandwith
-    * @return the evaluation of the kernel function
-    */
-    double kernel_eval(double distance, double bandwith) const { return kernel_eval(distance,bandwith,KERNEL_FUNC_T<kernel_func>{});};
- 
 };
 
-#include "kernel_functions_eval.hpp"
-
-#endif  /*FDAGWR_WEIGHT_MATRIX_HPP*/
+#endif  /*FDAGWR_FUNC_WEIGHT_MATRIX_HPP*/
