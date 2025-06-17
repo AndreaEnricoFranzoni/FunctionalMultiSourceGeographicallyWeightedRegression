@@ -74,6 +74,21 @@ Rcpp::List fmsgwr(double input_el,
         }
         Rcout << "" << std::endl;
     }
+
+    std::vector<double> non_stat{7.0,1.4,7.9};
+    weight_matrix_non_stationary<KERNEL_FUNC::GAUSSIAN> trial_wmns(trial,
+                                                                    non_stat,
+                                                                    trial.size(),
+                                                                    100,
+                                                                    number_threads);
+
+    auto mat = trial_wmns.weights();
+    for (int i = 0; i < mat.rows(); ++i) {
+        for (int j = 0; j < mat.cols(); ++j) {
+            Rcout << mat.coeff(i, j) << " ";
+        }
+        Rcout << "" << std::endl;
+    }
     
 
 

@@ -46,7 +46,8 @@ public:
                            std::size_t n, 
                            int number_threads)
                     : weight_matrix_base<weight_matrix_stationary,kernel_func>(n,number_threads) 
-                    {
+                    {   
+                        std::cout << "Constructing a stationary weight matrix" << std::endl;
                         //filling the diagonal with reconstructional stationary weights
                         this->weights().reserve(fdagwr_traits::Dense_Vector::Constant(this->n(), 1));
 

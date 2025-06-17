@@ -43,24 +43,25 @@ public:
   * @param n number of statistical units
   * @param number_threads number of threads for OMP
   */
-  weight_matrix_stationary(const std::vector<double> weight_stat, 
-                           const std::vector<double> weight_no_stat,
-                           std::size_t n,
-                           double bandwith, 
-                           int number_threads)
-                    : weight_matrix_base<weight_matrix_non_stationary,kernel_func>(n,number_threads) 
-                    {   
-                        //filling the diagonal with reconstructional stationary weights times non stationary spatial weights
-                        this->weights().reserve(fdagwr_traits::Dense_Vector::Constant(this->n(), 1));
+  weight_matrix_non_stationary(const std::vector<double> weight_stat, 
+                               const std::vector<double> weight_no_stat,
+                               std::size_t n,
+                               double bandwith, 
+                               int number_threads)
+                                : weight_matrix_base<weight_matrix_non_stationary,kernel_func>(n,number_threads) 
+                              {   
+                                  std::cout << "Constructing a non stationary weight matrix" << std::endl;
+                                  //filling the diagonal with reconstructional stationary weights times non stationary spatial weights
+                                  this->weights().reserve(fdagwr_traits::Dense_Vector::Constant(this->n(), 1));
 
 #ifdef _OPENMP
 #pragma omp parallel for num_threads(this->number_threads())
 #endif
-                        for(std::size_t i = 0; i < this->n(); ++i){   
-                              this->weights().insert(i, i) = weight_stat[i]*this->kernel_eval(weight_no_stat[i],bandwith);}
+                                  for(std::size_t i = 0; i < this->n(); ++i){   
+                                      this->weights().insert(i, i) = weight_stat[i]*this->kernel_eval(weight_no_stat[i],bandwith);}
 
-                        this->weights().makeCompressed();        //compressing the matrix for more efficiency in the operations
-                    }
+                                  this->weights().makeCompressed();        //compressing the matrix for more efficiency in the operations
+                              }
 };
 
 #endif  /*FDAGWR_WEIGHT_MATRIX_NON_STATIONARY_HPP*/
