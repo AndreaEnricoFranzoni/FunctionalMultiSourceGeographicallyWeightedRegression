@@ -33,6 +33,9 @@
 #include <string>
 
 
+#include <iostream>
+
+
 /*!
 * @file traits_fdagwr.hpp
 * @brief Contains customized types and enumerator for customized template parameters, used during the model's fitting

@@ -18,45 +18,49 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_WEIGHT_MATRIX_STATIONARY_HPP
-#define FDAGWR_WEIGHT_MATRIX_STATIONARY_HPP
+#ifndef FDAGWR_WEIGHT_MATRIX_NON_STATIONARY_HPP
+#define FDAGWR_WEIGHT_MATRIX_NON_STATIONARY_HPP
 
 #include "weight_matrix.hpp"
 
 
 /*!
-* @file weight_matrix_stat.hpp
-* @brief Construct the stationary weight matrix for performing the geographically weighted regression. Weights only consist of functional reconstruction weights
+* @file weight_matrix_no_stat.hpp
+* @brief Construct the non stationary weight matrix for performing the geographically weighted regression. Weights consist of functional reconstruction weights and spatial weights
 * @author Andrea Enrico Franzoni
 */
 
 
+
 template< KERNEL_FUNC kernel_func >  
-class weight_matrix_stationary : public weight_matrix_base< weight_matrix_stationary<kernel_func>, kernel_func >
+class weight_matrix_non_stationary : public weight_matrix_base< weight_matrix_non_stationary<kernel_func>, kernel_func >
 {
 public:
 
   /*!
-  * @brief Constructor for the stationary weight matrix: each weight only consists of the reconstruction functional weight
+  * @brief Constructor for the non stationary weight matrix: each weight consists of the reconstruction functional weight and spatial weight
   * @param weight_stat stationary weight, for each statistical unit
   * @param n number of statistical units
   * @param number_threads number of threads for OMP
   */
-  weight_matrix_stationary(const std::vector<double> weight_stat,
-                           std::size_t n, 
+  weight_matrix_stationary(const std::vector<double> weight_stat, 
+                           const std::vector<double> weight_no_stat,
+                           std::size_t n,
+                           double bandwith, 
                            int number_threads)
-                    : weight_matrix_base<weight_matrix_stationary,kernel_func>(n,number_threads) 
-                    {
-                        //filling the diagonal with reconstructional stationary weights
+                    : weight_matrix_base<weight_matrix_non_stationary,kernel_func>(n,number_threads) 
+                    {   
+                        //filling the diagonal with reconstructional stationary weights times non stationary spatial weights
                         this->weights().reserve(fdagwr_traits::Dense_Vector::Constant(this->n(), 1));
 
 #ifdef _OPENMP
 #pragma omp parallel for num_threads(this->number_threads())
 #endif
-                        for (std::size_t i = 0; i < this->n(); ++i) {   this->weights().insert(i, i) = weight_stat[i];}
+                        for(std::size_t i = 0; i < this->n(); ++i){   
+                              this->weights().insert(i, i) = weight_stat[i]*this->kernel_eval(weight_no_stat[i],bandwith);}
 
                         this->weights().makeCompressed();        //compressing the matrix for more efficiency in the operations
                     }
 };
 
-#endif  /*FDAGWR_WEIGHT_MATRIX_STATIONARY_HPP*/
+#endif  /*FDAGWR_WEIGHT_MATRIX_NON_STATIONARY_HPP*/

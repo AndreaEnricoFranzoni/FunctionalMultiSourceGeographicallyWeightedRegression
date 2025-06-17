@@ -17,31 +17,27 @@
 // OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
-#ifndef FDAGWR_KERNEL_FUNC_HPP
-#define FDAGWR_KERNEL_FUNC_HPP
 
-#include <cmath>
-#include "traits_fdagwr.hpp"
+#include "weight_matrix.hpp"
 
 /*!
-* @file kernel_functions.hpp
-* @brief Containing the definitions of the different kernel functions
+* @file kernel_functions_eval.hpp
+* @brief Implementation of tag-dispatched function for evaluating the kernel functions
 * @author Andrea Enrico Franzoni
 */
 
 
 /*!
-* @brief Template function for the gaussian kernel
-* @tparam T type of the data
-* @param distance a double indicating the distance
-* @param bandwith kernel bandawith
-* @return the evaluation of the kernel in the distance
+* @brief Kernel Gaussian function evaluation, given a bandwith, of a given distance
+* @param distance distance for which is needed the kernel function evaluation
+* @param bandwith bandwith of the gaussian kernel function
+* @details 'KERNEL_FUNC::GAUSSIAN' dispatch via std::integral_constant.
 */
-template<typename T>
-T gaussian_kernel(T distance, T bandwith)
-{   
-        //gaussian kernel function
-        return std::exp((-static_cast<double>(1)/static_cast<double>(2))*std::pow((distance/bandwith),static_cast<int>(2)));
-};
-
-#endif /*FDAGWR_KERNEL_FUNC_HPP*/
+template< class D, KERNEL_FUNC kernel_func >
+double
+weight_matrix_base<D,kernel_func>::kernel_eval(double distance, double bandwith, KERNEL_FUNC_T<KERNEL_FUNC::GAUSSIAN>)
+const
+{
+  //gaussian kernel function evaluation
+  return gaussian_kernel<double>(distance,bandwith);
+}

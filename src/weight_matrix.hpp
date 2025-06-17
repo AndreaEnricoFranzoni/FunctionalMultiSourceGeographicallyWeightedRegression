@@ -22,6 +22,7 @@
 #define FDAGWR_WEIGHT_MATRIX_HPP
 
 #include "traits_fdagwr.hpp"
+#include "kernel_functions.hpp"
 
 
 #ifdef _OPENMP
@@ -34,6 +35,16 @@
 * @brief Construct the weight matrix for performing the geographically weighted regression
 * @author Andrea Enrico Franzoni
 */
+
+
+
+/*!
+* Doing tag dispatching for the correct way of evaluating the non stationary weights (kernel function for the distances)
+* @tparam err_eval: template parameter for the error evaluation strategy
+*/
+template <KERNEL_FUNC kernel_func>
+using KERNEL_FUNC_T = std::integral_constant<KERNEL_FUNC, kernel_func>;
+
 
 
 /*!
@@ -58,6 +69,14 @@ private:
 
     /*!Number of threads for OMP*/
     int m_number_threads;
+
+    /*!
+    * @brief Evaluation of the kernel function for the non stationary weights
+    * @param distance distance between two locations
+    * @param bandwith kernel bandwith
+    * @return the evaluation of the kernel function
+    */
+    double kernel_eval(double distance, double bandwith, KERNEL_FUNC_T<KERNEL_FUNC::GAUSSIAN>) const;
 
 
 public:
@@ -94,6 +113,16 @@ public:
     */
     std::size_t number_threads() const {return m_number_threads;}
 
+    /*!
+    * @brief Evaluation of kernel function for the non-stationary weights. Tag-dispacther.
+    * @param distance distance between two locations
+    * @param bandwith kernel bandwith
+    * @return the evaluation of the kernel function
+    */
+    double kernel_eval(double distance, double bandwith) const { return kernel_eval(distance,bandwith,KERNEL_FUNC_T<kernel_func>{});};
+ 
 };
+
+#include "kernel_functions_eval.hpp"
 
 #endif  /*FDAGWR_WEIGHT_MATRIX_HPP*/
