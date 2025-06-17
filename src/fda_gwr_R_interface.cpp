@@ -83,10 +83,10 @@ Rcpp::List fmsgwr(double input_el,
                                                                     100,
                                                                     number_threads);
 
-    auto mat = trial_wmns.weights();
-    for (int i = 0; i < mat.rows(); ++i) {
-        for (int j = 0; j < mat.cols(); ++j) {
-            Rcout << mat.coeff(i, j) << " ";
+    auto mat1 = trial_wmns.weights();
+    for (int i = 0; i < mat1.rows(); ++i) {
+        for (int j = 0; j < mat1.cols(); ++j) {
+            Rcout << mat1.coeff(i, j) << " ";
         }
         Rcout << "" << std::endl;
     }
