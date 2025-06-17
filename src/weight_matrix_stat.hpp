@@ -42,7 +42,7 @@ public:
   * @param n number of statistical units
   * @param number_threads number of threads for OMP
   */
-  weight_matrix_stationary(const std::vector<double> weight_stat,
+  weight_matrix_stationary(const std::vector<double> & weight_stat,
                            std::size_t n, 
                            int number_threads)
                     : weight_matrix_base<weight_matrix_stationary,kernel_func>(n,number_threads) 

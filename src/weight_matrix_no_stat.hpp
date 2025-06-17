@@ -43,8 +43,8 @@ public:
   * @param n number of statistical units
   * @param number_threads number of threads for OMP
   */
-  weight_matrix_non_stationary(const std::vector<double> weight_stat, 
-                               const std::vector<double> weight_no_stat,
+  weight_matrix_non_stationary(const std::vector<double> & weight_stat, 
+                               const std::vector<double> & weight_no_stat,
                                std::size_t n,
                                double bandwith, 
                                int number_threads)

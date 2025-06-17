@@ -41,7 +41,7 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 void fdagwr_test_function(std::string input_string) {
 
-    Rcout << "First draft of fdagwr.5: " << input_string << std::endl;
+    Rcout << "First draft of fdagwr.6: " << input_string << std::endl;
 }
 
 
