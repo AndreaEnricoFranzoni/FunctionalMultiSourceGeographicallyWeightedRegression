@@ -27,6 +27,7 @@
 
 
 #include "weight_matrix_stat.hpp"
+#include "weight_matrix_no_stat.hpp"
 
 
 using namespace Rcpp;
