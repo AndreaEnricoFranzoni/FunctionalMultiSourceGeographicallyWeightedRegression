@@ -18,19 +18,42 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_WEIGHT_MATRIX_FUNC_HPP
-#define FDAGWR_WEIGHT_MATRIX_FUNC_HPP
+#ifndef FDAGWR_PENALIZATION_MATRIX_HPP
+#define FDAGWR_PENALIZATION_MATRIX_HPP
+
 
 #include "traits_fdagwr.hpp"
-#include "weight_matrix.hpp"
 
 /*!
-* @file weight_matrix_func.hpp
-* @brief Construct the functional weight matrix for performing geographically weighted regression
+* @file penalization_matrix.hpp
+* @brief Contains the class to define the penalization matrix used in the fmsgwr algoroithm
 * @author Andrea Enrico Franzoni
 */
 
+class penalization_matrix
+{
+
+private:
+    /*!Number of functional covariates described by a basis expansion*/
+    std::size_t m_q;
+
+    /*!Number of basis for each covariate*/
+    std::vector<std::size_t> m_Lj;
+
+    /*!Number of total basis*/;
+    std::size_t m_L;
+
+    /*!Penalization matrix*/
+    fdagwr_traits::Sparse_Matrix m_PenalizationMatrix;
+
+
+public:
+    penalization_matrix(/* args */);
+    
+};
 
 
 
-#endif  /*FDAGWR_WEIGHT_MATRIX_FUNC_HPP*/
+
+
+#endif  /*FDAGWR_PENALIZATION_MATRIX_HPP*/
