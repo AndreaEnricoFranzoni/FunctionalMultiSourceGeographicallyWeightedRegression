@@ -28,6 +28,7 @@
 
 #include "weight_matrix_stat.hpp"
 #include "weight_matrix_no_stat.hpp"
+#include "test_basis_eval.hpp"
 
 
 using namespace Rcpp;
@@ -42,7 +43,10 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 void fdagwr_test_function(std::string input_string) {
 
-    Rcout << "First draft of fdagwr.8: " << input_string << std::endl;
+    Rcout << "First draft of fdagwr.9: " << input_string << std::endl;
+    int test;
+
+    test = test_fda_PDE(5.9)
 }
 
 
