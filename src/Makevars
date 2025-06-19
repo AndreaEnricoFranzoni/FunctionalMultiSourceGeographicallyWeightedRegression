@@ -32,7 +32,7 @@ ifeq ($(OS),Darwin)
     #CXX = $(HOMEBREW_PREFIX)/opt/llvm/bin/clang++
     PKG_CXXFLAGS = -Xpreprocessor -fopenmp -I$(HOMEBREW_PREFIX)/opt/libomp/include -O3
     PKG_CFLAGS = -fopenmp
-    PKG_CPPFLAGS = -I./fdaPDE-core/fdaPDE
+    PKG_CPPFLAGS = -I./fdaPDE-core/fdaPDE/.
     PKG_LIBS = $(LAPACK_LIBS) $(FLIBS) $(BLAS_LIBS)
     PKG_LIBS += -L$(HOMEBREW_PREFIX)/opt/libomp/lib -lomp
 endif
