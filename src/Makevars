@@ -13,7 +13,7 @@
 ## OPENMP    ##
 ###############
 
-#CXX_STD = CXX20
+CXX_STD = CXX20
 #for retaining operative system
 OS = $(shell uname -s)
 #for retaining architecture
