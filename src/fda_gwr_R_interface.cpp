@@ -46,7 +46,7 @@ void fdagwr_test_function(std::string input_string) {
     Rcout << "First draft of fdagwr.9: " << input_string << std::endl;
     int test;
 
-    test = test_fda_PDE(5.9)
+    test = test_fda_PDE(5.9);
 }
 
 
