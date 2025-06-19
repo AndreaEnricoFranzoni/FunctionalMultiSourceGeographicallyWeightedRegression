@@ -1,4 +1,4 @@
-#include "fdaPDE-core/fdaPDE/splines.h"
+#include <fdaPDE/splines.h>
 #include "traits_fdagwr.hpp"
 
 // do not use this if you have other namespaces loaded
