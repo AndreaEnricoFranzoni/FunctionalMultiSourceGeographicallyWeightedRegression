@@ -75,8 +75,8 @@ class fe_linear_form_assembly_loop :
             if constexpr (Form::XprBits & int(fe_assembler_flags::compute_shape_grad)) {
                 Base::eval_shape_grads_on_cell(it, Base::test_shape_grads_, test_grads);
             }
-	    
-	    // perform integration of linear form for i-th basis
+
+            // perform integration of linear form for i-th basis
             active_dofs = it->dofs();
             for (int i = 0; i < n_basis; ++i) {   // test function loop
                 double value = 0;
