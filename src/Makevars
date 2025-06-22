@@ -10,6 +10,14 @@
 
 
 
+
+
+
+
+
+
+
+
 ###############
 ## OPENMP    ##
 ###############
@@ -38,6 +46,16 @@ ifeq ($(OS),Darwin)
     PKG_LIBS = $(LAPACK_LIBS) $(FLIBS) $(BLAS_LIBS)
     PKG_LIBS += -L$(HOMEBREW_PREFIX)/opt/libomp/lib -lomp
     PKG_LIBS += -stdlib=libc++                  #aggiunto questa riga solo per utilizzare std::numbers (forse da togliere)
+
+
+    #le prossime righe di questo OS servono per utilizzare clang da homebrew aggiornato
+
+    CXX = $(HOMEBREW_PREFIX)/opt/llvm/bin/clang++
+
+    #CXXFLAGS = -O3 -Wall -stdlib=libc++ -std=c++20
+    LDFLAGS = -L$(HOMEBREW_PREFIX)/opt/llvm/lib
+    CPPFLAGS = -I$(HOMEBREW_PREFIX)/opt/llvm/include
+
 endif
 
 # Linux
