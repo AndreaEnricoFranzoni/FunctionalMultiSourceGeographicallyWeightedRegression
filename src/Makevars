@@ -52,9 +52,9 @@ ifeq ($(OS),Darwin)
 
     CXX = $(HOMEBREW_PREFIX)/opt/llvm/bin/clang++
 
-    CXXFLAGS = -O3 -Wall -stdlib=libc++ -std=c++20      #decommentato questo
-    LDFLAGS = -L$(HOMEBREW_PREFIX)/opt/llvm/lib
-    CPPFLAGS = -I$(HOMEBREW_PREFIX)/opt/llvm/include
+    CXXFLAGS += -O3 -Wall -stdlib=libc++ -std=c++20      #decommentato questo
+    LDFLAGS += -L$(HOMEBREW_PREFIX)/opt/llvm/lib
+    CPPFLAGS += -I$(HOMEBREW_PREFIX)/opt/llvm/include
 
 endif
 
