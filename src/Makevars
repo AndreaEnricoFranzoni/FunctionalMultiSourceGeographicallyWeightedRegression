@@ -22,8 +22,8 @@
 ## OPENMP    ##
 ###############
 
-#CXX_STD = CXX20
-CXX_STD = CXX23
+CXX_STD = CXX20
+#CXX_STD = CXX23
 #for retaining operative system
 OS = $(shell uname -s)
 #for retaining architecture
@@ -53,8 +53,8 @@ ifeq ($(OS),Darwin)
 
     CXX = $(HOMEBREW_PREFIX)/opt/llvm/bin/clang++
 
-    CXXFLAGS += -O3 -Wall -stdlib=libc++ -std=c++23      #decommentato questo
-    #CXXFLAGS += -O3 -Wall -stdlib=libc++ -std=c++20      #decommentato questo
+    #CXXFLAGS += -O3 -Wall -stdlib=libc++ -std=c++23      #decommentato questo
+    CXXFLAGS += -O3 -Wall -stdlib=libc++ -std=c++20      #decommentato questo
     LDFLAGS += -L$(HOMEBREW_PREFIX)/opt/llvm/lib
     CPPFLAGS += -I$(HOMEBREW_PREFIX)/opt/llvm/include
 
