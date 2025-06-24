@@ -26,23 +26,55 @@ install.packages("devtools")
 library(devtools)
 ~~~
 
-**`fdagwr`** depends also on having Fortran, Lapack, BLAS and, if parallel version is used, OpenMP installed.
-Depending on the operative system, the instructions to set up everything can be found [here below](#prerequisites-depending-on-operative-system).
+**`fdagwr`** depends also on having Fortran, Lapack, BLAS and OpenMP installed. For Linux and Windows, GCC compiler version needed is 13.0.0.. On the other hand, for macOS, clang compiler version has to be at least 19.0.0.. Depending on the operative system, the instructions to set up everything can be found [here below](#prerequisites-depending-on-operative-system).
+
+C++ version used is c++20 (the most recent within the stable versions used by Rcpp).
 
 
 
 
 # Installation
 
-To install the package:
+To install the package, depending on the operative system:
 
-- Parallel version
+- **Linux**
 ~~~
 devtools::install_github("AndreaEnricoFranzoni/FunctionalMultiSourceGeographicallyWeightedRegression")
 ~~~
 
+- **Windows**
+~~~
+devtools::install_github("AndreaEnricoFranzoni/FunctionalMultiSourceGeographicallyWeightedRegression")
+~~~
 
-And upload the library in the R environment
+- **macOS**
+~~~
+install.packages("withr")
+library(withr)
+~~~
+
+and consequently, depending on the processor:
+
+  - Intel processor
+    ~~~
+    withr::with_path(
+        new = "/usr/local/opt/llvm/bin",
+        devtools::install_github("AndreaEnricoFranzoni/FunctionalMultiSourceGeographicallyWeightedRegression")
+    )
+    ~~~
+
+  - Apple processor (M1/M2/M3)
+    ~~~
+    withr::with_path(
+        new = "/opt/homebrew/opt/llvm/bin",
+        devtools::install_github("AndreaEnricoFranzoni/FunctionalMultiSourceGeographicallyWeightedRegression")
+    )
+    ~~~
+
+
+
+
+Upload the library in the R environment
 ~~~
 library(fdagwr)
 ~~~
@@ -78,18 +110,18 @@ library(RcppEigen)
 
 1. **Fortran**:  unlike Linux and Windows, Fortran has to be installed on macOS: instructions in this [link](https://cran.r-project.org/bin/macosx/tools/). Lapack and BLAS will be consequently installed.
 
-2. **OpenMP**: unlike Linux and Windows, OMP is not installed by default on macOS. Open the terminal and digit the following commands.
+2. **clang and OpenMP**: `Apple clang` version has to be at least 19.0.0.. Unlike Linux and Windows, OMP is not installed by default on macOS. Open the terminal and digit the following commands.
 
 - **Homebrew**
   - Check the presence of Homebrew
     ~~~
     brew --version
     ~~~
-    - If this command does not give back the version of Homebrew, install it according to the macOS version
+    - If this command does not give back the version of Homebrew, install it according to the macOS architecture 
     ~~~
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     ~~~
-      1. *M1* or *M2*
+      1. *M1*, *M2* or *M3*
       ~~~
       echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
       eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -99,6 +131,28 @@ library(RcppEigen)
       echo 'eval "$(/usr/local/bin/brew shellenv)"' >> ~/.zprofile
       eval "$(/usr/local/bin/brew shellenv)"
       ~~~
+
+- **LLVM/clang**
+   
+  [LLVM](https://llvm.org) toolchain is needed to configure clang on macOS in order to use **`fdaPDE`** (external library needed by **`fdagwr`**) and an external OMP version
+  - Check its presence. 
+  ~~~
+  llvm-config --version
+  ~~~
+  - `Apple clang` version has to be at least 19.0.0.. Check it via:
+    1. *M1*, *M2* or *M3*
+      ~~~
+      /opt/homebrew/opt/llvm/bin/clang++ --version
+      ~~~
+      2. *Intel*
+      ~~~
+      /usr/local/opt/llvm/bin/clang++ --version
+      ~~~
+  - Download it if not present or `Apple clang` version is not enough recent
+  ~~~
+  brew install llvm
+  ~~~
+  
 
 - **OMP**
   - Once Homebrew is set, check the presence of OMP
@@ -110,33 +164,13 @@ library(RcppEigen)
     brew install libomp
     ~~~
 
-- **LLVM**
-   
-  [LLVM](https://llvm.org) is needed to configure clang on macOS in order to use an external OMP version
-  - Check its presence
-  ~~~
-  llvm-config --version
-  ~~~
-  - Eventually, download it
-  ~~~
-  brew install llvm
-  ~~~
 
-- Check that the command that opens the graphic window used by the visualization results functions
-  ~~~
-  quartz()
-  ~~~
-  works on R, by digiting it on R console. If not, look [here](https://www.xquartz.org).
+
 
 ## Windows
 
 - **Rtools**: can be installed from [here](https://cran.r-project.org/bin/windows/Rtools/). Version 4.4 is needed to install parallel version.
 
-- Check that the command that opens the graphic window used by the visualization results functions
-  ~~~
-  windows()
-  ~~~
-  works on R, by digiting it on R console.
 
 ## Linux
 
@@ -146,12 +180,6 @@ library(RcppEigen)
   sudo apt install r-base-dev
   sudo apt install build-essential
    ~~~
-
-- Check that the command that opens the graphic window used by the visualization results functions
-  ~~~
-  x11()
-  ~~~
-  works on R, by digiting it on R console.
 
 ## Linux image
 Before being able to run the commands explained above for Linux, R has to be downloaded. Afterward, the installation of Fortran, Lapack, BLAS, devtools and its dependecies can be done by digiting into the terminal:
@@ -186,4 +214,6 @@ weighted regression for regionalized ground-motion models`, *Spatial Statistics*
 
 5. <a id="ref-eigen"></a> **Guennebaud G., Jacob B., et Al.**, `Eigen v3.4`, 2021, https://eigen.tuxfamily.org/index.php?title=Main_Page
 
-6. <a id="ref-pacsexamples"></a> **Formaggia L., et Al.**, `EXAMPLES AND EXERCISES FOR AMSC and APSC (PACS) COURSES`, 2024, https://github.com/pacs-course/pacs-examples
+6. <a id="ref-fdaPDE"> **Arnone E., Clemente A., Sangalli L.M., Lila E., Ramsay J., Formaggia L.**, `fdaPDE: Physics-Informed Spatial and Functional Data Analysis`, *R package available from CRAN*, 2023, https://cran.r-project.org/package=fdaPDE
+
+7. <a id="ref-pacsexamples"></a> **Formaggia L., et Al.**, `EXAMPLES AND EXERCISES FOR AMSC and APSC (PACS) COURSES`, 2024, https://github.com/pacs-course/pacs-examples
