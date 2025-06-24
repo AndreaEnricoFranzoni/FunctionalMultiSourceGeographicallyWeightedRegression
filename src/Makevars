@@ -1,60 +1,42 @@
-###############
-## NO OPENMP ##
-###############
-#PKG_LIBS = $(LAPACK_LIBS) $(FLIBS) $(BLAS_LIBS)
-#PKG_LIBS += -stdlib=libc++                  #aggiunto questa riga solo per utilizzare std::numbers (forse non da aggiunger)
+###################
+## OPENMP NEEDED ##
+###################
 
-#CXX_STD = CXX20
+# c++ version used. If changed, change also in the last rows of macOs if clause, as specified in the comments 
+CXX_STD = CXX20         #using c++20
+#CXX_STD = CXX23         #using c++23
 
-
-
-
-
-
-
-
-
-
-
-
-
-###############
-## OPENMP    ##
-###############
-
-#CXX_STD = CXX20
-CXX_STD = CXX23
-#for retaining operative system
+# retaining the operative system
 OS = $(shell uname -s)
-#for retaining architecture
+# retaining architecture of the operative system (for macOs)
 ARCH = $(shell uname -m)
 
-        # macOS
+
+# macOS
 ifeq ($(OS),Darwin)
     # Homebrew path depending on the architecture
-    ifeq ($(ARCH),arm64)
+    ifeq ($(ARCH),arm64)        # Apple processor
         HOMEBREW_PREFIX = /opt/homebrew
-    else
+    else                        # Intel processor
         HOMEBREW_PREFIX = /usr/local
     endif
 
     #CC = $(HOMEBREW_PREFIX)/opt/llvm/bin/clang
     #CXX = $(HOMEBREW_PREFIX)/opt/llvm/bin/clang++
     PKG_CXXFLAGS = -Xpreprocessor -fopenmp -I$(HOMEBREW_PREFIX)/opt/libomp/include -O3
-    PKG_CXXFLAGS += -stdlib=libc++              #aggiunto questa riga solo per utilizzare std::numbers (forse da togliere)
+    PKG_CXXFLAGS += -stdlib=libc++              
     PKG_CFLAGS = -fopenmp
     PKG_CPPFLAGS = -I./fdaPDE-core   -I../inst/include
     PKG_LIBS = $(LAPACK_LIBS) $(FLIBS) $(BLAS_LIBS)
     PKG_LIBS += -L$(HOMEBREW_PREFIX)/opt/libomp/lib -lomp
-    PKG_LIBS += -stdlib=libc++                  #aggiunto questa riga solo per utilizzare std::numbers (forse da togliere)
+    PKG_LIBS += -stdlib=libc++                  
 
 
-    #le prossime righe di questo OS servono per utilizzare clang da homebrew aggiornato
-
+    #clang default version by Rcpp is not sufficient, has to be taken from Homebrew
     CXX = $(HOMEBREW_PREFIX)/opt/llvm/bin/clang++
 
-    CXXFLAGS += -O3 -Wall -stdlib=libc++ -std=c++23      #decommentato questo
-    #CXXFLAGS += -O3 -Wall -stdlib=libc++ -std=c++20      #decommentato questo
+    CXXFLAGS += -O3 -Wall -stdlib=libc++ -std=c++20      #if using c++20: leave this row and comment the next one
+    #CXXFLAGS += -O3 -Wall -stdlib=libc++ -std=c++23      #if using c++23: leave this row and comment the previous one
     LDFLAGS += -L$(HOMEBREW_PREFIX)/opt/llvm/lib
     CPPFLAGS += -I$(HOMEBREW_PREFIX)/opt/llvm/include
 
