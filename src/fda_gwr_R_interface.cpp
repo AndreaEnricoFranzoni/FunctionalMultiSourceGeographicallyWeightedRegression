@@ -50,7 +50,7 @@ void fdagwr_test_function(std::string input_string) {
     Rcout << "First draft of fdagwr.9: " << input_string << std::endl;
     int test;
 
-    //test = test_fda_PDE(5.9);
+    test = test_fda_PDE(5.9);
 }
 
 
@@ -90,7 +90,14 @@ Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
     basis_systems<fdapde::Triangulation<1, 1>,BASIS_TYPE::BSPLINES> bs(3,order_basis_test,knots_test);
 
     std::vector<double> ev_points = Rcpp::as<std::vector<double>>(fd_points);
-    Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
+    //Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
+
+    n_locs = ev_points.size();
+    Eigen::Matrix<double, Dynamic, Dynamic> locs(n_locs, 1);
+    for(int i = 0; i < n_locs; ++i) { locs(i, 0) = ev_points[i]; }
+
+
+
 
     for(std::size_t i = 0; i < bs.q(); ++i){
             Eigen::SparseMatrix<double> Psi = spline_basis_eval(bs.systems_of_basis()[i], locs);
