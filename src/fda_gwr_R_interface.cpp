@@ -74,16 +74,14 @@ Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
                   Rcpp::IntegerVector n_order_basis_stations_cov,
                   Rcpp::NumericVector knots_stations_cov,
                   Rcpp::NumericVector penalization_stations_cov,
-                  Rcpp::Nullable<int> num_threads = R_NilValue
-                  )
-{
+                  Rcpp::Nullable<int> num_threads = R_NilValue){
     //funzione per il multi-source gwr
     //  !!!!!!!! NB: l'ordine delle basi su c++ corrisponde al degree su R !!!!!
 
     //Rcpp::NumericMatrix distances_events,
     //Rcpp::NumericMatrix distances_stations,
 
-    Rcout << "fdagwr.13: " << std::endl;
+    Rcout << "fdagwr.14: " << std::endl;
 
     //checking and wrapping input parameters
     int number_threads = wrap_num_thread(num_threads);
