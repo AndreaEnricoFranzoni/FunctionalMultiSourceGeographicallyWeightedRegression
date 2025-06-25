@@ -24,12 +24,6 @@
 
 #include "traits_fdagwr.hpp"
 
-#include "fdaPDE-core/fdaPDE/splines.h"
-
-
-#ifdef _OPENMP
-#include <omp.h>
-#endif
 
 /*!
 * @file basis_systems.hpp
@@ -38,33 +32,31 @@
 */
 
 
-template< typename triangulation_, BASIS_TYPE basis_type > 
+template< typename domain_structure, BASIS_TYPE basis_type > 
 class basis_systems{
 
 private:
     /*!Vector containing a basis system for each one of the functional covariates*/
-    std::vector<fdapde::BsSpace<triangulation_>> m_systems_of_basis;
+    std::vector< fdapde::BsSpace<domain_structure> > m_systems_of_basis;
 
     /*!Number of basis systems: one for each covariate*/
     std::size_t m_q;
 
 
 public:
-    basis_systems(std::size_t q,
+
+    basis_systems(const std::vector<double> & knots,
                   const std::vector<int> & order,
-                  const std::vector<double> & knots)            :    m_q(q)
+                  std::size_t q)            :    m_q(q)
                      {
                         m_systems_of_basis.reserve(q);
 
                         //casting the nodes for the basis system
                         Eigen::Map<const fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size());
-                        fdapde::Triangulation<1, 1> interval(nodes);
+                        domain_structure interval(nodes);
 
-                        for(std::size_t i = 0; i < q; ++i){
-                            
-                            //construct the basis system
-                            m_systems_of_basis.emplace_back(interval,order[i]);
-                        }  
+                        //construct the basis system
+                        for(std::size_t i = 0; i < q; ++i){     m_systems_of_basis.emplace_back(interval,order[i]);}  
                      }
 
 
@@ -72,7 +64,7 @@ public:
     * @brief Getter for the systems of basis
     * @return the private m_basis_system
     */
-    std::vector<fdapde::BsSpace<triangulation_>> systems_of_basis() const {return m_systems_of_basis;}
+    std::vector< fdapde::BsSpace<domain_structure> > systems_of_basis() const {return m_systems_of_basis;}
 
     /*!
     * @brief Getter for the number of basis systems

@@ -32,8 +32,6 @@
 #include "test_basis_eval.hpp"
 
 
-#include "fdaPDE-core/fdaPDE/splines.h"
-
 
 using namespace Rcpp;
 
@@ -86,8 +84,9 @@ Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
     std::vector<int> order_basis_test = Rcpp::as<std::vector<int>>(n_order_basis_stationary_cov);
     std::vector<double> knots_test = Rcpp::as<std::vector<double>>(knots_stationary_cov);
 
+    
 
-    basis_systems<fdapde::Triangulation<1, 1>,BASIS_TYPE::BSPLINES> bs(3,order_basis_test,knots_test);
+    basis_systems< fdagwr_traits::fdagwr_domain, BASIS_TYPE::BSPLINES > bs(3,order_basis_test,knots_test);
 
     std::vector<double> ev_points = Rcpp::as<std::vector<double>>(fd_points);
     //Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
