@@ -43,7 +43,7 @@ class basis_systems{
 
 private:
     /*!Vector containing a basis system for each one of the functional covariates*/
-    std::vector<fdapde::BsSpace<triangulation_>> m_basis_systems;
+    std::vector<fdapde::BsSpace<triangulation_>> m_systems_of_basis;
 
     /*!Number of basis systems: one for each covariate*/
     std::size_t m_q;
@@ -59,7 +59,7 @@ public:
                         for(std::size_t i = 0; i < q; ++i){
                             
                             //casting the nodes for the basis system
-                            Eigen::Map<fdagwr_traits::Dense_Vector> nodes(knots[i].data(), knots[i].size(), 1);
+                            Eigen::Map<fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size(), 1);
                             fdapde::Triangulation<1, 1> interval(nodes);
 
                             //construct the basis system
@@ -72,7 +72,7 @@ public:
     * @brief Getter for the systems of basis
     * @return the private m_basis_system
     */
-    std::vector<fdapde::BsSpace> basis_systems() const {return m_basis_systems;}
+    std::vector<fdapde::BsSpace<triangulation_>> systems_of_basis() const {return m_systems_of_basis;}
 
     /*!
     * @brief Getter for the number of basis systems

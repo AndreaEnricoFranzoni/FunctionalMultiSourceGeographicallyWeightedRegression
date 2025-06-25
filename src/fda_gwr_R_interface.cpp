@@ -87,13 +87,13 @@ Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
     std::vector<double> knots_test = Rcpp::as<std::vector<double>>(knots_stationary_cov);
 
 
-    basis_systems<BASIS_TYPE::BSPLINES> bs(3,order_basis_test,knots_test);
+    basis_systems<fdapde::Triangulation<1, 1>,BASIS_TYPE::BSPLINES> bs(3,order_basis_test,knots_test);
 
     std::vector<double> ev_points = Rcpp::as<std::vector<double>>(fd_points);
     Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
 
     for(std::size_t i = 0; i < bs.q(); ++i){
-            Eigen::SparseMatrix<double> Psi = spline_basis_eval(bs.basis_systems()[i], locs);
+            Eigen::SparseMatrix<double> Psi = spline_basis_eval(bs.systems_of_basis()[i], locs);
 
             std::cout << i+1 << "basis evaluation at location" << std::endl;
             std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(Psi) << std::endl; 
