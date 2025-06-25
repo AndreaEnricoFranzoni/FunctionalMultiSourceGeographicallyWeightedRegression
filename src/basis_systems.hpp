@@ -38,15 +38,15 @@
 */
 
 
-template< BASIS_TYPE basis_type > 
+template< typename triangulation_, BASIS_TYPE basis_type > 
 class basis_systems{
 
 private:
     /*!Vector containing a basis system for each one of the functional covariates*/
-    std::vector<fdapde::BsSpace> m_basis_systems;
+    std::vector<fdapde::BsSpace<triangulation_>> m_basis_systems;
 
     /*!Number of basis systems: one for each covariate*/
-    std::size_t m_q
+    std::size_t m_q;
 
 
 public:
