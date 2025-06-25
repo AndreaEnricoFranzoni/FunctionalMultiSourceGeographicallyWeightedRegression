@@ -35,6 +35,7 @@
 #include <type_traits>
 #include <cmath>
 #include <string>
+#include <algorithm>
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -69,8 +70,12 @@ public:
   
   using Dense_Array   = Eigen::ArrayXd;                  ///< Array data structure: more efficient for coefficient-wise operations.
 
-  using fdagwr_domain = fdapde::Triangulation<1, 1>;     ///< Domain mesh: unit interval with a fixed number of nodes 
+};
 
+
+struct FDAGWR_FEATS
+{
+  using FDAGWR_DOMAIN = fdapde::Triangulation<1, 1>;     ///< Domain mesh: unit interval with a fixed number of nodes
 };
 
 

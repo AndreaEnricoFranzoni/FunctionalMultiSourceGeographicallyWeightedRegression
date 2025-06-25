@@ -91,6 +91,10 @@ Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
     std::vector<int>    order_basis_test = Rcpp::as<std::vector<int>>(n_order_basis_stationary_cov);
     std::vector<double> knots_test       = Rcpp::as<std::vector<double>>(knots_stationary_cov);
     std::vector<double> ev_points        = Rcpp::as<std::vector<double>>(fd_points);
+
+    std::sort(knots_test.begin(),knots_test.end());
+
+    for(std::size_t i = 0; i < knots_test.size(); ++i){Rcout<< knots_test[i] << std::endl;}
     
 
     Rcout << "Wrap degli input" << std::endl;

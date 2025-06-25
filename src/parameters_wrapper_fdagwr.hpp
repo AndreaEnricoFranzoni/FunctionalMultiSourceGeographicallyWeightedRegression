@@ -50,10 +50,10 @@ int
 wrap_num_thread(Rcpp::Nullable<int> num_threads)
 {
 #ifndef _OPENMP
-  std::cout<< "No OMP " << std::endl;
+
   return 1;
 #else
-  std::cout<< "OMP " << std::endl;
+
   //getting maximum number of cores in the machine
   int max_n_t = omp_get_num_procs();
   

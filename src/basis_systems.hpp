@@ -46,7 +46,7 @@ private:
 public:
 
     basis_systems(const std::vector<double> & knots,
-                  const std::vector<int> & order,
+                  const std::vector<int> & basis_orders,
                   std::size_t q)            :    m_q(q)
                      {
                         std::cout << "Nel costruttore di basis_systems" << std::endl;
@@ -67,7 +67,7 @@ public:
                         //construct the basis system
                         for(std::size_t i = 0; i < q; ++i){     
                             std::cout << "i: " << i << std::endl;
-                            m_systems_of_basis.emplace_back(interval,order[i]);
+                            m_systems_of_basis.emplace_back(interval,basis_orders[i]);
                             std::cout << "oggetto creato" << std::endl;
                             }  
                      }
