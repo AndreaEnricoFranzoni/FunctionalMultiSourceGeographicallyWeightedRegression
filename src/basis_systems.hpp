@@ -65,10 +65,14 @@ public:
                         std::cout << "Intervallo generato" << std::endl;
 
                         //construct the basis system
-                        for(std::size_t i = 0; i < q; ++i){     
+                        for(std::size_t i = 0; i < q; ++i){    
+
+                            int order = basis_orders[i];
+                            BsSpace Vh(interval, order);
                             std::cout << "i: " << i << std::endl;
-                            m_systems_of_basis.emplace_back(interval,basis_orders[i]);
-                            std::cout << "oggetto creato" << std::endl;
+                            m_systems_of_basis.push_back(Vh);
+                            //m_systems_of_basis.emplace_back(interval,basis_orders[i]);
+                            std::cout << "base creata" << std::endl;
                             }  
                      }
 
