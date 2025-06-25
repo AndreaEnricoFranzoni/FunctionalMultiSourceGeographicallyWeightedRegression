@@ -29,6 +29,9 @@
 
 #include "weight_matrix_stat.hpp"
 #include "weight_matrix_no_stat.hpp"
+
+
+
 #include "test_basis_eval.hpp"
 
 
@@ -83,30 +86,23 @@ Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
 
     std::vector<int> order_basis_test = Rcpp::as<std::vector<int>>(n_order_basis_stationary_cov);
     std::vector<double> knots_test = Rcpp::as<std::vector<double>>(knots_stationary_cov);
+    std::vector<double> ev_points = Rcpp::as<std::vector<double>>(fd_points);
+    
 
     
 
-    basis_systems< fdagwr_traits::fdagwr_domain, BASIS_TYPE::BSPLINES > bs(knots_test,order_basis_test,3);
-
-    std::vector<double> ev_points = Rcpp::as<std::vector<double>>(fd_points);
+    
     //Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
 
 
-    /*
-    int n_locs = ev_points.size();
-    Eigen::Matrix<double, Dynamic, Dynamic> locs(n_locs, 1);
-    for(int i = 0; i < n_locs; ++i) { locs(i, 0) = ev_points[i]; }
+    testing_function(ev_points,order_basis_test,knots_test);
 
 
 
 
-    for(std::size_t i = 0; i < bs.q(); ++i){
-            Eigen::SparseMatrix<double> Psi = spline_basis_eval(bs.systems_of_basis()[i], locs);
 
-            std::cout << i+1 << "basis evaluation at location" << std::endl;
-            std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(Psi) << std::endl; 
-    }
-    */
+
+    
 
 
     /*

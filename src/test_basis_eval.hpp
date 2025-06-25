@@ -88,3 +88,26 @@ int test_fda_PDE(double input_test){
   return 0;
 
 }
+
+
+
+
+void testing_function(const std::vector<double> & fd_points,
+                      const std::vector<int> & basis_order,
+                      const std::vector<double> & knots){
+
+    basis_systems< fdagwr_traits::fdagwr_domain, BASIS_TYPE::BSPLINES > bs(knots,basis_order,3);
+    
+
+    int n_locs = ev_points.size();
+    Eigen::Matrix<double, Dynamic, Dynamic> locs(n_locs, 1);
+    for(int i = 0; i < n_locs; ++i) { locs(i, 0) = ev_points[i]; }
+
+
+    for(std::size_t i = 0; i < bs.q(); ++i){
+        Eigen::SparseMatrix<double> Psi = spline_basis_eval(bs.systems_of_basis()[i], fd_points);
+
+        std::cout << i+1 << "basis evaluation at location" << std::endl;
+        std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(Psi) << std::endl; 
+    }
+}
