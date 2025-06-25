@@ -64,11 +64,15 @@ public:
                         domain_structure interval(nodes);
                         std::cout << "Intervallo generato, con i seguenti nodi:" << std::endl;
                         std::cout << interval.nodes() << std::endl;
+
+                        fdapde::BsSpace<domain_structure> Vh(interval, 3);
+
+
                         //construct the basis system
                         for(std::size_t i = 0; i < q; ++i){    
 
                             int order = basis_orders[i];
-                            //fdapde::BsSpace<domain_structure> Vh(interval, order);
+                            //
                             std::cout << "i: " << i << std::endl;
                             //m_systems_of_basis.push_back(Vh);
                             //m_systems_of_basis.emplace_back(interval,basis_orders[i]);
