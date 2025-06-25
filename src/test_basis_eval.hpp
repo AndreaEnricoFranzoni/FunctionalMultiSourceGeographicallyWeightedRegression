@@ -96,7 +96,10 @@ void testing_function(const std::vector<double> & fd_points,
                       const std::vector<int> & basis_order,
                       const std::vector<double> & knots){
 
+    std::cout << "Nella testing_function" << std::endl;
     basis_systems< fdagwr_traits::fdagwr_domain, BASIS_TYPE::BSPLINES > bs(knots,basis_order,3);
+
+    std::cout << "creato basis_systems" << std::endl;
     
 
     int n_locs = fd_points.size();

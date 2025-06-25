@@ -49,14 +49,21 @@ public:
                   const std::vector<int> & order,
                   std::size_t q)            :    m_q(q)
                      {
+                        std::cout << "Nel costruttore di basis_systems" << std::endl;
                         m_systems_of_basis.reserve(q);
 
                         //casting the nodes for the basis system
                         Eigen::Map<const fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size());
+                        std::cout << "Nodi mappati" << std::endl;
                         domain_structure interval(nodes);
+                        std::cout << "Intervallo generato" << std::endl;
 
                         //construct the basis system
-                        for(std::size_t i = 0; i < q; ++i){     m_systems_of_basis.emplace_back(interval,order[i]);}  
+                        for(std::size_t i = 0; i < q; ++i){     
+                            std::cout << "i: " << i << std::endl;
+                            m_systems_of_basis.emplace_back(interval,order[i]);
+                            std::cout << "oggetto creato" << std::endl;
+                            }  
                      }
 
 
