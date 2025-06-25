@@ -70,7 +70,7 @@ public:
                             int order = basis_orders[i];
                             fdapde::BsSpace<domain_structure> Vh(interval, order);
                             std::cout << "i: " << i << std::endl;
-                            m_systems_of_basis.push_back(Vh);
+                            //m_systems_of_basis.push_back(Vh);
                             //m_systems_of_basis.emplace_back(interval,basis_orders[i]);
                             std::cout << "base creata" << std::endl;
                             }  
