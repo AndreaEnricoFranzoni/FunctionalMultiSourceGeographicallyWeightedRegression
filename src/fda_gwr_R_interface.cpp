@@ -86,7 +86,7 @@ Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
 
     
 
-    basis_systems< fdagwr_traits::fdagwr_domain, BASIS_TYPE::BSPLINES > bs(3,order_basis_test,knots_test);
+    basis_systems< fdagwr_traits::fdagwr_domain, BASIS_TYPE::BSPLINES > bs(knots_test,order_basis_test,3);
 
     std::vector<double> ev_points = Rcpp::as<std::vector<double>>(fd_points);
     //Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
