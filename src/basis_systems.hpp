@@ -62,8 +62,8 @@ public:
                         
 
                         domain_structure interval(nodes);
-                        std::cout << "Intervallo generato" << std::endl;
-
+                        std::cout << "Intervallo generato, con i seguenti nodi:" << std::endl;
+                        std::cout << interval.nodes() << std::endl;
                         //construct the basis system
                         for(std::size_t i = 0; i < q; ++i){    
 

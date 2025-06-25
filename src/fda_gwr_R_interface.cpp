@@ -81,7 +81,7 @@ Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
     //Rcpp::NumericMatrix distances_events,
     //Rcpp::NumericMatrix distances_stations,
 
-    Rcout << "fdagwr.16: " << std::endl;
+    Rcout << "fdagwr.17: " << std::endl;
 
     //checking and wrapping input parameters
     int number_threads = wrap_num_thread(num_threads);
