@@ -22,14 +22,28 @@ BEGIN_RCPP
 END_RCPP
 }
 // fmsgwr
-Rcpp::List fmsgwr(double input_el, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_fmsgwr(SEXP input_elSEXP, SEXP num_threadsSEXP) {
+Rcpp::List fmsgwr(Rcpp::NumericVector fd_points, double left_extreme_domain, double right_extreme_domain, Rcpp::IntegerVector n_basis_stationary_cov, Rcpp::IntegerVector n_order_basis_stationary_cov, Rcpp::NumericVector knots_stationary_cov, Rcpp::NumericVector penalization_stationary_cov, Rcpp::IntegerVector n_basis_events_cov, Rcpp::IntegerVector n_order_basis_events_cov, Rcpp::NumericVector knots_events_cov, Rcpp::NumericVector penalization_events_cov, Rcpp::IntegerVector n_basis_stations_cov, Rcpp::IntegerVector n_order_basis_stations_cov, Rcpp::NumericVector knots_stations_cov, Rcpp::NumericVector penalization_stations_cov, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_fmsgwr(SEXP fd_pointsSEXP, SEXP left_extreme_domainSEXP, SEXP right_extreme_domainSEXP, SEXP n_basis_stationary_covSEXP, SEXP n_order_basis_stationary_covSEXP, SEXP knots_stationary_covSEXP, SEXP penalization_stationary_covSEXP, SEXP n_basis_events_covSEXP, SEXP n_order_basis_events_covSEXP, SEXP knots_events_covSEXP, SEXP penalization_events_covSEXP, SEXP n_basis_stations_covSEXP, SEXP n_order_basis_stations_covSEXP, SEXP knots_stations_covSEXP, SEXP penalization_stations_covSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type input_el(input_elSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type fd_points(fd_pointsSEXP);
+    Rcpp::traits::input_parameter< double >::type left_extreme_domain(left_extreme_domainSEXP);
+    Rcpp::traits::input_parameter< double >::type right_extreme_domain(right_extreme_domainSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type n_basis_stationary_cov(n_basis_stationary_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type n_order_basis_stationary_cov(n_order_basis_stationary_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type knots_stationary_cov(knots_stationary_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type penalization_stationary_cov(penalization_stationary_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type n_basis_events_cov(n_basis_events_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type n_order_basis_events_cov(n_order_basis_events_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type knots_events_cov(knots_events_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type penalization_events_cov(penalization_events_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type n_basis_stations_cov(n_basis_stations_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type n_order_basis_stations_cov(n_order_basis_stations_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type knots_stations_cov(knots_stations_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type penalization_stations_cov(penalization_stations_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(fmsgwr(input_el, num_threads));
+    rcpp_result_gen = Rcpp::wrap(fmsgwr(fd_points, left_extreme_domain, right_extreme_domain, n_basis_stationary_cov, n_order_basis_stationary_cov, knots_stationary_cov, penalization_stationary_cov, n_basis_events_cov, n_order_basis_events_cov, knots_events_cov, penalization_events_cov, n_basis_stations_cov, n_order_basis_stations_cov, knots_stations_cov, penalization_stations_cov, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -60,7 +74,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_fdagwr_test_function", (DL_FUNC) &_fdagwr_fdagwr_test_function, 1},
-    {"_fdagwr_fmsgwr", (DL_FUNC) &_fdagwr_fmsgwr, 2},
+    {"_fdagwr_fmsgwr", (DL_FUNC) &_fdagwr_fmsgwr, 16},
     {"_fdagwr_fsgwr", (DL_FUNC) &_fdagwr_fsgwr, 2},
     {"_fdagwr_fgwr", (DL_FUNC) &_fdagwr_fgwr, 2},
     {NULL, NULL, 0}

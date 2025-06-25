@@ -23,12 +23,16 @@
 #include <string>
 #include "parameters_wrapper_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
+#include "basis_systems.hpp"
 
 
 
 #include "weight_matrix_stat.hpp"
 #include "weight_matrix_no_stat.hpp"
 #include "test_basis_eval.hpp"
+
+
+#include "fdaPDE-core/fdaPDE/splines.h"
 
 
 using namespace Rcpp;
@@ -53,19 +57,51 @@ void fdagwr_test_function(std::string input_string) {
 
 //
 // [[Rcpp::export]]
-Rcpp::List fmsgwr(double input_el,
+Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
+                  double left_extreme_domain,
+                  double right_extreme_domain,
+                  Rcpp::IntegerVector n_basis_stationary_cov,
+                  Rcpp::IntegerVector n_order_basis_stationary_cov,
+                  Rcpp::NumericVector knots_stationary_cov,
+                  Rcpp::NumericVector penalization_stationary_cov,
+                  Rcpp::IntegerVector n_basis_events_cov,
+                  Rcpp::IntegerVector n_order_basis_events_cov,
+                  Rcpp::NumericVector knots_events_cov,
+                  Rcpp::NumericVector penalization_events_cov,
+                  Rcpp::IntegerVector n_basis_stations_cov,
+                  Rcpp::IntegerVector n_order_basis_stations_cov,
+                  Rcpp::NumericVector knots_stations_cov,
+                  Rcpp::NumericVector penalization_stations_cov,
                   Rcpp::Nullable<int> num_threads = R_NilValue){
     //funzione per il multi-source gwr
+    //  !!!!!!!! NB: l'ordine delle basi su c++ corrisponde al degree su R !!!!!
 
-                      //Rcpp::NumericVector x_points,
-                  //Rcpp::NumericMatrix distances_events,
-                  //Rcpp::NumericMatrix distances_stations,
+    //Rcpp::NumericMatrix distances_events,
+    //Rcpp::NumericMatrix distances_stations,
 
     //checking and wrapping input parameters
     int number_threads = wrap_num_thread(num_threads);
 
 
+    std::vector<int> order_basis_test = Rcpp::as<std::vector<int>>(n_order_basis_stationary_cov);
+    std::vector<double> knots_test = Rcpp::as<std::vector<double>>(knots_stationary_cov);
 
+
+    basis_systems<BASIS_TYPE::BSPLINES> bs(3,order_basis_test,knots_test);
+
+    std::vector<double> ev_points = Rcpp::as<std::vector<double>>(fd_points);
+    Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
+
+    for(std::size_t i = 0; i < bs.q(); ++i){
+            Eigen::SparseMatrix<double> Psi = spline_basis_eval(bs.basis_systems()[i], locs);
+
+            std::cout << i+1 << "basis evaluation at location" << std::endl;
+            std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(Psi) << std::endl; 
+    }
+
+
+
+    /*
     std::vector<double> trial{12.0,8.0,7.9};
 
     weight_matrix_stationary<KERNEL_FUNC::GAUSSIAN> trial_sm(trial,
@@ -94,6 +130,7 @@ Rcpp::List fmsgwr(double input_el,
         }
         Rcout << "" << std::endl;
     }
+    */
     
 
 

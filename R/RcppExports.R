@@ -5,8 +5,8 @@ fdagwr_test_function <- function(input_string) {
     invisible(.Call(`_fdagwr_fdagwr_test_function`, input_string))
 }
 
-fmsgwr <- function(input_el, num_threads = NULL) {
-    .Call(`_fdagwr_fmsgwr`, input_el, num_threads)
+fmsgwr <- function(fd_points, left_extreme_domain, right_extreme_domain, n_basis_stationary_cov, n_order_basis_stationary_cov, knots_stationary_cov, penalization_stationary_cov, n_basis_events_cov, n_order_basis_events_cov, knots_events_cov, penalization_events_cov, n_basis_stations_cov, n_order_basis_stations_cov, knots_stations_cov, penalization_stations_cov, num_threads = NULL) {
+    .Call(`_fdagwr_fmsgwr`, fd_points, left_extreme_domain, right_extreme_domain, n_basis_stationary_cov, n_order_basis_stationary_cov, knots_stationary_cov, penalization_stationary_cov, n_basis_events_cov, n_order_basis_events_cov, knots_events_cov, penalization_events_cov, n_basis_stations_cov, n_order_basis_stations_cov, knots_stations_cov, penalization_stations_cov, num_threads)
 }
 
 fsgwr <- function(input_el = 1, num_threads = NULL) {

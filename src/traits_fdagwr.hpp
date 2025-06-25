@@ -67,7 +67,6 @@ public:
 
 
 
-
 /*!
 * @enum KERNEL_FUNC
 * @brief Kernel for evaluating the distances within different locations. Functions defined in "kernel_functions.hpp"
@@ -75,6 +74,17 @@ public:
 enum KERNEL_FUNC
 {
   GAUSSIAN = 0,  ///< Gaussian Kernel to evaluate the distances within different locations
+};
+
+
+
+/*!
+* @enum BASIS_TYPE
+* @brief type of basis for reconstructing the functional data
+*/
+enum BASIS_TYPE
+{
+    BSPLINES = 0,   ///< Bsplines basis
 };
 
 
