@@ -54,8 +54,8 @@ int test_fda_PDE(double input_test){
   // Triangulation<1, 1> interval(nodes);
   
   // build BSpline basis
-  int order = 3; // cubic splines
-  BsSpace Vh(interval, order);
+  int order = 3; // cubic splines:          NUMERO DI BASI E' ORDER + KNOTS (n_nodes) - 1
+  BsSpace Vh(interval, order);          
 
   // evaluate basis at set of locations
   int n_locs = 10;
