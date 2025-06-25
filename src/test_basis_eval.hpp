@@ -102,6 +102,7 @@ void testing_function(const std::vector<double> & fd_points,
     std::cout << "creato basis_systems" << std::endl;
     
 
+    /*
     int n_locs = fd_points.size();
     Eigen::Matrix<double, Dynamic, Dynamic> locs(n_locs, 1);
     for(int i = 0; i < n_locs; ++i) { locs(i, 0) = fd_points[i]; }
@@ -113,4 +114,5 @@ void testing_function(const std::vector<double> & fd_points,
         std::cout << i+1 << "basis evaluation at location" << std::endl;
         std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(Psi) << std::endl; 
     }
+    */
 }
