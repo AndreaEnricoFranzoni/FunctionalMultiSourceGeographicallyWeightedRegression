@@ -25,6 +25,10 @@
 
 #include "traits_fdagwr.hpp"
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 
 /*!
 * @file parameters_wrapper.hpp
