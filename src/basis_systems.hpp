@@ -54,7 +54,7 @@ public:
                   const std::vector<std::size_t> & order,
                   const std::vector<double> & knots)            :    m_q(q)
                      {
-                        m_basis_systems.reserve(q);
+                        m_systems_of_basis.reserve(q);
 
                         for(std::size_t i = 0; i < q; ++i){
                             
@@ -63,7 +63,7 @@ public:
                             fdapde::Triangulation<1, 1> interval(nodes);
 
                             //construct the basis system
-                            m_basis_systems.emplace_back(interval,order[i]);
+                            m_systems_of_basis.emplace_back(interval,order[i]);
                         }  
                      }
 
