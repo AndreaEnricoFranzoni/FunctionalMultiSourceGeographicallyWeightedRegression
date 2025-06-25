@@ -92,7 +92,7 @@ Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
     std::vector<double> ev_points = Rcpp::as<std::vector<double>>(fd_points);
     //Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
 
-    n_locs = ev_points.size();
+    int n_locs = ev_points.size();
     Eigen::Matrix<double, Dynamic, Dynamic> locs(n_locs, 1);
     for(int i = 0; i < n_locs; ++i) { locs(i, 0) = ev_points[i]; }
 
