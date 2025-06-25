@@ -56,12 +56,12 @@ public:
                      {
                         m_systems_of_basis.reserve(q);
 
+                        //casting the nodes for the basis system
+                        Eigen::Map<const fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size());
+                        fdapde::Triangulation<1, 1> interval(nodes);
+
                         for(std::size_t i = 0; i < q; ++i){
                             
-                            //casting the nodes for the basis system
-                            Eigen::Map<fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size());
-                            fdapde::Triangulation<1, 1> interval(nodes);
-
                             //construct the basis system
                             m_systems_of_basis.emplace_back(interval,order[i]);
                         }  
