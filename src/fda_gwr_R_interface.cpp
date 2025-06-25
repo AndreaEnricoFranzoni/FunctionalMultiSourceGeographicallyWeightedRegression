@@ -91,7 +91,7 @@ Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
     std::vector<double> ev_points = Rcpp::as<std::vector<double>>(fd_points);
     
 
-    
+    Rcout << "Wrap degli input" << std::endl;
 
     
     //Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
