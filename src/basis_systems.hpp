@@ -54,7 +54,13 @@ public:
 
                         //casting the nodes for the basis system
                         Eigen::Map<const fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size());
-                        std::cout << "Nodi mappati" << std::endl;
+                        std::cout << "Nodi mappati:" << std::endl;
+                        for (size_t j = 0; j < knots.size(); ++j)
+                        {
+                            std::cout << nodes(j) << std::endl;
+                        }
+                        
+
                         domain_structure interval(nodes);
                         std::cout << "Intervallo generato" << std::endl;
 
