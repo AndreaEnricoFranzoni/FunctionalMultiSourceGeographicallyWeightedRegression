@@ -23,9 +23,7 @@
 #define FDAGWR_WRAP_PARAMS_HPP
 
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
+#include "traits_fdagwr.hpp"
 
 
 /*!
