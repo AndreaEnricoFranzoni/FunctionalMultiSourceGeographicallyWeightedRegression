@@ -23,6 +23,11 @@
 #define FDAGWR_WRAP_PARAMS_HPP
 
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
+
 /*!
 * @file parameters_wrapper.hpp
 * @brief Contains methods to check and wrap R-inputs into fdagwr-coherent ones.
