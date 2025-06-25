@@ -99,7 +99,7 @@ Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
     //Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
 
 
-    testing_function(ev_points,order_basis_test,knots_test);
+    //testing_function(ev_points,order_basis_test,knots_test);
 
 
 
