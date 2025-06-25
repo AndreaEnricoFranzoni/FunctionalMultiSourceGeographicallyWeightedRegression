@@ -51,7 +51,7 @@ private:
 
 public:
     basis_systems(std::size_t q,
-                  const std::vector<std::size_t> & order,
+                  const std::vector<int> & order,
                   const std::vector<double> & knots)            :    m_q(q)
                      {
                         m_systems_of_basis.reserve(q);
@@ -59,7 +59,7 @@ public:
                         for(std::size_t i = 0; i < q; ++i){
                             
                             //casting the nodes for the basis system
-                            Eigen::Map<fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size(), 1);
+                            Eigen::Map<fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size());
                             fdapde::Triangulation<1, 1> interval(nodes);
 
                             //construct the basis system
