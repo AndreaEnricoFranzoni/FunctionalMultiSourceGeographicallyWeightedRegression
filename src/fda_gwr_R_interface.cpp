@@ -21,10 +21,11 @@
 #include <RcppEigen.h>
 
 #include <string>
-#include "parameters_wrapper_fdagwr.hpp"
-#include "traits_fdagwr.hpp"
-#include "basis_systems.hpp"
 
+#include "traits_fdagwr.hpp"
+
+#include "basis_systems.hpp"
+#include "parameters_wrapper_fdagwr.hpp"
 
 
 #include "weight_matrix_stat.hpp"
@@ -80,11 +81,12 @@ Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
     //Rcpp::NumericMatrix distances_events,
     //Rcpp::NumericMatrix distances_stations,
 
-    Rcout << "fdagwr.11: " << std::endl;
+    Rcout << "fdagwr.12: " << std::endl;
 
     //checking and wrapping input parameters
     int number_threads = wrap_num_thread(num_threads);
-
+    
+    Rcout << "NT: " << number_threads << std::endl;
 
     std::vector<int> order_basis_test = Rcpp::as<std::vector<int>>(n_order_basis_stationary_cov);
     std::vector<double> knots_test = Rcpp::as<std::vector<double>>(knots_stationary_cov);
