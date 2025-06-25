@@ -99,13 +99,13 @@ void testing_function(const std::vector<double> & fd_points,
     basis_systems< fdagwr_traits::fdagwr_domain, BASIS_TYPE::BSPLINES > bs(knots,basis_order,3);
     
 
-    int n_locs = ev_points.size();
+    int n_locs = fd_points.size();
     Eigen::Matrix<double, Dynamic, Dynamic> locs(n_locs, 1);
-    for(int i = 0; i < n_locs; ++i) { locs(i, 0) = ev_points[i]; }
+    for(int i = 0; i < n_locs; ++i) { locs(i, 0) = fd_points[i]; }
 
 
     for(std::size_t i = 0; i < bs.q(); ++i){
-        Eigen::SparseMatrix<double> Psi = spline_basis_eval(bs.systems_of_basis()[i], fd_points);
+        Eigen::SparseMatrix<double> Psi = spline_basis_eval(bs.systems_of_basis()[i], locs);
 
         std::cout << i+1 << "basis evaluation at location" << std::endl;
         std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(Psi) << std::endl; 
