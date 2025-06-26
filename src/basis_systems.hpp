@@ -50,12 +50,13 @@ public:
 
     basis_systems(const std::vector<double> & knots,
                   const std::vector<int> & basis_orders,
-                  std::size_t q)            :    
-                        m_q(q), 
-                        m_interval(Eigen::Map<const fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size()))
+                  std::size_t q)            :    m_q(q)
                      {
                         std::cout << "Nel costruttore di basis_systems" << std::endl;
                         m_systems_of_basis.reserve(q);
+
+
+                        m_interval(Eigen::Map<const fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size()));
 
                         //casting the nodes for the basis system
                         Eigen::Map<const fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size());
