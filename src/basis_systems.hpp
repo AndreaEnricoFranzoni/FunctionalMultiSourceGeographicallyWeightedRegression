@@ -55,9 +55,6 @@ public:
                         std::cout << "Nel costruttore di basis_systems" << std::endl;
                         m_systems_of_basis.reserve(q);
 
-
-                        m_interval(Eigen::Map<const fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size()));
-
                         //casting the nodes for the basis system
                         Eigen::Map<const fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size());
                         std::cout << "Nodi mappati:" << std::endl;
@@ -65,6 +62,8 @@ public:
                         {
                             std::cout << nodes(j) << std::endl;
                         }
+
+                        m_interval(nodes);
                         
 
                         domain_structure interval(nodes);
