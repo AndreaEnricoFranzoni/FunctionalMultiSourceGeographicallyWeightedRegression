@@ -64,14 +64,15 @@ public:
                         }
 
                         
+                        domain_structure interval = domain_structure::Interval(-2.5, 1.0, knots.size());
                         
 
-                        domain_structure interval(nodes);
-                        m_interval = interval;
+                        //domain_structure interval(nodes);
+                        // m_interval = interval;
                         std::cout << "Intervallo inizializzato nel costruttore, con i seguenti nodi:" << std::endl;
-                        std::cout << m_interval.nodes() << std::endl;
+                        std::cout << interval.nodes() << std::endl;
 
-                        fdapde::BsSpace<domain_structure> Vh(m_interval, 3);
+                        //fdapde::BsSpace<domain_structure> Vh(interval, 3);
 
 
                         //construct the basis system
