@@ -65,7 +65,7 @@ public:
                         std::cout << "Intervallo generato, con i seguenti nodi:" << std::endl;
                         std::cout << interval.nodes() << std::endl;
 
-                        //fdapde::BsSpace<domain_structure> Vh(interval, 3);
+                        fdapde::BsSpace<domain_structure> Vh(interval, 3);
 
 
                         //construct the basis system
