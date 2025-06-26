@@ -39,6 +39,9 @@ private:
     /*!Vector containing a basis system for each one of the functional covariates*/
     std::vector< fdapde::BsSpace<domain_structure> > m_systems_of_basis;
 
+    /*!Interval over which constructing the basis*/
+    domain_structure m_interval;
+
     /*!Number of basis systems: one for each covariate*/
     std::size_t m_q;
 
@@ -47,7 +50,9 @@ public:
 
     basis_systems(const std::vector<double> & knots,
                   const std::vector<int> & basis_orders,
-                  std::size_t q)            :    m_q(q)
+                  std::size_t q)            :    
+                        m_q(q), 
+                        m_interval(Eigen::Map<const fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size()))
                      {
                         std::cout << "Nel costruttore di basis_systems" << std::endl;
                         m_systems_of_basis.reserve(q);
@@ -62,10 +67,10 @@ public:
                         
 
                         domain_structure interval(nodes);
-                        std::cout << "Intervallo generato, con i seguenti nodi:" << std::endl;
-                        std::cout << interval.nodes() << std::endl;
+                        std::cout << "Intervallo inizializzato nel costruttore, con i seguenti nodi:" << std::endl;
+                        std::cout << m_interval.nodes() << std::endl;
 
-                        fdapde::BsSpace<domain_structure> Vh(interval, 3);
+                        //fdapde::BsSpace<domain_structure> Vh(m_interval, 3);
 
 
                         //construct the basis system
