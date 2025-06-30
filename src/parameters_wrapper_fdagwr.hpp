@@ -22,8 +22,12 @@
 #ifndef FDAGWR_WRAP_PARAMS_HPP
 #define FDAGWR_WRAP_PARAMS_HPP
 
+#include <RcppEigen.h>
+
 
 #include "traits_fdagwr.hpp"
+#include "data_reader.hpp"
+
 #include <stdexcept>
 
 #ifdef _OPENMP
@@ -79,16 +83,38 @@ wrap_covariates_names(Rcpp::List cov_coeff_list)
 }
 
 
-
+//
+//  [[Rcpp::depends(RcppEigen)]]
 template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
-void
+std::vector<fdagwr_traits::Dense_Matrix>
 wrap_covariates_coefficients(Rcpp::List cov_coeff_list)
 {
   // number of covariates 
   std::size_t number_cov = cov_coeff_list.size();
 
-  //std::vector<fdagwr_traits::Dense_Matrix>
+  std::vector<fdagwr_traits::Dense_Matrix> covariates_coefficients;
+  covariates_coefficients.reserve(number_cov);
+
+  for(std::size_t i = 0; i < number_cov; ++i){
+
+    SEXP covariate = cov_coeff_list[i];
+
+    if (!Rf_inherits(covariate, "matrix") || TYPEOF(covariate) != REALSXP)
+    {   std::string error_message1 = "All covariates coefficients have to be matrix of double";
+        throw std::invalid_argument(error_message1);}
+    
+    auto cov = reader_data<double,REM_NAN::MR>(covariate);
+    covariates_coefficients[i] = cov;
+  }
+
+  return covariates_coefficients;
 }
+
+
+
+
+
+
 
 
 

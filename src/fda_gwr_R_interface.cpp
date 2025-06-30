@@ -118,7 +118,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     std::vector<double> knots_stations_reg = wrap_abscissas(knots_stations_cov,left_extreme_domain,right_extreme_domain);
     //covariates
     std::vector<std::string> names_cov_stationary = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
-    
+    std::vector<fdagwr_traits::Dense_Matrix> stationary_cov_coeff = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
     std::vector<std::string> names_cov_events = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
 
     std::vector<std::string> names_cov_stations = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
