@@ -52,7 +52,7 @@ wrap_covariates_names(Rcpp::List cov_coeff_list)
   Rcpp::Nullable<Rcpp::CharacterVector> cov_names_R = cov_coeff_list.names();
 
 
-  if (cov_names.isNull())
+  if (cov_names_R.isNull())
   {
       std::vector<std::string> covariates_names;
       std::size_t number_cov = cov_coeff_list.size();
@@ -61,10 +61,9 @@ wrap_covariates_names(Rcpp::List cov_coeff_list)
       std::string covariates_type = covariate_conversion<fdagwr_cov_t>;
 
       for(std::size_t i = 0; i < number_cov; ++i){
-        covariates_names.emplace_back("Cov" + covariates_type + std::to_string(i+1));
-      }
+        covariates_names.emplace_back("Cov" + covariates_type + std::to_string(i+1));}
 
-      return covariates_type;
+      return covariates_names;
   }
   
   std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_R);

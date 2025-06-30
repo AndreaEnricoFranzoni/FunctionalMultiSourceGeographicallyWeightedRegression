@@ -105,9 +105,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     std::vector<double> knots_y = wrap_abscissas(knots_y_points,left_extreme_domain,right_extreme_domain);
     std::vector<double> knots_stat_reg = wrap_abscissas(knots_stationary_cov,left_extreme_domain,right_extreme_domain);
     std::vector<double> knots_ev_reg = wrap_abscissas(knots_events_cov,left_extreme_domain,right_extreme_domain);
-    std::vector<double> knots_stations_cov = wrap_abscissas(knots_stations_cov,left_extreme_domain,right_extreme_domain);
+    std::vector<double> knots_stations_reg = wrap_abscissas(knots_stations_cov,left_extreme_domain,right_extreme_domain);
     //covariates
-    std::vector<std::string> names_cov_stationary = wrap_covariates_names(coeff_y_points);
+    std::vector<std::string> names_cov_stationary = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
     for(std::size_t i = 0; i < names_cov_stationary.size(); ++i){   Rcout << names_cov_stationary[i] << std::endl;}
 
     //number of threads
