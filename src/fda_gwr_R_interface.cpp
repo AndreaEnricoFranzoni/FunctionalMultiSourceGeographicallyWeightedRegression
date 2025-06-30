@@ -23,6 +23,7 @@
 #include <string>
 
 #include "traits_fdagwr.hpp"
+#include "data_reader.hpp"
 
 #include "basis_systems.hpp"
 #include "parameters_wrapper_fdagwr.hpp"
