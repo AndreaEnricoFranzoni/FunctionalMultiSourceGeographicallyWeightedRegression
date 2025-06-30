@@ -94,7 +94,7 @@ enum FDAGWR_COVARIATES_TYPES
 
 template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
 std::string
-covariate_conversion()
+covariate_type()
 {
   if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::STATIONARY )    {   return "Stationary";}
   if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY ){   return "Nonstationary";}

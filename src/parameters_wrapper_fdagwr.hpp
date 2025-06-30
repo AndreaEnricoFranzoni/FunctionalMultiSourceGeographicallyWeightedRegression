@@ -48,23 +48,36 @@ template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
 std::vector<std::string>
 wrap_covariates_names(Rcpp::List cov_coeff_list)
 {
-  //std::tuple< std::vector<fdagwr_traits::Dense_Matrix>, std::vector<std::string>> _output_;
+  //name of the covariates in the list
   Rcpp::Nullable<Rcpp::CharacterVector> cov_names_R = cov_coeff_list.names();
+  //number of covariates 
+  std::size_t number_cov = cov_coeff_list.size();
 
-
+  //if no names
   if (cov_names_R.isNull())
   {
       std::vector<std::string> covariates_names;
-      std::size_t number_cov = cov_coeff_list.size();
       covariates_names.reserve(number_cov);
+      std::string covariates_type = covariate_type<fdagwr_cov_t>();   //type of the covariates
 
-      std::string covariates_type = covariate_conversion<fdagwr_cov_t>();
-
-      for(std::size_t i = 0; i < number_cov; ++i){
-        covariates_names.emplace_back("Cov" + covariates_type + std::to_string(i+1));}
+      //put a default value
+      for(std::size_t i = 0; i < number_cov; ++i){  
+        covariates_names.emplace_back("Covariate" + covariates_type + std::to_string(i+1));}
 
       return covariates_names;
   }
+  //if not all the names are set
+  if (number_cov != cov_names_R.size())
+  {
+    std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_R);
+
+    //put a default value for the missing names
+    for(std::size_t i = 0; i < number_cov; ++i){  
+        if(cov_names_R[i] == "" || cov_names_R[i] == NA_STRING){
+            covariates_names.insert(i,"Covariate" + covariates_type + std::to_string(i+1));   }}
+
+  }
+  
   
   std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_R);
   return covariates_names;
