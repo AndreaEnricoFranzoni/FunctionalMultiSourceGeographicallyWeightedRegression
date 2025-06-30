@@ -95,9 +95,15 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  !!!!!!!! NB: l'ordine delle basi su c++ corrisponde al degree su R !!!!!
 
 
-    Rcout << "fdagwr.26: " << std::endl;
+    Rcout << "fdagwr.27: " << std::endl;
 
-    //checking and wrapping input parameters
+    using T = double;
+
+    //reading the functional data, handoling eventual NaNs
+    auto x = reader_data<T,REM_NAN::MR>(y_points);
+    
+
+    //CHECKING and WRAPPING input parameters
 
     //abscissa
     std::vector<double> abscissa_points = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
@@ -108,7 +114,10 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     std::vector<double> knots_stations_reg = wrap_abscissas(knots_stations_cov,left_extreme_domain,right_extreme_domain);
     //covariates
     std::vector<std::string> names_cov_stationary = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
-    for(std::size_t i = 0; i < names_cov_stationary.size(); ++i){   Rcout << names_cov_stationary[i] << std::endl;}
+    
+    std::vector<std::string> names_cov_events = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
+
+    std::vector<std::string> names_cov_stations = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
 
     //number of threads
     int number_threads = wrap_num_thread(num_threads);

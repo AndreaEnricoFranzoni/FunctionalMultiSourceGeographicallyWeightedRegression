@@ -36,6 +36,11 @@
 #include <cmath>
 #include <string>
 #include <algorithm>
+#include <iterator>
+#include <numeric>
+#include <utility>
+#include <functional>
+#include <set>
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -122,6 +127,19 @@ enum KERNEL_FUNC
 enum BASIS_TYPE
 {
     BSPLINES = 0,   ///< Bsplines basis
+};
+
+
+
+/*!
+* @enum REM_NAN: how to remove NaNs 
+* @brief The available strategy for removing non-dummy NaNs
+*/
+enum REM_NAN
+{ 
+  NR = 0,      ///<  Not replacing NaN
+  MR = 1,      ///< Replacing nans with mean (could change the mean of the distribution)
+  ZR = 2,      ///< Replacing nans with 0s (could change the sd of the distribution)
 };
 
 

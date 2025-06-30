@@ -80,6 +80,18 @@ wrap_covariates_names(Rcpp::List cov_coeff_list)
 
 
 
+template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
+std::vector<fdagwr_traits::Dense_Matrix>
+wrap_covariates_coefficients(Rcpp::List cov_coeff_list)
+{
+  // number of covariates 
+  std::size_t number_cov = cov_coeff_list.size();
+
+  
+}
+
+
+
 
 
 /*!
