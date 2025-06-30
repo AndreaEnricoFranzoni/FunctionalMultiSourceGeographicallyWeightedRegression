@@ -24,6 +24,7 @@
 
 
 #include "traits_fdagwr.hpp"
+#include <stdexcept>
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -35,6 +36,80 @@
 * @brief Contains methods to check and wrap R-inputs into fdagwr-coherent ones.
 * @author Andrea Enrico Franzoni
 */
+
+
+
+/*!
+* @brief Wrapping the list of covariates
+* 
+* @note check input consistency
+*/
+template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
+std::vector<std::string>
+wrap_covariates_names(Rcpp::List cov_coeff_list)
+{
+  //std::tuple< std::vector<fdagwr_traits::Dense_Matrix>, std::vector<std::string>> _output_;
+  Rcpp::Nullable<Rcpp::CharacterVector> cov_names_R = cov_coeff_list.names();
+
+
+  if (cov_names.isNull())
+  {
+      std::vector<std::string> covariates_names;
+      std::size_t number_cov = cov_coeff_list.size();
+      covariates_names.reserve(number_cov);
+
+      std::string covariates_type = covariate_conversion<fdagwr_cov_t>;
+
+      for(std::size_t i = 0; i < number_cov; ++i){
+        covariates_names.emplace_back("Cov" + covariates_type + std::to_string(i+1));
+      }
+
+      return covariates_type;
+  }
+  
+  std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_R);
+  return covariates_names;
+}
+
+
+
+
+
+/*!
+* @brief Wrapping the points over which the discrete evaluations of the functional object are available/knots for basis system.
+* @param abscissas Rcpp::NumericVector  containing the domain points
+* @param a left domain extreme
+* @param b right domain extreme
+* @return an std::vector<double> containing the points.
+* @note Check consistency of domain extremes and passed points, eventualy throwing an error.
+*/
+inline
+std::vector<double>
+wrap_abscissas(Rcpp::NumericVector abscissas, double a, double b)    //dim: row of x
+{ 
+  //check that domain extremes are consistent
+  if(a>=b)
+  {
+    std::string error_message1 = "Left extreme of the domain has to be lower than the right one";
+    throw std::invalid_argument(error_message1);
+  }
+  
+  //sorting the abscissas values (security check)
+  std::vector<double> abscissas_wrapped = Rcpp::as<std::vector<double>>(abscissas);
+  std::sort(abscissas_wrapped.begin(),abscissas_wrapped.end());
+  
+  //checking that the passed points are inside the domain
+  if(abscissas_wrapped[0] < a || abscissas_wrapped.back() > b)
+  {
+    std::string error_message2 = "The points in which there are the discrete evaluations of the curves have to be in the interval (" + std::to_string(a) + "," + std::to_string(b) + ")";
+    throw std::invalid_argument(error_message2);
+  }
+    
+  return abscissas_wrapped;
+}
+
+
+
 
 
 

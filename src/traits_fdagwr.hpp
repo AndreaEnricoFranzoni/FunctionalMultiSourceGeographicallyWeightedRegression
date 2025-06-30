@@ -79,6 +79,30 @@ struct FDAGWR_FEATS
 };
 
 
+/*!
+* @enum FDAGWR_COVARIATES_TYPES
+* @brief different types of functional covariates
+*/
+enum FDAGWR_COVARIATES_TYPES
+{
+  STATIONARY = 0,       ///< Covariates not depending on the geographical location
+  NON_STATIONARY = 1,   ///< Covariates depending on the geographical location
+  EVENT = 2,            ///< Covariates depending on the event geographical location
+  STATION = 3,          ///< Covariates not depending on the station geographical location
+};
+
+
+template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
+std::string
+covariate_conversion()
+{
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::STATIONARY )    {   return "Stationary";}
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY ){   return "Nonstationary";}
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::EVENT )         {   return "Event";}
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::STATION )       {   return "Station";}
+};
+
+
 
 /*!
 * @enum KERNEL_FUNC

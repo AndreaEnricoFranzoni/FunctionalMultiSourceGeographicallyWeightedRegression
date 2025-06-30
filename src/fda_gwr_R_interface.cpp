@@ -94,12 +94,23 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //funzione per il multi-source gwr
     //  !!!!!!!! NB: l'ordine delle basi su c++ corrisponde al degree su R !!!!!
 
-    //Rcpp::NumericMatrix distances_events,
-    //Rcpp::NumericMatrix distances_stations,
 
     Rcout << "fdagwr.20: " << std::endl;
 
     //checking and wrapping input parameters
+
+    //abscissa
+    std::vector<double> abscissa_points = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
+    //knots
+    std::vector<double> knots_y = wrap_abscissas(knots_y_points,left_extreme_domain,right_extreme_domain);
+    std::vector<double> knots_stat_reg = wrap_abscissas(knots_stationary_cov,left_extreme_domain,right_extreme_domain);
+    std::vector<double> knots_ev_reg = wrap_abscissas(knots_events_cov,left_extreme_domain,right_extreme_domain);
+    std::vector<double> knots_stations_cov = wrap_abscissas(knots_stations_cov,left_extreme_domain,right_extreme_domain);
+    //covariates
+    std::vector<std::string> names_cov_stationary = wrap_covariates_names(coeff_y_points);
+    for(std::size_t i = 0; i < names_cov_stationary.size(); ++i){   Rcout << names_cov_stationary[i] << std::endl;}
+
+    //number of threads
     int number_threads = wrap_num_thread(num_threads);
     
 
