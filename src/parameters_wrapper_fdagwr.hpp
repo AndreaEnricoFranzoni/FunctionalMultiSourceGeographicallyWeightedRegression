@@ -48,18 +48,19 @@ template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
 std::vector<std::string>
 wrap_covariates_names(Rcpp::List cov_coeff_list)
 {
-  //name of the covariates in the list
-  Rcpp::Nullable<Rcpp::CharacterVector> cov_names_R = cov_coeff_list.names();
+  //name of the covariates in the input list list
+  Rcpp::Nullable<Rcpp::CharacterVector> cov_names_input_list = cov_coeff_list.names();
   //number of covariates 
   std::size_t number_cov = cov_coeff_list.size();
+  //type of the covariates
+  std::string covariates_type = covariate_type<fdagwr_cov_t>();
 
   //if no names
-  if (cov_names_R.isNull())
+  if (cov_names_input_list.isNull())
   {
       std::vector<std::string> covariates_names;
       covariates_names.reserve(number_cov);
-      std::string covariates_type = covariate_type<fdagwr_cov_t>();   //type of the covariates
-
+       
       //put a default value
       for(std::size_t i = 0; i < number_cov; ++i){  
         covariates_names.emplace_back("Covariate" + covariates_type + std::to_string(i+1));}
@@ -67,19 +68,20 @@ wrap_covariates_names(Rcpp::List cov_coeff_list)
       return covariates_names;
   }
   //if not all the names are set
-  if (number_cov != cov_names_R.size())
+  if (number_cov != cov_names_input_list.size())
   {
-    std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_R);
+    std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_input_list);
 
     //put a default value for the missing names
     for(std::size_t i = 0; i < number_cov; ++i){  
-        if(cov_names_R[i] == "" || cov_names_R[i] == NA_STRING){
-            covariates_names.insert(i,"Covariate" + covariates_type + std::to_string(i+1));   }}
+        if(cov_names_input_list[i] == "" || cov_names_input_list[i] == NA_STRING){
+            covariates_names.insert(i,"Covariate" + covariates_type + std::to_string(i+1));}}
 
+    return covariates_names;
   }
   
-  
-  std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_R);
+  //simply copy the actual names
+  std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_input_list);
   return covariates_names;
 }
 
