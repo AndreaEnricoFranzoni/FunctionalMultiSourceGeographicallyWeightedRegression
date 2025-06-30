@@ -92,7 +92,7 @@ wrap_covariates_names(Rcpp::List cov_coeff_list)
   std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_input_list);
 
   for(std::size_t i = 0; i < number_cov; ++i){  
-        if(covariates_names[i] == "" || covariates_names[i] == NA_STRING){
+        if(covariates_names[i] == "" ){         //|| covariates_names[i] == NA_STRING
             covariates_names[i] = "Covariate" + covariates_type + std::to_string(i+1);}}
 
   return covariates_names;
