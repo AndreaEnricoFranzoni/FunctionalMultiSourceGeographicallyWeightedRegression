@@ -95,7 +95,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  !!!!!!!! NB: l'ordine delle basi su c++ corrisponde al degree su R !!!!!
 
 
-    Rcout << "fdagwr.20: " << std::endl;
+    Rcout << "fdagwr.21: " << std::endl;
 
     //checking and wrapping input parameters
 
