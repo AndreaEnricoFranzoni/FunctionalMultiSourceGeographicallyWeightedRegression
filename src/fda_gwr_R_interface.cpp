@@ -101,8 +101,11 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     using T = double;
 
     //reading the functional data, handoling eventual NaNs
-    auto x = reader_data<T,REM_NAN::MR>(y_points);
+    auto y_points_ = reader_data<T,REM_NAN::MR>(y_points);
     
+    Rcout << "Righe: " << y_points_.rows() << std::endl;
+    Rcout << "Colonne: " << y_points_.cols() << std::endl;
+    Rcout << y_points_ << std::endl;
 
     //CHECKING and WRAPPING input parameters
 
