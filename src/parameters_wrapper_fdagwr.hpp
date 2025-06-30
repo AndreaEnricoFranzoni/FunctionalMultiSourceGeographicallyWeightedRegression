@@ -58,7 +58,7 @@ wrap_covariates_names(Rcpp::List cov_coeff_list)
       std::size_t number_cov = cov_coeff_list.size();
       covariates_names.reserve(number_cov);
 
-      std::string covariates_type = covariate_conversion<fdagwr_cov_t>;
+      std::string covariates_type = covariate_conversion<fdagwr_cov_t>();
 
       for(std::size_t i = 0; i < number_cov; ++i){
         covariates_names.emplace_back("Cov" + covariates_type + std::to_string(i+1));}
