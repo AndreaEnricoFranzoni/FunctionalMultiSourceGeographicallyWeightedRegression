@@ -69,6 +69,7 @@ wrap_covariates_names(Rcpp::List cov_coeff_list)
       return covariates_names;
   }
 
+  /*
   //if only some covariates have their name: put a default for all the names not already set
   Rcpp::CharacterVector cov_names_input_list_no_null(cov_names_input_list);
   if (number_cov != cov_names_input_list_no_null.size())
@@ -85,9 +86,15 @@ wrap_covariates_names(Rcpp::List cov_coeff_list)
 
       return covariates_names;
   }
+  */
   
   //simply copy the actual names
   std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_input_list);
+
+  for(std::size_t i = 0; i < number_cov; ++i){  
+        if(covariates_names[i] == "" || covariates_names[i] == NA_STRING){
+            covariates_names[i] = "Covariate" + covariates_type + std::to_string(i+1);}}
+
   return covariates_names;
 }
 
