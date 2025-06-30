@@ -76,6 +76,8 @@ wrap_covariates_names(Rcpp::List cov_coeff_list)
       //read the names
       std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_input_list_no_null);
 
+      std::cout << "covariates_names dim: " << covariates_names.size() << std::endl;
+
       //put a default value for the missing names
       for(std::size_t i = 0; i < number_cov; ++i){  
           if(cov_names_input_list_no_null[i] == "" || cov_names_input_list_no_null[i] == NA_STRING){
