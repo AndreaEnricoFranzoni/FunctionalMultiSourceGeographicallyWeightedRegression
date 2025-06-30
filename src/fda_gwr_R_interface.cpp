@@ -59,21 +59,46 @@ void fdagwr_test_function(std::string input_string) {
 
 //
 // [[Rcpp::export]]
-Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
+Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
+                  Rcpp::NumericMatrix coeff_y_points,
+                  Rcpp::NumericVector knots_y_points,
+                  Rcpp::Nullable<int> n_order_basis_y_points = R_NilValue,
+                  Rcpp::Nullable<int> n_basis_y_points = R_NilValue,
+                  double penalization_y_points,
+                  Rcpp::NumericMatrix coeff_rec_weights_y_points,
+                  Rcpp::Nullable<int> n_order_basis_rec_weights_y_points = R_NilValue,
+                  Rcpp::Nullable<int> n_basis_rec_weights_y_points = R_NilValue,
+                  Rcpp::NumericVector t_points,
                   double left_extreme_domain,
                   double right_extreme_domain,
-                  Rcpp::IntegerVector n_basis_stationary_cov,
-                  Rcpp::IntegerVector n_order_basis_stationary_cov,
+                  Rcpp::List coeff_stationary_cov,
                   Rcpp::NumericVector knots_stationary_cov,
+                  Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_stationary_cov = R_NilValue,
+                  Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stationary_cov = R_NilValue,
                   Rcpp::NumericVector penalization_stationary_cov,
-                  Rcpp::IntegerVector n_basis_events_cov,
-                  Rcpp::IntegerVector n_order_basis_events_cov,
+                  Rcpp::List coeff_rec_weights_stationary_cov,
+                  Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_rec_weights_stationary_cov = R_NilValue,
+                  Rcpp::Nullable<Rcpp::IntegerVector> n_basis_rec_weights_stationary_cov = R_NilValue,
+                  Rcpp::List coeff_events_cov,
                   Rcpp::NumericVector knots_events_cov,
+                  Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_events_cov = R_NilValue,
+                  Rcpp::Nullable<Rcpp::IntegerVector> n_basis_events_cov = R_NilValue,
                   Rcpp::NumericVector penalization_events_cov,
-                  Rcpp::IntegerVector n_basis_stations_cov,
-                  Rcpp::IntegerVector n_order_basis_stations_cov,
+                  Rcpp::List coeff_rec_weights_events_cov,
+                  Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_rec_weights_events_cov = R_NilValue,
+                  Rcpp::Nullable<Rcpp::IntegerVector> n_basis_rec_weights_events_cov = R_NilValue,
+                  Rcpp::NumericMatrix distances_events,
+                  double bandwith_events,
+                  Rcpp::List coeff_stations_cov,
                   Rcpp::NumericVector knots_stations_cov,
+                  Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_stations_cov,
+                  Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stations_cov,
                   Rcpp::NumericVector penalization_stations_cov,
+                  Rcpp::List coeff_rec_weights_stations_cov,
+                  Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_rec_weights_stations_cov = R_NilValue,
+                  Rcpp::Nullable<Rcpp::IntegerVector> n_basis_rec_weights_stations_cov = R_NilValue,
+                  Rcpp::NumericMatrix distances_stations,
+                  double bandwith_stations,
                   Rcpp::Nullable<int> num_threads = R_NilValue){
     //funzione per il multi-source gwr
     //  !!!!!!!! NB: l'ordine delle basi su c++ corrisponde al degree su R !!!!!
@@ -81,7 +106,7 @@ Rcpp::List fmsgwr(Rcpp::NumericVector fd_points,
     //Rcpp::NumericMatrix distances_events,
     //Rcpp::NumericMatrix distances_stations,
 
-    Rcout << "fdagwr.19: " << std::endl;
+    Rcout << "fdagwr.20: " << std::endl;
 
     //checking and wrapping input parameters
     int number_threads = wrap_num_thread(num_threads);
