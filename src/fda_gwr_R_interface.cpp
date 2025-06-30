@@ -104,8 +104,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     
 
     std::vector<int>    order_basis_test = Rcpp::as<std::vector<int>>(n_order_basis_stationary_cov);
-    std::vector<double> knots_test       = Rcpp::as<std::vector<double>>(knots_stationary_cov);
-    std::vector<double> ev_points        = Rcpp::as<std::vector<double>>(fd_points);
+    std::vector<double> knots_test       = Rcpp::as<std::vector<double>>(knots_y_points);
+    std::vector<double> ev_points        = Rcpp::as<std::vector<double>>(y_points);
 
     std::sort(knots_test.begin(),knots_test.end());
     
