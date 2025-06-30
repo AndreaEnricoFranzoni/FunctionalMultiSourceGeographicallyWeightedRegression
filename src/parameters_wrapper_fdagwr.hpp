@@ -48,36 +48,40 @@ template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
 std::vector<std::string>
 wrap_covariates_names(Rcpp::List cov_coeff_list)
 {
-  //name of the covariates in the input list list
+  // name of the covariates in the input list list
   Rcpp::Nullable<Rcpp::CharacterVector> cov_names_input_list = cov_coeff_list.names();
-  //number of covariates 
+  // number of covariates 
   std::size_t number_cov = cov_coeff_list.size();
-  //type of the covariates
+  // type of the covariates
   std::string covariates_type = covariate_type<fdagwr_cov_t>();
 
-  //if no names
+
+  //if all the covariates do not own a name: put default names for all of them
   if (cov_names_input_list.isNull())
   {
+      //output container
       std::vector<std::string> covariates_names;
       covariates_names.reserve(number_cov);
        
       //put a default value
-      for(std::size_t i = 0; i < number_cov; ++i){  
-        covariates_names.emplace_back("Covariate" + covariates_type + std::to_string(i+1));}
+      for(std::size_t i = 0; i < number_cov; ++i){  covariates_names.emplace_back("Covariate" + covariates_type + std::to_string(i+1));}
 
       return covariates_names;
   }
-  //if not all the names are set
-  if (number_cov != cov_names_input_list.size())
+
+  //if only some covariates have their name: put a default for all the names not already set
+  Rcpp::CharacterVector cov_names_input_list_no_null(cov_names_input_list);
+  if (number_cov != cov_names_input_list_no_null.size())
   {
-    std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_input_list);
+      //read the names
+      std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_input_list_no_null);
 
-    //put a default value for the missing names
-    for(std::size_t i = 0; i < number_cov; ++i){  
-        if(cov_names_input_list[i] == "" || cov_names_input_list[i] == NA_STRING){
-            covariates_names.insert(i,"Covariate" + covariates_type + std::to_string(i+1));}}
+      //put a default value for the missing names
+      for(std::size_t i = 0; i < number_cov; ++i){  
+          if(cov_names_input_list_no_null[i] == "" || cov_names_input_list_no_null[i] == NA_STRING){
+            covariates_names.insert(covariates_names.begin() + i,"Covariate" + covariates_type + std::to_string(i+1));}}
 
-    return covariates_names;
+      return covariates_names;
   }
   
   //simply copy the actual names
