@@ -62,37 +62,17 @@ wrap_covariates_names(Rcpp::List cov_coeff_list)
       //output container
       std::vector<std::string> covariates_names;
       covariates_names.reserve(number_cov);
-       
       //put a default value
       for(std::size_t i = 0; i < number_cov; ++i){  covariates_names.emplace_back("Covariate" + covariates_type + std::to_string(i+1));}
 
       return covariates_names;
   }
-
-  /*
-  //if only some covariates have their name: put a default for all the names not already set
-  Rcpp::CharacterVector cov_names_input_list_no_null(cov_names_input_list);
-  if (number_cov != cov_names_input_list_no_null.size())
-  {
-      //read the names
-      std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_input_list_no_null);
-
-      std::cout << "covariates_names dim: " << covariates_names.size() << std::endl;
-
-      //put a default value for the missing names
-      for(std::size_t i = 0; i < number_cov; ++i){  
-          if(cov_names_input_list_no_null[i] == "" || cov_names_input_list_no_null[i] == NA_STRING){
-            covariates_names.insert(covariates_names.begin() + i,"Covariate" + covariates_type + std::to_string(i+1));}}
-
-      return covariates_names;
-  }
-  */
   
-  //simply copy the actual names
+  //copy the actual names, defaulting only the missing ones
   std::vector<std::string> covariates_names = as<std::vector<std::string>>(cov_names_input_list);
 
   for(std::size_t i = 0; i < number_cov; ++i){  
-        if(covariates_names[i] == "" ){         //|| covariates_names[i] == NA_STRING
+        if(covariates_names[i] == "" ){         
             covariates_names[i] = "Covariate" + covariates_type + std::to_string(i+1);}}
 
   return covariates_names;
