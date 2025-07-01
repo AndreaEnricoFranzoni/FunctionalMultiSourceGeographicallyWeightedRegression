@@ -91,39 +91,53 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                   Rcpp::NumericVector penalization_stations_cov,
                   Rcpp::NumericMatrix distances_stations,
                   double bandwith_stations,
-                  Rcpp::Nullable<int> num_threads = R_NilValue){
+                  Rcpp::Nullable<int> num_threads = R_NilValue)
+{
     //funzione per il multi-source gwr
     //  !!!!!!!! NB: l'ordine delle basi su c++ corrisponde al degree su R !!!!!
+
+
+    //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
+    //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
     Rcout << "fdagwr.27: " << std::endl;
 
     using T = double;
 
-    //reading the functional data, handoling eventual NaNs
-    auto y_points_ = reader_data<T,REM_NAN::MR>(y_points);
     
-    Rcout << "Righe: " << y_points_.rows() << std::endl;
-    Rcout << "Colonne: " << y_points_.cols() << std::endl;
-    Rcout << y_points_ << std::endl;
-
     //CHECKING and WRAPPING input parameters
+    //  RESPONSE
+    auto response = reader_data<T,REM_NAN::MR>(y_points);       //Eigen dense matrix type (auto is necessary )
 
-    //abscissa
+    //  ABSCISSA POINTS
     std::vector<double> abscissa_points = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
-    //knots
-    std::vector<double> knots_y = wrap_abscissas(knots_y_points,left_extreme_domain,right_extreme_domain);
-    std::vector<double> knots_stat_reg = wrap_abscissas(knots_stationary_cov,left_extreme_domain,right_extreme_domain);
-    std::vector<double> knots_ev_reg = wrap_abscissas(knots_events_cov,left_extreme_domain,right_extreme_domain);
-    std::vector<double> knots_stations_reg = wrap_abscissas(knots_stations_cov,left_extreme_domain,right_extreme_domain);
-    //covariates
-    std::vector<std::string> names_cov_stationary = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
-    std::vector<fdagwr_traits::Dense_Matrix> stationary_cov_coeff = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
-    std::vector<std::string> names_cov_events = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
 
-    std::vector<std::string> names_cov_stations = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
+    //  KNOTS
+    //response
+    std::vector<double> knots_response = wrap_abscissas(knots_y_points,left_extreme_domain,right_extreme_domain);
+    //stationary 
+    std::vector<double> knots_stationary_cov = wrap_abscissas(knots_stationary_cov,left_extreme_domain,right_extreme_domain);
+    //events
+    std::vector<double> knots_events_cov = wrap_abscissas(knots_events_cov,left_extreme_domain,right_extreme_domain);
+    //stations
+    std::vector<double> knots_stations_cov = wrap_abscissas(knots_stations_cov,left_extreme_domain,right_extreme_domain);
 
-    //number of threads
+    //  COVARIATES names and coefficients
+    //stationary
+    std::vector<std::string> names_stationary_cov = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
+    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stationary_cov = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
+    for(std::size_t i = 0; i < coefficients_stationary_cov.size(); ++i){
+        Rcout << "Coeff of cov: " << i+1 << ", rows: " << coefficients_stationary_cov[i].rows() << ", cols: " << coefficients_stationary_cov[i].cols() << std::endl;
+        Rcout << coefficients_stationary_cov[i] << std::endl;
+    }
+    
+    //events
+    std::vector<std::string> names_events_cov = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
+    //stations
+    std::vector<std::string> names_stations_cov = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
+
+    //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
     
 

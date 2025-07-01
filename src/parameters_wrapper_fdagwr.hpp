@@ -92,19 +92,29 @@ wrap_covariates_coefficients(Rcpp::List cov_coeff_list)
   // number of covariates 
   std::size_t number_cov = cov_coeff_list.size();
 
+  //where to store the covariates coefficients
   std::vector<fdagwr_traits::Dense_Matrix> covariates_coefficients;
   covariates_coefficients.reserve(number_cov);
 
+  //check and read the coefficients for all the covariates
   for(std::size_t i = 0; i < number_cov; ++i){
 
+    //checking that all the elements of the input list are matrix of doubles
     SEXP covariate = cov_coeff_list[i];
 
     if (!Rf_inherits(covariate, "matrix") || TYPEOF(covariate) != REALSXP)
     {   std::string error_message1 = "All covariates coefficients have to be matrix of double";
         throw std::invalid_argument(error_message1);}
     
-    auto cov = reader_data<double,REM_NAN::MR>(covariate);
-    covariates_coefficients[i] = cov;
+    //read the data
+    auto cov_coeff = reader_data<double,REM_NAN::MR>(covariate);
+    covariates_coefficients[i] = cov_coeff;
+
+    //checking that all the coefficients refer to the same amount of statistical units 
+    //(checking that all the list elements have the same number of columns)
+    if(i>0   &&   covariates_coefficients[i-1].cols()!=covariates_coefficients[i].cols())
+    {   std::string error_message2 = "All covariates coefficients have to refer to the same number of statistical units";
+        throw std::invalid_argument(error_message2);}
   }
 
   return covariates_coefficients;
