@@ -100,11 +100,13 @@ wrap_covariates_coefficients(Rcpp::List cov_coeff_list)
   for(std::size_t i = 0; i < number_cov; ++i){
 
     //checking that all the elements of the input list are matrix of doubles
+    /*
     SEXP covariate = cov_coeff_list[i];
 
-    if (!Rf_inherits(covariate, "matrix"))
-    {   std::string error_message1 = "All covariates coefficients have to be matrix";
+    if (!Rf_inherits(covariate, "matrix") || TYPEOF(covariate) != REALSXP)
+    {   std::string error_message1 = "All covariates coefficients have to be matrix of double";
         throw std::invalid_argument(error_message1);}
+    */
     
     //read the data
     auto cov_coeff = reader_data<double,REM_NAN::MR>(covariate);
