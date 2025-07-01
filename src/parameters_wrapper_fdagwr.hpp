@@ -102,8 +102,8 @@ wrap_covariates_coefficients(Rcpp::List cov_coeff_list)
     //checking that all the elements of the input list are matrix of doubles
     SEXP covariate = cov_coeff_list[i];
 
-    if (!Rf_inherits(covariate, "matrix") || TYPEOF(covariate) != REALSXP)
-    {   std::string error_message1 = "All covariates coefficients have to be matrix of double";
+    if (!Rf_inherits(covariate, "matrix"))
+    {   std::string error_message1 = "All covariates coefficients have to be matrix";
         throw std::invalid_argument(error_message1);}
     
     //read the data
