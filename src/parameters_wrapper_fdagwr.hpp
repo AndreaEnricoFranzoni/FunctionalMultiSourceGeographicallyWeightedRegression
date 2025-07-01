@@ -284,7 +284,7 @@ wrap_basis_numbers_and_orders(Rcpp::Nullable<Rcpp::IntegerVector> basis_numbers,
     std::transform(orders.cbegin(),
                    orders.cend(),
                    ns_basis.begin(),
-                   [&knots_number](std::size_t const &el){return ( el - knots_number + static_cast<std::size_t>(1));});
+                   [&knots_number](std::size_t const &el){std::cout << el << "  " << knots_number << std::endl; return ( el - knots_number + static_cast<std::size_t>(1));});
 
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,ns_basis));
     returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,orders));
