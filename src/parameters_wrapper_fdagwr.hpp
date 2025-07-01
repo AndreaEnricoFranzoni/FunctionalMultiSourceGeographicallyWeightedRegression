@@ -182,7 +182,7 @@ wrap_penalizations(Rcpp::NumericVector lambda)
   {
     // type of the covariates for which the penalization is used
     std::string covariates_type = covariate_type<fdagwr_cov_t>();
-    std::transform(covariates_type.begin(),covariates_type.end(),
+    std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),
                    [](unsigned char c) { return std::tolower(c);});
 
     std::string error_message = "Penalization terms for " + covariates_type + " covariates have to be non-negative";
@@ -202,7 +202,7 @@ wrap_bandwith(double bandwith)
   {
     // type of the covariates for which the kernel bandwith is used
     std::string covariates_type = covariate_type<fdagwr_cov_t>();
-    std::transform(covariates_type.begin(),covariates_type.end(),
+    std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),
                    [](unsigned char c) { return std::tolower(c);});
 
     std::string error_message = "Kernel bandwith for " + covariates_type + " covariates has to be positive";

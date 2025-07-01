@@ -131,7 +131,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     std::vector<fdagwr_traits::Dense_Matrix> coefficients_stationary_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);    
     //events
     std::vector<std::string> names_events_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
-    std::vector<fdagwr_traits::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::EVENT>(coefficients_events_cov);
+    std::vector<fdagwr_traits::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
     //stations
     std::vector<std::string> names_stations_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
     std::vector<fdagwr_traits::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
