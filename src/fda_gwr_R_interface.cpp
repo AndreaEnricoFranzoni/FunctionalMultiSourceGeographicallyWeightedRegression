@@ -123,12 +123,26 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  KNOTS
     //response
     std::vector<double> knots_response_ = wrap_abscissas(knots_y_points,left_extreme_domain,right_extreme_domain);
-    //stationary 
+    //stationary cov
     std::vector<double> knots_stationary_cov_ = wrap_abscissas(knots_stationary_cov,left_extreme_domain,right_extreme_domain);
     //events
     std::vector<double> knots_events_cov_ = wrap_abscissas(knots_events_cov,left_extreme_domain,right_extreme_domain);
     //stations
     std::vector<double> knots_stations_cov_ = wrap_abscissas(knots_stations_cov,left_extreme_domain,right_extreme_domain);
+
+    //  COVARIATES names, coefficients and quantities
+    //stationary
+    std::vector<std::string> names_stationary_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
+    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stationary_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);    
+    std::size_t q_C = names_stationary_cov_.size();    //number of stationary covariates
+    //events
+    std::vector<std::string> names_events_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
+    std::vector<fdagwr_traits::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
+    std::size_t q_E = names_events_cov_.size();         //number of events related covariates
+    //stations
+    std::vector<std::string> names_stations_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
+    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
+    std::size_t q_S = names_stations_cov_.size();
 
     //  NUMBER AND ORDER OF BASIS
     //response
@@ -143,20 +157,52 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     std::size_t order_basis_weights_response_ = number_and_order_basis_weights_response_[FDAGWR_FEATS::order_basis_string];
     Rcout << "Basis n resp w: " << number_basis_weights_response_ << std::endl;
     Rcout << "Basis o resp w: " << order_basis_weights_response_ << std::endl;
+    //stationary cov
+    auto number_and_order_basis_stationary_cov_ = wrap_basis_numbers_and_orders<FDAGWR_COVARIATES_TYPES::STATIONARY>(n_basis_stationary_cov,n_order_basis_stationary_cov,knots_stationary_cov_.size(),q_C);
+    std::vector<std::size_t> number_basis_stationary_cov_ = number_and_order_basis_stationary_cov_[FDAGWR_FEATS::n_basis_string];
+    std::vector<std::size_t> order_basis_stationary_cov_ = number_and_order_basis_stationary_cov_[FDAGWR_FEATS::order_basis_string];
+    //events cov
+    auto number_and_order_basis_events_cov_ = wrap_basis_numbers_and_orders<FDAGWR_COVARIATES_TYPES::EVENT>(n_basis_events_cov,n_order_basis_events_cov,knots_events_cov_.size(),q_E);
+    std::vector<std::size_t> number_basis_events_cov_ = number_and_order_basis_events_cov_[FDAGWR_FEATS::n_basis_string];
+    std::vector<std::size_t> order_basis_events_cov_ = number_and_order_basis_events_cov_[FDAGWR_FEATS::order_basis_string];
+    //stations cov
+    auto number_and_order_basis_stations_cov_ = wrap_basis_numbers_and_orders<FDAGWR_COVARIATES_TYPES::STATION>(n_basis_stations_cov,n_order_basis_stations_cov,knots_stations_cov_.size(),q_S);
+    std::vector<std::size_t> number_basis_stations_cov_ = number_and_order_basis_stations_cov_[FDAGWR_FEATS::n_basis_string];
+    std::vector<std::size_t> order_basis_stations_cov_ = number_and_order_basis_stations_cov_[FDAGWR_FEATS::order_basis_string];
 
-    //  COVARIATES names, coefficients and quantities
-    //stationary
-    std::vector<std::string> names_stationary_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
-    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stationary_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);    
-    std::size_t q_c = names_stationary_cov_.size();    //number of stationary covariates
-    //events
-    std::vector<std::string> names_events_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
-    std::vector<fdagwr_traits::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
-    std::size_t q_e = names_events_cov_.size();         //number of events related covariates
-    //stations
-    std::vector<std::string> names_stations_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
-    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
-    std::size_t q_s = names_stations_cov_.size();
+
+    Rcout << "Basis n stationary: " << number_basis_stationary_cov_.size() << std::endl;
+    for (std::size_t i = 0; i < number_basis_stationary_cov_.size(); ++i)
+    {
+        Rcout << number_basis_stationary_cov_[i] << std::endl;
+    }
+    Rcout << "Basis o stationary: " << order_basis_stationary_cov_.size() << std::endl;
+    for (std::size_t i = 0; i < order_basis_stationary_cov_.size(); ++i)
+    {
+        Rcout << order_basis_stationary_cov_[i] << std::endl;
+    }
+    Rcout << "Basis n events: " << number_basis_events_cov_.size() << std::endl;
+    for (std::size_t i = 0; i < number_basis_events_cov_.size(); ++i)
+    {
+        Rcout << number_basis_events_cov_[i] << std::endl;
+    }
+    Rcout << "Basis o events: " << order_basis_events_cov_.size() << std::endl;
+    for (std::size_t i = 0; i < order_basis_events_cov_.size(); ++i)
+    {
+        Rcout << order_basis_events_cov_[i] << std::endl;
+    }
+    Rcout << "Basis n stations: " << number_basis_stations_cov_.size() << std::endl;
+    for (std::size_t i = 0; i < number_basis_stations_cov_.size(); ++i)
+    {
+        Rcout << number_basis_stations_cov_[i] << std::endl;
+    }
+    Rcout << "Basis o stations: " << order_basis_stations_cov_.size() << std::endl;
+    for (std::size_t i = 0; i < order_basis_stations_cov_.size(); ++i)
+    {
+        Rcout << order_basis_stations_cov_[i] << std::endl;
+    }
+    
+
 
     //  PENALIZATION TERMS
     //response
