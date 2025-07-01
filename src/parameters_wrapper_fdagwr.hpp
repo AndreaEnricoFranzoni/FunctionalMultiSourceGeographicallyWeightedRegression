@@ -197,6 +197,11 @@ wrap_basis_number_and_order(Rcpp::Nullable<int> basis_number, Rcpp::Nullable<int
   //both basis number and order known
   if (basis_number.isNotNull() && basis_order.isNotNull())
   {
+    if (static_cast<std::size_t>(Rcpp::as<int>(basis_number)) != static_cast<std::size_t>(Rcpp::as<int>(basis_order)) + knots_number - static_cast<std::size_t>(1))
+    {
+      std::string error_message3 = "The number of basis for the response has to be the order of the basis (" + std::to_string(static_cast<std::size_t>(Rcpp::as<int>(basis_order))) + ") + the number of knots (" + std::to_string(knots_number) + ") - 1";
+      throw std::invalid_argument(error_message3);
+    }
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,static_cast<std::size_t>(static_cast<std::size_t>(Rcpp::as<int>(basis_number)))));
     returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,static_cast<std::size_t>(static_cast<std::size_t>(Rcpp::as<int>(basis_order)))));
   }
