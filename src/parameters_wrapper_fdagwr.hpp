@@ -98,20 +98,8 @@ wrap_covariates_coefficients(Rcpp::List cov_coeff_list)
 
   //check and read the coefficients for all the covariates
   for(std::size_t i = 0; i < number_cov; ++i){
-
-    //checking that all the elements of the input list are matrix of doubles
-    /*
-    SEXP covariate = cov_coeff_list[i];
-
-    if (!Rf_inherits(covariate, "matrix") || TYPEOF(covariate) != REALSXP)
-    {   std::string error_message1 = "All covariates coefficients have to be matrix of double";
-        throw std::invalid_argument(error_message1);}
-    */
     
     //read the data
-    //auto cov_coeff = reader_data<double,REM_NAN::MR>(covariate);
-    //auto cov_coeff = reader_data<double,REM_NAN::MR>(cov_coeff_list[i]);
-    //covariates_coefficients.push_back(cov_coeff);
     covariates_coefficients.push_back(reader_data<double,REM_NAN::MR>(cov_coeff_list[i]));
 
     //checking that all the coefficients refer to the same amount of statistical units 
@@ -168,6 +156,61 @@ wrap_abscissas(Rcpp::NumericVector abscissas, double a, double b)    //dim: row 
 }
 
 
+inline
+double
+wrap_penalization(double lambda)
+{
+  if (lambda < 0)
+  {
+    std::string error_message = "Penalization term has to be non-negative";
+    throw std::invalid_argument(error_message);
+  }
+
+  return lambda;  
+}
+
+
+template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
+std::vector<double>
+wrap_penalizations(Rcpp::NumericVector lambda)
+{
+  std::vector<double> lambdas_wrapped = Rcpp::as<std::vector<double>>(lambda);
+
+  auto min_lambda = std::min_element(lambdas_wrapped.begin(), lambdas_wrapped.end());
+
+  if (*min_lambda < 0)
+  {
+    // type of the covariates for which the penalization is used
+    std::string covariates_type = covariate_type<fdagwr_cov_t>();
+    std::transform(covariates_type.begin(),covariates_type.end(),
+                   [](unsigned char c) { return std::tolower(c);});
+
+    std::string error_message = "Penalization terms for " + covariates_type + " covariates have to be non-negative";
+    throw std::invalid_argument(error_message);
+  }
+
+  return lambdas_wrapped;  
+}
+
+
+
+template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
+double
+wrap_bandwith(double bandwith)
+{
+  if (bandwith <= 0)
+  {
+    // type of the covariates for which the kernel bandwith is used
+    std::string covariates_type = covariate_type<fdagwr_cov_t>();
+    std::transform(covariates_type.begin(),covariates_type.end(),
+                   [](unsigned char c) { return std::tolower(c);});
+
+    std::string error_message = "Kernel bandwith for " + covariates_type + " covariates has to be positive";
+    throw std::invalid_argument(error_message);
+  }
+
+  return bandwith;  
+}
 
 
 

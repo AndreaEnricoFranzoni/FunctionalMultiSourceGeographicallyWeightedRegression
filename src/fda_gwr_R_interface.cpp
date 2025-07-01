@@ -109,6 +109,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //CHECKING and WRAPPING input parameters
     //  RESPONSE
     auto response_ = reader_data<T,REM_NAN::MR>(y_points);       //Eigen dense matrix type (auto is necessary )
+    auto coefficients_response_ = reader_data<T,REM_NAN::MR>(coeff_y_points);
+    auto coefficiente_response_reconstruction_weights_ = reader_data<T,REM_NAN::MR>(coeff_rec_weights_y_points);
 
     //  ABSCISSA POINTS
     std::vector<double> abscissa_points_ = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
@@ -126,16 +128,40 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  COVARIATES names and coefficients
     //stationary
     std::vector<std::string> names_stationary_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
-    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stationary_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
-    for(std::size_t i = 0; i < coefficients_stationary_cov_.size(); ++i){
-        Rcout << "Coeff of cov: " << i+1 << ", rows: " << coefficients_stationary_cov_[i].rows() << ", cols: " << coefficients_stationary_cov_[i].cols() << std::endl;
-        Rcout << coefficients_stationary_cov_[i] << std::endl;
-    }
-    
+    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stationary_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);    
     //events
     std::vector<std::string> names_events_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
+    std::vector<fdagwr_traits::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::EVENT>(coefficients_events_cov);
     //stations
     std::vector<std::string> names_stations_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
+    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
+
+    //  PENALIZATION TERMS
+    //response
+    double lambda_response_ = wrap_penalization(penalization_y_points);
+    //stationary
+    std::vector<double> lambda_stationary_cov_ = wrap_penalizations<FDAGWR_COVARIATES_TYPES::STATIONARY>(penalization_stationary_cov);
+    //events
+    std::vector<double> lambda_events_cov_ = wrap_penalizations<FDAGWR_COVARIATES_TYPES::EVENT>(penalization_events_cov);
+    //stations
+    std::vector<double> lambda_stations_cov_ = wrap_penalizations<FDAGWR_COVARIATES_TYPES::STATION>(penalization_stations_cov);
+
+    Rcout << "Penalization for response is " << lambda_response_ << std::endl;
+    Rcout << "Penalization for stationart cov are " << std::endl;
+    for(std::size_t i = 0; i < lambda_stationary_cov_.size(); ++i){Rcout << lambda_stationary_cov_[i] << std::endl;}
+    Rcout << "Penalization for event cov are " << std::endl;
+    for(std::size_t i = 0; i < lambda_events_cov_.size(); ++i){Rcout << lambda_events_cov_[i] << std::endl;}
+        Rcout << "Penalization for stations cov are " << std::endl;
+    for(std::size_t i = 0; i < lambda_stations_cov_.size(); ++i){Rcout << lambda_stations_cov_[i] << std::endl;}
+
+    //  KERNEL BANDWITH
+    //events
+    double bandwith_events_cov_ = wrap_bandwith<FDAGWR_COVARIATES_TYPES::EVENT>(bandwith_events);
+    //stations
+    double bandwith_stations_cov_ = wrap_bandwith<FDAGWR_COVARIATES_TYPES::STATION>(bandwith_stations);
+
+    Rcout << "bandwth for ev cov is " << bandwith_events_cov_ << std::endl;
+    Rcout << "bandwth for stat cov is " << bandwith_stations_cov_ << std::endl;
 
     //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
