@@ -105,11 +105,16 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     using T = double;
 
-    
+    //
     //CHECKING and WRAPPING input parameters
+    //
+
     //  RESPONSE
+    //raw data
     auto response_ = reader_data<T,REM_NAN::MR>(y_points);       //Eigen dense matrix type (auto is necessary )
+    //coefficients
     auto coefficients_response_ = reader_data<T,REM_NAN::MR>(coeff_y_points);
+    //reconstruction weights
     auto coefficiente_response_reconstruction_weights_ = reader_data<T,REM_NAN::MR>(coeff_rec_weights_y_points);
 
     //  ABSCISSA POINTS
@@ -125,16 +130,29 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //stations
     std::vector<double> knots_stations_cov_ = wrap_abscissas(knots_stations_cov,left_extreme_domain,right_extreme_domain);
 
-    //  COVARIATES names and coefficients
+    //  NUMBER AND ORDER OF BASIS
+    //response
+    auto number_and_order_basis_response_ = wrap_basis_number_and_order(n_basis_y_points,n_order_basis_y_points,knots_response_.size());
+    std::size_t number_basis_response_ = number_and_order_basis_response_[FDAGWR_FEATS::n_basis_string];
+    std::size_t order_basis_response_ = number_and_order_basis_response_[FDAGWR_FEATS::order_basis_string];
+    //response reconstruction weights
+    auto number_and_order_basis_weights_response_ = wrap_basis_number_and_order(n_basis_rec_weights_y_points,n_order_basis_rec_weights_y_points,knots_response_.size());
+    std::size_t number_basis_weights_response_ = number_and_order_basis_weights_response_[FDAGWR_FEATS::n_basis_string];
+    std::size_t order_basis_weights_response_ = number_and_order_basis_weights_response_[FDAGWR_FEATS::order_basis_string];
+
+    //  COVARIATES names, coefficients and quantities
     //stationary
     std::vector<std::string> names_stationary_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
     std::vector<fdagwr_traits::Dense_Matrix> coefficients_stationary_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);    
+    std::size_t q_c = names_stationary_cov_.size();    //number of stationary covariates
     //events
     std::vector<std::string> names_events_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
     std::vector<fdagwr_traits::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
+    std::size_t q_e = names_events_cov_.size();         //number of events related covariates
     //stations
     std::vector<std::string> names_stations_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
     std::vector<fdagwr_traits::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
+    std::size_t q_s = names_stations_cov_.size();
 
     //  PENALIZATION TERMS
     //response
@@ -146,26 +164,19 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //stations
     std::vector<double> lambda_stations_cov_ = wrap_penalizations<FDAGWR_COVARIATES_TYPES::STATION>(penalization_stations_cov);
 
-    Rcout << "Penalization for response is " << lambda_response_ << std::endl;
-    Rcout << "Penalization for stationart cov are " << std::endl;
-    for(std::size_t i = 0; i < lambda_stationary_cov_.size(); ++i){Rcout << lambda_stationary_cov_[i] << std::endl;}
-    Rcout << "Penalization for event cov are " << std::endl;
-    for(std::size_t i = 0; i < lambda_events_cov_.size(); ++i){Rcout << lambda_events_cov_[i] << std::endl;}
-        Rcout << "Penalization for stations cov are " << std::endl;
-    for(std::size_t i = 0; i < lambda_stations_cov_.size(); ++i){Rcout << lambda_stations_cov_[i] << std::endl;}
-
     //  KERNEL BANDWITH
     //events
     double bandwith_events_cov_ = wrap_bandwith<FDAGWR_COVARIATES_TYPES::EVENT>(bandwith_events);
     //stations
     double bandwith_stations_cov_ = wrap_bandwith<FDAGWR_COVARIATES_TYPES::STATION>(bandwith_stations);
 
-    Rcout << "bandwth for ev cov is " << bandwith_events_cov_ << std::endl;
-    Rcout << "bandwth for stat cov is " << bandwith_stations_cov_ << std::endl;
-
     //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
     
+
+
+
+
 
     std::vector<int>    order_basis_test = Rcpp::as<std::vector<int>>(n_order_basis_stationary_cov);
     std::vector<double> knots_test       = Rcpp::as<std::vector<double>>(knots_y_points);

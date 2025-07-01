@@ -113,15 +113,6 @@ wrap_covariates_coefficients(Rcpp::List cov_coeff_list)
 }
 
 
-
-
-
-
-
-
-
-
-
 /*!
 * @brief Wrapping the points over which the discrete evaluations of the functional object are available/knots for basis system.
 * @param abscissas Rcpp::NumericVector  containing the domain points
@@ -157,12 +148,84 @@ wrap_abscissas(Rcpp::NumericVector abscissas, double a, double b)    //dim: row 
 
 
 inline
+std::map<std::string,std::size_t>
+wrap_basis_number_and_order(Rcpp::Nullable<int> basis_number, Rcpp::Nullable<int> basis_order, std::size_t knots_number)
+{
+  //NUMERO DI BASI E' ORDER + KNOTS (n_nodes) - 1
+  std::map<std::string,std::size_t> returning_element;
+
+  //basis number unknown, order unknown: default values
+  if(basis_number.isNull() && basis_order.isNull())
+  {
+    std::size_t order = 3;  //default is a cubic b_spline
+    std::size_t n_basis = order + knots_number - static_cast<std::size_t>(1);
+
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,n_basis));
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,order));
+  }
+
+  //basis number unknown, order known
+  if (basis_number.isNull() && !basis_order.isNull())
+  {
+    if (basis_order < 0)
+    {
+      std::string error_message1 = "Basis order for the response has to be a non-negative integer";
+      throw std::invalid_argument(error_message1);
+    }
+
+    std::size_t n_basis = static_cast<std::size_t>(basis_order) + knots_number - static_cast<std::size_t>(1);
+
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,n_basis));
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,basis_order));
+  }
+
+  //basis number known, order unknown
+  if (!basis_number.isNull() && basis_order.isNull())
+  {
+    if (static_cast<std::size_t>(basis_number) < knots_number - static_cast<std::size_t>(1))
+    {
+      std::string error_message2 = "The number of basis for the response has to be at least the number of knots (" + std::to_string(knots_number) + ") - 1";
+      throw std::invalid_argument(error_message2);
+    }
+
+    std::size_t order = static_cast<std::size_t>(basis_number) - knots_number + static_cast<std::size_t>(1);
+
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,basis_number));
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,order));
+  }
+
+  //both basis number and order known
+  if (!basis_number.isNull() && !basis_order.isNull())
+  {
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,static_cast<std::size_t>(basis_number)));
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,static_cast<std::size_t>(basis_order)));
+  }
+  
+  return returning_element;
+}
+
+
+/*
+template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
+std::map<std::string,std::vector<std::size_t>
+wrap_basis_numbers_and_orders(Rcpp::Nullable<Rcpp::IntegerVector> basis_numbers, Rcpp::Nullable<Rcpp::IntegerVector> basis_orders, std::size_t knots_number)
+{
+
+  
+  //NUMERO DI BASI E' ORDER + KNOTS (n_nodes) - 1
+  if(basis_number.isNull() && basis_order.isNull())
+
+}
+*/
+
+
+inline
 double
 wrap_penalization(double lambda)
 {
   if (lambda < 0)
   {
-    std::string error_message = "Penalization term has to be non-negative";
+    std::string error_message = "Penalization term for the response has to be non-negative";
     throw std::invalid_argument(error_message);
   }
 
@@ -172,9 +235,9 @@ wrap_penalization(double lambda)
 
 template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
 std::vector<double>
-wrap_penalizations(Rcpp::NumericVector lambda)
+wrap_penalizations(Rcpp::NumericVector lambdas)
 {
-  std::vector<double> lambdas_wrapped = Rcpp::as<std::vector<double>>(lambda);
+  std::vector<double> lambdas_wrapped = Rcpp::as<std::vector<double>>(lambdas);
 
   auto min_lambda = std::min_element(lambdas_wrapped.begin(), lambdas_wrapped.end());
 
@@ -191,7 +254,6 @@ wrap_penalizations(Rcpp::NumericVector lambda)
 
   return lambdas_wrapped;  
 }
-
 
 
 template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
@@ -211,8 +273,6 @@ wrap_bandwith(double bandwith)
 
   return bandwith;  
 }
-
-
 
 
 /*!
