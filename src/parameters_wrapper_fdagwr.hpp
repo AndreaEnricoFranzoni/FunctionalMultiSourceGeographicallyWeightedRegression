@@ -112,7 +112,7 @@ wrap_covariates_coefficients(Rcpp::List cov_coeff_list)
     //auto cov_coeff = reader_data<double,REM_NAN::MR>(covariate);
     auto cov_coeff = reader_data<double,REM_NAN::MR>(cov_coeff_list[i]);
     std::cout << "Cov" << i+1 << " has " << cov_coeff.rows() << " rows and " << cov_coeff.cols() << " cols" << std::endl;
-    covariates_coefficients[i] = cov_coeff;
+    covariates_coefficients.push_back(cov_coeff);
 
     //checking that all the coefficients refer to the same amount of statistical units 
     //(checking that all the list elements have the same number of columns)
