@@ -177,11 +177,9 @@ wrap_basis_number_and_order(Rcpp::Nullable<int> basis_number,
   //basis number unknown, order known
   if (basis_number.isNull() && basis_order.isNotNull())
   {
-    if (Rcpp::as<int>(basis_order) < 0)
-    {
+    if (Rcpp::as<int>(basis_order) < 0){
       std::string error_message1 = "Basis order for the response has to be a non-negative integer";
-      throw std::invalid_argument(error_message1);
-    }
+      throw std::invalid_argument(error_message1);}
 
     std::size_t n_basis = static_cast<std::size_t>(Rcpp::as<int>(basis_order)) + knots_number - static_cast<std::size_t>(1);
 
@@ -192,11 +190,9 @@ wrap_basis_number_and_order(Rcpp::Nullable<int> basis_number,
   //basis number known, order unknown
   if (basis_number.isNotNull() && basis_order.isNull())
   {
-    if (static_cast<std::size_t>(Rcpp::as<int>(basis_number)) < knots_number - static_cast<std::size_t>(1))
-    {
+    if (static_cast<std::size_t>(Rcpp::as<int>(basis_number)) < knots_number - static_cast<std::size_t>(1)){
       std::string error_message2 = "The number of basis for the response has to be at least the number of knots (" + std::to_string(knots_number) + ") - 1";
-      throw std::invalid_argument(error_message2);
-    }
+      throw std::invalid_argument(error_message2);}
 
     std::size_t order = static_cast<std::size_t>(Rcpp::as<int>(basis_number)) - knots_number + static_cast<std::size_t>(1);
 
@@ -207,16 +203,13 @@ wrap_basis_number_and_order(Rcpp::Nullable<int> basis_number,
   //both basis number and order known
   if (basis_number.isNotNull() && basis_order.isNotNull())
   {
-    if (Rcpp::as<int>(basis_order) < 0)
-    {
+    if (Rcpp::as<int>(basis_order) < 0){
       std::string error_message3 = "Basis order for the response has to be a non-negative integer";
-      throw std::invalid_argument(error_message3);
-    }
-    if (static_cast<std::size_t>(Rcpp::as<int>(basis_number)) != static_cast<std::size_t>(Rcpp::as<int>(basis_order)) + knots_number - static_cast<std::size_t>(1))
-    {
+      throw std::invalid_argument(error_message3);}
+    if (static_cast<std::size_t>(Rcpp::as<int>(basis_number)) != static_cast<std::size_t>(Rcpp::as<int>(basis_order)) + knots_number - static_cast<std::size_t>(1)){
       std::string error_message4 = "The number of basis for the response has to be the order of the basis (" + std::to_string(static_cast<std::size_t>(Rcpp::as<int>(basis_order))) + ") + the number of knots (" + std::to_string(knots_number) + ") - 1";
-      throw std::invalid_argument(error_message4);
-    }
+      throw std::invalid_argument(error_message4);}
+
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,static_cast<std::size_t>(static_cast<std::size_t>(Rcpp::as<int>(basis_number)))));
     returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,static_cast<std::size_t>(static_cast<std::size_t>(Rcpp::as<int>(basis_order)))));
   }
@@ -284,7 +277,7 @@ wrap_basis_numbers_and_orders(Rcpp::Nullable<Rcpp::IntegerVector> basis_numbers,
     std::transform(orders.cbegin(),
                    orders.cend(),
                    ns_basis.begin(),
-                   [&knots_number](std::size_t const &el){std::cout << el << "  " << knots_number << "  " << (el - knots_number + static_cast<std::size_t>(1)) << std::endl; return (el - knots_number + static_cast<std::size_t>(1));});
+                   [knots_number](std::size_t const &el){std::cout << el << "  " << knots_number << "  " << (el + knots_number - static_cast<std::size_t>(1)) << std::endl; return (el + knots_number - static_cast<std::size_t>(1));});
 
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,ns_basis));
     returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,orders));
@@ -325,7 +318,7 @@ wrap_basis_numbers_and_orders(Rcpp::Nullable<Rcpp::IntegerVector> basis_numbers,
     std::transform(ns_basis.cbegin(),
                    ns_basis.cend(),
                    orders.begin(),
-                   [knots_number](auto el){return (el + knots_number - static_cast<std::size_t>(1));});
+                   [knots_number](std::size_t const &el){return (el - knots_number + static_cast<std::size_t>(1));});
 
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,ns_basis));
     returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,orders));
@@ -380,7 +373,7 @@ wrap_basis_numbers_and_orders(Rcpp::Nullable<Rcpp::IntegerVector> basis_numbers,
     consistency_input.reserve(number_of_covariates);
 
     for(std::size_t i = 0; i < number_of_covariates; ++i){
-          consistency_input.emplace_back(ns_basis[i] - (orders[i] - knots_number + static_cast<std::size_t>(1)));}
+          consistency_input.emplace_back(ns_basis[i] - (orders[i] + knots_number - static_cast<std::size_t>(1)));}
 
     auto incosistency_search = std::find(consistency_input.cbegin(),consistency_input.cend(),static_cast<std::size_t>(0));
     if(incosistency_search-consistency_input.cend() == 0){
