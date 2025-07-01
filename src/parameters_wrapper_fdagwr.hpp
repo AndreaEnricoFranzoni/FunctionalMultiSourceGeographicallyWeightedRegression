@@ -109,7 +109,8 @@ wrap_covariates_coefficients(Rcpp::List cov_coeff_list)
     */
     
     //read the data
-    auto cov_coeff = reader_data<double,REM_NAN::MR>(covariate);
+    //auto cov_coeff = reader_data<double,REM_NAN::MR>(covariate);
+    auto cov_coeff = reader_data<double,REM_NAN::MR>(cov_coeff_list[i]);
     covariates_coefficients[i] = cov_coeff;
 
     //checking that all the coefficients refer to the same amount of statistical units 
