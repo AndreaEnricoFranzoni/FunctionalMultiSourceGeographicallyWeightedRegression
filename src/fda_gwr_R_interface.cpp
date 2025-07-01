@@ -135,10 +135,14 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     auto number_and_order_basis_response_ = wrap_basis_number_and_order(n_basis_y_points,n_order_basis_y_points,knots_response_.size());
     std::size_t number_basis_response_ = number_and_order_basis_response_[FDAGWR_FEATS::n_basis_string];
     std::size_t order_basis_response_ = number_and_order_basis_response_[FDAGWR_FEATS::order_basis_string];
+    Rcout << "Basis n resp: " << number_basis_response_ << std::endl;
+    Rcout << "Basis o resp: " << order_basis_response_ << std::endl:
     //response reconstruction weights
     auto number_and_order_basis_weights_response_ = wrap_basis_number_and_order(n_basis_rec_weights_y_points,n_order_basis_rec_weights_y_points,knots_response_.size());
     std::size_t number_basis_weights_response_ = number_and_order_basis_weights_response_[FDAGWR_FEATS::n_basis_string];
     std::size_t order_basis_weights_response_ = number_and_order_basis_weights_response_[FDAGWR_FEATS::order_basis_string];
+    Rcout << "Basis n resp w: " << number_basis_weights_response_ << std::endl;
+    Rcout << "Basis o resp w: " << order_basis_weights_response_ << std::endl:
 
     //  COVARIATES names, coefficients and quantities
     //stationary

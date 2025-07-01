@@ -165,40 +165,40 @@ wrap_basis_number_and_order(Rcpp::Nullable<int> basis_number, Rcpp::Nullable<int
   }
 
   //basis number unknown, order known
-  if (basis_number.isNull() && !basis_order.isNull())
+  if (basis_number.isNull() && basis_order.isNotNull())
   {
-    if (basis_order < 0)
+    if (Rcpp::as<int>(basis_order) < 0)
     {
       std::string error_message1 = "Basis order for the response has to be a non-negative integer";
       throw std::invalid_argument(error_message1);
     }
 
-    std::size_t n_basis = static_cast<std::size_t>(basis_order) + knots_number - static_cast<std::size_t>(1);
+    std::size_t n_basis = static_cast<std::size_t>(Rcpp::as<int>(basis_order)) + knots_number - static_cast<std::size_t>(1);
 
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,n_basis));
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,basis_order));
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,static_cast<std::size_t>(Rcpp::as<int>(basis_order))));
   }
 
   //basis number known, order unknown
-  if (!basis_number.isNull() && basis_order.isNull())
+  if (basis_number.isNotNull() && basis_order.isNull())
   {
-    if (static_cast<std::size_t>(basis_number) < knots_number - static_cast<std::size_t>(1))
+    if (static_cast<std::size_t>(Rcpp::as<int>(basis_number)) < knots_number - static_cast<std::size_t>(1))
     {
       std::string error_message2 = "The number of basis for the response has to be at least the number of knots (" + std::to_string(knots_number) + ") - 1";
       throw std::invalid_argument(error_message2);
     }
 
-    std::size_t order = static_cast<std::size_t>(basis_number) - knots_number + static_cast<std::size_t>(1);
+    std::size_t order = static_cast<std::size_t>(Rcpp::as<int>(basis_number)) - knots_number + static_cast<std::size_t>(1);
 
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,basis_number));
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,static_cast<std::size_t>(Rcpp::as<int>(basis_number))));
     returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,order));
   }
 
   //both basis number and order known
-  if (!basis_number.isNull() && !basis_order.isNull())
+  if (basis_number.isNotNull() && basis_order.isNotNull())
   {
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,static_cast<std::size_t>(basis_number)));
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,static_cast<std::size_t>(basis_order)));
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,static_cast<std::size_t>(static_cast<std::size_t>(Rcpp::as<int>(basis_number)))));
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,static_cast<std::size_t>(static_cast<std::size_t>(Rcpp::as<int>(basis_order)))));
   }
   
   return returning_element;
