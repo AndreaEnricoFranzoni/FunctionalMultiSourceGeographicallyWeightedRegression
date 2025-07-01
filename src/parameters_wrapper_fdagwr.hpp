@@ -263,7 +263,7 @@ wrap_basis_numbers_and_orders(Rcpp::Nullable<Rcpp::IntegerVector> basis_numbers,
       throw std::invalid_argument(error_message1);}
 
     //checking that the input is consistent (basis order non-negative for all the covariates)
-    auto min_basis_order = std::min_element(basis_order_w.cbegin(),basis_order_w.cend());
+    auto min_basis_order = std::min_element(basis_orders_w.cbegin(),basis_orders_w.cend());
     if (*min_basis_order < 0){
       std::string covariates_type = covariate_type<fdagwr_cov_t>();
       std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
@@ -280,13 +280,13 @@ wrap_basis_numbers_and_orders(Rcpp::Nullable<Rcpp::IntegerVector> basis_numbers,
     std::vector<std::size_t> n_basis;
     n_basis.resize(number_of_covariates);
 
-    std::transform(basis_order_w.cbegin(),
-                   basis_order_w.cend(),
+    std::transform(basis_orders_w.cbegin(),
+                   basis_orders_w.cend(),
                    n_basis.begin(),
-                   [=knots_number](auto el){return ( el - knots_number + static_cast<std::size_t>(1));});
+                   [knots_number](auto el){return ( el - knots_number + static_cast<std::size_t>(1));});
 
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,n_basis));
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,basis_order_w));
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,basis_orders_w));
   }
 
   //basis number known, order unknown
@@ -323,7 +323,7 @@ wrap_basis_numbers_and_orders(Rcpp::Nullable<Rcpp::IntegerVector> basis_numbers,
     std::transform(basis_numbers_w.cbegin(),
                    basis_numbers_w.cend(),
                    orders.begin(),
-                   [=knots_number](auto el){return (el + knots_number - static_cast<std::size_t>(1));});
+                   [knots_number](auto el){return (el + knots_number - static_cast<std::size_t>(1));});
 
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,basis_numbers_w));
     returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,orders));
@@ -350,7 +350,7 @@ wrap_basis_numbers_and_orders(Rcpp::Nullable<Rcpp::IntegerVector> basis_numbers,
       throw std::invalid_argument(error_message6);}
 
     //checking that the order of basis input is consistent (basis order non-negative for all the covariates)
-    auto min_basis_order = std::min_element(basis_order_w.cbegin(),basis_order_w.cend());
+    auto min_basis_order = std::min_element(basis_orders_w.cbegin(),basis_orders_w.cend());
     if (*min_basis_order < 0){
         std::string covariates_type = covariate_type<fdagwr_cov_t>();
         std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
@@ -378,7 +378,7 @@ wrap_basis_numbers_and_orders(Rcpp::Nullable<Rcpp::IntegerVector> basis_numbers,
     if(incosistency_search-consistency_input.cend() == 0){
       std::string covariates_type = covariate_type<fdagwr_cov_t>();
       std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
-      std::string error_message8 = "The number of basis for the " + covariates_type + " covariates has to be the order of the basis (" + std::to_string(static_cast<std::size_t>(Rcpp::as<int>(basis_order))) + ") + the number of knots (" + std::to_string(knots_number) + ") - 1";
+      std::string error_message8 = "The number of basis for the " + covariates_type + " covariates has to be the order of the basis + the number of knots - 1";
       throw std::invalid_argument(error_message8);}
 
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,basis_numbers_w));

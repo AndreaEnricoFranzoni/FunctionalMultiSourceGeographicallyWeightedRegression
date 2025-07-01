@@ -82,7 +82,7 @@ struct FDAGWR_FEATS
 {
   using FDAGWR_DOMAIN = fdapde::Triangulation<1, 1>;      ///< Domain mesh: unit interval with a fixed number of nodes
 
-  static constexpr std::std::size_t default_basis_order = static_cast<std::size_t>(3);  
+  static constexpr std::size_t default_basis_order = static_cast<std::size_t>(3);  
 
   static constexpr std::string n_basis_string = "Basis number";
 
