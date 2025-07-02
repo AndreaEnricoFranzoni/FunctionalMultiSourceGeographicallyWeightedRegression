@@ -58,8 +58,8 @@ public:
                         m_systems_of_basis.resize(q);
 
                         //casting the nodes for the basis system
-                        fdagwr_traits::Dense_Vector nodes_casted = Eigen::Map<const fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size());
-                        m_interval(nodes_casted);
+                        fdagwr_traits::Dense_Vector knots_casted = Eigen::Map<const fdagwr_traits::Dense_Vector>(knots.data(), knots.size());
+                        m_interval(knots_casted);
                         
                         std::cout << "Nodi mappati:" << std::endl;
                         for (size_t j = 0; j < knots.size(); ++j)

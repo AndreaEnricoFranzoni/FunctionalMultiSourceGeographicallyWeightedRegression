@@ -177,7 +177,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     std::vector<std::size_t> number_basis_stationary_cov_ = number_and_order_basis_stationary_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_stationary_cov_ = number_and_order_basis_stationary_cov_[FDAGWR_FEATS::order_basis_string];
     //beta stationary cov
-    auto number_and_order_basis_beta_stationary_cov_ = wrap_basis_numbers_and_orders<FDAGWR_COVARIATES_TYPES::STATIONARY>(n_basis_beta_stationary_cov,n_order_beta_basis_stationary_cov,knots_beta_stationary_cov_.size(),q_C);
+    auto number_and_order_basis_beta_stationary_cov_ = wrap_basis_numbers_and_orders<FDAGWR_COVARIATES_TYPES::STATIONARY>(n_basis_beta_stationary_cov,n_order_basis_beta_stationary_cov,knots_beta_stationary_cov_.size(),q_C);
     std::vector<std::size_t> number_basis_beta_stationary_cov_ = number_and_order_basis_beta_stationary_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_beta_stationary_cov_ = number_and_order_basis_beta_stationary_cov_[FDAGWR_FEATS::order_basis_string];
     //events cov
@@ -221,7 +221,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
 
 
-    testing_function(order_basis_test,knots_stationary_cov_);
+    testing_function(order_basis_stationary_cov_,knots_stationary_cov_);
 
 
 
