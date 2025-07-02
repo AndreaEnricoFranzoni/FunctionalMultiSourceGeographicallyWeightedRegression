@@ -59,7 +59,8 @@ public:
 
                         //casting the nodes for the basis system
                         fdagwr_traits::Dense_Vector knots_casted = Eigen::Map<const fdagwr_traits::Dense_Vector>(knots.data(), knots.size());
-                        m_interval(knots_casted);
+                        domain_structure interval(knots_casted);
+                        m_interval = interval;
                         
                         std::cout << "Nodi mappati:" << std::endl;
                         for (size_t j = 0; j < knots.size(); ++j)
