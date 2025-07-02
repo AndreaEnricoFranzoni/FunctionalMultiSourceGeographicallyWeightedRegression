@@ -69,6 +69,7 @@ public:
                         }
 
                         fdapde::BsSpace<domain_structure> Vh(m_interval, 3);
+                        std::cout << "base constructed" << std::endl;
 
 
                         //construct the basis system
