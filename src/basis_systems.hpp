@@ -70,7 +70,13 @@ public:
                         std::cout << "Intervallo inizializzato nel costruttore, con i seguenti nodi:" << std::endl;
                         std::cout << m_interval.nodes() << std::endl;
 
-                        //fdapde::BsSpace<domain_structure> Vh(m_interval, 3);
+                        double a = 0;
+                        double b = 2;
+                        int n_nodes = 10;
+                        // divides [a, b] using 10 equispaced nodes
+                        fdapde::Triangulation<1, 1> interval = fdapde::Triangulation<1, 1>::Interval(a, b, n_nodes);
+
+                        fdapde::BsSpace<domain_structure> Vh(interval, 3);
 
 
                         //construct the basis system
