@@ -22,12 +22,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // fmsgwr
-Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points, Rcpp::NumericMatrix coeff_y_points, Rcpp::NumericVector knots_y_points, Rcpp::Nullable<int> n_order_basis_y_points, Rcpp::Nullable<int> n_basis_y_points, double penalization_y_points, Rcpp::NumericMatrix coeff_rec_weights_y_points, Rcpp::Nullable<int> n_order_basis_rec_weights_y_points, Rcpp::Nullable<int> n_basis_rec_weights_y_points, Rcpp::NumericVector t_points, double left_extreme_domain, double right_extreme_domain, Rcpp::List coeff_stationary_cov, Rcpp::NumericVector knots_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stationary_cov, Rcpp::NumericVector penalization_stationary_cov, Rcpp::List coeff_events_cov, Rcpp::NumericVector knots_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_events_cov, Rcpp::NumericVector penalization_events_cov, Rcpp::NumericMatrix distances_events, double bandwith_events, Rcpp::List coeff_stations_cov, Rcpp::NumericVector knots_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stations_cov, Rcpp::NumericVector penalization_stations_cov, Rcpp::NumericMatrix distances_stations, double bandwith_stations, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_fmsgwr(SEXP y_pointsSEXP, SEXP coeff_y_pointsSEXP, SEXP knots_y_pointsSEXP, SEXP n_order_basis_y_pointsSEXP, SEXP n_basis_y_pointsSEXP, SEXP penalization_y_pointsSEXP, SEXP coeff_rec_weights_y_pointsSEXP, SEXP n_order_basis_rec_weights_y_pointsSEXP, SEXP n_basis_rec_weights_y_pointsSEXP, SEXP t_pointsSEXP, SEXP left_extreme_domainSEXP, SEXP right_extreme_domainSEXP, SEXP coeff_stationary_covSEXP, SEXP knots_stationary_covSEXP, SEXP n_order_basis_stationary_covSEXP, SEXP n_basis_stationary_covSEXP, SEXP penalization_stationary_covSEXP, SEXP coeff_events_covSEXP, SEXP knots_events_covSEXP, SEXP n_order_basis_events_covSEXP, SEXP n_basis_events_covSEXP, SEXP penalization_events_covSEXP, SEXP distances_eventsSEXP, SEXP bandwith_eventsSEXP, SEXP coeff_stations_covSEXP, SEXP knots_stations_covSEXP, SEXP n_order_basis_stations_covSEXP, SEXP n_basis_stations_covSEXP, SEXP penalization_stations_covSEXP, SEXP distances_stationsSEXP, SEXP bandwith_stationsSEXP, SEXP num_threadsSEXP) {
+Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points, Rcpp::NumericVector t_points, double left_extreme_domain, double right_extreme_domain, Rcpp::NumericMatrix coeff_y_points, Rcpp::NumericVector knots_y_points, Rcpp::Nullable<int> n_order_basis_y_points, Rcpp::Nullable<int> n_basis_y_points, double penalization_y_points, Rcpp::NumericMatrix coeff_rec_weights_y_points, Rcpp::Nullable<int> n_order_basis_rec_weights_y_points, Rcpp::Nullable<int> n_basis_rec_weights_y_points, Rcpp::List coeff_stationary_cov, Rcpp::NumericVector knots_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stationary_cov, Rcpp::NumericVector penalization_stationary_cov, Rcpp::NumericVector knots_beta_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_beta_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_stationary_cov, Rcpp::List coeff_events_cov, Rcpp::NumericVector knots_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_events_cov, Rcpp::NumericVector penalization_events_cov, Rcpp::NumericMatrix distances_events, double bandwith_events, Rcpp::NumericVector knots_beta_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_beta_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_events_cov, Rcpp::List coeff_stations_cov, Rcpp::NumericVector knots_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stations_cov, Rcpp::NumericVector penalization_stations_cov, Rcpp::NumericMatrix distances_stations, double bandwith_stations, Rcpp::NumericVector knots_beta_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_beta_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_stations_cov, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_fmsgwr(SEXP y_pointsSEXP, SEXP t_pointsSEXP, SEXP left_extreme_domainSEXP, SEXP right_extreme_domainSEXP, SEXP coeff_y_pointsSEXP, SEXP knots_y_pointsSEXP, SEXP n_order_basis_y_pointsSEXP, SEXP n_basis_y_pointsSEXP, SEXP penalization_y_pointsSEXP, SEXP coeff_rec_weights_y_pointsSEXP, SEXP n_order_basis_rec_weights_y_pointsSEXP, SEXP n_basis_rec_weights_y_pointsSEXP, SEXP coeff_stationary_covSEXP, SEXP knots_stationary_covSEXP, SEXP n_order_basis_stationary_covSEXP, SEXP n_basis_stationary_covSEXP, SEXP penalization_stationary_covSEXP, SEXP knots_beta_stationary_covSEXP, SEXP n_order_basis_beta_stationary_covSEXP, SEXP n_basis_beta_stationary_covSEXP, SEXP coeff_events_covSEXP, SEXP knots_events_covSEXP, SEXP n_order_basis_events_covSEXP, SEXP n_basis_events_covSEXP, SEXP penalization_events_covSEXP, SEXP distances_eventsSEXP, SEXP bandwith_eventsSEXP, SEXP knots_beta_events_covSEXP, SEXP n_order_basis_beta_events_covSEXP, SEXP n_basis_events_covSEXP, SEXP coeff_stations_covSEXP, SEXP knots_stations_covSEXP, SEXP n_order_basis_stations_covSEXP, SEXP n_basis_stations_covSEXP, SEXP penalization_stations_covSEXP, SEXP distances_stationsSEXP, SEXP bandwith_stationsSEXP, SEXP knots_beta_stations_covSEXP, SEXP n_order_basis_beta_stations_covSEXP, SEXP n_basis_beta_stations_covSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type y_points(y_pointsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type t_points(t_pointsSEXP);
+    Rcpp::traits::input_parameter< double >::type left_extreme_domain(left_extreme_domainSEXP);
+    Rcpp::traits::input_parameter< double >::type right_extreme_domain(right_extreme_domainSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coeff_y_points(coeff_y_pointsSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type knots_y_points(knots_y_pointsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type n_order_basis_y_points(n_order_basis_y_pointsSEXP);
@@ -36,14 +39,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coeff_rec_weights_y_points(coeff_rec_weights_y_pointsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type n_order_basis_rec_weights_y_points(n_order_basis_rec_weights_y_pointsSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type n_basis_rec_weights_y_points(n_basis_rec_weights_y_pointsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type t_points(t_pointsSEXP);
-    Rcpp::traits::input_parameter< double >::type left_extreme_domain(left_extreme_domainSEXP);
-    Rcpp::traits::input_parameter< double >::type right_extreme_domain(right_extreme_domainSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stationary_cov(coeff_stationary_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type knots_stationary_cov(knots_stationary_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type n_order_basis_stationary_cov(n_order_basis_stationary_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type n_basis_stationary_cov(n_basis_stationary_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type penalization_stationary_cov(penalization_stationary_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type knots_beta_stationary_cov(knots_beta_stationary_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type n_order_basis_beta_stationary_cov(n_order_basis_beta_stationary_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type n_basis_beta_stationary_cov(n_basis_beta_stationary_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type coeff_events_cov(coeff_events_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type knots_events_cov(knots_events_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type n_order_basis_events_cov(n_order_basis_events_covSEXP);
@@ -51,6 +54,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type penalization_events_cov(penalization_events_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type distances_events(distances_eventsSEXP);
     Rcpp::traits::input_parameter< double >::type bandwith_events(bandwith_eventsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type knots_beta_events_cov(knots_beta_events_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type n_order_basis_beta_events_cov(n_order_basis_beta_events_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type n_basis_events_cov(n_basis_events_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stations_cov(coeff_stations_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type knots_stations_cov(knots_stations_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type n_order_basis_stations_cov(n_order_basis_stations_covSEXP);
@@ -58,8 +64,11 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type penalization_stations_cov(penalization_stations_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type distances_stations(distances_stationsSEXP);
     Rcpp::traits::input_parameter< double >::type bandwith_stations(bandwith_stationsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type knots_beta_stations_cov(knots_beta_stations_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type n_order_basis_beta_stations_cov(n_order_basis_beta_stations_covSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::IntegerVector> >::type n_basis_beta_stations_cov(n_basis_beta_stations_covSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(fmsgwr(y_points, coeff_y_points, knots_y_points, n_order_basis_y_points, n_basis_y_points, penalization_y_points, coeff_rec_weights_y_points, n_order_basis_rec_weights_y_points, n_basis_rec_weights_y_points, t_points, left_extreme_domain, right_extreme_domain, coeff_stationary_cov, knots_stationary_cov, n_order_basis_stationary_cov, n_basis_stationary_cov, penalization_stationary_cov, coeff_events_cov, knots_events_cov, n_order_basis_events_cov, n_basis_events_cov, penalization_events_cov, distances_events, bandwith_events, coeff_stations_cov, knots_stations_cov, n_order_basis_stations_cov, n_basis_stations_cov, penalization_stations_cov, distances_stations, bandwith_stations, num_threads));
+    rcpp_result_gen = Rcpp::wrap(fmsgwr(y_points, t_points, left_extreme_domain, right_extreme_domain, coeff_y_points, knots_y_points, n_order_basis_y_points, n_basis_y_points, penalization_y_points, coeff_rec_weights_y_points, n_order_basis_rec_weights_y_points, n_basis_rec_weights_y_points, coeff_stationary_cov, knots_stationary_cov, n_order_basis_stationary_cov, n_basis_stationary_cov, penalization_stationary_cov, knots_beta_stationary_cov, n_order_basis_beta_stationary_cov, n_basis_beta_stationary_cov, coeff_events_cov, knots_events_cov, n_order_basis_events_cov, n_basis_events_cov, penalization_events_cov, distances_events, bandwith_events, knots_beta_events_cov, n_order_basis_beta_events_cov, n_basis_events_cov, coeff_stations_cov, knots_stations_cov, n_order_basis_stations_cov, n_basis_stations_cov, penalization_stations_cov, distances_stations, bandwith_stations, knots_beta_stations_cov, n_order_basis_beta_stations_cov, n_basis_beta_stations_cov, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -90,7 +99,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_fdagwr_test_function", (DL_FUNC) &_fdagwr_fdagwr_test_function, 1},
-    {"_fdagwr_fmsgwr", (DL_FUNC) &_fdagwr_fmsgwr, 32},
+    {"_fdagwr_fmsgwr", (DL_FUNC) &_fdagwr_fmsgwr, 41},
     {"_fdagwr_fsgwr", (DL_FUNC) &_fdagwr_fsgwr, 2},
     {"_fdagwr_fgwr", (DL_FUNC) &_fdagwr_fgwr, 2},
     {NULL, NULL, 0}

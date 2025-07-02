@@ -39,6 +39,8 @@ private:
     /*!Vector containing a basis system for each one of the functional covariates*/
     std::vector< fdapde::BsSpace<domain_structure> > m_systems_of_basis;
 
+    /*!Nodes over which the basis systems are constructed*/
+
     /*!Interval over which constructing the basis*/
     domain_structure m_interval;
 
@@ -49,34 +51,23 @@ private:
 public:
 
     basis_systems(const std::vector<double> & knots,
-                  const std::vector<int> & basis_orders,
+                  const std::vector<std::size_t> & basis_orders,
                   std::size_t q)            :    m_q(q)
                      {
                         std::cout << "Nel costruttore di basis_systems" << std::endl;
-                        m_systems_of_basis.reserve(q);
+                        m_systems_of_basis.resize(q);
 
                         //casting the nodes for the basis system
-                        Eigen::Map<const fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size());
+                        fdagwr_traits::Dense_Vector nodes_casted = Eigen::Map<const fdagwr_traits::Dense_Vector> nodes(knots.data(), knots.size());
+                        m_interval(nodes_casted);
+                        
                         std::cout << "Nodi mappati:" << std::endl;
                         for (size_t j = 0; j < knots.size(); ++j)
                         {
-                            std::cout << nodes(j) << std::endl;
+                            std::cout << m_interval.nodes()(j) << std::endl;
                         }
 
-                        //domain_structure interval = domain_structure::Interval(-2.5, 1.0, knots.size());
-                        
-                        //domain_structure interval(nodes);
-                        //m_interval = interval;
-                        std::cout << "Intervallo inizializzato nel costruttore, con i seguenti nodi:" << std::endl;
-                        //std::cout << m_interval.nodes() << std::endl;
-
-                        double a = 0;
-                        double b = 2;
-                        int n_nodes = 10;
-                        // divides [a, b] using 10 equispaced nodes
-                        fdapde::Triangulation<1, 1> interval = fdapde::Triangulation<1, 1>::Interval(a, b, n_nodes);
-
-                        fdapde::BsSpace<domain_structure> Vh(interval, 3);
+                        //fdapde::BsSpace<domain_structure> Vh(m_interval, 3);
 
 
                         //construct the basis system

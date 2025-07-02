@@ -92,12 +92,11 @@ int test_fda_PDE(double input_test){
 
 
 
-void testing_function(const std::vector<double> & fd_points,
-                      const std::vector<int> & basis_order,
+void testing_function(const std::vector<std::size_t> & basis_order,
                       const std::vector<double> & knots){
 
     std::cout << "Nella testing_function" << std::endl;
-    basis_systems< FDAGWR_FEATS::FDAGWR_DOMAIN, BASIS_TYPE::BSPLINES > bs(knots,basis_order,3);
+    basis_systems< FDAGWR_FEATS::FDAGWR_DOMAIN, BASIS_TYPE::BSPLINES > bs(knots,basis_order,basis_order.size());
 
     std::cout << "creato basis_systems" << std::endl;
     
