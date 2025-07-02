@@ -63,12 +63,12 @@ public:
                             std::cout << nodes(j) << std::endl;
                         }
 
-                        domain_structure interval = domain_structure::Interval(-2.5, 1.0, knots.size());
+                        //domain_structure interval = domain_structure::Interval(-2.5, 1.0, knots.size());
                         
                         //domain_structure interval(nodes);
-                        m_interval = interval;
+                        //m_interval = interval;
                         std::cout << "Intervallo inizializzato nel costruttore, con i seguenti nodi:" << std::endl;
-                        std::cout << m_interval.nodes() << std::endl;
+                        //std::cout << m_interval.nodes() << std::endl;
 
                         double a = 0;
                         double b = 2;
