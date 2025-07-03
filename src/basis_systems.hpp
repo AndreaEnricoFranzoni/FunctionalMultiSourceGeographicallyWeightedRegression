@@ -68,7 +68,7 @@ public:
                             std::cout << m_interval.nodes()(j) << std::endl;
                         }
 
-                        fdapde::BsSpace<domain_structure> Vh(m_interval, 3);
+                        //fdapde::BsSpace<domain_structure> Vh(m_interval, 3);
                         std::cout << "base constructed" << std::endl;
 
 
