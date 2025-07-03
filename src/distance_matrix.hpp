@@ -84,7 +84,7 @@ public:
             m_flag_comp_dist(m_number_locations > 0)                       //if there are locations
         {       
             assert((void("Coordinates matrix has to have 2 columns"), coordinates.cols() == 2));
-            if m_flag_comp_dist   m_number_dist_comp =  (m_number_locations*(m_number_locations + static_cast<std::size_t>(1)))/static_cast<std::size_t>(2);
+            if (m_flag_comp_dist)   m_number_dist_comp =  (m_number_locations*(m_number_locations + static_cast<std::size_t>(1)))/static_cast<std::size_t>(2);
             //the number of distances to be computed is m*(m+1)/2
         }
 
