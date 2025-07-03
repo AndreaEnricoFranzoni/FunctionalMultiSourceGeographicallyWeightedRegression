@@ -20,7 +20,6 @@
 #ifndef FDAGWR_KERNEL_FUNC_HPP
 #define FDAGWR_KERNEL_FUNC_HPP
 
-#include <cmath>
 #include "traits_fdagwr.hpp"
 
 /*!

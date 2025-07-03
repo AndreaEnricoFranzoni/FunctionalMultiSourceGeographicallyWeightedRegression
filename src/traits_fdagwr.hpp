@@ -135,7 +135,18 @@ enum KERNEL_FUNC
 */
 enum BASIS_TYPE
 {
-    BSPLINES = 0,   ///< Bsplines basis
+  BSPLINES = 0,   ///< Bsplines basis
+};
+
+
+
+/*!
+* @enum DISTANCE_MEASURE
+* @brief measure to evaluate the distances within different location points for a GWR
+*/
+enum DISTANCE_MEASURE
+{
+  EUCLIDEAN = 0,  ///< Euclidean distance
 };
 
 

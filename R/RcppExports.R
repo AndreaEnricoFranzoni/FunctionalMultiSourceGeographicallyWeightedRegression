@@ -9,6 +9,10 @@ fmsgwr <- function(y_points, t_points, left_extreme_domain, right_extreme_domain
     .Call(`_fdagwr_fmsgwr`, y_points, t_points, left_extreme_domain, right_extreme_domain, coeff_y_points, knots_y_points, n_order_basis_y_points, n_basis_y_points, penalization_y_points, coeff_rec_weights_y_points, n_order_basis_rec_weights_y_points, n_basis_rec_weights_y_points, coeff_stationary_cov, knots_stationary_cov, n_order_basis_stationary_cov, n_basis_stationary_cov, penalization_stationary_cov, knots_beta_stationary_cov, n_order_basis_beta_stationary_cov, n_basis_beta_stationary_cov, coeff_events_cov, knots_events_cov, n_order_basis_events_cov, n_basis_events_cov, penalization_events_cov, distances_events, bandwith_events, knots_beta_events_cov, n_order_basis_beta_events_cov, n_basis_beta_events_cov, coeff_stations_cov, knots_stations_cov, n_order_basis_stations_cov, n_basis_stations_cov, penalization_stations_cov, distances_stations, bandwith_stations, knots_beta_stations_cov, n_order_basis_beta_stations_cov, n_basis_beta_stations_cov, num_threads)
 }
 
+test_distance_matrix <- function(coordinates) {
+    .Call(`_fdagwr_test_distance_matrix`, coordinates)
+}
+
 fsgwr <- function(input_el = 1, num_threads = NULL) {
     .Call(`_fdagwr_fsgwr`, input_el, num_threads)
 }

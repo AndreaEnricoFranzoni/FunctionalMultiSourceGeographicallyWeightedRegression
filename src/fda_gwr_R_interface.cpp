@@ -33,6 +33,7 @@
 #include "weight_matrix_no_stat.hpp"
 
 
+#include "distance_matrix.hpp"
 
 #include "test_basis_eval.hpp"
 
@@ -271,6 +272,28 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     return l;
 }
+
+
+
+//
+// [[Rcpp::export]]
+Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates)
+{
+    using T = double;
+
+    auto coordinates_ = reader_data<T,REM_NAN::MR>(coordinates);
+
+    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> dist(std::move(coordinates_));
+
+    dist.compute_distances();
+
+    auto distanze_mat = dist.distances_view();
+
+    Rcpp::List l;
+    l["Distanze"] = distanze_mat;
+    return l;
+}
+
 
 
 //
