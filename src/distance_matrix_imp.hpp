@@ -34,10 +34,10 @@ distance_matrix<distance_measure>::pointwise_distance(std::size_t loc_i, std::si
 const
 {
     //each row contains the coordinates of a location
-    std::cout << "Row " << loc_i << std::endl;
+    std::cout << "Row loc_i" << loc_i << std::endl;
     std::cout << m_coordinates.row(loc_i).array() << std::endl;
-    std::cout << "Row" << loc_j << std::endl << std::endl;
-    std::cout << m_coordinates.row(loc_j).array();
+    std::cout << "Row loc_j" << loc_j << std::endl << std::endl;
+    std::cout << m_coordinates.row(loc_j).array() << std::endl; 
     return std::pow( (m_coordinates.row(loc_i).array() - m_coordinates.row(loc_j).array()).sum(), 2 );
 }
 
@@ -61,7 +61,9 @@ distance_matrix<distance_measure>::compute_distances()
     for(std::size_t i = 0; i < m_number_locations; ++i){
         for (std::size_t j = i; j < m_number_locations; ++j)
         {
+            
             std::size_t k = (i*(i+static_cast<std::size_t>(1)))/static_cast<std::size_t>(2) + j;
+            std::cout << "Elemento: " << k << std::endl;
             m_distances[k] = this->pointwise_distance(i,j);
         }
     }
