@@ -102,6 +102,7 @@ public:
     void compute_distances();
 
     std::vector<double> distances() const {return m_distances;}
+    std::size_t number_dist_comp() const {m_number_dist_comp};
 
     inline fdagwr_traits::Dense_Matrix distances_view() const
     {

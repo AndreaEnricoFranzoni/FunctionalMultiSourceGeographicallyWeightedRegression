@@ -287,6 +287,14 @@ Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates)
 
     dist.compute_distances();
 
+    auto m_distances = dist.distances();
+
+    for (std::size_t i = 0; i < dist.number_dist_comp(); ++i)
+    {
+        std::cout << m_distances[i] << std::endl;
+    }
+    
+
     auto distanze_mat = dist.distances_view();
 
     Rcpp::List l;
