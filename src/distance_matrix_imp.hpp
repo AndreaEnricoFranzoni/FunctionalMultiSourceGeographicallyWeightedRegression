@@ -34,11 +34,11 @@ distance_matrix<distance_measure>::pointwise_distance(std::size_t loc_i, std::si
 const
 {
     //each row contains the coordinates of a location
-    std::cout << "Row loc_i" << loc_i << std::endl;
-    std::cout << m_coordinates.row(loc_i).array() << std::endl;
-    std::cout << "Row loc_j" << loc_j << std::endl << std::endl;
-    std::cout << m_coordinates.row(loc_j).array() << std::endl; 
-    return std::pow( (m_coordinates.row(loc_i).array() - m_coordinates.row(loc_j).array()).sum(), 2 );
+    //std::cout << "Row loc_i" << loc_i << std::endl;
+    //std::cout << m_coordinates.row(loc_i).array() << std::endl;
+    //std::cout << "Row loc_j" << loc_j << std::endl << std::endl;
+    //std::cout << m_coordinates.row(loc_j).array() << std::endl; 
+    return std::sqrt( (m_coordinates.row(loc_i).array() - m_coordinates.row(loc_j).array()).square().sum() );
 }
 
 
