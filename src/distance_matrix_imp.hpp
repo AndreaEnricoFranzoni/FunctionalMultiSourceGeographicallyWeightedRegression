@@ -35,8 +35,8 @@ const
 {
     //each row contains the coordinates of a location
     std::cout << "Row " << loc_i << std::endl;
-    std::cout << m_coordinates.row(loc_i).array();
-    std::cout << "Row" << loc_j << std::endl;
+    std::cout << m_coordinates.row(loc_i).array() << std::endl;
+    std::cout << "Row" << loc_j << std::endl << std::endl;
     std::cout << m_coordinates.row(loc_j).array();
     return std::pow( (m_coordinates.row(loc_i).array() - m_coordinates.row(loc_j).array()).sum(), 2 );
 }
