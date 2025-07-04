@@ -108,24 +108,19 @@ public:
     {
         fdagwr_traits::Dense_Matrix distances_symm(m_number_locations,m_number_locations);
 
-        for (std::size_t i = 0; i < m_number_locations; ++i)
-        {
-            for (std::size_t j = 0; j < m_number_locations; ++j)
-            {
-                auto elem = m_distances[(i*(1+i))/2 + j];
-
-                if (i == j)
-                {
-                    distances_symm(i,i) = elem;
-                }
-                else
-                {
-                    distances_symm(i,j)=elem;
-                    distances_symm(j,i) = elem;
-                }
+        for (std::size_t i = 0; i < m_number_locations; ++i){
+            for (std::size_t j = 0; j < m_number_locations; ++j){
                 
+                if (i<j)        {   std::swap(i,j);}
+                std::size_t index_k = (i*(1+i))/2 + j;
+                auto elem = m_distances[];
+
+                if (i == j){
+                    distances_symm(i,i) = m_distances[index_k];}
+                else{
+                    distances_symm(i,j)=elem;
+                    distances_symm(j,i) = elem;}
             }
-            
         }
         
         return distances_symm;
