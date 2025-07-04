@@ -113,13 +113,12 @@ public:
                 
                 if (i<j)        {   std::swap(i,j);}
                 std::size_t index_k = (i*(1+i))/2 + j;
-                auto elem = m_distances[];
 
                 if (i == j){
                     distances_symm(i,i) = m_distances[index_k];}
                 else{
-                    distances_symm(i,j)=elem;
-                    distances_symm(j,i) = elem;}
+                    distances_symm(i,j)=m_distances[index_k];
+                    distances_symm(j,i) = m_distances[index_k];}
             }
         }
         
