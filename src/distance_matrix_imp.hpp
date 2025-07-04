@@ -58,8 +58,8 @@ distance_matrix<distance_measure>::compute_distances()
 
     m_distances.resize(m_number_dist_comp);
 
-    for(std::size_t i = 0; i < m_number_locations; ++i){
-        for (std::size_t j = i; j < m_number_locations; ++j)
+    for(std::size_t j = 0; j < m_number_locations; ++j){
+        for (std::size_t i = 0; i < j; ++i)
         {
             
             std::size_t k = (i*(i+static_cast<std::size_t>(1)))/static_cast<std::size_t>(2) + j;
