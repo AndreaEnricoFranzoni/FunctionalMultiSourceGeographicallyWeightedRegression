@@ -282,7 +282,6 @@ Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates)
     using T = double;
 
     auto coordinates_ = reader_data<T,REM_NAN::MR>(coordinates);
-    Rcout << coordinates_ << std::endl;
 
     distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> dist(std::move(coordinates_));
 
