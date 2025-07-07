@@ -69,6 +69,7 @@ distance_matrix<distance_measure>::compute_distances()
     // una colonna alla volta, fino all'elemento sulla diagonale (dall'alto) viene inserito nel vettore sequenzialmente
 
     
+    /*
     m_distances.reserve(m_number_dist_comp);
 
     for(std::size_t j = 0; j < m_number_locations; ++j){
@@ -81,4 +82,16 @@ distance_matrix<distance_measure>::compute_distances()
                         std::cout << "Elem number " << (j*(j+1))/2 + i << std::endl;
                     }
             m_distances.push_back(this->pointwise_distance(i,j));}}
+    */
+
+    m_distances.resize(m_number_dist_comp);
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(m_number_locations) num_threads(m_number_threads)
+    for(std::size_t j = 0; j < m_number_locations; ++j){
+        for (std::size_t i = 0; i <= j; ++i){    
+            
+            std::size_t k = i>j ? (i*(i+1))/2 + j : (j*(j+1))/2 + i;
+            std::cout << "Elem number //" << k << std::endl;
+            m_distances[k]=(this->pointwise_distance(i,j));}}
 }

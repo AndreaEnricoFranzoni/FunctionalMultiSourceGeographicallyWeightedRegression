@@ -277,13 +277,16 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 //
 // [[Rcpp::export]]
-Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates)
+Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates,
+                                Rcpp::Nullable<int> num_threads = R_NilValue)
 {
     using T = double;
 
     auto coordinates_ = reader_data<T,REM_NAN::MR>(coordinates);
+    //  NUMBER OF THREADS
+    int number_threads = wrap_num_thread(num_threads);
 
-    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> dist(std::move(coordinates_));
+    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> dist(std::move(coordinates_),number_threads);
 
     dist.compute_distances();
 
