@@ -38,71 +38,100 @@ template <DISTANCE_MEASURE distance_measure>
 using DISTANCE_MEASURE_T = std::integral_constant<DISTANCE_MEASURE, distance_measure>;
 
 
+/*!
+* @class distance_matrix
+* @brief Template class for constructing the distance matrix: a squared symmetric matrix containing the distance within each pair of units
+* @tparam distance_measure how to compute the distances within different units (enumerator)
+*/
 template< DISTANCE_MEASURE distance_measure >
 class distance_matrix
 {
 private:
 
-    /*!*/
+    /*!
+    * The distance matrix is, for efficiency reasons, stored in vector, 
+    * column-wise (first col, second col, third col, ... of the original distance matrix)
+    */
     std::vector<double> m_distances;
 
     /*!
-    * the number of locations
+    * The number of statistical units. For each stastical unit, there is a location
     */
     std::size_t m_number_locations;
 
     /*!
-    * the number of distances to be computed
+    * The number of distances to be computed (m*(m+1)/2, where m is the number of statistical units)
     */
     std::size_t m_number_dist_comp;
 
-    /*!*/
+    /*!
+    * A number of statistical units x 2 matrix with the (UTM) coordinates of each statistical unit. The class supports only
+    * locations on a two dimensional mainfold
+    */
     fdagwr_traits::Dense_Matrix m_coordinates;
 
-    /*!*/
+    /*!
+    * Flag that tracks if at least two statistical units are passed
+    */
     bool m_flag_comp_dist;
 
     /*!*/
     //int m_num_threads;
 
     /*!
-    * @brief Evaluation of distance between two points
-    * @param distance distance between two locations
-    * @param bandwith kernel bandwith
-    * @return the evaluation of the kernel function
+    * @brief Evaluation of the Euclidean distance between two statistical units
+    * @param loc_i the first location (row of coordinates matrix)
+    * @param loc_j the second location (row of coordinates matrix)
+    * @return the pointwise distance within two locations
+    * @details a tag dispatcher for the Euclidean distance is used
     */
     double pointwise_distance(std::size_t loc_i, std::size_t loc_j, DISTANCE_MEASURE_T<DISTANCE_MEASURE::EUCLIDEAN>) const;
     
+
 public:
 
-    //le coordinate sono passate come una matrice del tipo: NUMERO DI UNITà x 2: OGNI RIGA è LA LOCATION DI UN EVENTO
+    /*!
+    * @brief Constructor for the distance matrix (square symmetric matrix containing the distances within each pair of units).
+    *        Locations are intended over a two dimensional domain. Dimensionality check into the constructor
+    * @param coordinates coordinates of each statistical unit. It is an Eigen dynamic matrix within as much rows as the number of statistical
+    *                    units, and two columns (for each column, one coordinate). The coordinates are intended as UTM coordinates.
+    *                    The distance matrix will be a number of statistical units x number of statistical units
+    * @details Universal constructor: move semantic used to optimazing handling big size objects
+    */
     template<typename COORDINATES_OBJ>
     distance_matrix(COORDINATES_OBJ&& coordinates)
         :   
             m_coordinates{std::forward<COORDINATES_OBJ>(coordinates)},      //pass the coordinates
-            m_number_locations(coordinates.rows()),                         //pass the number of locations
-            m_flag_comp_dist(m_number_locations > 0)                       //if there are locations
+            m_number_locations(coordinates.rows()),                         //pass the number of statistical units
+            m_flag_comp_dist(m_number_locations > 0)                        //if there are locations
         {       
+            //cheack the correct dimension of the coordinates matrix
             assert((void("Coordinates matrix has to have 2 columns"), coordinates.cols() == 2));
-            if (m_flag_comp_dist)   m_number_dist_comp =  (m_number_locations*(m_number_locations + static_cast<std::size_t>(1)))/static_cast<std::size_t>(2);
             //the number of distances to be computed is m*(m+1)/2
-            std::cout << m_coordinates << std::endl;
+            if (m_flag_comp_dist)   m_number_dist_comp =  (m_number_locations*(m_number_locations + static_cast<std::size_t>(1)))/static_cast<std::size_t>(2);
         }
 
 
     /*!
-    * @brief Evaluation of kernel function for the non-stationary weights. Tag-dispacther.
-    * @param distance distance between two locations
-    * @param bandwith kernel bandwith
-    * @return the evaluation of the kernel function
+    * @brief Evaluation of the distance between two statistical units
+    * @param loc_i the index of the first location
+    * @param loc_j the index of the second location
+    * @return the pointwise distance within two locations
+    * @details a tag dispatcher for the desired distance computation is used
     */
     double pointwise_distance(double distance, double bandwith) const { return pointwise_distance(distance,bandwith,DISTANCE_MEASURE_T<distance_measure>{});};
 
-
+    /*!
+    * Function that computes the distances within each pair of statistical units
+    */
     void compute_distances();
 
+    /*!
+    * @brief Getter for the distance matrix
+    * @return the private m_distances
+    */
     std::vector<double> distances() const {return m_distances;}
-    std::size_t number_dist_comp() const {return m_number_dist_comp;}
+
 
     inline fdagwr_traits::Dense_Matrix distances_view() const
     {

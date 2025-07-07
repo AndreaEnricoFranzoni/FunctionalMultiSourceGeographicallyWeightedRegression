@@ -22,33 +22,39 @@
 
 /*!
 * @file distance_matrix_imp.hpp
-* @brief Implementation of distance function
+* @brief Implementation of distance matrix class
 * @author Andrea Enrico Franzoni
 */
 
 
-
+/*!
+* @brief Euaclidean distance within two statistical units
+* @details 'DISTANCE_MEASURE::EUCLIDEAN' dispatch
+*/
 template< DISTANCE_MEASURE distance_measure >
 double
-distance_matrix<distance_measure>::pointwise_distance(std::size_t loc_i, std::size_t loc_j, DISTANCE_MEASURE_T<DISTANCE_MEASURE::EUCLIDEAN>)
+distance_matrix<distance_measure>::pointwise_distance(std::size_t loc_i, 
+                                                      std::size_t loc_j, 
+                                                      DISTANCE_MEASURE_T<DISTANCE_MEASURE::EUCLIDEAN>)
 const
 {
-    //each row contains the coordinates of a location
-    //std::cout << "Row loc_i" << loc_i << std::endl;
-    //std::cout << m_coordinates.row(loc_i).array() << std::endl;
-    //std::cout << "Row loc_j" << loc_j << std::endl << std::endl;
-    //std::cout << m_coordinates.row(loc_j).array() << std::endl; 
-    return std::sqrt( (m_coordinates.row(loc_i).array() - m_coordinates.row(loc_j).array()).square().sum() );
+    // given coordinates of unit loc_i and loc_j, doing, for each coordinate, difference and squared.
+    // Square root of the sum of the previous quantities
+    return std::sqrt((m_coordinates.row(loc_i).array() - m_coordinates.row(loc_j).array()).square().sum());
 }
 
 
+/*!
+* @brief Compute the distance matrix within the different locations, modifying the private member
+* @tparam distance_measure indicates which distance is used in the computations
+*/
 template< DISTANCE_MEASURE distance_measure >
 void
 distance_matrix<distance_measure>::compute_distances()
 {
 
     /*
-    Salvare le distanza col_major
+    Distances are stored column-wise. 
     */
 
 

@@ -289,7 +289,7 @@ Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates)
 
     auto m_distances = dist.distances();
 
-    for (std::size_t i = 0; i < dist.number_dist_comp(); ++i)
+    for (std::size_t i = 0; i < dist.distances().size(); ++i)
     {
         std::cout << m_distances[i] << std::endl;
     }
