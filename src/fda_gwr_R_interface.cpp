@@ -332,7 +332,7 @@ Rcpp::List test_distance_matrix2(Rcpp::NumericMatrix coordinates,
     for(std::size_t i = 0; i < distanze_mat.rows(); ++i){
         for(std::size_t j = 0; j < distanze_mat.cols(); ++j)
         {
-            std::cout << "Elem (" << i << "," << j << "): " << distanze_mat(i,j) << "   "
+            std::cout << "Elem (" << i << "," << j << "): " << distanze_mat(i,j) << "   ";
         }
         std::cout << "/n" << std::endl;
     }
