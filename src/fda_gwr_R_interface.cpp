@@ -298,7 +298,36 @@ Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates,
     }
     
 
-    auto distanze_mat = dist.distances_view();
+    Rcpp::List l;
+    l["Distanze"] = "";
+    return l;
+}
+
+
+
+//
+// [[Rcpp::export]]
+Rcpp::List test_distance_matrix2(Rcpp::NumericMatrix coordinates,
+                                Rcpp::Nullable<int> num_threads = R_NilValue)
+{
+    using T = double;
+
+    auto coordinates_ = reader_data<T,REM_NAN::MR>(coordinates);
+    //  NUMBER OF THREADS
+    int number_threads = wrap_num_thread(num_threads);
+
+    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> dist(std::move(coordinates_),number_threads);
+
+    dist.compute_distances();
+
+    auto m_distances = dist.distances();
+
+    for (std::size_t i = 0; i < dist.distances().size(); ++i)
+    {
+        std::cout << m_distances[i] << std::endl;
+    }
+    
+    auto distanze_mat = dist.distances_view_symm();
 
     Rcpp::List l;
     l["Distanze"] = distanze_mat;

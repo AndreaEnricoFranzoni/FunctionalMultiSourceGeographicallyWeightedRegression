@@ -67,14 +67,15 @@ struct fdagwr_traits
 {
 public:
   
-  using Dense_Matrix  = Eigen::MatrixXd;                 ///< Matrix data structure.
+  using Dense_Matrix  = Eigen::MatrixXd;                                      ///< Matrix data structure.
 
-  using Sparse_Matrix  = Eigen::SparseMatrix<double>;    ///< Sparse matrix data structure.
+  using Sparse_Matrix  = Eigen::SparseMatrix<double>;                         ///< Sparse matrix data structure.
   
-  using Dense_Vector  = Eigen::VectorXd;                 ///< Vector data structure.
+  using Dense_Vector  = Eigen::VectorXd;                                      ///< Vector data structure.
   
-  using Dense_Array   = Eigen::ArrayXd;                  ///< Array data structure: more efficient for coefficient-wise operations.
+  using Dense_Array   = Eigen::ArrayXd;                                       ///< Array data structure: more efficient for coefficient-wise operations.
 
+  using Symm_Matrix   = Eigen::SelfAdjointView<Eigen::MatrixXd, Eigen::Upper> ///< View for symmetric matrices (upper part)
 };
 
 

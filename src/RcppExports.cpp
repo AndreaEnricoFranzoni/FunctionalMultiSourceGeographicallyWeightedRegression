@@ -84,6 +84,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// test_distance_matrix2
+Rcpp::List test_distance_matrix2(Rcpp::NumericMatrix coordinates, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_test_distance_matrix2(SEXP coordinatesSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates(coordinatesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(test_distance_matrix2(coordinates, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 // fsgwr
 Rcpp::List fsgwr(double input_el, Rcpp::Nullable<int> num_threads);
 RcppExport SEXP _fdagwr_fsgwr(SEXP input_elSEXP, SEXP num_threadsSEXP) {
@@ -113,6 +125,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_fdagwr_test_function", (DL_FUNC) &_fdagwr_fdagwr_test_function, 1},
     {"_fdagwr_fmsgwr", (DL_FUNC) &_fdagwr_fmsgwr, 41},
     {"_fdagwr_test_distance_matrix", (DL_FUNC) &_fdagwr_test_distance_matrix, 2},
+    {"_fdagwr_test_distance_matrix2", (DL_FUNC) &_fdagwr_test_distance_matrix2, 2},
     {"_fdagwr_fsgwr", (DL_FUNC) &_fdagwr_fsgwr, 2},
     {"_fdagwr_fgwr", (DL_FUNC) &_fdagwr_fgwr, 2},
     {NULL, NULL, 0}

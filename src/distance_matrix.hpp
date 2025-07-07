@@ -171,6 +171,24 @@ public:
         return distances_symm;
     };
 
+    inline fdagwr_traits::Symm_Matrix distances_view_symm() const
+    {
+        fdagwr_traits::Dense_Matrix distances_view_symm = fdagwr_traits::Dense_Matrix::Zero(m_number_locations,m_number_locations);
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(m_number_locations) num_threads(m_num_threads)
+#endif
+        for(std::size_t j = 0; j < m_number_locations; ++j){
+            for (std::size_t i = 0; i <= j; ++i){    
+            
+                //the index for the new element in the storing vector
+                std::size_t k = i>=j ? (i*(i+1))/2 + j : (j*(j+1))/2 + i;
+            
+                distances_view_symm(i,j) = m_distances[k];}}
+        
+        return distances_view_symm.selfadjointview<Eigen::Upper>(); 
+    };
+
 };
 
 

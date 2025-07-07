@@ -45,7 +45,7 @@ const
 
 
 /*!
-* @brief Compute the distance matrix within the different locations, modifying the private member
+* @brief Compute the distance matrix within the different locations, modifying the private member m_distances
 * @tparam distance_measure indicates which distance is used in the computations
 */
 template< DISTANCE_MEASURE distance_measure >
@@ -54,36 +54,13 @@ distance_matrix<distance_measure>::compute_distances()
 {
 
     /*
-    Distances are stored column-wise. 
+    Distances are stored column-wise, up until the diagonal. Logic of access is the following
+    double& get(int i, int j) {
+        if (i < j) std::swap(i, j);
+        return m_distances[i * (i + 1) / 2 + j];}
     */
 
-
-    //L'IDEA E':
-    // HO UNA MATRICE m x 2, dove m indica il numero di unità statistiche disponibili
-    // faccio le distanze tra tutte queste righe (infatti l'idea è che mi calcolo le distanze solo tra le medesime distanze)
-    // la matrice che ottengo è m x m, MA SIMMETRICA: l'elemento (i,j) indica la distanza tra unità i e unità j, il (j,i) viceversa
-    // salvo in un vettore, PER COLONNE, con questa logica qui
-    //  double& get(int i, int j) {
-    //          if (i < j) std::swap(i, j);
-    //          return m_distances[i * (i + 1) / 2 + j];}
-    // una colonna alla volta, fino all'elemento sulla diagonale (dall'alto) viene inserito nel vettore sequenzialmente
-
-    
-    /*
-    m_distances.reserve(m_number_dist_comp);
-
-    for(std::size_t j = 0; j < m_number_locations; ++j){
-        for (std::size_t i = 0; i <= j; ++i){    
-                if (i>=j)
-                    {
-                        std::cout << "Elem number " << (i*(i+1))/2 + j << std::endl;
-                    }   
-                else{
-                        std::cout << "Elem number " << (j*(j+1))/2 + i << std::endl;
-                    }
-            m_distances.push_back(this->pointwise_distance(i,j));}}
-    */
-
+   //prearing the container for storing
     m_distances.resize(m_number_dist_comp);
 
 #ifdef _OPENMP
@@ -92,7 +69,22 @@ distance_matrix<distance_measure>::compute_distances()
     for(std::size_t j = 0; j < m_number_locations; ++j){
         for (std::size_t i = 0; i <= j; ++i){    
             
-            std::size_t k = i>j ? (i*(i+1))/2 + j : (j*(j+1))/2 + i;
-            std::cout << "Elem number //" << k << std::endl;
-            m_distances[k]=(this->pointwise_distance(i,j));}}
+            //the index for the new element in the storing vector
+            std::size_t k = i>=j ? (i*(i+1))/2 + j : (j*(j+1))/2 + i;
+            
+            m_distances[k]=this->pointwise_distance(i,j);}}
+
+
+    
+    /*
+    //Version for non parallel
+    m_distances.reserve(m_number_dist_comp);
+
+    for(std::size_t j = 0; j < m_number_locations; ++j){
+        for (std::size_t i = 0; i <= j; ++i){    
+
+            m_distances.push_back(this->pointwise_distance(i,j));}}
+    */
+
+
 }

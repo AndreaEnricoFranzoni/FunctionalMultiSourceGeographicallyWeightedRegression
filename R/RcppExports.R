@@ -13,6 +13,10 @@ test_distance_matrix <- function(coordinates, num_threads = NULL) {
     .Call(`_fdagwr_test_distance_matrix`, coordinates, num_threads)
 }
 
+test_distance_matrix2 <- function(coordinates, num_threads = NULL) {
+    .Call(`_fdagwr_test_distance_matrix2`, coordinates, num_threads)
+}
+
 fsgwr <- function(input_el = 1, num_threads = NULL) {
     .Call(`_fdagwr_fsgwr`, input_el, num_threads)
 }
