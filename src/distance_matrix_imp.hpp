@@ -87,7 +87,8 @@ distance_matrix<distance_measure>::compute_distances()
     m_distances.resize(m_number_dist_comp);
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(m_number_locations) num_threads(m_number_threads)
+#pragma omp parallel for shared(m_number_locations) num_threads(m_num_threads)
+#endif
     for(std::size_t j = 0; j < m_number_locations; ++j){
         for (std::size_t i = 0; i <= j; ++i){    
             

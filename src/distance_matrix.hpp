@@ -24,6 +24,10 @@
 #include <cassert>
 
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 /*!
 * @file distance_matrix.hpp
 * @brief Class for computing the distances within the points of interest of GWR model
@@ -107,7 +111,7 @@ public:
             m_coordinates{std::forward<COORDINATES_OBJ>(coordinates)},      //pass the coordinates
             m_number_locations(coordinates.rows()),                         //pass the number of statistical units
             m_flag_comp_dist(m_number_locations > 0),                       //if there are locations
-            m_number_threads(number_threads)                                //number of threads for paralelization
+            m_num_threads(number_threads)                                   //number of threads for paralelization
         {       
             //cheack the correct dimension of the coordinates matrix
             assert((void("Coordinates matrix has to have 2 columns"), coordinates.cols() == 2));
