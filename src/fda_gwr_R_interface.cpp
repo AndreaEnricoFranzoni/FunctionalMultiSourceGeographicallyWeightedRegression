@@ -329,8 +329,10 @@ Rcpp::List test_distance_matrix2(Rcpp::NumericMatrix coordinates,
     
     auto distanze_mat = dist.distances_view_symm();
 
+    Rcout << distanze_mat << std::endl;
+
     Rcpp::List l;
-    l["Distanze"] = distanze_mat;
+    l["Distanze"] = "";
     return l;
 }
 
