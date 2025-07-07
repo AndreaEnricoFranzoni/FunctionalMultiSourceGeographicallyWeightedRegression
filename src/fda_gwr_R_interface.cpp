@@ -329,6 +329,13 @@ Rcpp::List test_distance_matrix2(Rcpp::NumericMatrix coordinates,
     
     auto distanze_mat = dist.distances_view_symm();
 
+    for(std::size_t i = 0; i < distanze_mat.rows(); ++i){
+        for(std::size_t j = 0; j < distanze_mat.cols(); ++j)
+        {
+            std::cout << "Elem (" << i << "," << j << "): " << distanze_mat(i,j) << "   "
+        }
+        std::cout << "/n" << std::endl;
+    }
     //Rcout << distanze_mat << std::endl;
 
     Rcpp::List l;
