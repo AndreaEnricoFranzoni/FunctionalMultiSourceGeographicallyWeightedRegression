@@ -186,7 +186,7 @@ public:
             
                 distances_view_symm(i,j) = m_distances[k];}}
         
-        return distances_view_symm.selfadjointview<Eigen::Upper>(); 
+        return distances_view_symm.selfadjointView<Eigen::Upper>(); 
     };
 
 };
