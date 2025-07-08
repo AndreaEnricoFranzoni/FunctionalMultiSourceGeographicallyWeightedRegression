@@ -140,54 +140,17 @@ public:
     */
     std::vector<double> distances() const {return m_distances;}
 
-
-    inline fdagwr_traits::Dense_Matrix distances_view() const
-    {
-        fdagwr_traits::Dense_Matrix distances_symm(m_number_locations,m_number_locations);
-
-        for (std::size_t i = 0; i < m_number_locations; ++i){
-            for (std::size_t j = 0; j < m_number_locations; ++j){
-                
-                if (i==j)
-                {
-                    std::size_t index_k = (i*(1+i))/2 + j;
-                    distances_symm(i,i) = m_distances[index_k];
-                }
-                if (i<j)
-                {
-                    std::size_t index_k = (j*(1+j))/2 + i;
-                    distances_symm(i,j)=m_distances[index_k];
-                    distances_symm(j,i) = m_distances[index_k];
-                }
-                else
-                {
-                    std::size_t index_k = (i*(1+i))/2 + j;
-                    distances_symm(i,i) = m_distances[index_k];
-                    distances_symm(j,i) = m_distances[index_k];
-                }
-            }
-        }
-        
-        return distances_symm;
-    };
-
-    inline fdagwr_traits::Symm_Matrix distances_view_symm() const
-    {
-        fdagwr_traits::Dense_Matrix distances_view_symm = fdagwr_traits::Dense_Matrix::Zero(m_number_locations,m_number_locations);
-
-#ifdef _OPENMP
-#pragma omp parallel for shared(m_number_locations) num_threads(m_num_threads)
-#endif
-        for(std::size_t j = 0; j < m_number_locations; ++j){
-            for (std::size_t i = 0; i <= j; ++i){    
-            
-                //the index for the new element in the storing vector
-                std::size_t k = i>=j ? (i*(i+1))/2 + j : (j*(j+1))/2 + i;
-            
-                distances_view_symm(i,j) = m_distances[k];}}
-        
-        return distances_view_symm.selfadjointView<Eigen::Upper>(); 
-    };
+    /*!
+    * Get element A(i,j). Const version, read-only.
+    * @param i: number of row
+    * @param j: number of col
+    * @return the value in position (i,j) if non-zero, 0 casted to type T otherwise
+    */
+    inline double operator()(std::size_t i, std::size_t j) const
+    {    
+        if (i < j) std::swap(i, j);
+        return m_distances[i * (i + 1) / 2 + j];
+    }
 
 };
 

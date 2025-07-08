@@ -292,6 +292,8 @@ Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates,
 
     auto m_distances = dist.distances();
 
+    std::cout << "Elem (" << 0 << "," << 2 << "): " << dist(0,2) << std::endl;
+
     /*
     for (std::size_t i = 0; i < dist.distances().size(); ++i)
     {
@@ -304,50 +306,6 @@ Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates,
     l["Distanze"] = "";
     return l;
 }
-
-
-
-//
-// [[Rcpp::export]]
-Rcpp::List test_distance_matrix2(Rcpp::NumericMatrix coordinates,
-                                Rcpp::Nullable<int> num_threads = R_NilValue)
-{
-    using T = double;
-
-    auto coordinates_ = reader_data<T,REM_NAN::MR>(coordinates);
-    //  NUMBER OF THREADS
-    int number_threads = wrap_num_thread(num_threads);
-
-    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> dist(std::move(coordinates_),number_threads);
-
-    dist.compute_distances();
-
-    auto m_distances = dist.distances();
-
-    /*
-    for (std::size_t i = 0; i < dist.distances().size(); ++i)
-    {
-        std::cout << m_distances[i] << std::endl;
-    }
-    */
-    
-    auto distanze_mat = dist.distances_view_symm();
-
-    /*
-    for(std::size_t i = 0; i < distanze_mat.rows(); ++i){
-        for(std::size_t j = 0; j < distanze_mat.cols(); ++j)
-        {
-            std::cout << "Elem (" << i << "," << j << "): " << distanze_mat(i,j) << "   ";
-        }
-        std::cout << "/n" << std::endl;
-    }
-    */
-
-    Rcpp::List l;
-    l["Distanze"] = "";
-    return l;
-}
-
 
 
 //
