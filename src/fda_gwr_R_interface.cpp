@@ -283,6 +283,7 @@ Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates,
     using T = double;
 
     auto coordinates_ = reader_data<T,REM_NAN::MR>(coordinates);
+    std::size_t n_stat_units = coordinates_.rows();
     //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
 
@@ -301,7 +302,7 @@ Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates,
     }
     */
      
-     for (std::size_t i = 0; i < coordinates_.rows(); ++i)
+     for (std::size_t i = 0; i < n_stat_units; ++i)
      {
         auto col = dist[i];
         Rcout << col << std::endl;
