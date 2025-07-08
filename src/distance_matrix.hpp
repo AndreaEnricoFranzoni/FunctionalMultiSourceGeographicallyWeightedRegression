@@ -98,7 +98,7 @@ private:
     * @param up_until the last integer up until the partial sum is performed
     * @return the partial sum
     */
-    static std::size_t partial_sum(std::size_t up_until) const{
+    static std::size_t partial_sum(std::size_t up_until){
 
         std::size_t result(0);
 
