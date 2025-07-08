@@ -53,13 +53,6 @@ void
 distance_matrix<distance_measure>::compute_distances()
 {
 
-    /*
-    Distances are stored column-wise, up until the diagonal. Logic of access is the following
-    double& get(int i, int j) {
-        if (i < j) std::swap(i, j);
-        return m_distances[i * (i + 1) / 2 + j];}
-    */
-
    //prearing the container for storing
     m_distances.resize(m_number_dist_comp);
 
@@ -73,18 +66,4 @@ distance_matrix<distance_measure>::compute_distances()
             std::size_t k = i>=j ? (i*(i+1))/2 + j : (j*(j+1))/2 + i;
             
             m_distances[k]=this->pointwise_distance(i,j);}}
-
-
-    
-    /*
-    //Version for non parallel
-    m_distances.reserve(m_number_dist_comp);
-
-    for(std::size_t j = 0; j < m_number_locations; ++j){
-        for (std::size_t i = 0; i <= j; ++i){    
-
-            m_distances.push_back(this->pointwise_distance(i,j));}}
-    */
-
-
 }

@@ -80,7 +80,7 @@ private:
     bool m_flag_comp_dist;
 
     /*!
-    * Number of threads for paralelization
+    * Number of threads for parallelization
     */
     int m_num_threads;
 
@@ -99,12 +99,11 @@ private:
     * @return the partial sum
     */
     static std::size_t partial_sum(std::size_t up_until){
-
+        //partial sum
         std::size_t result(0);
-
         for (std::size_t i = 0; i <= up_until; ++i){    result += i;}
-        
         return result;}
+
 
 public:
 
@@ -161,17 +160,20 @@ public:
     inline double operator()(std::size_t i, std::size_t j) const
     {    
         if (i < j) std::swap(i, j);
-        return m_distances[i * (i + 1) / 2 + j];
+        return m_distances[i*(i+1)/2 + j];
     }
 
     /*!
     * @brief Return the col_i-th column (all the distances with respect to unit i-th)
     * @param col_i: the column desired. The first unit correspond to column 0
-    * @return column col_i-th (the distances with respect to unit i-th).
+    * @return column col_i-th (the distances with respect to unit i-th), in an Eigen::VectorXd
     * @note Elements are stored column-wise
     */
    inline fdagwr_traits::Dense_Vector operator[](std::size_t col_i) const
    {    
+        //cheack the correct dimension of the coordinates matrix
+        assert((void("The column index has to be in {0,1,...,number-of-statistical-units - 1}"), 0<=col_i && col_i < m_number_locations));
+
         //container for the column
         fdagwr_traits::Dense_Vector column(m_number_locations);
         
@@ -186,17 +188,9 @@ public:
         //then, the following indeces are the colomn_number integers following the first index (elems of the column up until diagonal)
         for (size_t i = 1; i <= col_i; ++i){    access_indeces.emplace_back(access_indeces.front() + i);}
         
-        //the last set of indeces corresponds to numbers of column following the one requested, taking account for how many
-        //elements are in that column
-        //(elems of the row corresponding to the diagonal element of the column until the end of that row)
+        //last set of indeces: elements of row col_i from the diagonal up until the end of the row
+        //(index of the previous element plus the column index of the next one in the same row)
         for (std::size_t i = col_i + 1; i < m_number_locations; ++i){   access_indeces.emplace_back(access_indeces.back()+i);}
-        
-        
-        std::cout << "Indeces of col " << col_i << "-th, size: " << access_indeces.size() << std::endl;
-        for (std::size_t i = 0; i < access_indeces.size(); ++i)
-        {
-            std::cout<<access_indeces[i] <<std::endl;
-        }
         
         //filling the column
 #ifdef _OPENMP
