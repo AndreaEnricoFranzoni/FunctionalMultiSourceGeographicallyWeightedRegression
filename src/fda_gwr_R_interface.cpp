@@ -344,7 +344,7 @@ Rcpp::List test_distance_matrix2(Rcpp::NumericMatrix coordinates,
     */
 
     Rcpp::List l;
-    l["Distanze"] = distanze_mat;
+    l["Distanze"] = "";
     return l;
 }
 
