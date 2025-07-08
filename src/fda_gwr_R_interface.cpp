@@ -292,10 +292,12 @@ Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates,
 
     auto m_distances = dist.distances();
 
+    /*
     for (std::size_t i = 0; i < dist.distances().size(); ++i)
     {
         std::cout << m_distances[i] << std::endl;
     }
+    */
     
 
     Rcpp::List l;
@@ -322,13 +324,16 @@ Rcpp::List test_distance_matrix2(Rcpp::NumericMatrix coordinates,
 
     auto m_distances = dist.distances();
 
+    /*
     for (std::size_t i = 0; i < dist.distances().size(); ++i)
     {
         std::cout << m_distances[i] << std::endl;
     }
+    */
     
     auto distanze_mat = dist.distances_view_symm();
 
+    /*
     for(std::size_t i = 0; i < distanze_mat.rows(); ++i){
         for(std::size_t j = 0; j < distanze_mat.cols(); ++j)
         {
@@ -336,10 +341,10 @@ Rcpp::List test_distance_matrix2(Rcpp::NumericMatrix coordinates,
         }
         std::cout << "/n" << std::endl;
     }
-    //Rcout << distanze_mat << std::endl;
+    */
 
     Rcpp::List l;
-    l["Distanze"] = "";
+    l["Distanze"] = distanze_mat;
     return l;
 }
 
