@@ -86,7 +86,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_events_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_basis_events_cov,
                   Rcpp::NumericVector penalization_events_cov,
-                  Rcpp::NumericMatrix distances_events,
+                  Rcpp::NumericMatrix coordinates_events,
                   double bandwith_events,
                   Rcpp::NumericVector knots_beta_events_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_beta_events_cov,
@@ -96,7 +96,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_stations_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stations_cov,
                   Rcpp::NumericVector penalization_stations_cov,
-                  Rcpp::NumericMatrix distances_stations,
+                  Rcpp::NumericMatrix coordinates_stations,
                   double bandwith_stations,
                   Rcpp::NumericVector knots_beta_stations_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_beta_stations_cov,
@@ -111,13 +111,18 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.29: " << std::endl;
+    Rcout << "fdagwr.30: " << std::endl;
 
     using T = double;
 
     //
     //CHECKING and WRAPPING input parameters
     //
+
+
+    //  NUMBER OF THREADS
+    int number_threads = wrap_num_thread(num_threads);
+
 
     //  RESPONSE
     //raw data
@@ -199,6 +204,13 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     std::vector<std::size_t> order_basis_beta_stations_cov_ = number_and_order_basis_beta_stations_cov_[FDAGWR_FEATS::order_basis_string];
 
 
+    //  DISTANCES
+    //events    DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
+    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_events_cov_(std::move(coordinates_events),number_threads);
+    //stations  DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
+    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_stations_cov_(std::move(coordinates_stations),number_threads);
+
+
     //  PENALIZATION TERMS
     //response
     double lambda_response_ = wrap_penalization(penalization_y_points);
@@ -209,14 +221,14 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //stations
     std::vector<double> lambda_stations_cov_ = wrap_penalizations<FDAGWR_COVARIATES_TYPES::STATION>(penalization_stations_cov);
 
+
     //  KERNEL BANDWITH
     //events
     double bandwith_events_cov_ = wrap_bandwith<FDAGWR_COVARIATES_TYPES::EVENT>(bandwith_events);
     //stations
     double bandwith_stations_cov_ = wrap_bandwith<FDAGWR_COVARIATES_TYPES::STATION>(bandwith_stations);
 
-    //  NUMBER OF THREADS
-    int number_threads = wrap_num_thread(num_threads);
+
     
 
     //Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
@@ -286,27 +298,6 @@ Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates,
     std::size_t n_stat_units = coordinates_.rows();
     //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
-
-    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> dist(std::move(coordinates_),number_threads);
-
-    dist.compute_distances();
-
-    auto m_distances = dist.distances();
-
-    std::cout << "Elem (" << 0 << "," << 2 << "): " << dist(0,2) << std::endl;
-
-    /*
-    for (std::size_t i = 0; i < dist.distances().size(); ++i)
-    {
-        std::cout << m_distances[i] << std::endl;
-    }
-    */
-     
-     for (std::size_t i = 0; i < n_stat_units; ++i)
-     {
-        auto col = dist[i];
-        Rcout << col << std::endl;
-     }
      
 
     Rcpp::List l;
