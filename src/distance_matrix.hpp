@@ -184,7 +184,7 @@ public:
         access_indeces.emplace_back(distance_matrix::partial_sum(col_i));  
 
         //then, the following indeces are the colomn_number integers following the first index (elems of the column up until diagonal)
-        for (size_t i = 0; i < col_i; ++i){    access_indeces.emplace_back(access_indeces.front() + i);}
+        for (size_t i = 1; i <= col_i; ++i){    access_indeces.emplace_back(access_indeces.front() + i);}
         
         //the last set of indeces corresponds to numbers of column following the one requested, taking account for how many
         //elements are in that column
