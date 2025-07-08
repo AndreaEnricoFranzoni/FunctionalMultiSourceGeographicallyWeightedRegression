@@ -300,7 +300,13 @@ Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates,
         std::cout << m_distances[i] << std::endl;
     }
     */
-    
+     
+     for (std::size_t i = 0; i < m_distances.size(); ++i)
+     {
+        auto col = dist[i];
+        Rcout << col << std::endl;
+     }
+     
 
     Rcpp::List l;
     l["Distanze"] = "";

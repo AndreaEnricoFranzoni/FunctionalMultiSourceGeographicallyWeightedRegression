@@ -93,6 +93,18 @@ private:
     */
     double pointwise_distance(std::size_t loc_i, std::size_t loc_j, DISTANCE_MEASURE_T<DISTANCE_MEASURE::EUCLIDEAN>) const;
     
+    /*!
+    * @brief Return the partial sum of integers up until up_until
+    * @param up_until the last integer up until the partial sum is performed
+    * @return the partial sum
+    */
+    static std::size_t partial_sum(std::size_t up_until) const{
+
+        std::size_t result(0);
+
+        for (std::size_t i = 0; i <= up_until; ++i){    result += i;}
+        
+        return result;}
 
 public:
 
@@ -141,16 +153,59 @@ public:
     std::vector<double> distances() const {return m_distances;}
 
     /*!
-    * Get element A(i,j). Const version, read-only.
+    * @brief Get element A(i,j). Const version, read-only.
     * @param i: number of row
     * @param j: number of col
-    * @return the value in position (i,j) if non-zero, 0 casted to type T otherwise
+    * @return the value in position (i,j) 
     */
     inline double operator()(std::size_t i, std::size_t j) const
     {    
         if (i < j) std::swap(i, j);
         return m_distances[i * (i + 1) / 2 + j];
     }
+
+    /*!
+    * @brief Return the col_i-th column (all the distances with respect to unit i-th)
+    * @param col_i: the column desired. The first unit correspond to column 0
+    * @return column col_i-th (the distances with respect to unit i-th).
+    * @note Elements are stored column-wise
+    */
+   inline fdagwr_traits::Dense_Vector operator[](std::size_t col_i) const
+   {    
+        //container for the column
+        fdagwr_traits::Dense_Vector column(m_number_locations);
+        
+        //vector to store the indeces of the elements of m_distances that refers to a distance computed with respect to the i-th statistical unit
+        std::vector<std::size_t> access_indeces;
+        //there is a total of number-of-statistical-units distances computed for each statistical unit
+        access_indeces.reserve(m_number_locations);     
+
+        //the first index is the index of start of the column (elem of the column in the first row)
+        access_indeces.emplace_back(distance_matrix::partial_sum(col_i));  
+
+        //then, the following indeces are the colomn_number integers following the first index (elems of the column up until diagonal)
+        for (size_t i = 0; i < col_i; ++i){    access_indeces.emplace_back(access_indeces.front() + i);}
+        
+        //the last set of indeces corresponds to numbers of column following the one requested, taking account for how many
+        //elements are in that column
+        //(elems of the row corresponding to the diagonal element of the column until the end of that row)
+        for (std::size_t i = col_i + 1; i < m_number_locations; ++i){   access_indeces.emplace_back(access_indeces.back()+i);}
+        
+        
+        std::cout << "Indeces of col " << col_i << "-th, size: " << access_indeces.size() << std::endl;
+        for (std::size_t i = 0; i < access_indeces.size(); ++i)
+        {
+            std::cout<<access_indeces[i] <<std::endl;
+        }
+        
+        //filling the column
+#ifdef _OPENMP
+#pragma omp parallel for shared(m_number_locations,access_indeces) num_threads(m_num_threads)
+#endif
+        for(std::size_t i = 0; i < m_number_locations; ++i){    column(i) = m_distances[access_indeces[i]];}
+
+        return column;
+   }
 
 };
 
