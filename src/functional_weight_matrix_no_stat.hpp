@@ -33,7 +33,7 @@
 
 
 template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func, BASIS_TYPE basis_type >  
-class functional_weight_matrix_non_stationary : public functional_weight_matrix_base< functional_weight_matrix_non_stationary<stationarity_t,kernel_func>, stationarity_t, kernel_func, basis_type >
+class functional_weight_matrix_non_stationary : public functional_weight_matrix_base< functional_weight_matrix_non_stationary<stationarity_t,kernel_func,basis_type>, stationarity_t, kernel_func, basis_type >
 {
 
 private:
