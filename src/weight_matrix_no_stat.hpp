@@ -32,36 +32,60 @@
 
 
 
-template< KERNEL_FUNC kernel_func >  
-class weight_matrix_non_stationary : public weight_matrix_base< weight_matrix_non_stationary<kernel_func>, kernel_func >
+template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func >  
+class weight_matrix_non_stationary : public weight_matrix_base< weight_matrix_non_stationary<stationarity_t,kernel_func>, stationarity_t, kernel_func >
 {
+
+private:
+
+    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> m_distance_matrix;
+
+    double m_kernel_bandwith;
+
+
+
 public:
 
-  /*!
-  * @brief Constructor for the non stationary weight matrix: each weight consists of the reconstruction functional weight and spatial weight
-  * @param weight_stat stationary weight, for each statistical unit
-  * @param n number of statistical units
-  * @param number_threads number of threads for OMP
-  */
-  weight_matrix_non_stationary(const std::vector<double> & weight_stat, 
-                               const std::vector<double> & weight_no_stat,
-                               std::size_t n,
-                               double bandwith, 
-                               int number_threads)
-                                : weight_matrix_base<weight_matrix_non_stationary,kernel_func>(n,number_threads) 
-                              {   
-                                  std::cout << "Constructing a non stationary weight matrix" << std::endl;
-                                  //filling the diagonal with reconstructional stationary weights times non stationary spatial weights
-                                  this->weights().reserve(fdagwr_traits::Dense_Vector::Constant(this->n(), 1));
+    /*!
+    * @brief Constructor for the non stationary weight matrix: each weight consists of the reconstruction functional weight and spatial weight
+    * @param weight_stat stationary weight, for each statistical unit
+    * @param n number of statistical units
+    * @param number_threads number of threads for OMP
+    */
+    template< typename STAT_WEIGHTS_OBJ, typename DIST_MATRIX_OBJ >
+    weight_matrix_non_stationary(STAT_WEIGHTS_OBJ&& stationary_weights,
+                                 DIST_MATRIX_OBJ&& distance_matrix,
+                                 double kernel_bwt,
+                                 int number_threads)
 
-#ifdef _OPENMP
-#pragma omp parallel for num_threads(this->number_threads())
-#endif
-                                  for(std::size_t i = 0; i < this->n(); ++i){   
-                                      this->weights().insert(i, i) = weight_stat[i]*this->kernel_eval(weight_no_stat[i],bandwith);}
+                                : 
+                                  weight_matrix_base<weight_matrix_non_stationary,stationarity_t,kernel_func>(std::move(stationary_weights),
+                                                                                                              number_threads),
+                                  m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)},
+                                  m_kernel_bandwith(kernel_bwt) 
+                                {   
+                                    std::cout << "Constructing a non stationary weight matrix" << std::endl;
+                                }
 
-                                  this->weights().makeCompressed();        //compressing the matrix for more efficiency in the operations
-                              }
+    inline
+    void
+    computing_weights()
+    {
+
+      m_weights.resize(m_number_statistical_units);
+
+      for(std::size_t i = 0; i < m_number_statistical_units; ++i)
+      {
+        m_weights[i].resize(m_number_abscissa_evaluations);
+
+        for (std::size_t j = 0; j < m_number_abscissa_evaluations; ++j)
+        {
+          fdagwr_traits::Diag_Matrix weight_given_abscissa(m_stationary_weights.row(j).transpose());
+          m_weights[i][j] = weight_given_abscissa;
+        }
+        
+      }
+    }
 };
 
 #endif  /*FDAGWR_WEIGHT_MATRIX_NON_STATIONARY_HPP*/
