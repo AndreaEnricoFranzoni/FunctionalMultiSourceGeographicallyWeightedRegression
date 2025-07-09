@@ -21,6 +21,8 @@
 #ifndef FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_HPP
 #define FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_HPP
 
+#include <cassert>
+
 #include "traits_fdagwr.hpp"
 #include "kernel_functions.hpp"
 #include "distance_matrix.hpp"
