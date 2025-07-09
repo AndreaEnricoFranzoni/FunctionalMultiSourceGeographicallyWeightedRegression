@@ -47,12 +47,11 @@ public:
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    template< typename STAT_WEIGHTS_OBJ >
-    weight_matrix_stationary(STAT_WEIGHTS_OBJ&& coeff_stat_weights,
+    weight_matrix_stationary(const fdagwr_traits::Dense_Matrix& coeff_stat_weights,
                              int number_threads)
                       : 
   
-                      weight_matrix_base<weight_matrix_stationary,stationarity_t,kernel_func>(std::move(coeff_stat_weights),
+                      weight_matrix_base<weight_matrix_stationary,stationarity_t,kernel_func>(coeff_stat_weights,
                                                                                               number_threads) 
                       {   std::cout << "Constructing a stationary weight matrix" << std::endl;}
 

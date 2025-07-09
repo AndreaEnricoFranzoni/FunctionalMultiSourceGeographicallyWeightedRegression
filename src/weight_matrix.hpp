@@ -97,11 +97,10 @@ public:
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    template< typename STAT_WEIGHTS_OBJ >
-    weight_matrix_base(STAT_WEIGHTS_OBJ&& coeff_stat_weights,
+    weight_matrix_base(const fdagwr_traits::Dense_Matrix &coeff_stat_weights,
                        int number_threads)
-        :       
-            m_coeff_stat_weights{std::forward<STAT_WEIGHTS_OBJ>(coeff_stat_weights)},
+        :      
+            m_coeff_stat_weights(coeff_stat_weights),
             m_number_abscissa_evaluations(coeff_stat_weights.rows()), 
             m_number_statistical_units(coeff_stat_weights.cols()), 
             m_number_threads(number_threads)  

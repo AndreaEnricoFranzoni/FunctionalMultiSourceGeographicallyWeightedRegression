@@ -55,14 +55,14 @@ public:
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    template< typename STAT_WEIGHTS_OBJ, typename DIST_MATRIX_OBJ >
-    weight_matrix_non_stationary(STAT_WEIGHTS_OBJ&& coeff_stat_weights,
+    template< typename DIST_MATRIX_OBJ >
+    weight_matrix_non_stationary(const fdagwr_traits::Dense_Matrix & coeff_stat_weights,
                                  DIST_MATRIX_OBJ&& distance_matrix,
                                  double kernel_bwt,
                                  int number_threads)
 
                                 : 
-                                  weight_matrix_base<weight_matrix_non_stationary,stationarity_t,kernel_func>(std::move(coeff_stat_weights),
+                                  weight_matrix_base<weight_matrix_non_stationary,stationarity_t,kernel_func>(coeff_stat_weights,
                                                                                                               number_threads),
                                   m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)},
                                   m_kernel_bandwith(kernel_bwt) 
