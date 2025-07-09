@@ -102,8 +102,8 @@ public:
                        int number_threads)
         :       
             m_coeff_stat_weights{std::forward<STAT_WEIGHTS_OBJ>(coeff_stat_weights)},
-            m_number_abscissa_evaluations(coeff_weights.rows()), 
-            m_number_statistical_units(coeff_weights.cols()), 
+            m_number_abscissa_evaluations(coeff_stat_weights.rows()), 
+            m_number_statistical_units(coeff_stat_weights.cols()), 
             m_number_threads(number_threads)  
         {}
 
