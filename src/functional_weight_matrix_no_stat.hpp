@@ -81,8 +81,8 @@ public:
                                             int number_threads)
 
                                 : 
-                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary,stationarity_t,kernel_func>(coeff_stat_weights,
-                                                                                                                                    number_threads),
+                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary,stationarity_t>(coeff_stat_weights,
+                                                                                                                        number_threads),
                                   m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)},
                                   m_kernel_bandwith(kernel_bwt) 
                                 {                                       
