@@ -31,7 +31,7 @@
 */
 
 
-template< FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY, KERNEL_FUNC kernel_func >  
+template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func >  
 class functional_weight_matrix_stationary : public functional_weight_matrix_base< functional_weight_matrix_stationary<stationarity_t,kernel_func>, stationarity_t, kernel_func >
 {
 private:
