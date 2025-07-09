@@ -111,7 +111,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.31: " << std::endl;
+    Rcout << "fdagwr.32: " << std::endl;
 
     using T = double;
 
