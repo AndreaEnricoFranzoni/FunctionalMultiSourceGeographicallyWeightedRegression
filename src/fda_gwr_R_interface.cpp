@@ -114,12 +114,12 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     Rcout << "fdagwr.36: " << std::endl;
 
     using _DATA_TYPE_ = double;
-    using _NAN_REM_ = REM_NAN::MR;
-    using _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;
-    using _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;
-    using _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;
-    using _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;
-    using _KERNEL_ = KERNEL_FUNC::GAUSSIAN;
+    auto _NAN_REM_ constexpr = REM_NAN::MR;
+    auto _STATIONARY_ constexpr = FDAGWR_COVARIATES_TYPES::STATIONARY;
+    auto _EVENT_ constexpr = FDAGWR_COVARIATES_TYPES::EVENT;
+    auto _STATION_ constexpr = FDAGWR_COVARIATES_TYPES::STATION;
+    auto _DISTANCE_ constexpr = DISTANCE_MEASURE::EUCLIDEAN;
+    auto _KERNEL_ constexpr = KERNEL_FUNC::GAUSSIAN;
 
     ///////////////////////////////////////////////////////
     /////   CHECKING and WRAPPING INPUT PARAMETERS  ///////
