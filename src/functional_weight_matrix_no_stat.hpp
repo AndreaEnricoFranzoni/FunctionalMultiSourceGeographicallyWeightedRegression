@@ -32,8 +32,8 @@
 
 
 
-template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func >  
-class functional_weight_matrix_non_stationary : public functional_weight_matrix_base< functional_weight_matrix_non_stationary<stationarity_t,kernel_func>, stationarity_t, kernel_func >
+template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func, BASIS_TYPE basis_type >  
+class functional_weight_matrix_non_stationary : public functional_weight_matrix_base< functional_weight_matrix_non_stationary<stationarity_t,kernel_func>, stationarity_t, kernel_func, basis_type >
 {
 
 private:
@@ -67,6 +67,11 @@ public:
                                   m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)},
                                   m_kernel_bandwith(kernel_bwt) 
                                 {   
+                                    if constexpr(basis_type == BASIS_TYPE::BSPLINES)
+                                    {
+                                      std::cout << "ok" << std::endl;
+                                    }
+                                    
                                     std::cout << "Constructing a non stationary weight matrix" << std::endl;
                                 }
 
