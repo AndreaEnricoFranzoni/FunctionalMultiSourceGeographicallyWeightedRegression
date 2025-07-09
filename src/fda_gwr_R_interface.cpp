@@ -115,10 +115,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     using T = double;
 
-    //
-    //CHECKING and WRAPPING input parameters
-    //
-
+    ///////////////////////////////////////////////////////
+    /////   CHECKING and WRAPPING INPUT PARAMETERS  ///////
+    ///////////////////////////////////////////////////////
 
     //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
@@ -230,23 +229,52 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //stations
     double bandwith_stations_cov_ = wrap_bandwith<FDAGWR_COVARIATES_TYPES::STATION>(bandwith_stations);
 
-
-    
-
-    //Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
-
-
-    //testing_function(order_basis_stationary_cov_,knots_stationary_cov_);
+    ////////////////////////////////////////
+    /////    END PARAMETERS WRAPPING   /////
+    ////////////////////////////////////////
 
 
-    //computing distances
+
+    //COMPUTING DISTANCES
     //events
     distances_events_cov_.compute_distances();
     //stations
     distances_stations_cov_.compute_distances();
 
-    auto dist_col0 = distances_events_cov_[0];
-    Rcout << dist_col0 << std::endl;
+
+    //COMPUTING FUNCTIONAL WEIGHT MATRIX
+    //stationary
+    weight_matrix_stationary<FDAGWR_COVARIATES_TYPES::STATIONARY,KERNEL_FUNC::GAUSSIAN> W_c(std::move(coefficiente_response_reconstruction_weights_),
+                                                                                            number_threads);
+    //events
+    weight_matrix_non_stationary<FDAGWR_COVARIATES_TYPES::EVENT,KERNEL_FUNC::GAUSSIAN> W_e(std::move(coefficiente_response_reconstruction_weights_),
+                                                                                           std::move(distances_events_cov),
+                                                                                           bandwith_events_cov_,
+                                                                                           number_threads);
+    //stations
+    weight_matrix_non_stationary<FDAGWR_COVARIATES_TYPES::STATION,KERNEL_FUNC::GAUSSIAN> W_s(std::move(coefficiente_response_reconstruction_weights_),
+                                                                                             std::move(distances_stations_cov_),
+                                                                                             bandwith_stations_cov_,
+                                                                                             number_threads);
+
+    Rcout << "Stationary w: units: " << W_c.number_statistical_units << ", abscissas: " << W_c.number_abscissa_evaluations() << ", pesi: " << std::endl;
+    Rcout << W_c.coeff_stat_weights() << std::endl;
+
+    Rcout << "Events w: units: " << W_e.number_statistical_units << ", abscissas: " << W_e.number_abscissa_evaluations() << ", pesi: " << std::endl;
+    Rcout << W_e.coeff_stat_weights() << std::endl;
+
+    Rcout << "Stations w: units: " << W_s.number_statistical_units << ", abscissas: " << W_s.number_abscissa_evaluations() << ", pesi: " << std::endl;
+    Rcout << W_s.coeff_stat_weights() << std::endl;
+
+
+
+
+    
+    
+    //Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
+
+
+    //testing_function(order_basis_stationary_cov_,knots_stationary_cov_);
 
     
 
