@@ -248,7 +248,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                                                                                             number_threads);
     //events
     weight_matrix_non_stationary<FDAGWR_COVARIATES_TYPES::EVENT,KERNEL_FUNC::GAUSSIAN> W_e(std::move(coefficiente_response_reconstruction_weights_),
-                                                                                           std::move(distances_events_cov),
+                                                                                           std::move(distances_events_cov_),
                                                                                            bandwith_events_cov_,
                                                                                            number_threads);
     //stations
@@ -257,13 +257,13 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                                                                                              bandwith_stations_cov_,
                                                                                              number_threads);
 
-    Rcout << "Stationary w: units: " << W_c.number_statistical_units << ", abscissas: " << W_c.number_abscissa_evaluations() << ", pesi: " << std::endl;
+    Rcout << "Stationary w: units: " << W_c.number_statistical_units() << ", abscissas: " << W_c.number_abscissa_evaluations() << ", pesi: " << std::endl;
     Rcout << W_c.coeff_stat_weights() << std::endl;
 
-    Rcout << "Events w: units: " << W_e.number_statistical_units << ", abscissas: " << W_e.number_abscissa_evaluations() << ", pesi: " << std::endl;
+    Rcout << "Events w: units: " << W_e.number_statistical_units() << ", abscissas: " << W_e.number_abscissa_evaluations() << ", pesi: " << std::endl;
     Rcout << W_e.coeff_stat_weights() << std::endl;
 
-    Rcout << "Stations w: units: " << W_s.number_statistical_units << ", abscissas: " << W_s.number_abscissa_evaluations() << ", pesi: " << std::endl;
+    Rcout << "Stations w: units: " << W_s.number_statistical_units() << ", abscissas: " << W_s.number_abscissa_evaluations() << ", pesi: " << std::endl;
     Rcout << W_s.coeff_stat_weights() << std::endl;
 
 
