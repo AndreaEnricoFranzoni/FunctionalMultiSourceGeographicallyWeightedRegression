@@ -111,9 +111,15 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.35: " << std::endl;
+    Rcout << "fdagwr.36: " << std::endl;
 
-    using T = double;
+    using _DATA_TYPE_ = double;
+    using _NAN_REM_ = REM_NAN::MR;
+    using _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;
+    using _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;
+    using _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;
+    using _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;
+    using _KERNEL_ = KERNEL_FUNC::GAUSSIAN;
 
     ///////////////////////////////////////////////////////
     /////   CHECKING and WRAPPING INPUT PARAMETERS  ///////
@@ -125,11 +131,11 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //  RESPONSE
     //raw data
-    auto response_ = reader_data<T,REM_NAN::MR>(y_points);       //Eigen dense matrix type (auto is necessary )
+    auto response_ = reader_data<_DATA_TYPE_,_NAN_REM_>(y_points);       //Eigen dense matrix type (auto is necessary )
     //coefficients
-    auto coefficients_response_ = reader_data<T,REM_NAN::MR>(coeff_y_points);
+    auto coefficients_response_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coeff_y_points);
     //reconstruction weights
-    auto coefficiente_response_reconstruction_weights_ = reader_data<T,REM_NAN::MR>(coeff_rec_weights_y_points);
+    auto coefficiente_response_reconstruction_weights_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coeff_rec_weights_y_points);
 
 
     //  ABSCISSA POINTS
@@ -155,16 +161,16 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //  COVARIATES names, coefficients and how many
     //stationary 
-    std::vector<std::string> names_stationary_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);
-    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stationary_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATIONARY>(coeff_stationary_cov);    
+    std::vector<std::string> names_stationary_cov_ = wrap_covariates_names<_STATIONARY_>(coeff_stationary_cov);
+    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stationary_cov_ = wrap_covariates_coefficients<_STATIONARY_>(coeff_stationary_cov);    
     std::size_t q_C = names_stationary_cov_.size();    //number of stationary covariates
     //events
-    std::vector<std::string> names_events_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
-    std::vector<fdagwr_traits::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::EVENT>(coeff_events_cov);
+    std::vector<std::string> names_events_cov_ = wrap_covariates_names<_EVENT_>(coeff_events_cov);
+    std::vector<fdagwr_traits::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<_EVENT_>(coeff_events_cov);
     std::size_t q_E = names_events_cov_.size();        //number of events related covariates
     //stations
-    std::vector<std::string> names_stations_cov_ = wrap_covariates_names<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
-    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<FDAGWR_COVARIATES_TYPES::STATION>(coeff_stations_cov);
+    std::vector<std::string> names_stations_cov_ = wrap_covariates_names<_STATION_>(coeff_stations_cov);
+    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<_STATION_>(coeff_stations_cov);
     std::size_t q_S = names_stations_cov_.size();      //number of stations related covariates
 
 
@@ -178,56 +184,56 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     std::size_t number_basis_weights_response_ = number_and_order_basis_weights_response_[FDAGWR_FEATS::n_basis_string];
     std::size_t order_basis_weights_response_ = number_and_order_basis_weights_response_[FDAGWR_FEATS::order_basis_string];
     //stationary cov
-    auto number_and_order_basis_stationary_cov_ = wrap_basis_numbers_and_orders<FDAGWR_COVARIATES_TYPES::STATIONARY>(n_basis_stationary_cov,n_order_basis_stationary_cov,knots_stationary_cov_.size(),q_C);
+    auto number_and_order_basis_stationary_cov_ = wrap_basis_numbers_and_orders<_STATIONARY_>(n_basis_stationary_cov,n_order_basis_stationary_cov,knots_stationary_cov_.size(),q_C);
     std::vector<std::size_t> number_basis_stationary_cov_ = number_and_order_basis_stationary_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_stationary_cov_ = number_and_order_basis_stationary_cov_[FDAGWR_FEATS::order_basis_string];
     //beta stationary cov
-    auto number_and_order_basis_beta_stationary_cov_ = wrap_basis_numbers_and_orders<FDAGWR_COVARIATES_TYPES::STATIONARY>(n_basis_beta_stationary_cov,n_order_basis_beta_stationary_cov,knots_beta_stationary_cov_.size(),q_C);
+    auto number_and_order_basis_beta_stationary_cov_ = wrap_basis_numbers_and_orders<_STATIONARY_>(n_basis_beta_stationary_cov,n_order_basis_beta_stationary_cov,knots_beta_stationary_cov_.size(),q_C);
     std::vector<std::size_t> number_basis_beta_stationary_cov_ = number_and_order_basis_beta_stationary_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_beta_stationary_cov_ = number_and_order_basis_beta_stationary_cov_[FDAGWR_FEATS::order_basis_string];
     //events cov
-    auto number_and_order_basis_events_cov_ = wrap_basis_numbers_and_orders<FDAGWR_COVARIATES_TYPES::EVENT>(n_basis_events_cov,n_order_basis_events_cov,knots_events_cov_.size(),q_E);
+    auto number_and_order_basis_events_cov_ = wrap_basis_numbers_and_orders<_EVENT_>(n_basis_events_cov,n_order_basis_events_cov,knots_events_cov_.size(),q_E);
     std::vector<std::size_t> number_basis_events_cov_ = number_and_order_basis_events_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_events_cov_ = number_and_order_basis_events_cov_[FDAGWR_FEATS::order_basis_string];
     //beta events cov
-    auto number_and_order_basis_beta_events_cov_ = wrap_basis_numbers_and_orders<FDAGWR_COVARIATES_TYPES::EVENT>(n_basis_beta_events_cov,n_order_basis_beta_events_cov,knots_beta_events_cov_.size(),q_E);
+    auto number_and_order_basis_beta_events_cov_ = wrap_basis_numbers_and_orders<_EVENT_>(n_basis_beta_events_cov,n_order_basis_beta_events_cov,knots_beta_events_cov_.size(),q_E);
     std::vector<std::size_t> number_basis_beta_events_cov_ = number_and_order_basis_beta_events_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_beta_events_cov_ = number_and_order_basis_beta_events_cov_[FDAGWR_FEATS::order_basis_string];
     //stations cov
-    auto number_and_order_basis_stations_cov_ = wrap_basis_numbers_and_orders<FDAGWR_COVARIATES_TYPES::STATION>(n_basis_stations_cov,n_order_basis_stations_cov,knots_stations_cov_.size(),q_S);
+    auto number_and_order_basis_stations_cov_ = wrap_basis_numbers_and_orders<_STATION_>(n_basis_stations_cov,n_order_basis_stations_cov,knots_stations_cov_.size(),q_S);
     std::vector<std::size_t> number_basis_stations_cov_ = number_and_order_basis_stations_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_stations_cov_ = number_and_order_basis_stations_cov_[FDAGWR_FEATS::order_basis_string];
     //beta stations cov
-    auto number_and_order_basis_beta_stations_cov_ = wrap_basis_numbers_and_orders<FDAGWR_COVARIATES_TYPES::STATION>(n_basis_beta_stations_cov,n_order_basis_beta_stations_cov,knots_beta_stations_cov_.size(),q_S);
+    auto number_and_order_basis_beta_stations_cov_ = wrap_basis_numbers_and_orders<_STATION_>(n_basis_beta_stations_cov,n_order_basis_beta_stations_cov,knots_beta_stations_cov_.size(),q_S);
     std::vector<std::size_t> number_basis_beta_stations_cov_ = number_and_order_basis_beta_stations_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_beta_stations_cov_ = number_and_order_basis_beta_stations_cov_[FDAGWR_FEATS::order_basis_string];
 
 
     //  DISTANCES
     //events    DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
-    auto coordinates_events_ = reader_data<T,REM_NAN::MR>(coordinates_events);
-    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_events_cov_(std::move(coordinates_events_),number_threads);
+    auto coordinates_events_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coordinates_events);
+    distance_matrix<_DISTANCE_> distances_events_cov_(std::move(coordinates_events_),number_threads);
     //stations  DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
-    auto coordinates_stations_ = reader_data<T,REM_NAN::MR>(coordinates_stations);
-    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_stations_cov_(std::move(coordinates_stations_),number_threads);
+    auto coordinates_stations_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coordinates_stations);
+    distance_matrix<_DISTANCE_> distances_stations_cov_(std::move(coordinates_stations_),number_threads);
 
 
     //  PENALIZATION TERMS
     //response
     double lambda_response_ = wrap_penalization(penalization_y_points);
     //stationary
-    std::vector<double> lambda_stationary_cov_ = wrap_penalizations<FDAGWR_COVARIATES_TYPES::STATIONARY>(penalization_stationary_cov);
+    std::vector<double> lambda_stationary_cov_ = wrap_penalizations<_STATIONARY_>(penalization_stationary_cov);
     //events
-    std::vector<double> lambda_events_cov_ = wrap_penalizations<FDAGWR_COVARIATES_TYPES::EVENT>(penalization_events_cov);
+    std::vector<double> lambda_events_cov_ = wrap_penalizations<_EVENT_>(penalization_events_cov);
     //stations
-    std::vector<double> lambda_stations_cov_ = wrap_penalizations<FDAGWR_COVARIATES_TYPES::STATION>(penalization_stations_cov);
+    std::vector<double> lambda_stations_cov_ = wrap_penalizations<_STATION_>(penalization_stations_cov);
 
 
     //  KERNEL BANDWITH
     //events
-    double bandwith_events_cov_ = wrap_bandwith<FDAGWR_COVARIATES_TYPES::EVENT>(bandwith_events);
+    double bandwith_events_cov_ = wrap_bandwith<_EVENT_>(bandwith_events);
     //stations
-    double bandwith_stations_cov_ = wrap_bandwith<FDAGWR_COVARIATES_TYPES::STATION>(bandwith_stations);
+    double bandwith_stations_cov_ = wrap_bandwith<_STATION_>(bandwith_stations);
 
     ////////////////////////////////////////
     /////    END PARAMETERS WRAPPING   /////
@@ -244,18 +250,18 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //COMPUTING FUNCTIONAL WEIGHT MATRIX
     //stationary
-    functional_weight_matrix_stationary<FDAGWR_COVARIATES_TYPES::STATIONARY> W_c(coefficiente_response_reconstruction_weights_,
-                                                                                 number_threads);
+    functional_weight_matrix_stationary<_STATIONARY_> W_c(coefficiente_response_reconstruction_weights_,
+                                                          number_threads);
     //events
-    functional_weight_matrix_non_stationary<FDAGWR_COVARIATES_TYPES::EVENT,KERNEL_FUNC::GAUSSIAN,DISTANCE_MEASURE::EUCLIDEAN> W_e(coefficiente_response_reconstruction_weights_,
-                                                                                                                                  std::move(distances_events_cov_),
-                                                                                                                                  bandwith_events_cov_,
-                                                                                                                                  number_threads);
+    functional_weight_matrix_non_stationary<_EVENT_,_KERNEL_,_DISTANCE_> W_e(coefficiente_response_reconstruction_weights_,
+                                                                             std::move(distances_events_cov_),
+                                                                             bandwith_events_cov_,
+                                                                             number_threads);
     //stations
-    functional_weight_matrix_non_stationary<FDAGWR_COVARIATES_TYPES::STATION,KERNEL_FUNC::GAUSSIAN,DISTANCE_MEASURE::EUCLIDEAN> W_s(coefficiente_response_reconstruction_weights_,
-                                                                                                                                    std::move(distances_stations_cov_),
-                                                                                                                                    bandwith_stations_cov_,
-                                                                                                                                    number_threads);
+    functional_weight_matrix_non_stationary<_STATION_,_KERNEL_,_DISTANCE_> W_s(coefficiente_response_reconstruction_weights_,
+                                                                               std::move(distances_stations_cov_),
+                                                                               bandwith_stations_cov_,
+                                                                               number_threads);
 
     //Rcout << "Stationary w: units: " << W_c.number_statistical_units() << ", abscissas: " << W_c.number_abscissa_evaluations() << ", pesi: " << std::endl;
     //Rcout << W_c.coeff_stat_weights() << std::endl;
