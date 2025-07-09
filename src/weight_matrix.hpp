@@ -123,7 +123,7 @@ public:
     * @brief Getter for the number of statistical units
     * @return the private m_number_statistical_units
     */
-    std::size_t number_statistical_units() const {return number_statistical_units;}
+    std::size_t number_statistical_units() const {return m_number_statistical_units;}
 
     /*!
     * @brief Getter for the number of threads for OMP
