@@ -206,9 +206,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //  DISTANCES
     //events    DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
-    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_events_cov_(std::move(coordinates_events),number_threads);
+    //distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_events_cov_(std::move(coordinates_events),number_threads);
     //stations  DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
-    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_stations_cov_(std::move(coordinates_stations),number_threads);
+    //distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_stations_cov_(std::move(coordinates_stations),number_threads);
 
 
     //  PENALIZATION TERMS
