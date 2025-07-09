@@ -247,15 +247,15 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     functional_weight_matrix_stationary<FDAGWR_COVARIATES_TYPES::STATIONARY> W_c(coefficiente_response_reconstruction_weights_,
                                                                                  number_threads);
     //events
-    functional_weight_matrix_non_stationary<FDAGWR_COVARIATES_TYPES::EVENT,KERNEL_FUNC::GAUSSIAN> W_e(coefficiente_response_reconstruction_weights_,
-                                                                                                      std::move(distances_events_cov_),
-                                                                                                      bandwith_events_cov_,
-                                                                                                      number_threads);
+    functional_weight_matrix_non_stationary<FDAGWR_COVARIATES_TYPES::EVENT,KERNEL_FUNC::GAUSSIAN,DISTANCE_MEASURE::EUCLIDEAN> W_e(coefficiente_response_reconstruction_weights_,
+                                                                                                                                  std::move(distances_events_cov_),
+                                                                                                                                  bandwith_events_cov_,
+                                                                                                                                  number_threads);
     //stations
-    functional_weight_matrix_non_stationary<FDAGWR_COVARIATES_TYPES::STATION,KERNEL_FUNC::GAUSSIAN> W_s(coefficiente_response_reconstruction_weights_,
-                                                                                                        std::move(distances_stations_cov_),
-                                                                                                        bandwith_stations_cov_,
-                                                                                                        number_threads);
+    functional_weight_matrix_non_stationary<FDAGWR_COVARIATES_TYPES::STATION,KERNEL_FUNC::GAUSSIAN,DISTANCE_MEASURE::EUCLIDEAN> W_s(coefficiente_response_reconstruction_weights_,
+                                                                                                                                    std::move(distances_stations_cov_),
+                                                                                                                                    bandwith_stations_cov_,
+                                                                                                                                    number_threads);
 
     //Rcout << "Stationary w: units: " << W_c.number_statistical_units() << ", abscissas: " << W_c.number_abscissa_evaluations() << ", pesi: " << std::endl;
     //Rcout << W_c.coeff_stat_weights() << std::endl;

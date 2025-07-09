@@ -42,8 +42,8 @@ template <KERNEL_FUNC kernel_func>
 using KERNEL_FUNC_T = std::integral_constant<KERNEL_FUNC, kernel_func>;
 
 
-template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func >  
-class functional_weight_matrix_non_stationary : public functional_weight_matrix_base< functional_weight_matrix_non_stationary<stationarity_t,kernel_func>, stationarity_t >
+template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func = KERNEL_FUNC::GAUSSIAN, DISTANCE_MEASURE dist_meas = DISTANCE_MEASURE::EUCLIDEAN >  
+class functional_weight_matrix_non_stationary : public functional_weight_matrix_base< functional_weight_matrix_non_stationary<stationarity_t,kernel_func,dist_meas>, stationarity_t >
 {
 
 private:
@@ -52,7 +52,7 @@ private:
     WeightMatrixType<stationarity_t> m_weights;
 
     /*!Distance matrix*/
-    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> m_distance_matrix;
+    distance_matrix<dist_meas> m_distance_matrix;
 
     /*!Kernel bandwith*/
     double m_kernel_bandwith;
