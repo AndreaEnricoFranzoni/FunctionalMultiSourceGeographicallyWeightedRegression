@@ -68,11 +68,9 @@ class weight_matrix_base
 {
 
 private:
-    /*!Vector of diagonal matrices storing the weights*/
-    WeightMatrixType<stationarity_t> m_weights;
 
     /*!Matrix containing the stationary weights: abscissa x units*/
-    fdagwr_traits::Dense_Matrix m_stationary_weights;
+    fdagwr_traits::Dense_Matrix m_coeff_stat_weights;
 
     /*!Number of abscissa evaluations*/
     std::size_t m_number_abscissa_evaluations;
@@ -100,20 +98,20 @@ public:
     * @param number_threads number of threads for OMP
     */
     template< typename STAT_WEIGHTS_OBJ >
-    weight_matrix_base(STAT_WEIGHTS_OBJ&& stationary_weights,
+    weight_matrix_base(STAT_WEIGHTS_OBJ&& coeff_stat_weights,
                        int number_threads)
         :       
-            m_stationary_weights{std::forward<STAT_WEIGHTS_OBJ>(stationary_weights)},
-            m_number_abscissa_evaluations(stationary_weights.rows()), 
-            m_number_statistical_units(stationary_weights.cols()), 
+            m_coeff_stat_weights{std::forward<STAT_WEIGHTS_OBJ>(coeff_stat_weights)},
+            m_number_abscissa_evaluations(coeff_weights.rows()), 
+            m_number_statistical_units(coeff_weights.cols()), 
             m_number_threads(number_threads)  
         {}
 
     /*!
-    * @brief Getter for the weight matrix
-    * @return the private m_data
+    * @brief Getter for the coefficient-stationary-weights matrix
+    * @return the private m_coeff_stat_weights
     */
-    std::vector<fdagwr_traits::Diag_Matrix> weights() const {return m_weights;}
+    fdagwr_traits::Dense_Matrix coeff_stat_weights() const {return m_coeff_stat_weights;}
 
     /*!
     * @brief Getter for the number of available evaluations of the stationary weights
@@ -126,6 +124,12 @@ public:
     * @return the private m_number_statistical_units
     */
     std::size_t number_statistical_units() const {return number_statistical_units;}
+
+    /*!
+    * @brief Getter for the number of threads for OMP
+    * @return the private m_number_threads
+    */
+    inline int number_threads() const {return m_number_threads;}
 
     /*!
     * @brief Evaluation of kernel function for the non-stationary weights. Tag-dispacther.
@@ -147,6 +151,6 @@ public:
     }
 };
 
-#include "kernel_functions_eval.hpp"
+#include "weight_matrix_kernel_functions_eval.hpp"
 
 #endif  /*FDAGWR_WEIGHT_MATRIX_HPP*/

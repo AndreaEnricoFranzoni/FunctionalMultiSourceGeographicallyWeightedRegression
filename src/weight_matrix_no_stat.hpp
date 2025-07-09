@@ -38,6 +38,9 @@ class weight_matrix_non_stationary : public weight_matrix_base< weight_matrix_no
 
 private:
 
+    /*!Vector of diagonal matrices storing the weights*/
+    WeightMatrixType<stationarity_t> m_weights;
+
     distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> m_distance_matrix;
 
     double m_kernel_bandwith;
@@ -53,13 +56,13 @@ public:
     * @param number_threads number of threads for OMP
     */
     template< typename STAT_WEIGHTS_OBJ, typename DIST_MATRIX_OBJ >
-    weight_matrix_non_stationary(STAT_WEIGHTS_OBJ&& stationary_weights,
+    weight_matrix_non_stationary(STAT_WEIGHTS_OBJ&& coeff_stat_weights,
                                  DIST_MATRIX_OBJ&& distance_matrix,
                                  double kernel_bwt,
                                  int number_threads)
 
                                 : 
-                                  weight_matrix_base<weight_matrix_non_stationary,stationarity_t,kernel_func>(std::move(stationary_weights),
+                                  weight_matrix_base<weight_matrix_non_stationary,stationarity_t,kernel_func>(std::move(coeff_stat_weights),
                                                                                                               number_threads),
                                   m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)},
                                   m_kernel_bandwith(kernel_bwt) 
@@ -72,15 +75,15 @@ public:
     computing_weights()
     {
 
-      m_weights.resize(m_number_statistical_units);
+      m_weights.resize(this->number_statistical_units());
 
-      for(std::size_t i = 0; i < m_number_statistical_units; ++i)
+      for(std::size_t i = 0; i < this->number_statistical_units(); ++i)
       {
-        m_weights[i].resize(m_number_abscissa_evaluations);
+        m_weights[i].resize(this->number_abscissa_evaluations());
 
-        for (std::size_t j = 0; j < m_number_abscissa_evaluations; ++j)
+        for (std::size_t j = 0; j < this->number_abscissa_evaluations(); ++j)
         {
-          fdagwr_traits::Diag_Matrix weight_given_abscissa(m_stationary_weights.row(j).transpose());
+          fdagwr_traits::Diag_Matrix weight_given_abscissa(this->coeff_stat_weights().row(j).transpose());
           m_weights[i][j] = weight_given_abscissa;
         }
         

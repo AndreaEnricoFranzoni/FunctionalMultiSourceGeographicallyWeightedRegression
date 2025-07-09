@@ -34,6 +34,10 @@
 template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func >  
 class weight_matrix_stationary : public weight_matrix_base< weight_matrix_stationary<stationarity_t,kernel_func>, stationarity_t, kernel_func >
 {
+private:
+
+    /*!Vector of diagonal matrices storing the weights*/
+    WeightMatrixType<stationarity_t> m_weights;
 
 public:
 
@@ -44,11 +48,11 @@ public:
     * @param number_threads number of threads for OMP
     */
     template< typename STAT_WEIGHTS_OBJ >
-    weight_matrix_stationary(STAT_WEIGHTS_OBJ&& stationary_weights,
+    weight_matrix_stationary(STAT_WEIGHTS_OBJ&& coeff_stat_weights,
                              int number_threads)
                       : 
   
-                      weight_matrix_base<weight_matrix_stationary,stationarity_t,kernel_func>(std::move(stationary_weights),
+                      weight_matrix_base<weight_matrix_stationary,stationarity_t,kernel_func>(std::move(coeff_stat_weights),
                                                                                               number_threads) 
                       {   std::cout << "Constructing a stationary weight matrix" << std::endl;}
 
@@ -57,14 +61,14 @@ public:
     computing_weights()
     {
 
-      m_weights.resize(m_number_abscissa_evaluations);
+      m_weights.resize(this->number_abscissa_evaluations());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(m_number_abscissa_evaluations,m_stationary_weights) num_threads(m_number_threads))
+#pragma omp parallel for shared(this->number_abscissa_evaluations(),this->coeff_stat_weights()) num_threads(this->number_threads())
 #endif
-      for(std::size_t i = 0; i < m_number_abscissa_evaluations; ++i)
+      for(std::size_t i = 0; i < this->number_abscissa_evaluations(); ++i)
       {
-        fdagwr_traits::Diag_Matrix weight_given_abscissa(m_stationary_weights.row(i).transpose());
+        fdagwr_traits::Diag_Matrix weight_given_abscissa(this->coeff_stat_weights().row(i).transpose());
         m_weights[i] = weight_given_abscissa;
       }
     }
