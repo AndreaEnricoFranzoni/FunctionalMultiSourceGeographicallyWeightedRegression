@@ -36,7 +36,7 @@
 */
 template< class D, FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func >
 double
-functional_weight_matrix_non_stationary<D,stationarity_t,kernel_func>::kernel_eval(double distance, double bandwith, KERNEL_FUNC_T<KERNEL_FUNC::GAUSSIAN>)
+functional_weight_matrix_non_stationary<stationarity_t,kernel_func>::kernel_eval(double distance, double bandwith, KERNEL_FUNC_T<KERNEL_FUNC::GAUSSIAN>)
 const
 {
   //gaussian kernel function evaluation
