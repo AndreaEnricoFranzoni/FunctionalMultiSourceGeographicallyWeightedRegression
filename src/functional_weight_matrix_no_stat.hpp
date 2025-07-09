@@ -18,14 +18,14 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_WEIGHT_MATRIX_NON_STATIONARY_HPP
-#define FDAGWR_WEIGHT_MATRIX_NON_STATIONARY_HPP
+#ifndef FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_NON_STATIONARY_HPP
+#define FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_NON_STATIONARY_HPP
 
-#include "weight_matrix.hpp"
+#include "functional_weight_matrix.hpp"
 
 
 /*!
-* @file weight_matrix_no_stat.hpp
+* @file functional_weight_matrix_no_stat.hpp
 * @brief Construct the non stationary weight matrix for performing the geographically weighted regression. Weights consist of functional reconstruction weights and spatial weights
 * @author Andrea Enrico Franzoni
 */
@@ -33,7 +33,7 @@
 
 
 template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func >  
-class weight_matrix_non_stationary : public weight_matrix_base< weight_matrix_non_stationary<stationarity_t,kernel_func>, stationarity_t, kernel_func >
+class functional_weight_matrix_non_stationary : public functional_weight_matrix_base< functional_weight_matrix_non_stationary<stationarity_t,kernel_func>, stationarity_t, kernel_func >
 {
 
 private:
@@ -56,14 +56,14 @@ public:
     * @param number_threads number of threads for OMP
     */
     template< typename DIST_MATRIX_OBJ >
-    weight_matrix_non_stationary(const fdagwr_traits::Dense_Matrix & coeff_stat_weights,
-                                 DIST_MATRIX_OBJ&& distance_matrix,
-                                 double kernel_bwt,
-                                 int number_threads)
+    functional_weight_matrix_non_stationary(const fdagwr_traits::Dense_Matrix & coeff_stat_weights,
+                                            DIST_MATRIX_OBJ&& distance_matrix,
+                                            double kernel_bwt,
+                                            int number_threads)
 
                                 : 
-                                  weight_matrix_base<weight_matrix_non_stationary,stationarity_t,kernel_func>(coeff_stat_weights,
-                                                                                                              number_threads),
+                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary,stationarity_t,kernel_func>(coeff_stat_weights,
+                                                                                                                                    number_threads),
                                   m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)},
                                   m_kernel_bandwith(kernel_bwt) 
                                 {   
@@ -91,4 +91,4 @@ public:
     }
 };
 
-#endif  /*FDAGWR_WEIGHT_MATRIX_NON_STATIONARY_HPP*/
+#endif  /*FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_NON_STATIONARY_HPP*/

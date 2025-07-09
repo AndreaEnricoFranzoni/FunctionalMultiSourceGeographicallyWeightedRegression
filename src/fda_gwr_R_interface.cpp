@@ -29,8 +29,8 @@
 #include "parameters_wrapper_fdagwr.hpp"
 
 
-#include "weight_matrix_stat.hpp"
-#include "weight_matrix_no_stat.hpp"
+#include "functional_weight_matrix_stat.hpp"
+#include "functional_weight_matrix_no_stat.hpp"
 
 
 #include "distance_matrix.hpp"
@@ -111,7 +111,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.30: " << std::endl;
+    Rcout << "fdagwr.31: " << std::endl;
 
     using T = double;
 

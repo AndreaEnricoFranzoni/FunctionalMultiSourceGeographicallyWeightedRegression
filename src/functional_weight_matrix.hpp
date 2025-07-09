@@ -18,8 +18,8 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_WEIGHT_MATRIX_HPP
-#define FDAGWR_WEIGHT_MATRIX_HPP
+#ifndef FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_HPP
+#define FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_HPP
 
 #include "traits_fdagwr.hpp"
 #include "kernel_functions.hpp"
@@ -32,7 +32,7 @@
 
 
 /*!
-* @file weight_matrix.hpp
+* @file functional_weight_matrix.hpp
 * @brief Construct the weight matrix for performing the geographically weighted regression
 * @author Andrea Enrico Franzoni
 */
@@ -64,7 +64,7 @@ using WeightMatrixType = std::conditional<stationarity_t == FDAGWR_COVARIATES_TY
 * @details It is the base class. Polymorphism is known at compile time thanks to Curiously Recursive Template Pattern (CRTP) 
 */
 template< class D, FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func >
-class weight_matrix_base
+class functional_weight_matrix_base
 {
 
 private:
@@ -97,8 +97,8 @@ public:
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    weight_matrix_base(const fdagwr_traits::Dense_Matrix &coeff_stat_weights,
-                       int number_threads)
+    functional_weight_matrix_base(const fdagwr_traits::Dense_Matrix &coeff_stat_weights,
+                                  int number_threads)
         :      
             m_coeff_stat_weights(coeff_stat_weights),
             m_number_abscissa_evaluations(coeff_stat_weights.rows()), 
@@ -150,6 +150,6 @@ public:
     }
 };
 
-#include "weight_matrix_kernel_functions_eval.hpp"
+#include "functional_weight_matrix_kernel_functions_eval.hpp"
 
-#endif  /*FDAGWR_WEIGHT_MATRIX_HPP*/
+#endif  /*FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_HPP*/

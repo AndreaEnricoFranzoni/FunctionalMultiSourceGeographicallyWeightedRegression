@@ -18,10 +18,10 @@
 // fdagwr.
 
 
-#include "weight_matrix.hpp"
+#include "functional_weight_matrix.hpp"
 
 /*!
-* @file kernel_functions_eval.hpp
+* @file functional_weight_matrix_kernel_functions_eval.hpp
 * @brief Implementation of tag-dispatched function for evaluating the kernel functions
 * @author Andrea Enrico Franzoni
 */
@@ -35,7 +35,7 @@
 */
 template< class D, FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func >
 double
-weight_matrix_base<D,stationarity_t,kernel_func>::kernel_eval(double distance, double bandwith, KERNEL_FUNC_T<KERNEL_FUNC::GAUSSIAN>)
+functional_weight_matrix_base<D,stationarity_t,kernel_func>::kernel_eval(double distance, double bandwith, KERNEL_FUNC_T<KERNEL_FUNC::GAUSSIAN>)
 const
 {
   //gaussian kernel function evaluation

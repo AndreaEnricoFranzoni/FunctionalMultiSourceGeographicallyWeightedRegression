@@ -18,10 +18,10 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_WEIGHT_MATRIX_STATIONARY_HPP
-#define FDAGWR_WEIGHT_MATRIX_STATIONARY_HPP
+#ifndef FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_STATIONARY_HPP
+#define FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_STATIONARY_HPP
 
-#include "weight_matrix.hpp"
+#include "functional_weight_matrix.hpp"
 
 
 /*!
@@ -32,7 +32,7 @@
 
 
 template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func >  
-class weight_matrix_stationary : public weight_matrix_base< weight_matrix_stationary<stationarity_t,kernel_func>, stationarity_t, kernel_func >
+class functional_weight_matrix_stationary : public functional_weight_matrix_base< functional_weight_matrix_stationary<stationarity_t,kernel_func>, stationarity_t, kernel_func >
 {
 private:
 
@@ -47,12 +47,12 @@ public:
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    weight_matrix_stationary(const fdagwr_traits::Dense_Matrix& coeff_stat_weights,
+    functional_weight_matrix_stationary(const fdagwr_traits::Dense_Matrix& coeff_stat_weights,
                              int number_threads)
                       : 
   
-                      weight_matrix_base<weight_matrix_stationary,stationarity_t,kernel_func>(coeff_stat_weights,
-                                                                                              number_threads) 
+                      functional_weight_matrix_base<functional_weight_matrix_stationary,stationarity_t,kernel_func>(coeff_stat_weights,
+                                                                                                                    number_threads) 
                       {   std::cout << "Constructing a stationary weight matrix" << std::endl;}
 
     inline
@@ -73,4 +73,4 @@ public:
     }
 };
 
-#endif  /*FDAGWR_WEIGHT_MATRIX_STATIONARY_HPP*/
+#endif  /*FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_STATIONARY_HPP*/
