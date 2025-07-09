@@ -101,6 +101,7 @@ public:
     */
     double kernel_eval(double distance, double bandwith) const { return kernel_eval(distance,bandwith,KERNEL_FUNC_T<kernel_func>{});};
 
+    /*!Function to compute non stationary weights*/
     inline
     void
     computing_weights()
