@@ -210,7 +210,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_events_cov_(std::move(coordinates_events_),number_threads);
     //stations  DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
     auto coordinates_stations_ = reader_data<T,REM_NAN::MR>(coordinates_stations);
-    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_stations_cov_(std::move(coordinates_stations),number_threads);
+    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_stations_cov_(std::move(coordinates_stations_),number_threads);
 
 
     //  PENALIZATION TERMS
