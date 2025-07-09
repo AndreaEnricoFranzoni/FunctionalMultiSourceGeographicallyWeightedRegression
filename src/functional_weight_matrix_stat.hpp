@@ -31,8 +31,8 @@
 */
 
 
-template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func >  
-class functional_weight_matrix_stationary : public functional_weight_matrix_base< functional_weight_matrix_stationary<stationarity_t,kernel_func>, stationarity_t, kernel_func >
+template< FDAGWR_COVARIATES_TYPES stationarity_t >  
+class functional_weight_matrix_stationary : public functional_weight_matrix_base< functional_weight_matrix_stationary<stationarity_t>, stationarity_t >
 {
 private:
 
@@ -50,9 +50,8 @@ public:
     functional_weight_matrix_stationary(const fdagwr_traits::Dense_Matrix& coeff_stat_weights,
                              int number_threads)
                       : 
-  
-                      functional_weight_matrix_base<functional_weight_matrix_stationary,stationarity_t,kernel_func>(coeff_stat_weights,
-                                                                                                                    number_threads) 
+                      functional_weight_matrix_base<functional_weight_matrix_stationary,stationarity_t>(coeff_stat_weights,
+                                                                                                        number_threads) 
                       {   
                         static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::STATIONARY,
                                       "Functional weight matrix for stationary covariates needs FDAGWR_COVARIATES_TYPES::STATIONARY as template parameter");

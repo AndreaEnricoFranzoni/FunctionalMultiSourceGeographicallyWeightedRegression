@@ -18,7 +18,8 @@
 // fdagwr.
 
 
-#include "functional_weight_matrix.hpp"
+#include "kernel_functions.hpp"
+#include "functional_weight_matrix_no_stat.hpp"
 
 /*!
 * @file functional_weight_matrix_kernel_functions_eval.hpp

@@ -111,7 +111,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.33: " << std::endl;
+    Rcout << "fdagwr.34: " << std::endl;
 
     using T = double;
 
@@ -244,15 +244,15 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //COMPUTING FUNCTIONAL WEIGHT MATRIX
     //stationary
-    functional_weight_matrix_stationary<FDAGWR_COVARIATES_TYPES::STATIONARY,KERNEL_FUNC::GAUSSIAN> W_c(coefficiente_response_reconstruction_weights_,
-                                                                                                       number_threads);
+    functional_weight_matrix_stationary<FDAGWR_COVARIATES_TYPES::STATIONARY> W_c(coefficiente_response_reconstruction_weights_,
+                                                                                 number_threads);
     //events
-    functional_weight_matrix_non_stationary<FDAGWR_COVARIATES_TYPES::EVENT,KERNEL_FUNC::GAUSSIAN, BASIS_TYPE::BSPLINES> W_e(coefficiente_response_reconstruction_weights_,
-                                                                                                     std::move(distances_events_cov_),
-                                                                                                     bandwith_events_cov_,
-                                                                                                     number_threads);
+    functional_weight_matrix_non_stationary<FDAGWR_COVARIATES_TYPES::EVENT,KERNEL_FUNC::GAUSSIAN> W_e(coefficiente_response_reconstruction_weights_,
+                                                                                                      std::move(distances_events_cov_),
+                                                                                                      bandwith_events_cov_,
+                                                                                                      number_threads);
     //stations
-    functional_weight_matrix_non_stationary<FDAGWR_COVARIATES_TYPES::STATION,KERNEL_FUNC::GAUSSIAN,BASIS_TYPE::BSPLINES> W_s(coefficiente_response_reconstruction_weights_,
+    functional_weight_matrix_non_stationary<FDAGWR_COVARIATES_TYPES::STATION,KERNEL_FUNC::GAUSSIAN> W_s(coefficiente_response_reconstruction_weights_,
                                                                                                         std::move(distances_stations_cov_),
                                                                                                         bandwith_stations_cov_,
                                                                                                         number_threads);

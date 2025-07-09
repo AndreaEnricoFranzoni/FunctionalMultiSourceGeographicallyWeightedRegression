@@ -22,6 +22,8 @@
 #define FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_NON_STATIONARY_HPP
 
 #include "functional_weight_matrix.hpp"
+#include "distance_matrix.hpp"
+
 
 
 /*!
@@ -32,8 +34,16 @@
 
 
 
-template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func, BASIS_TYPE basis_type >  
-class functional_weight_matrix_non_stationary : public functional_weight_matrix_base< functional_weight_matrix_non_stationary<stationarity_t,kernel_func,basis_type>, stationarity_t, kernel_func >
+/*!
+* Doing tag dispatching for the correct way of evaluating the non stationary weights (kernel function for the distances)
+* @tparam err_eval: template parameter for the error evaluation strategy
+*/
+template <KERNEL_FUNC kernel_func>
+using KERNEL_FUNC_T = std::integral_constant<KERNEL_FUNC, kernel_func>;
+
+
+template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func >  
+class functional_weight_matrix_non_stationary : public functional_weight_matrix_base< functional_weight_matrix_non_stationary<stationarity_t,kernel_func>, stationarity_t >
 {
 
 private:
@@ -41,10 +51,19 @@ private:
     /*!Vector of diagonal matrices storing the weights*/
     WeightMatrixType<stationarity_t> m_weights;
 
+    /*!Distance matrix*/
     distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> m_distance_matrix;
 
+    /*!Kernel bandwith*/
     double m_kernel_bandwith;
 
+    /*!
+    * @brief Evaluation of the kernel function for the non stationary weights
+    * @param distance distance between two locations
+    * @param bandwith kernel bandwith
+    * @return the evaluation of the kernel function
+    */
+    double kernel_eval(double distance, double bandwith, KERNEL_FUNC_T<KERNEL_FUNC::GAUSSIAN>) const;
 
 
 public:
@@ -66,14 +85,21 @@ public:
                                                                                                                                     number_threads),
                                   m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)},
                                   m_kernel_bandwith(kernel_bwt) 
-                                {   
-                                    if constexpr(basis_type == BASIS_TYPE::BSPLINES)
-                                    {
-                                      std::cout << "ok" << std::endl;
-                                    }
-                                    
-                                    std::cout << "Constructing a non stationary weight matrix" << std::endl;
+                                {                                       
+                                    static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY   ||
+                                                  stationarity_t == FDAGWR_COVARIATES_TYPES::EVENT            ||
+                                                  stationarity_t == FDAGWR_COVARIATES_TYPES::STATION,
+                                                  "Functional weight matrix for non stationary covariates needs FDAGWR_COVARIATES_TYPES::NON_STATIONARY or FDAGWR_COVARIATES_TYPES::EVENT or FDAGWR_COVARIATES_TYPES::STATION as template parameter");
                                 }
+
+
+    /*!
+    * @brief Evaluation of kernel function for the non-stationary weights. Tag-dispacther.
+    * @param distance distance between two locations
+    * @param bandwith kernel bandwith
+    * @return the evaluation of the kernel function
+    */
+    double kernel_eval(double distance, double bandwith) const { return kernel_eval(distance,bandwith,KERNEL_FUNC_T<kernel_func>{});};
 
     inline
     void
@@ -95,5 +121,7 @@ public:
       }
     }
 };
+
+#include "functional_weight_matrix_kernel_functions_eval.hpp"
 
 #endif  /*FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_NON_STATIONARY_HPP*/

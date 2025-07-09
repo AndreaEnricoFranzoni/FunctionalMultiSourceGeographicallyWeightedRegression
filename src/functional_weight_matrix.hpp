@@ -21,12 +21,11 @@
 #ifndef FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_HPP
 #define FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_HPP
 
-#include <cassert>
 
 #include "traits_fdagwr.hpp"
-#include "kernel_functions.hpp"
-#include "distance_matrix.hpp"
 
+
+#include <cassert>
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -42,13 +41,8 @@
 
 
 /*!
-* Doing tag dispatching for the correct way of evaluating the non stationary weights (kernel function for the distances)
-* @tparam err_eval: template parameter for the error evaluation strategy
+* @brief Indicating the container to storing the functional weight matrix
 */
-template <KERNEL_FUNC kernel_func>
-using KERNEL_FUNC_T = std::integral_constant<KERNEL_FUNC, kernel_func>;
-
-
 template <FDAGWR_COVARIATES_TYPES stationarity_t>
 using WeightMatrixType = std::conditional<stationarity_t == FDAGWR_COVARIATES_TYPES::STATIONARY,
                                           std::vector< fdagwr_traits::Diag_Matrix >,        //se stazionario, ogni elemento del vettore corrisponde ad un valore dell'ascissa, e di conseguenza vi è la giusta matrice peso
@@ -65,7 +59,7 @@ using WeightMatrixType = std::conditional<stationarity_t == FDAGWR_COVARIATES_TY
 * @tparam kernel_func kernel function for the evaluation of the weights (enumerator)
 * @details It is the base class. Polymorphism is known at compile time thanks to Curiously Recursive Template Pattern (CRTP) 
 */
-template< class D, FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func >
+template< class D, FDAGWR_COVARIATES_TYPES stationarity_t >
 class functional_weight_matrix_base
 {
 
@@ -82,14 +76,6 @@ private:
 
     /*!Number of threads for OMP*/
     int m_number_threads;
-
-    /*!
-    * @brief Evaluation of the kernel function for the non stationary weights
-    * @param distance distance between two locations
-    * @param bandwith kernel bandwith
-    * @return the evaluation of the kernel function
-    */
-    double kernel_eval(double distance, double bandwith, KERNEL_FUNC_T<KERNEL_FUNC::GAUSSIAN>) const;
 
 
 public:
@@ -131,14 +117,6 @@ public:
     * @return the private m_number_threads
     */
     inline int number_threads() const {return m_number_threads;}
-
-    /*!
-    * @brief Evaluation of kernel function for the non-stationary weights. Tag-dispacther.
-    * @param distance distance between two locations
-    * @param bandwith kernel bandwith
-    * @return the evaluation of the kernel function
-    */
-    double kernel_eval(double distance, double bandwith) const { return kernel_eval(distance,bandwith,KERNEL_FUNC_T<kernel_func>{});};
     
     /*!
     * @brief Computing weights accordingly if they are only stationary or not
@@ -151,7 +129,5 @@ public:
         static_cast<D*>(this)->computing_weights();   //solving depends on child class: downcasting with CRTP of base to derived
     }
 };
-
-#include "functional_weight_matrix_kernel_functions_eval.hpp"
 
 #endif  /*FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_HPP*/
