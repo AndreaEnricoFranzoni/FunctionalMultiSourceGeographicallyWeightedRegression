@@ -206,9 +206,11 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //  DISTANCES
     //events    DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
-    //distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_events_cov_(std::move(coordinates_events),number_threads);
+    auto coordinates_events_ = reader_data<T,REM_NAN::MR>(coordinates_events);
+    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_events_cov_(std::move(coordinates_events_),number_threads);
     //stations  DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
-    //distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_stations_cov_(std::move(coordinates_stations),number_threads);
+    auto coordinates_stations_ = reader_data<T,REM_NAN::MR>(coordinates_stations);
+    distance_matrix<DISTANCE_MEASURE::EUCLIDEAN> distances_stations_cov_(std::move(coordinates_stations),number_threads);
 
 
     //  PENALIZATION TERMS
@@ -234,12 +236,17 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
 
 
-    testing_function(order_basis_stationary_cov_,knots_stationary_cov_);
+    //testing_function(order_basis_stationary_cov_,knots_stationary_cov_);
 
 
+    //computing distances
+    //events
+    distances_events_cov_.compute_distances();
+    //stations
+    distances_stations_cov_.compute_distances();
 
-
-
+    auto dist_col0 = distances_events_cov_[0];
+    Rcout << dist_col0 << std::endl;
 
     
 
