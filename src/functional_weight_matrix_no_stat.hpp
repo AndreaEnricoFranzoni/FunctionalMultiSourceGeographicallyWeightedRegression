@@ -79,7 +79,6 @@ public:
                                             DIST_MATRIX_OBJ&& distance_matrix,
                                             double kernel_bwt,
                                             int number_threads)
-
                                 : 
                                   functional_weight_matrix_base<functional_weight_matrix_non_stationary,stationarity_t>(coeff_stat_weights,
                                                                                                                         number_threads),
@@ -101,7 +100,10 @@ public:
     */
     double kernel_eval(double distance, double bandwith) const { return kernel_eval(distance,bandwith,KERNEL_FUNC_T<kernel_func>{});};
 
-    /*!Function to compute non stationary weights*/
+    /*!
+    * @brief Function to compute non stationary weights
+    * @details Strongly influeneced by Eigen
+    */
     inline
     void
     computing_weights()
@@ -109,16 +111,29 @@ public:
 
       m_weights.resize(this->number_statistical_units());
 
+#ifdef _OPENMP
+#pragma omp parallel for shared(this->number_abscissa_evaluations(),this->number_statistical_units(),this->coeff_stat_weights(),m_distance_matrix,m_kernel_bandwith) num_threads(this->number_threads())
+#endif
       for(std::size_t i = 0; i < this->number_statistical_units(); ++i)
       {
-        m_weights[i].resize(this->number_abscissa_evaluations());
+        //non stationary weights: applying the kernel to the distances within statistical units
+        auto weights_non_stat_unit_i = m_distance_matrix[i]; //Eigen vector with the distances with respect to unit i-th
+        
+        //applying the kernel function to correctly smoothing the distances
+        std::transform(weights_non_stat_unit_i.data(),
+                       weights_non_stat_unit_i.data() + weights_non_stat_unit_i.size(),
+                       weights_non_stat_unit_i.data(),
+                       [this,m_kernel_bandwith](auto dist){return this->kernel_eval(dist,m_kernel_bandwith);});
+
+        std::vector<fdagwr_traits::Diag_Matrix> weights_unit_i;
+        weights_unit_i.reserve(this->number_abscissa_evaluations());
 
         for (std::size_t j = 0; j < this->number_abscissa_evaluations(); ++j)
         {
-          fdagwr_traits::Diag_Matrix weight_given_abscissa(this->coeff_stat_weights().row(j).transpose());
-          m_weights[i][j] = weight_given_abscissa;
+          weights_unit_i.pushback(weights_stat_unit_i.array() * this->coeff_stat_weights().row(j).transpose().array());
         }
         
+        m_weights[i] = weights_unit_i;
       }
     }
 };

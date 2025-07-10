@@ -113,13 +113,15 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     Rcout << "fdagwr.36: " << std::endl;
 
-    using _DATA_TYPE_ = double;
-    constexpr auto _NAN_REM_ = REM_NAN::MR;
-    constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;
-    constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;
-    constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;
-    constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;
-    constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;
+    using _DATA_TYPE_ = double;                                         //data type
+    constexpr auto _NAN_REM_ = REM_NAN::MR;                             //how to remove nan (with mean of non-nans)
+    constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;  //enum for stationary covariates
+    constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;            //enum for event covariates
+    constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;        //enum for station covariates
+    constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;            //enum for euclidean distance within statistical units locations
+    constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                    //kernel function to smooth the distances within statistcal units locations
+
+
 
     ///////////////////////////////////////////////////////
     /////   CHECKING and WRAPPING INPUT PARAMETERS  ///////
@@ -252,16 +254,19 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //stationary
     functional_weight_matrix_stationary<_STATIONARY_> W_c(coefficiente_response_reconstruction_weights_,
                                                           number_threads);
+    W_c.compute_weights();                                                      
     //events
     functional_weight_matrix_non_stationary<_EVENT_,_KERNEL_,_DISTANCE_> W_e(coefficiente_response_reconstruction_weights_,
                                                                              std::move(distances_events_cov_),
                                                                              bandwith_events_cov_,
                                                                              number_threads);
+    W_e.compute_weights();                                                                         
     //stations
     functional_weight_matrix_non_stationary<_STATION_,_KERNEL_,_DISTANCE_> W_s(coefficiente_response_reconstruction_weights_,
                                                                                std::move(distances_stations_cov_),
                                                                                bandwith_stations_cov_,
                                                                                number_threads);
+    W_s.compute_weights();
 
     //Rcout << "Stationary w: units: " << W_c.number_statistical_units() << ", abscissas: " << W_c.number_abscissa_evaluations() << ", pesi: " << std::endl;
     //Rcout << W_c.coeff_stat_weights() << std::endl;

@@ -172,7 +172,8 @@ public:
    inline fdagwr_traits::Dense_Vector operator[](std::size_t col_i) const
    {    
         //cheack the correct dimension of the coordinates matrix
-        assert((void("The column index has to be in {0,1,...,number-of-statistical-units - 1}"), 0<=col_i && col_i < m_number_locations));
+        assert((void("The column index has to be in {0,1,...,number-of-statistical-units - 1}"), 
+               0<=col_i && col_i < m_number_locations));
 
         //container for the column
         fdagwr_traits::Dense_Vector column(m_number_locations);
