@@ -139,13 +139,12 @@ public:
         for (std::size_t abscissa_index = 0; abscissa_index < n_abscissa_eval; ++abscissa_index)
         {
           //the product element-wise between stationary weights at abscissa abscissa_index-th and non-stationary weight unit_index-th
-          //is performed in the most efficient possible way, but it returns an Eigen::ArrayXd that cannot be directly constructed into 
-          //an Eigen::DiagonalMatrix<double,-1>
+          //is performed in the most efficient possible way, but it returns an Eigen::ArrayXd: the .matrix() cast it to an Eigen::VectorXd,
+          //allowing to call the constructor for an Eigen::DiagonalMatrix
+          weights_unit_i.emplace_back((weights_non_stat_unit_i.array() * this->coeff_stat_weights_abscissa_i(abscissa_index).array()).matrix());
           
           //fdagwr_traits::Diag_Matrix w((weights_non_stat_unit_i.array() * this->coeff_stat_weights_abscissa_i(abscissa_index).array()).matrix());
           //weights_unit_i.push_back(w);
-
-          weights_unit_i.emplace_back((weights_non_stat_unit_i.array() * this->coeff_stat_weights_abscissa_i(abscissa_index).array()).matrix());
         }
         
         //storing the functional non-stationary matrix for unit i-th (corresponding to index unit_index)
