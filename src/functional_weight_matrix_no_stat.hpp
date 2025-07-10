@@ -141,8 +141,11 @@ public:
           //the product element-wise between stationary weights at abscissa abscissa_index-th and non-stationary weight unit_index-th
           //is performed in the most efficient possible way, but it returns an Eigen::ArrayXd that cannot be directly constructed into 
           //an Eigen::DiagonalMatrix<double,-1>
-          fdagwr_traits::Diag_Matrix w((weights_non_stat_unit_i.array() * this->coeff_stat_weights_abscissa_i(abscissa_index).array()).matrix());
-          weights_unit_i.push_back(w);
+          
+          //fdagwr_traits::Diag_Matrix w((weights_non_stat_unit_i.array() * this->coeff_stat_weights_abscissa_i(abscissa_index).array()).matrix());
+          //weights_unit_i.push_back(w);
+
+          weights_unit_i.emplace_back((weights_non_stat_unit_i.array() * this->coeff_stat_weights_abscissa_i(abscissa_index).array()).matrix());
         }
         
         //storing the functional non-stationary matrix for unit i-th (corresponding to index unit_index)
