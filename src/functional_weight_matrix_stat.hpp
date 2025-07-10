@@ -62,15 +62,20 @@ public:
     computing_weights()
     {
 
-      m_weights.resize(this->number_abscissa_evaluations());
+      //to shared the values with OMP
+      auto n_abscissa_eval = this->number_abscissa_evaluations();
+
+      //preparing the container for the functional stationary weight matrix
+      m_weights.resize(n_abscissa_eval);
+
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(this->number_abscissa_evaluations(),this->coeff_stat_weights()) num_threads(this->number_threads())
+#pragma omp parallel for shared(n_abscissa_eval) num_threads(this->number_threads())
 #endif
-      for(std::size_t i = 0; i < this->number_abscissa_evaluations(); ++i)
+      for(std::size_t abscissa_index = 0; abscissa_index < n_abscissa_eval; ++abscissa_index)
       {
-        fdagwr_traits::Diag_Matrix weight_given_abscissa(this->coeff_stat_weights().row(i).transpose());
-        m_weights[i] = weight_given_abscissa;
+        fdagwr_traits::Diag_Matrix weight_given_abscissa(this->coeff_stat_weights_abscissa_i(abscissa_index));
+        m_weights[abscissa_index] = weight_given_abscissa;
       }
     }
 };

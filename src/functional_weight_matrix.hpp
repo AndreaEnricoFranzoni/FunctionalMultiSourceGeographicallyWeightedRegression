@@ -117,6 +117,13 @@ public:
     * @return the private m_number_threads
     */
     inline int number_threads() const {return m_number_threads;}
+
+    /*!
+    * @brief Return the coefficient of the stationary weight of abscissa i-th (coeff_stat_weights are abscissas x units)
+    * @param abscissa_i index of abscissa i-th
+    * @return 
+    */
+    inline auto coeff_stat_weights_abscissa_i(std::size_t abscissa_i) const{ return m_coeff_stat_weights.row(abscissa_i).transpose();};
     
     /*!
     * @brief Computing weights accordingly if they are only stationary or not
