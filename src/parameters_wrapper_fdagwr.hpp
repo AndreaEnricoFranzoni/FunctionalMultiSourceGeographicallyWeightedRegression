@@ -108,8 +108,8 @@ wrap_covariates_coefficients(Rcpp::List cov_coeff_list)
     //checking that all the coefficients refer to the same amount of statistical units 
     //(checking that all the list elements have the same number of columns)
     if(i>0   &&   covariates_coefficients[i-1].cols()!=covariates_coefficients[i].cols())
-    {   std::string error_message2 = "All covariates coefficients have to refer to the same number of statistical units";
-        throw std::invalid_argument(error_message2);}
+    {   std::string error_message = "All covariates coefficients have to refer to the same number of statistical units";
+        throw std::invalid_argument(error_message);}
   }
 
   return covariates_coefficients;
@@ -277,7 +277,7 @@ wrap_basis_numbers_and_orders(Rcpp::Nullable<Rcpp::IntegerVector> basis_numbers,
     std::transform(orders.cbegin(),
                    orders.cend(),
                    ns_basis.begin(),
-                   [knots_number](std::size_t const &el){std::cout << el << "  " << knots_number << "  " << (el + knots_number - static_cast<std::size_t>(1)) << std::endl; return (el + knots_number - static_cast<std::size_t>(1));});
+                   [knots_number](std::size_t const &el){ return (el + knots_number - static_cast<std::size_t>(1));});
 
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,ns_basis));
     returning_element.insert(std::make_pair(FDAGWR_FEATS::order_basis_string,orders));
