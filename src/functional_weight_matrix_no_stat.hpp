@@ -101,6 +101,13 @@ public:
     double kernel_eval(double distance, double bandwith) const { return kernel_eval(distance,bandwith,KERNEL_FUNC_T<kernel_func>{});};
 
     /*!
+    * @brief Return the coefficient of the stationary weight of abscissa i-th (coeff_stat_weights are abscissas x units)
+    * @param abscissa_i index of abscissa i-th
+    * @return 
+    */
+    inline auto coeff_stat_weights_abscissa_i(std::size_t abscissa_i) const{ return this->coeff_stat_weights().row(abscissa_i).transpose();};
+
+    /*!
     * @brief Function to compute non stationary weights
     * @details Strongly influeneced by Eigen
     */
@@ -108,13 +115,15 @@ public:
     void
     computing_weights()
     {
-
-      m_weights.resize(this->number_statistical_units());
+      auto n_abs_eval = this->number_abscissa_evaluations();
+      auto n_stat_uni = this->number_statistical_units();
+      
+      m_weights.resize(n_stat_uni);
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(this->number_abscissa_evaluations(),this->number_statistical_units(),this->coeff_stat_weights(),m_distance_matrix,m_kernel_bandwith) num_threads(this->number_threads())
+#pragma omp parallel for shared(n_abs_eval,n_stat_uni,m_distance_matrix) num_threads(this->number_threads())
 #endif
-      for(std::size_t i = 0; i < this->number_statistical_units(); ++i)
+      for(std::size_t i = 0; i < n_stat_uni; ++i)
       {
         //non stationary weights: applying the kernel to the distances within statistical units
         auto weights_non_stat_unit_i = m_distance_matrix[i]; //Eigen vector with the distances with respect to unit i-th
@@ -126,11 +135,11 @@ public:
                        [this](auto dist){return this->kernel_eval(dist,this->m_kernel_bandwith);});
 
         std::vector<fdagwr_traits::Diag_Matrix> weights_unit_i;
-        weights_unit_i.reserve(this->number_abscissa_evaluations());
+        weights_unit_i.reserve(n_abs_eval);
 
-        for (std::size_t j = 0; j < this->number_abscissa_evaluations(); ++j)
+        for (std::size_t abscissa_j = 0; abscissa_j < n_abs_eval; ++abscissa_j)
         {
-          weights_unit_i.push_back(weights_stat_unit_i.array() * this->coeff_stat_weights().row(j).transpose().array());
+          weights_unit_i.push_back(weights_non_stat_unit_i.array() * coeff_stat_weights_abscissa_i(abscissa_j).array());
         }
         
         m_weights[i] = weights_unit_i;
