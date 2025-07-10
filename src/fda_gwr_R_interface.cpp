@@ -270,6 +270,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
 
+    /*
     Rcout << "Stationary w: units: " << W_c.number_statistical_units() << ", abscissas: " << W_c.number_abscissa_evaluations() << std::endl;
     W_c.compute_weights();
     for (std::size_t i = 0; i < W_c.number_abscissa_evaluations(); ++i)
@@ -277,10 +278,22 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
         Rcout << "Abscissa: " << knots_response_[i] << std::endl;
         Rcout << W_c.weights()[i].toDenseMatrix() << std::endl;
     }
+    */
     
 
-    //Rcout << "Events w: units: " << W_e.number_statistical_units() << ", abscissas: " << W_e.number_abscissa_evaluations() << std::endl;
-    //W_e.compute_weights();
+    Rcout << "Events w: units: " << W_e.number_statistical_units() << ", abscissas: " << W_e.number_abscissa_evaluations() << std::endl;
+    W_e.compute_weights();
+    for (std::size_t i = 0; i < W_e.number_statistical_units(); ++i)
+    {
+        Rcout << "Unit: " << i + 1 << std::endl;
+
+        for(std::size_t j = 0; j < W_e.number_abscissa_evaluations(); ++j)
+        {
+            Rcout << "Abscissa: " << knots_events_cov_[j] << std::endl;
+            Rcout << W_e.weights()[i][j].toDenseMatrix() << std::endl;
+        }
+    }
+    
     //Rcout << W_e.coeff_stat_weights() << std::endl;
 
     //Rcout << "Stations w: units: " << W_s.number_statistical_units() << ", abscissas: " << W_s.number_abscissa_evaluations() << ", pesi: " << std::endl;
