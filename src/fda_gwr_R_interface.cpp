@@ -274,7 +274,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     W_c.compute_weights();
     for (std::size_t i = 0; i < W_c.number_abscissa_evaluations(); ++i)
     {
-        Rcout << "Abscissa: " << abscissa_points_[i] << std::endl;
+        Rcout << "Abscissa: " << knots_response_[i] << std::endl;
         Rcout << W_c.weights()[i].toDenseMatrix() << std::endl;
     }
     
