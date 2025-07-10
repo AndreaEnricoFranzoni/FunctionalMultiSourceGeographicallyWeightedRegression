@@ -121,9 +121,9 @@ public:
     /*!
     * @brief Return the coefficient of the stationary weight of abscissa i-th (coeff_stat_weights are abscissas x units)
     * @param abscissa_i index of abscissa i-th
-    * @return 
+    * @return an Eigen vector with the abscissa_i-th row of m_coeff_stat_weights
     */
-    inline auto coeff_stat_weights_abscissa_i(std::size_t abscissa_i) const{ return m_coeff_stat_weights.row(abscissa_i).transpose();};
+    inline fdagwr_traits::Dense_Vector coeff_stat_weights_abscissa_i(std::size_t abscissa_i) const{ return m_coeff_stat_weights.row(abscissa_i).transpose();};
     
     /*!
     * @brief Computing weights accordingly if they are only stationary or not
