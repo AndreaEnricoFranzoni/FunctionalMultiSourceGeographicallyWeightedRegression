@@ -123,14 +123,14 @@ public:
         std::transform(weights_non_stat_unit_i.data(),
                        weights_non_stat_unit_i.data() + weights_non_stat_unit_i.size(),
                        weights_non_stat_unit_i.data(),
-                       [this,m_kernel_bandwith](auto dist){return this->kernel_eval(dist,m_kernel_bandwith);});
+                       [this](auto dist){return this->kernel_eval(dist,this->m_kernel_bandwith);});
 
         std::vector<fdagwr_traits::Diag_Matrix> weights_unit_i;
         weights_unit_i.reserve(this->number_abscissa_evaluations());
 
         for (std::size_t j = 0; j < this->number_abscissa_evaluations(); ++j)
         {
-          weights_unit_i.pushback(weights_stat_unit_i.array() * this->coeff_stat_weights().row(j).transpose().array());
+          weights_unit_i.push_back(weights_stat_unit_i.array() * this->coeff_stat_weights().row(j).transpose().array());
         }
         
         m_weights[i] = weights_unit_i;
