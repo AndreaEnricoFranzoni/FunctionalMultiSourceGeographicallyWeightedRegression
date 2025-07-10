@@ -91,6 +91,12 @@ public:
                                                   "Functional weight matrix for non stationary covariates needs FDAGWR_COVARIATES_TYPES::NON_STATIONARY or FDAGWR_COVARIATES_TYPES::EVENT or FDAGWR_COVARIATES_TYPES::STATION as template parameter");
                                 }
 
+    /*!
+    * @brief Getter for the functional non-stationary weight matrix
+    * @return the private m_weights
+    */
+    WeightMatrixType<stationarity_t> weights() const {return m_weights;}
+
 
     /*!
     * @brief Evaluation of kernel function for the non-stationary weights. Tag-dispacther.

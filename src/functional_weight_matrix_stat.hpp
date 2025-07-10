@@ -57,11 +57,19 @@ public:
                                       "Functional weight matrix for stationary covariates needs FDAGWR_COVARIATES_TYPES::STATIONARY as template parameter");
                       }
 
+    /*!
+    * @brief Getter for the functional stationary weight matrix
+    * @return the private m_weights
+    */
+    WeightMatrixType<stationarity_t> weights() const {return m_weights;}
+
+    /*!
+    * @brief Function to compute stationary weights
+    */
     inline
     void
     computing_weights()
     {
-
       //to shared the values with OMP
       auto n_abscissa_eval = this->number_abscissa_evaluations();
 
