@@ -271,12 +271,12 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //COMPUTING THE BASIS
     Triangulation<1, 1> interval = Triangulation<1, 1>::Interval(knots_stationary_cov_.front(), knots_stationary_cov_.back(), knots_stationary_cov_.size());
-    std::vector<BsSpace> basis_;
-    basis_reserve(q_C);
+    std::vector<BsSpace<Triangulation<1, 1>>> basis_;
+    basis_.reserve(q_C);
 
     for(std::size_t i = 0; i < q_C; ++i)
     {
-        BsSpace Vh(interval, order_basis_stationary_cov_[i]);
+        BsSpace<Triangulation<1, 1>> Vh(interval, order_basis_stationary_cov_[i]);
         basis_.push_back(Vh);
 
         // integration
