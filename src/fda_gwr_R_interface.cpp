@@ -252,52 +252,44 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //COMPUTING FUNCTIONAL WEIGHT MATRIX
     //stationary
-    functional_weight_matrix_stationary<_STATIONARY_> W_c(coefficiente_response_reconstruction_weights_,
+    functional_weight_matrix_stationary<_STATIONARY_> W_C(coefficiente_response_reconstruction_weights_,
                                                           number_threads);
-    W_c.compute_weights();                                                      
+    W_C.compute_weights();                                                      
     //events
-    functional_weight_matrix_non_stationary<_EVENT_,_KERNEL_,_DISTANCE_> W_e(coefficiente_response_reconstruction_weights_,
+    functional_weight_matrix_non_stationary<_EVENT_,_KERNEL_,_DISTANCE_> W_E(coefficiente_response_reconstruction_weights_,
                                                                              std::move(distances_events_cov_),
                                                                              bandwith_events_cov_,
                                                                              number_threads);
-    W_e.compute_weights();                                                                         
+    W_E.compute_weights();                                                                         
     //stations
-    functional_weight_matrix_non_stationary<_STATION_,_KERNEL_,_DISTANCE_> W_s(coefficiente_response_reconstruction_weights_,
+    functional_weight_matrix_non_stationary<_STATION_,_KERNEL_,_DISTANCE_> W_S(coefficiente_response_reconstruction_weights_,
                                                                                std::move(distances_stations_cov_),
                                                                                bandwith_stations_cov_,
                                                                                number_threads);
-    W_s.compute_weights();
+    W_S.compute_weights();
 
 
+    //COMPUTING THE BASIS
+    Triangulation<1, 1> interval = Triangulation<1, 1>::Interval(knots_stationary_cov_.front(), knots_stationary_cov_.back(), knots_stationary_cov_.size());
+    std::vector<BsSpace> basis_;
+    basis_reserve(q_C);
 
-    /*
-    Rcout << "Stationary w: units: " << W_c.number_statistical_units() << ", abscissas: " << W_c.number_abscissa_evaluations() << std::endl;
-    W_c.compute_weights();
-    for (std::size_t i = 0; i < W_c.number_abscissa_evaluations(); ++i)
+    for(std::size_t i = 0; i < q_C; ++i)
     {
-        Rcout << "Abscissa: " << knots_response_[i] << std::endl;
-        Rcout << W_c.weights()[i].toDenseMatrix() << std::endl;
+        BsSpace Vh(interval, order_basis_stationary_cov_[i]);
+        basis_.push_back(Vh);
+
+        // integration
+        TrialFunction u(basis_[i]);
+        TestFunction  v(basis_[i]);
+
+        // mass matrix
+        auto mass = integral(interval)(u * v);
+        Eigen::SparseMatrix<double> M = mass.assemble();
+
+        std::cout << "\n\nmass matrix:  [M]_{ij} = int_I (psi_i * psi_j) of cov " << i+1 << std::endl;
+        std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
     }
-    */
-    
-
-    Rcout << "Events w: units: " << W_e.number_statistical_units() << ", abscissas: " << W_e.number_abscissa_evaluations() << std::endl;
-    W_e.compute_weights();
-    for (std::size_t i = 0; i < W_e.number_statistical_units(); ++i)
-    {
-        Rcout << "Unit: " << i + 1 << std::endl;
-
-        for(std::size_t j = 0; j < W_e.number_abscissa_evaluations(); ++j)
-        {
-            Rcout << "Abscissa: " << knots_events_cov_[j] << std::endl;
-            Rcout << W_e.weights()[i][j].toDenseMatrix() << std::endl;
-        }
-    }
-    
-    //Rcout << W_e.coeff_stat_weights() << std::endl;
-
-    //Rcout << "Stations w: units: " << W_s.number_statistical_units() << ", abscissas: " << W_s.number_abscissa_evaluations() << ", pesi: " << std::endl;
-    //Rcout << W_s.coeff_stat_weights() << std::endl;
 
 
 
@@ -309,39 +301,6 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //testing_function(order_basis_stationary_cov_,knots_stationary_cov_);
 
-    
-
-
-    /*
-    std::vector<double> trial{12.0,8.0,7.9};
-
-    weight_matrix_stationary<KERNEL_FUNC::GAUSSIAN> trial_sm(trial,
-                                                              trial.size(),
-                                                              number_threads);
-
-    auto mat = trial_sm.weights();
-    for (int i = 0; i < mat.rows(); ++i) {
-        for (int j = 0; j < mat.cols(); ++j) {
-            Rcout << mat.coeff(i, j) << " ";
-        }
-        Rcout << "" << std::endl;
-    }
-
-    std::vector<double> non_stat{7.0,1.4,7.9};
-    weight_matrix_non_stationary<KERNEL_FUNC::GAUSSIAN> trial_wmns(trial,
-                                                                    non_stat,
-                                                                    trial.size(),
-                                                                    100,
-                                                                    number_threads);
-
-    auto mat1 = trial_wmns.weights();
-    for (int i = 0; i < mat1.rows(); ++i) {
-        for (int j = 0; j < mat1.cols(); ++j) {
-            Rcout << mat1.coeff(i, j) << " ";
-        }
-        Rcout << "" << std::endl;
-    }
-    */
     
 
 
