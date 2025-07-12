@@ -42,7 +42,7 @@ private:
     /*!Nodes over which the basis systems are constructed*/
 
     /*!Interval over which constructing the basis*/
-    fdaPDE::Triangulation<1, 1> m_interval;
+    fdapde::Triangulation<1, 1> m_interval;
 
     /*!Number of basis systems: one for each covariate*/
     std::size_t m_q;
@@ -55,13 +55,13 @@ public:
                   std::size_t q)            :    m_q(q)
                      {
 
-                        m_interval = Triangulation<1, 1>::Interval(knots.front(), knots.back(), knots.size());
+                        m_interval = fdapde::Triangulation<1, 1>::Interval(knots.front(), knots.back(), knots.size());
                         m_systems_of_basis.resize(q);
 
                         for (std::size_t i = 0; i < q; ++i)
                         {
                             int order = basis_orders[i];
-                            fdaPDE::BsSpace Vh(m_interval, order); 
+                            fdapde::BsSpace<fdapde::Triangulation<1, 1>> Vh(m_interval, order); 
 
                             m_systems_of_basis[i] = Vh;
                         }               
