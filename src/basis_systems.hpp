@@ -42,7 +42,7 @@ private:
     /*!Nodes over which the basis systems are constructed*/
 
     /*!Interval over which constructing the basis*/
-    domain_structure m_interval;
+    fdaPDE::Triangulation<1, 1> m_interval;
 
     /*!Number of basis systems: one for each covariate*/
     std::size_t m_q;
@@ -54,34 +54,17 @@ public:
                   const std::vector<std::size_t> & basis_orders,
                   std::size_t q)            :    m_q(q)
                      {
-                        std::cout << "Nel costruttore di basis_systems" << std::endl;
+
+                        m_interval = Triangulation<1, 1>::Interval(knots.front(), knots.back(), knots.size());
                         m_systems_of_basis.resize(q);
 
-                        //casting the nodes for the basis system
-                        fdagwr_traits::Dense_Vector knots_casted = Eigen::Map<const fdagwr_traits::Dense_Vector>(knots.data(), knots.size());
-                        domain_structure interval(knots_casted);
-                        m_interval = interval;
-                        
-                        std::cout << "Nodi mappati:" << std::endl;
-                        for (size_t j = 0; j < knots.size(); ++j)
+                        for (std::size_t i = 0; i < q; ++i)
                         {
-                            std::cout << m_interval.nodes()(j) << std::endl;
-                        }
-
-                        //fdapde::BsSpace<domain_structure> Vh(m_interval, 3);
-                        std::cout << "base constructed" << std::endl;
-
-
-                        //construct the basis system
-                        for(std::size_t i = 0; i < q; ++i){    
-
                             int order = basis_orders[i];
-                            //
-                            std::cout << "i: " << i << std::endl;
-                            //m_systems_of_basis.push_back(Vh);
-                            //m_systems_of_basis.emplace_back(interval,basis_orders[i]);
-                            std::cout << "base creata" << std::endl;
-                            }  
+                            fdaPDE::BsSpace Vh(m_interval, order); 
+
+                            m_systems_of_basis[i] = Vh;
+                        }               
                      }
 
 

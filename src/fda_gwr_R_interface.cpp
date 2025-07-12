@@ -270,6 +270,13 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
     //COMPUTING THE BASIS
+    basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_,
+                                                                          order_basis_stationary_cov_,
+                                                                          q_C);
+
+    
+
+
     /*
     std::vector<BsSpace<Triangulation<1, 1>>> basis_;
     basis_.reserve(q_C);
