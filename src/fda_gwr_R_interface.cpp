@@ -270,12 +270,13 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
     //COMPUTING THE BASIS
-    Triangulation<1, 1> interval = Triangulation<1, 1>::Interval(knots_stationary_cov_.front(), knots_stationary_cov_.back(), knots_stationary_cov_.size());
+    /*
     std::vector<BsSpace<Triangulation<1, 1>>> basis_;
     basis_.reserve(q_C);
 
     for(std::size_t i = 0; i < q_C; ++i)
     {
+        Triangulation<1, 1> interval = Triangulation<1, 1>::Interval(knots_stationary_cov_.front(), knots_stationary_cov_.back(), knots_stationary_cov_.size());
         BsSpace<Triangulation<1, 1>> Vh(interval, order_basis_stationary_cov_[i]);
         basis_.push_back(Vh);
 
@@ -290,6 +291,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
         std::cout << "\n\nmass matrix:  [M]_{ij} = int_I (psi_i * psi_j) of cov " << i+1 << std::endl;
         std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
     }
+    */
 
 
 
