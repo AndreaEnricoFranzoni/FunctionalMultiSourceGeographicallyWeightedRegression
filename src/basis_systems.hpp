@@ -69,6 +69,11 @@ public:
 
 
     /*!
+    * @brief Getter for the interval
+    */
+    const fdapde::Triangulation<1, 1>& interval() const { return m_interval; }
+
+    /*!
     * @brief Getter for the systems of basis (returning a reference since fdaPDE stores the basis as a pointer to them)
     * @return the private m_basis_system
     */

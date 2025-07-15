@@ -272,7 +272,22 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //COMPUTING THE BASIS
     basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_,order_basis_stationary_cov_,q_C);
 
-    
+    basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > bs(
+    knots_stationary_cov_, order_basis_stationary_cov_, q_C);
+
+    for(std::size_t i = 0; i < bs.q(); ++i) {
+      // integration
+      TrialFunction u(bs.systems_of_basis()[i]); 
+      TestFunction  v(bs.systems_of_basis()[i]);
+      
+      // mass matrix
+      auto mass = integral(bs.interval())(u * v);
+      // auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
+      Eigen::SparseMatrix<double> M = mass.assemble();
+
+      std::cout << "\n\nmass matrix:  [M]_{ij} = int_I (psi_i * psi_j) of cov " << i+1 << std::endl;
+      std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
+    }
 
 
     /*
