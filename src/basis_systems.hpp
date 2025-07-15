@@ -50,13 +50,13 @@ private:
 
 public:
 
-    basis_systems(const std::vector<double> & knots,
+    basis_systems(const fdagwr_traits::Dense_Vector & knots,
                   const std::vector<std::size_t> & basis_orders,
                   std::size_t q)            :    m_q(q)
                      {
-
+                        
                         //m_interval = fdapde::Triangulation<1, 1>::Interval(knots.front(), knots.back(), knots.size());
-                        m_interval = fdapde::Triangulation<1, 1>::Interval(Eigen::Map<fdagwr_traits::Dense_Vector>(knots.data(),knots.size()));
+                        m_interval = fdapde::Triangulation<1, 1>::Interval(knots);
                         
                         
                         

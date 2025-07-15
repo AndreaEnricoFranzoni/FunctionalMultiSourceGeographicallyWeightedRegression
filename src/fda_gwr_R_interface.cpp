@@ -272,8 +272,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //COMPUTING THE BASIS
     //basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_,order_basis_stationary_cov_,q_C);
-
-    basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_, order_basis_stationary_cov_, q_C);
+    fdagwr_traits::Dense_Vector knots_w = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_stationary_cov_.data(),knots_stationary_cov_.size());
+    basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > bs(knots_w, order_basis_stationary_cov_, q_C);
     penalization_matrix R(bs);
 
     /*
