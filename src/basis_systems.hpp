@@ -69,10 +69,10 @@ public:
 
 
     /*!
-    * @brief Getter for the systems of basis
+    * @brief Getter for the systems of basis (returning a reference since fdaPDE stores the basis as a pointer to them)
     * @return the private m_basis_system
     */
-    std::vector< fdapde::BsSpace<domain_structure> > systems_of_basis() const {return m_systems_of_basis;}
+    const std::vector< fdapde::BsSpace<domain_structure> >& systems_of_basis() const {return m_systems_of_basis;}
 
     /*!
     * @brief Getter for the number of basis systems
