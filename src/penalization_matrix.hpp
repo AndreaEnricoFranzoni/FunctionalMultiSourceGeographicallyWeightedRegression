@@ -49,7 +49,7 @@ private:
 
 
 public:
-    penalization_matrix(const basis_systems & b_s)
+    penalization_matrix(const basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > & b_s)
         :   m_q(b_s.q())
             {
                 for(std::size_t i = 0; i < bs.q(); ++i) {
