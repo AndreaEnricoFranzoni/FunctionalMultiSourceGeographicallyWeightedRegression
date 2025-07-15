@@ -281,11 +281,12 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
       TestFunction  v(bs.systems_of_basis()[i]);
       
       // mass matrix
-      auto mass = integral(bs.interval())(u * v);
-      // auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
-      Eigen::SparseMatrix<double> M = mass.assemble();
+      //auto mass = integral(bs.interval())(u * v);
+      auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
+      Eigen::SparseMatrix<double> M = stiff.assemble();
 
-      std::cout << "\n\nmass matrix:  [M]_{ij} = int_I (psi_i * psi_j) of cov " << i+1 << std::endl;
+      std::cout << "\n\nstiff matrix: [A]_{ij} = int_I (dxx(psi_i) * dxx(psi_j)) of cov " << i+1 << std::endl;
+      //std::cout << "\n\nStiff matrix:  [M]_{ij} = int_I (psi_i * psi_j) of cov " << i+1 << std::endl;
       std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
     }
 
