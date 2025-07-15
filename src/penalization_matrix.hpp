@@ -23,6 +23,7 @@
 
 
 #include "traits_fdagwr.hpp"
+#include "basis_systems.hpp"
 
 /*!
 * @file penalization_matrix.hpp
@@ -48,7 +49,23 @@ private:
 
 
 public:
-    penalization_matrix(/* args */);
+    penalization_matrix(const basis_systems & b_s)
+        :   m_q(b_s.q())
+            {
+                for(std::size_t i = 0; i < bs.q(); ++i) {
+                    // integration
+                    TrialFunction u(bs.systems_of_basis()[i]); 
+                    TestFunction  v(bs.systems_of_basis()[i]);
+      
+                    // mass matrix
+                    //auto mass = integral(bs.interval())(u * v);
+                    auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
+                    Eigen::SparseMatrix<double> M = stiff.assemble();
+
+                    std::cout << "\n\nstiff matrix: [A]_{ij} = int_I (dxx(psi_i) * dxx(psi_j)) of cov " << i+1 << std::endl;
+                    std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
+                }
+            };
     
 };
 

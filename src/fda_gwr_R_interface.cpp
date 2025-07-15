@@ -34,6 +34,7 @@
 
 
 #include "distance_matrix.hpp"
+#include "penalization_matrix.hpp"
 
 #include "test_basis_eval.hpp"
 
@@ -272,10 +273,11 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //COMPUTING THE BASIS
     //basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_,order_basis_stationary_cov_,q_C);
 
-    basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > bs(
-    knots_stationary_cov_, order_basis_stationary_cov_, q_C);
+    basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_, order_basis_stationary_cov_, q_C);
+    penalization_matrix R(bs);
 
-    for(std::size_t i = 0; i < bs.q(); ++i) {
+    /*
+        for(std::size_t i = 0; i < bs.q(); ++i) {
       // integration
       TrialFunction u(bs.systems_of_basis()[i]); 
       TestFunction  v(bs.systems_of_basis()[i]);
@@ -289,6 +291,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
       //std::cout << "\n\nStiff matrix:  [M]_{ij} = int_I (psi_i * psi_j) of cov " << i+1 << std::endl;
       std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
     }
+    */
 
 
     /*
