@@ -56,7 +56,7 @@ public:
                      {
                         
                         //m_interval = fdapde::Triangulation<1, 1>::Interval(knots.front(), knots.back(), knots.size());
-                        m_interval = fdapde::Triangulation<1, 1>::Interval(knots);
+                        m_interval = fdapde::Triangulation<1, 1>::Triangulation(knots);
                         
                         
                         
