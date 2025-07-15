@@ -54,8 +54,8 @@ public:
             {
                 for(std::size_t i = 0; i < bs.q(); ++i) {
                     // integration
-                    TrialFunction u(bs.systems_of_basis()[i]); 
-                    TestFunction  v(bs.systems_of_basis()[i]);
+                    fdapde::TrialFunction u(bs.systems_of_basis()[i]); 
+                    fdapde::TestFunction  v(bs.systems_of_basis()[i]);
       
                     // mass matrix
                     //auto mass = integral(bs.interval())(u * v);
@@ -63,7 +63,7 @@ public:
                     Eigen::SparseMatrix<double> M = stiff.assemble();
 
                     std::cout << "\n\nstiff matrix: [A]_{ij} = int_I (dxx(psi_i) * dxx(psi_j)) of cov " << i+1 << std::endl;
-                    std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
+                    std::cout << Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>(M) << std::endl;
                 }
             };
     
