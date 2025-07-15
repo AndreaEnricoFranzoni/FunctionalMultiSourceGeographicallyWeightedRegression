@@ -49,8 +49,8 @@ private:
 
 
 public:
-    penalization_matrix(const basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > & b_s)
-        :   m_q(b_s.q())
+    penalization_matrix(const basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > & bs)
+        :   m_q(bs.q())
             {
                 for(std::size_t i = 0; i < bs.q(); ++i) {
                     // integration
