@@ -270,9 +270,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
     //COMPUTING THE BASIS
-    basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_,
-                                                                          order_basis_stationary_cov_,
-                                                                          q_C);
+    //basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_,order_basis_stationary_cov_,q_C);
 
     
 
@@ -299,18 +297,6 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
         std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
     }
     */
-
-
-
-
-    
-    
-    //Eigen::Map<fdagwr_traits::Dense_Matrix> locs(ev_points.data(), ev_points.size(), 1);
-
-
-    //testing_function(order_basis_stationary_cov_,knots_stationary_cov_);
-
-    
 
 
     //returning element
