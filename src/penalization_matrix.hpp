@@ -62,8 +62,8 @@ public:
                     auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
                     Eigen::SparseMatrix<double> M = stiff.assemble();
 
-                    std::cout << "\n\nstiff matrix: [A]_{ij} = int_I (dxx(psi_i) * dxx(psi_j)) of cov " << i+1 << std::endl;
-                    std::cout << Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>(M) << std::endl;
+                    //std::cout << "\n\nstiff matrix: [A]_{ij} = int_I (dxx(psi_i) * dxx(psi_j)) of cov " << i+1 << std::endl;
+                    //std::cout << Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>(M) << std::endl;
                 }
             };
     
