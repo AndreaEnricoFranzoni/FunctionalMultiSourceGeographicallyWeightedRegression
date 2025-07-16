@@ -291,6 +291,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     
     
     auto eval_base = bs.eval_base(0,1);
+    Rcout << "R: " << eval_base.rows() << ", C: " << eval_base.cols() << std::endl;
     Rcout << eval_base << std::endl;
     
     for(std::size_t i=0; i < bs.q(); ++i)

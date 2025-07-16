@@ -113,21 +113,17 @@ public:
     std::size_t q() const {return m_q;}
 
     /*!
-    * @brief evaluating the system of basis base-th in location location
+    * @brief evaluating the system of basis basis_i-th in location location
     */
     inline 
     fdagwr_traits::Dense_Matrix 
-    eval_base(double location, std::size_t base) 
+    eval_base(double location, std::size_t basis_i) 
     const
     {
-        fdagwr_traits::Dense_Matrix locs = fdagwr_traits::Dense_Matrix::Constant(1, 1, location);
-
-        //fdagwr_traits::Dense_Matrix locs(1,1);
-        //locs(0,0) = location;
-
-        //auto tmp = spline_basis_evaluation<domain>(m_systems_of_basis[base], locs);
-
-        return fdagwr_traits::Dense_Matrix(spline_basis_evaluation<domain>(m_systems_of_basis[base], locs));
+        //wrap the input into a coherent object for the spline evaluation
+        fdagwr_traits::Dense_Matrix loc = fdagwr_traits::Dense_Matrix::Constant(1, 1, location);
+        //wrap the output into a dense matrix
+        return fdagwr_traits::Dense_Matrix(spline_basis_evaluation<domain>(m_systems_of_basis[basis_i], loc));
     }
 };
 
