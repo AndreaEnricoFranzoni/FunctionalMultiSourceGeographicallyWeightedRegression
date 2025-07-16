@@ -112,7 +112,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.39: " << std::endl;
+    Rcout << "fdagwr.40: " << std::endl;
 
     using _DATA_TYPE_ = double;                                         //data type
     constexpr auto _NAN_REM_ = REM_NAN::MR;                             //how to remove nan (with mean of non-nans)
@@ -143,23 +143,31 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //  ABSCISSA POINTS
     std::vector<double> abscissa_points_ = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
+    fdagwr_traits::Dense_Vector abscissa_points_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(abscissa_points_.data(),abscissa_points_.size());
 
 
     //  KNOTS
     //response
     std::vector<double> knots_response_ = wrap_abscissas(knots_y_points,left_extreme_domain,right_extreme_domain);
+    fdagwr_traits::Dense_Vector knots_response_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_response_.data(),knots_response_.size());
     //stationary cov
     std::vector<double> knots_stationary_cov_ = wrap_abscissas(knots_stationary_cov,left_extreme_domain,right_extreme_domain);
+    fdagwr_traits::Dense_Vector knots_stationary_cov_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_stationary_cov_.data(),knots_stationary_cov_.size());
     //beta stationary cov
     std::vector<double> knots_beta_stationary_cov_ = wrap_abscissas(knots_beta_stationary_cov,left_extreme_domain,right_extreme_domain);
+    fdagwr_traits::Dense_Vector knots_beta_stationary_cov_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_beta_stationary_cov_.data(),knots_beta_stationary_cov_.size());
     //events cov
     std::vector<double> knots_events_cov_ = wrap_abscissas(knots_events_cov,left_extreme_domain,right_extreme_domain);
+    fdagwr_traits::Dense_Vector knots_events_cov_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_events_cov_.data(),knots_events_cov_.size());
     //beta events cov
     std::vector<double> knots_beta_events_cov_ = wrap_abscissas(knots_beta_events_cov,left_extreme_domain,right_extreme_domain);
+    fdagwr_traits::Dense_Vector knots_beta_events_cov_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_beta_events_cov_.data(),knots_beta_events_cov_.size());
     //stations cov
     std::vector<double> knots_stations_cov_ = wrap_abscissas(knots_stations_cov,left_extreme_domain,right_extreme_domain);
+    fdagwr_traits::Dense_Vector knots_stations_cov_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_stations_cov_.data(),knots_stations_cov_.size());
     //stations beta cov
     std::vector<double> knots_beta_stations_cov_ = wrap_abscissas(knots_beta_stations_cov,left_extreme_domain,right_extreme_domain);
+    fdagwr_traits::Dense_Vector knots_beta_stations_cov_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_beta_stations_cov_.data(),knots_beta_stations_cov_.size());
 
 
     //  COVARIATES names, coefficients and how many
@@ -272,7 +280,6 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //COMPUTING THE BASIS
     //basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_,order_basis_stationary_cov_,q_C);
-    fdagwr_traits::Dense_Vector knots_w = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_stationary_cov_.data(),knots_stationary_cov_.size());
     basis_systems< fdapde::Triangulation<1, 1>, BASIS_TYPE::BSPLINES > bs(knots_w, order_basis_stationary_cov_, q_C);
     penalization_matrix R(bs);
 
