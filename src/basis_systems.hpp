@@ -32,11 +32,11 @@
 */
 
 
-template< typename domain_structure, BASIS_TYPE basis_type > 
+template< BASIS_TYPE basis_type > 
 class basis_systems{
 
 /*!Alias for the basis space*/
-using BasisSpace = fdapde::BsSpace<domain_structure>;
+using BasisSpace = fdapde::BsSpace<fdagwr_traits::Domain>;
 
 
 private:
@@ -44,7 +44,7 @@ private:
     std::vector<BasisSpace> m_systems_of_basis;
 
     /*!Nodes over which the basis systems are constructed*/
-    domain_structure m_interval;
+    fdagwr_traits::Domain m_interval;
 
     /*!Order of basis for each covariate*/
     std::vector<std::size_t> m_basis_orders;
@@ -79,7 +79,7 @@ public:
     /*!
     * @brief Getter for the nodes over which the basis systems are constructed
     */
-    const domain_structure& interval() const {return m_interval;}
+    const fdagwr_traits::Domain& interval() const {return m_interval;}
 
     /*!
     * @brief Getter for the systems of basis (returning a reference since fdaPDE stores the basis as a pointer to them)
