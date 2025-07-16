@@ -295,8 +295,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     }
     // evaluate basis at set of locations
     int n_locs = 10;
-    fdagwr_traits::Dense_Vector locs(n_locs + 1);
-    for(int i = 0; i <= n_locs; ++i) { locs(i) = (b - a)/n_locs * i; }
+    fdagwr_traits::Dense_Matrix locs(n_locs + 1,1);
+    for(int i = 0; i <= n_locs; ++i) { locs(i,0) = (b - a)/n_locs * i; }
 
     Rcout << "Locations:" << std::endl;
     Rcout << locs << std::endl;
