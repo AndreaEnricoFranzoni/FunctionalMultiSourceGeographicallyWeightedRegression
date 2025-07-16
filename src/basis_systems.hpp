@@ -120,8 +120,8 @@ public:
     eval_base(double location, std::size_t base) 
     const
     {
-        Eigen::Matrix<double,1,1> locs;
-        locs << location;
+        fdagwr_traits::Dense_Matrix locs = fdagwr_traits::Dense_Matrix::Constant(1, 1, location);
+
         //fdagwr_traits::Dense_Matrix locs(1,1);
         //locs(0,0) = location;
 
