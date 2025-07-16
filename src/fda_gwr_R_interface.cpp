@@ -300,7 +300,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     for(std::size_t i = 0; i < bs.q(); ++i)
     {
-        Eigen::SparseMatrix<double> Psi = spline_basis_eval(bs.systems_of_basis()[i], locs);
+        Eigen::SparseMatrix<double> Psi = spline_basis_eval_(bs.systems_of_basis()[i], locs);
         std::cout << "basis evaluation at location for covariate " << i+1 << std::endl;
         std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(Psi) << std::endl;   // cast to dense matrix just for printing
     }
