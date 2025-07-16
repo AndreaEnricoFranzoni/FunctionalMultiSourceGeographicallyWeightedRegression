@@ -300,7 +300,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     for(int i = 0; i <= n_locs; ++i) { locs(i,0) = (b - a)/n_locs * i; }
 */
     fdagwr_traits::Dense_Matrix locs(1,1);
-    locs(0,0) = 1;
+    locs(0,0) = 0;
 
     Rcout << "Locations:" << std::endl;
     Rcout << locs << std::endl;
