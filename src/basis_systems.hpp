@@ -115,12 +115,15 @@ public:
     /*!
     * @brief evaluating the system of basis base-th in location location
     */
-    inline fdagwr_traits::Dense_Matrix eval_base(double location, std::size_t base) const
+    inline 
+    fdagwr_traits::Dense_Matrix 
+    eval_base(double location, std::size_t base) 
+    const
     {
         fdagwr_traits::Dense_Matrix locs(1,1);
         locs(0,0) = location;
 
-        auto tmp = spline_basis_eval_(m_systems_of_basis[base], locs);
+        auto tmp = spline_basis_eval_<domain,fdagwr_traits::Dense_Matrix>(m_systems_of_basis[base], locs);
 
         return fdagwr_traits::Dense_Matrix(tmp);
     }
