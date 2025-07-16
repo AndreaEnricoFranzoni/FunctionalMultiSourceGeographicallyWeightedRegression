@@ -78,10 +78,10 @@ public:
                         for (std::size_t i = 0; i < q; ++i){    m_systems_of_basis.emplace_back(m_interval,basis_orders[i]);}  
 */               
                             for(std::size_t i = 0; i < q; ++i){
-        Rcout << "Stationary covariate (in system_basis)" << i+1 << " has " << number_of_basis[i] << " basis" << std::endl;
+        std::cout << "Stationary covariate (in system_basis)" << i+1 << " has " << number_of_basis[i] << " basis" << std::endl;
     }
         for(std::size_t i = 0; i < q; ++i){
-        Rcout << "Stationary covariate basis " << i+1 << " has order " << basis_orders[i] << std::endl;
+        std::cout << "Stationary covariate basis " << i+1 << " has order " << basis_orders[i] << std::endl;
     }
                         m_systems_of_basis.resize(q);
                         for (std::size_t i = 0; i < q; ++i){
