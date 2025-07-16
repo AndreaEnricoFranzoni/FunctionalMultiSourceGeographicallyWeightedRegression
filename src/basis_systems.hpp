@@ -120,8 +120,10 @@ public:
     eval_base(double location, std::size_t base) 
     const
     {
-        fdagwr_traits::Dense_Matrix locs(1,1);
-        locs(0,0) = location;
+        Eigen::Matrix<double,1,1> locs;
+        locs << location;
+        //fdagwr_traits::Dense_Matrix locs(1,1);
+        //locs(0,0) = location;
 
         //auto tmp = spline_basis_evaluation<domain>(m_systems_of_basis[base], locs);
 
