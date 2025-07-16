@@ -67,6 +67,8 @@ public:
                   std::size_t q)            
                   :    
                         m_interval(knots),
+                        m_basis_orders(basis_orders),
+                        m_number_of_basis(number_of_basis),
                         m_q(q)
                      {
                         //m_basis_orders.reserve(q);
@@ -74,25 +76,14 @@ public:
                         //m_number_of_basis.reserve(q);
                         //std::copy(number_of_basis.cbegin(),number_of_basis.cend(),std::back_inserter(m_number_of_basis));
 
-                        //constructing systems of bsplines given knots and orders of the basis
-/*
+                        //constructing systems of bsplines given knots and orders of the basis             
+                        m_systems_of_basis.reserve(m_q);
+                        for (std::size_t i = 0; i < m_q; ++i){  m_systems_of_basis.emplace_back(m_interval, basis_orders[i]);}
 
-                        m_systems_of_basis.reserve(q);
-                        for (std::size_t i = 0; i < q; ++i){    m_systems_of_basis.emplace_back(m_interval,basis_orders[i]);}  
-*/               
-                            for(std::size_t i = 0; i < q; ++i){
-        std::cout << "Stationary covariate (in system_basis)" << i+1 << " has " << number_of_basis[i] << " basis" << std::endl;
-    }
-        for(std::size_t i = 0; i < q; ++i){
-        std::cout << "Stationary covariate basis " << i+1 << " has order " << basis_orders[i] << std::endl;
-    }
-                        m_systems_of_basis.reserve(q);
-                        for (std::size_t i = 0; i < q; ++i){
-                            m_systems_of_basis.emplace_back(m_interval, basis_orders[i]);
 
-                            //fdapde::BsSpace<fdapde::Triangulation<1, 1>> Vh(m_interval, basis_orders[i]); 
+
+                                                    //fdapde::BsSpace<fdapde::Triangulation<1, 1>> Vh(m_interval, basis_orders[i]); 
                             //m_systems_of_basis[i] = Vh;
-                        }
                      }
 
     /*!
