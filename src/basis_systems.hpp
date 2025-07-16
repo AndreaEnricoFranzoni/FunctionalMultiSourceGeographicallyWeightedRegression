@@ -66,11 +66,11 @@ public:
                         m_interval(knots),
                         m_q(q)
                      {
-                        m_basis_orders.reserve(q);
-                        std::copy(basis_orders.cbegin(),basis_orders.cend(),std::back_inserter(m_basis_orders));
-                        m_number_of_basis.reserve(q);
-                        std::copy(number_of_basis.cbegin(),number_of_basis.cend(),std::back_inserter(m_number_of_basis));
-                        
+                        //m_basis_orders.reserve(q);
+                        //std::copy(basis_orders.cbegin(),basis_orders.cend(),std::back_inserter(m_basis_orders));
+                        //m_number_of_basis.reserve(q);
+                        //std::copy(number_of_basis.cbegin(),number_of_basis.cend(),std::back_inserter(m_number_of_basis));
+
                         //constructing systems of bsplines given knots and orders of the basis
                         m_systems_of_basis.reserve(q);
                         for (std::size_t i = 0; i < q; ++i){    m_systems_of_basis.emplace_back(m_interval,basis_orders[i]);}                 
