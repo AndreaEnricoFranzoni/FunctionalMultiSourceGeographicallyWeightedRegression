@@ -284,7 +284,10 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
     //COMPUTING THE BASIS
-    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_eigen_w_, order_basis_stationary_cov_, number_basis_stationary_cov_, q_C);
+    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_eigen_w_, 
+                                                                    order_basis_stationary_cov_, 
+                                                                    number_basis_stationary_cov_, 
+                                                                    q_C);
     
     
     
@@ -294,7 +297,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
         Rcout << "Stationary covariate " << i+1 << " has " << bs.number_of_basis()[i] << " basis of order " << bs.basis_orders()[i] << std::endl;
     }
     // evaluate basis at set of locations
-    /*
+    
     fdagwr_traits::Dense_Matrix locs(1,1);
     locs(0,0) = 0;
 
@@ -307,7 +310,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
         std::cout << "basis evaluation at location for covariate " << i+1 << std::endl;
         std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(Psi) << std::endl;   // cast to dense matrix just for printing
     }
-    */
+    
     
 
 
@@ -315,7 +318,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //penalization_matrix R(bs);
 
-    
+    /*
     for(std::size_t i = 0; i < bs.q(); ++i) {
       // integration
       TrialFunction u(bs.systems_of_basis()[i]); 
@@ -330,6 +333,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
       //std::cout << "\n\nStiff matrix:  [M]_{ij} = int_I (psi_i * psi_j) of cov " << i+1 << std::endl;
       std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
     }
+    */
     
 
 
