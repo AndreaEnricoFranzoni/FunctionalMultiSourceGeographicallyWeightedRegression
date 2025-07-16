@@ -35,33 +35,31 @@
 template< typename domain_structure, BASIS_TYPE basis_type > 
 class basis_systems{
 
+/*!Alias for the basis space*/
+using BasisSpace = fdapde::BsSpace<domain_structure>;
+
+
 private:
     /*!Vector containing a basis system for each one of the functional covariates*/
-    std::vector< fdapde::BsSpace<domain_structure> > m_systems_of_basis;
+    std::vector<BasisSpace> m_systems_of_basis;
 
     /*!Nodes over which the basis systems are constructed*/
+    domain_structure m_interval;
 
-    /*!Interval over which constructing the basis*/
-    fdapde::Triangulation<1, 1> m_interval;
-
-    /*!Number of basis systems: one for each covariate*/
+    /*!Number of functional covariates: one basis system for each one of them*/
     std::size_t m_q;
 
 
 public:
-
+    /*!Class constructor*/
     basis_systems(const fdagwr_traits::Dense_Vector & knots,
                   const std::vector<std::size_t> & basis_orders,
-                  std::size_t q)            :    m_interval(knots), m_q(q)
+                  std::size_t q)            
+                  :    
+                        m_interval(knots), 
+                        m_q(q)
                      {
-                        
-                        //m_interval = fdapde::Triangulation<1, 1>::Interval(knots.front(), knots.back(), knots.size());
-                        
-                        
-                        
-                        
-                        
-                        
+/*
                         m_systems_of_basis.resize(q);
 
                         for (std::size_t i = 0; i < q; ++i)
@@ -70,20 +68,24 @@ public:
                             fdapde::BsSpace<fdapde::Triangulation<1, 1>> Vh(m_interval, order); 
 
                             m_systems_of_basis[i] = Vh;
-                        }               
+                        }  
+*/             
+                        m_systems_of_basis.reserve(q);
+                        for (std::size_t i = 0; i < q; i++){    m_systems_of_basis.emplace_back(m_interval,basis_orders[i]);}
+                        
                      }
 
 
     /*!
-    * @brief Getter for the interval
+    * @brief Getter for the nodes over which the basis systems are constructed
     */
-    const fdapde::Triangulation<1, 1>& interval() const { return m_interval; }
+    const domain_structure& interval() const {return m_interval;}
 
     /*!
     * @brief Getter for the systems of basis (returning a reference since fdaPDE stores the basis as a pointer to them)
-    * @return the private m_basis_system
+    * @return the private m_systems_of_basis
     */
-    const std::vector< fdapde::BsSpace<domain_structure> >& systems_of_basis() const {return m_systems_of_basis;}
+    const std::vector<BasisSpace>& systems_of_basis() const {return m_systems_of_basis;}
 
     /*!
     * @brief Getter for the number of basis systems

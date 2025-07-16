@@ -112,7 +112,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.40: " << std::endl;
+    Rcout << "fdagwr.41: " << std::endl;
 
     using _DATA_TYPE_ = double;                                         //data type
     constexpr auto _NAN_REM_ = REM_NAN::MR;                             //how to remove nan (with mean of non-nans)
