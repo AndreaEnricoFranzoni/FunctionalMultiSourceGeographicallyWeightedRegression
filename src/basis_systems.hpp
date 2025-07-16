@@ -88,13 +88,13 @@ public:
     * @brief Getter for the order of basis for each covariate
     * @return the private m_basis_orders
     */
-    const std::vector<std::size_t>& basis_orders() const {return m_basis_orders;}
+    std::vector<std::size_t> basis_orders() const {return m_basis_orders;}
 
     /*!
     * @brief Getter for the number of basis for each covariate
     * @return the private m_number_of_basis
     */
-    const std::vector<std::size_t>& number_of_basis() const {return m_number_of_basis;}
+    std::vector<std::size_t> number_of_basis() const {return m_number_of_basis;}
 
     /*!
     * @brief Getter for the number of basis systems
