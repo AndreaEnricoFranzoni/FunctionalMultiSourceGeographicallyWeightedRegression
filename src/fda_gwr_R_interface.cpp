@@ -113,7 +113,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.1: " << std::endl;
+    Rcout << "fdagwr.2: " << std::endl;
 
     using _DATA_TYPE_ = double;                                         //data type
     constexpr auto _NAN_REM_ = REM_NAN::MR;                             //how to remove nan (with mean of non-nans)
@@ -295,8 +295,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     }
     // evaluate basis at set of locations
     int n_locs = 10;
-    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> locs(n_locs + 1, 1);
-    for(int i = 0; i <= n_locs; ++i) { locs(i, 0) = (b - a)/n_locs * i; }
+    fdagwr_traits::Dense_Vector locs(n_locs + 1);
+    for(int i = 0; i <= n_locs; ++i) { locs(i) = (b - a)/n_locs * i; }
 
     Rcout << "Locations:" << std::endl;
     Rcout << locs << std::endl;
