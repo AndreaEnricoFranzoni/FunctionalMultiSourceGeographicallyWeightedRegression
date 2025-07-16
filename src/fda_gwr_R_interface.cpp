@@ -298,6 +298,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> locs(n_locs + 1, 1);
     for(int i = 0; i <= n_locs; ++i) { locs(i, 0) = (b - a)/n_locs * i; }
 
+    Rcout << "Locations:" << std::endl;
+    Rcout << locs << std::endl;
+
     for(std::size_t i = 0; i < bs.q(); ++i)
     {
         Eigen::SparseMatrix<double> Psi = spline_basis_eval_(bs.systems_of_basis()[i], locs);
