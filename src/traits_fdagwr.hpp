@@ -77,7 +77,7 @@ public:
 
   using Diag_Matrix   = Eigen::DiagonalMatrix<double, Eigen::Dynamic>;    ///< Diagonal matrix (for weights matrices)
 
-  using FDAGWR_DOMAIN = fdapde::Triangulation<1, 1>;                      ///< Domain mesh: unit interval with a fixed number of nodes
+  using Domain        = fdapde::Triangulation<1, 1>;                      ///< Domain mesh: unit interval with a fixed number of nodes
 
 };
 
