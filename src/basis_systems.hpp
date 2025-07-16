@@ -72,8 +72,17 @@ public:
                         //std::copy(number_of_basis.cbegin(),number_of_basis.cend(),std::back_inserter(m_number_of_basis));
 
                         //constructing systems of bsplines given knots and orders of the basis
+/*
+
                         m_systems_of_basis.reserve(q);
-                        for (std::size_t i = 0; i < q; ++i){    m_systems_of_basis.emplace_back(m_interval,basis_orders[i]);}                 
+                        for (std::size_t i = 0; i < q; ++i){    m_systems_of_basis.emplace_back(m_interval,basis_orders[i]);}  
+*/               
+                        m_systems_of_basis.reserve(q);
+                        for (std::size_t i = 0; i < q; ++i){
+                            fdapde::BsSpace<fdapde::Triangulation<1, 1>> Vh(m_interval, order); 
+
+                            m_systems_of_basis[i] = Vh;
+                        }
                      }
 
     /*!
