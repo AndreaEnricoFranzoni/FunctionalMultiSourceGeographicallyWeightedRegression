@@ -36,12 +36,12 @@ template< BASIS_TYPE basis_type >
 class basis_systems{
 
 /*!Alias for the basis space*/
-using BasisSpace = fdapde::BsSpace<fdagwr_traits::Domain>;
+//using BasisSpace = fdapde::BsSpace<fdagwr_traits::Domain>;
 
 
 private:
     /*!Vector containing a basis system for each one of the functional covariates*/
-    std::vector<BasisSpace> m_systems_of_basis;
+    std::vector<fdapde::BsSpace<fdagwr_traits::Domain>> m_systems_of_basis;
 
     /*!Nodes over which the basis systems are constructed*/
     fdagwr_traits::Domain m_interval;
@@ -85,7 +85,7 @@ public:
     * @brief Getter for the systems of basis (returning a reference since fdaPDE stores the basis as a pointer to them)
     * @return the private m_systems_of_basis
     */
-    const std::vector<BasisSpace>& systems_of_basis() const {return m_systems_of_basis;}
+    const std::vector<fdapde::BsSpace<fdagwr_traits::Domain>>& systems_of_basis() const {return m_systems_of_basis;}
 
     /*!
     * @brief Getter for the order of basis for each covariate
