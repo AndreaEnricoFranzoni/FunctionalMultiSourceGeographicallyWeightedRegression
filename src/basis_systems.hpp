@@ -120,7 +120,9 @@ public:
         fdagwr_traits::Dense_Matrix locs(1,1);
         locs(0,0) = location;
 
-        return fdagwr_traits::Dense_Matrix(spline_basis_eval_(m_systems_of_basis[base], locs));
+        auto tmp = spline_basis_eval_(m_systems_of_basis[base], locs);
+
+        return fdagwr_traits::Dense_Matrix(tmp);
     }
 };
 
