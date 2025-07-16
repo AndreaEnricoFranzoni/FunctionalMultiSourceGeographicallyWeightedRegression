@@ -37,6 +37,7 @@
 #include "penalization_matrix.hpp"
 
 #include "test_basis_eval.hpp"
+#include "basis_evaluation.hpp"
 
 
 
@@ -144,7 +145,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  ABSCISSA POINTS
     std::vector<double> abscissa_points_ = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
     fdagwr_traits::Dense_Vector abscissa_points_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(abscissa_points_.data(),abscissa_points_.size());
-
+    double a = left_extreme_domain;
+    double b = right_extreme_domain;
 
     //  KNOTS
     //response
@@ -283,11 +285,31 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //COMPUTING THE BASIS
     basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_eigen_w_, order_basis_stationary_cov_, number_basis_stationary_cov_, q_C);
+    
+    
+    
+    
     for(std::size_t i=0; i < bs.q(); ++i)
     {
         Rcout << "Stationary covariate " << i+1 << " has " << bs.number_of_basis()[i] << " basis of order " << bs.basis_orders()[i] << std::endl;
     }
-    penalization_matrix R(bs);
+    // evaluate basis at set of locations
+    int n_locs = 10;
+    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> locs(n_locs + 1, 1);
+    for(int i = 0; i <= n_locs; ++i) { locs(i, 0) = (b - a)/n_locs * i; }
+
+    for(std::size_t i = 0; i < bs.q(); ++i)
+    {
+        Eigen::SparseMatrix<double> Psi = spline_basis_eval(bs.systems_of_basis()[i], locs);
+        std::cout << "basis evaluation at location for covariate " << i+1 << std::endl;
+        std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(Psi) << std::endl;   // cast to dense matrix just for printing
+    }
+    
+
+
+
+
+    //penalization_matrix R(bs);
 
     /*
         for(std::size_t i = 0; i < bs.q(); ++i) {
