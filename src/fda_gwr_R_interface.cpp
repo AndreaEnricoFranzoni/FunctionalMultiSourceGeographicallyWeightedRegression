@@ -290,7 +290,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                                                                     q_C);
     
     
-    
+    auto eval_base = bs.eval_base(0,1);
+    Rcout << eval_base << std::endl;
     
     for(std::size_t i=0; i < bs.q(); ++i)
     {
@@ -298,18 +299,18 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     }
     // evaluate basis at set of locations
     
+    /*  TUTTA QUESTA PARTE SULLA VALUTAZIONE E' OK
     fdagwr_traits::Dense_Matrix locs(1,1);
     locs(0,0) = 0;
-
     Rcout << "Locations:" << std::endl;
     Rcout << locs << std::endl;
-
     for(std::size_t i = 0; i < bs.q(); ++i)
     {
         Eigen::SparseMatrix<double> Psi = spline_basis_eval_(bs.systems_of_basis()[i], locs);
         std::cout << "basis evaluation at location for covariate " << i+1 << std::endl;
         std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(Psi) << std::endl;   // cast to dense matrix just for printing
     }
+    */
     
     
 

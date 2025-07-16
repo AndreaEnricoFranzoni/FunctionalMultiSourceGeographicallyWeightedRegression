@@ -23,6 +23,7 @@
 
 
 #include "traits_fdagwr.hpp"
+#include "basis_evaluation.hpp"
 
 
 /*!
@@ -32,10 +33,16 @@
 */
 
 
+/*!
+* @todo SERVIREBBE UN CONCEPT PER IL TIPO DOMAIN
+*/
 template< typename domain = fdagwr_traits::Domain, BASIS_TYPE basis_type = BASIS_TYPE::BSPLINES > 
 class basis_systems{
 
-/*!Alias for the basis space*/
+/*!
+* @brief Alias for the basis space
+* @note calling the constructor of BsSpace in the constructor of the class
+*/
 using BasisSpace = fdapde::BsSpace<domain>;
 
 
@@ -74,11 +81,6 @@ public:
                         //constructing systems of bsplines given knots and orders of the basis             
                         m_systems_of_basis.reserve(m_q);
                         for(std::size_t i = 0; i < m_q; ++i){  m_systems_of_basis.emplace_back(m_interval, m_basis_orders[i]);}
-
-                        //m_systems_of_basis.resize(m_q);
-                        //for(std::size_t i = 0; i < m_q; ++i){
-                        //    BasisSpace Vh(m_interval,m_basis_orders[i]);
-                        //    m_systems_of_basis[i] = Vh;}
                      }
 
     /*!
@@ -109,6 +111,17 @@ public:
     * @return the private m_q
     */
     std::size_t q() const {return m_q;}
+
+    /*!
+    * @brief evaluating the system of basis base-th in location location
+    */
+    inline fdagwr_traits::Dense_Matrix eval_base(double location, std::size_t base) const
+    {
+        fdagwr_traits::Dense_Matrix locs(1,1);
+        locs(0,0) = location;
+
+        return fdagwr_traits::Dense_Matrix(spline_basis_eval_(m_systems_of_basis[base], locs))
+    }
 };
 
 #endif  /*FDAGWR_BASIS_SYSTEM_HPP*/
