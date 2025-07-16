@@ -71,19 +71,14 @@ public:
                         m_number_of_basis(number_of_basis),
                         m_q(q)
                      {
-                        //m_basis_orders.reserve(q);
-                        //std::copy(basis_orders.cbegin(),basis_orders.cend(),std::back_inserter(m_basis_orders));
-                        //m_number_of_basis.reserve(q);
-                        //std::copy(number_of_basis.cbegin(),number_of_basis.cend(),std::back_inserter(m_number_of_basis));
-
                         //constructing systems of bsplines given knots and orders of the basis             
-                        m_systems_of_basis.reserve(m_q);
-                        for (std::size_t i = 0; i < m_q; ++i){  m_systems_of_basis.emplace_back(m_interval, basis_orders[i]);}
+                        //m_systems_of_basis.reserve(m_q);
+                        //for(std::size_t i = 0; i < m_q; ++i){  m_systems_of_basis.emplace_back(m_interval, basis_orders[i]);}
 
-
-
-                                                    //fdapde::BsSpace<fdapde::Triangulation<1, 1>> Vh(m_interval, basis_orders[i]); 
-                            //m_systems_of_basis[i] = Vh;
+                        m_systems_of_basis.resize(m_q);
+                        for(std::size_t i = 0; i < m_q; ++i){
+                            BasisSpace Vh(m_interval,m_basis_orders[i]);
+                            m_systems_of_basis[i] = Vh;}
                      }
 
     /*!
