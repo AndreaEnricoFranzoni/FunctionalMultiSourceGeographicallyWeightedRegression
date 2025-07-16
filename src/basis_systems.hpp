@@ -32,19 +32,19 @@
 */
 
 
-template< BASIS_TYPE basis_type > 
+template< typename domain = fdagwr_traits::Domain, BASIS_TYPE basis_type = BASIS_TYPE::BSPLINES > 
 class basis_systems{
 
 /*!Alias for the basis space*/
-//using BasisSpace = fdapde::BsSpace<fdagwr_traits::Domain>;
+using BasisSpace = fdapde::BsSpace<domain>;
 
 
 private:
     /*!Vector containing a basis system for each one of the functional covariates*/
-    std::vector<fdapde::BsSpace<fdagwr_traits::Domain>> m_systems_of_basis;
+    std::vector<BasisSpace> m_systems_of_basis;
 
     /*!Nodes over which the basis systems are constructed*/
-    fdagwr_traits::Domain m_interval;
+    domain m_interval;
 
     /*!Order of basis for each covariate*/
     std::vector<std::size_t> m_basis_orders;
@@ -57,7 +57,10 @@ private:
 
 
 public:
-    /*!Class constructor*/
+    /*!
+    * @brief Class constructor
+    * @note BASIS ORDERS HAVE TO BE INT >=1 !!!!!!!!
+    */
     basis_systems(const fdagwr_traits::Dense_Vector & knots,
                   const std::vector<std::size_t> & basis_orders,
                   const std::vector<std::size_t> & number_of_basis,
@@ -83,11 +86,12 @@ public:
         for(std::size_t i = 0; i < q; ++i){
         std::cout << "Stationary covariate basis " << i+1 << " has order " << basis_orders[i] << std::endl;
     }
-                        m_systems_of_basis.resize(q);
+                        m_systems_of_basis.reserve(q);
                         for (std::size_t i = 0; i < q; ++i){
-                            fdapde::BsSpace<fdapde::Triangulation<1, 1>> Vh(m_interval, basis_orders[i]); 
+                            m_systems_of_basis.emplace_back(m_interval, basis_orders[i]);
 
-                            m_systems_of_basis[i] = Vh;
+                            //fdapde::BsSpace<fdapde::Triangulation<1, 1>> Vh(m_interval, basis_orders[i]); 
+                            //m_systems_of_basis[i] = Vh;
                         }
                      }
 
@@ -100,19 +104,19 @@ public:
     * @brief Getter for the systems of basis (returning a reference since fdaPDE stores the basis as a pointer to them)
     * @return the private m_systems_of_basis
     */
-    const std::vector<fdapde::BsSpace<fdagwr_traits::Domain>>& systems_of_basis() const {return m_systems_of_basis;}
+    const std::vector<BasisSpace>& systems_of_basis() const {return m_systems_of_basis;}
 
     /*!
     * @brief Getter for the order of basis for each covariate
     * @return the private m_basis_orders
     */
-    std::vector<std::size_t> basis_orders() const {return m_basis_orders;}
+    const std::vector<std::size_t>& basis_orders() const {return m_basis_orders;}
 
     /*!
     * @brief Getter for the number of basis for each covariate
     * @return the private m_number_of_basis
     */
-    std::vector<std::size_t> number_of_basis() const {return m_number_of_basis;}
+    const std::vector<std::size_t>& number_of_basis() const {return m_number_of_basis;}
 
     /*!
     * @brief Getter for the number of basis systems

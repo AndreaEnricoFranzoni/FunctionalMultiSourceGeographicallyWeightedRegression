@@ -49,7 +49,7 @@ private:
 
 
 public:
-    penalization_matrix(const basis_systems< BASIS_TYPE::BSPLINES > & bs)
+    penalization_matrix(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > & bs)
         :   m_q(bs.q())
             {
                 for(std::size_t i = 0; i < bs.q(); ++i) {

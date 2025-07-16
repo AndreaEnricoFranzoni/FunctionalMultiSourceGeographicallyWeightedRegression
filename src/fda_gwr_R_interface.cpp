@@ -187,6 +187,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //  NUMBER AND ORDER OF BASIS
     //response
+    /*!
+    * @todo CONTROLLARE CHE L'ORDINE DELLE BASI PASSATO SIA ALMENO 1, SENNO' CRASHA
+    */
     auto number_and_order_basis_response_ = wrap_basis_number_and_order(n_basis_y_points,n_order_basis_y_points,knots_response_.size());
     std::size_t number_basis_response_ = number_and_order_basis_response_[FDAGWR_FEATS::n_basis_string];
     std::size_t order_basis_response_ = number_and_order_basis_response_[FDAGWR_FEATS::order_basis_string];
@@ -198,12 +201,6 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     auto number_and_order_basis_stationary_cov_ = wrap_basis_numbers_and_orders<_STATIONARY_>(n_basis_stationary_cov,n_order_basis_stationary_cov,knots_stationary_cov_.size(),q_C);
     std::vector<std::size_t> number_basis_stationary_cov_ = number_and_order_basis_stationary_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_stationary_cov_ = number_and_order_basis_stationary_cov_[FDAGWR_FEATS::order_basis_string];
-    for(std::size_t i = 0; i < number_basis_stationary_cov_.size(); ++i){
-        Rcout << "Stationary covariate " << i+1 << " has " << number_basis_stationary_cov_[i] << "basis" << std::endl;
-    }
-        for(std::size_t i = 0; i < order_basis_stationary_cov_.size(); ++i){
-        Rcout << "Stationary covariate basis " << i+1 << " has order " << order_basis_stationary_cov_[i] << std::endl;
-    }
     //beta stationary cov
     auto number_and_order_basis_beta_stationary_cov_ = wrap_basis_numbers_and_orders<_STATIONARY_>(n_basis_beta_stationary_cov,n_order_basis_beta_stationary_cov,knots_beta_stationary_cov_.size(),q_C);
     std::vector<std::size_t> number_basis_beta_stationary_cov_ = number_and_order_basis_beta_stationary_cov_[FDAGWR_FEATS::n_basis_string];
@@ -292,7 +289,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
         Rcout << "Covaritate " << i+1 << " has " << bs.number_of_basis()[i] << " basis of order " << bs.basis_orders()[i] << std::endl;
     }
 */
-    //penalization_matrix R(bs);
+    penalization_matrix R(bs);
 
     /*
         for(std::size_t i = 0; i < bs.q(); ++i) {
