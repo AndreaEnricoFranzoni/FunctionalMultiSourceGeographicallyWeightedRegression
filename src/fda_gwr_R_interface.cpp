@@ -289,7 +289,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
         Rcout << "Covaritate " << i+1 << " has " << bs.number_of_basis()[i] << " basis of order " << bs.basis_orders()[i] << std::endl;
     }
 */
-    penalization_matrix R(bs);
+    //penalization_matrix R(bs);
 
     /*
         for(std::size_t i = 0; i < bs.q(); ++i) {
