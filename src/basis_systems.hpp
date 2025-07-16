@@ -46,6 +46,12 @@ private:
     /*!Nodes over which the basis systems are constructed*/
     domain_structure m_interval;
 
+    /*!Order of basis for each covariate*/
+    std::vector<std::size_t> m_basis_orders;
+
+    /*!Number of basis for each covariate*/
+    std::vector<std::size_t> m_number_of_basis;
+
     /*!Number of functional covariates: one basis system for each one of them*/
     std::size_t m_q;
 
@@ -54,27 +60,18 @@ public:
     /*!Class constructor*/
     basis_systems(const fdagwr_traits::Dense_Vector & knots,
                   const std::vector<std::size_t> & basis_orders,
+                  const std::vector<std::size_t> & number_of_basis,
                   std::size_t q)            
                   :    
-                        m_interval(knots), 
+                        m_interval(knots),
+                        m_basis_orders(basis_orders),
+                        m_number_of_basis(number_of_basis), 
                         m_q(q)
                      {
-/*
-                        m_systems_of_basis.resize(q);
-
-                        for (std::size_t i = 0; i < q; ++i)
-                        {
-                            int order = basis_orders[i];
-                            fdapde::BsSpace<fdapde::Triangulation<1, 1>> Vh(m_interval, order); 
-
-                            m_systems_of_basis[i] = Vh;
-                        }  
-*/             
+                        //constructing systems of bsplines given knots and orders of the basis
                         m_systems_of_basis.reserve(q);
-                        for (std::size_t i = 0; i < q; i++){    m_systems_of_basis.emplace_back(m_interval,basis_orders[i]);}
-                        
+                        for (std::size_t i = 0; i < q; ++i){    m_systems_of_basis.emplace_back(m_interval,basis_orders[i]);}                 
                      }
-
 
     /*!
     * @brief Getter for the nodes over which the basis systems are constructed
@@ -86,6 +83,18 @@ public:
     * @return the private m_systems_of_basis
     */
     const std::vector<BasisSpace>& systems_of_basis() const {return m_systems_of_basis;}
+
+    /*!
+    * @brief Getter for the order of basis for each covariate
+    * @return the private m_basis_orders
+    */
+    const std::vector<std::size_t>& basis_orders() const {return m_basis_orders;}
+
+    /*!
+    * @brief Getter for the number of basis for each covariate
+    * @return the private m_number_of_basis
+    */
+    const std::vector<std::size_t>& number_of_basis() const {return m_number_of_basis;}
 
     /*!
     * @brief Getter for the number of basis systems
