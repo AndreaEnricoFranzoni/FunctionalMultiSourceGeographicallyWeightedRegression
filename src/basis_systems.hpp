@@ -79,7 +79,7 @@ public:
 */               
                         m_systems_of_basis.reserve(q);
                         for (std::size_t i = 0; i < q; ++i){
-                            fdapde::BsSpace<fdapde::Triangulation<1, 1>> Vh(m_interval, order); 
+                            fdapde::BsSpace<fdapde::Triangulation<1, 1>> Vh(m_interval, basis_orders[i]); 
 
                             m_systems_of_basis[i] = Vh;
                         }
