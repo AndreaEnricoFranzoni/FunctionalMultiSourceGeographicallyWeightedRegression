@@ -112,7 +112,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.42: " << std::endl;
+    Rcout << "fdagwr.43: " << std::endl;
 
     using _DATA_TYPE_ = double;                                         //data type
     constexpr auto _NAN_REM_ = REM_NAN::MR;                             //how to remove nan (with mean of non-nans)
@@ -279,14 +279,14 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
     //COMPUTING THE BASIS
-    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_eigen_w_, order_basis_stationary_cov_, number_basis_stationary_cov_, q_C);
+    //basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_eigen_w_, order_basis_stationary_cov_, number_basis_stationary_cov_, q_C);
 /*
     for(std::size_t i=0; i < bs.q(); ++i)
     {
         Rcout << "Covaritate " << i+1 << " has " << bs.number_of_basis()[i] << " basis of order " << bs.basis_orders()[i] << std::endl;
     }
 */
-    penalization_matrix R(bs);
+    //penalization_matrix R(bs);
 
     /*
         for(std::size_t i = 0; i < bs.q(); ++i) {
