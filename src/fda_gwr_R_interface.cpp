@@ -113,14 +113,14 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.5: " << std::endl;
+    Rcout << "fdagwr.6: " << std::endl;
 
     using _DATA_TYPE_ = double;                                         //data type
     constexpr auto _NAN_REM_ = REM_NAN::MR;                             //how to remove nan (with mean of non-nans)
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;  //enum for stationary covariates
     constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;            //enum for event covariates
     constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;        //enum for station covariates
-    constexpr auto _PENALTY_ = PENALIZED_DERIVATIVE::SECOND             //enum for the penalization
+    constexpr auto _PENALTY_ = PENALIZED_DERIVATIVE::SECOND;            //enum for the penalization
     constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;            //enum for euclidean distance within statistical units locations
     constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                    //kernel function to smooth the distances within statistcal units locations
 
