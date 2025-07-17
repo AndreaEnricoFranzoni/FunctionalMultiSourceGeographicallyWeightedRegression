@@ -86,7 +86,7 @@ public:
     /*!
     * @brief Getter for the nodes over which the basis systems are constructed
     */
-    const fdagwr_traits::Domain& interval() const {return m_interval;}
+    const domain& interval() const {return m_interval;}
 
     /*!
     * @brief Getter for the systems of basis (returning a reference since fdaPDE stores the basis as a pointer to them)
