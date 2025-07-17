@@ -87,8 +87,8 @@ public:
                         for(std::size_t i = 0; i < m_q; ++i){  
                             m_systems_of_basis.emplace_back(m_interval, m_basis_orders[i]);
                             
-                            fdapde::TrialFunction u(m_systems_of_basis[i]); 
-                            fdapde::TestFunction  v(m_systems_of_basis[i]);
+                            fdapde::TrialFunction u(*m_systems_of_basis[i]); 
+                            fdapde::TestFunction  v(*m_systems_of_basis[i]);
                             auto stiff = integral(m_interval)(dxx(u) * dxx(v));
                             fdagwr_traits::Sparse_Matrix M = stiff.assemble();
 
