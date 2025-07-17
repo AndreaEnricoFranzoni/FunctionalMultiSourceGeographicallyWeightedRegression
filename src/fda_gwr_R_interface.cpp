@@ -289,6 +289,11 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                                                                     number_basis_stationary_cov_, 
                                                                     q_C);
     
+    for(std::size_t i=0; i < bs.q(); ++i)
+    {
+        Rcout << "Stationary covariate " << i+1 << " has " << bs.number_of_basis()[i] << " basis of order " << bs.basis_orders()[i] << std::endl;
+    }
+    
     // evaluate basis at set of locations
     /*  TUTTA QUESTA PARTE SULLA VALUTAZIONE E' OK (NON GUARDARLA)
     auto eval_base = bs.eval_base(0,1);
