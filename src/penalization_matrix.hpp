@@ -65,6 +65,7 @@ public:
                 stiff_matrices_triplets.reserve(std::transform_reduce(m_Lj.cbegin(),
                                                                       m_Lj.cend(),
                                                                       static_cast<std::size_t>(0),
+                                                                      std::plus{},
                                                                       [](const double &nb){return std::pow(nb,2);}));
 
                 //constructing the penalty matrices
