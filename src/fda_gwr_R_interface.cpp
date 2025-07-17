@@ -120,6 +120,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;  //enum for stationary covariates
     constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;            //enum for event covariates
     constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;        //enum for station covariates
+    constexpr auto _PENALTY_ = PENALIZED_DERIVATIVE::SECOND             //enum for the penalization
     constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;            //enum for euclidean distance within statistical units locations
     constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                    //kernel function to smooth the distances within statistcal units locations
 
@@ -333,7 +334,10 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
       std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
     }
     */
-   penalization_matrix R(bs);
+   penalization_matrix<_PENALTY_> R(bs,lambda_stationary_cov_);
+
+   Rcout << "Penalization matrix for the stationary covariates" << std::endl;
+   Rcout << fdagwr_traits::Dense_Matrix(R.PenalizationMatrix()) << std::endl;
     
     
     

@@ -144,6 +144,19 @@ enum BASIS_TYPE
 
 
 /*!
+* @enum PENALIZED_DERIVATIVE
+* @brief order od the derivative to be penalized when creating penalization matrix
+*/
+enum PENALIZED_DERIVATIVE
+{
+  ZERO   = 0,   ///< Penalizing the basis itself
+  FIRST  = 1,   ///< Penalizing the first derivative of the basis
+  SECOND = 2,   ///< Penalizing the second derivative of the basis 
+};
+
+
+
+/*!
 * @enum DISTANCE_MEASURE
 * @brief measure to evaluate the distances within different location points for a GWR
 */
@@ -164,7 +177,5 @@ enum REM_NAN
   MR = 1,      ///< Replacing nans with mean (could change the mean of the distribution)
   ZR = 2,      ///< Replacing nans with 0s (could change the sd of the distribution)
 };
-
-
 
 #endif  /*FDAGWR_TRAITS_HPP*/

@@ -31,11 +31,15 @@
 * @author Andrea Enrico Franzoni
 */
 
+template< PENALIZED_DERIVATIVE der_pen = PENALIZED_DERIVATIVE::SECOND >
 class penalization_matrix
 {
 
 private:
-    /*!Number of functional covariates described by a basis expansion*/
+    /*!Penalization matrix*/
+    fdagwr_traits::Sparse_Matrix m_PenalizationMatrix;
+
+    /*!Number of functional covariates described by a basis expansion (total number of blocks in the penalization matrix)*/
     std::size_t m_q;
 
     /*!Number of basis for each covariate*/
@@ -44,33 +48,54 @@ private:
     /*!Number of total basis*/;
     std::size_t m_L;
 
-    /*!Penalization matrix*/
-    fdagwr_traits::Sparse_Matrix m_PenalizationMatrix;
-
-
+    /*!
+    PER AVERE LE PENALIZZAZIONI CON LA DERIVATA SECONDA SERVE UN ORDINE DELLE BASI >= 2
+    */
 public:
-    penalization_matrix(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > & bs)
-        :   m_q(bs.q())
-            {
-                for(std::size_t i = 0; i < bs.q(); ++i) {
+    penalization_matrix(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > & bs,
+                        const std::vector<double>& lambdas)
+        :   
+        m_Lj(bs.number_of_basis()),
+        m_L(std::reduce(bs.number_of_basis().cebgin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0))),
+        m_q(bs.q()),
+        m_PenalizationMatrix(m_L,m_L)       //initializing the penalization matrix
+            {   
+                //storing the penalty for each covariate in an Eigen::Triplet
+                std::vector<Eigen::Triplet<double>> stiff_matrices_triplets;
+                stiff_matrices_triplets.reserve(std::transform_reduce(m_Lj.cbegin(),
+                                                                      m_Lj.cend(),
+                                                                      static_cast<std::size_t>(0),
+                                                                      [](const double &nb){return std::pow(nb,2);}));
+
+                //constructing the penalty matrices
+                for(std::size_t i = 0; i < m_q; ++i){
                     // integration
                     fdapde::TrialFunction u(bs.systems_of_basis()[i]); 
                     fdapde::TestFunction  v(bs.systems_of_basis()[i]);
-      
-                    // mass matrix
-                    //auto mass = integral(bs.interval())(u * v);
+                    // stiff matrix: penalizing the second derivaive
                     auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
                     Eigen::SparseMatrix<double> M = stiff.assemble();
+                    //penalties, for each basis system
+                    M *= lambdas[i];
 
-                    std::cout << "\n\nstiff matrix in penalization_matrix class: [A]_{ij} = int_I (dxx(psi_i) * dxx(psi_j)) of cov " << i+1 << std::endl;
-                    //std::cout << Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>(M) << std::endl;
-                }
-            };
+                    //all the penalty matrix are squared matrices: therse are the index at which each block starts
+                    std::size_t start_of_block = std::reduce(bs.number_of_basis().cebgin(),bs.number_of_basis().cebgin()+i,static_cast<std::size_t>(0));
+
+                    //storing the matrix in the a vector of Eigen::Triplets
+                    for (std::size_t k = 0; k < M.outerSize(); ++k){
+                        for (fdagwr_traits::Sparse_Matrix::InnerIterator it(M,k); it; ++it){
+                            stiff_matrices_triplets.emplace_back(it.row() + start_of_block, 
+                                                                 it.col() + start_of_block,
+                                                                 it.value());}}}
+
+                //constructing the penalization matrix as a sparse block matrix
+                m_PenalizationMatrix.setFromTriplets(stiff_matrices_triplets.begin(),stiff_matrices_triplets.end());
+            }
     
+    /*!
+    * @brief Getter for the penalization matrix
+    */
+    const fdagwr_traits::Sparse_Matrix& PenalizationMatrix() const {return m_PenalizationMatrix;}
 };
-
-
-
-
 
 #endif  /*FDAGWR_PENALIZATION_MATRIX_HPP*/
