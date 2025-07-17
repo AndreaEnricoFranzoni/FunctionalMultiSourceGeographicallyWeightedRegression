@@ -92,7 +92,7 @@ public:
                             auto stiff = integral(m_interval)(dxx(u) * dxx(v));
                             fdagwr_traits::Sparse_Matrix M = stiff.assemble();
 
-                            stiff_matrices.push_back(M)
+                            stiff_matrices.push_back(M);
                             }
                      }
 
