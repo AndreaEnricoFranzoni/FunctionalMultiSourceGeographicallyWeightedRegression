@@ -317,7 +317,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     
     
     //TUTTA QUESTA PARTE NON E' OK: 
-    
+    /*
     for(std::size_t i = 0; i < bs.q(); ++i) {
       // integration
       TrialFunction u(bs.systems_of_basis()[i]); 
@@ -332,8 +332,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
       //std::cout << "\n\nStiff matrix:  [M]_{ij} = int_I (psi_i * psi_j) of cov " << i+1 << std::endl;
       std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
     }
-    
-   //penalization_matrix R(bs);
+    */
+   penalization_matrix R(bs);
     
     
     
