@@ -63,6 +63,7 @@ private:
     std::size_t m_q;
 
     /*!*/
+    std::vector<fdagwr_traits::Sparse_Matrix> stiff_matrices;
 
 public:
     /*!
@@ -81,8 +82,18 @@ public:
                      {
                         //constructing systems of bsplines given knots and orders of the basis  
                         m_systems_of_basis.reserve(m_q);
+                        stiff_matrices.reserve(m_q);
+
                         for(std::size_t i = 0; i < m_q; ++i){  
-                            m_systems_of_basis.emplace_back(m_interval, m_basis_orders[i]);}
+                            m_systems_of_basis.emplace_back(m_interval, m_basis_orders[i]);
+                            
+                            fdapde::TrialFunction u(m_systems_of_basis.back()); 
+                            fdapde::TestFunction  v(m_systems_of_basis.back());
+                            auto stiff = integral(m_interval)(dxx(u) * dxx(v));
+                            fdagwr_traits::Sparse_Matrix M = stiff.assemble();
+
+                            stiff_matrices.push_back(M)
+                            }
                      }
 
     /*!
