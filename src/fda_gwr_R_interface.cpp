@@ -289,18 +289,15 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                                                                     number_basis_stationary_cov_, 
                                                                     q_C);
     
-    
+    // evaluate basis at set of locations
+    /*  TUTTA QUESTA PARTE SULLA VALUTAZIONE E' OK (NON GUARDARLA)
     auto eval_base = bs.eval_base(0,1);
     Rcout << "R: " << eval_base.rows() << ", C: " << eval_base.cols() << std::endl;
     Rcout << eval_base << std::endl;
-    
     for(std::size_t i=0; i < bs.q(); ++i)
     {
         Rcout << "Stationary covariate " << i+1 << " has " << bs.number_of_basis()[i] << " basis of order " << bs.basis_orders()[i] << std::endl;
     }
-    // evaluate basis at set of locations
-    
-    /*  TUTTA QUESTA PARTE SULLA VALUTAZIONE E' OK
     fdagwr_traits::Dense_Matrix locs(1,1);
     locs(0,0) = 0;
     Rcout << "Locations:" << std::endl;
@@ -314,13 +311,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     */
     
     
-
-
-
-
-    //penalization_matrix R(bs);
-
-    
+    //TUTTA QUESTA PARTE NON E' OK: 
     /*
     for(std::size_t i = 0; i < bs.q(); ++i) {
       // integration
@@ -337,6 +328,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
       std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
     }
     */
+   //penalization_matrix R(bs);
     
     
     
