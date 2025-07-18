@@ -358,7 +358,16 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
    penalization_matrix<_DERVIATIVE_PENALIZED_> R_E(bs_E,lambda_events_cov_);
 
    Rcout << "Penalization matrix for the events covariates" << std::endl;
-   Rcout << fdagwr_traits::Dense_Matrix(R_E.PenalizationMatrix()) << std::endl;
+   //Rcout << fdagwr_traits::Dense_Matrix(R_E.PenalizationMatrix()) << std::endl;
+
+   for (std::size_t i = 0; i < R_E.PenalizationMatrix().rows(); ++i)
+   {
+        for(std::size_t j = 0; j < R_E.PenalizationMatrix().cols(); ++j)
+        {
+            Rcout << "Elem (" << i << "," << j << "): " << R_E.PenalizationMatrix().(i,j) << std::endl;
+        }
+   }
+   
     
     
     
