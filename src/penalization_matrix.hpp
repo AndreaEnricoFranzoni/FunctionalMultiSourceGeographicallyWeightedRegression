@@ -24,6 +24,7 @@
 
 #include "traits_fdagwr.hpp"
 #include "basis_systems.hpp"
+#include "penalty_matrix_penalties_comp.hpp"
 
 /*!
 * @file penalization_matrix.hpp
@@ -56,27 +57,22 @@ public:
     template< typename BASIS_SPACE >
     penalization_matrix(BASIS_SPACE&& bs,
                         const std::vector<double>& lambdas)
-    /*
-penalization_matrix(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > & bs,
-                        const std::vector<double>& lambdas)
-    */
         :   
         m_Lj(bs.number_of_basis()),
         m_L(std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0))),
         m_q(bs.q())
-        //m_PenalizationMatrix(m_L,m_L)       //initializing the penalization matrix
             {   
                 //storing the penalty for each covariate in an Eigen::Triplet
-                std::vector<Eigen::Triplet<double>> stiff_matrices_triplets;
+                std::vector<Eigen::Triplet<double>> penalty_matrices_triplets;
                 //the unlikely scenario in which all the L2 scalar products are not-null
-                stiff_matrices_triplets.reserve(std::transform_reduce(m_Lj.cbegin(),
-                                                                      m_Lj.cend(),
-                                                                      static_cast<std::size_t>(0),
-                                                                      std::plus{},
-                                                                      [](const double &nb){return std::pow(nb,2);}));
+                penalty_matrices_triplets.reserve(std::transform_reduce(m_Lj.cbegin(),
+                                                                        m_Lj.cend(),
+                                                                        static_cast<std::size_t>(0),
+                                                                        std::plus{},
+                                                                        [](const double &nb){return std::pow(nb,2);}));
 
 
-                std::cout << "Triplets size: " << stiff_matrices_triplets.size() << ", triplets capacity: " << stiff_matrices_triplets.capacity() << std::endl;
+                std::cout << "Triplets size: " << penalty_matrices_triplets.size() << ", triplets capacity: " << penalty_matrices_triplets.capacity() << std::endl;
                 std::cout << "m_L: " << m_L << std::endl;
                 std::cout << "basi divise in" << std::endl;
                 for (std::size_t i = 0; i < m_Lj.size(); ++i)
@@ -90,35 +86,40 @@ penalization_matrix(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPL
 
                 //constructing the penalty matrices
                 for(std::size_t i = 0; i < m_q; ++i){
+                    /*
                     // integration
                     fdapde::TrialFunction u(bs.systems_of_basis()[i]); 
                     fdapde::TestFunction  v(bs.systems_of_basis()[i]);
                     // stiff matrix: penalizing the second derivaive
                     auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
-                    Eigen::SparseMatrix<double> M = stiff.assemble();
+                    Eigen::SparseMatrix<double> PenaltyBasis_i = stiff.assemble();
+                    */
                     //penalties, for each basis system
-                    M *= lambdas[i];
+                    penalty_computation<SecondDerivativePenalty> penalty_comp;
+                    fdagwr_traits::Sparse_Matrix PenaltyBasis_i = penalty_comp(bs.systems_of_basis()[i]);
+                    PenaltyBasis_i *= lambdas[i];
 
                     //all the penalty matrix are squared matrices: therse are the index at which each block starts
                     std::size_t start_of_block = std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cbegin()+i,static_cast<std::size_t>(0));
                     std::cout << "Start of block " << i+1 << ": " << start_of_block << std::endl;
                     //storing the matrix in the a vector of Eigen::Triplets
-                    for (std::size_t k = 0; k < M.outerSize(); ++k){
-                        for (fdagwr_traits::Sparse_Matrix::InnerIterator it(M,k); it; ++it){
-                            stiff_matrices_triplets.emplace_back(it.row() + start_of_block, 
-                                                                 it.col() + start_of_block,
-                                                                 it.value());}}}
+                    for (std::size_t k = 0; k < PenaltyBasis_i.outerSize(); ++k){
+                        for (fdagwr_traits::Sparse_Matrix::InnerIterator it(PenaltyBasis_i,k); it; ++it){
+                            penalty_matrices_triplets.emplace_back(it.row() + start_of_block, 
+                                                                   it.col() + start_of_block,
+                                                                   it.value());}}}
 
-                std::cout << "Dopo aver inserito tutte le matrici di penalty: capacity: " <<  stiff_matrices_triplets.capacity() << ", size: " << stiff_matrices_triplets.size() << std::endl;
-                stiff_matrices_triplets.shrink_to_fit();
-                std::cout << "Dopo aver inserito tutte le matrici di penalty con shrinkaggio: capacity: " <<  stiff_matrices_triplets.capacity() << ", size: " << stiff_matrices_triplets.size() << std::endl;
+                std::cout << "Dopo aver inserito tutte le matrici di penalty: capacity: " <<  penalty_matrices_triplets.capacity() << ", size: " << penalty_matrices_triplets.size() << std::endl;
+                penalty_matrices_triplets.shrink_to_fit();
+                std::cout << "Dopo aver inserito tutte le matrici di penalty con shrinkaggio: capacity: " <<  penalty_matrices_triplets.capacity() << ", size: " << penalty_matrices_triplets.size() << std::endl;
 
-m_PenalizationMatrix.resize(m_L,m_L);
+                //size for the penalization matrix
+                m_PenalizationMatrix.resize(m_L,m_L);
                 std::cout << "Starting init the penalization matrix, with " << m_PenalizationMatrix.rows() << " rows and " << m_PenalizationMatrix.cols() << " cols" << std::endl;
                 
                 std::cout << "NNZ pre: " << m_PenalizationMatrix.nonZeros() << std::endl;
                 //constructing the penalization matrix as a sparse block matrix
-                m_PenalizationMatrix.setFromTriplets(stiff_matrices_triplets.begin(),stiff_matrices_triplets.end());
+                m_PenalizationMatrix.setFromTriplets(penalty_matrices_triplets.begin(),penalty_matrices_triplets.end());
                 std::cout << "NNZ post: " << m_PenalizationMatrix.nonZeros() << std::endl;
             }
     
