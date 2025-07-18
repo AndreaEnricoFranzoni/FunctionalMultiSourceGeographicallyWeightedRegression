@@ -46,9 +46,12 @@ struct ZeroDerivativePenalty
     
     // mass matrix: penalizing the zero order derivaive
     auto mass = integral(bs.interval())(u * v);
+    /*
     Eigen::SparseMatrix<double> M = mass.assemble();
     
     return M;
+    */
+   return mass.assemble();
   }
 };
 
