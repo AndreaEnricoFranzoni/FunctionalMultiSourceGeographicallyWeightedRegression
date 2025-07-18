@@ -95,7 +95,8 @@ public:
                     Eigen::SparseMatrix<double> PenaltyBasis_i = stiff.assemble();
                     */
                     //penalties, for each basis system
-                    penalty_computation<SecondDerivativePenalty> penalty_comp;
+                    //penalty_computation<SecondDerivativePenalty> penalty_comp;
+                    penalty_computation<ZeroDerivativePenalty> penalty_comp;
                     fdagwr_traits::Sparse_Matrix PenaltyBasis_i = penalty_comp(bs,i);
                     PenaltyBasis_i *= lambdas[i];
 
