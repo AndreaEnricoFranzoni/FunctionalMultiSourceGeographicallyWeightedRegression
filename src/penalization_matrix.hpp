@@ -71,7 +71,7 @@ public:
 
                 std::cout << "Triplets size: " << stiff_matrices_triplets.size() << ", triplets capacity: " << stiff_matrices_triplets.capacity() << std::endl;
                 std::cout << "m_L" << m_L << std::endl;
-                std::cout << "basi divise in" << std::endl
+                std::cout << "basi divise in" << std::endl;
                 for (std::size_t i = 0; i < m_Lj.size(); ++i)
                 {
                     std::cout << "Cov " << i+1 << m_Lj[i] << std::endl;
