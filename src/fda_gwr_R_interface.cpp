@@ -338,7 +338,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
    penalization_matrix<_DERVIATIVE_PENALIZED_> R(bs,lambda_stationary_cov_);
 
    Rcout << "Penalization matrix for the stationary covariates" << std::endl;
-   //Rcout << fdagwr_traits::Dense_Matrix(R.PenalizationMatrix()) << std::endl;
+   Rcout << fdagwr_traits::Dense_Matrix(R.PenalizationMatrix()) << std::endl;
     
     
     
