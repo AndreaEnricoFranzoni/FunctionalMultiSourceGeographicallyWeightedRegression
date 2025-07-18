@@ -107,7 +107,7 @@ public:
                 stiff_matrices_triplets.shrink_to_fit();
                 std::cout << "Dopo aver inserito tutte le matrici di penalty con shrinkaggio: capacity: " <<  stiff_matrices_triplets.capacity() << ", size: " << stiff_matrices_triplets.size() << std::endl;
 
-                std::cout << "Starting init the penalization matrix, with " << m_PenalizationMatrix.rows() << " rows and " << m_PenalizationMatrix.cols << " cols" << std::endl;
+                std::cout << "Starting init the penalization matrix, with " << m_PenalizationMatrix.rows() << " rows and " << m_PenalizationMatrix.cols() << " cols" << std::endl;
                 //m_PenalizationMatrix.resize(m_L,m_L);
                 m_PenalizationMatrix.insert(0,0) = 1;
                 //constructing the penalization matrix as a sparse block matrix
