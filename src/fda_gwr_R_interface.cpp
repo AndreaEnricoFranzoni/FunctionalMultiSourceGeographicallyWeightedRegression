@@ -113,7 +113,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.6: " << std::endl;
+    Rcout << "fdagwr.7: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                      //data type
     constexpr auto _NAN_REM_ = REM_NAN::MR;                                          //how to remove nan (with mean of non-nans)
@@ -355,7 +355,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     }
     */
    Rcout << "Constructing the pen matrix for events cov" << std::endl;
-   penalization_matrix<_DERVIATIVE_PENALIZED_> R_E(bs_E,lambda_events_cov_);
+   penalization_matrix<_DERVIATIVE_PENALIZED_> R_E(std::move(bs_E),lambda_events_cov_);
 
    Rcout << "Penalization matrix for the events covariates" << std::endl;
    //Rcout << fdagwr_traits::Dense_Matrix(R_E.PenalizationMatrix()) << std::endl;
