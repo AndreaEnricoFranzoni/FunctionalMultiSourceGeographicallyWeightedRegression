@@ -110,10 +110,10 @@ public:
 m_PenalizationMatrix.resize(m_L,m_L);
                 std::cout << "Starting init the penalization matrix, with " << m_PenalizationMatrix.rows() << " rows and " << m_PenalizationMatrix.cols() << " cols" << std::endl;
                 
-                m_PenalizationMatrix.insert(0,0) = 1;
+                std::cout << "NNZ pre: " << m_PenalizationMatrix.nonZeos() << std::endl;
                 //constructing the penalization matrix as a sparse block matrix
                 m_PenalizationMatrix.setFromTriplets(stiff_matrices_triplets.begin(),stiff_matrices_triplets.end());
-                std::cout << "NNZ: " << m_PenalizationMatrix.nonZeos() << std::endl;
+                std::cout << "NNZ post: " << m_PenalizationMatrix.nonZeos() << std::endl;
             }
     
     /*!
