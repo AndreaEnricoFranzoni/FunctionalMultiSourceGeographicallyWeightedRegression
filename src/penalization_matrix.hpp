@@ -111,7 +111,7 @@ public:
                                                                  it.value());}}}
                 
                 std::cout << "Starting init the penalization matrix" << std::endl;
-                m_PenalizationMatrix(m_L,m_L);
+                m_PenalizationMatrix.resize(m_L,m_L);
                 //constructing the penalization matrix as a sparse block matrix
                 m_PenalizationMatrix.setFromTriplets(stiff_matrices_triplets.begin(),stiff_matrices_triplets.end());
             }
