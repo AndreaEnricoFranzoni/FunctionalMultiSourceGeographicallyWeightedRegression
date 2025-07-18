@@ -315,7 +315,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
         Rcout << "Stationary covariate " << i+1 << " has " << bs_S.number_of_basis()[i] << " basis of order " << bs_S.basis_orders()[i] << std::endl;
     }
     
-    
+    auto eval_base = bs_E.eval_base(0,1);
+    Rcout << "R: " << eval_base.rows() << ", C: " << eval_base.cols() << std::endl;
+    Rcout << "Pre: " << eval_base << std::endl;
     /*  PARTE DELLA VALUTAZIONE SULLE BASI
     auto eval_base = bs.eval_base(0,1);
     Rcout << "R: " << eval_base.rows() << ", C: " << eval_base.cols() << std::endl;
@@ -367,6 +369,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
             Rcout << "Elem (" << i << "," << j << "): " << R_E.PenalizationMatrix().coeff(i,j) << std::endl;
         }
    }
+    auto eval_base1 = bs_E.eval_base(0,1);
+    Rcout << "R: " << eval_base1.rows() << ", C: " << eval_base1.cols() << std::endl;
+    Rcout << "Post: " << eval_base1 << std::endl;
    
     
     
