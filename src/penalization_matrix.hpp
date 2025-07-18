@@ -55,11 +55,13 @@ public:
     penalization_matrix(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > & bs,
                         const std::vector<double>& lambdas)
         :   
-        m_Lj(bs.number_of_basis()),
+        //m_Lj(bs.number_of_basis()),
         //m_L(std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0))),
-        m_q(bs.q()),
-        m_PenalizationMatrix(m_L,m_L)       //initializing the penalization matrix
+        m_q(bs.q())
+        //m_PenalizationMatrix(m_L,m_L)       //initializing the penalization matrix
             {   
+                m_Lj.reserve(bs.number_of_basis().size());
+                std::copy(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),std::back_inserter(m_Lj));
                 std::cout << "Tot basis= " << std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0)) << std::endl;
                 m_L = std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0));
                 //storing the penalty for each covariate in an Eigen::Triplet
@@ -107,7 +109,9 @@ public:
                             stiff_matrices_triplets.emplace_back(it.row() + start_of_block, 
                                                                  it.col() + start_of_block,
                                                                  it.value());}}}
-
+                
+                std::cout << "Starting init the penalization matrix" << std::endl;
+                m_PenalizationMatrix(m_L,m_L);
                 //constructing the penalization matrix as a sparse block matrix
                 m_PenalizationMatrix.setFromTriplets(stiff_matrices_triplets.begin(),stiff_matrices_triplets.end());
             }
