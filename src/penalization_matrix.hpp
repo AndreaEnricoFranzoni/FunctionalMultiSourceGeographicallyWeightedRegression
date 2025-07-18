@@ -55,15 +55,15 @@ public:
     penalization_matrix(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > & bs,
                         const std::vector<double>& lambdas)
         :   
-        //m_Lj(bs.number_of_basis()),
-        //m_L(std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0))),
+        m_Lj(bs.number_of_basis()),
+        m_L(std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0))),
         m_q(bs.q())
         //m_PenalizationMatrix(m_L,m_L)       //initializing the penalization matrix
             {   
-                m_Lj.reserve(bs.number_of_basis().size());
-                std::copy(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),std::back_inserter(m_Lj));
-                std::cout << "Tot basis= " << std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0)) << std::endl;
-                m_L = std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0));
+                //m_Lj.reserve(bs.number_of_basis().size());
+                //std::copy(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),std::back_inserter(m_Lj));
+                //std::cout << "Tot basis= " << std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0)) << std::endl;
+                //m_L = std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0));
                 //storing the penalty for each covariate in an Eigen::Triplet
                 std::vector<Eigen::Triplet<double>> stiff_matrices_triplets;
                 stiff_matrices_triplets.reserve(std::transform_reduce(m_Lj.cbegin(),
@@ -74,11 +74,11 @@ public:
 
 
                 std::cout << "Triplets size: " << stiff_matrices_triplets.size() << ", triplets capacity: " << stiff_matrices_triplets.capacity() << std::endl;
-                std::cout << "m_L" << m_L << std::endl;
+                std::cout << "m_L: " << m_L << std::endl;
                 std::cout << "basi divise in" << std::endl;
                 for (std::size_t i = 0; i < m_Lj.size(); ++i)
                 {
-                    std::cout << "Cov " << i+1 << m_Lj[i] << std::endl;
+                    std::cout << "Cov " << i+1 << ": n basis = " << m_Lj[i] << std::endl;
                 }
                 std::cout << "Cov num: " << m_q << std::endl;
                 
