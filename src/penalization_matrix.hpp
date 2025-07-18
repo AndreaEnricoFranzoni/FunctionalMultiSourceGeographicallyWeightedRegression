@@ -60,10 +60,6 @@ public:
         m_q(bs.q())
         //m_PenalizationMatrix(m_L,m_L)       //initializing the penalization matrix
             {   
-                //m_Lj.reserve(bs.number_of_basis().size());
-                //std::copy(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),std::back_inserter(m_Lj));
-                //std::cout << "Tot basis= " << std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0)) << std::endl;
-                //m_L = std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0));
                 //storing the penalty for each covariate in an Eigen::Triplet
                 std::vector<Eigen::Triplet<double>> stiff_matrices_triplets;
                 stiff_matrices_triplets.reserve(std::transform_reduce(m_Lj.cbegin(),
@@ -109,7 +105,11 @@ public:
                             stiff_matrices_triplets.emplace_back(it.row() + start_of_block, 
                                                                  it.col() + start_of_block,
                                                                  it.value());}}}
-                
+
+                std::cout << "Dopo aver inserito tutte le matrici di penalty: capacity: " <<  stiff_matrices_triplets.capacity() << ", size: " << stiff_matrices_triplets.size() << std::endl;
+                stiff_matrices_triplets.shrink_to_fit();
+                std::cout << "Dopo aver inserito tutte le matrici di penalty con shrinkaggio: capacity: " <<  stiff_matrices_triplets.capacity() << ", size: " << stiff_matrices_triplets.size() << std::endl;
+
                 std::cout << "Starting init the penalization matrix" << std::endl;
                 m_PenalizationMatrix.resize(m_L,m_L);
                 m_PenalizationMatrix.insert(0,0) = 1;
