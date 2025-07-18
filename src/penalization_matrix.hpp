@@ -32,6 +32,11 @@
 * @author Andrea Enrico Franzoni
 */
 
+template <PENALIZED_DERIVATIVE der_pen>
+using PenaltyOrderDerivativeType = std::conditional<der_pen == PENALIZED_DERIVATIVE::SECOND,
+                                                    SecondDerivativePenalty,        //se stazionario, ogni elemento del vettore corrisponde ad un valore dell'ascissa, e di conseguenza vi è la giusta matrice peso
+                                                    ZeroDerivativePenalty>::type;
+
 template< PENALIZED_DERIVATIVE der_pen = PENALIZED_DERIVATIVE::SECOND >
 class penalization_matrix
 {

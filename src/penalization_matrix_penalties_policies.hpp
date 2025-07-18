@@ -43,15 +43,11 @@ struct ZeroDerivativePenalty
     std::cout << "0 der pen" << std::endl;
     fdapde::TrialFunction u(bs.systems_of_basis()[system_number]); 
     fdapde::TestFunction  v(bs.systems_of_basis()[system_number]);
-    
     // mass matrix: penalizing the zero order derivaive
     auto mass = integral(bs.interval())(u * v);
-    /*
-    Eigen::SparseMatrix<double> M = mass.assemble();
-    
-    return M;
-    */
-   return mass.assemble();
+
+    //assembling the mass matrix
+    return mass.assemble();
   }
 };
 
@@ -67,15 +63,13 @@ struct SecondDerivativePenalty
   operator()(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > &bs, std::size_t system_number) 
   const
   {
-    std::cout << "2 der pen" << std::endl;
     fdapde::TrialFunction u(bs.systems_of_basis()[system_number]); 
     fdapde::TestFunction  v(bs.systems_of_basis()[system_number]);
-    
     // stiff matrix: penalizing the second derivaive
     auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
-    Eigen::SparseMatrix<double> M = stiff.assemble();
     
-    return M;
+    //assmebling the stiff matrix 
+    return stiff.assemble();
   }
 };
 
