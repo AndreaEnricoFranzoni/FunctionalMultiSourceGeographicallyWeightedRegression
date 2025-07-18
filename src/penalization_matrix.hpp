@@ -68,6 +68,19 @@ public:
                                                                       std::plus{},
                                                                       [](const double &nb){return std::pow(nb,2);}));
 
+
+                std::cout << "Triplets size: " << stiff_matrices_triplets.size() << ", triplets capacity: " << stiff_matrices_triplets.capacity() << std::endl;
+                std::cout << "m_L" << m_L << std::endl;
+                std::cout << "basi divise in" << std::endl
+                for (std::size_t i = 0; i < m_Lj.size(); ++i)
+                {
+                    std::cout << "Cov " << i+1 << m_Lj[i] << std::endl;
+                }
+                std::cout << "Cov num: " << m_q << std::endl;
+                
+
+
+
                 //constructing the penalty matrices
                 for(std::size_t i = 0; i < m_q; ++i){
                     // integration
@@ -76,12 +89,16 @@ public:
                     // stiff matrix: penalizing the second derivaive
                     auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
                     Eigen::SparseMatrix<double> M = stiff.assemble();
+                    std::cout << "Pen " << i+1 << " pre" << std::endl;
+                    std::cout << Eigen::MatrixXd(M) << std::endl;
                     //penalties, for each basis system
                     M *= lambdas[i];
+                    std::cout << "Pen " << i+1 << " pro, with lambda= " << lambdas[i] << std::endl;
+                    std::cout << Eigen::MatrixXd(M) << std::endl;
 
                     //all the penalty matrix are squared matrices: therse are the index at which each block starts
                     std::size_t start_of_block = std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cbegin()+i,static_cast<std::size_t>(0));
-
+                    std::cout << "Start of block " << i+1 << ": " << start_of_block << std::endl;
                     //storing the matrix in the a vector of Eigen::Triplets
                     for (std::size_t k = 0; k < M.outerSize(); ++k){
                         for (fdagwr_traits::Sparse_Matrix::InnerIterator it(M,k); it; ++it){
