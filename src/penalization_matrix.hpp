@@ -56,10 +56,11 @@ public:
                         const std::vector<double>& lambdas)
         :   
         m_Lj(bs.number_of_basis()),
-        m_L(std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0))),
+        //m_L(std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0))),
         m_q(bs.q()),
         m_PenalizationMatrix(m_L,m_L)       //initializing the penalization matrix
             {   
+                std::cout << "Tot basis= " << std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0)) << std::endl;
                 //storing the penalty for each covariate in an Eigen::Triplet
                 std::vector<Eigen::Triplet<double>> stiff_matrices_triplets;
                 stiff_matrices_triplets.reserve(std::transform_reduce(m_Lj.cbegin(),
