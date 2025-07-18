@@ -31,7 +31,7 @@ class penalty_computation
 {
 public:
   
-  fdagwr_traits::Sparse_Matrix operator()(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > &bs) const {   return penalty_computing(bs);}
+  fdagwr_traits::Sparse_Matrix operator()(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > &bs, std::size_t system_number) const {   return penalty_computing(bs, system_number);}
   
 private:
   /*!Policy to correctly compute the penalization*/

@@ -96,7 +96,7 @@ public:
                     */
                     //penalties, for each basis system
                     penalty_computation<SecondDerivativePenalty> penalty_comp;
-                    fdagwr_traits::Sparse_Matrix PenaltyBasis_i = penalty_comp(bs.systems_of_basis()[i]);
+                    fdagwr_traits::Sparse_Matrix PenaltyBasis_i = penalty_comp(bs,i);
                     PenaltyBasis_i *= lambdas[i];
 
                     //all the penalty matrix are squared matrices: therse are the index at which each block starts

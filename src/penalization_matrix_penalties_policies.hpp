@@ -37,12 +37,12 @@
 struct ZeroDerivativePenalty
 { 
   Eigen::SparseMatrix<double> 
-  operator()(const basis_systems &bs) 
+  operator()(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > &bs, std::size_t system_number) 
   const
   {
     std::cout << "0 der pen" << std::endl;
-    fdapde::TrialFunction u(bs.systems_of_basis()[i]); 
-    fdapde::TestFunction  v(bs.systems_of_basis()[i]);
+    fdapde::TrialFunction u(bs.systems_of_basis()[system_number]); 
+    fdapde::TestFunction  v(bs.systems_of_basis()[system_number]);
     
     // mass matrix: penalizing the zero order derivaive
     auto mass = integral(bs.interval())(d(u) * d(v));
@@ -52,6 +52,8 @@ struct ZeroDerivativePenalty
   }
 };
 
+
+
 /*!
 * @struct Case
 * @brief Functor returning the values for which computing ratio for computing ADF-test statistic. No lag orders bigger than one considered.
@@ -59,12 +61,12 @@ struct ZeroDerivativePenalty
 struct SecondDerivativePenalty
 { 
   Eigen::SparseMatrix<double> 
-  operator()(const basis_systems &bs) 
+  operator()(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > &bs, std::size_t system_number) 
   const
   {
     std::cout << "2 der pen" << std::endl;
-    fdapde::TrialFunction u(bs.systems_of_basis()[i]); 
-    fdapde::TestFunction  v(bs.systems_of_basis()[i]);
+    fdapde::TrialFunction u(bs.systems_of_basis()[system_number]); 
+    fdapde::TestFunction  v(bs.systems_of_basis()[system_number]);
     
     // stiff matrix: penalizing the second derivaive
     auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
