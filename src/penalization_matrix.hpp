@@ -41,6 +41,8 @@ template< PENALIZED_DERIVATIVE der_pen = PENALIZED_DERIVATIVE::SECOND >
 class penalization_matrix
 {
 
+using PenaltyPolicy = PenaltyOrderDerivativeType<der_pen>;
+
 private:
     /*!Penalization matrix*/
     fdagwr_traits::Sparse_Matrix m_PenalizationMatrix;
@@ -101,7 +103,7 @@ public:
                     */
                     //penalties, for each basis system
                     //penalty_computation<SecondDerivativePenalty> penalty_comp;
-                    penalty_computation<ZeroDerivativePenalty> penalty_comp;
+                    penalty_computation<PenaltyPolicy> penalty_comp;
                     fdagwr_traits::Sparse_Matrix PenaltyBasis_i = penalty_comp(bs,i);
                     PenaltyBasis_i *= lambdas[i];
 
