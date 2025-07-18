@@ -89,12 +89,8 @@ public:
                     // stiff matrix: penalizing the second derivaive
                     auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
                     Eigen::SparseMatrix<double> M = stiff.assemble();
-                    std::cout << "Pen " << i+1 << " pre" << std::endl;
-                    std::cout << Eigen::MatrixXd(M) << std::endl;
                     //penalties, for each basis system
                     M *= lambdas[i];
-                    std::cout << "Pen " << i+1 << " pro, with lambda= " << lambdas[i] << std::endl;
-                    std::cout << Eigen::MatrixXd(M) << std::endl;
 
                     //all the penalty matrix are squared matrices: therse are the index at which each block starts
                     std::size_t start_of_block = std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cbegin()+i,static_cast<std::size_t>(0));
