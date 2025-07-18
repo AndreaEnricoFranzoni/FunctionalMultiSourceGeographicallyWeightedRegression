@@ -52,8 +52,14 @@ private:
     PER AVERE LE PENALIZZAZIONI CON LA DERIVATA SECONDA SERVE UN ORDINE DELLE BASI >= 2
     */
 public:
-    penalization_matrix(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > & bs,
+
+    template< typename BASIS_SPACE >
+    penalization_matrix(BASIS_SPACE&& bs,
                         const std::vector<double>& lambdas)
+    /*
+penalization_matrix(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > & bs,
+                        const std::vector<double>& lambdas)
+    */
         :   
         m_Lj(bs.number_of_basis()),
         m_L(std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0))),
