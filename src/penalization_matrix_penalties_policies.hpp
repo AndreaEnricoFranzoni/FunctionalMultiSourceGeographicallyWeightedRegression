@@ -45,8 +45,8 @@ struct ZeroDerivativePenalty
     fdapde::TestFunction  v(bs.systems_of_basis()[system_number]);
     
     // mass matrix: penalizing the zero order derivaive
-    auto mass = integral(bs.interval())(d(u) * d(v));
-    Eigen::SparseMatrix<double> M = stiff.assemble();
+    auto mass = integral(bs.interval())(u * v);
+    Eigen::SparseMatrix<double> M = mass.assemble();
     
     return M;
   }
