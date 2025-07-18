@@ -149,6 +149,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     double a = left_extreme_domain;
     double b = right_extreme_domain;
 
+
     //  KNOTS
     //response
     std::vector<double> knots_response_ = wrap_abscissas(knots_y_points,left_extreme_domain,right_extreme_domain);
@@ -220,7 +221,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     auto number_and_order_basis_stations_cov_ = wrap_basis_numbers_and_orders<_STATION_>(n_basis_stations_cov,n_order_basis_stations_cov,knots_stations_cov_.size(),q_S);
     std::vector<std::size_t> number_basis_stations_cov_ = number_and_order_basis_stations_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_stations_cov_ = number_and_order_basis_stations_cov_[FDAGWR_FEATS::order_basis_string];
-    //beta stations cov
+    //beta stations cov 
     auto number_and_order_basis_beta_stations_cov_ = wrap_basis_numbers_and_orders<_STATION_>(n_basis_beta_stations_cov,n_order_basis_beta_stations_cov,knots_beta_stations_cov_.size(),q_S);
     std::vector<std::size_t> number_basis_beta_stations_cov_ = number_and_order_basis_beta_stations_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_beta_stations_cov_ = number_and_order_basis_beta_stations_cov_[FDAGWR_FEATS::order_basis_string];
@@ -284,19 +285,38 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     W_S.compute_weights();
 
 
+
     //COMPUTING THE BASIS
-    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs(knots_stationary_cov_eigen_w_, 
-                                                                    order_basis_stationary_cov_, 
-                                                                    number_basis_stationary_cov_, 
-                                                                    q_C);
-    
-    for(std::size_t i=0; i < bs.q(); ++i)
+    //stationary
+    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_C(knots_stationary_cov_eigen_w_, 
+                                                                      order_basis_stationary_cov_, 
+                                                                      number_basis_stationary_cov_, 
+                                                                      q_C);
+    for(std::size_t i=0; i < bs_C.q(); ++i)
     {
-        Rcout << "Stationary covariate " << i+1 << " has " << bs.number_of_basis()[i] << " basis of order " << bs.basis_orders()[i] << std::endl;
+        Rcout << "Stationary covariate " << i+1 << " has " << bs_C.number_of_basis()[i] << " basis of order " << bs_C.basis_orders()[i] << std::endl;
+    }
+    //events
+    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_E(knots_events_cov_eigen_w_, 
+                                                                      order_basis_events_cov_, 
+                                                                      number_basis_events_cov_, 
+                                                                      q_E);
+    for(std::size_t i=0; i < bs_E.q(); ++i)
+    {
+        Rcout << "Events covariate " << i+1 << " has " << bs_E.number_of_basis()[i] << " basis of order " << bs_E.basis_orders()[i] << std::endl;
+    }
+    //stations
+    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_S(knots_stations_cov_eigen_w_,  
+                                                                      order_basis_stations_cov_, 
+                                                                      number_basis_stations_cov_, 
+                                                                      q_S);
+    for(std::size_t i=0; i < bs_S.q(); ++i)
+    {
+        Rcout << "Stationary covariate " << i+1 << " has " << bs_S.number_of_basis()[i] << " basis of order " << bs_S.basis_orders()[i] << std::endl;
     }
     
-    // evaluate basis at set of locations
-    /*  TUTTA QUESTA PARTE SULLA VALUTAZIONE E' OK (NON GUARDARLA)
+    
+    /*  PARTE DELLA VALUTAZIONE SULLE BASI
     auto eval_base = bs.eval_base(0,1);
     Rcout << "R: " << eval_base.rows() << ", C: " << eval_base.cols() << std::endl;
     Rcout << eval_base << std::endl;
@@ -317,8 +337,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     */
     
     
-    //TUTTA QUESTA PARTE NON E' OK: 
-    /*
+     
+    /*  PARTE SULLA CREZIONE DI MASS E STIFF MATRIX
     for(std::size_t i = 0; i < bs.q(); ++i) {
       // integration
       TrialFunction u(bs.systems_of_basis()[i]); 
@@ -334,11 +354,11 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
       std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
     }
     */
-   Rcout << "Constructing the pen matrix" << std::endl;
-   penalization_matrix<_DERVIATIVE_PENALIZED_> R(bs,lambda_stationary_cov_);
+   Rcout << "Constructing the pen matrix for events cov" << std::endl;
+   penalization_matrix<_DERVIATIVE_PENALIZED_> R_E(bs_E,lambda_events_cov_);
 
-   Rcout << "Penalization matrix for the stationary covariates" << std::endl;
-   Rcout << fdagwr_traits::Dense_Matrix(R.PenalizationMatrix()) << std::endl;
+   Rcout << "Penalization matrix for the events covariates" << std::endl;
+   Rcout << fdagwr_traits::Dense_Matrix(R_E.PenalizationMatrix()) << std::endl;
     
     
     
