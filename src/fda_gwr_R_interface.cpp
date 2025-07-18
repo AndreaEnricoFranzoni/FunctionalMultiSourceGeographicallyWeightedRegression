@@ -334,6 +334,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
       std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
     }
     */
+   Rcout << "Constructing the pen matrix" << std::endl;
    penalization_matrix<_DERVIATIVE_PENALIZED_> R(bs,lambda_stationary_cov_);
 
    Rcout << "Penalization matrix for the stationary covariates" << std::endl;
