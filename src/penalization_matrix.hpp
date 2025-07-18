@@ -57,8 +57,8 @@ public:
         :   
         m_Lj(bs.number_of_basis()),
         m_L(std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cend(),static_cast<std::size_t>(0))),
-        m_q(bs.q()),
-        m_PenalizationMatrix(m_L,m_L)       //initializing the penalization matrix
+        m_q(bs.q())
+        //m_PenalizationMatrix(m_L,m_L)       //initializing the penalization matrix
             {   
                 //storing the penalty for each covariate in an Eigen::Triplet
                 std::vector<Eigen::Triplet<double>> stiff_matrices_triplets;
@@ -107,8 +107,9 @@ public:
                 stiff_matrices_triplets.shrink_to_fit();
                 std::cout << "Dopo aver inserito tutte le matrici di penalty con shrinkaggio: capacity: " <<  stiff_matrices_triplets.capacity() << ", size: " << stiff_matrices_triplets.size() << std::endl;
 
+m_PenalizationMatrix.resize(m_L,m_L);
                 std::cout << "Starting init the penalization matrix, with " << m_PenalizationMatrix.rows() << " rows and " << m_PenalizationMatrix.cols() << " cols" << std::endl;
-                //m_PenalizationMatrix.resize(m_L,m_L);
+                
                 m_PenalizationMatrix.insert(0,0) = 1;
                 //constructing the penalization matrix as a sparse block matrix
                 //m_PenalizationMatrix.setFromTriplets(stiff_matrices_triplets.begin(),stiff_matrices_triplets.end());
