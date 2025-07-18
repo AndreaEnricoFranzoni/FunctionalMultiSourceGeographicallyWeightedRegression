@@ -364,7 +364,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
    {
         for(std::size_t j = 0; j < R_E.PenalizationMatrix().cols(); ++j)
         {
-            Rcout << "Elem (" << i << "," << j << "): " << R_E.PenalizationMatrix().(i,j) << std::endl;
+            Rcout << "Elem (" << i << "," << j << "): " << R_E.PenalizationMatrix()(i,j) << std::endl;
         }
    }
    
