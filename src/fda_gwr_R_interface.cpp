@@ -399,7 +399,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     bsplines_basis<_DOMAIN_> bs_test(knots_response_eigen_w_,3,15);
 
     functional_data<_DOMAIN_,bsplines_basis<_DOMAIN_>> fd_test(std::move(coefficients_response_),std::move(bs_test));
-
+    std::cout << "evaluating the functional obj: " << fd_test.eval(0,0) << std::endl;
 
     
     

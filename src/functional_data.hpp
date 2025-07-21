@@ -58,6 +58,13 @@ public:
                             std::cout << el << std::endl;
                         }
 
+    double
+    eval(double loc,std::size_t unit_i)
+    const
+    {
+        return m_fdata_basis.eval_base(loc).row(0).dot(m_fdata_coeff.col(unit_i));
+    }
+
 };
 
 
