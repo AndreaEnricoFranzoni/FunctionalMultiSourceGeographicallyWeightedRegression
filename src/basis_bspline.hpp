@@ -70,12 +70,6 @@ public:
                             {
                                 //cheack input consistency
                                 assert((void("Number of knots = number of basis - degree + 1"), m_knots.size() == (m_number_of_basis - m_degree + static_cast<std::size_t>(1))));
-                                std::cout << "Stampare l'intervallo delle basi" << std::endl;
-                                for (size_t i = 0; i < m_knots.nodes().size(); ++i)
-                                {
-                                    std::cout << m_knots.nodes()(i,0) << std::endl;
-                                }
-                                
                             }
 
     /*!

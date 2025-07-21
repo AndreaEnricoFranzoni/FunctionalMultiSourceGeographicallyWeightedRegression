@@ -20,20 +20,19 @@
 
 #include <RcppEigen.h>
 
-#include <string>
 
 #include "traits_fdagwr.hpp"
 #include "data_reader.hpp"
+#include "parameters_wrapper_fdagwr.hpp"
 
 #include "basis_constant.hpp"
 #include "basis_bspline.hpp"
 #include "basis_systems.hpp"
-#include "parameters_wrapper_fdagwr.hpp"
 
+#include "functional_data.hpp"
 
 #include "functional_weight_matrix_stat.hpp"
 #include "functional_weight_matrix_no_stat.hpp"
-
 
 #include "distance_matrix.hpp"
 #include "penalization_matrix.hpp"
@@ -395,17 +394,12 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     Rcout << "R: " << eval_base1.rows() << ", C: " << eval_base1.cols() << std::endl;
     Rcout << "Post: " << eval_base1 << std::endl;
 
-/*
-    Rcout << "New class for the basis: constsn" << std::endl;
-    constant_basis<_DOMAIN_> bs_test_c(knots_stationary_cov_eigen_w_);
-    auto eval_test_c = bs_test_c.eval_base(0.1);
-    Rcout << eval_test_c << std::endl;
-*/
    
     Rcout << "New class for the basis: splines" << std::endl;
-    bsplines_basis<_DOMAIN_> bs_test(knots_stationary_cov_eigen_w_,3,15);
-    auto eval_test = bs_test.eval_base(0);
-    Rcout << eval_test << std::endl;
+    bsplines_basis<_DOMAIN_> bs_test(knots_response_,3,15);
+
+    functional_data<_DOMAIN_,bsplines_basis<_DOMAIN_>> fd_test(std::move(coefficients_response_),std::move(bs_test));
+
 
     
     
