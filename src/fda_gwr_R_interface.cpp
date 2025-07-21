@@ -396,12 +396,12 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     Rcout << "Post: " << eval_base1 << std::endl;
    
     Rcout << "New class for the basis: splines" << std::endl;
-    bsplines_basis<_DOMAIN_> bs_test(knots_stationary_cov_,3,15);
+    bsplines_basis<_DOMAIN_> bs_test(knots_stationary_cov_eigen_w_,3,15);
     auto eval_test = bs_test.eval_base(0.1);
     Rcout << eval_test << std::endl;
 
     Rcout << "New class for the basis: constsn" << std::endl;
-    constant_basis<_DOMAIN_> bs_test_c(knots_stationary_cov_);
+    constant_basis<_DOMAIN_> bs_test_c(knots_stationary_cov_eigen_w_);
     auto eval_test_c = bs_test_c.eval_base(0.1);
     Rcout << eval_test_c << std::endl;
     
