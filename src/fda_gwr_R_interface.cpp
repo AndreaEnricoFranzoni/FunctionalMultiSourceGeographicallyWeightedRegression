@@ -396,7 +396,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
    
     Rcout << "New class for the basis: splines" << std::endl;
-    bsplines_basis<_DOMAIN_> bs_test(knots_response_eigen_w,3,15);
+    bsplines_basis<_DOMAIN_> bs_test(knots_response_eigen_w_,3,15);
 
     functional_data<_DOMAIN_,bsplines_basis<_DOMAIN_>> fd_test(std::move(coefficients_response_),std::move(bs_test));
 
