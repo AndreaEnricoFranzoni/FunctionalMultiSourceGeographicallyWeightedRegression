@@ -48,10 +48,10 @@ public:
     functional_data(_COEFF_OBJ_ && fdata_coeff,
                     _BASIS_OBJ_ && fdata_basis)
                     : 
-                        m_a(fdata_basis.nodes()(0,0)),
-                        m_b(fdata_basis.nodes()(fdata_basis.nodes().size()-static_cast<std::size_t>(1),0)),
-                        m_fdata_coeff{std::forward(fdata_coeff)},
-                        m_fdata_basis{std::forward(fdata_basis)}
+                        m_a(fdata_basis.knots().nodes()(0,0)),
+                        m_b(fdata_basis.knots().nodes()(fdata_basis.nodes().size()-static_cast<std::size_t>(1),0)),
+                        m_fdata_coeff{std::forward<_COEFF_OBJ_>(fdata_coeff)},
+                        m_fdata_basis{std::forward<_BASIS_OBJ_>(fdata_basis)}
                         {
                             std::cout << "Nel functional_data class" << std::endl;
                             auto el = m_fdata_basis.eval_base(0);
