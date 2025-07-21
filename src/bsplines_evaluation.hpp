@@ -26,7 +26,7 @@ using namespace fdapde;
 // evaluates a basis system \{ \phi_1(t), \phi_2(t), ..., \phi_N(t) \} at a set of locations \{ t_1, t_2, ..., t_n \}
 template <typename Triangulation_, typename CoordsMatrix_>
     requires(internals::is_eigen_dense_xpr_v<CoordsMatrix_>)
-Eigen::SparseMatrix<double> bsplines_basis_evaluation(const BsSpace<Triangulation_>& bs_space, CoordsMatrix_&& coords) {
+inline Eigen::SparseMatrix<double> bsplines_basis_evaluation(const BsSpace<Triangulation_>& bs_space, CoordsMatrix_&& coords) {
     static constexpr int embed_dim = Triangulation_::embed_dim;
     fdapde_assert(coords.rows() > 0 && coords.cols() == embed_dim);
 

@@ -44,7 +44,7 @@ private:
 public:
     /*!Constructor*/
     constant_basis(const fdagwr_traits::Dense_Vector & knots)    
-        :  m_knots(knots), m_a(knots.coeff(0)), m_b(m_knots.coeff(knots.size()-static_cast<std::size_t>(1)))  {}
+        :  m_knots(knots), m_a(knots.coeff(0)), m_b(knots.coeff(knots.size()-static_cast<std::size_t>(1)))  {}
 
     /*!
     * @brief Getter for the nodes over which the basis are constructed
