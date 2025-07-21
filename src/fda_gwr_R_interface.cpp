@@ -257,8 +257,6 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
     //  PENALIZATION TERMS
-    //response
-    double lambda_response_ = wrap_penalization(penalization_y_points);
     //stationary
     std::vector<double> lambda_stationary_cov_ = wrap_penalizations<_STATIONARY_>(penalization_stationary_cov);
     //events
