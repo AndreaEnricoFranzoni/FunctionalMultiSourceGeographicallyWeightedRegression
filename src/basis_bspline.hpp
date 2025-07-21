@@ -60,7 +60,7 @@ public:
     /*!Constructor*/
     bsplines_basis(const fdagwr_traits::Dense_Vector & knots,
                    std::size_t bsplines_degree,
-                   std::size_ number_of_bsplines)    :   
+                   std::size_t number_of_bsplines)    :   
                         m_knots(knots), 
                         m_a(knots.coeff(0)), 
                         m_b(m_knots.coeff(knots.size()-static_cast<std::size_t>(1))),
@@ -112,7 +112,7 @@ public:
         fdagwr_traits::Dense_Matrix loc = fdagwr_traits::Dense_Matrix::Constant(1, 1, location);
         //wrap the output into a dense matrix
         // HA UNA RIGA, N_BASIS COLONNE
-        return fdagwr_traits::Dense_Matrix(bsplines_basis_evaluation<domain>(m_systems_of_basis[basis_i], loc));
+        return fdagwr_traits::Dense_Matrix(bsplines_basis_evaluation<domain>(m_basis, loc));
     }
 };
 
