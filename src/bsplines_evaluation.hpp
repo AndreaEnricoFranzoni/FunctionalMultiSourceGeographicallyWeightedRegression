@@ -18,6 +18,10 @@
 // fdagwr.
 
 
+#ifndef FDAGWR_BSPLINES_EVAL_HPP
+#define FDAGWR_BSPLINES_EVAL_HPP
+
+
 #include "traits_fdagwr.hpp"
 
 // do not use this if you have other namespaces loaded
@@ -56,3 +60,5 @@ inline Eigen::SparseMatrix<double> bsplines_basis_evaluation(const BsSpace<Trian
     psi_.makeCompressed();
     return psi_;
 }
+
+#endif  /*FDAGWR_BSPLINES_EVAL_HPP*/
