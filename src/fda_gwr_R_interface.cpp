@@ -140,7 +140,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     using _DATA_TYPE_ = double;                                                      //data type
     constexpr auto _NAN_REM_ = REM_NAN::MR;                                          //how to remove nan (with mean of non-nans)
-    constexpr auto _DOMAIN_ = fdagwr_traits::Domain;                                 //domain geometry
+    using _DOMAIN_ = fdagwr_traits::Domain;                                          //domain geometry
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;               //enum for stationary covariates
     constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;                         //enum for event covariates
     constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;                     //enum for station covariates
