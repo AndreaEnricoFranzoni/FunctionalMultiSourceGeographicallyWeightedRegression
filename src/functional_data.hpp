@@ -58,7 +58,7 @@ public:
                             std::cout << el << std::endl;
                         }
 
-}
+};
 
 
 #endif  /*FDAGWR_FUNCTIONAL_DATA_HPP*/
