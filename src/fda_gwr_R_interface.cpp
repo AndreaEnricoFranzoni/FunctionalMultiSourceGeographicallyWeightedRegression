@@ -404,8 +404,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
    
     Rcout << "New class for the basis: splines" << std::endl;
     bsplines_basis<_DOMAIN_> bs_test(knots_stationary_cov_eigen_w_,3,15);
-    //auto eval_test = bs_test.eval_base(0.1);
-    //Rcout << eval_test << std::endl;
+    auto eval_test = bs_test.eval_base(0.1);
+    Rcout << eval_test << std::endl;
 
     
     

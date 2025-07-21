@@ -38,23 +38,23 @@ using BasisSpace = fdapde::BsSpace<domain>;
 
 
 private:
-    /*!Basis*/
-    BasisSpace m_basis;
-
-    /*!Knots*/
-    domain m_knots;
-
     /*!Domain left extreme*/
     double m_a;
 
     /*!Domain right extreme*/
     double m_b;
 
+    /*!Knots*/
+    domain m_knots;
+
     /*!Bsplines degree*/
     std::size_t m_degree;
 
     /*!Number of bsplines*/
     std::size_t m_number_of_basis;
+
+    /*!Basis*/
+    BasisSpace m_basis;
 
 public:
     /*!Constructor*/
@@ -65,7 +65,8 @@ public:
                         m_b(knots.coeff(knots.size()-static_cast<std::size_t>(1))),
                         m_knots(knots), 
                         m_degree(bsplines_degree),
-                        m_number_of_basis(number_of_bsplines)
+                        m_number_of_basis(number_of_bsplines),
+                        m_basis(m_knots,m_degree)
                             {
                                 //cheack input consistency
                                 assert((void("Number of knots = number of basis - degree + 1"), m_knots.size() == (m_number_of_basis - m_degree + static_cast<std::size_t>(1))));
