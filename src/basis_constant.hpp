@@ -59,7 +59,7 @@ public:
     eval_base(double location) 
     const
     {   
-        //check where the point has to be evaluated
+        //check where the point has to be evaluated:    TODO: TOGLIERE IL CHECK PER DISCORSI DI EFFICIENZA?
         if (location < m_a || location > m_b)
         {
             std::string error_message = "The constant basis can be evaluated only inside its domain, [" + std::to_string(m_a) + "," + std::to_string(m_b) + "]";

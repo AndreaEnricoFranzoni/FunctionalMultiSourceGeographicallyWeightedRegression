@@ -25,6 +25,8 @@
 #include "traits_fdagwr.hpp"
 #include "data_reader.hpp"
 
+#include "basis_constant.hpp"
+#include "basis_bsplines.hpp"
 #include "basis_systems.hpp"
 #include "parameters_wrapper_fdagwr.hpp"
 
@@ -37,7 +39,8 @@
 #include "penalization_matrix.hpp"
 
 #include "test_basis_eval.hpp"
-//#include "basis_evaluation.hpp"
+
+
 
 
 
@@ -137,6 +140,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     using _DATA_TYPE_ = double;                                                      //data type
     constexpr auto _NAN_REM_ = REM_NAN::MR;                                          //how to remove nan (with mean of non-nans)
+    constexpr auto _DOMAIN_ = fdagwr_traits::Domain;                                 //domain geometry
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;               //enum for stationary covariates
     constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;                         //enum for event covariates
     constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;                     //enum for station covariates
@@ -391,34 +395,18 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     Rcout << "R: " << eval_base1.rows() << ", C: " << eval_base1.cols() << std::endl;
     Rcout << "Post: " << eval_base1 << std::endl;
    
+    Rcout << "New class for the basis: splines" << std::endl;
+    bsplines_basis<_DOMAIN_> bs_test(knots_stationary_cov_,3,15);
+    auto eval_test = bs_test.eval_base(0.1);
+    Rcout << eval_test << std::endl;
+
+    Rcout << "New class for the basis: constsn" << std::endl;
+    constant_basis<_DOMAIN_> bs_test_c(knots_stationary_cov_);
+    auto eval_test_c = bs_test_c.eval_base(0.1);
+    Rcout << eval_test_c << std::endl;
     
     
     
-    
-
-
-    /*
-    std::vector<BsSpace<Triangulation<1, 1>>> basis_;
-    basis_.reserve(q_C);
-
-    for(std::size_t i = 0; i < q_C; ++i)
-    {
-        Triangulation<1, 1> interval = Triangulation<1, 1>::Interval(knots_stationary_cov_.front(), knots_stationary_cov_.back(), knots_stationary_cov_.size());
-        BsSpace<Triangulation<1, 1>> Vh(interval, order_basis_stationary_cov_[i]);
-        basis_.push_back(Vh);
-
-        // integration
-        TrialFunction u(basis_[i]);
-        TestFunction  v(basis_[i]);
-
-        // mass matrix
-        auto mass = integral(interval)(u * v);
-        Eigen::SparseMatrix<double> M = mass.assemble();
-
-        std::cout << "\n\nmass matrix:  [M]_{ij} = int_I (psi_i * psi_j) of cov " << i+1 << std::endl;
-        std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
-    }
-    */
 
 
     //returning element
