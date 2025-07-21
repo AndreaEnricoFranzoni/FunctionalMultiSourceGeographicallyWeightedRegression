@@ -35,12 +35,15 @@
 template <PENALIZED_DERIVATIVE der_pen>
 using PenaltyOrderDerivativeType = std::conditional<der_pen == PENALIZED_DERIVATIVE::SECOND,
                                                     SecondDerivativePenalty,        //se stazionario, ogni elemento del vettore corrisponde ad un valore dell'ascissa, e di conseguenza vi è la giusta matrice peso
-                                                    ZeroDerivativePenalty>::type;
+                                                    std::conditional<der_pen == PENALIZED_DERIVATIVE::FIRST,
+                                                                     FirstDerivativePenalty,
+                                                                     ZeroDerivativePenalty>::type>::type;
 
 template< PENALIZED_DERIVATIVE der_pen = PENALIZED_DERIVATIVE::SECOND >
 class penalization_matrix
 {
 
+//order of the penalization for the policy to compute the penalization itself
 using PenaltyPolicy = PenaltyOrderDerivativeType<der_pen>;
 
 private:
@@ -56,11 +59,12 @@ private:
     /*!Number of total basis*/;
     std::size_t m_L;
 
-    /*!
-    PER AVERE LE PENALIZZAZIONI CON LA DERIVATA SECONDA SERVE UN ORDINE DELLE BASI >= 2
-    */
-public:
 
+public:
+    /*!
+    * @brief Constructor: PER AVERE LE PENALIZZAZIONI CON LA DERIVATA SECONDA SERVE UN ORDINE DELLE BASI >= 2
+    * @note  PENALIZATION COMPUTATION IS IMPLEMENTED ONLY FOR 1D DOMAINS AND BSPLINES BASIS
+    */
     template< typename BASIS_SPACE >
     penalization_matrix(BASIS_SPACE&& bs,
                         const std::vector<double>& lambdas)
@@ -93,16 +97,8 @@ public:
 
                 //constructing the penalty matrices
                 for(std::size_t i = 0; i < m_q; ++i){
-                    /*
-                    // integration
-                    fdapde::TrialFunction u(bs.systems_of_basis()[i]); 
-                    fdapde::TestFunction  v(bs.systems_of_basis()[i]);
-                    // stiff matrix: penalizing the second derivaive
-                    auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
-                    Eigen::SparseMatrix<double> PenaltyBasis_i = stiff.assemble();
-                    */
-                    //penalties, for each basis system
-                    //penalty_computation<SecondDerivativePenalty> penalty_comp;
+
+                    //penalties, for each basis system: PenaltyPolicy indicates the order
                     penalty_computation<PenaltyPolicy> penalty_comp;
                     fdagwr_traits::Sparse_Matrix PenaltyBasis_i = penalty_comp(bs,i);
                     PenaltyBasis_i *= lambdas[i];
