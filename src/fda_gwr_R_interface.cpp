@@ -60,7 +60,28 @@ void fdagwr_test_function(std::string input_string) {
 }
 
 
-
+/*!
+* @brief Function to perform fms-gwr
+* @param y_points Rcpp::NumericMatrix (matrix of double) containing the raw (functional) response: each row represents a specific abscissa, each column a statistical units
+* @param t_points Rcpp::NumericVector with the abscissa points with respect which the raw evaluations of y_points are available (length(t_points)==number of row (y_points))
+* @param left_extreme_domain double indicating the left extreme of the domain of the response curve (not necessarily the smaller element in t_points)
+* @param right_extreme_domain double indicating the right extreme of the domain of the response curve (not necessarily the biggest element in t_points)
+* @param coeff_y_points Rcpp::NumericMatrix (matrix of double) containing the coefficient of the response's basis expansion: each row represents a specific basis, each column a statistical units
+* @param knots_y_points Rcpp::NumericVector with the abscissa points with respect which the basis expansion of the y_points is performed
+* @param n_order_basis_y_points integer: the degree of the bsplines used for the (functional) response
+* @param n_basis_y_points integer: number of basis for the basis expansion of the (functional) response. It has to be the number of rows of coeff_y_points
+* @param coeff_rec_weights_y_points Rcpp::NumericMatrix (matrix of double) containing the coefficients of the weights to reconstruct the (functional) response: each row represents a specific basis, each column a statistical units.
+*                                   The above-mentioned basis expansion is performed with respect to knots_y_points 
+* @param n_order_basis_rec_weights_y_points integer: the degree of the bsplines used for the reconstruction of the (functional) response
+* @param n_basis_rec_weights_y_points integer: number of bsplines basis used for the reconstruction of the (functional) response
+* @param coeff_stationary_cov list: each element is a Rcpp::NumericMatrix containing the coefficient for the basis expansion of the i-th stationary covariate: each row represents a specific basis, each column a statistical units.
+*                             The name of the i-th element is the name of the i-th stationary covariate (default: "reg.Ci")
+* @param 
+* @return an R list containing:
+* - 
+* @note all the basis expansion have to be made with respect to bsplines o constant basis. 
+*       For the bsplines basis, number of knots = number of basis - order(degree of pols) + 1
+*/
 //
 // [[Rcpp::export]]
 Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
@@ -71,7 +92,6 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                   Rcpp::NumericVector knots_y_points,
                   Rcpp::Nullable<int> n_order_basis_y_points,
                   Rcpp::Nullable<int> n_basis_y_points,
-                  double penalization_y_points,
                   Rcpp::NumericMatrix coeff_rec_weights_y_points,
                   Rcpp::Nullable<int> n_order_basis_rec_weights_y_points,
                   Rcpp::Nullable<int> n_basis_rec_weights_y_points,
@@ -120,7 +140,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;               //enum for stationary covariates
     constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;                         //enum for event covariates
     constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;                     //enum for station covariates
-    constexpr auto _DERVIATIVE_PENALIZED_ = PENALIZED_DERIVATIVE::ZERO;            //enum for the penalization
+    constexpr auto _DERVIATIVE_PENALIZED_ = PENALIZED_DERIVATIVE::SECOND;            //enum for the penalization
     constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;                         //enum for euclidean distance within statistical units locations
     constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                                 //kernel function to smooth the distances within statistcal units locations
 
@@ -192,7 +212,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  NUMBER AND ORDER OF BASIS
     //response
     /*!
-    * @todo CONTROLLARE CHE L'ORDINE DELLE BASI PASSATO SIA ALMENO 1, SENNO' CRASHA
+    * @todo CONTROLLARE CHE L'ORDINE DELLE BASI PASSATO SIA COERENTE CON LA DIMENSIONE DI QUANTO SIA STATO PASSATO
     */
     auto number_and_order_basis_response_ = wrap_basis_number_and_order(n_basis_y_points,n_order_basis_y_points,knots_response_.size());
     std::size_t number_basis_response_ = number_and_order_basis_response_[FDAGWR_FEATS::n_basis_string];

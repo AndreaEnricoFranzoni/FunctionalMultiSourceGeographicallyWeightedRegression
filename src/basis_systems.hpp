@@ -23,7 +23,7 @@
 
 
 #include "traits_fdagwr.hpp"
-#include "basis_evaluation.hpp"
+#include "bsplines_evaluation.hpp"
 
 
 /*!
@@ -65,7 +65,7 @@ private:
 public:
     /*!
     * @brief Class constructor
-    * @note BASIS ORDERS HAVE TO BE INT >=1 !!!!!!!!
+    * @note BASIS ORDERS HAVE TO BE INT >=0 !!!!!!!!
     */
     basis_systems(const fdagwr_traits::Dense_Vector & knots,
                   const std::vector<std::size_t> & basis_orders,
@@ -123,7 +123,7 @@ public:
         fdagwr_traits::Dense_Matrix loc = fdagwr_traits::Dense_Matrix::Constant(1, 1, location);
         //wrap the output into a dense matrix
         // HA UNA RIGA, N_BASIS COLONNE
-        return fdagwr_traits::Dense_Matrix(spline_basis_evaluation<domain>(m_systems_of_basis[basis_i], loc));
+        return fdagwr_traits::Dense_Matrix(bsplines_basis_evaluation<domain>(m_systems_of_basis[basis_i], loc));
     }
 };
 

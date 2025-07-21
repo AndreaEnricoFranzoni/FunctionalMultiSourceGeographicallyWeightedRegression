@@ -139,6 +139,7 @@ enum KERNEL_FUNC
 enum BASIS_TYPE
 {
   BSPLINES = 0,   ///< Bsplines basis
+  CONSTANT = 1,   ///< Constant basis
 };
 
 

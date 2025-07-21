@@ -40,7 +40,6 @@ struct SecondDerivativePenalty
   operator()(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > &bs, std::size_t system_number) 
   const
   {
-    std::cout << "2 pen" << std::endl;
     //using fdaPDE
     fdapde::TrialFunction u(bs.systems_of_basis()[system_number]); 
     fdapde::TestFunction  v(bs.systems_of_basis()[system_number]);
@@ -64,7 +63,6 @@ struct FirstDerivativePenalty
   operator()(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > &bs, std::size_t system_number) 
   const
   {
-    std::cout << "1 pen" << std::endl;
     //using fdaPDE
     fdapde::TrialFunction u(bs.systems_of_basis()[system_number]); 
     fdapde::TestFunction  v(bs.systems_of_basis()[system_number]);
@@ -88,7 +86,6 @@ struct ZeroDerivativePenalty
   operator()(const basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > &bs, std::size_t system_number) 
   const
   {
-    std::cout << "0 pen" << std::endl;
     //using fdaPDE
     fdapde::TrialFunction u(bs.systems_of_basis()[system_number]); 
     fdapde::TestFunction  v(bs.systems_of_basis()[system_number]);
