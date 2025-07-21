@@ -26,7 +26,7 @@
 #include "data_reader.hpp"
 
 #include "basis_constant.hpp"
-#include "basis_bsplines.hpp"
+#include "basis_bspline.hpp"
 #include "basis_systems.hpp"
 #include "parameters_wrapper_fdagwr.hpp"
 
