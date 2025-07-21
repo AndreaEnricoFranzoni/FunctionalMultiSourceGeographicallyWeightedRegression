@@ -63,14 +63,13 @@ public:
                    std::size_t number_of_bsplines)    :   
                         m_knots(knots), 
                         m_a(knots.coeff(0)), 
-                        m_b(m_knots.coeff(knots.size()-static_cast<std::size_t>(1))),
+                        m_b(knots.coeff(knots.size()-static_cast<std::size_t>(1))),
                         m_degree(bsplines_degree),
-                        m_number_of_basis(number_of_bsplines)
+                        m_number_of_basis(number_of_bsplines),
+                        m_basis(m_knots,m_degree)
                             {
                                 //cheack input consistency
                                 assert((void("Number of knots = number of basis - degree + 1"), m_knots.size() == (m_number_of_basis - m_degree + static_cast<std::size_t>(1))));
-                                //construct the basis object
-                                m_basis(m_knots,m_degree);
                             }
 
     /*!
