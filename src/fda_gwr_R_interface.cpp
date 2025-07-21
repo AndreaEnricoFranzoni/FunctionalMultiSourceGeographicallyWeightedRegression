@@ -120,7 +120,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;               //enum for stationary covariates
     constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;                         //enum for event covariates
     constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;                     //enum for station covariates
-    constexpr auto _DERVIATIVE_PENALIZED_ = PENALIZED_DERIVATIVE::FIRST;            //enum for the penalization
+    constexpr auto _DERVIATIVE_PENALIZED_ = PENALIZED_DERIVATIVE::ZERO;            //enum for the penalization
     constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;                         //enum for euclidean distance within statistical units locations
     constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                                 //kernel function to smooth the distances within statistcal units locations
 
