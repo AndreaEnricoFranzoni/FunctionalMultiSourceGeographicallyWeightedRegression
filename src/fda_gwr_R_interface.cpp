@@ -310,27 +310,27 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //COMPUTING THE BASIS
     //stationary
-    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_C(knots_stationary_cov_eigen_w_, 
-                                                                      order_basis_stationary_cov_, 
-                                                                      number_basis_stationary_cov_, 
+    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_C(knots_beta_stationary_cov_eigen_w_, 
+                                                                      order_basis_beta_stationary_cov_, 
+                                                                      number_basis_beta_stationary_cov_, 
                                                                       q_C);
     for(std::size_t i=0; i < bs_C.q(); ++i)
     {
         Rcout << "Stationary covariate " << i+1 << " has " << bs_C.number_of_basis()[i] << " basis of order " << bs_C.basis_orders()[i] << std::endl;
     }
     //events
-    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_E(knots_events_cov_eigen_w_, 
-                                                                      order_basis_events_cov_, 
-                                                                      number_basis_events_cov_, 
+    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_E(knots_beta_events_cov_eigen_w_, 
+                                                                      order_basis_beta_events_cov_, 
+                                                                      number_basis_beta_events_cov_, 
                                                                       q_E);
     for(std::size_t i=0; i < bs_E.q(); ++i)
     {
         Rcout << "Events covariate " << i+1 << " has " << bs_E.number_of_basis()[i] << " basis of order " << bs_E.basis_orders()[i] << std::endl;
     }
     //stations
-    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_S(knots_stations_cov_eigen_w_,  
-                                                                      order_basis_stations_cov_, 
-                                                                      number_basis_stations_cov_, 
+    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_S(knots_beta_stations_cov_eigen_w_,  
+                                                                      order_basis_beta_stations_cov_, 
+                                                                      number_basis_beta_stations_cov_, 
                                                                       q_S);
     for(std::size_t i=0; i < bs_S.q(); ++i)
     {
