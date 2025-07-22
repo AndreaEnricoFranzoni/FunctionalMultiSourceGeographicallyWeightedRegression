@@ -43,21 +43,22 @@ private:
     basis_type m_fdata_basis;
 
 public:
-    /*!*/
+    /*!
+    * @brief Constructor
+    */
     template< typename _COEFF_OBJ_ >
     functional_data(_COEFF_OBJ_ && fdata_coeff,
                     const basis_type& fdata_basis)
-                    : 
-                        m_a(fdata_basis.knots().nodes()(0,0)),
-                        m_b(fdata_basis.knots().nodes()(fdata_basis.knots().nodes().size()-static_cast<std::size_t>(1),0)),
-                        m_fdata_coeff{std::forward<_COEFF_OBJ_>(fdata_coeff)},
-                        m_fdata_basis(fdata_basis)
-                        {
-                            std::cout << "Nel functional_data class" << std::endl;
-                            auto el = m_fdata_basis.eval_base(0);
-                            std::cout << el << std::endl;
-                        }
+        : 
+            m_a(fdata_basis.knots().nodes()(0,0)),
+            m_b(fdata_basis.knots().nodes()(fdata_basis.knots().nodes().size()-static_cast<std::size_t>(1),0)),
+            m_fdata_coeff{std::forward<_COEFF_OBJ_>(fdata_coeff)},
+            m_fdata_basis(fdata_basis)      
+        {}
 
+    /*!
+    * @brief evaluating the unit_i-th statistical unit in location loc
+    */
     double
     eval(double loc,std::size_t unit_i)
     const
