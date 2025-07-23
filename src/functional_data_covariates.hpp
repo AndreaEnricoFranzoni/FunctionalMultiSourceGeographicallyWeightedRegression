@@ -18,36 +18,17 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_CONSTANT_BASIS_HPP
-#define FDAGWR_CONSTANT_BASIS_HPP
+#ifndef FDAGWR_FUNCTIONAL_DATA_DATASET_HPP
+#define FDAGWR_FUNCTIONAL_DATA_DATASET_HPP
 
 
-#include "basis.hpp"
+#include "functional_data.hpp"
 
 
-/*!
-* @brief Class for constant basis
-*/
-template< typename domain >
-class constant_basis :  public basis<domain>
+template< typename domain = fdagwr_traits::Domain>
+class functional_data_covariates
 {
-public:
-    /*!Constructor*/
-    constant_basis(const fdagwr_traits::Dense_Vector & knots)    :  basis(knots)  {}
 
-    /*!
-    * @brief evaluating the system of basis basis_i-th in location location. Overriding the method
-    */
-    inline 
-    fdagwr_traits::Dense_Matrix 
-    eval_base(double location) 
-    const
-    override
-    {   
-        std::cout << "eval_base della costante" << std::endl;
-        //wrap the output into a dense matrix: HA UNA RIGA, N_BASIS COLONNE
-        return fdagwr_traits::Dense_Matrix::Ones(1,1);
-    }
 };
 
-#endif  /*FDAGWR_CONSTANT_BASIS_HPP*/
+#endif  /*FDAGWR_FUNCTIONAL_DATA_DATASET_HPP*/

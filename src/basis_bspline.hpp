@@ -22,12 +22,15 @@
 #define FDAGWR_BSPLINES_BASIS_HPP
 
 
-#include "traits_fdagwr.hpp"
+#include "basis.hpp"
 #include "bsplines_evaluation.hpp"
 
 
+/*!
+* @brief class for bsplines basis
+*/
 template< typename domain >
-class bsplines_basis
+class bsplines_basis :  public basis<domain>
 {
 
 /*!
@@ -38,15 +41,6 @@ using BasisSpace = fdapde::BsSpace<domain>;
 
 
 private:
-    /*!Domain left extreme*/
-    double m_a;
-
-    /*!Domain right extreme*/
-    double m_b;
-
-    /*!Knots*/
-    domain m_knots;
-
     /*!Bsplines degree*/
     std::size_t m_degree;
 
@@ -61,9 +55,7 @@ public:
     bsplines_basis(const fdagwr_traits::Dense_Vector & knots,
                    std::size_t bsplines_degree,
                    std::size_t number_of_bsplines)    :   
-                        m_a(knots.coeff(0)), 
-                        m_b(knots.coeff(knots.size()-static_cast<std::size_t>(1))),
-                        m_knots(knots), 
+                        basis(knots),
                         m_degree(bsplines_degree),
                         m_number_of_basis(number_of_bsplines),
                         m_basis(m_knots,m_degree)
@@ -79,11 +71,6 @@ public:
     const BasisSpace& basis() const {return m_basis;}
 
     /*!
-    * @brief Getter for the nodes over which the basis are constructed
-    */
-    const domain& knots() const {return m_knots;}
-
-    /*!
     * @brief Getter for the degree of the basis
     */
     std::size_t degree() const {return m_degree;}
@@ -94,19 +81,15 @@ public:
     std::size_t number_of_basis() const {return m_number_of_basis;}
 
     /*!
-    * @brief evaluating the system of basis basis_i-th in location location
+    * @brief evaluating the system of basis basis_i-th in location location. Overriding the method
     */
     inline 
     fdagwr_traits::Dense_Matrix 
     eval_base(double location) 
     const
+    override
     {
-        //check where the point has to be evaluated     TODO: TOGLIERE IL CHECK PER DISCORSI DI EFFICIENZA?
-        if (location < m_a || location > m_b)
-        {
-            std::string error_message = "The bspline basis can be evaluated only inside its domain, [" + std::to_string(m_a) + "," + std::to_string(m_b) + "]";
-            throw std::invalid_argument(error_message);
-        }
+        std::cout << "eval_base della bspline" << std::endl;
         //wrap the input into a coherent object for the spline evaluation
         fdagwr_traits::Dense_Matrix loc = fdagwr_traits::Dense_Matrix::Constant(1, 1, location);
         //wrap the output into a dense matrix

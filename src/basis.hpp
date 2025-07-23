@@ -18,16 +18,15 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_FUNCTIONAL_DATUM_HPP
-#define FDAGWR_FUNCTIONAL_DATUM_HPP
+#ifndef FDAGWR_BASIS_HPP
+#define FDAGWR_BASIS_HPP
+
 
 #include "traits_fdagwr.hpp"
-#include "basis_bspline.hpp"
-#include "basis_constant.hpp"
 
 
-template< typename domain = fdagwr_traits::Domain, typename basis_type = bsplines_basis<domain> >
-class functional_datum
+template< typename domain = fdagwr_traits::Domain >
+class basis
 {
 private:
     /*!Domain left extreme*/
@@ -36,38 +35,39 @@ private:
     /*!Domain right extreme*/
     double m_b;
 
-    /*!Coefficient of datum basis expansion*/
-    fdagwr_traits::Dense_Vector m_fdata_coeff;
-
-    /*!Basis of datum basis expansion*/
-    basis_type m_fdata_basis;
+    /*!Knots*/
+    domain m_knots;
 
 public:
-    /*!
-    * @brief Constructor
+    /*!Constructor*/
+    basis(const fdagwr_traits::Dense_Vector & knots)    
+        :   m_a(knots.coeff(0)), m_b(knots.coeff(knots.size()-static_cast<std::size_t>(1))), m_knots(knots)  {}
+
+    /*! 
+    * @brief virtual destructor, for polymorphism
     */
-    template< typename _COEFF_OBJ_ >
-    functional_datum(_COEFF_OBJ_ && fdata_coeff,
-                     const basis_type& fdata_basis)
-        : 
-            m_a(fdata_basis.knots().nodes()(0,0)),
-            m_b(fdata_basis.knots().nodes()(fdata_basis.knots().nodes().size()-static_cast<std::size_t>(1),0)),
-            m_fdata_coeff{std::forward<_COEFF_OBJ_>(fdata_coeff)},
-            m_fdata_basis(fdata_basis)      
-        {}
+    virtual ~basis() = default;
 
     /*!
-    * @brief evaluating the functional datum in location loc
+    * @brief Getter for the basis domain left extreme
     */
-    double
-    eval(double loc)
-    const
-    {
-        //as it is in fdaPDE
-        return m_fdata_basis.eval_base(loc).row(0) * m_fdata_coeff;
-    }
+    double a() const {return m_a;}
 
+    /*!
+    * @brief Getter for the basis domain right extreme
+    */
+    double b() const {return m_b;}
+
+    /*!
+    * @brief Getter for the nodes over which the basis are constructed
+    */
+    const domain& knots() const {return m_knots;}
+
+    /*!
+    * @brief Abstract function to evaluate the basis in a location
+    */
+    virtual inline fdagwr_traits::Dense_Matrix eval_base(double loc) const = 0;
 };
 
 
-#endif  /*FDAGWR_FUNCTIONAL_DATUM_HPP*/
+#endif  /*FDAGWR_BASIS_HPP*/
