@@ -55,10 +55,10 @@ public:
     bsplines_basis(const fdagwr_traits::Dense_Vector & knots,
                    std::size_t bsplines_degree,
                    std::size_t number_of_bsplines)    :   
-                        basis(knots),
+                        basis{knots},
                         m_degree(bsplines_degree),
                         m_number_of_basis(number_of_bsplines),
-                        m_basis(m_knots,m_degree)
+                        m_basis(this->knots(),m_degree)
                             {
                                 //cheack input consistency
                                 assert((void("Number of knots = number of basis - degree + 1"), m_knots.size() == (m_number_of_basis - m_degree + static_cast<std::size_t>(1))));
