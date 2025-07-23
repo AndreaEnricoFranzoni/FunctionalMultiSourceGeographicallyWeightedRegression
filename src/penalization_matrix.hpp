@@ -82,19 +82,6 @@ public:
                                                                         std::plus{},
                                                                         [](const double &nb){return std::pow(nb,2);}));
 
-
-                std::cout << "Triplets size: " << penalty_matrices_triplets.size() << ", triplets capacity: " << penalty_matrices_triplets.capacity() << std::endl;
-                std::cout << "m_L: " << m_L << std::endl;
-                std::cout << "basi divise in" << std::endl;
-                for (std::size_t i = 0; i < m_Lj.size(); ++i)
-                {
-                    std::cout << "Cov " << i+1 << ": n basis = " << m_Lj[i] << std::endl;
-                }
-                std::cout << "Cov num: " << m_q << std::endl;
-                
-
-
-
                 //constructing the penalty matrices
                 for(std::size_t i = 0; i < m_q; ++i){
 
@@ -105,7 +92,6 @@ public:
 
                     //all the penalty matrix are squared matrices: therse are the index at which each block starts
                     std::size_t start_of_block = std::reduce(bs.number_of_basis().cbegin(),bs.number_of_basis().cbegin()+i,static_cast<std::size_t>(0));
-                    std::cout << "Start of block " << i+1 << ": " << start_of_block << std::endl;
                     //storing the matrix in the a vector of Eigen::Triplets
                     for (std::size_t k = 0; k < PenaltyBasis_i.outerSize(); ++k){
                         for (fdagwr_traits::Sparse_Matrix::InnerIterator it(PenaltyBasis_i,k); it; ++it){
@@ -113,18 +99,14 @@ public:
                                                                    it.col() + start_of_block,
                                                                    it.value());}}}
 
-                std::cout << "Dopo aver inserito tutte le matrici di penalty: capacity: " <<  penalty_matrices_triplets.capacity() << ", size: " << penalty_matrices_triplets.size() << std::endl;
+                //shrinking
                 penalty_matrices_triplets.shrink_to_fit();
-                std::cout << "Dopo aver inserito tutte le matrici di penalty con shrinkaggio: capacity: " <<  penalty_matrices_triplets.capacity() << ", size: " << penalty_matrices_triplets.size() << std::endl;
 
                 //size for the penalization matrix
                 m_PenalizationMatrix.resize(m_L,m_L);
-                std::cout << "Starting init the penalization matrix, with " << m_PenalizationMatrix.rows() << " rows and " << m_PenalizationMatrix.cols() << " cols" << std::endl;
-                
-                std::cout << "NNZ pre: " << m_PenalizationMatrix.nonZeros() << std::endl;
+
                 //constructing the penalization matrix as a sparse block matrix
                 m_PenalizationMatrix.setFromTriplets(penalty_matrices_triplets.begin(),penalty_matrices_triplets.end());
-                std::cout << "NNZ post: " << m_PenalizationMatrix.nonZeros() << std::endl;
             }
     
     /*!
