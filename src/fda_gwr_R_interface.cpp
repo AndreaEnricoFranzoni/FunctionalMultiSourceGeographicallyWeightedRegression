@@ -337,7 +337,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //response
     //bsplines_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_,number_basis_response_,order_basis_response_);
     constant_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_);
-    functional_data<_DOMAIN_> fd_response_(std::move(coefficients_response_),basis_response_);
+    functional_data<_DOMAIN_,decltype(basis_response_) > fd_response_(std::move(coefficients_response_),basis_response_);
 
     double el = 0;
     for(std::size_t i = 0; i < fd_response_.n(); ++i){
