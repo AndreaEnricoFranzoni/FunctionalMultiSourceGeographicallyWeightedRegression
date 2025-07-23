@@ -55,7 +55,7 @@ public:
     bsplines_basis(const fdagwr_traits::Dense_Vector & knots,
                    std::size_t bsplines_degree,
                    std::size_t number_of_bsplines)    :   
-                        basis<domain>(knots),
+                        //basis<domain>(knots),
                         m_degree(bsplines_degree),
                         m_number_of_basis(number_of_bsplines),
                         m_basis(this->knots(),m_degree)
