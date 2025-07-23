@@ -34,7 +34,7 @@
 
 template <PENALIZED_DERIVATIVE der_pen>
 using PenaltyOrderDerivativeType = std::conditional<der_pen == PENALIZED_DERIVATIVE::SECOND,
-                                                    SecondDerivativePenalty,        //se stazionario, ogni elemento del vettore corrisponde ad un valore dell'ascissa, e di conseguenza vi è la giusta matrice peso
+                                                    SecondDerivativePenalty,        
                                                     typename std::conditional<der_pen == PENALIZED_DERIVATIVE::FIRST,
                                                                      FirstDerivativePenalty,
                                                                      ZeroDerivativePenalty>::type>::type;
@@ -56,13 +56,15 @@ private:
     /*!Number of basis for each covariate*/
     std::vector<std::size_t> m_Lj;
 
-    /*!Number of total basis*/;
+    /*!Number of total basis (penalization matrix is a m_L x m_L)*/;
     std::size_t m_L;
 
 
 public:
     /*!
     * @brief Constructor: PER AVERE LE PENALIZZAZIONI CON LA DERIVATA SECONDA SERVE UN ORDINE DELLE BASI >= 2
+    * @param bs is an object storing systems of basis
+    * @param lambdas is an std::vector<double> storing the penalization for each regressor
     * @note  PENALIZATION COMPUTATION IS IMPLEMENTED ONLY FOR 1D DOMAINS AND BSPLINES BASIS
     */
     template< typename BASIS_SPACE >
@@ -113,6 +115,11 @@ public:
     * @brief Getter for the penalization matrix
     */
     const fdagwr_traits::Sparse_Matrix& PenalizationMatrix() const {return m_PenalizationMatrix;}
+
+    /*!
+    * @brief Getter for the dimension of the penalization matrix
+    */
+   std::size_t L() const {return m_L;}
 };
 
 #endif  /*FDAGWR_PENALIZATION_MATRIX_HPP*/

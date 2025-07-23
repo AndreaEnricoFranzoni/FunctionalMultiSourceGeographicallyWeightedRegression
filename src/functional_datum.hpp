@@ -18,23 +18,18 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_FUNCTIONAL_DATA_HPP
-#define FDAGWR_FUNCTIONAL_DATA_HPP
+#ifndef FDAGWR_FUNCTIONAL_DATUM_HPP
+#define FDAGWR_FUNCTIONAL_DATUM_HPP
+
+#include "traits_fdagwr.hpp"
+#include "basis_bspline.hpp"
+#include "basis_constant.hpp"
 
 
-#include "functional_datum.hpp"
-
-
-/*!
-* @brief The class describes n-statistical units referring to the same population: the basis system is the same for each one of them 
-*/
 template< typename domain = fdagwr_traits::Domain, typename basis_type = bsplines_basis<domain> >
-class functional_data
+class functional_datum
 {
 private:
-    /*!Number of statistical units*/
-    std::size_t m_n;
-
     /*!Domain left extreme*/
     double m_a;
 
@@ -42,40 +37,36 @@ private:
     double m_b;
 
     /*!Coefficient of datum basis expansion*/
-    std::vector<functional_datum<domain,basis_type>> m_fdata;
+    fdagwr_traits::Dense_Vector m_fdata_coeff;
 
+    /*!Basis of datum basis expansion*/
+    basis_type m_fdata_basis;
 
 public:
     /*!
     * @brief Constructor
     */
     template< typename _COEFF_OBJ_ >
-    functional_data(_COEFF_OBJ_ && fdata_coeff,
-                    const basis_type& fdata_basis)
+    functional_datum(_COEFF_OBJ_ && fdata_coeff,
+                     const basis_type& fdata_basis)
         : 
             m_a(fdata_basis.knots().nodes()(0,0)),
             m_b(fdata_basis.knots().nodes()(fdata_basis.knots().nodes().size()-static_cast<std::size_t>(1),0)),
-            m_n(fdata_coeff.cols())   
-        {
-            m_fdata.reserve(m_n);
-            for(std::size_t i = 0; i < m_n; ++i){       m_fdata.emplace_back(std::move(fdata_coeff.col(i)),fdata_basis);}
-        }
+            m_fdata_coeff{std::forward<_COEFF_OBJ_>(fdata_coeff)},
+            m_fdata_basis(fdata_basis)      
+        {}
 
     /*!
-    * @brief Getter for the number of statistical units
-    */
-    std::size_t n() const {return m_n;}
-
-    /*!
-    * @brief Evaluating the correct statistical unit
+    * @brief evaluating the functional datum in location loc
     */
     double
-    eval(double loc, std::size_t unit_i)
+    eval(double loc)
     const
     {
-        return m_fdata[unit_i].eval(loc);
+        return m_fdata_basis.eval_base(loc).row(0) * m_fdata_coeff;
     }
 
 };
 
-#endif  /*FDAGWR_FUNCTIONAL_DATA_HPP*/
+
+#endif  /*FDAGWR_FUNCTIONAL_DATUM_HPP*/

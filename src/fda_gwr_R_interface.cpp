@@ -138,7 +138,6 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     Rcout << "fdagwr.2: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                      //data type
-    constexpr auto _NAN_REM_ = REM_NAN::MR;                                          //how to remove nan (with mean of non-nans)
     using _DOMAIN_ = fdagwr_traits::Domain;                                          //domain geometry
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;               //enum for stationary covariates
     constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;                         //enum for event covariates
@@ -146,7 +145,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     constexpr auto _DERVIATIVE_PENALIZED_ = PENALIZED_DERIVATIVE::SECOND;            //enum for the penalization
     constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;                         //enum for euclidean distance within statistical units locations
     constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                                 //kernel function to smooth the distances within statistcal units locations
-
+    constexpr auto _NAN_REM_ = REM_NAN::MR;                                          //how to remove nan (with mean of non-nans)
 
 
     ///////////////////////////////////////////////////////
@@ -163,7 +162,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //coefficients
     auto coefficients_response_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coeff_y_points);
     //reconstruction weights
-    auto coefficiente_response_reconstruction_weights_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coeff_rec_weights_y_points);
+    auto coefficients_response_reconstruction_weights_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coeff_rec_weights_y_points);
 
 
     //  ABSCISSA POINTS
@@ -289,17 +288,17 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //COMPUTING FUNCTIONAL WEIGHT MATRIX
     //stationary
-    functional_weight_matrix_stationary<_STATIONARY_> W_C(coefficiente_response_reconstruction_weights_,
+    functional_weight_matrix_stationary<_STATIONARY_> W_C(coefficients_response_reconstruction_weights_,
                                                           number_threads);
     W_C.compute_weights();                                                      
     //events
-    functional_weight_matrix_non_stationary<_EVENT_,_KERNEL_,_DISTANCE_> W_E(coefficiente_response_reconstruction_weights_,
+    functional_weight_matrix_non_stationary<_EVENT_,_KERNEL_,_DISTANCE_> W_E(coefficients_response_reconstruction_weights_,
                                                                              std::move(distances_events_cov_),
                                                                              bandwith_events_cov_,
                                                                              number_threads);
     W_E.compute_weights();                                                                         
     //stations
-    functional_weight_matrix_non_stationary<_STATION_,_KERNEL_,_DISTANCE_> W_S(coefficiente_response_reconstruction_weights_,
+    functional_weight_matrix_non_stationary<_STATION_,_KERNEL_,_DISTANCE_> W_S(coefficients_response_reconstruction_weights_,
                                                                                std::move(distances_stations_cov_),
                                                                                bandwith_stations_cov_,
                                                                                number_threads);
@@ -309,17 +308,17 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //COMPUTING THE BASIS SYSTEMS FOR THE BETAS
     //stationary
-    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_C(knots_beta_stationary_cov_eigen_w_, 
+    basis_systems< _DOMAIN_, BASIS_TYPE::BSPLINES > bs_C(knots_beta_stationary_cov_eigen_w_, 
                                                                       order_basis_beta_stationary_cov_, 
                                                                       number_basis_beta_stationary_cov_, 
                                                                       q_C);
     //events
-    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_E(knots_beta_events_cov_eigen_w_, 
+    basis_systems< _DOMAIN_, BASIS_TYPE::BSPLINES > bs_E(knots_beta_events_cov_eigen_w_, 
                                                                       order_basis_beta_events_cov_, 
                                                                       number_basis_beta_events_cov_, 
                                                                       q_E);
     //stations
-    basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_S(knots_beta_stations_cov_eigen_w_,  
+    basis_systems< _DOMAIN_, BASIS_TYPE::BSPLINES > bs_S(knots_beta_stations_cov_eigen_w_,  
                                                                       order_basis_beta_stations_cov_, 
                                                                       number_basis_beta_stations_cov_, 
                                                                       q_S);
@@ -333,6 +332,16 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //stations
     penalization_matrix<_DERVIATIVE_PENALIZED_> R_S(std::move(bs_S),lambda_stations_cov_);
 
+
+    //FD OBJECTS
+    //response
+    bsplines_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_,number_basis_response_,order_basis_response_);
+    functional_data<_DOMAIN_> fd_response_(std::move(coefficients_response_),basis_response_);
+
+    double el = 0;
+    for(std::size_t i = 0; i < fd_response_.n(); ++i){
+        Rcout << "Eval unit " << i+1 << " in loc " << el << ": " << fd_response_.eval(el,i) << std::endl;
+    }
 
 
     //returning element
