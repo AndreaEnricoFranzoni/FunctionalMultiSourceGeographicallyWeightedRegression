@@ -40,13 +40,13 @@ private:
 
 public:
     /*!Constructor*/
-    basis(const fdagwr_traits::Dense_Vector & knots)    
+    basis_base_class(const fdagwr_traits::Dense_Vector & knots)    
         :   m_a(knots.coeff(0)), m_b(knots.coeff(knots.size()-static_cast<std::size_t>(1))), m_knots(knots)  {}
 
     /*! 
     * @brief virtual destructor, for polymorphism
     */
-    virtual ~basis() = default;
+    virtual ~basis_base_class() = default;
 
     /*!
     * @brief Getter for the basis domain left extreme
@@ -71,7 +71,7 @@ public:
     /*!
     * @brief Abstract function to evaluate the basis in a location
     */
-    virtual inline fdagwr_traits::Dense_Matrix eval_base(double loc) const = 0;
+    virtual inline fdagwr_traits::Dense_Matrix eval_base(double location) const = 0;
 };
 
 
