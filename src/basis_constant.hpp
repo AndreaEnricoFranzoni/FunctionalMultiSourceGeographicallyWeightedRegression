@@ -28,7 +28,7 @@
 /*!
 * @brief Class for constant basis
 */
-template< typename domain >
+template< typename domain = fdagwr_traits::Domain >
 class constant_basis :  public basis<domain>
 {
 public:
