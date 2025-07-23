@@ -29,11 +29,11 @@
 * @brief Class for constant basis
 */
 template< typename domain = fdagwr_traits::Domain >
-class constant_basis :  public basis<domain>
+class constant_basis :  public basis_base_class<domain>
 {
 public:
     /*!Constructor*/
-    constant_basis(const fdagwr_traits::Dense_Vector & knots)    :  basis<domain>(knots)  {}
+    constant_basis(const fdagwr_traits::Dense_Vector & knots)    :  basis_base_class<domain>(knots)  {}
 
     /*!
     * @brief evaluating the system of basis basis_i-th in location location. Overriding the method

@@ -26,7 +26,7 @@
 
 
 template< typename domain = fdagwr_traits::Domain >
-class basis
+class basis_base_class
 {
 private:
     /*!Domain left extreme*/
@@ -57,6 +57,11 @@ public:
     * @brief Getter for the basis domain right extreme
     */
     double b() const {return m_b;}
+
+    /*!
+    * @brief Getter for the number of knots
+    */
+    std::size_t number_knots() const {return m_knots.size();}
 
     /*!
     * @brief Getter for the nodes over which the basis are constructed
