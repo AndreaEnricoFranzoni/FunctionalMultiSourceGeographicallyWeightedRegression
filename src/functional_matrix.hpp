@@ -39,16 +39,35 @@ private:
 
     std::vector<function_type> m_matrix;
 
+    static inline T default_f(T el) {   return static_cast<T>(1);};
+
+
 public:
-    functional_matrix(const function_type& f,
-                      std::size_t m,
-                      std::size_t n)
+    functional_matrix(std::size_t m,
+                      std::size_t n,
+                      const function_type& f)
         :
             m_rows(m),
             m_cols(n),
             m_matrix(m_rows*m_cols,f)
         {}
 
+
+    template<typename... Args>
+    functional_matrix(std::size_t m,
+                      std::size_t n,
+                      Args&&...args)
+        :   m_rows(m), m_cols(n)
+        {
+            m_matrix.reserve(m_rows*m_cols);
+            m_matrix.emplace_back(std::forward<Args>(args),...);
+
+            if (sizeof...(args) != (m_rows*m_cols)){
+                std::size_t number_of_func_passed = sizeof...(args);
+
+                for (std::size_t i = number_of_func_passed; i < m_rows*m_cols; ++i){
+                    m_matrix.push_back(this->default_f);}}
+    }
 
 };
 

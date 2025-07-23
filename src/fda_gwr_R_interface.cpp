@@ -307,103 +307,32 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
 
-    //COMPUTING THE BASIS
+    //COMPUTING THE BASIS SYSTEMS FOR THE BETAS
     //stationary
     basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_C(knots_beta_stationary_cov_eigen_w_, 
                                                                       order_basis_beta_stationary_cov_, 
                                                                       number_basis_beta_stationary_cov_, 
                                                                       q_C);
-    for(std::size_t i=0; i < bs_C.q(); ++i)
-    {
-        Rcout << "Stationary covariate " << i+1 << " has " << bs_C.number_of_basis()[i] << " basis of order " << bs_C.basis_orders()[i] << std::endl;
-    }
     //events
     basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_E(knots_beta_events_cov_eigen_w_, 
                                                                       order_basis_beta_events_cov_, 
                                                                       number_basis_beta_events_cov_, 
                                                                       q_E);
-    for(std::size_t i=0; i < bs_E.q(); ++i)
-    {
-        Rcout << "Events covariate " << i+1 << " has " << bs_E.number_of_basis()[i] << " basis of order " << bs_E.basis_orders()[i] << std::endl;
-    }
     //stations
     basis_systems< fdagwr_traits::Domain, BASIS_TYPE::BSPLINES > bs_S(knots_beta_stations_cov_eigen_w_,  
                                                                       order_basis_beta_stations_cov_, 
                                                                       number_basis_beta_stations_cov_, 
                                                                       q_S);
-    for(std::size_t i=0; i < bs_S.q(); ++i)
-    {
-        Rcout << "Stationary covariate " << i+1 << " has " << bs_S.number_of_basis()[i] << " basis of order " << bs_S.basis_orders()[i] << std::endl;
-    }
-    
-    auto eval_base = bs_E.eval_base(0,1);
-    Rcout << "R: " << eval_base.rows() << ", C: " << eval_base.cols() << std::endl;
-    Rcout << "Pre: " << eval_base << std::endl;
-    /*  PARTE DELLA VALUTAZIONE SULLE BASI
-    auto eval_base = bs.eval_base(0,1);
-    Rcout << "R: " << eval_base.rows() << ", C: " << eval_base.cols() << std::endl;
-    Rcout << eval_base << std::endl;
-    for(std::size_t i=0; i < bs.q(); ++i)
-    {
-        Rcout << "Stationary covariate " << i+1 << " has " << bs.number_of_basis()[i] << " basis of order " << bs.basis_orders()[i] << std::endl;
-    }
-    fdagwr_traits::Dense_Matrix locs(1,1);
-    locs(0,0) = 0;
-    Rcout << "Locations:" << std::endl;
-    Rcout << locs << std::endl;
-    for(std::size_t i = 0; i < bs.q(); ++i)
-    {
-        Eigen::SparseMatrix<double> Psi = spline_basis_eval_(bs.systems_of_basis()[i], locs);
-        std::cout << "basis evaluation at location for covariate " << i+1 << std::endl;
-        std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(Psi) << std::endl;   // cast to dense matrix just for printing
-    }
-    */
     
     
-     
-    /*  PARTE SULLA CREZIONE DI MASS E STIFF MATRIX
-    for(std::size_t i = 0; i < bs.q(); ++i) {
-      // integration
-      TrialFunction u(bs.systems_of_basis()[i]); 
-      TestFunction  v(bs.systems_of_basis()[i]);
-      
-      // mass matrix
-      //auto mass = integral(bs.interval())(u * v);
-      auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
-      Eigen::SparseMatrix<double> M = stiff.assemble();
+    //PENALIZATION MATRICES
+    //stationary
+    penalization_matrix<_DERVIATIVE_PENALIZED_> R_C(std::move(bs_C),lambda_stationary_cov_);
+    //events
+    penalization_matrix<_DERVIATIVE_PENALIZED_> R_E(std::move(bs_E),lambda_events_cov_);
+    //stations
+    penalization_matrix<_DERVIATIVE_PENALIZED_> R_S(std::move(bs_S),lambda_stations_cov_);
 
-      std::cout << "\n\nstiff matrix: [A]_{ij} = int_I (dxx(psi_i) * dxx(psi_j)) of cov " << i+1 << std::endl;
-      //std::cout << "\n\nStiff matrix:  [M]_{ij} = int_I (psi_i * psi_j) of cov " << i+1 << std::endl;
-      std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(M) << std::endl;
-    }
-    */
-   Rcout << "Constructing the pen matrix for events cov" << std::endl;
-   penalization_matrix<_DERVIATIVE_PENALIZED_> R_E(std::move(bs_E),lambda_events_cov_);
-
-   Rcout << "Penalization matrix for the events covariates" << std::endl;
-   //Rcout << fdagwr_traits::Dense_Matrix(R_E.PenalizationMatrix()) << std::endl;
-
-   for (std::size_t i = 0; i < R_E.PenalizationMatrix().rows(); ++i)
-   {
-        for(std::size_t j = 0; j < R_E.PenalizationMatrix().cols(); ++j)
-        {
-            Rcout << "Elem (" << i << "," << j << "): " << R_E.PenalizationMatrix().coeff(i,j) << std::endl;
-        }
-   }
-    auto eval_base1 = bs_E.eval_base(0,1);
-    Rcout << "R: " << eval_base1.rows() << ", C: " << eval_base1.cols() << std::endl;
-    Rcout << "Post: " << eval_base1 << std::endl;
-
-   
-    Rcout << "New class for the basis: splines" << std::endl;
-    bsplines_basis<_DOMAIN_> bs_test(knots_response_eigen_w_,3,15);
-
-    functional_data<_DOMAIN_,bsplines_basis<_DOMAIN_>> fd_test(std::move(coefficients_response_),std::move(bs_test));
-    std::cout << "evaluating the functional obj: " << fd_test.eval(0,0) << std::endl;
-
-    
-    
-    
 
 
     //returning element
