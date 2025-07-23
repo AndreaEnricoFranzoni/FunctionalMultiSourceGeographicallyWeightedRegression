@@ -90,11 +90,9 @@ public:
     const
     override
     {
-        std::cout << "eval_base della bspline" << std::endl;
         //wrap the input into a coherent object for the spline evaluation
         fdagwr_traits::Dense_Matrix loc = fdagwr_traits::Dense_Matrix::Constant(1, 1, location);
-        //wrap the output into a dense matrix
-        // HA UNA RIGA, N_BASIS COLONNE
+        //wrap the output into a dense matrix:      HA UNA RIGA, N_BASIS COLONNE
         return fdagwr_traits::Dense_Matrix(bsplines_basis_evaluation<domain>(m_basis, loc));
     }
 };

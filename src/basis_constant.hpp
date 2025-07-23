@@ -44,7 +44,6 @@ public:
     const
     override
     {   
-        std::cout << "eval_base della costante" << std::endl;
         //wrap the output into a dense matrix: HA UNA RIGA, N_BASIS COLONNE
         return fdagwr_traits::Dense_Matrix::Ones(1,1);
     }
