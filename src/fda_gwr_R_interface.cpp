@@ -25,9 +25,8 @@
 #include "data_reader.hpp"
 #include "parameters_wrapper_fdagwr.hpp"
 
-#include "basis_constant.hpp"
-#include "basis_bspline.hpp"
-#include "basis_systems.hpp"
+#include "basis_include.hpp"
+
 
 #include "functional_data.hpp"
 
@@ -309,19 +308,19 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //COMPUTING THE BASIS SYSTEMS FOR THE BETAS
     //stationary
     basis_systems< _DOMAIN_, BASIS_TYPE::BSPLINES > bs_C(knots_beta_stationary_cov_eigen_w_, 
-                                                                      order_basis_beta_stationary_cov_, 
-                                                                      number_basis_beta_stationary_cov_, 
-                                                                      q_C);
+                                                         order_basis_beta_stationary_cov_, 
+                                                         number_basis_beta_stationary_cov_, 
+                                                         q_C);
     //events
     basis_systems< _DOMAIN_, BASIS_TYPE::BSPLINES > bs_E(knots_beta_events_cov_eigen_w_, 
-                                                                      order_basis_beta_events_cov_, 
-                                                                      number_basis_beta_events_cov_, 
-                                                                      q_E);
+                                                         order_basis_beta_events_cov_, 
+                                                         number_basis_beta_events_cov_, 
+                                                         q_E);
     //stations
     basis_systems< _DOMAIN_, BASIS_TYPE::BSPLINES > bs_S(knots_beta_stations_cov_eigen_w_,  
-                                                                      order_basis_beta_stations_cov_, 
-                                                                      number_basis_beta_stations_cov_, 
-                                                                      q_S);
+                                                         order_basis_beta_stations_cov_, 
+                                                         number_basis_beta_stations_cov_, 
+                                                         q_S);
     
     
     //PENALIZATION MATRICES

@@ -59,7 +59,7 @@ public:
                         basis_base_class<domain>(knots),
                         m_degree(bsplines_degree),
                         m_number_of_basis(number_of_bsplines),
-                        m_basis(knots,m_degree)
+                        m_basis(this->knots(),m_degree)
                             {
                                 //cheack input consistency
                                 assert((void("Number of knots = number of basis - degree + 1"), m_knots.size() == (m_number_of_basis - m_degree + static_cast<std::size_t>(1))));
