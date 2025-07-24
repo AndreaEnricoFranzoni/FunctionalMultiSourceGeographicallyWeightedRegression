@@ -44,7 +44,7 @@ struct SecondDerivativePenalty
     fdapde::TrialFunction u(bs.systems_of_basis()[system_number].basis()); 
     fdapde::TestFunction  v(bs.systems_of_basis()[system_number].basis());
     // stiff matrix: penalizing the second derivaive
-    auto stiff = integral(bs.interval())(dxx(u) * dxx(v));
+    auto stiff = integral(bs.knots())(dxx(u) * dxx(v));
     
     //assmebling the stiff matrix 
     return stiff.assemble();
@@ -67,7 +67,7 @@ struct FirstDerivativePenalty
     fdapde::TrialFunction u(bs.systems_of_basis()[system_number].basis()); 
     fdapde::TestFunction  v(bs.systems_of_basis()[system_number].basis());
     // first_derivative_penalty matrix: penalizing the first order derivaive
-    auto first_derivative_penalty = integral(bs.interval())(dx(u) * dx(v));
+    auto first_derivative_penalty = integral(bs.knots())(dx(u) * dx(v));
 
     //assembling the first_derivative_penalty matrix
     return first_derivative_penalty.assemble();
@@ -90,7 +90,7 @@ struct ZeroDerivativePenalty
     fdapde::TrialFunction u(bs.systems_of_basis()[system_number].basis()); 
     fdapde::TestFunction  v(bs.systems_of_basis()[system_number].basis());
     // mass matrix: penalizing the zero order derivaive
-    auto mass = integral(bs.interval())(u * v);
+    auto mass = integral(bs.knots())(u * v);
 
     //assembling the mass matrix
     return mass.assemble();
