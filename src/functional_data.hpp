@@ -42,7 +42,7 @@ private:
     double m_b;
 
     /*!Coefficient of datum basis expansion*/
-    std::vector<functional_datum<domain,basis_type<domain>>> m_fdata;
+    std::vector<functional_datum<domain,basis_type>> m_fdata;
 
 
 public:
@@ -61,7 +61,7 @@ public:
             for(std::size_t i = 0; i < m_n; ++i){       m_fdata.emplace_back(std::move(fdata_coeff.col(i)),fdata_basis);}
         }
 
-    const std::vector<functional_datum<domain,basis_type<domain>>>& fdata() const {return m_fdata;}
+    const std::vector<functional_datum<domain,basis_type>>& fdata() const {return m_fdata;}
 
     /*!
     * @brief Getter for the number of statistical units

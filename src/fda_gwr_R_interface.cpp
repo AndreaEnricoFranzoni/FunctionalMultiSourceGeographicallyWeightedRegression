@@ -135,7 +135,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.17: " << std::endl;
+    Rcout << "fdagwr.1: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                      //data type
     using _DOMAIN_ = fdagwr_traits::Domain;                                          //domain geometry
@@ -337,8 +337,10 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //FD OBJECTS
     //response
     bsplines_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_,number_basis_response_,order_basis_response_);
+    functional_data<_DOMAIN_,bsplines_basis > fd_response_(std::move(coefficients_response_),basis_response_);
+    //decltype(basis_response_)
     //constant_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_);
-    functional_data<_DOMAIN_,decltype(basis_response_) > fd_response_(std::move(coefficients_response_),basis_response_);
+    //functional_data<_DOMAIN_,constant_basis > fd_response_(std::move(coefficients_response_),basis_response_);
 
     double el = 0.0;
     Rcout << "Eval basis pre in" << el << ": " << basis_response_.eval_base(el) << std::endl;
