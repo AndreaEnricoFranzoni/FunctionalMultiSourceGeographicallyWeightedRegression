@@ -139,7 +139,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     using _DATA_TYPE_ = double;                                                      //data type
     using _DOMAIN_ = fdagwr_traits::Domain;                                          //domain geometry
-    using _BASIS_BETAS_ = bsplines_basis<_DOMAIN_>;                                  //basis for the betas
+    using _BASIS_BETAS_ = bsplines_basis;                                            //basis for the betas
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;               //enum for stationary covariates
     constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;                         //enum for event covariates
     constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;                     //enum for station covariates
