@@ -344,6 +344,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     double el = 0.0;
     Rcout << "Eval basis pre in" << el << ": " << basis_response_.eval_base(el) << std::endl;
+    /*
     for(std::size_t i = 0; i < fd_response_.n(); ++i){
         Rcout << "Eval unit " << i+1 << " in loc " << el << ": " << fd_response_.eval(el,i) << std::endl;
         Rcout << "Eval unit " << i+1 << " basis in loc " << el << ": " << fd_response_.fdata()[i].fdatum_basis().eval_base(el) << std::endl;
@@ -355,6 +356,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
         Rcout << "Eval unit " << i+1 << " in loc " << el1 << ": " << fd_response_.eval(el1,i) << std::endl;
         Rcout << "Eval unit " << i+1 << " basis in loc " << el1 << ": " << fd_response_.fdata()[i].fdatum_basis().eval_base(el1) << std::endl;
     }
+    */
 
 
     //returning element
