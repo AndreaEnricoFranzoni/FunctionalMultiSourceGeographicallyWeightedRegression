@@ -22,7 +22,7 @@
 #define FDAGWR_PENALTIES_COMP_HPP
 
 #include "traits_fdagwr.hpp"
-#include "basis_systems.hpp"
+#include "basis_bspline_systems.hpp"
 #include "penalization_matrix_penalties_policies.hpp"
 
 
