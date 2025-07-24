@@ -35,11 +35,9 @@
 /*!
 * @todo SERVIREBBE UN CONCEPT PER IL TIPO DOMAIN
 */
-//template< typename domain = fdagwr_traits::Domain, typename basis_type = bsplines_basis<domain> > 
 template< class domain = fdagwr_traits::Domain, template <typename> class basis_type = bsplines_basis > 
 class basis_systems{
 
-using basis_type_alias = basis_type<domain>;
 
 private:
     /*!Nodes over which the basis systems are constructed*/
@@ -55,7 +53,7 @@ private:
     std::size_t m_q;
 
     /*!Vector containing a basis system for each one of the functional covariates*/
-    std::vector<basis_type_alias> m_systems_of_basis;
+    std::vector<basis_type<domain>> m_systems_of_basis;
 
 public:
     /*!
@@ -86,7 +84,7 @@ public:
     * @brief Getter for the systems of basis (returning a reference since fdaPDE stores the basis as a pointer to them)
     * @return the private m_systems_of_basis
     */
-    const std::vector<basis_type_alias>& systems_of_basis() const {return m_systems_of_basis;}
+    const std::vector<basis_type<domain>>& systems_of_basis() const {return m_systems_of_basis;}
 
     /*!
     * @brief Getter for the order of basis for each covariate
