@@ -135,7 +135,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.5: " << std::endl;
+    Rcout << "fdagwr.6: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                      //data type
     using _DOMAIN_ = fdagwr_traits::Domain;                                          //domain geometry
@@ -340,9 +340,18 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     constant_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_);
     functional_data<_DOMAIN_,decltype(basis_response_) > fd_response_(std::move(coefficients_response_),basis_response_);
 
-    double el = 0;
+    double el = 0.0;
+    Rcout << "Eval basis pre in" << el << ": " << basis_response_.eval_base(el) << std::endl;
     for(std::size_t i = 0; i < fd_response_.n(); ++i){
         Rcout << "Eval unit " << i+1 << " in loc " << el << ": " << fd_response_.eval(el,i) << std::endl;
+        Rcout << "Eval unit " << i+1 << " basis in loc " << el << ": " << fd_response_.fdata()[i].fdatum_basis().eval_base(el) << std::endl;
+    }
+
+    double el1 = -1.0;
+    Rcout << "Eval basis pre in" << el1 << ": " << basis_response_.eval_base(el1) << std::endl;
+    for(std::size_t i = 0; i < fd_response_.n(); ++i){
+        Rcout << "Eval unit " << i+1 << " in loc " << el1 << ": " << fd_response_.eval(el1,i) << std::endl;
+        Rcout << "Eval unit " << i+1 << " basis in loc " << el1 << ": " << fd_response_.fdata()[i].fdatum_basis().eval_base(el1) << std::endl;
     }
 
 

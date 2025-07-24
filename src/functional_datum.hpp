@@ -37,10 +37,10 @@ private:
     double m_b;
 
     /*!Coefficient of datum basis expansion*/
-    fdagwr_traits::Dense_Vector m_fdata_coeff;
+    fdagwr_traits::Dense_Vector m_fdatum_coeff;
 
     /*!Basis of datum basis expansion*/
-    basis_type m_fdata_basis;
+    basis_type m_fdatum_basis;
 
 public:
     /*!
@@ -52,9 +52,11 @@ public:
         : 
             m_a(fdata_basis.knots().nodes()(0,0)),
             m_b(fdata_basis.knots().nodes()(fdata_basis.knots().nodes().size()-static_cast<std::size_t>(1),0)),
-            m_fdata_coeff{std::forward<_COEFF_OBJ_>(fdata_coeff)},
-            m_fdata_basis(fdata_basis)      
+            m_fdatum_coeff{std::forward<_COEFF_OBJ_>(fdata_coeff)},
+            m_fdatum_basis(fdata_basis)      
         {}
+
+    const basis_type& fdatum_basis() const {return m_fdatum_basis;}
 
     /*!
     * @brief evaluating the functional datum in location loc
@@ -64,7 +66,7 @@ public:
     const
     {
         //as it is in fdaPDE
-        return m_fdata_basis.eval_base(loc).row(0) * m_fdata_coeff;
+        return m_fdatum_basis.eval_base(loc).row(0) * m_fdatum_coeff;
     }
 
 };
