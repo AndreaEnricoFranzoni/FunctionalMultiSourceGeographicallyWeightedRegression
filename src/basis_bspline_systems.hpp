@@ -36,7 +36,7 @@
 * @todo SERVIREBBE UN CONCEPT PER IL TIPO DOMAIN
 */
 //template< typename domain = fdagwr_traits::Domain, typename basis_type = bsplines_basis<domain> > 
-template< template domain = fdagwr_traits::Domain, template <typename> class basis_type = bsplines_basis<domain> > 
+template< class domain = fdagwr_traits::Domain, template <typename> class basis_type = bsplines_basis<domain> > 
 class basis_systems{
 
 private:
