@@ -101,8 +101,8 @@ struct FDAGWR_basis_names
 
   static constexpr std::string _constant_ = "constant";
 
-  static constexpr std::set<std::string> _implemented_basis_{FDAGWR_basis_names::_bsplines_,
-                                                             FDAGWR_basis_names::_constant_};
+  static std::set<std::string> _implemented_basis_{FDAGWR_basis_names::_bsplines_,
+                                                   FDAGWR_basis_names::_constant_};
 };
 
 
