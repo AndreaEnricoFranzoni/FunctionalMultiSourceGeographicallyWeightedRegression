@@ -21,7 +21,7 @@
 #define FDAGWR_PENALTIES_POLICIES_HPP
 
 #include "traits_fdagwr.hpp"
-#include "basis_systems.hpp"
+#include "basis_bspline_systems.hpp"
 
 
 /*!
