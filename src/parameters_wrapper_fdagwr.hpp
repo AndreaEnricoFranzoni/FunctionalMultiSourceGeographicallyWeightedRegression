@@ -144,7 +144,7 @@ wrap_covariates_coefficients(Rcpp::List cov_coeff_list)
 //  [[Rcpp::depends(RcppEigen)]]
 template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
 std::vector<std::string>
-wrap_basis_type_names(Rcpp::CharacterVector basis_types_names, std::size_t number_of_covariates)
+wrap_basis_type(Rcpp::CharacterVector basis_types_names, std::size_t number_of_covariates)
 {
   // number of covariates 
   std::size_t number_cov = basis_types_names.size();
@@ -153,14 +153,14 @@ wrap_basis_type_names(Rcpp::CharacterVector basis_types_names, std::size_t numbe
 
   for(std::size_t i = 0; i < number_cov; ++i)
   {
-    if (FDAGWR_basis_names::_implemented_basis_.find(basis_types_names_wrapped[i]) == FDAGWR_basis_names::_implemented_basis_.cend()){
+    if (FDAGWR_BASIS_TYPES::_implemented_basis_.find(basis_types_names_wrapped[i]) == FDAGWR_BASIS_TYPES::_implemented_basis_.cend()){
       std::string covariates_type = covariate_type<fdagwr_cov_t>();
       std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
       std::string error_message = "For " + covariates_type + " covariates, basis type " + basis_types_names_wrapped[i] + " is not acceptable: basis types accepted: ";
-      for(auto it = FDAGWR_basis_names::_implemented_basis_.cbegin(); it != FDAGWR_basis_names::_implemented_basis_.cend(); ++it)
+      for(auto it = FDAGWR_BASIS_TYPES::_implemented_basis_.cbegin(); it != FDAGWR_BASIS_TYPES::_implemented_basis_.cend(); ++it)
       {
           error_message += *it;
-          if (next(it)!=FDAGWR_basis_names::_implemented_basis_.cend())
+          if (next(it)!=FDAGWR_BASIS_TYPES::_implemented_basis_.cend())
           {
             error_message += ", ";
           }
