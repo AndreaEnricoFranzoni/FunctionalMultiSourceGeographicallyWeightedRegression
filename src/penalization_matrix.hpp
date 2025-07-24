@@ -23,7 +23,7 @@
 
 
 #include "traits_fdagwr.hpp"
-#include "basis_systems.hpp"
+#include "basis_bspline_systems.hpp"
 #include "penalty_matrix_penalties_comp.hpp"
 
 /*!
