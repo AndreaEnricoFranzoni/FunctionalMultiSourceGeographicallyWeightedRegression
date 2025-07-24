@@ -33,7 +33,8 @@ public:
   
   fdagwr_traits::Sparse_Matrix 
   operator()
-  (const basis_systems< fdagwr_traits::Domain, bsplines_basis<fdagwr_traits::Domain> > &bs, std::size_t system_number) 
+  //(const basis_systems< fdagwr_traits::Domain, bsplines_basis<fdagwr_traits::Domain> > &bs, std::size_t system_number) 
+  (const basis_systems< fdagwr_traits::Domain, bsplines_basis > &bs, std::size_t system_number) 
   const 
   {   
     return penalty_computing(bs, system_number);}
