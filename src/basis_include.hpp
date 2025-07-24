@@ -25,6 +25,6 @@
 #include "basis_bspline.hpp"
 #include "basis_constant.hpp"
 
-#include "basis_systems.hpp"
+
 
 #endif  /*FDAGWR_BASIS_INCLUDE_HPP*/

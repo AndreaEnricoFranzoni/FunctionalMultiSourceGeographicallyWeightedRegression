@@ -26,6 +26,7 @@
 #include "parameters_wrapper_fdagwr.hpp"
 
 #include "basis_include.hpp"
+#include "basis_bspline_systems.hpp"
 
 
 #include "functional_data.hpp"
