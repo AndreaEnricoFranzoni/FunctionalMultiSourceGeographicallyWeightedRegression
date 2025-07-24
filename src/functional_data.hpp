@@ -28,7 +28,7 @@
 /*!
 * @brief The class describes n-statistical units referring to the same population: the basis system is the same for each one of them 
 */
-template< typename domain = fdagwr_traits::Domain, typename basis_type = bsplines_basis<domain> >
+template< class domain = fdagwr_traits::Domain, template <typename> class basis_type = bsplines_basis > 
 class functional_data
 {
 private:
@@ -42,7 +42,7 @@ private:
     double m_b;
 
     /*!Coefficient of datum basis expansion*/
-    std::vector<functional_datum<domain,basis_type>> m_fdata;
+    std::vector<functional_datum<domain,basis_type<domain>>> m_fdata;
 
 
 public:
@@ -51,7 +51,7 @@ public:
     */
     template< typename _COEFF_OBJ_ >
     functional_data(_COEFF_OBJ_ && fdata_coeff,
-                    const basis_type& fdata_basis)
+                    const basis_type<domain>& fdata_basis)
         : 
             m_a(fdata_basis.knots().nodes()(0,0)),
             m_b(fdata_basis.knots().nodes()(fdata_basis.knots().nodes().size()-static_cast<std::size_t>(1),0)),
@@ -61,7 +61,7 @@ public:
             for(std::size_t i = 0; i < m_n; ++i){       m_fdata.emplace_back(std::move(fdata_coeff.col(i)),fdata_basis);}
         }
 
-    const std::vector<functional_datum<domain,basis_type>>& fdata() const {return m_fdata;}
+    const std::vector<functional_datum<domain,basis_type<domain>>>& fdata() const {return m_fdata;}
 
     /*!
     * @brief Getter for the number of statistical units

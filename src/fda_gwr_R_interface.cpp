@@ -135,7 +135,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
 
-    Rcout << "fdagwr.7: " << std::endl;
+    Rcout << "fdagwr.17: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                      //data type
     using _DOMAIN_ = fdagwr_traits::Domain;                                          //domain geometry
