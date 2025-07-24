@@ -491,7 +491,7 @@ wrap_penalizations(Rcpp::NumericVector lambdas,
     throw std::invalid_argument(error_message);
   }
 
-  constexpr std::string qt_str = " the penalization vector's";
+  const std::string qt_str = " the penalization vector's";
   check_dim_input<fdagwr_cov_t>(number_of_covariates,lambdas_wrapped.size(),qt_str);
 
   return lambdas_wrapped;  

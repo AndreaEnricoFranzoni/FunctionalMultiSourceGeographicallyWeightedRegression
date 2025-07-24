@@ -276,8 +276,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  DISTANCES
     //events    DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
     auto coordinates_events_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coordinates_events);
-    check_dim_input<_EVENT_>(number_of_statistical_units_,coordinates_stations_.rows()," coordinates matrix rows");
-    check_dim_input<_EVENT_>(FDAGWR_FEATS::number_of_geographical_coordinates,coordinates_stations_.cols()," coordinates matrix columns");
+    check_dim_input<_EVENT_>(number_of_statistical_units_,coordinates_events_.rows()," coordinates matrix rows");
+    check_dim_input<_EVENT_>(FDAGWR_FEATS::number_of_geographical_coordinates,coordinates_events_.cols()," coordinates matrix columns");
     distance_matrix<_DISTANCE_> distances_events_cov_(std::move(coordinates_events_),number_threads);
     //stations  DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
     auto coordinates_stations_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coordinates_stations);
