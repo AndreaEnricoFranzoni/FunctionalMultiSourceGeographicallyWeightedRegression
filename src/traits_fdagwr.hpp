@@ -97,7 +97,7 @@ struct FDAGWR_FEATS
 
 struct FDAGWR_BASIS_TYPES
 {
-  static constexpr std::size_t _number_implemented_basis_types_ = static_cast<std::size>(2);
+  static constexpr std::size_t _number_implemented_basis_types_ = static_cast<std::size_t>(2);
 
   static constexpr std::string _bsplines_ = "bsplines";
 

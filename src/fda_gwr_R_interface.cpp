@@ -218,11 +218,11 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //  BASIS TYPES
     //stationary
-    std::vector<std::string> basis_types_stationary_cov_ = wrap_basis_type(basis_types_stationary_cov,q_C);
+    std::vector<std::string> basis_types_stationary_cov_ = wrap_basis_type<_STATIONARY_>(basis_types_stationary_cov,q_C);
     //events
-    std::vector<std::string> basis_types_events_cov_ = wrap_basis_type(basis_types_events_cov,q_E);
+    std::vector<std::string> basis_types_events_cov_ = wrap_basis_type<_EVENT_>(basis_types_events_cov,q_E);
     //stations
-    std::vector<std::string> basis_types_stations_cov_ = wrap_basis_type(basis_types_stations_cov,q_S);
+    std::vector<std::string> basis_types_stations_cov_ = wrap_basis_type<_STATION_>(basis_types_stations_cov,q_S);
 
 
     //  NUMBER AND ORDER OF BASIS: checking matrix coefficients dimensions

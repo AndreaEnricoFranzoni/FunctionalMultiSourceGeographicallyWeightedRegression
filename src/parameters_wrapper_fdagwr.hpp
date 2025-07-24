@@ -152,8 +152,8 @@ wrap_basis_type(Rcpp::CharacterVector basis_types_names, std::size_t number_of_c
   std::vector<std::string> basis_types_names_wrapped = Rcpp::as<std::vector<std::string>>(basis_types_names);
 
   for(std::size_t i = 0; i < number_cov; ++i)
-  {
-    if (FDAGWR_BASIS_TYPES::_implemented_basis_.find(basis_types_names_wrapped[i]) == FDAGWR_BASIS_TYPES::_implemented_basis_.cend()){
+  {     
+    if (std::find(FDAGWR_BASIS_TYPES::_implemented_basis_.cbegin(),FDAGWR_BASIS_TYPES::_implemented_basis_.cend(),basis_types_names_wrapped[i]) == FDAGWR_BASIS_TYPES::_implemented_basis_.cend()){
       std::string covariates_type = covariate_type<fdagwr_cov_t>();
       std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
       std::string error_message = "For " + covariates_type + " covariates, basis type " + basis_types_names_wrapped[i] + " is not acceptable: basis types accepted: ";
@@ -168,7 +168,7 @@ wrap_basis_type(Rcpp::CharacterVector basis_types_names, std::size_t number_of_c
       throw std::invalid_argument(error_message);}
   }
 
-  constexpr std::string qt_str = " the basis types vector's";
+  const std::string qt_str = " the basis types vector's";
   check_dim_input<fdagwr_cov_t>(number_of_covariates,basis_types_names_wrapped.size(),qt_str);
 
   return basis_types_names_wrapped;
