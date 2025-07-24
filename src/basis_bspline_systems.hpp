@@ -35,7 +35,8 @@
 /*!
 * @todo SERVIREBBE UN CONCEPT PER IL TIPO DOMAIN
 */
-template< typename domain = fdagwr_traits::Domain, typename basis_type = bsplines_basis<domain> > 
+//template< typename domain = fdagwr_traits::Domain, typename basis_type = bsplines_basis<domain> > 
+template< class domain = fdagwr_traits::Domain, template <typename> class basis_type = bsplines_basis<domain> > 
 class basis_systems{
 
 private:
@@ -52,11 +53,11 @@ private:
     std::size_t m_q;
 
     /*!Vector containing a basis system for each one of the functional covariates*/
-    std::vector<basis_type> m_systems_of_basis;
+    std::vector<basis_type<domain>> m_systems_of_basis;
 
 public:
     /*!
-    * @brief Class constructor
+    * @brief Class constructor for a vector of bsplines
     * @note BASIS ORDERS HAVE TO BE INT >=0 !!!!!!!!
     */
     basis_systems(const fdagwr_traits::Dense_Vector & knots,

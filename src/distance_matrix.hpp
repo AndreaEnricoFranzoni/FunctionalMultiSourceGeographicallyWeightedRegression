@@ -119,8 +119,8 @@ public:
     distance_matrix(COORDINATES_OBJ&& coordinates,
                     int number_threads)
         :   
-            m_coordinates{std::forward<COORDINATES_OBJ>(coordinates)},      //pass the coordinates
             m_number_locations(coordinates.rows()),                         //pass the number of statistical units
+            m_coordinates{std::forward<COORDINATES_OBJ>(coordinates)},      //pass the coordinates
             m_flag_comp_dist(m_number_locations > 0),                       //if there are locations
             m_num_threads(number_threads)                                   //number of threads for paralelization
         {       
