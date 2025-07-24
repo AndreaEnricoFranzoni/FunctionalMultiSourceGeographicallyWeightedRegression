@@ -98,6 +98,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                   Rcpp::Nullable<int> n_order_basis_rec_weights_y_points,
                   Rcpp::Nullable<int> n_basis_rec_weights_y_points,
                   Rcpp::List coeff_stationary_cov,
+                  Rcpp::CharacterVector basis_types_stationary_cov,
                   Rcpp::NumericVector knots_stationary_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_stationary_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stationary_cov,
@@ -106,6 +107,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_beta_stationary_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_stationary_cov,
                   Rcpp::List coeff_events_cov,
+                  Rcpp::CharacterVector basis_types_events_cov,
                   Rcpp::NumericVector knots_events_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_events_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_basis_events_cov,
@@ -116,6 +118,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_beta_events_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_events_cov,
                   Rcpp::List coeff_stations_cov,
+                  Rcpp::CharacterVector basis_types_stations_cov,
                   Rcpp::NumericVector knots_stations_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_order_basis_stations_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stations_cov,
@@ -160,13 +163,14 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  RESPONSE
     //raw data
     auto response_ = reader_data<_DATA_TYPE_,_NAN_REM_>(y_points);       //Eigen dense matrix type (auto is necessary )
+    std::size_t number_of_statistical_units_ = response_.cols();
     //coefficients
     auto coefficients_response_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coeff_y_points);
     //reconstruction weights
     auto coefficients_response_reconstruction_weights_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coeff_rec_weights_y_points);
+    
 
-
-    //  ABSCISSA POINTS
+    //  ABSCISSA POINTS of response
     std::vector<double> abscissa_points_ = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
     fdagwr_traits::Dense_Vector abscissa_points_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(abscissa_points_.data(),abscissa_points_.size());
     double a = left_extreme_domain;
@@ -212,22 +216,35 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     std::size_t q_S = names_stations_cov_.size();      //number of stations related covariates
 
 
-    //  NUMBER AND ORDER OF BASIS
+    //  BASIS TYPES
+    //stationary
+    std::vector<std::string> basis_types_stationary_cov_ = wrap_basis_type_names(basis_types_stationary_cov,q_C);
+    //events
+    std::vector<std::string> basis_types_events_cov_ = wrap_basis_type_names(basis_types_events_cov,q_E);
+    //stations
+    std::vector<std::string> basis_types_stations_cov_ = wrap_basis_type_names(basis_types_stations_cov,q_S);
+
+
+    //  NUMBER AND ORDER OF BASIS: checking matrix coefficients dimensions
     //response
-    /*!
-    * @todo CONTROLLARE CHE L'ORDINE DELLE BASI PASSATO SIA COERENTE CON LA DIMENSIONE DI QUANTO SIA STATO PASSATO
-    */
     auto number_and_order_basis_response_ = wrap_basis_number_and_order(n_basis_y_points,n_order_basis_y_points,knots_response_.size());
     std::size_t number_basis_response_ = number_and_order_basis_response_[FDAGWR_FEATS::n_basis_string];
     std::size_t order_basis_response_ = number_and_order_basis_response_[FDAGWR_FEATS::order_basis_string];
+    check_dim_input<_STATIONARY_>(number_basis_response_,coefficients_response_.rows()," response coefficients matrix rows");
+    check_dim_input<_STATIONARY_>(number_of_statistical_units_,coefficients_response_.cols()," response coefficients matrix columns");
     //response reconstruction weights
     auto number_and_order_basis_weights_response_ = wrap_basis_number_and_order(n_basis_rec_weights_y_points,n_order_basis_rec_weights_y_points,knots_response_.size());
     std::size_t number_basis_weights_response_ = number_and_order_basis_weights_response_[FDAGWR_FEATS::n_basis_string];
     std::size_t order_basis_weights_response_ = number_and_order_basis_weights_response_[FDAGWR_FEATS::order_basis_string];
+    check_dim_input<_STATIONARY_>(number_basis_weights_response_,coefficients_response_reconstruction_weights_.rows()," response reconstruction coefficients matrix rows");
+    check_dim_input<_STATIONARY_>(number_of_statistical_units_,coefficients_response_.cols()," response reconstruction coefficients matrix columns");
     //stationary cov
     auto number_and_order_basis_stationary_cov_ = wrap_basis_numbers_and_orders<_STATIONARY_>(n_basis_stationary_cov,n_order_basis_stationary_cov,knots_stationary_cov_.size(),q_C);
     std::vector<std::size_t> number_basis_stationary_cov_ = number_and_order_basis_stationary_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_stationary_cov_ = number_and_order_basis_stationary_cov_[FDAGWR_FEATS::order_basis_string];
+    for(std::size_t i = 0; i < q_C; ++i){   
+        check_dim_input<_STATIONARY_>(number_basis_stationary_cov_[i],coefficients_stationary_cov_[i].rows()," covariate " + std::to_string(i+1) + " coefficients matrix rows");
+        check_dim_input<_STATIONARY_>(number_of_statistical_units_,coefficients_stationary_cov_[i].cols()," covariate " + std::to_string(i+1) + " coefficients matrix columns");}
     //beta stationary cov
     auto number_and_order_basis_beta_stationary_cov_ = wrap_basis_numbers_and_orders<_STATIONARY_>(n_basis_beta_stationary_cov,n_order_basis_beta_stationary_cov,knots_beta_stationary_cov_.size(),q_C);
     std::vector<std::size_t> number_basis_beta_stationary_cov_ = number_and_order_basis_beta_stationary_cov_[FDAGWR_FEATS::n_basis_string];
@@ -236,6 +253,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     auto number_and_order_basis_events_cov_ = wrap_basis_numbers_and_orders<_EVENT_>(n_basis_events_cov,n_order_basis_events_cov,knots_events_cov_.size(),q_E);
     std::vector<std::size_t> number_basis_events_cov_ = number_and_order_basis_events_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_events_cov_ = number_and_order_basis_events_cov_[FDAGWR_FEATS::order_basis_string];
+    for(std::size_t i = 0; i < q_E; ++i){   
+        check_dim_input<_EVENT_>(number_basis_events_cov_[i],coefficients_events_cov_[i].rows()," covariate " + std::to_string(i+1) + " coefficients matrix rows");
+        check_dim_input<_EVENT_>(number_of_statistical_units_,coefficients_events_cov_[i].cols()," covariate " + std::to_string(i+1) + " coefficients matrix columns");}
     //beta events cov
     auto number_and_order_basis_beta_events_cov_ = wrap_basis_numbers_and_orders<_EVENT_>(n_basis_beta_events_cov,n_order_basis_beta_events_cov,knots_beta_events_cov_.size(),q_E);
     std::vector<std::size_t> number_basis_beta_events_cov_ = number_and_order_basis_beta_events_cov_[FDAGWR_FEATS::n_basis_string];
@@ -244,6 +264,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     auto number_and_order_basis_stations_cov_ = wrap_basis_numbers_and_orders<_STATION_>(n_basis_stations_cov,n_order_basis_stations_cov,knots_stations_cov_.size(),q_S);
     std::vector<std::size_t> number_basis_stations_cov_ = number_and_order_basis_stations_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> order_basis_stations_cov_ = number_and_order_basis_stations_cov_[FDAGWR_FEATS::order_basis_string];
+    for(std::size_t i = 0; i < q_E; ++i){   
+        check_dim_input<_STATION_>(number_basis_stations_cov_[i],coefficients_stations_cov_[i].rows()," covariate " + std::to_string(i+1) + " coefficients matrix rows");
+        check_dim_input<_STATION_>(number_of_statistical_units_,coefficients_stations_cov_[i].cols()," covariate " + std::to_string(i+1) + " coefficients matrix columns");}
     //beta stations cov 
     auto number_and_order_basis_beta_stations_cov_ = wrap_basis_numbers_and_orders<_STATION_>(n_basis_beta_stations_cov,n_order_basis_beta_stations_cov,knots_beta_stations_cov_.size(),q_S);
     std::vector<std::size_t> number_basis_beta_stations_cov_ = number_and_order_basis_beta_stations_cov_[FDAGWR_FEATS::n_basis_string];
@@ -253,19 +276,23 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  DISTANCES
     //events    DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
     auto coordinates_events_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coordinates_events);
+    check_dim_input<_EVENT_>(number_of_statistical_units_,coordinates_stations_.rows()," coordinates matrix rows");
+    check_dim_input<_EVENT_>(FDAGWR_FEATS::number_of_geographical_coordinates,coordinates_stations_.cols()," coordinates matrix columns");
     distance_matrix<_DISTANCE_> distances_events_cov_(std::move(coordinates_events_),number_threads);
     //stations  DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
     auto coordinates_stations_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coordinates_stations);
+    check_dim_input<_STATION_>(number_of_statistical_units_,coordinates_stations_.rows()," coordinates matrix rows");
+    check_dim_input<_STATION_>(FDAGWR_FEATS::number_of_geographical_coordinates,coordinates_stations_.cols()," coordinates matrix columns");
     distance_matrix<_DISTANCE_> distances_stations_cov_(std::move(coordinates_stations_),number_threads);
 
 
     //  PENALIZATION TERMS
     //stationary
-    std::vector<double> lambda_stationary_cov_ = wrap_penalizations<_STATIONARY_>(penalization_stationary_cov);
+    std::vector<double> lambda_stationary_cov_ = wrap_penalizations<_STATIONARY_>(penalization_stationary_cov,q_C);
     //events
-    std::vector<double> lambda_events_cov_ = wrap_penalizations<_EVENT_>(penalization_events_cov);
+    std::vector<double> lambda_events_cov_ = wrap_penalizations<_EVENT_>(penalization_events_cov,q_E);
     //stations
-    std::vector<double> lambda_stations_cov_ = wrap_penalizations<_STATION_>(penalization_stations_cov);
+    std::vector<double> lambda_stations_cov_ = wrap_penalizations<_STATION_>(penalization_stations_cov,q_S);
 
 
     //  KERNEL BANDWITH
@@ -342,8 +369,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //constant_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_);
     //functional_data<_DOMAIN_,constant_basis > fd_response_(std::move(coefficients_response_),basis_response_);
 
-    double el = 0.0;
-    Rcout << "Eval basis pre in" << el << ": " << basis_response_.eval_base(el) << std::endl;
+    //double el = 0.0;
+    //Rcout << "Eval basis pre in" << el << ": " << basis_response_.eval_base(el) << std::endl;
     /*
     for(std::size_t i = 0; i < fd_response_.n(); ++i){
         Rcout << "Eval unit " << i+1 << " in loc " << el << ": " << fd_response_.eval(el,i) << std::endl;

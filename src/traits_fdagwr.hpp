@@ -84,6 +84,7 @@ public:
 
 struct FDAGWR_FEATS
 {
+  static constexpr std::size_t number_of_geographical_coordinates = static_cast<std::size_t>(2); 
 
   static constexpr std::size_t default_basis_order = static_cast<std::size_t>(3);  
 
@@ -93,6 +94,16 @@ struct FDAGWR_FEATS
 };
 
 
+
+struct FDAGWR_basis_names
+{
+  static constexpr std::string _bsplines_ = "bsplines";
+
+  static constexpr std::string _constant_ = "constant";
+
+  static constexpr std::set(std::string) _implemented_basis_{FDAGWR_basis_names::_bsplines_,
+                                                             FDAGWR_basis_names::_constant_};
+};
 
 
 
@@ -128,18 +139,6 @@ covariate_type()
 enum KERNEL_FUNC
 {
   GAUSSIAN = 0,  ///< Gaussian Kernel to evaluate the distances within different locations
-};
-
-
-
-/*!
-* @enum BASIS_TYPE
-* @brief type of basis for reconstructing the functional data
-*/
-enum BASIS_TYPE
-{
-  BSPLINES = 0,   ///< Bsplines basis
-  CONSTANT = 1,   ///< Constant basis
 };
 
 

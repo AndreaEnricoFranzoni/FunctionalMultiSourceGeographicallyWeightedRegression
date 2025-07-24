@@ -42,6 +42,27 @@
 */
 
 
+/*!
+* @brief checking dimension inputs
+* @param sz_q dimension that the input has to have
+* @param sz_input input dimension
+* @param quantity what the input is about
+*/
+template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
+void
+check_dim_input(std::size_t sz_q, std::size_t sz_input,const std::string& quantity)
+{
+  if(sz_q!=sz_input)
+  {
+    std::string covariates_type = covariate_type<fdagwr_cov_t>();
+    std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
+    std::string error_message = "For " + covariates_type + " covariates, " + quantity + " size has to be " + std::to_string(sz_q);
+
+    throw std::invalid_argument(error_message);
+  }
+}
+
+
 
 /*!
 * @brief Wrapping the list of covariates
@@ -114,6 +135,45 @@ wrap_covariates_coefficients(Rcpp::List cov_coeff_list)
 
   return covariates_coefficients;
 }
+
+
+/*!
+* @brief Wrapping the type of basis passed, checking their consistency
+*/
+//
+//  [[Rcpp::depends(RcppEigen)]]
+template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
+std::vector<std::string>
+wrap_basis_type_names(Rcpp::CharacterVector basis_types_names, std::size_t number_of_covariates)
+{
+  // number of covariates 
+  std::size_t number_cov = basis_types_names.size();
+
+  std::vector<std::string> basis_types_names_wrapped = Rcpp::as<std::vector<std::string>>(basis_types_names);
+
+  for(std::size_t i = 0; i < number_cov; ++i)
+  {
+    if (FDAGWR_basis_names::_implemented_basis_.find(basis_types_names_wrapped[i]) == FDAGWR_basis_names::_implemented_basis_.cend()){
+      std::string covariates_type = covariate_type<fdagwr_cov_t>();
+      std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
+      std::string error_message = "For " + covariates_type + " covariates, basis type " + basis_types_names_wrapped[i] + " is not acceptable: basis types accepted: ";
+      for(auto it = FDAGWR_basis_names::_implemented_basis_.cbegin(); it != FDAGWR_basis_names::_implemented_basis_.cend(); ++it)
+      {
+          error_message += *it;
+          if (next(it)!=FDAGWR_basis_names::_implemented_basis_.cend())
+          {
+            error_message += ", ";
+          }
+      }
+      throw std::invalid_argument(error_message);}
+  }
+
+  constexpr std::string qt_str = " the basis types vector's";
+  check_dim_input<fdagwr_cov_t>(number_of_covariates,basis_types_names_wrapped.size(),qt_str);
+
+  return basis_types_names_wrapped;
+}
+
 
 
 /*!
@@ -413,7 +473,8 @@ wrap_penalization(double lambda)
 */
 template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
 std::vector<double>
-wrap_penalizations(Rcpp::NumericVector lambdas)
+wrap_penalizations(Rcpp::NumericVector lambdas,
+                   std::size_t number_of_covariates)
 {
   std::vector<double> lambdas_wrapped = Rcpp::as<std::vector<double>>(lambdas);
 
@@ -429,6 +490,9 @@ wrap_penalizations(Rcpp::NumericVector lambdas)
     std::string error_message = "Penalization terms for " + covariates_type + " covariates have to be non-negative";
     throw std::invalid_argument(error_message);
   }
+
+  constexpr std::string qt_str = " the penalization vector's";
+  check_dim_input<fdagwr_cov_t>(number_of_covariates,lambdas_wrapped.size(),qt_str);
 
   return lambdas_wrapped;  
 }
