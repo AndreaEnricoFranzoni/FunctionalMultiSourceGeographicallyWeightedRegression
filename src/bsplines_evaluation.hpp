@@ -23,7 +23,7 @@
 
 
 #include "traits_fdagwr.hpp"
-#include "concepts_fdagwr.hpp
+#include "concepts_fdagwr.hpp"
 
 // do not use this if you have other namespaces loaded
 using namespace fdapde;
