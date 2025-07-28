@@ -195,7 +195,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
 
 
-    Rcout << "fdagwr.2: " << std::endl;
+    Rcout << "fdagwr.4: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                      //data type
     using _DOMAIN_ = fdagwr_traits::Domain;                                          //domain geometry
@@ -377,8 +377,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     ////////////////////////////////////////
 
 
+
+    //CHECK PARAMETER WRAPPING: BEBUGGING PURPOSES
     /*
-    //CHECK PARAMETER WRAPPING
     Rcout << "Number of statistical units: " << number_of_statistical_units_ << std::endl;
     Rcout << "Response " << ", type of basis: " << basis_type_response_ << ", basis degree: " << degree_basis_response_ << ", basis number: " << number_basis_response_ << std::endl;
     Rcout << "Response rec w" << ", type of basis: " << basis_type_rec_weights_response_ << ", basis degree: " << degree_basis_rec_weights_response_ << ", basis number: " << number_basis_rec_weights_response_ << std::endl;
@@ -471,9 +472,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //constant_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_);
     //functional_data<_DOMAIN_,constant_basis > fd_response_(std::move(coefficients_response_),basis_response_);
 
-    //double el = 0.0;
-    //Rcout << "Eval basis pre in" << el << ": " << basis_response_.eval_base(el) << std::endl;
-    /*
+    double el = 0.0;
+    Rcout << "Eval basis pre in" << el << ": " << basis_response_.eval_base(el) << std::endl;
+    
     for(std::size_t i = 0; i < fd_response_.n(); ++i){
         Rcout << "Eval unit " << i+1 << " in loc " << el << ": " << fd_response_.eval(el,i) << std::endl;
         Rcout << "Eval unit " << i+1 << " basis in loc " << el << ": " << fd_response_.fdata()[i].fdatum_basis().eval_base(el) << std::endl;
@@ -485,7 +486,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
         Rcout << "Eval unit " << i+1 << " in loc " << el1 << ": " << fd_response_.eval(el1,i) << std::endl;
         Rcout << "Eval unit " << i+1 << " basis in loc " << el1 << ": " << fd_response_.fdata()[i].fdatum_basis().eval_base(el1) << std::endl;
     }
-    */
+    
 
 
     //returning element

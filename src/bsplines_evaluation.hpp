@@ -23,13 +23,15 @@
 
 
 #include "traits_fdagwr.hpp"
+#include "concepts_fdagwr.hpp
 
 // do not use this if you have other namespaces loaded
 using namespace fdapde;
 
 // evaluates a basis system \{ \phi_1(t), \phi_2(t), ..., \phi_N(t) \} at a set of locations \{ t_1, t_2, ..., t_n \}
 template <typename Triangulation_, typename CoordsMatrix_>
-    requires(internals::is_eigen_dense_xpr_v<CoordsMatrix_>)
+    //requires(internals::is_eigen_dense_xpr_v<CoordsMatrix_>)
+    requires(as_interval<Triangulation_> && internals::is_eigen_dense_xpr_v<CoordsMatrix_>)
 inline Eigen::SparseMatrix<double> bsplines_basis_evaluation(const BsSpace<Triangulation_>& bs_space, CoordsMatrix_&& coords) {
     static constexpr int embed_dim = Triangulation_::embed_dim;
     fdapde_assert(coords.rows() > 0 && coords.cols() == embed_dim);
