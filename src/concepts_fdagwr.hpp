@@ -40,7 +40,7 @@ concept as_interval = std::derived_from<std::remove_cvref_t<T>, fdapde::Triangul
 //concept for the basis evaluation
 template<typename T>
 concept as_basis = requires(T x) {
-  std::remove_cvref_t<T>
+  
   {x.knots()} -> as_interval;                //knots of the basis have to be as the class described in fdaPDE: it is mandatory to remove the const ref from the returning type
   //{x.knots()} -> as_interval;                                     //knots of the basis have to be as the class described in fdaPDE
   {x.eval_base()} -> std::same_as<fdagwr_traits::Dense_Matrix>;   //function to perform the evaluation
