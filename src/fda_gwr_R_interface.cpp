@@ -375,6 +375,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     ////////////////////////////////////////
 
 
+    /*
     //CHECK PARAMETER WRAPPING
     Rcout << "Number of statistical units: " << number_of_statistical_units_ << std::endl;
     Rcout << "Response " << ", type of basis: " << basis_type_response_ << ", basis degree: " << degree_basis_response_ << ", basis number: " << number_basis_response_ << std::endl;
@@ -400,6 +401,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
         Rcout << "Covariate " << i+1 << ", " << names_stations_cov_[i] << ", type of basis: " << basis_types_stations_cov_[i] << ", basis degree: " << degree_basis_stations_cov_[i] << ", basis number: " << number_basis_stations_cov_[i] << std::endl;
         Rcout << "Covariate regressor " << i+1 << ", type of basis: " << basis_types_beta_stations_cov_[i] << ", basis degree: " << degree_basis_beta_stations_cov_[i] << ", basis number: " << number_basis_beta_stations_cov_[i] << std::endl;
     }
+    */
 
 
 
