@@ -234,7 +234,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     fdagwr_traits::Dense_Vector abscissa_points_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(abscissa_points_.data(),abscissa_points_.size());
     double a = left_extreme_domain;
     double b = right_extreme_domain;
-    
+
 
     //  KNOTS
     //response
@@ -333,7 +333,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     auto number_and_degree_basis_stations_cov_ = wrap_and_check_basis_number_and_degree<_STATION_>(n_basis_stations_cov,degrees_basis_stations_cov,knots_stations_cov_.size(),q_S,basis_types_stations_cov_);
     std::vector<std::size_t> number_basis_stations_cov_ = number_and_degree_basis_stations_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> degree_basis_stations_cov_ = number_and_degree_basis_stations_cov_[FDAGWR_FEATS::degree_basis_string];
-    for(std::size_t i = 0; i < q_E; ++i){   
+    for(std::size_t i = 0; i < q_S; ++i){   
         check_dim_input<_STATION_>(number_basis_stations_cov_[i],coefficients_stations_cov_[i].rows(),"covariate " + std::to_string(i+1) + " coefficients matrix rows");
         check_dim_input<_STATION_>(number_of_statistical_units_,coefficients_stations_cov_[i].cols(),"covariate " + std::to_string(i+1) + " coefficients matrix columns");}
     //beta stations cov 
@@ -373,6 +373,35 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     ////////////////////////////////////////
     /////    END PARAMETERS WRAPPING   /////
     ////////////////////////////////////////
+
+
+    //CHECK PARAMETER WRAPPING
+    Rcout << "Number of statistical units: " << number_of_statistical_units_ << std::endl;
+    Rcout << "Response " << ", type of basis: " << basis_type_response_ << ", basis degree: " << degree_basis_response_ << ", basis number: " << number_basis_response_ << std::endl;
+    Rcout << "Response rec w" << ", type of basis: " << basis_type_rec_weights_response_ << ", basis degree: " << degree_basis_rec_weights_response_ << ", basis number: " << number_basis_rec_weights_response_ << std::endl;
+    Rcout << "********" << std::endl;
+    Rcout << "Stationary covs: " << q_C << std::endl;
+    for(std::size_t i = 0; i < q_C; ++i)
+    {
+        Rcout << "Covariate " << i+1 << ", type of basis: " << basis_types_stationary_cov_[i] << ", basis degree: " << degree_basis_stationary_cov_[i] << ", basis number: " << number_basis_stationary_cov_[i] << std::endl;
+        Rcout << "Covariate regressor " << i+1 << ", type of basis: " << basis_types_beta_stationary_cov_[i] << ", basis degree: " << degree_basis_beta_stationary_cov_[i] << ", basis number: " << number_basis_beta_stationary_cov_[i] << std::endl;
+    }
+    Rcout << "********" << std::endl;
+    Rcout << "Events covs: " << q_E << std::endl;
+    for(std::size_t i = 0; i < q_E; ++i)
+    {
+        Rcout << "Covariate " << i+1 << ", type of basis: " << basis_types_events_cov_[i] << ", basis degree: " << degree_basis_events_cov_[i] << ", basis number: " << number_basis_events_cov_[i] << std::endl;
+        Rcout << "Covariate regressor " << i+1 << ", type of basis: " << basis_types_beta_events_cov_[i] << ", basis degree: " << degree_basis_beta_events_cov_[i] << ", basis number: " << number_basis_beta_events_cov_[i] << std::endl;
+    }
+    Rcout << "********" << std::endl;
+    Rcout << "Stations covs: " << q_S << std::endl;
+    for(std::size_t i = 0; i < q_S; ++i)
+    {
+        Rcout << "Covariate " << i+1 << ", type of basis: " << basis_types_stations_cov_[i] << ", basis degree: " << degree_basis_stations_cov_[i] << ", basis number: " << number_basis_stations_cov_[i] << std::endl;
+        Rcout << "Covariate regressor " << i+1 << ", type of basis: " << basis_types_beta_stations_cov_[i] << ", basis degree: " << degree_basis_beta_stations_cov_[i] << ", basis number: " << number_basis_beta_stations_cov_[i] << std::endl;
+    }
+
+
 
 
 
