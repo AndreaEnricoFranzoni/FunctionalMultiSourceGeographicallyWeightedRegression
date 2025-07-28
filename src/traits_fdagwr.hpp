@@ -86,11 +86,11 @@ struct FDAGWR_FEATS
 {
   static constexpr std::size_t number_of_geographical_coordinates = static_cast<std::size_t>(2); 
 
-  static constexpr std::size_t default_basis_order = static_cast<std::size_t>(3);  
+  static constexpr std::size_t default_basis_degree = static_cast<std::size_t>(3);  
 
   static constexpr std::string n_basis_string = "Basis number";
 
-  static constexpr std::string order_basis_string = "Basis order";
+  static constexpr std::string degree_basis_string = "Basis degree";
 };
 
 
@@ -119,6 +119,8 @@ enum FDAGWR_COVARIATES_TYPES
   NON_STATIONARY = 1,   ///< Covariates depending on the geographical location
   EVENT = 2,            ///< Covariates depending on the event geographical location
   STATION = 3,          ///< Covariates not depending on the station geographical location
+  RESPONSE = 4,         ///< Response
+  REC_WEIGHTS = 5,      ///< Response reconstruction weights
 };
 
 
@@ -130,6 +132,8 @@ covariate_type()
   if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY ){   return "Nonstationary";}
   if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::EVENT )         {   return "Event";}
   if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::STATION )       {   return "Station";}
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::RESPONSE )      {   return "Response";}
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::REC_WEIGHTS )   {   return "Response reconstruction weights";}
 };
 
 
