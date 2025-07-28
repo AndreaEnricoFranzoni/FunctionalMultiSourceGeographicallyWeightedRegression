@@ -445,13 +445,13 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
       std::string error_message3 = "It is necessary to pass a vector with " + std::to_string(number_of_covariates) + " number of basis for the " + covariates_type + " covariates";
       throw std::invalid_argument(error_message3);}
 
-    //checking that the input is consistent (basis number at least the number of knots - 1 for all the covariates), if not throwing an exception
-    auto min_basis_number = std::min_element(basis_numbers_w.cbegin(),basis_numbers_w.cend());
-    if (static_cast<std::size_t>(*min_basis_number) < knots_size - static_cast<std::size_t>(1)){
-      std::string covariates_type = covariate_type<fdagwr_cov_t>();
-      std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
-      std::string error_message4 = "The number of basis for all the " + covariates_type + " covariates has to be at least the number of knots (" + std::to_string(knots_size) + ") - 1";
-      throw std::invalid_argument(error_message4);}
+    //checking that the input is consistent (basis number at least the number of knots - 1 for all the covariates for bsplines), if not throwing an exception
+    for(std::size_t i = 0; i < number_of_covariates; ++i){
+          if ((basis_numbers_w[i] < (knots_size - static_cast<std::size_t>(1))) && basis_types[i] == FDAGWR_BASIS_TYPES::_bsplines_){ //checking B-splines relationship for each covariate, where basis are bsplines
+              std::string covariates_type = covariate_type<fdagwr_cov_t>();
+              std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
+              std::string error_message4 = "The number of basis, bspline basis, for all the " + covariates_type + " covariates has to be at least the number of knots (" + std::to_string(knots_size) + ") - 1";
+              throw std::invalid_argument(error_message4);}}
 
     //converting into a vector of std::size_t (create another copy for the conversion, they are objects of small dimensions)
     std::vector<std::size_t> ns_basis;
@@ -497,7 +497,7 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
     if (*min_basis_degree < 0){
         std::string covariates_type = covariate_type<fdagwr_cov_t>();
         std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
-        std::string error_message7 = "Basis orders for all the " + covariates_type + " covariates have to be non-negative";
+        std::string error_message7 = "Basis degrees for all the " + covariates_type + " covariates have to be non-negative";
         throw std::invalid_argument(error_message7);}
 
     //converting into a vector of std::size_t (create another copy for the conversion, they are objects of small dimensions)
@@ -508,7 +508,7 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
                    basis_numbers_w.cend(),
                    ns_basis.begin(),
                    [](auto el){return static_cast<std::size_t>(el);});
-    //orders of basis
+    //degrees of basis
     std::vector<std::size_t> degrees;
     degrees.resize(number_of_covariates);
     std::transform(basis_degrees_w.cbegin(),
@@ -516,20 +516,14 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
                    degrees.begin(),
                    [](auto el){return static_cast<std::size_t>(el);});
 
-
     //check that the number of basis input is consistent, if not throwing an exception
-    std::vector<std::size_t> consistency_input;
-    consistency_input.reserve(number_of_covariates);
-    //checking B-splines relationship for each covariate
     for(std::size_t i = 0; i < number_of_covariates; ++i){
-          consistency_input.emplace_back(ns_basis[i] - (degrees[i] + knots_size - static_cast<std::size_t>(1)));}
-    
-    auto incosistency_search = std::find(consistency_input.cbegin(),consistency_input.cend(),static_cast<std::size_t>(0));
-    if(incosistency_search - consistency_input.cend() == 0){
-      std::string covariates_type = covariate_type<fdagwr_cov_t>();
-      std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
-      std::string error_message8 = "The number of basis for the " + covariates_type + " covariates has to be the degree of the basis + the number of knots - 1";
-      throw std::invalid_argument(error_message8);}
+          //checking B-splines relationship for each covariate, where basis are bsplines
+          if ((ns_basis[i] - (degrees[i] + knots_size - static_cast<std::size_t>(1)) != 0) && basis_types[i] == FDAGWR_BASIS_TYPES::_bsplines_){  
+            std::string covariates_type = covariate_type<fdagwr_cov_t>();
+            std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
+            std::string error_message8 = "The number of basis, bspline basis, for the " + covariates_type + " covariates has to be the degree of the basis + the number of knots - 1";
+            throw std::invalid_argument(error_message8);}}
 
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,ns_basis));
     returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,degrees));
