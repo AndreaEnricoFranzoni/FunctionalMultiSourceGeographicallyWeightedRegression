@@ -26,11 +26,17 @@
 
 
 /*!
-* @brief Class for constant basis
+* @brief Class for constant basis: a straight line at y=1 all along the fd domain
 */
 template< typename domain = fdagwr_traits::Domain >
 class constant_basis :  public basis_base_class<domain>
 {
+private:
+    /*!Degree*/
+    static constexpr std::size_t m_degree = 0;
+    /*!Number of basis*/
+    static constexpr std::size_t m_number_of_basis = 1;
+
 public:
     /*!Constructor*/
     constant_basis(const fdagwr_traits::Dense_Vector & knots)    :  basis_base_class<domain>(knots)  {}

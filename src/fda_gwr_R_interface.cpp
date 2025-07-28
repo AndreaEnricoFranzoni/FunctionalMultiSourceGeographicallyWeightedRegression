@@ -383,21 +383,21 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     Rcout << "Stationary covs: " << q_C << std::endl;
     for(std::size_t i = 0; i < q_C; ++i)
     {
-        Rcout << "Covariate " << i+1 << ", type of basis: " << basis_types_stationary_cov_[i] << ", basis degree: " << degree_basis_stationary_cov_[i] << ", basis number: " << number_basis_stationary_cov_[i] << std::endl;
+        Rcout << "Covariate " << i+1 << ", " << names_stationary_cov_[i] << ", type of basis: " << basis_types_stationary_cov_[i] << ", basis degree: " << degree_basis_stationary_cov_[i] << ", basis number: " << number_basis_stationary_cov_[i] << std::endl;
         Rcout << "Covariate regressor " << i+1 << ", type of basis: " << basis_types_beta_stationary_cov_[i] << ", basis degree: " << degree_basis_beta_stationary_cov_[i] << ", basis number: " << number_basis_beta_stationary_cov_[i] << std::endl;
     }
     Rcout << "********" << std::endl;
     Rcout << "Events covs: " << q_E << std::endl;
     for(std::size_t i = 0; i < q_E; ++i)
     {
-        Rcout << "Covariate " << i+1 << ", type of basis: " << basis_types_events_cov_[i] << ", basis degree: " << degree_basis_events_cov_[i] << ", basis number: " << number_basis_events_cov_[i] << std::endl;
+        Rcout << "Covariate " << i+1 << ", " << names_events_cov_[i] << ", type of basis: " << basis_types_events_cov_[i] << ", basis degree: " << degree_basis_events_cov_[i] << ", basis number: " << number_basis_events_cov_[i] << std::endl;
         Rcout << "Covariate regressor " << i+1 << ", type of basis: " << basis_types_beta_events_cov_[i] << ", basis degree: " << degree_basis_beta_events_cov_[i] << ", basis number: " << number_basis_beta_events_cov_[i] << std::endl;
     }
     Rcout << "********" << std::endl;
     Rcout << "Stations covs: " << q_S << std::endl;
     for(std::size_t i = 0; i < q_S; ++i)
     {
-        Rcout << "Covariate " << i+1 << ", type of basis: " << basis_types_stations_cov_[i] << ", basis degree: " << degree_basis_stations_cov_[i] << ", basis number: " << number_basis_stations_cov_[i] << std::endl;
+        Rcout << "Covariate " << i+1 << ", " << names_stations_cov_[i] << ", type of basis: " << basis_types_stations_cov_[i] << ", basis degree: " << degree_basis_stations_cov_[i] << ", basis number: " << number_basis_stations_cov_[i] << std::endl;
         Rcout << "Covariate regressor " << i+1 << ", type of basis: " << basis_types_beta_stations_cov_[i] << ", basis degree: " << degree_basis_beta_stations_cov_[i] << ", basis number: " << number_basis_beta_stations_cov_[i] << std::endl;
     }
 
