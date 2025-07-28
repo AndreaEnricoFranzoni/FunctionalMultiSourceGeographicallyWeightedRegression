@@ -36,7 +36,7 @@
 * @todo SERVIREBBE UN CONCEPT PER IL TIPO DOMAIN
 */
 template< class domain = fdagwr_traits::Domain, template <typename> class basis_type = bsplines_basis > 
-    requires fdagwr_concepts::as_interval<domain> && fdagwr_concepts::as_basis<basis_type>
+    requires fdagwr_concepts::as_interval<domain> && fdagwr_concepts::as_basis<basis_type<domain>>
 class basis_systems{
 
 
