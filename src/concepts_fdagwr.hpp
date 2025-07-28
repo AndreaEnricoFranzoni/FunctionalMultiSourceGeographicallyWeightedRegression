@@ -43,7 +43,7 @@ concept as_basis = requires(T x) {
   
   {x.knots()} -> as_interval;                //knots of the basis have to be as the class described in fdaPDE: it is mandatory to remove the const ref from the returning type
   //{x.knots()} -> as_interval;                                     //knots of the basis have to be as the class described in fdaPDE
-  {x.eval_base()} -> std::same_as<fdagwr_traits::Dense_Matrix>;   //function to perform the evaluation
+  {x.eval_base(0.0)} -> std::same_as<fdagwr_traits::Dense_Matrix>;   //function to perform the evaluation
 };
 }
 
