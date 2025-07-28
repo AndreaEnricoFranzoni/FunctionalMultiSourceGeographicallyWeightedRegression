@@ -23,7 +23,9 @@
 
 #include "traits_fdagwr.hpp"
 
-
+namespace fdagwr_concepts
+{
+  
 //concept for saying that the interval used to define the basis derives from the triangulation geometry in fdapde
 template<typename T>
 concept as_interval = std::derived_from<T,fdapde::TriangulationBase<1,1,fdapde::Triangulation<1,1>>>;
@@ -36,7 +38,7 @@ concept as_basis = requires(T x) {
   {x.m_knots} -> as_interval;                                     //knots of the basis have to be as the class described in fdaPDE
   {x.eval_base()} -> std::same_as<fdagwr_traits::Dense_Matrix>;   //function to perform the evaluation
 };
-
+}
 
 
 #endif  /*FDAGWR_BASIS_CONCEPTS_HPP*/

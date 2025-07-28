@@ -26,6 +26,7 @@
 
 
 template< typename domain = fdagwr_traits::Domain>
+    requires fdagwr_concepts::as_interval<domain>
 class functional_data_covariates
 {
 

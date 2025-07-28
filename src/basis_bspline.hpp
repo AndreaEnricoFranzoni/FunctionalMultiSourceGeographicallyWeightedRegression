@@ -30,6 +30,7 @@
 * @brief class for bsplines basis
 */
 template< typename domain = fdagwr_traits::Domain >
+    requires fdagwr_concepts::as_interval<domain>
 class bsplines_basis :  public basis_base_class<domain>
 {
 

@@ -27,6 +27,7 @@
 
 
 template< class domain = fdagwr_traits::Domain, template <typename> class basis_type = bsplines_basis > 
+    requires fdagwr_concepts::as_interval<domain>
 class functional_datum
 {
 private:

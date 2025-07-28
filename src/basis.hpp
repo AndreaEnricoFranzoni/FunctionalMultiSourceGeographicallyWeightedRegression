@@ -27,7 +27,7 @@
 
 
 template< typename domain = fdagwr_traits::Domain >
-//    requires as_interval<domain>
+    requires fdagwr_concepts::as_interval<domain>
 class basis_base_class
 {
 private:
