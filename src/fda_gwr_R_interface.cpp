@@ -434,7 +434,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //FD OBJECTS
     //response
     Rcout << "Response: coeff rows: " << coefficients_response_.rows() << ", cols: " << coefficients_response_.cols() << ", nb: " << number_basis_response_ << std::endl;
-    bsplines_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_,number_basis_response_,degree_basis_response_);
+    bsplines_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     functional_data<_DOMAIN_,bsplines_basis > fd_response_(std::move(coefficients_response_),basis_response_);
     //decltype(basis_response_)
     //constant_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_);
