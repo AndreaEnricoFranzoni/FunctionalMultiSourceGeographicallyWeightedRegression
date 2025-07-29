@@ -56,7 +56,7 @@ public:
             m_fdatum_coeff{std::forward<_COEFF_OBJ_>(fdata_coeff)},
             m_fdatum_basis(fdata_basis)      
         {
-            std::cout << "Fdatum: basis: nb: " << m_fdatum_basis .number_of_basis() << std::endl;
+            std::cout << "Fdatum: basis: nb: " << m_fdatum_basis.number_of_basis() << ", deg: " << m_fdatum_basis.degree() << std::endl;
         }
 
     /*!*/
