@@ -35,14 +35,12 @@
 /*!
 * @todo SERVIREBBE UN CONCEPT PER IL TIPO DOMAIN
 */
-template< class domain = fdagwr_traits::Domain, template <typename> class basis_type = bsplines_basis > 
-    requires fdagwr_concepts::as_interval<domain> && fdagwr_concepts::as_basis<basis_type<domain>>
+template< class domain_type = fdagwr_traits::Domain, template <typename> class basis_type = bsplines_basis > 
+    requires fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
 class basis_systems{
-
-
 private:
     /*!Nodes over which the basis systems are constructed*/
-    domain m_knots;
+    domain_type m_knots;
 
     /*!Order of basis for each covariate*/
     std::vector<std::size_t> m_basis_degrees;
@@ -54,7 +52,7 @@ private:
     std::size_t m_q;
 
     /*!Vector containing a basis system for each one of the functional covariates*/
-    std::vector<basis_type<domain>> m_systems_of_basis;
+    std::vector<basis_type<domain_type>> m_systems_of_basis;
 
 public:
     /*!
@@ -79,13 +77,13 @@ public:
     /*!
     * @brief Getter for the nodes over which the basis systems are constructed
     */
-    const domain& knots() const {return m_knots;}
+    const domain_type& knots() const {return m_knots;}
 
     /*!
     * @brief Getter for the systems of basis (returning a reference since fdaPDE stores the basis as a pointer to them)
     * @return the private m_systems_of_basis
     */
-    const std::vector<basis_type<domain>>& systems_of_basis() const {return m_systems_of_basis;}
+    const std::vector<basis_type<domain_type>>& systems_of_basis() const {return m_systems_of_basis;}
 
     /*!
     * @brief Getter for the order of basis for each covariate

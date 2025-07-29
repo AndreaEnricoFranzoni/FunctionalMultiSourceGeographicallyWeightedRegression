@@ -27,22 +27,17 @@ namespace fdagwr_concepts
 {
 
 //concept for saying that the interval used to define the basis derives from the triangulation geometry in fdapde
-//template<typename T>
-//concept as_interval = std::derived_from<T,fdapde::TriangulationBase<1,1,fdapde::Triangulation<1,1>>>;
-
-
-
+//it is necessary to remove the const ref since, for fdaPDE workflow, knots are returned as const ref
 template <typename T>
 concept as_interval = std::derived_from<std::remove_cvref_t<T>, fdapde::TriangulationBase<1,1,fdapde::Triangulation<1,1>>>;
 
 
 
-//concept for the basis evaluation
+//concept for the basis type
 template<typename T>
 concept as_basis = requires(T x) {
   
-  {x.knots()} -> as_interval;                //knots of the basis have to be as the class described in fdaPDE: it is mandatory to remove the const ref from the returning type
-  //{x.knots()} -> as_interval;                                     //knots of the basis have to be as the class described in fdaPDE
+  {x.knots()} -> as_interval;                                        //knots of the basis have to be as the class described in fdaPDE
   {x.eval_base(0.0)} -> std::same_as<fdagwr_traits::Dense_Matrix>;   //function to perform the evaluation
 };
 }

@@ -25,8 +25,8 @@
 #include "functional_data.hpp"
 
 
-template< typename domain = fdagwr_traits::Domain>
-    requires fdagwr_concepts::as_interval<domain>
+template< typename domain_type = fdagwr_traits::Domain>
+    requires fdagwr_concepts::as_interval<domain_type>
 class functional_data_covariates
 {
 

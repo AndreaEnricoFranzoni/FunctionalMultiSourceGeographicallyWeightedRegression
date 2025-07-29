@@ -29,16 +29,16 @@
 /*!
 * @brief class for bsplines basis
 */
-template< typename domain = fdagwr_traits::Domain >
-    requires fdagwr_concepts::as_interval<domain>
-class bsplines_basis :  public basis_base_class<domain>
+template< typename domain_type = fdagwr_traits::Domain >
+    requires fdagwr_concepts::as_interval<domain_type>
+class bsplines_basis :  public basis_base_class<domain_type>
 {
 
 /*!
 * @brief Alias for the basis space
 * @note calling the constructor of BsSpace in the constructor of the class
 */
-using BasisSpace = fdapde::BsSpace<domain>;
+using BasisSpace = fdapde::BsSpace<domain_type>;
 
 
 private:

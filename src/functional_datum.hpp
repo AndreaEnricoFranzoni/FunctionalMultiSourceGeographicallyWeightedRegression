@@ -26,8 +26,8 @@
 #include "basis_constant.hpp"
 
 
-template< class domain = fdagwr_traits::Domain, template <typename> class basis_type = bsplines_basis > 
-    requires fdagwr_concepts::as_interval<domain>
+template< class domain_type = fdagwr_traits::Domain, template <typename> class basis_type = bsplines_basis > 
+    requires fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
 class functional_datum
 {
 private:
@@ -41,7 +41,7 @@ private:
     fdagwr_traits::Dense_Vector m_fdatum_coeff;
 
     /*!Basis of datum basis expansion*/
-    basis_type<domain> m_fdatum_basis;
+    basis_type<domain_type> m_fdatum_basis;
 
 public:
     /*!
@@ -49,7 +49,7 @@ public:
     */
     template< typename _COEFF_OBJ_ >
     functional_datum(_COEFF_OBJ_ && fdata_coeff,
-                     const basis_type<domain>& fdata_basis)
+                     const basis_type<domain_type>& fdata_basis)
         : 
             m_a(fdata_basis.knots().nodes()(0,0)),
             m_b(fdata_basis.knots().nodes()(fdata_basis.knots().nodes().size()-static_cast<std::size_t>(1),0)),
@@ -58,7 +58,7 @@ public:
         {}
 
     /*!*/
-    const basis_type<domain>& fdatum_basis() const {return m_fdatum_basis;}
+    const basis_type<domain_type>& fdatum_basis() const {return m_fdatum_basis;}
 
     /*!
     * @brief evaluating the functional datum in location loc

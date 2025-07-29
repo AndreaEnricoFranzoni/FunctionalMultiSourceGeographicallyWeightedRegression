@@ -28,9 +28,9 @@
 /*!
 * @brief Class for constant basis: a straight line at y=1 all along the fd domain
 */
-template< typename domain = fdagwr_traits::Domain >
-    requires fdagwr_concepts::as_interval<domain>
-class constant_basis :  public basis_base_class<domain>
+template< typename domain_type = fdagwr_traits::Domain >
+    requires fdagwr_concepts::as_interval<domain_type>
+class constant_basis :  public basis_base_class<domain_type>
 {
 private:
     /*!Degree*/

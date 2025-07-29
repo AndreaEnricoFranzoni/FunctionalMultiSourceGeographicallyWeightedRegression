@@ -26,19 +26,17 @@
 #include "concepts_fdagwr.hpp"
 
 
-template< typename domain = fdagwr_traits::Domain >
-    requires fdagwr_concepts::as_interval<domain>
+template< typename domain_type = fdagwr_traits::Domain >
+    requires fdagwr_concepts::as_interval<domain_type>
 class basis_base_class
 {
 private:
     /*!Domain left extreme*/
     double m_a;
-
     /*!Domain right extreme*/
     double m_b;
-
     /*!Knots*/
-    domain m_knots;
+    domain_type m_knots;
 
 public:
     /*!Constructor*/
@@ -68,7 +66,7 @@ public:
     /*!
     * @brief Getter for the nodes over which the basis are constructed
     */
-    const domain& knots() const {return m_knots;}
+    const domain_type& knots() const {return m_knots;}
 
     /*!
     * @brief Abstract function to evaluate the basis in a location
