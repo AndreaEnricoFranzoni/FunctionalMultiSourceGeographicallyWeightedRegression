@@ -28,12 +28,16 @@
 
 template<typename domain_type, class... Args>
     requires fdagwr_concepts::as_interval<domain_type>
-std::unique_ptr<basis_base_class> baseFactory(const std::string& basis_id, Args&&... args)
+std::unique_ptr<basis_base_class<domain_type>> baseFactory(const std::string& basis_id, Args&&... args)
 {
-switch(basis_id)
-case FDAGWR_BASIS_TYPES::_bsplines_ :   return std::make_unique<bsplines_basis<domain_type>>(std::forward<Args>(args)...);
-case FDAGWR_BASIS_TYPES::_constant_ :   return std::make_unique<constant_basis<domain_type>>(std::forward<Args>(args)...); 
-default                             :   return std::unique_ptr<basis_base_class>();
+    if(basis_id == FDAGWR_BASIS_TYPES::_bsplines_){
+        return std::make_unique<bsplines_basis<domain_type>>(std::forward<Args>(args)...);}
+    
+    if(basis_id == FDAGWR_BASIS_TYPES::_constant_ ){
+        return std::make_unique<constant_basis<domain_type>>(std::forward<Args>(args)...); }
+
+    else{
+        return std::unique_ptr<basis_base_class<domain_type>>();}
 }
 
 #endif  /*FDAGWR_BASIS_FACTORY_HPP*/

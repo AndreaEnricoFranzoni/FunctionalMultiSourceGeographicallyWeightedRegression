@@ -64,6 +64,7 @@ public:
                             {
                                 //cheack input consistency
                                 assert((void("Number of knots = number of basis - degree + 1"), m_knots.size() == (m_number_of_basis - m_degree + static_cast<std::size_t>(1))));
+                                std::cout<<"BB creation"<<std::endl;
                             }
 
     /*!
