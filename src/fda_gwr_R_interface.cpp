@@ -437,7 +437,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //bsplines_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     //functional_data<_DOMAIN_,bsplines_basis > fd_response_(std::move(coefficients_response_),basis_response_);
     auto basis_response_ = baseFactory<_DOMAIN_>(FDAGWR_BASIS_TYPES::_bsplines_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
-    functional_data<_DOMAIN_,basis_base_class > fd_response_(std::move(coefficients_response_),*basis_response_);
+    //functional_data<_DOMAIN_,bsplines_basis> fd_response_(std::move(coefficients_response_),*basis_response_);
     //decltype(basis_response_)
     //constant_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_);
     //functional_data<_DOMAIN_,constant_basis > fd_response_(std::move(coefficients_response_),basis_response_);
@@ -445,18 +445,21 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     double el = 0.0;
     Rcout << "Eval basis pre in " << el << ": " << basis_response_->eval_base(el) << std::endl;
     
+    /*
     for(std::size_t i = 0; i < fd_response_.n(); ++i){
         Rcout << "Eval unit " << i+1 << " in loc " << el << ": " << fd_response_.eval(el,i) << std::endl;
         Rcout << "Eval unit " << i+1 << " basis in loc " << el << ": " << fd_response_.fdata()[i].fdatum_basis().eval_base(el) << std::endl;
     }
+    */
 
     double el1 = -1.0;
     Rcout << "Eval basis pre in" << el1 << ": " << basis_response_->eval_base(el1) << std::endl;
+    /*
     for(std::size_t i = 0; i < fd_response_.n(); ++i){
         Rcout << "Eval unit " << i+1 << " in loc " << el1 << ": " << fd_response_.eval(el1,i) << std::endl;
         Rcout << "Eval unit " << i+1 << " basis in loc " << el1 << ": " << fd_response_.fdata()[i].fdatum_basis().eval_base(el1) << std::endl;
     }
-    
+    */
 
 
     //returning element
