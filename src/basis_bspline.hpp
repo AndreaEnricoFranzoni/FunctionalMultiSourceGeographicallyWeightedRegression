@@ -57,7 +57,7 @@ public:
                    std::size_t bsplines_degree,
                    std::size_t number_of_bsplines)    
                 :   
-                        basis_base_class<domain>(knots),
+                        basis_base_class<domain_type>(knots),
                         m_degree(bsplines_degree),
                         m_number_of_basis(number_of_bsplines),
                         m_basis(this->knots(),m_degree)
@@ -94,7 +94,7 @@ public:
         //wrap the input into a coherent object for the spline evaluation
         fdagwr_traits::Dense_Matrix loc = fdagwr_traits::Dense_Matrix::Constant(1, 1, location);
         //wrap the output into a dense matrix:      HA UNA RIGA, N_BASIS COLONNE
-        return fdagwr_traits::Dense_Matrix(bsplines_basis_evaluation<domain>(m_basis, loc));
+        return fdagwr_traits::Dense_Matrix(bsplines_basis_evaluation<domain_type>(m_basis, loc));
     }
 };
 
