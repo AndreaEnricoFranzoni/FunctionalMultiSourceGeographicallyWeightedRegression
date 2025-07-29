@@ -53,11 +53,11 @@ template<typename domain_type>
 Builder<domain_type> build_constant = [] { return std::make_unique<constant_basis<domain_type>>();};
 
 //loading the factory
-void loadBasis(){    auto &basis_factory = basisFactory::Instance();}
+void loadBasis(){    auto &basis_factory = basisFactory<fdagwr_traits::Domain>::Instance();}
 namespace   //registering each time a new implemented basis type
 {
-GenericFactory::Proxy<basisFactory<fdagwr_traits::Domain>, bsplines_basis<domain_type>> bsplines_basis_obj{FDAGWR_BASIS_TYPES::_bsplines_, build_bsplines};
-GenericFactory::Proxy<basisFactory<fdagwr_traits::Domain>, constant_basis<domain_type>> constant_basis_obj{FDAGWR_BASIS_TYPES::_constant_, build_constant};
+GenericFactory::Proxy<basisFactory<fdagwr_traits::Domain>, bsplines_basis<fdagwr_traits::Domain>> bsplines_basis_obj{FDAGWR_BASIS_TYPES::_bsplines_, build_bsplines<fdagwr_traits::Domain>};
+GenericFactory::Proxy<basisFactory<fdagwr_traits::Domain>, constant_basis<fdagwr_traits::Domain>> constant_basis_obj{FDAGWR_BASIS_TYPES::_constant_, build_constant<fdagwr_traits::Domain>};
 }
 
 

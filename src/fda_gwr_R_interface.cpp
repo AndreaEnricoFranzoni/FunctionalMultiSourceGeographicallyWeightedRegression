@@ -383,7 +383,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     loadBasis();
     // get the factory
     auto &basis_factory = basisFactory<_DOMAIN_>::Instance();
-    auto  list = factory.registered();
+    auto  list = basis_factory.registered();
     std::cout << "Registered identifiers:" << std::endl;
     for(std::size_t i = 0; i < list.size(); ++i)
     {
