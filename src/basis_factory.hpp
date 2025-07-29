@@ -46,11 +46,11 @@ using basisFactory = GenericFactory::Factory<basis_base_class<domain_type>, Iden
 //bsplines
 template<typename domain_type>
     requires fdagwr_concepts::as_interval<domain_type>
-Builder<domain_type> build_bsplines = [] { return std::make_unique<bsplines_basis<domain_type>>(const fdagwr_traits::Dense_Vector &,std::size_t,std::size_t);};
+Builder<domain_type> build_bsplines = [] (const fdagwr_traits::Dense_Vector & knots,std::size_t dg,std::size_t nb) { return std::make_unique<bsplines_basis<domain_type>>(knots,dg,nb);};
 //constant basis
 template<typename domain_type>
     requires fdagwr_concepts::as_interval<domain_type>
-Builder<domain_type> build_constant = [] { return std::make_unique<constant_basis<domain_type>>(const fdagwr_traits::Dense_Vector &);};
+Builder<domain_type> build_constant = [] (const fdagwr_traits::Dense_Vector & knots) { return std::make_unique<constant_basis<domain_type>>(knots);};
 
 //loading the factory
 void loadBasis(){    auto &basis_factory = basisFactory<fdagwr_traits::Domain>::Instance();}
