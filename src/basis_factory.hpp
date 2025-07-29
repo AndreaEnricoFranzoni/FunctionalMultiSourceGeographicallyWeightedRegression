@@ -24,8 +24,45 @@
 #include "traits_fdagwr.hpp"
 #include "concepts_fdagwr.hpp"
 #include "basis_include.hpp"
+#include "factory_def.hpp"
+#include "factory_proxy.hpp"
 
 
+
+//identifier for the factory
+using Identifier = std::string;
+
+//general builder for the factory
+template<typename domain_type>
+    requires fdagwr_concepts::as_interval<domain_type>
+using Builder = std::function<std::unique_ptr<basis_base_class<domain_type>>()>;
+
+//factory
+template<typename domain_type>
+    requires fdagwr_concepts::as_interval<domain_type>
+using basisFactory = GenericFactory::Factory<basis_base_class<domain_type>, Identifier, Builder<domain_type>>;
+
+//builders: a builder for each one of the implemented basis
+//bsplines
+template<typename domain_type>
+    requires fdagwr_concepts::as_interval<domain_type>
+Builder<domain_type> build_bsplines = [] { return std::make_unique<bsplines_basis<domain_type>>();};
+//constant basis
+template<typename domain_type>
+    requires fdagwr_concepts::as_interval<domain_type>
+Builder<domain_type> build_constant = [] { return std::make_unique<constant_basis<domain_type>>();};
+
+//loading the factory
+void loadBasis(){    auto &basis_factory = basisFactory::Instance();}
+namespace   //registering each time a new implemented basis type
+{
+GenericFactory::Proxy<basisFactory<fdagwr_traits::Domain>, bsplines_basis<domain_type>> bsplines_basis_obj{FDAGWR_BASIS_TYPES::_bsplines_, build_bsplines};
+GenericFactory::Proxy<basisFactory<fdagwr_traits::Domain>, constant_basis<domain_type>> constant_basis_obj{FDAGWR_BASIS_TYPES::_constant_, build_constant};
+}
+
+
+
+/*
 template<typename domain_type, class... Args>
     requires fdagwr_concepts::as_interval<domain_type>
 std::unique_ptr<basis_base_class<domain_type>> baseFactory(const std::string& basis_id, Args&&... args)
@@ -39,5 +76,6 @@ std::unique_ptr<basis_base_class<domain_type>> baseFactory(const std::string& ba
     else{
         return std::unique_ptr<basis_base_class<domain_type>>();}
 }
+*/
 
 #endif  /*FDAGWR_BASIS_FACTORY_HPP*/

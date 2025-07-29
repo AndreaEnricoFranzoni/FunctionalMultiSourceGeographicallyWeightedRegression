@@ -379,6 +379,27 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
 
+    // fill basis factory 
+    loadBasis();
+    // get the factory
+    auto &basis_factory = basisFactory<_DOMAIN_>::Instance();
+    auto  list = factory.registered();
+    std::cout << "Registered identifiers:" << std::endl;
+    for(std::size_t i = 0; i < list.size(); ++i)
+    {
+      std::cout << list[i] << std::endl;
+    }
+
+    //auto object = basis_factory.create(i);
+
+
+
+
+
+
+
+
+
     //COMPUTING DISTANCES
     //events
     distances_events_cov_.compute_distances();
@@ -436,14 +457,15 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //response
     //bsplines_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     //functional_data<_DOMAIN_,bsplines_basis > fd_response_(std::move(coefficients_response_),basis_response_);
-    auto basis_response_ = baseFactory<_DOMAIN_>(FDAGWR_BASIS_TYPES::_bsplines_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
+    //auto basis_response_ = baseFactory<_DOMAIN_>(FDAGWR_BASIS_TYPES::_bsplines_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
+    //using basis_type = typename decltype(basis_response_)::element_type;
     //functional_data<_DOMAIN_,bsplines_basis> fd_response_(std::move(coefficients_response_),*basis_response_);
     //decltype(basis_response_)
     //constant_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_);
     //functional_data<_DOMAIN_,constant_basis > fd_response_(std::move(coefficients_response_),basis_response_);
 
-    double el = 0.0;
-    Rcout << "Eval basis pre in " << el << ": " << basis_response_->eval_base(el) << std::endl;
+    //double el = 0.0;
+    //Rcout << "Eval basis pre in " << el << ": " << basis_response_->eval_base(el) << std::endl;
     
     /*
     for(std::size_t i = 0; i < fd_response_.n(); ++i){
@@ -452,8 +474,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     }
     */
 
-    double el1 = -1.0;
-    Rcout << "Eval basis pre in" << el1 << ": " << basis_response_->eval_base(el1) << std::endl;
+    //double el1 = -1.0;
+    //Rcout << "Eval basis pre in" << el1 << ": " << basis_response_->eval_base(el1) << std::endl;
     /*
     for(std::size_t i = 0; i < fd_response_.n(); ++i){
         Rcout << "Eval unit " << i+1 << " in loc " << el1 << ": " << fd_response_.eval(el1,i) << std::endl;
