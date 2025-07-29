@@ -42,6 +42,7 @@
 #include <functional>
 #include <set>
 #include <concepts>
+#include <memory>
 
 #ifdef _OPENMP
 #include <omp.h>

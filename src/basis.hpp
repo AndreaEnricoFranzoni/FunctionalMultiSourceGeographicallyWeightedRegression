@@ -39,6 +39,8 @@ private:
     domain_type m_knots;
 
 public:
+    /*!Default constructor*/
+    basis_base_class() = default;
     /*!Constructor*/
     basis_base_class(const fdagwr_traits::Dense_Vector & knots)    
         :   m_a(knots.coeff(0)), m_b(knots.coeff(knots.size()-static_cast<std::size_t>(1))), m_knots(knots)  {}

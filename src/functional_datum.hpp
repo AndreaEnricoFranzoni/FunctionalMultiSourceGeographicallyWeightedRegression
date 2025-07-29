@@ -55,9 +55,7 @@ public:
             m_b(fdata_basis.knots().nodes()(fdata_basis.knots().nodes().size()-static_cast<std::size_t>(1),0)),
             m_fdatum_coeff{std::forward<_COEFF_OBJ_>(fdata_coeff)},
             m_fdatum_basis(fdata_basis)      
-        {
-            std::cout << "Fdatum: basis: nb: " << m_fdatum_basis.number_of_basis() << ", deg: " << m_fdatum_basis.degree() << std::endl;
-        }
+        {}
 
     /*!*/
     const basis_type<domain_type>& fdatum_basis() const {return m_fdatum_basis;}
