@@ -54,12 +54,12 @@ private:
 public:
     /*!Constructor*/
     bsplines_basis(const fdagwr_traits::Dense_Vector & knots,
-                   std::size_t bsplines_degree,
-                   std::size_t number_of_bsplines)    
+                   std::size_t degree,
+                   std::size_t number_of_basis)    
                 :   
                         basis_base_class<domain_type>(knots),
-                        m_degree(bsplines_degree),
-                        m_number_of_basis(number_of_bsplines),
+                        m_degree(degree),
+                        m_number_of_basis(number_of_basis),
                         m_basis(this->knots(),m_degree)
                             {
                                 //cheack input consistency

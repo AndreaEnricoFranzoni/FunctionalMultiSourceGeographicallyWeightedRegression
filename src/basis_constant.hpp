@@ -40,7 +40,12 @@ private:
 
 public:
     /*!Constructor*/
-    constant_basis(const fdagwr_traits::Dense_Vector & knots)    :  basis_base_class<domain_type>(knots)  {std::cout<<"CB creation"<<std::endl;}
+    constant_basis(const fdagwr_traits::Dense_Vector & knots,
+                   std::size_t bsplines_degree = 0,
+                   std::size_t number_of_bsplines = 1)    
+            :  
+                basis_base_class<domain_type>(knots)  
+            {std::cout<<"CB creation"<<std::endl;}
 
     /*!
     * @brief evaluating the system of basis basis_i-th in location location. Overriding the method

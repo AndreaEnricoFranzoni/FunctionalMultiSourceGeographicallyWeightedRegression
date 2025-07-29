@@ -30,27 +30,27 @@
 
 
 //identifier for the factory
-using Identifier = std::string;
+using basisIdentifier = std::string;
 
 //general builder for the factory
 template<typename domain_type>
     requires fdagwr_concepts::as_interval<domain_type>
-using Builder = std::function<std::unique_ptr<basis_base_class<domain_type>>()>;
+using basisBuilder = std::function<std::unique_ptr<basis_base_class<domain_type>>(const fdagwr_traits::Dense_Vector &, std::size_t, std::size_t)>;
 
 //factory
 template<typename domain_type>
     requires fdagwr_concepts::as_interval<domain_type>
-using basisFactory = GenericFactory::Factory<basis_base_class<domain_type>, Identifier, Builder<domain_type>>;
+using basisFactory = GenericFactory::Factory<basis_base_class<domain_type>, basisIdentifier, Builder<domain_type>>;
 
 //builders: a builder for each one of the implemented basis
 //bsplines
 template<typename domain_type>
     requires fdagwr_concepts::as_interval<domain_type>
-Builder<domain_type> build_bsplines = [] { return std::make_unique<bsplines_basis<domain_type>>();};
+basisBuilder<domain_type> build_bsplines = [] (const fdagwr_traits::Dense_Vector &knots, std::size_t dg, std::size_t nb) { return std::make_unique<bsplines_basis<domain_type>>(knots,dg,nb);};
 //constant basis
 template<typename domain_type>
     requires fdagwr_concepts::as_interval<domain_type>
-Builder<domain_type> build_constant = [] { return std::make_unique<constant_basis<domain_type>>();};
+basisBuilder<domain_type> build_constant = [] (const fdagwr_traits::Dense_Vector &knots, std::size_t dg, std::size_t nb) { return std::make_unique<constant_basis<domain_type>>(knots,dg,nb);};
 
 //loading the factory
 void loadBasis(){    auto &basis_factory = basisFactory<fdagwr_traits::Domain>::Instance();}
