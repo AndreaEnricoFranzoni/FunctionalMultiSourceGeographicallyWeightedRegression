@@ -40,7 +40,7 @@ using basisBuilder = std::function<std::unique_ptr<basis_base_class<domain_type>
 //factory
 template<typename domain_type>
     requires fdagwr_concepts::as_interval<domain_type>
-using basisFactory = GenericFactory::Factory<basis_base_class<domain_type>, basisIdentifier, Builder<domain_type>>;
+using basisFactory = GenericFactory::Factory<basis_base_class<domain_type>, basisIdentifier, basisBuilder<domain_type>>;
 
 //builders: a builder for each one of the implemented basis
 //bsplines
