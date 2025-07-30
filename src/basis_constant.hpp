@@ -41,8 +41,8 @@ private:
 public:
     /*!Constructor*/
     constant_basis(const fdagwr_traits::Dense_Vector & knots,
-                   std::size_t bsplines_degree = 0,
-                   std::size_t number_of_bsplines = 1)    
+                   std::size_t degree = 0,
+                   std::size_t number_of_basis = 1)    
             :  
                 basis_base_class<domain_type>(knots,degree,number_of_basis)  
             {std::cout<<"CB creation"<<std::endl;}
