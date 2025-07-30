@@ -111,10 +111,11 @@ namespace generic_factory {
     Proxy(Identifier_type const &);
 
     /**
-    * Builder.
+    * Builder.  INPUT PARAMETERS HAVE TO COMPLY WITH THE ONES OF THE CONSTRUCTOR
     */
-    static std::unique_ptr<AbstractProduct_type> Build(const fdagwr_traits::Dense_Vector &m, std::size_t a, std::size_t b){ return std::make_unique<ConcreteProduct>(m,a,b);}
-
+    //static std::unique_ptr<AbstractProduct_type> Build(const fdagwr_traits::Dense_Vector &m, std::size_t a, std::size_t b){ return std::make_unique<ConcreteProduct>(m,a,b);}
+    template<typename... Args>
+    static std::unique_ptr<AbstractProduct_type> Build(Args&&... args){return std::make_unique<ConcreteProduct>(std::forward<Args>(args)...);}
     
 
   private:
