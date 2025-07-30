@@ -1,93 +1,100 @@
-#ifndef GENERICPROXY_HPP_
-#define GENERICPROXY_HPP_
-#include <iostream>
-#include <memory>
-#include <string>
-#include <type_traits>
-namespace GenericFactory
-{
-/*! A simple proxy for registering into a factory.
+// Copyright (c) 2025 Andrea Enrico Franzoni (andreaenrico.franzoni@gmail.com)
+//
+// This file is part of fdagwr
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of fdagwr and associated documentation files (the fdagwr software), to deal
+// fdagwr without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of fdagwr, and to permit persons to whom fdagwr is
+// furnished to do so, subject to the following conditions:
+//
+// fdagwr IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// fdagwr.
 
-  It provides the builder as static method
-  and the automatic registration mechanism.
+#ifndef FDAGWR_FACTORY_PROXY_HPP
+#define FDAGWR_FACTORY_PROXY_HPP
 
-  \tparam Factory The type of the factory. It must be a specialization of
-  GenericFactory::Factory<>.
-  \tparam ConcreteProduct is the derived (concrete)
-  type to be registered in the factory
 
-*/
-template <typename Factory, typename ConcreteProduct> class Proxy
-{
-public:
-  using AbstractProduct_type = typename Factory::AbstractProduct_type;
-  using Identifier_type = typename Factory::Identifier_type;
-  using Builder_type = typename Factory::Builder_type;
-  // The type returned by the builder
-  using Result_type = std::invoke_result_t<Builder_type>;
-  using Factory_type = Factory;
+#include "traits_fdagwr.hpp"
 
-  /*! The constructor does the registration.
-    @param name The identifier
-    @note I use the builder type provided by the factory. No check is made to
-    verify that it is consistant with the one provided by this Proxy. the
-    builder type must take no arguments and have a return type that accepts a
-    pointer to the ConcreteProduct as argument.
+
+namespace generic_factory {
+
+  /**
+  * A simple proxy for registering into a factory.
+  * It provides the builder as static method
+  * and the automatic registration mechanism.
+  * \param Factory The type of the factory.
+  * \param ConcreteProduct Is the derived (concrete) type to be
+  * registered in the factory
+  * @note I have to use the default builder provided by the factory. No check is made to verify it
   */
-  Proxy(Identifier_type const &name);
 
-  /*! This version takes also the builder. It does not use the builder already
-    provided by the class.To be used in case on incompatibilities.
-    @param name The identifier
-    @param builder The builder
-   */
-  Proxy(Identifier_type const &name, Builder_type const &b = Builder_type{});
+  template <typename Factory, typename ConcreteProduct>
+  class Proxy {
+  public:
+    /**
+    * \var typedef typename  Factory::AbstractProduct_type AbstractProduct_type
+    * Container for the rules.
+    */
+    typedef typename  Factory::AbstractProduct_type AbstractProduct_type;
 
-  //! The in-built builder. Must comply with the signature.
-  /*!
-    Actually you do not need to use the proxy to define the builder,
-    but this way you have only one object that does everything
-    I assume that the builder is a type that returns Result_type
-    and that Result_type can be constructed with a pointer the
-    concrete product. I also assume that Result_type takes
-    care of memory handling (i.e. is a unique_ptr or something
-    that behaves like a unique_prt).
-   */
-  static Result_type
-  Build()
-  {
-    return Result_type(new ConcreteProduct());
+    /**
+    * \var typedef typename  Factory::Identifier_type Identifier_type
+    * Identifier.
+    */
+    typedef typename  Factory::Identifier_type Identifier_type;
+
+    /**
+    * \var typedef typename  Factory::Builder_type Builder_type
+    * Builder type.
+    */
+    typedef typename  Factory::Builder_type Builder_type;
+
+    /**
+    * \var typedef Factory Factory_type
+    * Factory type.
+    */
+    typedef Factory Factory_type;
+
+    /**
+    * Constructor for the registration.
+    */
+    Proxy(Identifier_type const &);
+
+    /**
+    * Builder.
+    */
+    static std::unique_ptr<AbstractProduct_type> Build(){
+      return std::make_unique<ConcreteProduct>();}
+
+  private:
+    /**
+    * Copy onstructor deleted since it is a Singleton
+    */
+    Proxy(Proxy const &)=delete;
+
+    /**
+    * Assignment operator deleted since it is a Singleton
+    */
+    Proxy & operator=(Proxy const &)=delete;
+  };
+
+
+  template<typename F, typename C>
+  Proxy<F,C>::Proxy(Identifier_type const & name) {
+    // get the factory. First time creates it.
+    Factory_type & factory(Factory_type::Instance());
+    // Insert the builder. The & is not needed.
+    factory.add(name,&Proxy<F,C>::Build);
+    // std::cout<<"Added "<< name << " to factory"<<std::endl;
   }
-  //! This is a more explicit version
-  //    static std::unique_ptr<AbstractProduct_type> Build(){
-  // return std::make_unique<ConcreteProduct>();
-  //}
-
-private:
-  Proxy(Proxy const &) = delete;            //
-  Proxy &operator=(Proxy const &) = delete; //
-};
-
-template <typename F, typename C>
-Proxy<F, C>::Proxy(Identifier_type const &name)
-{
-  // get the factory. First time creates it.
-  Factory_type &factory(Factory_type::Instance());
-  // Insert the builder. The & is not needed, but it does not hurt.
-  factory.add(name, &Proxy<F, C>::Build);
-  std::clog << "Added " << name << " to factory" << std::endl;
 }
 
-template <typename F, typename C>
-Proxy<F, C>::Proxy(Identifier_type const &name, Builder_type const &b)
-{
-  // get the factory. First time creates it.
-  Factory_type &factory(Factory_type::Instance());
-  // Insert the builder. The & is not needed, but it does not hurt.
-  factory.add(name, b);
-  std::clog << "Added " << name << " to factory" << std::endl;
-}
-
-} // namespace GenericFactory
-
-#endif /* RULESHANDLER_HPP_ */
+#endif /*FDAGWR_FACTORY_PROXY_HPP*/

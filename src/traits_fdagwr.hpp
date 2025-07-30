@@ -28,21 +28,22 @@
 #include "fdaPDE-core/fdaPDE/splines.h"
 
 #include <vector>
+#include <string>
 #include <array>
 #include <tuple>
 #include <map>
-#include <variant>
+#include <set>
+#include <memory>
+#include <functional>
 #include <type_traits>
-#include <cmath>
-#include <string>
+#include <concepts>
 #include <algorithm>
 #include <iterator>
+#include <cmath>
 #include <numeric>
+#include <variant>
 #include <utility>
-#include <functional>
-#include <set>
-#include <concepts>
-#include <memory>
+
 
 #ifdef _OPENMP
 #include <omp.h>

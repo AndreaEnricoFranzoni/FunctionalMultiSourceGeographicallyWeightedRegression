@@ -24,13 +24,35 @@
 #include "traits_fdagwr.hpp"
 #include "concepts_fdagwr.hpp"
 #include "basis_include.hpp"
-#include "factory_def.hpp"
+#include "factory.hpp"
 #include "factory_proxy.hpp"
 
 
 
-//identifier for the factory
-using basisIdentifier = std::string;
+namespace basis_factory{
+
+    //identifier for the factory
+    using basisIdentifier = std::string;
+
+
+    /**
+    * \var typedef generic_factory::Factory<TailUpModel, std::string> TailUpFactory;
+    * Factory for the tail-up model
+    */
+    typedef generic_factory::Factory<basis_base_class<fdagwr_traits::Domain>, basisIdentifier> basisFactory;  // Use standard Builder
+
+    /**
+    * Proxy for the tail-up model
+    */
+    template<typename ConcreteProduct>
+    using basisProxy = generic_factory::Proxy<basisFactory,ConcreteProduct>;
+
+}   //end namespace basis_factory
+
+
+
+
+/*
 
 //general builder for the factory
 template<typename domain_type>
@@ -60,6 +82,7 @@ GenericFactory::Proxy<basisFactory<fdagwr_traits::Domain>, bsplines_basis<fdagwr
 GenericFactory::Proxy<basisFactory<fdagwr_traits::Domain>, constant_basis<fdagwr_traits::Domain>> constant_basis_obj{FDAGWR_BASIS_TYPES::_constant_, build_constant<fdagwr_traits::Domain>};
 }
 
+*/
 
 
 /*
