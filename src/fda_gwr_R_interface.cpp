@@ -27,7 +27,7 @@
 
 #include "basis_include.hpp"
 #include "basis_bspline_systems.hpp"
-#include "basis_factory.hpp"
+#include "basis_factory_proxy.hpp"
 
 
 #include "functional_data.hpp"
