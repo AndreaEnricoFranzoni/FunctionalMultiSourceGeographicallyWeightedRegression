@@ -146,7 +146,8 @@ namespace generic_factory{
 	      throw std::invalid_argument(out);
     }
     else {
-	       return std::unique_ptr<AbstractProduct>(f->second(std::forward<Args>(args)...));
+	       //return std::unique_ptr<AbstractProduct>(f->second(std::forward<Args>(args)...));
+         return f->second(std::forward<Args>(args)...);
     }
   }
 
