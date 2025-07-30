@@ -101,9 +101,8 @@ namespace generic_factory {
     /**
     * Builder.
     */
-    //static std::unique_ptr<AbstractProduct_type> Build(){ return std::make_unique<ConcreteProduct>();}
-    template<typename... Args>
-    static std::unique_ptr<AbstractProduct_type> Build(){ return std::make_unique<ConcreteProduct>(Args...);}
+    static std::unique_ptr<AbstractProduct_type> Build(){ return std::make_unique<ConcreteProduct>();}
+
     
 
   private:
