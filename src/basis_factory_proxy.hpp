@@ -17,6 +17,8 @@
 // OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
+#ifndef FDAGWR_BASIS_FACTORY_PROXY_HPP
+#define FDAGWR_BASIS_FACTORY_PROXY_HPP
 
 #include "basis_factory.hpp"
 
@@ -27,3 +29,5 @@ namespace {
   basisProxy<constant_basis<fdagwr_traits::Domain>> basisCONSTANT(FDAGWR_BASIS_TYPES::_constant_);
 
 }
+
+#endif  /*FDAGWR_BASIS_FACTORY_PROXY_HPP*/
