@@ -37,7 +37,7 @@ namespace basis_factory{
 
     //builder
     template<typename... Args>
-    using basisBuilder = std::function<std::unique_ptr<basis_base_class<fdagwr_traits::Domain>>(Args...);
+    using basisBuilder = std::function<std::unique_ptr<basis_base_class<fdagwr_traits::Domain>>(Args...)>;
     //using basisBuilder = std::function<std::unique_ptr<basis_base_class<fdagwr_traits::Domain>>(const fdagwr_traits::Dense_Vector &, std::size_t, std::size_t)>;
 
 
