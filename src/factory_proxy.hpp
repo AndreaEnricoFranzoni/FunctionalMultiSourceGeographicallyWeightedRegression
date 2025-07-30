@@ -120,7 +120,6 @@ namespace generic_factory {
 
 
   template<typename F, typename C>
-  template<typename... Args>                              //aggiunta dopo
   Proxy<F,C>::Proxy(Identifier_type const & name) {
     // get the factory. First time creates it.
     Factory_type & factory(Factory_type::Instance());
