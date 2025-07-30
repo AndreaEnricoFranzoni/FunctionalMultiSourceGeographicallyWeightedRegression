@@ -24,10 +24,6 @@
 #include "traits_fdagwr.hpp"
 
 
-#include <functional>
-#include <tuple>
-#include <type_traits>
-
 /*
 // Trait generico per std::function
 template <typename T>
@@ -44,9 +40,25 @@ struct function_traits<std::function<R(Args...)>> {
     template <std::size_t N>
     using argument = std::tuple_element_t<N, std::tuple<Args...>>;
 };
+
+#include <iostream>
+
+int main() {
+    std::function<double(int, float)> f;
+
+    using traits = function_traits<decltype(f)>;
+
+    using ret_type = traits::return_type;          // double
+    using args_tuple = traits::argument_types;     // std::tuple<int, float>
+    using first_arg = traits::argument<0>;         // int
+
+    static_assert(std::is_same_v<ret_type, double>);
+    static_assert(std::is_same_v<first_arg, int>);
+
+    std::cout << "Arity: " << traits::arity << "\n"; // Output: 2
+}
+
 */
-
-
 
 
 
@@ -101,9 +113,7 @@ namespace generic_factory {
     /**
     * Builder.
     */
-    //static std::unique_ptr<AbstractProduct_type> Build(){ return std::make_unique<ConcreteProduct>();}
-    template<typename... Args>
-    static std::unique_ptr<AbstractProduct_type> Build(Args&&... args){ return std::make_unique<ConcreteProduct>(std::forward<Args>(args)...);}
+    static std::unique_ptr<AbstractProduct_type> Build(const fdagwr_traits::Dense_Vector &m, std::size_t a, std::size_t b){ return std::make_unique<ConcreteProduct>(m,a,b);}
 
     
 
