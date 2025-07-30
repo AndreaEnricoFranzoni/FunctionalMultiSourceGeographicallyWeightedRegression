@@ -57,7 +57,7 @@ public:
                    std::size_t degree,
                    std::size_t number_of_basis)    
                 :   
-                        basis_base_class<domain_type>(knots),
+                        basis_base_class<domain_type>(knots,degree,number_of_basis),
                         m_degree(degree),
                         m_number_of_basis(number_of_basis),
                         m_basis(this->knots(),m_degree)

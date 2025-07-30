@@ -44,7 +44,7 @@ public:
                    std::size_t bsplines_degree = 0,
                    std::size_t number_of_bsplines = 1)    
             :  
-                basis_base_class<domain_type>(knots)  
+                basis_base_class<domain_type>(knots,degree,number_of_basis)  
             {std::cout<<"CB creation"<<std::endl;}
 
     /*!

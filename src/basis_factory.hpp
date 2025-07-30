@@ -34,12 +34,14 @@ namespace basis_factory{
     //identifier for the factory
     using basisIdentifier = std::string;
 
+    using basisBuilder = std::function<basis_base_class<fdagwr_traits::Domain>(const fdagwr_traits::Dense_Vector &, std::size_t, std::size_t)>;
+
 
     /**
     * \var typedef generic_factory::Factory<TailUpModel, std::string> TailUpFactory;
     * Factory for the tail-up model
     */
-    typedef generic_factory::Factory<basis_base_class<fdagwr_traits::Domain>, basisIdentifier> basisFactory;  // Use standard Builder
+    typedef generic_factory::Factory<basis_base_class<fdagwr_traits::Domain>, basisIdentifier, basisBuilder> basisFactory;  // Use standard Builder
 
     /**
     * Proxy for the tail-up model

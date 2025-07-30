@@ -40,7 +40,9 @@ private:
 
 public:
     /*!Constructor*/
-    basis_base_class(const fdagwr_traits::Dense_Vector & knots)    
+    basis_base_class(const fdagwr_traits::Dense_Vector & knots,
+                    std::size_t bsplines_degree = 0,
+                    std::size_t number_of_bsplines = 1)    
         :   m_a(knots.coeff(0)), m_b(knots.coeff(knots.size()-static_cast<std::size_t>(1))), m_knots(knots)  {}
 
     /*! 
