@@ -34,6 +34,7 @@ namespace basis_factory{
     //identifier for the factory
     using basisIdentifier = std::string;
 
+    //builder
     using basisBuilder = std::function<basis_base_class<fdagwr_traits::Domain>(const fdagwr_traits::Dense_Vector &, std::size_t, std::size_t)>;
 
 

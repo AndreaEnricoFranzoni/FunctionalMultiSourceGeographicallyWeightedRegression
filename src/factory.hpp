@@ -73,7 +73,8 @@ namespace generic_factory{
     /* Get the rule with given name
     * The pointer is null if no rule is present.
     */
-    std::unique_ptr<AbstractProduct> create(Identifier const & name) const;
+    template<typename... Args>
+    std::unique_ptr<AbstractProduct> create(Identifier const & name, Args&&... args) const;
 
     /*
     * Register the given rule.
