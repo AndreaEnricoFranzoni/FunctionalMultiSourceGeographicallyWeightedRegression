@@ -44,7 +44,7 @@ namespace generic_factory{
   template <
             typename AbstractProduct, 
             typename Identifier, 
-            typename Builder=std::function<std::unique_ptr<AbstractProduct> ()>>
+            typename Builder = std::function<std::unique_ptr<AbstractProduct>()>>
   class Factory{
 
   public:

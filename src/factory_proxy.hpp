@@ -24,6 +24,36 @@
 #include "traits_fdagwr.hpp"
 
 
+#include <functional>
+#include <tuple>
+#include <type_traits>
+
+/*
+// Trait generico per std::function
+template <typename T>
+struct function_traits;
+
+// Specializzazione per std::function
+template <typename R, typename... Args>
+struct function_traits<std::function<R(Args...)>> {
+    using return_type = R;
+    using argument_types = std::tuple<Args...>;
+
+    static constexpr std::size_t arity = sizeof...(Args);
+
+    template <std::size_t N>
+    using argument = std::tuple_element_t<N, std::tuple<Args...>>;
+};
+*/
+
+
+
+
+
+
+
+
+
 namespace generic_factory {
 
   /**
@@ -71,7 +101,10 @@ namespace generic_factory {
     /**
     * Builder.
     */
-    static std::unique_ptr<AbstractProduct_type> Build(){ return std::make_unique<ConcreteProduct>();}
+    //static std::unique_ptr<AbstractProduct_type> Build(){ return std::make_unique<ConcreteProduct>();}
+    template<typename... Args>
+    static std::unique_ptr<AbstractProduct_type> Build(){ return std::make_unique<ConcreteProduct>(Args...);}
+    
 
   private:
     /**
@@ -87,6 +120,7 @@ namespace generic_factory {
 
 
   template<typename F, typename C>
+  template<typename... Args>                              //aggiunta dopo
   Proxy<F,C>::Proxy(Identifier_type const & name) {
     // get the factory. First time creates it.
     Factory_type & factory(Factory_type::Instance());

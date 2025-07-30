@@ -43,7 +43,7 @@ namespace basis_factory{
     * \var typedef generic_factory::Factory<TailUpModel, std::string> TailUpFactory;
     * Factory for the tail-up model
     */
-    typedef generic_factory::Factory<basis_base_class<fdagwr_traits::Domain>, basisIdentifier, basisBuilder> basisFactory;  // Use standard Builder
+    typedef generic_factory::Factory< basis_base_class<fdagwr_traits::Domain>, basisIdentifier, basisBuilder> basisFactory;  // Use standard Builder
 
     /**
     * Proxy for the tail-up model
