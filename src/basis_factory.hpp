@@ -36,16 +36,14 @@ namespace basis_factory{
 
 
     //builder
-    template<typename... Args>
-    using basisBuilder = std::function<std::unique_ptr<basis_base_class<fdagwr_traits::Domain>>(Args...)>;
-    //using basisBuilder = std::function<std::unique_ptr<basis_base_class<fdagwr_traits::Domain>>(const fdagwr_traits::Dense_Vector &, std::size_t, std::size_t)>;
+    using basisBuilder = std::function<std::unique_ptr<basis_base_class<fdagwr_traits::Domain>>(const fdagwr_traits::Dense_Vector &, std::size_t, std::size_t)>;
 
 
     /**
     * \var typedef generic_factory::Factory<TailUpModel, std::string> TailUpFactory;
     * Factory for the tail-up model
     */
-    typedef generic_factory::Factory< basis_base_class<fdagwr_traits::Domain>, basisIdentifier, basisBuilder> basisFactory;  // Use standard Builder
+    typedef generic_factory::Factory< basis_base_class<fdagwr_traits::Domain>, basisIdentifier, basisBuilder> basisFactory;  // Use standard Builder // Use standard Builder
 
     /**
     * Proxy for the tail-up model
