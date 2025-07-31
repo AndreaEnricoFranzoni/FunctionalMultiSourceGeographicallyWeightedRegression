@@ -460,7 +460,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     */
 
     
-    Rcout << "Eval fd unit 0-th in " << el << ": " << fd_response_.eval(el,0) << std::endl;
+    Rcout << "Eval fd unit 0-th in " << el << ": " << y_fd_.eval(el,0) << std::endl;
 
 
     //response
