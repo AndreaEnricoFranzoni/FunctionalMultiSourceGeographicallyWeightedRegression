@@ -437,12 +437,12 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     std::unique_ptr<basis_base_class<_DOMAIN_>> tmp_base = basis_fac.create("bsplines",knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     Rcout << "La base ha " << tmp_base->a() << " basi, con grado " << tmp_base->b() << std::endl;
 
-    using PointeeType = typename std::decltype(tmp_base)::element_type;
+    using PointeeType = typename decltype(tmp_base)::element_type;
 
-    if(std::is_same_v(PointeeType,basis_base_class<_DOMAIN_>)){Rcout << "Stessa classe padre" << std::endl;}
-if(std::is_same_v(PointeeType,bsplines_basis<_DOMAIN_>)){Rcout << "Stessa classe figlia bsplines" << std::endl;}
+    if(std::is_same_v<PointeeType,basis_base_class<_DOMAIN_>>){Rcout << "Stessa classe padre" << std::endl;}
+if(std::is_same_v<PointeeType,bsplines_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia bsplines" << std::endl;}
 
-if(std::is_same_v(PointeeType,constant_basis<_DOMAIN_>)){Rcout << "Stessa classe figlia constant" << std::endl;}
+if(std::is_same_v<PointeeType,constant_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia constant" << std::endl;}
 
 
     //response
