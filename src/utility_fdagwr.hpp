@@ -18,30 +18,42 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_BASIS_CONCEPTS_HPP
-#define FDAGWR_BASIS_CONCEPTS_HPP
+#ifndef FDAGWR_UTILITIES_HPP
+#define FDAGWR_UTILITIES_HPP
 
 
 #include "traits_fdagwr.hpp"
 
-namespace fdagwr_concepts
-{
-
-//concept for saying that the interval used to define the basis derives from the triangulation geometry in fdapde
-//it is necessary to remove the const ref since, for fdaPDE workflow, knots are returned as const ref
 template <typename T>
-concept as_interval = std::derived_from<std::remove_cvref_t<T>, fdapde::TriangulationBase<1,1,fdapde::Triangulation<1,1>>>;
+struct extract_template;
 
-
-
-//concept for the basis type
-template<typename T>
-concept as_basis = requires(T x) {
-  
-  {x.knots()} -> as_interval;                                        //knots of the basis have to be as the class described in fdaPDE
-  {x.eval_base(0.0)} -> std::same_as<fdagwr_traits::Dense_Matrix>;   //function to perform the evaluation
+// Specializzazione per classi template con un solo parametro di tipo
+template <template <typename> class Template, typename Arg>
+struct extract_template<Template<Arg>> {
+    using type = Template; // Il nome del template
 };
+
+// Helper alias
+template <typename T>
+using extract_template_t = typename extract_template<T>::type;
+
+
+/*
+template <typename Domain>
+struct basis {};
+
+int main() {
+    std::unique_ptr<basis<int>> ptr;
+
+    using PointeeType = typename decltype(ptr)::element_type; // basis<int>
+    using BasisTemplate = extract_template_t<PointeeType>;    // basis
+
+    // Ora puoi fare:
+    wrapper<BasisTemplate> w;
 }
 
+*/
 
-#endif  /*FDAGWR_BASIS_CONCEPTS_HPP*/
+
+
+#endif  /*FDAGWR_UTILITIES_HPP*/

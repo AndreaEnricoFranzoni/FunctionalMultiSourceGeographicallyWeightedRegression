@@ -22,6 +22,8 @@
 
 
 #include "traits_fdagwr.hpp"
+#include "concepts_fdagwr.hpp"
+#include "utility_fdagwr.hpp"
 #include "data_reader.hpp"
 #include "parameters_wrapper_fdagwr.hpp"
 
@@ -435,7 +437,13 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //FD OBJECTS
     basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_response_ = basis_fac.create("bsplines",knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
-    functional_data<_DOMAIN_,decltype(basis_response_)::element_type > fd_response_(std::move(coefficients_response_),basis_response_);
+    
+    using PointeeType = typename decltype(basis_response_)::element_type; // basis<int>
+    using BasisTemplate = extract_template_t<PointeeType>;    // basis
+    
+    
+    
+    functional_data<_DOMAIN_,BasisTemplate > fd_response_(std::move(coefficients_response_),basis_response_);
     
     
         
