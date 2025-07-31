@@ -61,7 +61,7 @@ public:
                 m_fdata_basis(std::move(fdata_basis))  
             {
 
-                Rcout << "La base ha " << m_fdata_basis->number_of_basis() << " basi, con grado " << m_fdata_basis->degree() << std::endl;
+                std::cout << "La base ha " << m_fdata_basis->number_of_basis() << " basi, con grado " << m_fdata_basis->degree() << std::endl;
             }
 
     /*!
