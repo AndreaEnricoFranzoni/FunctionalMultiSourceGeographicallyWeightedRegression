@@ -45,8 +45,8 @@
 */
 template <FDAGWR_COVARIATES_TYPES stationarity_t>
 using WeightMatrixType = std::conditional<stationarity_t == FDAGWR_COVARIATES_TYPES::STATIONARY,
-                                          std::vector< fdagwr_traits::Diag_Matrix >,        //se stazionario, ogni elemento del vettore corrisponde ad un valore dell'ascissa, e di conseguenza vi è la giusta matrice peso
-                                          std::vector< std::vector< fdagwr_traits::Diag_Matrix >>>::type;
+                                          std::vector< FDAGWR_TRAITS::Diag_Matrix >,        //se stazionario, ogni elemento del vettore corrisponde ad un valore dell'ascissa, e di conseguenza vi è la giusta matrice peso
+                                          std::vector< std::vector< FDAGWR_TRAITS::Diag_Matrix >>>::type;
 
 
 
@@ -66,7 +66,7 @@ class functional_weight_matrix_base
 private:
 
     /*!Matrix containing the stationary weights: abscissa x units*/
-    fdagwr_traits::Dense_Matrix m_coeff_stat_weights;
+    FDAGWR_TRAITS::Dense_Matrix m_coeff_stat_weights;
 
     /*!Number of abscissa evaluations*/
     std::size_t m_number_abscissa_evaluations;

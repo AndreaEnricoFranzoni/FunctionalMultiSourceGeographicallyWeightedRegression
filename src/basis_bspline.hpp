@@ -40,14 +40,14 @@ class bsplines_basis :  public basis_base_class<domain_type>
 */
 using BasisSpace = fdapde::BsSpace<domain_type>;
 
-
 private:
     /*!Bslines*/
     BasisSpace m_basis;
+
+public:
     /*!Default(cubic bsplines)*/
     static constexpr std::size_t bsplines_degree_default = static_cast<std::size_t>(3); 
 
-public:
     /*!Constructor*/
     bsplines_basis(const FDAGWR_TRAITS::Dense_Vector & knots,
                    std::size_t degree,
@@ -59,6 +59,7 @@ public:
                     //cheack input consistency
                     assert((void("Number of knots = number of basis - degree + 1"), this->number_knots() == (m_number_of_basis - m_degree + static_cast<std::size_t>(1))));
                 }
+
 
     /*!
     * @brief Getter for the basis

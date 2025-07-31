@@ -388,7 +388,7 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
   if (basis_numbers.isNull() && basis_degrees.isNull())
   {
     std::vector<std::size_t> degrees(number_of_covariates,bsplines_basis<FDAGWR_TRAITS::basis_geometry>::bsplines_degree_default);    //default is a cubic B-spline (degree 3) for all the covariates
-    std::vector<std::size_t> ns_basis(number_of_covariates,FDAGWR_FEATS::default_basis_degree + knots_size - static_cast<std::size_t>(1));
+    std::vector<std::size_t> ns_basis(number_of_covariates,bsplines_basis<FDAGWR_TRAITS::basis_geometry>::bsplines_degree_default + knots_size - static_cast<std::size_t>(1));
 
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,ns_basis));
     returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,degrees));

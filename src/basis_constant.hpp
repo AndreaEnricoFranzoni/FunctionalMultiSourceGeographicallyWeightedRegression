@@ -32,13 +32,12 @@ template< typename domain_type = FDAGWR_TRAITS::basis_geometry >
     requires fdagwr_concepts::as_interval<domain_type>
 class constant_basis :  public basis_base_class<domain_type>
 {
-private:
+public:
     /*!Degree*/
     static constexpr std::size_t degree_constant_basis = 0;
     /*!Number of basis*/
     static constexpr std::size_t number_of_basis_constant_basis = 1;
-
-public:
+    
     /*!Constructor*/
     constant_basis(const FDAGWR_TRAITS::Dense_Vector & knots,
                    std::size_t,

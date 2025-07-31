@@ -25,8 +25,8 @@
 namespace {
   using basis_factory::basisProxy;
 
-  basisProxy<bsplines_basis<FDAGWR_TRAITS::Domain>> basisBSPLINES(FDAGWR_BASIS_TYPES::_bsplines_);
-  basisProxy<constant_basis<FDAGWR_TRAITS::Domain>> basisCONSTANT(FDAGWR_BASIS_TYPES::_constant_);
+  basisProxy<bsplines_basis<FDAGWR_TRAITS::basis_geometry>> basisBSPLINES(FDAGWR_BASIS_TYPES::_bsplines_);
+  basisProxy<constant_basis<FDAGWR_TRAITS::basis_geometry>> basisCONSTANT(FDAGWR_BASIS_TYPES::_constant_);
 
 }
 
