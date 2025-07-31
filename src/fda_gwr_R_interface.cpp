@@ -37,6 +37,7 @@
 
 
 #include "functional_data.hpp"
+#include "functional_data_covariates.hpp"
 
 #include "functional_weight_matrix_stat.hpp"
 #include "functional_weight_matrix_no_stat.hpp"
