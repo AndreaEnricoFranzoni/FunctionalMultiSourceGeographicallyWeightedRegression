@@ -37,7 +37,7 @@
 struct SecondDerivativePenalty
 { 
   Eigen::SparseMatrix<double> 
-  operator()(const basis_systems< fdagwr_traits::Domain, bsplines_basis > &bs, std::size_t system_number) 
+  operator()(const basis_systems< FDAGWR_TRAITS::Domain, bsplines_basis > &bs, std::size_t system_number) 
   const
   {
     //using fdaPDE
@@ -60,7 +60,7 @@ struct SecondDerivativePenalty
 struct FirstDerivativePenalty
 { 
   Eigen::SparseMatrix<double> 
-  operator()(const basis_systems< fdagwr_traits::Domain, bsplines_basis > &bs, std::size_t system_number) 
+  operator()(const basis_systems< FDAGWR_TRAITS::Domain, bsplines_basis > &bs, std::size_t system_number) 
   const
   {
     //using fdaPDE
@@ -83,7 +83,7 @@ struct FirstDerivativePenalty
 struct ZeroDerivativePenalty
 { 
   Eigen::SparseMatrix<double> 
-  operator()(const basis_systems< fdagwr_traits::Domain, bsplines_basis > &bs, std::size_t system_number) 
+  operator()(const basis_systems< FDAGWR_TRAITS::Domain, bsplines_basis > &bs, std::size_t system_number) 
   const
   {
     //using fdaPDE

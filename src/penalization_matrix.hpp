@@ -97,7 +97,7 @@ public:
                     std::size_t start_of_block = std::reduce(bs.numbers_of_basis().cbegin(),bs.numbers_of_basis().cbegin()+i,static_cast<std::size_t>(0));
                     //storing the matrix in the a vector of Eigen::Triplets
                     for (std::size_t k = 0; k < PenaltyBasis_i.outerSize(); ++k){
-                        for (fdagwr_traits::Sparse_Matrix::InnerIterator it(PenaltyBasis_i,k); it; ++it){
+                        for (FDAGWR_TRAITS::Sparse_Matrix::InnerIterator it(PenaltyBasis_i,k); it; ++it){
                             penalty_matrices_triplets.emplace_back(it.row() + start_of_block, 
                                                                    it.col() + start_of_block,
                                                                    it.value());}}}
@@ -115,7 +115,7 @@ public:
     /*!
     * @brief Getter for the penalization matrix
     */
-    const fdagwr_traits::Sparse_Matrix& PenalizationMatrix() const {return m_PenalizationMatrix;}
+    const FDAGWR_TRAITS::Sparse_Matrix& PenalizationMatrix() const {return m_PenalizationMatrix;}
 
     /*!
     * @brief Getter for the dimension of the penalization matrix

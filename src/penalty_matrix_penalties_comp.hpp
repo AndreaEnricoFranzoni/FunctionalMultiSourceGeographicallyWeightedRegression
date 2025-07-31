@@ -33,7 +33,7 @@ public:
   
   FDAGWR_TRAITS::Sparse_Matrix 
   operator()
-  (const basis_systems< FDAGWR_TRAITS::Domain, bsplines_basis > &bs, std::size_t system_number) 
+  (const basis_systems< FDAGWR_TRAITS::basis_geometry, bsplines_basis > &bs, std::size_t system_number) 
   const 
   {   
     return penalty_computing(bs, system_number);}
