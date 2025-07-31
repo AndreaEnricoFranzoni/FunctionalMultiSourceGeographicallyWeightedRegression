@@ -217,7 +217,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                                //kernel function to smooth the distances within statistcal units locations
     constexpr auto _NAN_REM_ = REM_NAN::MR;                                         //how to remove nan (with mean of non-nans)
     
-    //basis factory
+    //instance of the factory for the basis
     basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());    
 
     ///////////////////////////////////////////////////////
@@ -387,14 +387,18 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
 
-    //COMPUTING DISTANCES
+    /////////////////////////////////////////
+    /////    START FD OBJECT CREATION   /////
+    /////////////////////////////////////////
+
+    //DISTANCES
     //events
     distances_events_cov_.compute_distances();
     //stations
     distances_stations_cov_.compute_distances();
 
 
-    //COMPUTING FUNCTIONAL WEIGHT MATRIX
+    //FUNCTIONAL WEIGHT MATRIX
     //stationary
     functional_weight_matrix_stationary<_STATIONARY_> W_C(coefficients_rec_weights_response_,
                                                           number_threads);
@@ -413,18 +417,18 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     W_S.compute_weights();
 
 
-    //COMPUTING THE BASIS SYSTEMS FOR THE BETAS
-    //stationary
+    //BASIS SYSTEMS FOR THE BETAS
+    //stationary (Omega)
     basis_systems< _DOMAIN_, bsplines_basis > bs_C(knots_beta_stationary_cov_eigen_w_, 
                                                   degree_basis_beta_stationary_cov_, 
                                                   number_basis_beta_stationary_cov_, 
                                                   q_C);
-    //events
+    //events (Theta)
     basis_systems< _DOMAIN_, bsplines_basis > bs_E(knots_beta_events_cov_eigen_w_, 
                                                   degree_basis_beta_events_cov_, 
                                                   number_basis_beta_events_cov_, 
                                                   q_E);
-    //stations
+    //stations (Psi)
     basis_systems< _DOMAIN_, bsplines_basis > bs_S(knots_beta_stations_cov_eigen_w_,  
                                                   degree_basis_beta_stations_cov_, 
                                                   number_basis_beta_stations_cov_, 
@@ -440,63 +444,52 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     penalization_matrix<_DERVIATIVE_PENALIZED_> R_S(std::move(bs_S),lambda_stations_cov_);
 
 
-    //FD OBJECTS
+    //FD OBJECTS: RESPONSE and COVARIATES
     //response
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_response_ = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     //extracting the template param of the basis for fd (access it in the template params list with ::template_type)  
     using response_basis_tmp_t = extract_template_t< decltype(basis_response_)::element_type >;   
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
+    
     //stationary covariates
-    functional_data_covariates<_DOMAIN_> x_C_fd_(coefficients_stationary_cov_,
-                                                 q_C,
-                                                 basis_types_stationary_cov_,
-                                                 degree_basis_stationary_cov_,
-                                                 number_basis_stationary_cov_,
-                                                 knots_stationary_cov_eigen_w_,
-                                                 basis_fac);
-    
+    functional_data_covariates<_DOMAIN_,_STATIONARY_> x_C_fd_(coefficients_stationary_cov_,
+                                                              q_C,
+                                                              basis_types_stationary_cov_,
+                                                              degree_basis_stationary_cov_,
+                                                              number_basis_stationary_cov_,
+                                                              knots_stationary_cov_eigen_w_,
+                                                              basis_fac);
+    //events covariates
+    functional_data_covariates<_DOMAIN_,_EVENT_> x_E_fd_(coefficients_events_cov_,
+                                                         q_E,
+                                                         basis_types_events_cov_,
+                                                         degree_basis_events_cov_,
+                                                         number_basis_events_cov_,
+                                                         knots_events_cov_eigen_w_,
+                                                         basis_fac);
+    //stations covariates
+    functional_data_covariates<_DOMAIN_,_STATION_> x_S_fd_(coefficients_stations_cov_,
+                                                           q_S,
+                                                           basis_types_stations_cov_,
+                                                           degree_basis_stations_cov_,
+                                                           number_basis_stations_cov_,
+                                                           knots_stations_cov_eigen_w_,
+                                                           basis_fac);
 
-    /*
-    if(std::is_same_v<PointeeType,basis_base_class<_DOMAIN_>>){Rcout << "Stessa classe padre" << std::endl;}
-    if(std::is_same_v<PointeeType,bsplines_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia bsplines" << std::endl;}
 
-    if(std::is_same_v<PointeeType,constant_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia constant" << std::endl;}
-    */
+   double el = 0.0;
+   for(std::size_t i = 0; i < number_of_statistical_units_; ++i)
+   {
+        Rcout << "Evaluation of unit " << i + 1 << "-th in location " << el << std::endl;
+        Rcout << "Response: " << y_fd_.eval(el,i) << std::endl;
+        for(std::size_t i_c = 0; i_c < q_C; ++i_c){
+            Rcout << "Stationary covairiate " << i_c + 1 << "-th: " << x_C_fd_.eval(el,i_c,i) << std::endl;}
+        for(std::size_t i_e = 0; i_e < q_E; ++i_e){
+            Rcout << "Event covairiate " << i_e + 1 << "-th: " << x_E_fd_.eval(el,i_e,i) << std::endl;}
+        for(std::size_t i_s = 0; i_s < q_S; ++i_s){
+            Rcout << "Event covairiate " << i_s + 1 << "-th: " << x_S_fd_.eval(el,i_s,i) << std::endl;}
+   }
 
-    double el = 0.0;
-    Rcout << "Eval fd unit 0-th in " << el << ": " << y_fd_.eval(el,0) << std::endl;
-
-    Rcout << "Eval fd xC unit 0-th cov 0-th in " << el << ": " << x_C_fd_.eval(el,0,0) << std::endl;
-
-
-    //response
-    //bsplines_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
-    //functional_data<_DOMAIN_,bsplines_basis > fd_response_(std::move(coefficients_response_),basis_response_);
-    //auto basis_response_ = baseFactory<_DOMAIN_>(FDAGWR_BASIS_TYPES::_bsplines_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
-    //using basis_type = typename decltype(basis_response_)::element_type;
-    //functional_data<_DOMAIN_,bsplines_basis> fd_response_(std::move(coefficients_response_),*basis_response_);
-    //decltype(basis_response_)
-    //constant_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_);
-    //functional_data<_DOMAIN_,constant_basis > fd_response_(std::move(coefficients_response_),basis_response_);
-
-    //double el = 0.0;
-    //Rcout << "Eval basis pre in " << el << ": " << basis_response_->eval_base(el) << std::endl;
-    
-    /*
-    for(std::size_t i = 0; i < fd_response_.n(); ++i){
-        Rcout << "Eval unit " << i+1 << " in loc " << el << ": " << fd_response_.eval(el,i) << std::endl;
-        Rcout << "Eval unit " << i+1 << " basis in loc " << el << ": " << fd_response_.fdata()[i].fdatum_basis().eval_base(el) << std::endl;
-    }
-    */
-
-    //double el1 = -1.0;
-    //Rcout << "Eval basis pre in" << el1 << ": " << basis_response_->eval_base(el1) << std::endl;
-    /*
-    for(std::size_t i = 0; i < fd_response_.n(); ++i){
-        Rcout << "Eval unit " << i+1 << " in loc " << el1 << ": " << fd_response_.eval(el1,i) << std::endl;
-        Rcout << "Eval unit " << i+1 << " basis in loc " << el1 << ": " << fd_response_.fdata()[i].fdatum_basis().eval_base(el1) << std::endl;
-    }
-    */
 
 
     //returning element

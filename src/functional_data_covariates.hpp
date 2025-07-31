@@ -27,7 +27,7 @@
 #include "basis_factory_proxy.hpp"
 
 
-template< typename domain_type = FDAGWR_TRAITS::basis_geometry >
+template< typename domain_type = FDAGWR_TRAITS::basis_geometry, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >
     requires fdagwr_concepts::as_interval<domain_type>
 class functional_data_covariates
 {
@@ -40,6 +40,7 @@ private:
     std::vector<functional_data< domain_type,basis_base_class >> m_X;
 
 public:
+    /*!Constructor*/
     functional_data_covariates(const std::vector<FDAGWR_TRAITS::Dense_Matrix> & coeff,
                                std::size_t q,
                                const std::vector<std::string> & basis_types,
@@ -59,14 +60,24 @@ public:
                                 m_X.emplace_back(std::move(coeff[i]),std::move(basis_i));
                             }
                         }
+    
+    /*!
+    * @brief Getter for the number of covariates
+    */
+    std::size_t q() const {return m_q;}
 
+    /*!
+    * @brief Getter for the number of statistical units
+    */
+    std::size_t n() const {return m_n;}
+
+    /*!Evaluation function*/
     double
     eval(double loc, std::size_t cov_i, std::size_t unit_j)
     const
     {
-        return m_X[cov_i].eval(loc,unit_j);
+        return m_X[cov_i].eval(loc,unit_j); //evaluation of unit_j-th of covariate cov_i-th in location loc
     }
-
 };
 
 #endif  /*FDAGWR_FUNCTIONAL_DATA_DATASET_HPP*/
