@@ -434,18 +434,22 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //FD OBJECTS
     basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());
-    std::unique_ptr<basis_base_class<_DOMAIN_>> tmp_base = basis_fac.create("bsplines",knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
-    Rcout << "La base ha " << tmp_base->number_of_basis() << " basi, con grado " << tmp_base->degree() << std::endl;
+    std::unique_ptr<basis_base_class<_DOMAIN_>> tmp_base = basis_fac.create("constant",knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
+    //functional_data<_DOMAIN_,decltype(tmp_base)::element_type > fd_response_(std::move(coefficients_response_),basis_response_);
+    
+    
+        Rcout << "La base ha " << tmp_base->number_of_basis() << " basi, con grado " << tmp_base->degree() << std::endl;
 
     using PointeeType = typename decltype(tmp_base)::element_type;
 
     if(std::is_same_v<PointeeType,basis_base_class<_DOMAIN_>>){Rcout << "Stessa classe padre" << std::endl;}
-if(std::is_same_v<PointeeType,bsplines_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia bsplines" << std::endl;}
+    if(std::is_same_v<PointeeType,bsplines_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia bsplines" << std::endl;}
 
-if(std::is_same_v<PointeeType,constant_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia constant" << std::endl;}
+    if(std::is_same_v<PointeeType,constant_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia constant" << std::endl;}
 
     double el = 0.0;
     Rcout << "Eval basis pre in " << el << ": " << tmp_base->eval_base(el) << std::endl;
+    
 
 
     //response

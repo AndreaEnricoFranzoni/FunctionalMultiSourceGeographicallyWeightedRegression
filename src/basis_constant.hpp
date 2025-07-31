@@ -34,9 +34,9 @@ class constant_basis :  public basis_base_class<domain_type>
 {
 private:
     /*!Degree*/
-    static constexpr std::size_t degree_constant_basis = 0;
+    static constexpr std::size_t degree_constant_basis = 100;
     /*!Number of basis*/
-    static constexpr std::size_t number_of_basis_constant_basis = 1;
+    static constexpr std::size_t number_of_basis_constant_basis = 101;
 
 public:
     /*!Constructor*/
@@ -44,8 +44,8 @@ public:
                    std::size_t degree = 0,
                    std::size_t number_of_basis = 1)    
             :  
-                basis_base_class<domain_type>(knots,0,1)  
-            {std::cout<<"CB creation"<<std::endl;}
+                basis_base_class<domain_type>(knots,constant_basis<domain_type>::degree_constant_basis,constant_basis<domain_type>::number_of_basis_constant_basis)  
+            {}
 
     /*!
     * @brief evaluating the system of basis basis_i-th in location location. Overriding the method
