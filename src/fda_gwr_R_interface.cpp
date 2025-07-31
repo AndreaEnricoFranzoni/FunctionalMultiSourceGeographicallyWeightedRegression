@@ -198,7 +198,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
 
 
-    Rcout << "fdagwr.24: " << std::endl;
+    Rcout << "fdagwr.25: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                         //data type
     using _DOMAIN_ = fdagwr_traits::Domain;                                             //domain geometry
@@ -435,10 +435,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
     //FD OBJECTS
+    //response
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_response_ = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
-    
-    double el = 0.0;
-    Rcout << "Eval basis pre in " << el << ": " << basis_response_->eval_base(el) << std::endl;
+    using response_basis_tmp_t = extract_template_t<decltype(basis_response_)::element_type>;
 
 
     using PointeeType   = typename decltype(basis_response_)::element_type; // basis<int>
@@ -448,7 +447,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     
     
     //functional_data<_DOMAIN_,Extracted::template_type > fd_response_(std::move(coefficients_response_),std::move(basis_response_));
-    functional_data<_DOMAIN_,extract_template_t<decltype(basis_response_)::element_type>::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
+    functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
 
     
 
