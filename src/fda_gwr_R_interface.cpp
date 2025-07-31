@@ -444,7 +444,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     
     
     
-    functional_data<_DOMAIN_,Extracted::template_type > fd_response_(std::move(coefficients_response_),basis_response_);
+    functional_data<_DOMAIN_,Extracted::template_type > fd_response_(std::move(coefficients_response_),std::move(basis_response_));
     
     
 
