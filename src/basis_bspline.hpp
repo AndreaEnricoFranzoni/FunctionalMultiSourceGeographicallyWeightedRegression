@@ -52,7 +52,7 @@ public:
                    std::size_t number_of_basis)    
             :   
                 basis_base_class<domain_type>(knots,degree,number_of_basis),
-                m_basis(this->knots(),m_degree)
+                m_basis(this->knots(),degree)
                 {
                     //cheack input consistency
                     assert((void("Number of knots = number of basis - degree + 1"), this->number_knots() == (m_number_of_basis - m_degree + static_cast<std::size_t>(1))));
