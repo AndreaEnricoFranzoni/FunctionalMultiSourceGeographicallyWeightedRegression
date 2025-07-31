@@ -70,7 +70,7 @@ namespace generic_factory {
     Proxy(Identifier_type const &);
 
     /**
-    * Builder.  INPUT PARAMETERS HAVE TO COMPLY WITH THE ONES OF THE CONSTRUCTOR
+    * Builder.  INPUT PARAMETERS HAVE TO COMPLY WITH THE ONES OF THE _CONSTRUCTORS: TUTTI I COSTRUTTORI DEVONO ESSERE UGUALI
     */
     static std::unique_ptr<AbstractProduct_type> Build(const FDAGWR_TRAITS::Dense_Vector &m, std::size_t a, std::size_t b){ return std::make_unique<ConcreteProduct>(m,a,b);}
 

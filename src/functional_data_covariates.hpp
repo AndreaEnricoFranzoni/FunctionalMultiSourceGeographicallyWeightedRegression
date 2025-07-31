@@ -23,12 +23,49 @@
 
 
 #include "functional_data.hpp"
+#include "basis_include.hpp"
+#include "basis_factory_proxy.hpp"
 
 
 template< typename domain_type = FDAGWR_TRAITS::basis_geometry >
     requires fdagwr_concepts::as_interval<domain_type>
 class functional_data_covariates
 {
+private:
+    /*!How many covariates*/
+    std::size_t m_q;
+    /*!How many statistical units*/
+    std::size_t m_n;
+    /*!Functional data covariates*/
+    std::vector<functional_data< domain_type,basis_base_class<domain_type> >> m_X;
+
+public:
+    functional_data_covariates(const std::vector<FDAGWR_TRAITS::Dense_Matrix> & coeff,
+                               std::size_t q,
+                               const std::vector<std::string> & basis_types,
+                               const std::vector<std::size_t> & basis_degrees,
+                               const std::vector<std::size_t> & basis_numbers,
+                               const FDAGWR_TRAITS::Dense_Vector & knots,
+                               const basis_factory::basisFactory& factoryBasis)
+                        :
+                            m_q(q)
+                        {
+                            m_n = m_q > 0 ? coeff[0].cols() : 0;
+
+                            m_X.reserve(m_q);
+                            for(std::size_t i = 0; i < m_q; ++i)
+                            {
+                                std::unique_ptr<basis_base_class<domain_type>> basis_i = factoryBasis.create(basis_types[i],knots,basis_degrees[i],basis_numbers[i]);
+                                m_X.emplace_back(std::move(coeff[i]),std::move(basis_i));
+                            }
+                        }
+
+    double
+    eval(double loc, std::size_t cov_i, std::size_t unit_j)
+    const
+    {
+        return m_X[cov_i].eval(loc,unit_j);
+    }
 
 };
 

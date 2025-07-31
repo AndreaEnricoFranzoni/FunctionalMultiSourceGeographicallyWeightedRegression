@@ -37,7 +37,7 @@ namespace basis_factory{
     using basisIdentifier = std::string;
 
 
-    //builder
+    //builder: DA MODIFICARE DOVESSE CAMBIARE IL COSTRUTTORE, QUI E IN factory_proxy.hpp
     using basisBuilder = std::function<std::unique_ptr<basis_base_class<FDAGWR_TRAITS::basis_geometry>>(const FDAGWR_TRAITS::Dense_Vector &, std::size_t, std::size_t)>;
 
 

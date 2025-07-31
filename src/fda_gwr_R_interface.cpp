@@ -202,7 +202,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
 
 
-    Rcout << "fdagwr.26: " << std::endl;
+    Rcout << "fdagwr.27: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                     //data type
     using _DOMAIN_ = FDAGWR_TRAITS::basis_geometry;                                 //domain geometry
@@ -442,9 +442,11 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //FD OBJECTS
     //response
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_response_ = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
-    using response_basis_tmp_t = extract_template_t< decltype(basis_response_)::element_type >;     //extracting the template param of the basis for fd (access it in the template params list with ::template_type)
+    //extracting the template param of the basis for fd (access it in the template params list with ::template_type)  
+    using response_basis_tmp_t = extract_template_t< decltype(basis_response_)::element_type >;   
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
-
+    //stationary covariates
+    functional_data_covariates<_DOMAIN_> x_C_fd_(coefficients_stationary_cov_,q_C,basis_types_stationary_cov_,degree_basis_stationary_cov_,number_basis_stationary_cov_,basis_fac);
     
 
     /*
@@ -456,6 +458,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     double el = 0.0;
     Rcout << "Eval fd unit 0-th in " << el << ": " << y_fd_.eval(el,0) << std::endl;
+
+    Rcout < "Eval fd xC unit 0-th cov 0-th in " << el << ": " << x_C_fd_.eval(el,0,0) << std::endl;
 
 
     //response
