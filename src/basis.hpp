@@ -35,6 +35,8 @@ private:
     double m_a;
     /*!Domain right extreme*/
     double m_b;
+    /*!Knots size*/
+    std::size_t m_number_knots;
     /*!Knots*/
     domain_type m_knots;
     /*!Basis degree*/
@@ -50,6 +52,7 @@ public:
             :   
                 m_a(knots.coeff(0)), 
                 m_b(knots.coeff(knots.size()-static_cast<std::size_t>(1))), 
+                m_number_knots(knots.size()),
                 m_knots(knots),
                 m_degree(degree),
                 m_number_of_basis(number_of_basis)  
@@ -73,7 +76,7 @@ public:
     /*!
     * @brief Getter for the number of knots
     */
-    std::size_t number_knots() const {return m_knots.size();}
+    std::size_t number_knots() const {return m_number_knots;}
 
     /*!
     * @brief Getter for the nodes over which the basis are constructed
