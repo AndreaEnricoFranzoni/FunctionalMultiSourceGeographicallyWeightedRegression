@@ -37,7 +37,7 @@ private:
     /*!How many statistical units*/
     std::size_t m_n;
     /*!Functional data covariates*/
-    std::vector<functional_data< domain_type,basis_base_class<domain_type> >> m_X;
+    std::vector<functional_data< domain_type,basis_base_class >> m_X;
 
 public:
     functional_data_covariates(const std::vector<FDAGWR_TRAITS::Dense_Matrix> & coeff,
