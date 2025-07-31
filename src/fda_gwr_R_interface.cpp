@@ -379,7 +379,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());
     std::unique_ptr<basis_base_class<_DOMAIN_>> tmp_base;
-    tmp_base = basis_fac.create("bsplines",knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
+    tmp_base = basis_fac.create("constant",knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
 
 
 
