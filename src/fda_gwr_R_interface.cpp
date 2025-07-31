@@ -440,11 +440,11 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     
     using PointeeType   = typename decltype(basis_response_)::element_type; // basis<int>
     using Extracted     = extract_template_t<PointeeType>;
-    using BasisTemplate = Extracted::template_type; // <— qui è un alias template
+    //using BasisTemplate = Extracted::template_type; // <— qui è un alias template
     
     
     
-    functional_data<_DOMAIN_,BasisTemplate > fd_response_(std::move(coefficients_response_),basis_response_);
+    functional_data<_DOMAIN_,Extracted::template_type > fd_response_(std::move(coefficients_response_),basis_response_);
     
     
 
