@@ -438,6 +438,10 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_response_ = basis_fac.create("bsplines",knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     
+    double el = 0.0;
+    Rcout << "Eval basis pre in " << el << ": " << basis_response_->eval_base(el) << std::endl;
+
+
     using PointeeType   = typename decltype(basis_response_)::element_type; // basis<int>
     using Extracted     = extract_template_t<PointeeType>;
     //using BasisTemplate = Extracted::template_type; // <— qui è un alias template
@@ -455,8 +459,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     if(std::is_same_v<PointeeType,constant_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia constant" << std::endl;}
     */
 
-    double el = 0.0;
-    Rcout << "Eval basis pre in " << el << ": " << basis_response_->eval_base(el) << std::endl;
+    
     //Rcout << "Eval fd in " << el << ": " << fd_response_.eval(el,0) << std::endl;
 
 
