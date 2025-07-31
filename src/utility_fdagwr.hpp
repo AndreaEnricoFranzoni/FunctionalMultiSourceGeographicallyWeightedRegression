@@ -27,23 +27,29 @@
 #include <memory>
 #include <type_traits>
 
-// Generico: gestisce qualsiasi template <typename...> class
+#include <type_traits>
+
+// Dichiarazione primaria: lascia volutamente vuoto
 template <typename T>
 struct extract_template;
 
-// Pattern matching su classi template con qualsiasi numero di parametri di tipo
-template <template <typename...> class Template, typename... Args>
-struct extract_template<Template<Args...>> {
-    using type = Template; // Nome del template puro
+// Specializzazione generica per template con parametri di tipo
+template <template <typename...> class TT, typename... Args>
+struct extract_template<TT<Args...>> {
+    template <typename... Ts>
+    using template_type = TT<Ts...>; // definisco un alias template
+
+    using type = TT; // solo il "nome" del template, se ti serve
 };
 
-// Helper alias
+
 template <typename T>
 using extract_template_t = typename extract_template<
-    typename std::remove_cv_t<  // rimuove const/volatile
-        typename std::remove_reference_t<T> // rimuove ref
+    typename std::remove_cv_t<
+        typename std::remove_reference_t<T>
     >
 >::type;
+
 
 
 /*
