@@ -446,7 +446,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     using response_basis_tmp_t = extract_template_t< decltype(basis_response_)::element_type >;   
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
     //stationary covariates
-    functional_data_covariates<_DOMAIN_> x_C_fd_(coefficients_stationary_cov_,q_C,basis_types_stationary_cov_,degree_basis_stationary_cov_,number_basis_stationary_cov_,basis_fac);
+    functional_data_covariates<_DOMAIN_> x_C_fd_(coefficients_stationary_cov_,q_C,basis_types_stationary_cov_,degree_basis_stationary_cov_,number_basis_stationary_cov_,knots_stationary_cov_,basis_fac);
     
 
     /*
