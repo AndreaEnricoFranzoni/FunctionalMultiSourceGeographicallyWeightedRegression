@@ -37,13 +37,23 @@ private:
     double m_b;
     /*!Knots*/
     domain_type m_knots;
+    /*!Basis degree*/
+    std::size_t m_degree;
+    /*!Number of basis*/
+    std::size_t m_number_of_basis;
 
 public:
     /*!Constructor*/
     basis_base_class(const fdagwr_traits::Dense_Vector & knots,
-                    std::size_t degree = 0,
-                    std::size_t number_of_basis = 1)    
-        :   m_a(knots.coeff(0)), m_b(knots.coeff(knots.size()-static_cast<std::size_t>(1))), m_knots(knots)  {}
+                    std::size_t degree,
+                    std::size_t number_of_basis)    
+            :   
+                m_a(knots.coeff(0)), 
+                m_b(knots.coeff(knots.size()-static_cast<std::size_t>(1))), 
+                m_knots(knots),
+                m_degree(degree),
+                m_number_of_basis(number_of_basis)  
+            {}
 
     /*! 
     * @brief virtual destructor, for polymorphism
@@ -69,6 +79,16 @@ public:
     * @brief Getter for the nodes over which the basis are constructed
     */
     const domain_type& knots() const {return m_knots;}
+
+    /*!
+    * @brief Getter for the degree of the basis
+    */
+    std::size_t degree() const {return m_degree;}
+
+    /*!
+    * @brief Getter for the number of basis
+    */
+    std::size_t number_of_basis() const {return m_number_of_basis;}
 
     /*!
     * @brief Abstract function to evaluate the basis in a location
