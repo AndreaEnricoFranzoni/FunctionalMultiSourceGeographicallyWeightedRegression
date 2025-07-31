@@ -24,18 +24,26 @@
 
 #include "traits_fdagwr.hpp"
 
+#include <memory>
+#include <type_traits>
+
+// Generico: gestisce qualsiasi template <typename...> class
 template <typename T>
 struct extract_template;
 
-// Specializzazione per classi template con un solo parametro di tipo
-template <template <typename> class Template, typename Arg>
-struct extract_template<Template<Arg>> {
-    using type = Template; // Il nome del template
+// Pattern matching su classi template con qualsiasi numero di parametri di tipo
+template <template <typename...> class Template, typename... Args>
+struct extract_template<Template<Args...>> {
+    using type = Template; // Nome del template puro
 };
 
 // Helper alias
 template <typename T>
-using extract_template_t = typename extract_template<T>::type;
+using extract_template_t = typename extract_template<
+    typename std::remove_cv_t<  // rimuove const/volatile
+        typename std::remove_reference_t<T> // rimuove ref
+    >
+>::type;
 
 
 /*
