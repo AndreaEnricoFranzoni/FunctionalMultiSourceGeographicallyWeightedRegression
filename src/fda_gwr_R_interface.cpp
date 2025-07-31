@@ -434,7 +434,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     //FD OBJECTS
     basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());
-    std::unique_ptr<basis_base_class<_DOMAIN_>> tmp_base = basis_fac.create("bsplines",knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
+    std::unique_ptr<basis_base_class<_DOMAIN_>> tmp_base = basis_fac.create("constant",knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     Rcout << "La base ha " << tmp_base->a() << " basi, con grado " << tmp_base->b() << std::endl;
 
     using PointeeType = typename decltype(tmp_base)::element_type;
