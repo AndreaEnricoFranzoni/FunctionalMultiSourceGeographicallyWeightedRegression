@@ -435,7 +435,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //FD OBJECTS
     basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_response_ = basis_fac.create("bsplines",knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
-    functional_data<_DOMAIN_,decltype(tmp_base)::element_type > fd_response_(std::move(coefficients_response_),basis_response_);
+    functional_data<_DOMAIN_,decltype(basis_response_)::element_type > fd_response_(std::move(coefficients_response_),basis_response_);
     
     
         
