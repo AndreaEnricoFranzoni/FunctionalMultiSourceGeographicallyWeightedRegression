@@ -196,7 +196,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
 
 
-    Rcout << "fdagwr.20: " << std::endl;
+    Rcout << "fdagwr.21: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                      //data type
     using _DOMAIN_ = fdagwr_traits::Domain;                                          //domain geometry
@@ -443,6 +443,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 if(std::is_same_v<PointeeType,bsplines_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia bsplines" << std::endl;}
 
 if(std::is_same_v<PointeeType,constant_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia constant" << std::endl;}
+
+    double el = 0.0;
+    Rcout << "Eval basis pre in " << el << ": " << tmp_base->eval_base(el) << std::endl;
 
 
     //response
