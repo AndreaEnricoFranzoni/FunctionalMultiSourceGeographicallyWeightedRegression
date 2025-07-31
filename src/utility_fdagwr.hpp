@@ -24,31 +24,28 @@
 
 #include "traits_fdagwr.hpp"
 
-#include <memory>
-#include <type_traits>
 
-#include <type_traits>
 
-// Dichiarazione primaria: lascia volutamente vuoto
+// Primaria: vuota
 template <typename T>
 struct extract_template;
 
-// Specializzazione generica per template con parametri di tipo
+// Specializzazione generica per template con soli parametri di tipo
 template <template <typename...> class TT, typename... Args>
 struct extract_template<TT<Args...>> {
+    // Alias template che ricrea il template di partenza
     template <typename... Ts>
-    using template_type = TT<Ts...>; // definisco un alias template
-
-    using type = TT; // solo il "nome" del template, se ti serve
+    using template_type = TT<Ts...>;
 };
 
-
+// Helper per normalizzare il tipo (toglie const/ref)
 template <typename T>
-using extract_template_t = typename extract_template<
-    typename std::remove_cv_t<
-        typename std::remove_reference_t<T>
-    >
->::type;
+using extract_template_t = extract_template<
+    std::remove_cv_t<std::remove_reference_t<T>>
+>;
+
+
+
 
 
 
@@ -56,14 +53,17 @@ using extract_template_t = typename extract_template<
 template <typename Domain>
 struct basis {};
 
+template <template <typename> class BasisTemplate>
+struct wrapper {};
+
 int main() {
     std::unique_ptr<basis<int>> ptr;
 
-    using PointeeType = typename decltype(ptr)::element_type; // basis<int>
-    using BasisTemplate = extract_template_t<PointeeType>;    // basis
+    using PointeeType   = typename decltype(ptr)::element_type; // basis<int>
+    using Extracted     = extract_template_t<PointeeType>;
+    using BasisTemplate = Extracted::template_type; // <— qui è un alias template
 
-    // Ora puoi fare:
-    wrapper<BasisTemplate> w;
+    wrapper<BasisTemplate> w; // ✅ funziona
 }
 
 */
