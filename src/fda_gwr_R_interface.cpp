@@ -448,13 +448,15 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     
     
 
+    /*
     if(std::is_same_v<PointeeType,basis_base_class<_DOMAIN_>>){Rcout << "Stessa classe padre" << std::endl;}
     if(std::is_same_v<PointeeType,bsplines_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia bsplines" << std::endl;}
 
     if(std::is_same_v<PointeeType,constant_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia constant" << std::endl;}
+    */
 
     double el = 0.0;
-    //Rcout << "Eval basis pre in " << el << ": " << basis_response_->eval_base(el) << std::endl;
+    Rcout << "Eval basis pre in " << el << ": " << basis_response_->eval_base(el) << std::endl;
     //Rcout << "Eval fd in " << el << ": " << fd_response_.eval(el,0) << std::endl;
 
 
