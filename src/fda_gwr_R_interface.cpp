@@ -446,9 +446,6 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     functional_data<_DOMAIN_,BasisTemplate > fd_response_(std::move(coefficients_response_),basis_response_);
     
     
-        
-
-    using PointeeType = typename decltype(basis_response_)::element_type;
 
     if(std::is_same_v<PointeeType,basis_base_class<_DOMAIN_>>){Rcout << "Stessa classe padre" << std::endl;}
     if(std::is_same_v<PointeeType,bsplines_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia bsplines" << std::endl;}
