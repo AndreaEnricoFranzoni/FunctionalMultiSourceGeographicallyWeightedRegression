@@ -377,47 +377,6 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     /////    END PARAMETERS WRAPPING   /////
     ////////////////////////////////////////
 
-    basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());
-    std::unique_ptr<basis_base_class<_DOMAIN_>> tmp_base;
-    tmp_base = basis_fac.create("constant",knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
-
-
-
-
-    /*
-    std::vector<std::string> corModels = Rcpp::as<std::vector<std::string>> (model_names);
-    tailup_factory::TailUpFactory& tailup_fac (tailup_factory::TailUpFactory::Instance());
-    std::unique_ptr<TailUpModel> tmp_tailUpModel;
-    taildown_factory::TailDownFactory& taildown_fac (taildown_factory::TailDownFactory::Instance());
-    std::unique_ptr<TailDownModel> tmp_tailDownModel;
-    euclidean_factory::EuclideanFactory& euclid_fac(euclidean_factory::EuclideanFactory::Instance());
-    std::unique_ptr<EuclideanModel> tmp_euclidModel;
-
-    bool nuggetEffect = Rcpp::as<bool> (nugg);
-
-    int up = 0;
-    int down = 0;
-    int euclid = 0;
-    for (auto name: corModels){
-      std::size_t found_up = name.find("up");
-      std::size_t found_down = name.find("down");
-      std::size_t found_euclid = name.find("Euclid");
-      if (found_up!=std::string::npos){
-        up++;
-         tmp_tailUpModel = tailup_fac.create(name);
-      }
-      if (found_down!=std::string::npos){
-        down++;
-        tmp_tailDownModel = taildown_fac.create(name);
-      }
-      if (found_euclid!=std::string::npos){
-        euclid++;
-        tmp_euclidModel = euclid_fac.create(name);
-      }
-    }
-    */
-
-
 
 
     //COMPUTING DISTANCES
@@ -474,6 +433,17 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
     //FD OBJECTS
+    basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());
+    std::unique_ptr<basis_base_class<_DOMAIN_>> tmp_base = basis_fac.create("bsplines",knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
+    Rcout << "La base ha " << *tmp_base.number_of_basis() << " basi, con grado " << *tmp_base.degree() << std::endl;
+
+
+
+
+
+
+
+
     //response
     //bsplines_basis<_DOMAIN_> basis_response_(knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     //functional_data<_DOMAIN_,bsplines_basis > fd_response_(std::move(coefficients_response_),basis_response_);
