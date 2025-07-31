@@ -458,7 +458,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     if(std::is_same_v<PointeeType,constant_basis<_DOMAIN_>>){Rcout << "Stessa classe figlia constant" << std::endl;}
     */
 
-    
+    doule el = 0.0;
     Rcout << "Eval fd unit 0-th in " << el << ": " << y_fd_.eval(el,0) << std::endl;
 
 
