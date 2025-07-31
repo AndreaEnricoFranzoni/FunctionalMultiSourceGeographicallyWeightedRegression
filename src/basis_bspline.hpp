@@ -29,7 +29,7 @@
 /*!
 * @brief class for bsplines basis
 */
-template< typename domain_type = fdagwr_traits::Domain >
+template< typename domain_type = FDAGWR_TRAITS::basis_geometry >
     requires fdagwr_concepts::as_interval<domain_type>
 class bsplines_basis :  public basis_base_class<domain_type>
 {
@@ -44,10 +44,12 @@ using BasisSpace = fdapde::BsSpace<domain_type>;
 private:
     /*!Bslines*/
     BasisSpace m_basis;
+    /*!Default(cubic bsplines)*/
+    static constexpr std::size_t bsplines_degree_default = static_cast<std::size_t>(3); 
 
 public:
     /*!Constructor*/
-    bsplines_basis(const fdagwr_traits::Dense_Vector & knots,
+    bsplines_basis(const FDAGWR_TRAITS::Dense_Vector & knots,
                    std::size_t degree,
                    std::size_t number_of_basis)    
             :   
@@ -68,16 +70,16 @@ public:
     * @brief evaluating the system of basis basis_i-th in location location. Overriding the method
     */
     inline 
-    fdagwr_traits::Dense_Matrix 
+    FDAGWR_TRAITS::Dense_Matrix 
     eval_base(double location) 
     const
     override
     {
         std::cout << "Evaluating a bspline basis" << std::endl;
         //wrap the input into a coherent object for the spline evaluation
-        fdagwr_traits::Dense_Matrix loc = fdagwr_traits::Dense_Matrix::Constant(1, 1, location);
+        FDAGWR_TRAITS::Dense_Matrix loc = FDAGWR_TRAITS::Dense_Matrix::Constant(1, 1, location);
         //wrap the output into a dense matrix:      HA UNA RIGA, N_BASIS COLONNE
-        return fdagwr_traits::Dense_Matrix(bsplines_basis_evaluation<domain_type>(m_basis, loc));
+        return FDAGWR_TRAITS::Dense_Matrix(bsplines_basis_evaluation<domain_type>(m_basis, loc));
     }
 };
 

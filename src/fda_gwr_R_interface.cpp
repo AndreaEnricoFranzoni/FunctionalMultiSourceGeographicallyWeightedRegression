@@ -21,11 +21,15 @@
 #include <RcppEigen.h>
 
 
+#include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
 #include "concepts_fdagwr.hpp"
 #include "utility_fdagwr.hpp"
+
+
 #include "data_reader.hpp"
 #include "parameters_wrapper_fdagwr.hpp"
+
 
 #include "basis_include.hpp"
 #include "basis_bspline_systems.hpp"
@@ -198,21 +202,22 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
 
 
-    Rcout << "fdagwr.25: " << std::endl;
+    Rcout << "fdagwr.26: " << std::endl;
 
-    using _DATA_TYPE_ = double;                                                         //data type
-    using _DOMAIN_ = fdagwr_traits::Domain;                                             //domain geometry
-
-    constexpr auto _RESPONSE_ = FDAGWR_COVARIATES_TYPES::RESPONSE;                      //enum for the response
-    constexpr auto _REC_WEIGHTS_ = FDAGWR_COVARIATES_TYPES::REC_WEIGHTS;                //enum for the response reconstruction weights
-    constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;                  //enum for stationary covariates
-    constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;                            //enum for event covariates
-    constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;                        //enum for station covariates
-    constexpr auto _DERVIATIVE_PENALIZED_ = PENALIZED_DERIVATIVE::SECOND;               //enum for the penalization
-    constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;                            //enum for euclidean distance within statistical units locations
-    constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                                    //kernel function to smooth the distances within statistcal units locations
-    constexpr auto _NAN_REM_ = REM_NAN::MR;                                             //how to remove nan (with mean of non-nans)
-    basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());    //basis factory
+    using _DATA_TYPE_ = double;                                                     //data type
+    using _DOMAIN_ = FDAGWR_TRAITS::basis_geometry;                                 //domain geometry
+    constexpr auto _RESPONSE_ = FDAGWR_COVARIATES_TYPES::RESPONSE;                  //enum for the response
+    constexpr auto _REC_WEIGHTS_ = FDAGWR_COVARIATES_TYPES::REC_WEIGHTS;            //enum for the response reconstruction weights
+    constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;              //enum for stationary covariates
+    constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;                        //enum for event covariates
+    constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;                    //enum for station covariates
+    constexpr auto _DERVIATIVE_PENALIZED_ = PENALIZED_DERIVATIVE::SECOND;           //enum for the penalization order
+    constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;                        //enum for euclidean distance within statistical units locations
+    constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                                //kernel function to smooth the distances within statistcal units locations
+    constexpr auto _NAN_REM_ = REM_NAN::MR;                                         //how to remove nan (with mean of non-nans)
+    
+    //basis factory
+    basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());    
 
     ///////////////////////////////////////////////////////
     /////   CHECKING and WRAPPING INPUT PARAMETERS  ///////
@@ -236,7 +241,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  ABSCISSA POINTS of response
     std::vector<double> abscissa_points_ = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
     check_dim_input<_RESPONSE_>(response_.rows(), abscissa_points_.size(), "points for evaluation of raw data vector");   //check that size of abscissa points and number of evaluations of fd raw data coincide
-    fdagwr_traits::Dense_Vector abscissa_points_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(abscissa_points_.data(),abscissa_points_.size());
+    FDAGWR_TRAITS::Dense_Vector abscissa_points_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(abscissa_points_.data(),abscissa_points_.size());
     double a = left_extreme_domain;
     double b = right_extreme_domain;
 
@@ -244,40 +249,40 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //  KNOTS
     //response
     std::vector<double> knots_response_ = wrap_abscissas(knots_y_points,a,b);
-    fdagwr_traits::Dense_Vector knots_response_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_response_.data(),knots_response_.size());
+    FDAGWR_TRAITS::Dense_Vector knots_response_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_.data(),knots_response_.size());
     //stationary cov
     std::vector<double> knots_stationary_cov_ = wrap_abscissas(knots_stationary_cov,a,b);
-    fdagwr_traits::Dense_Vector knots_stationary_cov_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_stationary_cov_.data(),knots_stationary_cov_.size());
+    FDAGWR_TRAITS::Dense_Vector knots_stationary_cov_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_stationary_cov_.data(),knots_stationary_cov_.size());
     //beta stationary cov
     std::vector<double> knots_beta_stationary_cov_ = wrap_abscissas(knots_beta_stationary_cov,a,b);
-    fdagwr_traits::Dense_Vector knots_beta_stationary_cov_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_beta_stationary_cov_.data(),knots_beta_stationary_cov_.size());
+    FDAGWR_TRAITS::Dense_Vector knots_beta_stationary_cov_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stationary_cov_.data(),knots_beta_stationary_cov_.size());
     //events cov
     std::vector<double> knots_events_cov_ = wrap_abscissas(knots_events_cov,a,b);
-    fdagwr_traits::Dense_Vector knots_events_cov_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_events_cov_.data(),knots_events_cov_.size());
+    FDAGWR_TRAITS::Dense_Vector knots_events_cov_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_events_cov_.data(),knots_events_cov_.size());
     //beta events cov
     std::vector<double> knots_beta_events_cov_ = wrap_abscissas(knots_beta_events_cov,a,b);
-    fdagwr_traits::Dense_Vector knots_beta_events_cov_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_beta_events_cov_.data(),knots_beta_events_cov_.size());
+    FDAGWR_TRAITS::Dense_Vector knots_beta_events_cov_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_events_cov_.data(),knots_beta_events_cov_.size());
     //stations cov
     std::vector<double> knots_stations_cov_ = wrap_abscissas(knots_stations_cov,a,b);
-    fdagwr_traits::Dense_Vector knots_stations_cov_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_stations_cov_.data(),knots_stations_cov_.size());
+    FDAGWR_TRAITS::Dense_Vector knots_stations_cov_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_stations_cov_.data(),knots_stations_cov_.size());
     //stations beta cov
     std::vector<double> knots_beta_stations_cov_ = wrap_abscissas(knots_beta_stations_cov,a,b);
-    fdagwr_traits::Dense_Vector knots_beta_stations_cov_eigen_w_ = Eigen::Map<fdagwr_traits::Dense_Vector>(knots_beta_stations_cov_.data(),knots_beta_stations_cov_.size());
+    FDAGWR_TRAITS::Dense_Vector knots_beta_stations_cov_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stations_cov_.data(),knots_beta_stations_cov_.size());
 
 
     //  COVARIATES names, coefficients and how many (q_), for every type
     //stationary 
     std::vector<std::string> names_stationary_cov_ = wrap_covariates_names<_STATIONARY_>(coeff_stationary_cov);
     std::size_t q_C = names_stationary_cov_.size();    //number of stationary covariates
-    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stationary_cov_ = wrap_covariates_coefficients<_STATIONARY_>(coeff_stationary_cov);    
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_stationary_cov_ = wrap_covariates_coefficients<_STATIONARY_>(coeff_stationary_cov);    
     //events
     std::vector<std::string> names_events_cov_ = wrap_covariates_names<_EVENT_>(coeff_events_cov);
     std::size_t q_E = names_events_cov_.size();        //number of events related covariates
-    std::vector<fdagwr_traits::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<_EVENT_>(coeff_events_cov);
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<_EVENT_>(coeff_events_cov);
     //stations
     std::vector<std::string> names_stations_cov_ = wrap_covariates_names<_STATION_>(coeff_stations_cov);
     std::size_t q_S = names_stations_cov_.size();      //number of stations related covariates
-    std::vector<fdagwr_traits::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<_STATION_>(coeff_stations_cov);
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<_STATION_>(coeff_stations_cov);
 
 
     //  BASIS TYPES
@@ -437,16 +442,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //FD OBJECTS
     //response
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_response_ = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
-    using response_basis_tmp_t = extract_template_t<decltype(basis_response_)::element_type>;
-
-
-    using PointeeType   = typename decltype(basis_response_)::element_type; // basis<int>
-    using Extracted     = extract_template_t<PointeeType>;
-    //using BasisTemplate = Extracted::template_type; // <— qui è un alias template
-    
-    
-    
-    //functional_data<_DOMAIN_,Extracted::template_type > fd_response_(std::move(coefficients_response_),std::move(basis_response_));
+    using response_basis_tmp_t = extract_template_t< decltype(basis_response_)::element_type >;     //extracting the template param of the basis for fd (access it in the template params list with ::template_type)
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
 
     

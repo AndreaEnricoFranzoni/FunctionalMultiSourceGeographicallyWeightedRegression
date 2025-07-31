@@ -22,6 +22,7 @@
 #define FDAGWR_PENALIZATION_MATRIX_HPP
 
 
+#include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
 #include "basis_bspline_systems.hpp"
 #include "penalty_matrix_penalties_comp.hpp"
@@ -48,7 +49,7 @@ using PenaltyPolicy = PenaltyOrderDerivativeType<der_pen>;
 
 private:
     /*!Penalization matrix*/
-    fdagwr_traits::Sparse_Matrix m_PenalizationMatrix;
+    FDAGWR_TRAITS::Sparse_Matrix m_PenalizationMatrix;
 
     /*!Number of functional covariates described by a basis expansion (total number of blocks in the penalization matrix)*/
     std::size_t m_q;
@@ -89,7 +90,7 @@ public:
 
                     //penalties, for each basis system: PenaltyPolicy indicates the order
                     penalty_computation<PenaltyPolicy> penalty_comp;
-                    fdagwr_traits::Sparse_Matrix PenaltyBasis_i = penalty_comp(bs,i);
+                    FDAGWR_TRAITS::Sparse_Matrix PenaltyBasis_i = penalty_comp(bs,i);
                     PenaltyBasis_i *= lambdas[i];
 
                     //all the penalty matrix are squared matrices: therse are the index at which each block starts

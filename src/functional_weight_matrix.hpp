@@ -85,7 +85,7 @@ public:
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    functional_weight_matrix_base(const fdagwr_traits::Dense_Matrix &coeff_stat_weights,
+    functional_weight_matrix_base(const FDAGWR_TRAITS::Dense_Matrix &coeff_stat_weights,
                                   int number_threads)
         :      
             m_coeff_stat_weights(coeff_stat_weights),
@@ -98,7 +98,7 @@ public:
     * @brief Getter for the coefficient-stationary-weights matrix
     * @return the private m_coeff_stat_weights
     */
-    fdagwr_traits::Dense_Matrix coeff_stat_weights() const {return m_coeff_stat_weights;}
+    FDAGWR_TRAITS::Dense_Matrix coeff_stat_weights() const {return m_coeff_stat_weights;}
 
     /*!
     * @brief Getter for the number of available evaluations of the stationary weights
@@ -123,7 +123,7 @@ public:
     * @param abscissa_i index of abscissa i-th
     * @return an Eigen vector with the abscissa_i-th row of m_coeff_stat_weights
     */
-    inline fdagwr_traits::Dense_Vector coeff_stat_weights_abscissa_i(std::size_t abscissa_i) const{ return m_coeff_stat_weights.row(abscissa_i).transpose();};
+    inline FDAGWR_TRAITS::Dense_Vector coeff_stat_weights_abscissa_i(std::size_t abscissa_i) const{ return m_coeff_stat_weights.row(abscissa_i).transpose();};
     
     /*!
     * @brief Computing weights accordingly if they are only stationary or not

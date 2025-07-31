@@ -28,7 +28,7 @@
 /*!
 * @brief Class for constant basis: a straight line at y=1 all along the fd domain
 */
-template< typename domain_type = fdagwr_traits::Domain >
+template< typename domain_type = FDAGWR_TRAITS::basis_geometry >
     requires fdagwr_concepts::as_interval<domain_type>
 class constant_basis :  public basis_base_class<domain_type>
 {
@@ -40,7 +40,7 @@ private:
 
 public:
     /*!Constructor*/
-    constant_basis(const fdagwr_traits::Dense_Vector & knots,
+    constant_basis(const FDAGWR_TRAITS::Dense_Vector & knots,
                    std::size_t,
                    std::size_t)    
             :  
@@ -51,14 +51,14 @@ public:
     * @brief evaluating the system of basis basis_i-th in location location. Overriding the method
     */
     inline 
-    fdagwr_traits::Dense_Matrix 
+    FDAGWR_TRAITS::Dense_Matrix 
     eval_base(double location) 
     const
     override
     {   
         std::cout << "Evaluating a constant basis" << std::endl;
         //wrap the output into a dense matrix: HA UNA RIGA, N_BASIS COLONNE
-        return fdagwr_traits::Dense_Matrix::Ones(1,1);
+        return FDAGWR_TRAITS::Dense_Matrix::Ones(1,1);
     }
 };
 

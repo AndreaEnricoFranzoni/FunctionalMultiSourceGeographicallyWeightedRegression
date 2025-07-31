@@ -17,17 +17,39 @@
 // OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
-#ifndef FDAGWR_BASIS_FACTORY_PROXY_HPP
-#define FDAGWR_BASIS_FACTORY_PROXY_HPP
 
-#include "basis_factory.hpp"
+#ifndef FDAGWR_INCLUDE_HPP
+#define FDAGWR_INCLUDE_HPP
 
-namespace {
-  using basis_factory::basisProxy;
 
-  basisProxy<bsplines_basis<FDAGWR_TRAITS::Domain>> basisBSPLINES(FDAGWR_BASIS_TYPES::_bsplines_);
-  basisProxy<constant_basis<FDAGWR_TRAITS::Domain>> basisCONSTANT(FDAGWR_BASIS_TYPES::_constant_);
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
 
-}
+#include "fdaPDE-core/fdaPDE/splines.h"
 
-#endif  /*FDAGWR_BASIS_FACTORY_PROXY_HPP*/
+#include <vector>
+#include <string>
+#include <array>
+#include <tuple>
+#include <map>
+#include <set>
+#include <memory>
+#include <functional>
+#include <type_traits>
+#include <concepts>
+#include <algorithm>
+#include <iterator>
+#include <cmath>
+#include <numeric>
+#include <variant>
+#include <utility>
+
+
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
+
+#include <iostream>
+
+#endif  /*FDAGWR_INCLUDE_HPP*/

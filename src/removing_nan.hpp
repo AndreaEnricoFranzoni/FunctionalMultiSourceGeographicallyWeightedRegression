@@ -22,6 +22,7 @@
 
 #include <Eigen/Dense>
 
+#include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
 
 
@@ -57,7 +58,7 @@ class removing_nan
   
 private:
   /*!Matrix containing data from which NaNs have to be removed*/
-  fdagwr_traits::Dense_Matrix m_data;
+  FDAGWR_TRAITS::Dense_Matrix m_data;
   /*!Number of rows of the matrix*/
   std::size_t m_m;
   /*!Number of columns of the matrix*/
@@ -92,7 +93,7 @@ public:
   * @brief Getter for the data matrix
   * @return the private m_data
   */
-  inline fdagwr_traits::Dense_Matrix data() const {return m_data;};
+  inline FDAGWR_TRAITS::Dense_Matrix data() const {return m_data;};
   
   /*!
   * @brief Substituting non-dummy NaNs. Tag-dispacther.

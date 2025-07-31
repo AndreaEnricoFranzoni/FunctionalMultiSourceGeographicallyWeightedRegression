@@ -22,11 +22,12 @@
 #define FDAGWR_BASIS_HPP
 
 
+#include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
 #include "concepts_fdagwr.hpp"
 
 
-template< typename domain_type = fdagwr_traits::Domain >
+template< typename domain_type = FDAGWR_TRAITS::basis_geometry >
     requires fdagwr_concepts::as_interval<domain_type>
 class basis_base_class
 {
@@ -46,7 +47,7 @@ private:
 
 public:
     /*!Constructor*/
-    basis_base_class(const fdagwr_traits::Dense_Vector & knots,
+    basis_base_class(const FDAGWR_TRAITS::Dense_Vector & knots,
                     std::size_t degree,
                     std::size_t number_of_basis)    
             :   
@@ -96,7 +97,7 @@ public:
     /*!
     * @brief Abstract function to evaluate the basis in a location
     */
-    virtual inline fdagwr_traits::Dense_Matrix eval_base(double location) const = 0;
+    virtual inline FDAGWR_TRAITS::Dense_Matrix eval_base(double location) const = 0;
 };
 
 

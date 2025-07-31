@@ -20,6 +20,8 @@
 #ifndef FDAGWR_DISTANCE_MATRIX_HPP
 #define FDAGWR_DISTANCE_MATRIX_HPP
 
+
+#include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
 #include <cassert>
 
@@ -72,7 +74,7 @@ private:
     * A number of statistical units x 2 matrix with the (UTM) coordinates of each statistical unit. The class supports only
     * locations on a two dimensional mainfold
     */
-    fdagwr_traits::Dense_Matrix m_coordinates;
+    FDAGWR_TRAITS::Dense_Matrix m_coordinates;
 
     /*!
     * Flag that tracks if at least two statistical units are passed
@@ -169,14 +171,14 @@ public:
     * @return column col_i-th (the distances with respect to unit i-th), in an Eigen::VectorXd
     * @note Elements are stored column-wise
     */
-   inline fdagwr_traits::Dense_Vector operator[](std::size_t col_i) const
+   inline FDAGWR_TRAITS::Dense_Vector operator[](std::size_t col_i) const
    {    
         //cheack the correct dimension of the coordinates matrix
         assert((void("The column index has to be in {0,1,...,number-of-statistical-units - 1}"), 
                0<=col_i && col_i < m_number_locations));
 
         //container for the column
-        fdagwr_traits::Dense_Vector column(m_number_locations);
+        FDAGWR_TRAITS::Dense_Vector column(m_number_locations);
         
         //vector to store the indeces of the elements of m_distances that refers to a distance computed with respect to the i-th statistical unit
         std::vector<std::size_t> access_indeces;

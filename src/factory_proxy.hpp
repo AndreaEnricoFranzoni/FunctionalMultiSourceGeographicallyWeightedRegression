@@ -21,49 +21,8 @@
 #define FDAGWR_FACTORY_PROXY_HPP
 
 
+#include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
-
-
-/*
-// Trait generico per std::function
-template <typename T>
-struct function_traits;
-
-// Specializzazione per std::function
-template <typename R, typename... Args>
-struct function_traits<std::function<R(Args...)>> {
-    using return_type = R;
-    using argument_types = std::tuple<Args...>;
-
-    static constexpr std::size_t arity = sizeof...(Args);
-
-    template <std::size_t N>
-    using argument = std::tuple_element_t<N, std::tuple<Args...>>;
-};
-
-#include <iostream>
-
-int main() {
-    std::function<double(int, float)> f;
-
-    using traits = function_traits<decltype(f)>;
-
-    using ret_type = traits::return_type;          // double
-    using args_tuple = traits::argument_types;     // std::tuple<int, float>
-    using first_arg = traits::argument<0>;         // int
-
-    static_assert(std::is_same_v<ret_type, double>);
-    static_assert(std::is_same_v<first_arg, int>);
-
-    std::cout << "Arity: " << traits::arity << "\n"; // Output: 2
-}
-
-*/
-
-
-
-
-
 
 
 namespace generic_factory {
@@ -113,7 +72,7 @@ namespace generic_factory {
     /**
     * Builder.  INPUT PARAMETERS HAVE TO COMPLY WITH THE ONES OF THE CONSTRUCTOR
     */
-    static std::unique_ptr<AbstractProduct_type> Build(const fdagwr_traits::Dense_Vector &m, std::size_t a, std::size_t b){ return std::make_unique<ConcreteProduct>(m,a,b);}
+    static std::unique_ptr<AbstractProduct_type> Build(const FDAGWR_TRAITS::Dense_Vector &m, std::size_t a, std::size_t b){ return std::make_unique<ConcreteProduct>(m,a,b);}
 
     
 

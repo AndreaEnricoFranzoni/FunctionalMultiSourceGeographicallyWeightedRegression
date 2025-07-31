@@ -23,7 +23,10 @@
 
 #include <RcppEigen.h>
 
+
+#include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
+#include "basis_include.hpp"
 #include "data_reader.hpp"
 
 #include <stdexcept>
@@ -113,14 +116,14 @@ wrap_covariates_names(Rcpp::List cov_coeff_list)
 //  [[Rcpp::depends(RcppEigen)]]
 template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
 inline
-std::vector<fdagwr_traits::Dense_Matrix>
+std::vector<FDAGWR_TRAITS::Dense_Matrix>
 wrap_covariates_coefficients(Rcpp::List cov_coeff_list)
 {
   // number of covariates 
   std::size_t number_cov = cov_coeff_list.size();
 
   //where to store the covariates coefficients
-  std::vector<fdagwr_traits::Dense_Matrix> covariates_coefficients;
+  std::vector<FDAGWR_TRAITS::Dense_Matrix> covariates_coefficients;
   covariates_coefficients.reserve(number_cov);
 
   //check and read the coefficients for all the covariates
@@ -281,8 +284,8 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<int> basis_number,
   if(basis_type == FDAGWR_BASIS_TYPES::_constant_)
   {
     //default (and only possible) case
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,1));         //one base
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,0));    //degree zero
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,constant_basis<FDAGWR_TRAITS::basis_geometry>::number_of_basis_constant_basis));    //one base
+    returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,constant_basis<FDAGWR_TRAITS::basis_geometry>::degree_constant_basis));        //degree zero
 
     return returning_element;
   }
@@ -293,8 +296,8 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<int> basis_number,
   //basis number unknown, order unknown: default values
   if(basis_number.isNull() && basis_degree.isNull())     
   {
-    std::size_t degree = FDAGWR_FEATS::default_basis_degree;                  //default is a cubic B-spline (degree 3)
-    std::size_t n_basis = degree + knots_size - static_cast<std::size_t>(1);  //B-splines constraint for basis number
+    std::size_t degree = bsplines_basis<FDAGWR_TRAITS::basis_geometry>::bsplines_degree_default;       //default is a cubic B-spline (degree 3)
+    std::size_t n_basis = degree + knots_size - static_cast<std::size_t>(1);                           //B-splines constraint for basis number
 
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,n_basis));
     returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,degree));
@@ -384,7 +387,7 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
   //basis number unknown, order unknown: default values
   if (basis_numbers.isNull() && basis_degrees.isNull())
   {
-    std::vector<std::size_t> degrees(number_of_covariates,FDAGWR_FEATS::default_basis_degree);    //default is a cubic B-spline (degree 3) for all the covariates
+    std::vector<std::size_t> degrees(number_of_covariates,bsplines_basis<FDAGWR_TRAITS::basis_geometry>::bsplines_degree_default);    //default is a cubic B-spline (degree 3) for all the covariates
     std::vector<std::size_t> ns_basis(number_of_covariates,FDAGWR_FEATS::default_basis_degree + knots_size - static_cast<std::size_t>(1));
 
     returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,ns_basis));
@@ -535,8 +538,8 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
   {
     if (basis_types[i] == FDAGWR_BASIS_TYPES::_constant_)
     {
-      returning_element[FDAGWR_FEATS::n_basis_string][i] = static_cast<std::size_t>(1);
-      returning_element[FDAGWR_FEATS::degree_basis_string][i] = static_cast<std::size_t>(0);
+      returning_element[FDAGWR_FEATS::n_basis_string][i] = constant_basis<FDAGWR_TRAITS::basis_geometry>::number_of_basis_constant_basis;
+      returning_element[FDAGWR_FEATS::degree_basis_string][i] = constant_basis<FDAGWR_TRAITS::basis_geometry>::degree_constant_basis;
     }
   }
 

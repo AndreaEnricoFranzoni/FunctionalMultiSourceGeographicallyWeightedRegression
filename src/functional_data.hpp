@@ -21,6 +21,8 @@
 #ifndef FDAGWR_FUNCTIONAL_DATA_HPP
 #define FDAGWR_FUNCTIONAL_DATA_HPP
 
+
+#include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
 #include "concepts_fdagwr.hpp"
 #include "basis_include.hpp"
@@ -30,7 +32,7 @@
 /*!
 * @brief The class describes n-statistical units referring to the same population: the basis system is the same for each one of them 
 */
-template< class domain_type = fdagwr_traits::Domain, template <typename> class basis_type = bsplines_basis > 
+template< class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis > 
     requires fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
 class functional_data
 {
@@ -42,7 +44,7 @@ private:
     /*!Number of statistical units*/
     std::size_t m_n;
     /*!Coefficients of basis expansion*/
-    fdagwr_traits::Dense_Matrix m_fdata_coeff;
+    FDAGWR_TRAITS::Dense_Matrix m_fdata_coeff;
     /*!Pointer to the base*/
     std::unique_ptr<basis_type<domain_type>> m_fdata_basis;
 

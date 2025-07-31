@@ -22,35 +22,7 @@
 #define FDAGWR_TRAITS_HPP
 
 
-#include <Eigen/Dense>
-#include <Eigen/Sparse>
-
-#include "fdaPDE-core/fdaPDE/splines.h"
-
-#include <vector>
-#include <string>
-#include <array>
-#include <tuple>
-#include <map>
-#include <set>
-#include <memory>
-#include <functional>
-#include <type_traits>
-#include <concepts>
-#include <algorithm>
-#include <iterator>
-#include <cmath>
-#include <numeric>
-#include <variant>
-#include <utility>
-
-
-#ifdef _OPENMP
-#include <omp.h>
-#endif
-
-
-#include <iostream>
+#include "include_fdagwr.hpp"
 
 
 /*!
@@ -66,48 +38,33 @@
 * @brief Contains the customized types for fts, covariances, PPCs, etc...
 * @details Data are stored in dynamic matrices (easily very big dimensions) of doubles
 */
-struct fdagwr_traits
+struct FDAGWR_TRAITS
 {
 public:
   
-  using Dense_Matrix  = Eigen::MatrixXd;                                  ///< Matrix data structure.
+  using Dense_Matrix   = Eigen::MatrixXd;                                  ///< Matrix data structure.
 
   using Sparse_Matrix  = Eigen::SparseMatrix<double>;                     ///< Sparse matrix data structure.
   
-  using Dense_Vector  = Eigen::VectorXd;                                  ///< Vector data structure.
+  using Dense_Vector   = Eigen::VectorXd;                                  ///< Vector data structure.
   
-  using Dense_Array   = Eigen::ArrayXd;                                   ///< Array data structure: more efficient for coefficient-wise operations.
+  using Dense_Array    = Eigen::ArrayXd;                                   ///< Array data structure: more efficient for coefficient-wise operations.
 
-  using Diag_Matrix   = Eigen::DiagonalMatrix<double, Eigen::Dynamic>;    ///< Diagonal matrix (for weights matrices)
+  using Diag_Matrix    = Eigen::DiagonalMatrix<double, Eigen::Dynamic>;    ///< Diagonal matrix (for weights matrices)
 
-  using Domain        = fdapde::Triangulation<1, 1>;                      ///< Domain mesh: unit interval with a fixed number of nodes
-
+  using basis_geometry = fdapde::Triangulation<1, 1>;                      ///< Domain mesh: unit interval with a fixed number of nodes
 };
+
+
 
 
 struct FDAGWR_FEATS
 {
   static constexpr std::size_t number_of_geographical_coordinates = static_cast<std::size_t>(2); 
-
-  static constexpr std::size_t default_basis_degree = static_cast<std::size_t>(3);  
-
+ 
   static constexpr std::string n_basis_string = "Basis number";
 
   static constexpr std::string degree_basis_string = "Basis degree";
-};
-
-
-
-struct FDAGWR_BASIS_TYPES
-{
-  static constexpr std::size_t _number_implemented_basis_types_ = static_cast<std::size_t>(2);
-
-  static constexpr std::string _bsplines_ = "bsplines";
-
-  static constexpr std::string _constant_ = "constant";
-
-  static constexpr std::array<std::string,FDAGWR_BASIS_TYPES::_number_implemented_basis_types_> _implemented_basis_{FDAGWR_BASIS_TYPES::_bsplines_,
-                                                                                                                    FDAGWR_BASIS_TYPES::_constant_};
 };
 
 

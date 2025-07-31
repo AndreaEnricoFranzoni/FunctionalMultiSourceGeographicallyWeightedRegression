@@ -63,7 +63,7 @@ int main() {
     using Extracted     = extract_template_t<PointeeType>;
     using BasisTemplate = Extracted::template_type; // <— qui è un alias template
 
-    wrapper<BasisTemplate> w; // ✅ funziona
+    wrapper<BasisTemplate> w; // funziona
 }
 
 */

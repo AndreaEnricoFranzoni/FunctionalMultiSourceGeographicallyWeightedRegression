@@ -75,7 +75,7 @@ public:
     * @param number_threads number of threads for OMP
     */
     template< typename DIST_MATRIX_OBJ >
-    functional_weight_matrix_non_stationary(const fdagwr_traits::Dense_Matrix & coeff_stat_weights,
+    functional_weight_matrix_non_stationary(const FDAGWR_TRAITS::Dense_Matrix & coeff_stat_weights,
                                             DIST_MATRIX_OBJ&& distance_matrix,
                                             double kernel_bwt,
                                             int number_threads)
@@ -137,7 +137,7 @@ public:
                        [this](double dist){return this->kernel_eval(dist,this->m_kernel_bandwith);});
 
         //preparing the container for the functional non-stationary matrix of unit i-th (corresponding to index unit_index)
-        std::vector<fdagwr_traits::Diag_Matrix> weights_unit_i;
+        std::vector<FDAGWR_TRAITS::Diag_Matrix> weights_unit_i;
         weights_unit_i.reserve(n_abscissa_eval);
 
         //computing the functional non-stationary matrix for unit i-th (corresponding to index unit_index),

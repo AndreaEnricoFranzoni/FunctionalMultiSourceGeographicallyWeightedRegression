@@ -23,6 +23,7 @@
 #include <RcppEigen.h>
 
 
+#include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
 #include "removing_nan.hpp"
 
@@ -45,7 +46,7 @@
 //
 // [[Rcpp::depends(RcppEigen)]]
 template<typename T, REM_NAN rem_nan_t> 
-fdagwr_traits::Dense_Matrix
+FDAGWR_TRAITS::Dense_Matrix
 reader_data(Rcpp::NumericMatrix X)
 {
   //taking the dimensions: n_row is the number of "covariates" (evaluation points), n_col is the number of statistical units
@@ -53,7 +54,7 @@ reader_data(Rcpp::NumericMatrix X)
   int n_col = X.ncol();
     
   //Eigen::Map to map data into KO_Traits::StoringMatrix (Eigen::MatrixXd)  (!!to be modified if the trait is not an Eigen object anymore!!)
-  fdagwr_traits::Dense_Matrix x = Eigen::Map<fdagwr_traits::Dense_Matrix>(X.begin(),n_row,n_col);
+  FDAGWR_TRAITS::Dense_Matrix x = Eigen::Map<FDAGWR_TRAITS::Dense_Matrix>(X.begin(),n_row,n_col);
   
   //check if there are NaNs (NaNs due to missed measurements, not dummy)
   auto check_nan = std::find_if(x.reshaped().cbegin(),x.reshaped().cend(),[](T el){return std::isnan(el);});

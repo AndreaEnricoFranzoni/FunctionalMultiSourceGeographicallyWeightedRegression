@@ -35,7 +35,7 @@
 /*!
 * @todo SERVIREBBE UN CONCEPT PER IL TIPO DOMAIN
 */
-template< class domain_type = fdagwr_traits::Domain, template <typename> class basis_type = bsplines_basis > 
+template< class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis > 
     requires fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
 class basis_systems{
 private:
@@ -59,7 +59,7 @@ public:
     * @brief Class constructor for a vector of bsplines
     * @note BASIS ORDERS HAVE TO BE INT >=0 !!!!!!!!
     */
-    basis_systems(const fdagwr_traits::Dense_Vector & knots,
+    basis_systems(const FDAGWR_TRAITS::Dense_Vector & knots,
                   const std::vector<std::size_t> & basis_degrees,
                   const std::vector<std::size_t> & numbers_of_basis,
                   std::size_t q)            
@@ -107,7 +107,7 @@ public:
     * @brief evaluating the system of basis basis_i-th in location location
     */
     inline 
-    fdagwr_traits::Dense_Matrix 
+    FDAGWR_TRAITS::Dense_Matrix 
     eval_base(double location, std::size_t basis_i) 
     const
     {

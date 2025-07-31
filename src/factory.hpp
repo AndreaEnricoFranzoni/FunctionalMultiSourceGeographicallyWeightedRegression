@@ -21,11 +21,11 @@
 #ifndef FDAGWR_FACTORY_HPP
 #define FDAGWR_FACTORY_HPP
 
+
+#include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
 #include <sstream>
 #include <stdexcept>
-
-
 
 
 namespace generic_factory{
@@ -172,6 +172,5 @@ namespace generic_factory{
   }
 
 }
-
 
 #endif /* FDAGWR_FACTORY_HPP */

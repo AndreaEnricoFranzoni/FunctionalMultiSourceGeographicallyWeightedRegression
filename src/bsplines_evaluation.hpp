@@ -22,6 +22,7 @@
 #define FDAGWR_BSPLINES_EVAL_HPP
 
 
+#include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
 #include "concepts_fdagwr.hpp"
 
@@ -32,7 +33,11 @@ using namespace fdapde;
 template <typename Triangulation_, typename CoordsMatrix_>
     //requires(internals::is_eigen_dense_xpr_v<CoordsMatrix_>)
     requires(fdagwr_concepts::as_interval<Triangulation_> && internals::is_eigen_dense_xpr_v<CoordsMatrix_>)
-inline Eigen::SparseMatrix<double> bsplines_basis_evaluation(const BsSpace<Triangulation_>& bs_space, CoordsMatrix_&& coords) {
+inline 
+Eigen::SparseMatrix<double> 
+bsplines_basis_evaluation(const BsSpace<Triangulation_>& bs_space, 
+                          CoordsMatrix_&& coords) 
+{
     static constexpr int embed_dim = Triangulation_::embed_dim;
     fdapde_assert(coords.rows() > 0 && coords.cols() == embed_dim);
 

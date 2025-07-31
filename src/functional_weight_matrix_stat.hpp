@@ -47,7 +47,7 @@ public:
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    functional_weight_matrix_stationary(const fdagwr_traits::Dense_Matrix& coeff_stat_weights,
+    functional_weight_matrix_stationary(const FDAGWR_TRAITS::Dense_Matrix& coeff_stat_weights,
                              int number_threads)
                       : 
                       functional_weight_matrix_base<functional_weight_matrix_stationary,stationarity_t>(coeff_stat_weights,
@@ -82,7 +82,7 @@ public:
 #endif
       for(std::size_t abscissa_index = 0; abscissa_index < n_abscissa_eval; ++abscissa_index)
       {
-        fdagwr_traits::Diag_Matrix weight_given_abscissa(this->coeff_stat_weights_abscissa_i(abscissa_index));
+        FDAGWR_TRAITS::Diag_Matrix weight_given_abscissa(this->coeff_stat_weights_abscissa_i(abscissa_index));
         m_weights[abscissa_index] = weight_given_abscissa;
       }
     }
