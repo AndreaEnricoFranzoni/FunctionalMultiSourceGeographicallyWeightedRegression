@@ -21,8 +21,10 @@
 #ifndef FDAGWR_FUNCTIONAL_DATA_HPP
 #define FDAGWR_FUNCTIONAL_DATA_HPP
 
+#include "traits_fdagwr.hpp"
+#include "concepts_fdagwr.hpp"
+#include "basis_include.hpp"
 
-#include "functional_datum.hpp"
 
 
 /*!
@@ -33,18 +35,16 @@ template< class domain_type = fdagwr_traits::Domain, template <typename> class b
 class functional_data
 {
 private:
-    /*!Number of statistical units*/
-    std::size_t m_n;
-
     /*!Domain left extreme*/
     double m_a;
-
     /*!Domain right extreme*/
     double m_b;
-
-    /*!Coefficient of datum basis expansion*/
-    std::vector<functional_datum<domain_type,basis_type>> m_fdata;
-
+    /*!Number of statistical units*/
+    std::size_t m_n;
+    /*!Coefficients of basis expansion*/
+    fdagwr_traits::Dense_Matrix m_fdata_coeff;
+    /*!Pointer to the base*/
+    std::unique_ptr<basis_type<domain_type>> m_fdata_basis;
 
 public:
     /*!
@@ -52,17 +52,27 @@ public:
     */
     template< typename _COEFF_OBJ_ >
     functional_data(_COEFF_OBJ_ && fdata_coeff,
-                    const basis_type<domain_type>& fdata_basis)
-        : 
-            m_a(fdata_basis.knots().nodes()(0,0)),
-            m_b(fdata_basis.knots().nodes()(fdata_basis.knots().nodes().size()-static_cast<std::size_t>(1),0)),
-            m_n(fdata_coeff.cols())   
-        {
-            m_fdata.reserve(m_n);
-            for(std::size_t i = 0; i < m_n; ++i){       m_fdata.emplace_back(std::move(fdata_coeff.col(i)),fdata_basis);}
-        }
+                    std::unique_ptr<basis_type<domain_type>> fdata_basis)
+            : 
+                m_a(fdata_basis->knots().nodes()(0,0)),
+                m_b(fdata_basis->knots().nodes()(fdata_basis->number_knots()-static_cast<std::size_t>(1),0)),
+                m_n(fdata_coeff.cols()),
+                m_fdata_coeff{std::forward<_COEFF_OBJ_>(fdata_coeff)},
+                m_fdata_basis(std::move(fdata_basis))  
+            {
 
-    const std::vector<functional_datum<domain_type,basis_type>>& fdata() const {return m_fdata;}
+                Rcout << "La base ha " << m_fdata_basis->number_of_basis() << " basi, con grado " << m_fdata_basis->degree() << std::endl;
+            }
+
+    /*!
+    * @brief Getter for the basis domain left extreme
+    */
+    double a() const {return m_a;}
+
+    /*!
+    * @brief Getter for the basis domain right extreme
+    */
+    double b() const {return m_b;}
 
     /*!
     * @brief Getter for the number of statistical units
@@ -76,7 +86,7 @@ public:
     eval(double loc, std::size_t unit_i)
     const
     {
-        return m_fdata[unit_i].eval(loc);
+        return m_fdata_basis->eval_base(loc).row(0) * m_fdata_coeff.col(unit_i);
     }
 
 };

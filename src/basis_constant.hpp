@@ -34,9 +34,9 @@ class constant_basis :  public basis_base_class<domain_type>
 {
 private:
     /*!Degree*/
-    static constexpr std::size_t degree_constant_basis = 500;
+    static constexpr std::size_t degree_constant_basis = 0;
     /*!Number of basis*/
-    static constexpr std::size_t number_of_basis_constant_basis = 59041;
+    static constexpr std::size_t number_of_basis_constant_basis = 1;
 
 public:
     /*!Constructor*/
