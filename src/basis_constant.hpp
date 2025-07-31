@@ -34,15 +34,15 @@ class constant_basis :  public basis_base_class<domain_type>
 {
 private:
     /*!Degree*/
-    static constexpr std::size_t degree_constant_basis = 100;
+    static constexpr std::size_t degree_constant_basis = 500;
     /*!Number of basis*/
-    static constexpr std::size_t number_of_basis_constant_basis = 101;
+    static constexpr std::size_t number_of_basis_constant_basis = 59041;
 
 public:
     /*!Constructor*/
     constant_basis(const fdagwr_traits::Dense_Vector & knots,
-                   std::size_t degree = 0,
-                   std::size_t number_of_basis = 1)    
+                   std::size_t,
+                   std::size_t)    
             :  
                 basis_base_class<domain_type>(knots,constant_basis<domain_type>::degree_constant_basis,constant_basis<domain_type>::number_of_basis_constant_basis)  
             {}
