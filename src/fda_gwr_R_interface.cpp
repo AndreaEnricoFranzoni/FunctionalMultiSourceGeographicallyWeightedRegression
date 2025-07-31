@@ -198,21 +198,21 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
 
 
-    Rcout << "fdagwr.23: " << std::endl;
+    Rcout << "fdagwr.24: " << std::endl;
 
-    using _DATA_TYPE_ = double;                                                      //data type
-    using _DOMAIN_ = fdagwr_traits::Domain;                                          //domain geometry
-    //using _BASIS_BETAS_ = bsplines_basis;                                          //basis for the betas
-    constexpr auto _RESPONSE_ = FDAGWR_COVARIATES_TYPES::RESPONSE;                   //enum for the response
-    constexpr auto _REC_WEIGHTS_ = FDAGWR_COVARIATES_TYPES::REC_WEIGHTS;             //enum for the response reconstruction weights
-    constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;               //enum for stationary covariates
-    constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;                         //enum for event covariates
-    constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;                     //enum for station covariates
-    constexpr auto _DERVIATIVE_PENALIZED_ = PENALIZED_DERIVATIVE::SECOND;            //enum for the penalization
-    constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;                         //enum for euclidean distance within statistical units locations
-    constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                                 //kernel function to smooth the distances within statistcal units locations
-    constexpr auto _NAN_REM_ = REM_NAN::MR;                                          //how to remove nan (with mean of non-nans)
+    using _DATA_TYPE_ = double;                                                         //data type
+    using _DOMAIN_ = fdagwr_traits::Domain;                                             //domain geometry
 
+    constexpr auto _RESPONSE_ = FDAGWR_COVARIATES_TYPES::RESPONSE;                      //enum for the response
+    constexpr auto _REC_WEIGHTS_ = FDAGWR_COVARIATES_TYPES::REC_WEIGHTS;                //enum for the response reconstruction weights
+    constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;                  //enum for stationary covariates
+    constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;                            //enum for event covariates
+    constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;                        //enum for station covariates
+    constexpr auto _DERVIATIVE_PENALIZED_ = PENALIZED_DERIVATIVE::SECOND;               //enum for the penalization
+    constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;                            //enum for euclidean distance within statistical units locations
+    constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                                    //kernel function to smooth the distances within statistcal units locations
+    constexpr auto _NAN_REM_ = REM_NAN::MR;                                             //how to remove nan (with mean of non-nans)
+    basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());    //basis factory
 
     ///////////////////////////////////////////////////////
     /////   CHECKING and WRAPPING INPUT PARAMETERS  ///////
@@ -435,8 +435,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
     //FD OBJECTS
-    basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());
-    std::unique_ptr<basis_base_class<_DOMAIN_>> basis_response_ = basis_fac.create("bsplines",knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
+    std::unique_ptr<basis_base_class<_DOMAIN_>> basis_response_ = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     
     double el = 0.0;
     Rcout << "Eval basis pre in " << el << ": " << basis_response_->eval_base(el) << std::endl;
@@ -448,8 +447,9 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     
     
     
-    functional_data<_DOMAIN_,Extracted::template_type > fd_response_(std::move(coefficients_response_),std::move(basis_response_));
-    
+    //functional_data<_DOMAIN_,Extracted::template_type > fd_response_(std::move(coefficients_response_),std::move(basis_response_));
+    functional_data<_DOMAIN_,extract_template_t<decltype(basis_response_)::element_type>::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
+
     
 
     /*
