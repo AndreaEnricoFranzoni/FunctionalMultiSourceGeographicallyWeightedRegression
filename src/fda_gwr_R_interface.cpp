@@ -466,7 +466,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     double el = 0.0;
     Rcout << "Eval fd unit 0-th in " << el << ": " << y_fd_.eval(el,0) << std::endl;
 
-    Rcout < "Eval fd xC unit 0-th cov 0-th in " << el << ": " << x_C_fd_.eval(el,0,0) << std::endl;
+    Rcout << "Eval fd xC unit 0-th cov 0-th in " << el << ": " << x_C_fd_.eval(el,0,0) << std::endl;
 
 
     //response
