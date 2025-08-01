@@ -495,7 +495,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
    }
     */
 
-    std::function<double(double const &)> f = [](const double &x){return std::pow(x,2);}
+    std::function<double(double const &)> f = [](const double &x){return std::pow(x,2);};
     fd_integration integration_test(a,b,100);
     double rest_test = integration_test.integrate(f);
     double exact_test = (1/3)*(std::pow(b,3)-std::pow(a,3));

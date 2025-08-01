@@ -27,6 +27,7 @@
 #include "concepts_fdagwr.hpp"
 
 #include "mesh.hpp"
+#include "numerical_integration.hpp"
 #include "Adams_rule.hpp"
 #include "QuadratureRuleAdaptive.hpp"
 using namespace Geometry;
