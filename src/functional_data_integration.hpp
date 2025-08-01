@@ -22,12 +22,38 @@
 #define FDAGWR_FUNCTIONAL_DATA_INTEGRATION_HPP
 
 
+#include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
+#include "concepts_fdagwr.hpp"
+
+#include "mesh.hpp"
+#include "Adams_rule.hpp"
+#include "QuadratureRuleAdaptive.hpp"
+using namespace Geometry;
+using namespace apsc::NumericalIntegration;
+
 
 
 class fd_integration
 {
 
+using integrand_type = FunPoint;
+
+private:
+    /*!Integration domain*/
+    Domain1D m_integration_domain;
+    /*!Integration mesh*/
+    Mesh1D m_integration_mesh;
+
+    
+public:
+    fd_integration(double a, double b, int intervals):
+        m_integration_domain(a,b), m_integration_mesh(m_integration_domain,intervals)
+        {}
+
+    double integrate(const integrand_type &f){
+        Quadrature sa(QuadratureRuleAdaptive<Trapezoidal>(1.e-6, 10000), m_integration_mesh);
+        return sa.apply(f);}
 };
 
 

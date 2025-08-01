@@ -64,7 +64,6 @@ public:
             {
                 //checking that coefficients dimensions are consistent
                 assert((void("Number of knots = number of basis - degree + 1"), m_fdata_coeff.rows() == m_fdata_basis->number_of_basis() ));
-                std::cout << "La base ha " << m_fdata_basis->number_of_basis() << " basi, con grado " << m_fdata_basis->degree() << std::endl;
             }
 
     /*!

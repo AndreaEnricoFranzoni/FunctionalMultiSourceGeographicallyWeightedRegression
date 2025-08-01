@@ -55,7 +55,6 @@ public:
     const
     override
     {   
-        std::cout << "Evaluating a constant basis" << std::endl;
         //wrap the output into a dense matrix: HA UNA RIGA, N_BASIS COLONNE
         return FDAGWR_TRAITS::Dense_Matrix::Ones(1,1);
     }

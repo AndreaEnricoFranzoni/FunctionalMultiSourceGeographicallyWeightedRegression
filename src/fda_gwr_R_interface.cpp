@@ -39,6 +39,9 @@
 #include "functional_data.hpp"
 #include "functional_data_covariates.hpp"
 
+#include "functional_integration.hpp"
+
+
 #include "functional_weight_matrix_stat.hpp"
 #include "functional_weight_matrix_no_stat.hpp"
 
@@ -477,6 +480,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                                                            basis_fac);
 
 
+    /*
    double el = 0.0;
    for(std::size_t i = 0; i < number_of_statistical_units_; ++i)
    {
@@ -489,7 +493,13 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
         for(std::size_t i_s = 0; i_s < q_S; ++i_s){
             Rcout << "Event covairiate " << i_s + 1 << "-th: " << x_S_fd_.eval(el,i_s,i) << std::endl;}
    }
+    */
 
+    std::function<double(double const &)> f = [](const double &x){return std::pow(x,2);}
+    fd_integration integration_test(a,b,100);
+    double rest_test = integration_test.integrate(f);
+    double exact_test = (1/3)*(std::pow(b,3)-std::pow(a,3));
+    Rcout << "Integrating x^2 between " << a << " and " << b << ": test result is " << rest_test << ", with exact value of " << exact_test << std::endl;
 
 
     //returning element

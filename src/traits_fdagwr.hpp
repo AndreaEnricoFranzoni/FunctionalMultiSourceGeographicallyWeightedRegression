@@ -57,7 +57,6 @@ public:
 
 
 
-
 struct FDAGWR_FEATS
 {
   static constexpr std::size_t number_of_geographical_coordinates = static_cast<std::size_t>(2); 
