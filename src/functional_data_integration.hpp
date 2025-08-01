@@ -45,16 +45,26 @@ private:
     Domain1D m_integration_domain;
     /*!Integration mesh*/
     Mesh1D m_integration_mesh;
+    /*!Quadrature rule*/
+    Quadrature m_integration_quadrature;
 
     
 public:
+    /*!Constructor*/
     fd_integration(double a, double b, int intervals):
-        m_integration_domain(a,b), m_integration_mesh(m_integration_domain,intervals)
+        m_integration_domain(a,b), 
+        m_integration_mesh(m_integration_domain,intervals),
+        m_integration_quadrature(QuadratureRuleAdaptive<Trapezoidal>(1.e-6, 10000), m_integration_mesh)
         {}
 
-    double integrate(const integrand_type &f){
-        Quadrature sa(QuadratureRuleAdaptive<Trapezoidal>(1.e-6, 10000), m_integration_mesh);
-        return sa.apply(f);}
+    /*!Function to perform the integration*/
+    inline
+    double 
+    integrate(const integrand_type &f)
+    const
+    {
+        return m_integration_quadrature.apply(f);
+    }
 };
 
 
