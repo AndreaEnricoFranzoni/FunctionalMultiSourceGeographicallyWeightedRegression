@@ -39,7 +39,7 @@
 #include "functional_data.hpp"
 #include "functional_data_covariates.hpp"
 
-#include "functional_integration.hpp"
+#include "functional_data_integration.hpp"
 
 
 #include "functional_weight_matrix_stat.hpp"
