@@ -31,27 +31,26 @@
 */
 
 
-template< FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >  
-class functional_weight_matrix_stationary : public functional_weight_matrix_base< functional_weight_matrix_stationary<stationarity_t>, stationarity_t >
+template< class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >  
+    requires fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
+class functional_weight_matrix_stationary : public functional_weight_matrix_base< functional_weight_matrix_stationary<domain_type,basis_type>, stationarity_t >
 {
 private:
-
     /*!Vector of diagonal matrices storing the weights*/
     WeightMatrixType<stationarity_t> m_weights;
 
 public:
-
     /*!
     * @brief Constructor for the stationary weight matrix: each weight only consists of the reconstruction functional weight
     * @param weight_stat stationary weight, for each statistical unit (abscissas x units)
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    functional_weight_matrix_stationary(const FDAGWR_TRAITS::Dense_Matrix& coeff_stat_weights,
-                             int number_threads)
+    functional_weight_matrix_stationary(const functional_data<domain_type,basis_type> &y_recostruction_weights,
+                                        int number_threads)
                       : 
-                      functional_weight_matrix_base<functional_weight_matrix_stationary,stationarity_t>(coeff_stat_weights,
-                                                                                                        number_threads) 
+                      functional_weight_matrix_base<functional_weight_matrix_stationary,domain_type,basis_type>(y_recostruction_weights,
+                                                                                                                number_threads) 
                       {   
                         static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::STATIONARY,
                                       "Functional weight matrix for stationary covariates needs FDAGWR_COVARIATES_TYPES::STATIONARY as template parameter");
@@ -61,7 +60,7 @@ public:
     * @brief Getter for the functional stationary weight matrix
     * @return the private m_weights
     */
-    WeightMatrixType<stationarity_t> weights() const {return m_weights;}
+    const WeightMatrixType<stationarity_t>>& weights() const {return m_weights;}
 
     /*!
     * @brief Function to compute stationary weights
@@ -71,19 +70,17 @@ public:
     computing_weights()
     {
       //to shared the values with OMP
-      auto n_abscissa_eval = this->number_abscissa_evaluations();
-
+      auto n_stat_units = this->n();
       //preparing the container for the functional stationary weight matrix
-      m_weights.resize(n_abscissa_eval);
-
+      m_weights.resize(n_stat_units);
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(n_abscissa_eval) num_threads(this->number_threads())
+#pragma omp parallel for shared(n_stat_units) num_threads(this->number_threads())
 #endif
-      for(std::size_t abscissa_index = 0; abscissa_index < n_abscissa_eval; ++abscissa_index)
+      for(std::size_t i = 0; i < n_stat_units; ++i)
       {
-        FDAGWR_TRAITS::Diag_Matrix weight_given_abscissa(this->coeff_stat_weights_abscissa_i(abscissa_index));
-        m_weights[abscissa_index] = weight_given_abscissa;
+        FDAGWR_TRAITS::f_type w_i = [=i](const double & loc){return this->y_recostruction_weights().eval(loc,i);};
+        m_weights[i] = w_i;
       }
     }
 };

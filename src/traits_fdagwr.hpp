@@ -53,6 +53,8 @@ public:
   using Diag_Matrix    = Eigen::DiagonalMatrix<double, Eigen::Dynamic>;    ///< Diagonal matrix (for weights matrices)
 
   using basis_geometry = fdapde::Triangulation<1, 1>;                      ///< Domain mesh: unit interval with a fixed number of nodes
+
+  using f_type = std::function<double(double const &)>;                    ///< Function type
 };
 
 

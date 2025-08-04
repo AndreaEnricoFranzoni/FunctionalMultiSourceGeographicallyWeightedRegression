@@ -42,21 +42,18 @@ template <KERNEL_FUNC kernel_func>
 using KERNEL_FUNC_T = std::integral_constant<KERNEL_FUNC, kernel_func>;
 
 
-template< FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::NON_STATIONARY, KERNEL_FUNC kernel_func = KERNEL_FUNC::GAUSSIAN, DISTANCE_MEASURE dist_meas = DISTANCE_MEASURE::EUCLIDEAN >  
-class functional_weight_matrix_non_stationary : public functional_weight_matrix_base< functional_weight_matrix_non_stationary<stationarity_t,kernel_func,dist_meas>, stationarity_t >
+template< class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::NON_STATIONARY, KERNEL_FUNC kernel_func = KERNEL_FUNC::GAUSSIAN, DISTANCE_MEASURE dist_meas = DISTANCE_MEASURE::EUCLIDEAN >  
+    requires fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
+class functional_weight_matrix_non_stationary : public functional_weight_matrix_base< functional_weight_matrix_non_stationary<domain_type,basis_type,stationarity_t,kernel_func,dist_meas>, domain_type, basis_type >
 {
 
 private:
-
     /*!Vector of diagonal matrices storing the weights*/
     WeightMatrixType<stationarity_t> m_weights;
-
     /*!Distance matrix*/
     distance_matrix<dist_meas> m_distance_matrix;
-
     /*!Kernel bandwith*/
     double m_kernel_bandwith;
-
     /*!
     * @brief Evaluation of the kernel function for the non stationary weights
     * @param distance distance between two locations
@@ -75,13 +72,13 @@ public:
     * @param number_threads number of threads for OMP
     */
     template< typename DIST_MATRIX_OBJ >
-    functional_weight_matrix_non_stationary(const FDAGWR_TRAITS::Dense_Matrix & coeff_stat_weights,
+    functional_weight_matrix_non_stationary(const functional_data<domain_type,basis_type> &y_recostruction_weights,
                                             DIST_MATRIX_OBJ&& distance_matrix,
                                             double kernel_bwt,
                                             int number_threads)
                                 : 
-                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary,stationarity_t>(coeff_stat_weights,
-                                                                                                                        number_threads),
+                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary>(y_recostruction_weights,
+                                                                                                         number_threads),
                                   m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)},
                                   m_kernel_bandwith(kernel_bwt) 
                                 {                                       
@@ -95,8 +92,7 @@ public:
     * @brief Getter for the functional non-stationary weight matrix
     * @return the private m_weights
     */
-    WeightMatrixType<stationarity_t> weights() const {return m_weights;}
-
+    const WeightMatrixType<stationarity_t>& weights() const {return m_weights;}
 
     /*!
     * @brief Evaluation of kernel function for the non-stationary weights. Tag-dispacther.
@@ -115,20 +111,17 @@ public:
     computing_weights()
     {
       //to shared the values with OMP
-      auto n_abscissa_eval = this->number_abscissa_evaluations();
-      auto n_stat_units = this->number_statistical_units();
-      
+      auto n_stat_units = this->n();
       //preparing the container for the functional non-stationary weight matrix
       m_weights.resize(n_stat_units);
 
-
 #ifdef _OPENMP
-#pragma omp parallel for shared(m_distance_matrix,n_abscissa_eval,n_stat_units) num_threads(this->number_threads())
+#pragma omp parallel for shared(m_distance_matrix,n_stat_units) num_threads(this->number_threads())
 #endif
-      for(std::size_t unit_index = 0; unit_index < n_stat_units; ++unit_index)
+      for(std::size_t i = 0; i < n_stat_units; ++i)
       {
         //non stationary weights: applying the kernel to the distances within statistical units
-        auto weights_non_stat_unit_i = m_distance_matrix[unit_index]; //Eigen vector with the distances with respect to unit i-th
+        auto weights_non_stat_unit_i = m_distance_matrix[i]; //Eigen vector with the distances with respect to unit i-th
         
         //applying the kernel function to correctly smoothing the distances
         std::transform(weights_non_stat_unit_i.data(),
@@ -137,24 +130,31 @@ public:
                        [this](double dist){return this->kernel_eval(dist,this->m_kernel_bandwith);});
 
         //preparing the container for the functional non-stationary matrix of unit i-th (corresponding to index unit_index)
-        std::vector<FDAGWR_TRAITS::Diag_Matrix> weights_unit_i;
-        weights_unit_i.reserve(n_abscissa_eval);
+        std::vector< FDAGWR_TRAITS::f_type > weights_unit_i;
+        weights_unit_i.reserve(n_stat_units);
 
         //computing the functional non-stationary matrix for unit i-th (corresponding to index unit_index),
         //  stationary and non-stationary weights interacting
-        for (std::size_t abscissa_index = 0; abscissa_index < n_abscissa_eval; ++abscissa_index)
+        for (std::size_t j = 0; j < n_stat_units; ++j)
         {
           //the product element-wise between stationary weights at abscissa abscissa_index-th and non-stationary weight unit_index-th
           //is performed in the most efficient possible way, but it returns an Eigen::ArrayXd: the .matrix() cast it to an Eigen::VectorXd,
           //allowing to call the constructor for an Eigen::DiagonalMatrix
-          weights_unit_i.emplace_back((weights_non_stat_unit_i.array() * this->coeff_stat_weights_abscissa_i(abscissa_index).array()).matrix());
+          //weights_unit_i.emplace_back((weights_non_stat_unit_i.array() * this->coeff_stat_weights_abscissa_i(abscissa_index).array()).matrix());
           
           //fdagwr_traits::Diag_Matrix w((weights_non_stat_unit_i.array() * this->coeff_stat_weights_abscissa_i(abscissa_index).array()).matrix());
           //weights_unit_i.push_back(w);
+          
+          
+          
+          
+          double alpha_i_j = weights_non_stat_unit_i[j];
+          FDAGWR_TRAITS::f_type w_i_j = [=i,=alpha_i_j](const double & loc){return alpha_i_j * this->y_recostruction_weights().eval(loc,i);};
+          weights_unit_i.push_back(w_i_j);
         }
         
         //storing the functional non-stationary matrix for unit i-th (corresponding to index unit_index)
-        m_weights[unit_index] = weights_unit_i;
+        m_weights[i] = weights_unit_i;
       }
     }
 };
