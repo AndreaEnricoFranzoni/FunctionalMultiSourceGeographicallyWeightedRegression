@@ -33,7 +33,7 @@
 
 template< class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >  
     requires fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
-class functional_weight_matrix_stationary : public functional_weight_matrix_base< functional_weight_matrix_stationary<domain_type,basis_type>, stationarity_t >
+class functional_weight_matrix_stationary : public functional_weight_matrix_base< functional_weight_matrix_stationary<domain_type,basis_type>, domain_type, basis_type, stationarity_t >
 {
 private:
     /*!Vector of diagonal matrices storing the weights*/
@@ -60,7 +60,7 @@ public:
     * @brief Getter for the functional stationary weight matrix
     * @return the private m_weights
     */
-    const WeightMatrixType<stationarity_t>>& weights() const {return m_weights;}
+    const WeightMatrixType<stationarity_t>& weights() const {return m_weights;}
 
     /*!
     * @brief Function to compute stationary weights
@@ -79,7 +79,7 @@ public:
 #endif
       for(std::size_t i = 0; i < n_stat_units; ++i)
       {
-        FDAGWR_TRAITS::f_type w_i = [=i](const double & loc){return this->y_recostruction_weights_fd().eval(loc,i);};
+        FDAGWR_TRAITS::f_type w_i = [i](const double & loc){return this->y_recostruction_weights_fd().eval(loc,i);};
         m_weights[i] = w_i;
       }
     }

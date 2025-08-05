@@ -78,8 +78,8 @@ public:
     functional_weight_matrix_base(const functional_data<domain_type,basis_type> &y_recostruction_weights_fd,
                                   int number_threads)
         :      
-            m_y_recostruction_weights(y_recostruction_weights),
-            m_n(y_recostruction_weights.n()), 
+            m_y_recostruction_weights_fd(y_recostruction_weights_fd),
+            m_n(m_y_recostruction_weights_fd.n()), 
             m_number_threads(number_threads)  
         {}
 

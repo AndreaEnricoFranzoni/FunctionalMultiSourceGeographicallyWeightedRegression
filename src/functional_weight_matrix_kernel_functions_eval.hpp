@@ -34,9 +34,9 @@
 * @param bandwith bandwith of the gaussian kernel function
 * @details 'KERNEL_FUNC::GAUSSIAN' dispatch via std::integral_constant.
 */
-template< FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func, DISTANCE_MEASURE dist_meas >
+template< class domain_type, template <typename> class basis_type, FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func, DISTANCE_MEASURE dist_meas >
 double
-functional_weight_matrix_non_stationary<stationarity_t,kernel_func,dist_meas>::kernel_eval(double distance, double bandwith, KERNEL_FUNC_T<KERNEL_FUNC::GAUSSIAN>)
+functional_weight_matrix_non_stationary<domain_type,basis_type,stationarity_t,kernel_func,dist_meas>::kernel_eval(double distance, double bandwith, KERNEL_FUNC_T<KERNEL_FUNC::GAUSSIAN>)
 const
 {
   //gaussian kernel function evaluation

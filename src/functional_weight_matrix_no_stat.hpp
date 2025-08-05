@@ -147,7 +147,7 @@ public:
           
           
           double alpha_i_j = weights_non_stat_unit_i[j];
-          FDAGWR_TRAITS::f_type w_i_j = [=i,=alpha_i_j](const double & loc){return alpha_i_j * this->y_recostruction_weights_fd().eval(loc,i);};
+          FDAGWR_TRAITS::f_type w_i_j = [i,alpha_i_j](const double & loc){return alpha_i_j * this->y_recostruction_weights_fd().eval(loc,i);};
           weights_unit_i.push_back(w_i_j);
         }
         
