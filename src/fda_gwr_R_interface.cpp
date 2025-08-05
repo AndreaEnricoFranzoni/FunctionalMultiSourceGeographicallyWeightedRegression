@@ -437,7 +437,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //response reconstruction weights
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_rec_weights_response_ = basis_fac.create(basis_type_rec_weights_response_,knots_response_eigen_w_,degree_basis_rec_weights_response_,number_basis_rec_weights_response_);
     //extracting the template param of the basis for fd (access it in the template params list with ::template_type)  
-    using rec_weights_response_basis_tmp_t = extract_template_t< decltype(basisrec_weights__response_)::element_type >;   
+    using rec_weights_response_basis_tmp_t = extract_template_t< decltype(basis_rec_weights_response_)::element_type >;   
     functional_data< _DOMAIN_, rec_weights_response_basis_tmp_t::template_type > rec_weights_y_fd_(std::move(coefficients_rec_weights_response_),std::move(basis_rec_weights_response_));
     
     //stationary covariates
