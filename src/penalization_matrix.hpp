@@ -120,7 +120,7 @@ public:
     /*!
     * @brief Getter for the dimension of the penalization matrix
     */
-   std::size_t L() const {return m_L;}
+    std::size_t L() const {return m_L;}
 };
 
 #endif  /*FDAGWR_PENALIZATION_MATRIX_HPP*/

@@ -480,18 +480,31 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                                                                                                                                       std::move(distances_events_cov_),
                                                                                                                                       kernel_bandwith_events_cov_,
                                                                                                                                       number_threads);
-    //W_E.compute_weights();                                                                         
+    W_E.compute_weights();                                                                         
     //stations
     functional_weight_matrix_non_stationary<_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_,_KERNEL_,_DISTANCE_> W_S(rec_weights_y_fd_,
                                                                                                                                         std::move(distances_stations_cov_),
                                                                                                                                         kernel_bandwith_stations_cov_,
                                                                                                                                         number_threads);
-    //W_S.compute_weights();
+    W_S.compute_weights();
 
 
     double el = 1.0;
     for(std::size_t i = 0; i < W_C.n(); ++i){
         std::cout << "Unit: " << i+1 << ": " << W_C.weights()[i](el) << std::endl;
+    }
+
+    for(std::size_t i = 0; i < W_E.n(); ++i)
+    {
+        std::cout << "E for unit " << i+1 << std::endl;
+        for(std::size_t j = 0; j < W_E.n(); ++j){std::cout << "Unit: " << j+1 << ": " << W_E.weights()[j](el) << std::endl;}
+    }
+
+
+    for(std::size_t i = 0; i < W_S.n(); ++i)
+    {
+        std::cout << "S for unit " << i+1 << std::endl;
+        for(std::size_t j = 0; j < W_S.n(); ++j){std::cout << "Unit: " << j+1 << ": " << W_S.weights()[j](el) << std::endl;}
     }
 
 

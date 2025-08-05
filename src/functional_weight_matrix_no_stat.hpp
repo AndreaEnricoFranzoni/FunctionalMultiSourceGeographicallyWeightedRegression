@@ -118,8 +118,10 @@ public:
 #endif
       for(std::size_t i = 0; i < n_stat_units; ++i)
       {
-        //non stationary weights: applying the kernel to the distances within statistical units
-        auto weights_non_stat_unit_i = m_distance_matrix[i]; //Eigen vector with the distances with respect to unit i-th
+        //non stationary weights with respect to unit i-th 
+
+        //Eigen vector with the distances with respect to unit i-th
+        auto weights_non_stat_unit_i = m_distance_matrix[i]; 
         
         //applying the kernel function to correctly smoothing the distances
         std::transform(weights_non_stat_unit_i.data(),
@@ -127,25 +129,13 @@ public:
                        weights_non_stat_unit_i.data(),
                        [this](double dist){return this->kernel_eval(dist,this->m_kernel_bandwith);});
 
-        //preparing the container for the functional non-stationary matrix of unit i-th (corresponding to index unit_index)
+        //preparing the container for the functional non-stationary matrix of unit i-th 
         std::vector< FDAGWR_TRAITS::f_type > weights_unit_i;
         weights_unit_i.reserve(n_stat_units);
 
-        //computing the functional non-stationary matrix for unit i-th (corresponding to index unit_index),
-        //  stationary and non-stationary weights interacting
+        //computing the interaction within kernel application to distances and response reconstruction, unit i-th and all the other ones
         for (std::size_t j = 0; j < n_stat_units; ++j)
-        {
-          //the product element-wise between stationary weights at abscissa abscissa_index-th and non-stationary weight unit_index-th
-          //is performed in the most efficient possible way, but it returns an Eigen::ArrayXd: the .matrix() cast it to an Eigen::VectorXd,
-          //allowing to call the constructor for an Eigen::DiagonalMatrix
-          //weights_unit_i.emplace_back((weights_non_stat_unit_i.array() * this->coeff_stat_weights_abscissa_i(abscissa_index).array()).matrix());
-          
-          //fdagwr_traits::Diag_Matrix w((weights_non_stat_unit_i.array() * this->coeff_stat_weights_abscissa_i(abscissa_index).array()).matrix());
-          //weights_unit_i.push_back(w);
-          
-          
-          
-          
+        {          
           double alpha_i_j = weights_non_stat_unit_i[j];
           FDAGWR_TRAITS::f_type w_i_j = [i,alpha_i_j,this](const double & loc){return alpha_i_j * this->y_recostruction_weights_fd().eval(loc,i);};
           weights_unit_i.push_back(w_i_j);
