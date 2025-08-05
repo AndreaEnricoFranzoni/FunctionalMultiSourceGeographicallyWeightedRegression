@@ -44,7 +44,9 @@ public:
                    std::size_t)    
             :  
                 basis_base_class<domain_type>(knots,constant_basis<domain_type>::degree_constant_basis,constant_basis<domain_type>::number_of_basis_constant_basis)  
-            {}
+            {
+                std::cout << "Constant basis construction" << std::endl;
+            }
 
     /*!
     * @brief evaluating the system of basis basis_i-th in location location. Overriding the method

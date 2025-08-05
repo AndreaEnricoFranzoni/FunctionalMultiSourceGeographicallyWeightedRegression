@@ -390,35 +390,15 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
 
 
-    /////////////////////////////////////////
-    /////    START FD OBJECT CREATION   /////
-    /////////////////////////////////////////
+    ////////////////////////////////
+    /////    OBJECT CREATION   /////
+    ////////////////////////////////
 
     //DISTANCES
     //events
     distances_events_cov_.compute_distances();
     //stations
     distances_stations_cov_.compute_distances();
-
-
-    //FUNCTIONAL WEIGHT MATRIX
-    //stationary
-    functional_weight_matrix_stationary<_STATIONARY_> W_C(coefficients_rec_weights_response_,
-                                                          number_threads);
-    W_C.compute_weights();                                                      
-    //events
-    functional_weight_matrix_non_stationary<_EVENT_,_KERNEL_,_DISTANCE_> W_E(coefficients_rec_weights_response_,
-                                                                             std::move(distances_events_cov_),
-                                                                             kernel_bandwith_events_cov_,
-                                                                             number_threads);
-    W_E.compute_weights();                                                                         
-    //stations
-    functional_weight_matrix_non_stationary<_STATION_,_KERNEL_,_DISTANCE_> W_S(coefficients_rec_weights_response_,
-                                                                               std::move(distances_stations_cov_),
-                                                                               kernel_bandwith_stations_cov_,
-                                                                               number_threads);
-    W_S.compute_weights();
-
 
     //BASIS SYSTEMS FOR THE BETAS
     //stationary (Omega)
@@ -454,6 +434,12 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     using response_basis_tmp_t = extract_template_t< decltype(basis_response_)::element_type >;   
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
     
+    //response reconstruction weights
+    std::unique_ptr<basis_base_class<_DOMAIN_>> basis_rec_weights_response_ = basis_fac.create(basis_type_rec_weights_response_,knots_rec_weights_response_eigen_w_,degree_basis_rec_weights_response_,number_basis_rec_weights_response_)
+    //extracting the template param of the basis for fd (access it in the template params list with ::template_type)  
+    using rec_weights_response_basis_tmp_t = extract_template_t< decltype(basisrec_weights__response_)::element_type >;   
+    functional_data< _DOMAIN_, rec_weights_response_basis_tmp_t::template_type > rec_weights_y_fd_(std::move(coefficients_rec_weights_response_),std::move(basis_rec_weights_response_));
+    
     //stationary covariates
     functional_data_covariates<_DOMAIN_,_STATIONARY_> x_C_fd_(coefficients_stationary_cov_,
                                                               q_C,
@@ -462,6 +448,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                                                               number_basis_stationary_cov_,
                                                               knots_stationary_cov_eigen_w_,
                                                               basis_fac);
+    
     //events covariates
     functional_data_covariates<_DOMAIN_,_EVENT_> x_E_fd_(coefficients_events_cov_,
                                                          q_E,
@@ -470,6 +457,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                                                          number_basis_events_cov_,
                                                          knots_events_cov_eigen_w_,
                                                          basis_fac);
+    
     //stations covariates
     functional_data_covariates<_DOMAIN_,_STATION_> x_S_fd_(coefficients_stations_cov_,
                                                            q_S,
@@ -478,6 +466,25 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                                                            number_basis_stations_cov_,
                                                            knots_stations_cov_eigen_w_,
                                                            basis_fac);
+
+
+    //FUNCTIONAL WEIGHT MATRIX
+    //stationary
+    functional_weight_matrix_stationary<_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATIONARY_> W_C(rec_weights_y_fd_,
+                                                                                                                   number_threads);
+    //W_C.compute_weights();                                                      
+    //events
+    functional_weight_matrix_non_stationary<_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_,_KERNEL_,_DISTANCE_> W_E(coefficients_rec_weights_response_,
+                                                                                                                                      std::move(distances_events_cov_),
+                                                                                                                                      kernel_bandwith_events_cov_,
+                                                                                                                                      number_threads);
+    //W_E.compute_weights();                                                                         
+    //stations
+    functional_weight_matrix_non_stationary<_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_,_KERNEL_,_DISTANCE_> W_S(coefficients_rec_weights_response_,
+                                                                                                                                        std::move(distances_stations_cov_),
+                                                                                                                                        kernel_bandwith_stations_cov_,
+                                                                                                                                        number_threads);
+    /W_S.compute_weights();
 
 
     /*

@@ -44,6 +44,8 @@ private:
     std::size_t m_degree;
     /*!Number of basis*/
     std::size_t m_number_of_basis;
+    /*!Type of basis*/
+    std::string m_type = "Basis";
 
 public:
     /*!Constructor*/
@@ -93,6 +95,11 @@ public:
     * @brief Getter for the number of basis
     */
     std::size_t number_of_basis() const {return m_number_of_basis;}
+
+    /*!
+    * @brief Getter for the basis type
+    */
+    std::string type() const {return m_type;}
 
     /*!
     * @brief Abstract function to evaluate the basis in a location

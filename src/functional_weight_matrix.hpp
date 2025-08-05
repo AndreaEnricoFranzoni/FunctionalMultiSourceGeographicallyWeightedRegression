@@ -63,7 +63,7 @@ class functional_weight_matrix_base
 
 private:
     /*!Matrix containing the stationary weights: abscissa x units*/
-    functional_data<domain_type,basis_type> m_y_recostruction_weights;
+    functional_data<domain_type,basis_type> m_y_recostruction_weights_fd;
     /*!Number of statistical units*/
     std::size_t m_n;
     /*!Number of threads for OMP*/
@@ -75,7 +75,7 @@ public:
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    functional_weight_matrix_base(const functional_data<domain_type,basis_type> &y_recostruction_weights,
+    functional_weight_matrix_base(const functional_data<domain_type,basis_type> &y_recostruction_weights_fd,
                                   int number_threads)
         :      
             m_y_recostruction_weights(y_recostruction_weights),
@@ -87,7 +87,7 @@ public:
     * @brief Getter for the coefficient-stationary-weights matrix
     * @return the private m_coeff_stat_weights
     */
-    const functional_data<domain_type,basis_type>& y_recostruction_weights() const {return m_y_recostruction_weights;}
+    const functional_data<domain_type,basis_type>& y_recostruction_weights_fd() const {return m_y_recostruction_weights_fd;}
 
     /*!
     * @brief Getter for the number of available evaluations of the stationary weights

@@ -62,9 +62,7 @@ private:
     */
     double kernel_eval(double distance, double bandwith, KERNEL_FUNC_T<KERNEL_FUNC::GAUSSIAN>) const;
 
-
 public:
-
     /*!
     * @brief Constructor for the non stationary weight matrix: each weight consists of the reconstruction functional weight and spatial weight
     * @param weight_stat stationary weight, for each statistical unit
@@ -72,12 +70,12 @@ public:
     * @param number_threads number of threads for OMP
     */
     template< typename DIST_MATRIX_OBJ >
-    functional_weight_matrix_non_stationary(const functional_data<domain_type,basis_type> &y_recostruction_weights,
+    functional_weight_matrix_non_stationary(const functional_data<domain_type,basis_type> &y_recostruction_weights_fd,
                                             DIST_MATRIX_OBJ&& distance_matrix,
                                             double kernel_bwt,
                                             int number_threads)
                                 : 
-                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary>(y_recostruction_weights,
+                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary>(y_recostruction_weights_fd,
                                                                                                          number_threads),
                                   m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)},
                                   m_kernel_bandwith(kernel_bwt) 
@@ -149,7 +147,7 @@ public:
           
           
           double alpha_i_j = weights_non_stat_unit_i[j];
-          FDAGWR_TRAITS::f_type w_i_j = [=i,=alpha_i_j](const double & loc){return alpha_i_j * this->y_recostruction_weights().eval(loc,i);};
+          FDAGWR_TRAITS::f_type w_i_j = [=i,=alpha_i_j](const double & loc){return alpha_i_j * this->y_recostruction_weights_fd().eval(loc,i);};
           weights_unit_i.push_back(w_i_j);
         }
         

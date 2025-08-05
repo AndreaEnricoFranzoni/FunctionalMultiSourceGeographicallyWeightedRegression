@@ -45,7 +45,7 @@ private:
     std::size_t m_n;
     /*!Coefficients of basis expansion*/
     FDAGWR_TRAITS::Dense_Matrix m_fdata_coeff;
-    /*!Pointer to the base*/
+    /*!Pointer to the basis*/
     std::unique_ptr<basis_type<domain_type>> m_fdata_basis;
 
 public:
@@ -67,6 +67,16 @@ public:
             }
 
     /*!
+    * @todo SCRIVERE UN COPY CONSTRUCTOR PER GESTIRE IL PUNTATORE ALLA BASE
+    */
+    functional_data(functional_data<domain_type,basis_type> const &fd)
+            : m_a(fd.a()), m_b(fd.b()), m_n(fd.n()), m_fdata_coeff(fd.fdata_coeff())
+            {
+                std::cout << "Creando fd con il copy constructor" << std::endl;
+                m_fdata_basis = std::make_unique<basis_type<domain_type>>(fd.fdata_basis()->knots(),fd.fdata_basis()->degree(),fd.fdata_basis()->number_of_basis());
+            }
+
+    /*!
     * @brief Getter for the basis domain left extreme
     */
     double a() const {return m_a;}
@@ -80,6 +90,16 @@ public:
     * @brief Getter for the number of statistical units
     */
     std::size_t n() const {return m_n;}
+
+    /*!
+    * @brief Getter for the basis expansion coefficients
+    */
+    const FDAGWR_TRAITS::Dense_Matrix & fdata_coeff() const {return m_fdata_coeff;}
+
+    /*!
+    * @brief Getter for the basis 
+    */
+    std::unique_ptr<basis_type<domain_type>> & fdata_basis {return m_fdata_basis;}
 
     /*!
     * @brief Evaluating the correct statistical unit

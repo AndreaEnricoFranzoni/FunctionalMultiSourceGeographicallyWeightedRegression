@@ -46,10 +46,10 @@ public:
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    functional_weight_matrix_stationary(const functional_data<domain_type,basis_type> &y_recostruction_weights,
+    functional_weight_matrix_stationary(const functional_data<domain_type,basis_type> &y_recostruction_weights_fd,
                                         int number_threads)
                       : 
-                      functional_weight_matrix_base<functional_weight_matrix_stationary,domain_type,basis_type>(y_recostruction_weights,
+                      functional_weight_matrix_base<functional_weight_matrix_stationary,domain_type,basis_type>(y_recostruction_weights_fd,
                                                                                                                 number_threads) 
                       {   
                         static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::STATIONARY,
@@ -79,7 +79,7 @@ public:
 #endif
       for(std::size_t i = 0; i < n_stat_units; ++i)
       {
-        FDAGWR_TRAITS::f_type w_i = [=i](const double & loc){return this->y_recostruction_weights().eval(loc,i);};
+        FDAGWR_TRAITS::f_type w_i = [=i](const double & loc){return this->y_recostruction_weights_fd().eval(loc,i);};
         m_weights[i] = w_i;
       }
     }
