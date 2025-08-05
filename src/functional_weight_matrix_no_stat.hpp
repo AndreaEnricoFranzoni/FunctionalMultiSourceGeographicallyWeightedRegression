@@ -137,7 +137,7 @@ public:
         for (std::size_t j = 0; j < n_stat_units; ++j)
         {          
           double alpha_i_j = weights_non_stat_unit_i[j];
-          FDAGWR_TRAITS::f_type w_i_j = [j,alpha_i_j,this](const double & loc){std::cout<<alpha_i_j<<std::endl; return alpha_i_j * this->y_recostruction_weights_fd().eval(loc,j);};
+          FDAGWR_TRAITS::f_type w_i_j = [j,alpha_i_j,this](const double & loc){ return alpha_i_j * this->y_recostruction_weights_fd().eval(loc,j);};
           weights_unit_i.push_back(w_i_j);
         }
         
