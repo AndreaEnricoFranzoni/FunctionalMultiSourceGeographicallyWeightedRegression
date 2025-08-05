@@ -484,7 +484,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                                                                                                                                         std::move(distances_stations_cov_),
                                                                                                                                         kernel_bandwith_stations_cov_,
                                                                                                                                         number_threads);
-    /W_S.compute_weights();
+    //W_S.compute_weights();
 
 
     /*
