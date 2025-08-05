@@ -75,8 +75,8 @@ public:
                                             double kernel_bwt,
                                             int number_threads)
                                 : 
-                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary>(y_recostruction_weights_fd,
-                                                                                                         number_threads),
+                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary,domain_type,basis_type>(y_recostruction_weights_fd,
+                                                                                                                                number_threads),
                                   m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)},
                                   m_kernel_bandwith(kernel_bwt) 
                                 {                                       
