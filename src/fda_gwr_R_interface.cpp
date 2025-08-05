@@ -497,14 +497,14 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     for(std::size_t i = 0; i < W_E.n(); ++i)
     {
         std::cout << "E for unit " << i+1 << std::endl;
-        for(std::size_t j = 0; j < W_E.n(); ++j){std::cout << "Unit: " << j+1 << ": " << W_E.weights()[j](el) << std::endl;}
+        for(std::size_t j = 0; j < W_E.n(); ++j){std::cout << "Unit: " << j+1 << ": " << W_E.weights()[i][j](el) << std::endl;}
     }
 
 
     for(std::size_t i = 0; i < W_S.n(); ++i)
     {
         std::cout << "S for unit " << i+1 << std::endl;
-        for(std::size_t j = 0; j < W_S.n(); ++j){std::cout << "Unit: " << j+1 << ": " << W_S.weights()[j](el) << std::endl;}
+        for(std::size_t j = 0; j < W_S.n(); ++j){std::cout << "Unit: " << j+1 << ": " << W_S.weights()[i][j](el) << std::endl;}
     }
 
 
