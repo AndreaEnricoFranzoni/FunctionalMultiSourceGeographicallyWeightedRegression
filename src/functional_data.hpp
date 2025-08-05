@@ -45,8 +45,7 @@ private:
     std::size_t m_n;
     /*!Coefficients of basis expansion*/
     FDAGWR_TRAITS::Dense_Matrix m_fdata_coeff;
-    /*!Pointer to the basis*/
-    //std::unique_ptr<basis_type<domain_type>> m_fdata_basis;
+    /*!Pointer to the basis: shared_ptr is chosen over unique_ptr since is easir to copy*/
     std::shared_ptr<basis_type<domain_type>> m_fdata_basis;
 
 public:
@@ -66,34 +65,6 @@ public:
                 //checking that coefficients dimensions are consistent
                 assert((void("Number of knots = number of basis - degree + 1"), m_fdata_coeff.rows() == m_fdata_basis->number_of_basis() ));
             }
-    /*
-    template< typename _COEFF_OBJ_ >
-    functional_data(_COEFF_OBJ_ && fdata_coeff,
-                    std::unique_ptr<basis_type<domain_type>> fdata_basis)
-            : 
-                m_a(fdata_basis->knots().nodes()(0,0)),
-                m_b(fdata_basis->knots().nodes()(fdata_basis->number_knots()-static_cast<std::size_t>(1),0)),
-                m_n(fdata_coeff.cols()),
-                m_fdata_coeff{std::forward<_COEFF_OBJ_>(fdata_coeff)},
-                m_fdata_basis(std::move(fdata_basis))  
-            {
-                //checking that coefficients dimensions are consistent
-                assert((void("Number of knots = number of basis - degree + 1"), m_fdata_coeff.rows() == m_fdata_basis->number_of_basis() ));
-            }
-    */
-
-    /*!
-    * @todo SCRIVERE UN COPY CONSTRUCTOR PER GESTIRE IL PUNTATORE ALLA BASE
-    */
-   /*
-    functional_data(functional_data<domain_type,basis_type> const &fd)
-            : m_a(fd.a()), m_b(fd.b()), m_n(fd.n()), m_fdata_coeff(fd.fdata_coeff())
-            {
-                std::cout << "Creando fd con il copy constructor" << std::endl;
-                //m_fdata_basis = std::make_unique<basis_type<domain_type>>(fd.fdata_basis()->knots().nodes(),fd.fdata_basis()->degree(),fd.fdata_basis()->number_of_basis());
-                m_fdata_basis = std::make_unique<bsplines_basis<domain_type>>(fd.fdata_basis()->knots().nodes(),fd.fdata_basis()->degree(),fd.fdata_basis()->number_of_basis());
-            }
-   */
 
     /*!
     * @brief Getter for the basis domain left extreme
@@ -114,11 +85,6 @@ public:
     * @brief Getter for the basis expansion coefficients
     */
     const FDAGWR_TRAITS::Dense_Matrix & fdata_coeff() const {return m_fdata_coeff;}
-
-    /*!
-    * @brief Getter for the basis 
-    */
-    //const std::unique_ptr<basis_type<domain_type>> & fdata_basis() const {return m_fdata_basis;}
 
     /*!
     * @brief Evaluating the correct statistical unit

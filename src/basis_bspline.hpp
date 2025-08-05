@@ -56,12 +56,10 @@ public:
                 basis_base_class<domain_type>(knots,degree,number_of_basis),
                 m_basis(this->knots(),this->degree())
                 {
-                    std::cout << "basis" << this->type() << "construction" << std::endl;
                     //cheack input consistency
                     assert((void("Number of knots = number of basis - degree + 1"), this->number_knots() == (m_number_of_basis - m_degree + static_cast<std::size_t>(1))));
                 }
-
-
+                
     /*!
     * @brief Getter for the basis
     * @return the private m_basis

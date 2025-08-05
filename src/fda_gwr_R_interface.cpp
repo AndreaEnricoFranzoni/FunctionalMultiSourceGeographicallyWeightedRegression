@@ -394,11 +394,13 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     /////    OBJECT CREATION   /////
     ////////////////////////////////
 
+
     //DISTANCES
     //events
     distances_events_cov_.compute_distances();
     //stations
     distances_stations_cov_.compute_distances();
+
 
     //BASIS SYSTEMS FOR THE BETAS
     //stationary (Omega)
@@ -440,7 +442,6 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     using rec_weights_response_basis_tmp_t = extract_template_t< decltype(basis_rec_weights_response_)::element_type >;   
     functional_data< _DOMAIN_, rec_weights_response_basis_tmp_t::template_type > rec_weights_y_fd_(std::move(coefficients_rec_weights_response_),std::move(basis_rec_weights_response_));
     
-    
     //stationary covariates
     functional_data_covariates<_DOMAIN_,_STATIONARY_> x_C_fd_(coefficients_stationary_cov_,
                                                               q_C,
@@ -473,7 +474,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //stationary
     functional_weight_matrix_stationary<_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATIONARY_> W_C(rec_weights_y_fd_,
                                                                                                                    number_threads);
-    //W_C.compute_weights();                                                      
+    W_C.compute_weights();                                                      
     //events
     functional_weight_matrix_non_stationary<_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_,_KERNEL_,_DISTANCE_> W_E(rec_weights_y_fd_,
                                                                                                                                       std::move(distances_events_cov_),
@@ -486,6 +487,12 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                                                                                                                                         kernel_bandwith_stations_cov_,
                                                                                                                                         number_threads);
     //W_S.compute_weights();
+
+
+    double el = 1.0;
+    for(std::size_t i = 0; i < W_C.n(); ++i){
+        std::cout << "Unit: " << i+1 << ": " << W_C.weights[i](el) << std::endl;
+    }
 
 
     /*
