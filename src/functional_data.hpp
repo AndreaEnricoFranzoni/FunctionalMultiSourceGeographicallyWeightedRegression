@@ -73,7 +73,7 @@ public:
             : m_a(fd.a()), m_b(fd.b()), m_n(fd.n()), m_fdata_coeff(fd.fdata_coeff())
             {
                 std::cout << "Creando fd con il copy constructor" << std::endl;
-                m_fdata_basis = std::make_unique<basis_type<domain_type>>(fd.fdata_basis()->knots(),fd.fdata_basis()->degree(),fd.fdata_basis()->number_of_basis());
+                m_fdata_basis = std::make_unique<bsplines_basis<domain_type>>(fd.fdata_basis()->knots(),fd.fdata_basis()->degree(),fd.fdata_basis()->number_of_basis());
             }
 
     /*!
