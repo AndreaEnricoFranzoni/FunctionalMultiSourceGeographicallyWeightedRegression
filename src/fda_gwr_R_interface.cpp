@@ -474,13 +474,13 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
                                                                                                                    number_threads);
     //W_C.compute_weights();                                                      
     //events
-    functional_weight_matrix_non_stationary<_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_,_KERNEL_,_DISTANCE_> W_E(coefficients_rec_weights_response_,
+    functional_weight_matrix_non_stationary<_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_,_KERNEL_,_DISTANCE_> W_E(rec_weights_y_fd_,
                                                                                                                                       std::move(distances_events_cov_),
                                                                                                                                       kernel_bandwith_events_cov_,
                                                                                                                                       number_threads);
     //W_E.compute_weights();                                                                         
     //stations
-    functional_weight_matrix_non_stationary<_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_,_KERNEL_,_DISTANCE_> W_S(coefficients_rec_weights_response_,
+    functional_weight_matrix_non_stationary<_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_,_KERNEL_,_DISTANCE_> W_S(rec_weights_y_fd_,
                                                                                                                                         std::move(distances_stations_cov_),
                                                                                                                                         kernel_bandwith_stations_cov_,
                                                                                                                                         number_threads);

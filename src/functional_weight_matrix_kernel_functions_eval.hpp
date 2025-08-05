@@ -35,6 +35,7 @@
 * @details 'KERNEL_FUNC::GAUSSIAN' dispatch via std::integral_constant.
 */
 template< class domain_type, template <typename> class basis_type, FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func, DISTANCE_MEASURE dist_meas >
+    requires fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
 double
 functional_weight_matrix_non_stationary<domain_type,basis_type,stationarity_t,kernel_func,dist_meas>::kernel_eval(double distance, double bandwith, KERNEL_FUNC_T<KERNEL_FUNC::GAUSSIAN>)
 const
