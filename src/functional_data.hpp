@@ -99,7 +99,7 @@ public:
     /*!
     * @brief Getter for the basis 
     */
-    std::unique_ptr<basis_type<domain_type>> & fdata_basis() {return m_fdata_basis;}
+    const std::unique_ptr<basis_type<domain_type>> & fdata_basis() const {return m_fdata_basis;}
 
     /*!
     * @brief Evaluating the correct statistical unit
