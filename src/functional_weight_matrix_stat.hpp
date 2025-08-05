@@ -33,7 +33,7 @@
 
 template< class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >  
     requires fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
-class functional_weight_matrix_stationary : public functional_weight_matrix_base< functional_weight_matrix_stationary<domain_type,basis_type>, domain_type, basis_type, stationarity_t >
+class functional_weight_matrix_stationary : public functional_weight_matrix_base< functional_weight_matrix_stationary<domain_type,basis_type>, domain_type, basis_type >
 {
 private:
     /*!Vector of diagonal matrices storing the weights*/
