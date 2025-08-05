@@ -50,6 +50,19 @@ public:
             }
 
     /*!
+    * @brief Giving the basis type
+    * @return std::string
+    */
+    inline
+    std::string 
+    type()
+    const 
+    override
+    {
+        return "Constant";
+    }
+
+    /*!
     * @brief evaluating the system of basis basis_i-th in location location. Overriding the method
     */
     inline 

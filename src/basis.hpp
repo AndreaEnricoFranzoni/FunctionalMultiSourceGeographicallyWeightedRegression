@@ -97,9 +97,9 @@ public:
     std::size_t number_of_basis() const {return m_number_of_basis;}
 
     /*!
-    * @brief Getter for the basis type
+    * @brief Basis type
     */
-    std::string type() const {return m_type;}
+    virtual inline std::string type() const = 0;
 
     /*!
     * @brief Abstract function to evaluate the basis in a location
