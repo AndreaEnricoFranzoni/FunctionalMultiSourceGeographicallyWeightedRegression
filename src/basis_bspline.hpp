@@ -54,9 +54,10 @@ public:
                    std::size_t number_of_basis)    
             :   
                 basis_base_class<domain_type>(knots,degree,number_of_basis),
+                m_type(FDAGWR_BASIS_TYPES::_bsplines_), 
                 m_basis(this->knots(),this->degree())
                 {
-                    std::cout << "Bsplines basis construction" << std::endl;
+                    std::cout << "basis" << this->type() << "construction" << std::endl;
                     //cheack input consistency
                     assert((void("Number of knots = number of basis - degree + 1"), this->number_knots() == (m_number_of_basis - m_degree + static_cast<std::size_t>(1))));
                 }

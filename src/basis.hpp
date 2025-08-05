@@ -45,7 +45,7 @@ private:
     /*!Number of basis*/
     std::size_t m_number_of_basis;
     /*!Type of basis*/
-    std::string m_type = "Basis";
+    std::string m_type;
 
 public:
     /*!Constructor*/

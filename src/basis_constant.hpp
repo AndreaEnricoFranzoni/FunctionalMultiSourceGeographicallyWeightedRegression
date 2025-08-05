@@ -43,9 +43,10 @@ public:
                    std::size_t,
                    std::size_t)    
             :  
-                basis_base_class<domain_type>(knots,constant_basis<domain_type>::degree_constant_basis,constant_basis<domain_type>::number_of_basis_constant_basis)  
+                basis_base_class<domain_type>(knots,constant_basis<domain_type>::degree_constant_basis,constant_basis<domain_type>::number_of_basis_constant_basis),
+                m_type(FDAGWR_BASIS_TYPES::_constant_)  
             {
-                std::cout << "Constant basis construction" << std::endl;
+                std::cout << "basis" << this->type() << "construction" << std::endl;
             }
 
     /*!
