@@ -65,6 +65,24 @@ public:
     {
         return m_integration_quadrature.apply(f);
     }
+
+    /*!
+    * @brief Performing a specific integration
+    */
+/*
+    inline
+    FDAGWR_TRAITS::Dense_Matrix
+    operator()
+    (const basis_systems & basis_betas_lhs, 
+     const functional_data_covariates & fd_lhs,
+     const basis_systems & basis_betas_rhs,
+     const functional_data_covariates & fd_rhs,
+     const functional_weight_matrix_non_stationary & W)
+    const
+    {
+        
+    }
+*/
 };
 
 

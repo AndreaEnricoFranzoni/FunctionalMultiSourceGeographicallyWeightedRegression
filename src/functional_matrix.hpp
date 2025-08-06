@@ -22,6 +22,7 @@
 #define FDAGWR_FUNCTIONAL_MATRIX_HPP
 
 
+#include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
 
 
@@ -30,7 +31,8 @@ template< typename T = double >
 class functional_matrix
 {
 
-using function_type = std::vector<std::function<T(T)>>;
+using function_type = std::function<T(const T&)>;
+using functional_matrix_type = std::vector<function_type>;
 
 private:
     std::size_t m_rows;
@@ -39,13 +41,13 @@ private:
 
     std::vector<function_type> m_matrix;
 
-    static inline T default_f(T el) {   return static_cast<T>(1);};
+    static inline T default_f(const T &el) {   return static_cast<T>(1);};
 
 
 public:
     functional_matrix(std::size_t m,
                       std::size_t n,
-                      const function_type& f)
+                      const functional_matrix_type& f)
         :
             m_rows(m),
             m_cols(n),

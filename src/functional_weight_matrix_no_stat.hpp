@@ -129,8 +129,6 @@ public:
                        weights_non_stat_unit_i.data(),
                        [this](double dist){return this->kernel_eval(dist,this->m_kernel_bandwith);});
 
-        std::cout << "For unit " << i+1 << ": alphas: " << weights_non_stat_unit_i << std::endl;
-
         //preparing the container for the functional non-stationary matrix of unit i-th 
         std::vector< FDAGWR_TRAITS::f_type > weights_unit_i;
         weights_unit_i.reserve(n_stat_units);

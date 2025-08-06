@@ -489,6 +489,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     W_S.compute_weights();
 
 
+/*
     double el = 1.0;
     for(std::size_t i = 0; i < W_C.n(); ++i){
         std::cout << "Unit: " << i+1 << ": " << W_C.weights()[i](el) << std::endl;
@@ -506,6 +507,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
         std::cout << "S for unit " << i+1 << std::endl;
         for(std::size_t j = 0; j < W_S.n(); ++j){std::cout << "Unit: " << j+1 << ": " << W_S.weights()[i][j](el) << std::endl;}
     }
+*/
 
 
     /*
@@ -523,11 +525,11 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
    }
     */
 
-    std::function<double(double const &)> f = [](const double &x){return std::pow(x,2);};
-    fd_integration integration_test(a,b,100);
-    double rest_test = integration_test.integrate(f);
-    double exact_test = (1/3)*(std::pow(b,3)-std::pow(a,3));
-    Rcout << "Integrating x^2 between " << a << " and " << b << ": test result is " << rest_test << ", with exact value of " << exact_test << std::endl;
+    std::function<double(double const &)> f1 = [](const double &x){return std::pow(x,2);};
+    std::function<double(double const &)> f2 = [](const double &x){return std::pow(x,3);};
+    auto f_prod = f1*f2;
+    double el = 2.0;
+    Rcout << "f1(2): " << f1(el) << ", f2(2): " << f2(el) << ", f1(2)*f2(2): " << f_prod(2) << std::endl;
 
 
     //returning element
