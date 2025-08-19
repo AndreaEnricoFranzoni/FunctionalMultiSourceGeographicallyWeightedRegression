@@ -524,15 +524,29 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
    }
     */
 
+   double el = 2.0;
+
     std::function<double(double const &)> f1 = [](const double &x){return std::pow(x,2);};
     std::function<double(double const &)> f2 = [](const double &x){return std::pow(x,3);};
-    std::vector<std::function<double(double const &)> > test_f{f1,f2};
+    std::vector<std::function<double(double const &)> > test_f1_f2{f1,f2};
+    functional_matrix test_fm_1(test_f1_f2,1,2);
 
-    functional_matrix test_fm(test_f,1,2);
-    //auto f_prod = f1*f2;
-    double el = 2.0;
-    Rcout << "FM: f1(2): " << test_fm(0,0)(el) << ", f2(2): " << test_fm(0,1)(el) << std::endl;
-    //", f1(2)*f2(2): " << f_prod(2) <<
+    Rcout << "FM: f1(2): " << test_fm_1(0,0)(el) << ", f2(2): " << test_fm_1(0,1)(el) << std::endl;
+
+
+    std::function<double(double const &)> f3 = [](const double &x){return 1.0 + 2.0*x;};
+    std::function<double(double const &)> f4 = [](const double &x){return 3.0 - x;};
+    std::vector<std::function<double(double const &)> > test_f3_f4{f3,f4};
+    functional_matrix test_fm_2(test_f3_f4,1,2);
+
+    Rcout << "FM: f3(2): " << test_fm_2(0,0)(el) << ", f4(2): " << test_fm_2(0,1)(el) << std::endl;
+
+
+
+    
+    
+    functional_matrix test_op = test_fm_1*test_fm_2;
+    Rcout << "FM op: primo: " << test_op(0,0)(el) << ", secondo: " << test_op(0,1)(el) << std::endl;
 
 
     //returning element
