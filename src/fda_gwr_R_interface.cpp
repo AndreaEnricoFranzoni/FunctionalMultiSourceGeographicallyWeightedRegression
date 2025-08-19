@@ -35,22 +35,21 @@
 #include "basis_bspline_systems.hpp"
 #include "basis_factory_proxy.hpp"
 
-
 #include "functional_data.hpp"
 #include "functional_data_covariates.hpp"
-
-#include "functional_data_integration.hpp"
-
-
 #include "functional_weight_matrix_stat.hpp"
 #include "functional_weight_matrix_no_stat.hpp"
-
 #include "distance_matrix.hpp"
 #include "penalization_matrix.hpp"
+
+#include "functional_data_integration.hpp"
 
 #include "test_basis_eval.hpp"
 
 
+
+#include "functional_matrix.hpp"
+#include "functional_matrix_operators.hpp"
 
 
 
@@ -527,9 +526,13 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
 
     std::function<double(double const &)> f1 = [](const double &x){return std::pow(x,2);};
     std::function<double(double const &)> f2 = [](const double &x){return std::pow(x,3);};
-    auto f_prod = f1*f2;
+    std::vector<std::function<double(double const &)> > test_f(f1,f2);
+
+    functional_matrix test_fm(test_f,1,2);
+    //auto f_prod = f1*f2;
     double el = 2.0;
-    Rcout << "f1(2): " << f1(el) << ", f2(2): " << f2(el) << ", f1(2)*f2(2): " << f_prod(2) << std::endl;
+    Rcout << "FM: f1(2): " << test_fm(0,0)(el) << ", f2(2): " << test_fm(0,1)(el) << std::endl;
+    //", f1(2)*f2(2): " << f_prod(2) <<
 
 
     //returning element
