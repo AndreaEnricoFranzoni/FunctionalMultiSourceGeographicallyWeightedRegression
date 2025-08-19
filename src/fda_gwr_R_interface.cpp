@@ -524,7 +524,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
    }
     */
 
-   double el = 2.0;
+   double el = 1.0;
 
     std::function<double(double const &)> f1 = [](const double &x){return std::pow(x,2);};
     std::function<double(double const &)> f2 = [](const double &x){return std::pow(x,3);};
