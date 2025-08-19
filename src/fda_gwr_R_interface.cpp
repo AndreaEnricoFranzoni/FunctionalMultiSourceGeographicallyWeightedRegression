@@ -528,7 +528,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     std::function<double(double const &)> f2 = [](const double &x){return std::pow(x,3);};
     std::vector<std::function<double(double const &)> > test_f(f1,f2);
 
-    functional_matrix test_fm(test_f,1,2);
+    functional_matrix test_fm{test_f,1,2};
     //auto f_prod = f1*f2;
     double el = 2.0;
     Rcout << "FM: f1(2): " << test_fm(0,0)(el) << ", f2(2): " << test_fm(0,1)(el) << std::endl;
