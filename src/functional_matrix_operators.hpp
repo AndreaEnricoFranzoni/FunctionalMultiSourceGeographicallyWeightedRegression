@@ -33,12 +33,14 @@ class BinaryOperator : public Expr<BinaryOperator<LO, RO, OP> >
 {
 public:
   BinaryOperator(LO const &l, RO const &r) : M_lo(l), M_ro(r){};
+
   // Applies operation on operands
-  double
+  FDAGWR_TRAITS::f_type
   operator()(std::size_t i, std::size_t j) const
   {
     return OP()(M_lo(i,j), M_ro(i,j));
   }
+
   std::size_t
   rows() const
   {
@@ -46,6 +48,7 @@ public:
     assert(M_lo.rows() == M_ro.rows());
     return M_lo.rows();
   }
+
   std::size_t
   cols() const
   {
@@ -65,17 +68,20 @@ class UnaryOperator : public Expr<UnaryOperator<RO, OP> >
 {
 public:
   UnaryOperator(RO const &r) : M_ro(r){};
+
   // Applies operation on operands
-  double
+  FDAGWR_TRAITS::f_type
   operator()(std::size_t i, std::size_t j) const
   {
     return OP()(M_ro(i,j));
   }
+
   std::size_t
   rows() const
   {
     return M_ro.rows();
   }
+
   std::size_t
   cols() const
   {
@@ -94,16 +100,19 @@ class BinaryOperator<double, RO, OP>
 public:
   using LO = double;
   BinaryOperator(LO const &l, RO const &r) : M_lo(l), M_ro(r){};
-  double
+
+  FDAGWR_TRAITS::f_type
   operator()(std::size_t i, std::size_t j) const
   {
     return OP()(M_lo, M_ro(i,j));
   }
+
   std::size_t
   rows() const
   {
     return M_ro.rows();
   }
+
   std::size_t
   cols() const
   {
@@ -123,16 +132,19 @@ class BinaryOperator<LO, double, OP>
 public:
   using RO = double;
   BinaryOperator(LO const &l, RO const &r) : M_lo(l), M_ro(r){};
-  double
+
+  FDAGWR_TRAITS::f_type
   operator()(std::size_t i, std::size_t j) const
   {
     return OP()(M_lo(i,j), M_ro);
   }
+
   std::size_t
   rows() const
   {
     return M_lo.rows();
   }
+  
   std::size_t
   cols() const
   {
