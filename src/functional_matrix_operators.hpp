@@ -29,7 +29,7 @@
 // Operators can be defined throus static or non static call operators.
 //  CLASSES THAT ENCAPSULATE OPERATIONS
 //! Binary operator expression.
-template <class LO, class RO, class OP, typename INPUT, typename OUTPUT>
+template <class LO, class RO, class OP, typename INPUT = double, typename OUTPUT = double>
 class BinaryOperator : public Expr<BinaryOperator<LO, RO, OP, INPUT, OUTPUT>, INPUT, OUTPUT>
 {
 public:
@@ -94,7 +94,7 @@ private:
 
 
 //! Unary operator expression.
-template <class RO, class OP, typename INPUT, typename OUTPUT>
+template <class RO, class OP, typename INPUT = double, typename OUTPUT = double>
 class UnaryOperator : public Expr<UnaryOperator<RO, OP, INPUT, OUTPUT>, INPUT, OUTPUT>
 {
 public:
@@ -148,7 +148,7 @@ private:
 };
 
 //! Specialization for operation by a scalar
-template <class RO, class OP, typename INPUT, typename OUTPUT>
+template <class RO, class OP, typename INPUT = double, typename OUTPUT = double>
 class BinaryOperator<double, RO, OP, INPUT, OUTPUT>
   : public Expr<BinaryOperator<double, RO, OP, INPUT, OUTPUT>, INPUT, OUTPUT>
 {
@@ -195,7 +195,7 @@ private:
 };
 
 //! Specialization for operation by a scalar
-template <class LO, class OP, typename INPUT, typename OUTPUT>
+template <class LO, class OP, typename INPUT = double, typename OUTPUT = double>
 class BinaryOperator<LO, double, OP, INPUT, OUTPUT>
   : public Expr<BinaryOperator<LO, double, OP, INPUT, OUTPUT>, INPUT, OUTPUT >
 {
@@ -250,7 +250,7 @@ private:
   using Add = std::add<double>;
   /endcode
 */
-template <typename INPUT, typename OUTPUT>
+template <typename INPUT = double, typename OUTPUT = double>
 struct Add
 {
   //type of the function stored
@@ -264,7 +264,7 @@ struct Add
   }
 };
 //! The basic Multiplication
-template <typename INPUT, typename OUTPUT>
+template <typename INPUT = double, typename OUTPUT = double>
 struct Multiply
 {
   //type of the function stored
@@ -293,7 +293,7 @@ struct Multiply
 };
 
 //! The basic Subtraction
-template <typename INPUT, typename OUTPUT>
+template <typename INPUT = double, typename OUTPUT = double>
 struct Subtract
 {
   //type of the function stored
@@ -308,7 +308,7 @@ struct Subtract
 };
 
 //! Minus operator
-template <typename INPUT, typename OUTPUT>
+template <typename INPUT = double, typename OUTPUT = double>
 struct Minus
 {
   //type of the function stored
@@ -324,7 +324,7 @@ struct Minus
 
 // Some fancier operators
 //! Exponential
-template <typename INPUT, typename OUTPUT>
+template <typename INPUT = double, typename OUTPUT = double>
 struct ExpOP
 {
   //type of the function stored
@@ -339,7 +339,7 @@ struct ExpOP
 };
 
 //! Logarithm
-template <typename INPUT, typename OUTPUT>
+template <typename INPUT = double, typename OUTPUT = double>
 struct LogOP
 {
   //type of the function stored
@@ -354,22 +354,22 @@ struct LogOP
 };
 
 // WRAPPING THE BASE OPERATIONS INTO THE OPERATION CLASSES: ARE JUST TYPEDEFS
-template <class LO, class RO, typename INPUT, typename OUTPUT> using AddExpr = BinaryOperator<LO, RO, Add<INPUT,OUTPUT>, INPUT, OUTPUT>;
+template <class LO, class RO, typename INPUT = double, typename OUTPUT = double> using AddExpr = BinaryOperator<LO, RO, Add<INPUT,OUTPUT>, INPUT, OUTPUT>;
 
-template <class LO, class RO, typename INPUT, typename OUTPUT> using MultExpr = BinaryOperator<LO, RO, Multiply<INPUT,OUTPUT>, INPUT, OUTPUT>;
+template <class LO, class RO, typename INPUT = double, typename OUTPUT = double> using MultExpr = BinaryOperator<LO, RO, Multiply<INPUT,OUTPUT>, INPUT, OUTPUT>;
 
-template <class LO, class RO, typename INPUT, typename OUTPUT> using SubExpr = BinaryOperator<LO, RO, Subtract<INPUT,OUTPUT>, INPUT, OUTPUT>;
+template <class LO, class RO, typename INPUT = double, typename OUTPUT = double> using SubExpr = BinaryOperator<LO, RO, Subtract<INPUT,OUTPUT>, INPUT, OUTPUT>;
 
-template <class RO, typename INPUT, typename OUTPUT> using MinusExpr = UnaryOperator<RO, Minus<INPUT,OUTPUT>, INPUT, OUTPUT>;
+template <class RO, typename INPUT = double, typename OUTPUT = double> using MinusExpr = UnaryOperator<RO, Minus<INPUT,OUTPUT>, INPUT, OUTPUT>;
 
-template <class RO, typename INPUT, typename OUTPUT> using ExpExpr = UnaryOperator<RO, ExpOP<INPUT,OUTPUT>, INPUT, OUTPUT>;
+template <class RO, typename INPUT = double, typename OUTPUT = double> using ExpExpr = UnaryOperator<RO, ExpOP<INPUT,OUTPUT>, INPUT, OUTPUT>;
 
-template <class RO, typename INPUT, typename OUTPUT> using LogExpr = UnaryOperator<RO, LogOP<INPUT,OUTPUT>, INPUT, OUTPUT>;
+template <class RO, typename INPUT = double, typename OUTPUT = double> using LogExpr = UnaryOperator<RO, LogOP<INPUT,OUTPUT>, INPUT, OUTPUT>;
 
 //  USER LEVEL OPERATORS: THESE ARE THE ONLY ONES THE USER WILL ADOPT
 
 //! Addition of  expression
-template <class LO, class RO, typename INPUT, typename OUTPUT>
+template <class LO, class RO, typename INPUT = double, typename OUTPUT = double>
 inline AddExpr<LO, RO, INPUT, OUTPUT>
 operator+(LO const &l, RO const &r)
 {
@@ -377,21 +377,21 @@ operator+(LO const &l, RO const &r)
 }
 
 //! Multiplication of expressions
-template <class LO, class RO, typename INPUT, typename OUTPUT>
+template <class LO, class RO, typename INPUT = double, typename OUTPUT = double>
 inline MultExpr<LO, RO, INPUT, OUTPUT>
 operator*(LO const &l, RO const &r)
 {
   return MultExpr<LO, RO, INPUT, OUTPUT>(l, r);
 }
 
-template <class LO, class RO, typename INPUT, typename OUTPUT>
+template <class LO, class RO, typename INPUT = double, typename OUTPUT = double>
 inline SubExpr<LO, RO, INPUT, OUTPUT>
 operator-(LO const &l, RO const &r)
 {
   return SubExpr<LO, RO, INPUT, OUTPUT>(l, r);
 }
 
-template <class RO, typename INPUT, typename OUTPUT>
+template <class RO, typename INPUT = double, typename OUTPUT = double>
 inline MinusExpr<RO, INPUT, OUTPUT>
 operator-(RO const &r)
 {
@@ -399,7 +399,7 @@ operator-(RO const &r)
 }
 
 //! Exponential
-template <class RO, typename INPUT, typename OUTPUT>
+template <class RO, typename INPUT = double, typename OUTPUT = double>
 inline ExpExpr<RO, INPUT, OUTPUT>
 exp(RO const &r)
 {
@@ -407,7 +407,7 @@ exp(RO const &r)
 }
 
 //! Logarithm
-template <class RO, typename INPUT, typename OUTPUT>
+template <class RO, typename INPUT = double, typename OUTPUT = double>
 inline LogExpr<RO, INPUT, OUTPUT>
 log(RO const &r)
 {

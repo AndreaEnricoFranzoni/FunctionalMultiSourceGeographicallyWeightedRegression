@@ -33,7 +33,7 @@
   It is build around std::vector<double> and indeed
   std::vector:double> is the only variable member of the class.
  */
-template< typename INPUT, typename OUTPUT >
+template< typename INPUT = double, typename OUTPUT = double >
 class functional_matrix : public Expr< functional_matrix<INPUT,OUTPUT>, INPUT, OUTPUT >
 {
 //type of the function stored
@@ -204,43 +204,48 @@ public:
   Note the use of declval. I do not need to istantiate a vector to interrogate
   the type returned by begin!
  */
+template< typename INPUT = double, typename OUTPUT = double >
 inline 
 auto
-begin(functional_matrix &fm) 
-    -> decltype(std::declval<std::vector<F_OBJ> >().begin())
+begin(functional_matrix<INPUT,OUTPUT> &fm) 
+    -> decltype(std::declval< std::vector<FUNC_OBJ<INPUT,OUTPUT>> >().begin())
 {
   // I exploit the fact tha I have a casting operator to std::vector<double>&
-  return static_cast<std::vector<F_OBJ> &>(fm).begin();
+  return static_cast<std::vector<FUNC_OBJ<INPUT,OUTPUT>> &>(fm).begin();
   // If you prefer
   // return fm.as_vector().begin();
 }
 
-inline auto
-end(functional_matrix &fm) 
-    -> decltype(std::declval<std::vector<F_OBJ> >().end())
+template< typename INPUT = double, typename OUTPUT = double >
+inline 
+auto
+end(functional_matrix<INPUT,OUTPUT> &fm) 
+    -> decltype(std::declval< std::vector<FUNC_OBJ<INPUT,OUTPUT>> >().end())
 {
   // I exploit the fact tha I have a casting operator to std::vector<double>&
-  return static_cast<std::vector<F_OBJ> &>(fm).end();
+  return static_cast<std::vector<FUNC_OBJ<INPUT,OUTPUT>> &>(fm).end();
 }
 
+template< typename INPUT = double, typename OUTPUT = double >
 inline 
 auto
-cbegin(functional_matrix const &fm)
-  -> decltype(std::declval<std::vector<F_OBJ> >().cbegin())
+cbegin(functional_matrix<INPUT,OUTPUT> const &fm)
+  -> decltype(std::declval< std::vector<FUNC_OBJ<INPUT,OUTPUT>> >().cbegin())
 {
   // I exploit the fact tha I have a casting operator to std::vector<double>
   // const &
-  return static_cast<std::vector<F_OBJ> const &>(fm).cbegin();
+  return static_cast<std::vector<FUNC_OBJ<INPUT,OUTPUT>> const &>(fm).cbegin();
 }
 
+template< typename INPUT = double, typename OUTPUT = double >
 inline 
 auto
-cend(functional_matrix const &fm) 
-    -> decltype(std::declval<std::vector<F_OBJ> >().cend())
+cend(functional_matrix<INPUT,OUTPUT> const &fm) 
+    -> decltype(std::declval< std::vector<FUNC_OBJ<INPUT,OUTPUT>> >().cend())
 {
   // I exploit the fact tha I have a casting operator to std::vector<double>
   // const &
-  return static_cast<std::vector<F_OBJ> const &>(fm).cend();
+  return static_cast<std::vector<FUNC_OBJ<INPUT,OUTPUT>> const &>(fm).cend();
 }
 
 #endif  /*FUNCTIONAL_MATRIX_HPP*/

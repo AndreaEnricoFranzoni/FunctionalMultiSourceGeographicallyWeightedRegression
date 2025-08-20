@@ -52,7 +52,7 @@ using FUNC_OBJ = std::function< OUTPUT (INPUT const &) >;
    strictly necessary: an alternative is to use a method.
 
  */
-template <class E, typename INPUT, typename OUTPUT> 
+template <class E, typename INPUT = double, typename OUTPUT = double> 
 struct Expr
 {
   //type of the function stored
