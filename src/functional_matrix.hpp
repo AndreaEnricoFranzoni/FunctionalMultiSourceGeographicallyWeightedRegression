@@ -22,10 +22,9 @@
 #define FUNCTIONAL_MATRIX_HPP
 
 
-#include "include_fdagwr.hpp"
-#include "traits_fdagwr.hpp"
 #include "functional_matrix_expression_wrapper.hpp"
-
+#include <utility>
+#include <vector>
 #include <cassert>
 
 
@@ -34,21 +33,25 @@
   It is build around std::vector<double> and indeed
   std::vector:double> is the only variable member of the class.
  */
-class functional_matrix : public Expr<functional_matrix>
+template< typename INPUT, typename OUTPUT >
+class functional_matrix : public Expr< functional_matrix<INPUT,OUTPUT>, INPUT, OUTPUT >
 {
+//type of the function stored
+using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+
 private:
     /*!Number of rows*/
     std::size_t m_rows;
     /*!Number of cols*/
     std::size_t m_cols;
     /*!Matrix of functions*/
-    std::vector<FDAGWR_TRAITS::f_type> m_data;
+    std::vector< F_OBJ > m_data;
 
 public:
     //! default constructor
     functional_matrix() = default;
     //! A vector may be converted to a Vector
-    functional_matrix(std::vector<FDAGWR_TRAITS::f_type> const &fm,
+    functional_matrix(std::vector< F_OBJ > const &fm,
                       std::size_t n_rows,
                       std::size_t n_cols)
                 :   m_rows(n_rows), m_cols(n_cols), m_data{fm} 
@@ -57,7 +60,7 @@ public:
                     assert((void("Number of rows times number of cols has to be equal to the number of stored functions"), m_rows * m_cols == m_data.size()));
                 }
     //! A vector may also be moved in a Vector
-    functional_matrix(std::vector<FDAGWR_TRAITS::f_type> &&fm,
+    functional_matrix(std::vector< F_OBJ > &&fm,
                       std::size_t n_rows,
                       std::size_t n_cols) 
                 :   m_rows(n_rows), m_cols(n_cols), m_data{std::move(fm)}
@@ -65,8 +68,8 @@ public:
                     //cheack input consistency
                     assert((void("Number of rows times number of cols has to be equal to the number of stored functions"), m_rows * m_cols == m_data.size()));
                 }
-    //! Construct a Vector of n elements initialised by value
-    functional_matrix(std::size_t n_rows, std::size_t n_cols, FDAGWR_TRAITS::f_type f=[](const double &){return static_cast<double>(1.0);}) : m_rows(n_rows), m_cols(n_cols), m_data(m_rows*m_cols,f)   {};
+    //! Construct a Vector of n elements initialised by value   //DA METTERE IL DEFAULT f=[](const INPUT &){return static_cast<OUTPUT>(1.0);} 
+    functional_matrix(std::size_t n_rows, std::size_t n_cols, F_OBJ f) : m_rows(n_rows), m_cols(n_cols), m_data(m_rows*m_cols,f)   {};
     //! Copy constructor
     functional_matrix(functional_matrix const &) = default;
     //! Move constructor
@@ -78,7 +81,7 @@ public:
 
     //! I may build a Vector from an expression!
     template <class T> 
-    functional_matrix(const Expr<T> &e)
+    functional_matrix(const Expr<T,INPUT,OUTPUT> &e)
         :   m_data()
     {
         const T &et(e); // casting!
@@ -96,7 +99,7 @@ public:
     */
     template <class T>
     functional_matrix &
-    operator=(const Expr<T> &e)
+    operator=(const Expr<T,INPUT,OUTPUT> &e)
     {
         const T &et(e); // casting!
         m_rows = et.rows(); 
@@ -111,7 +114,7 @@ public:
     /*!
     * @brief Returns element (i,j)
     */
-    FDAGWR_TRAITS::f_type &
+    F_OBJ &
     operator()
     (std::size_t i, std::size_t j)
     {
@@ -121,7 +124,7 @@ public:
     /*!
     * @brief Returns element (i,j) (const version)
     */
-    FDAGWR_TRAITS::f_type
+    F_OBJ
     operator()
     (std::size_t i, std::size_t j)
     const
@@ -168,9 +171,9 @@ public:
     av.emplace_back(10.0);
     @endcode
     */
-    operator std::vector<FDAGWR_TRAITS::f_type> const &() const { return m_data; }
+    operator std::vector< F_OBJ > const &() const { return m_data; }
     //! Non const version of casting operator
-    operator std::vector<FDAGWR_TRAITS::f_type> &() { return m_data; }
+    operator std::vector< F_OBJ > &() { return m_data; }
   
     //! This does the same as casting but with a method
     /*!
@@ -182,14 +185,14 @@ public:
     works as well!) av.emplace_back(10.0);
     @endcode
     */
-    std::vector<FDAGWR_TRAITS::f_type> const &
+    std::vector< F_OBJ > const &
     as_vector() 
     const
     {
         return m_data;
     }
     //! Non const version of casting operator
-    std::vector<FDAGWR_TRAITS::f_type> &
+    std::vector< F_OBJ > &
     as_vector()
     {
         return m_data;
@@ -204,40 +207,40 @@ public:
 inline 
 auto
 begin(functional_matrix &fm) 
-    -> decltype(std::declval<std::vector<FDAGWR_TRAITS::f_type> >().begin())
+    -> decltype(std::declval<std::vector<F_OBJ> >().begin())
 {
   // I exploit the fact tha I have a casting operator to std::vector<double>&
-  return static_cast<std::vector<FDAGWR_TRAITS::f_type> &>(fm).begin();
+  return static_cast<std::vector<F_OBJ> &>(fm).begin();
   // If you prefer
   // return fm.as_vector().begin();
 }
 
 inline auto
 end(functional_matrix &fm) 
-    -> decltype(std::declval<std::vector<FDAGWR_TRAITS::f_type> >().end())
+    -> decltype(std::declval<std::vector<F_OBJ> >().end())
 {
   // I exploit the fact tha I have a casting operator to std::vector<double>&
-  return static_cast<std::vector<FDAGWR_TRAITS::f_type> &>(fm).end();
+  return static_cast<std::vector<F_OBJ> &>(fm).end();
 }
 
 inline 
 auto
 cbegin(functional_matrix const &fm)
-  -> decltype(std::declval<std::vector<FDAGWR_TRAITS::f_type> >().cbegin())
+  -> decltype(std::declval<std::vector<F_OBJ> >().cbegin())
 {
   // I exploit the fact tha I have a casting operator to std::vector<double>
   // const &
-  return static_cast<std::vector<FDAGWR_TRAITS::f_type> const &>(fm).cbegin();
+  return static_cast<std::vector<F_OBJ> const &>(fm).cbegin();
 }
 
 inline 
 auto
 cend(functional_matrix const &fm) 
-    -> decltype(std::declval<std::vector<FDAGWR_TRAITS::f_type> >().cend())
+    -> decltype(std::declval<std::vector<F_OBJ> >().cend())
 {
   // I exploit the fact tha I have a casting operator to std::vector<double>
   // const &
-  return static_cast<std::vector<FDAGWR_TRAITS::f_type> const &>(fm).cend();
+  return static_cast<std::vector<F_OBJ> const &>(fm).cend();
 }
 
 #endif  /*FUNCTIONAL_MATRIX_HPP*/

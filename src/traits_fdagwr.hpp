@@ -54,7 +54,11 @@ public:
 
   using basis_geometry = fdapde::Triangulation<1, 1>;                      ///< Domain mesh: unit interval with a fixed number of nodes
 
-  using f_type = std::function<double(double const &)>;                    ///< Function type
+  using fd_obj_y_type  = double;                                           ///< Functional data image type
+
+  using fd_obj_x_type  = double;                                           ///< Functional data abscissa type
+
+  using f_type = std::function<fd_obj_y_type(fd_obj_x_type const &)>;      ///< Function type
 };
 
 

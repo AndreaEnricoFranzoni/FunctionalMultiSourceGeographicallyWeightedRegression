@@ -21,8 +21,16 @@
 #ifndef FUNCTIONAL_MATRIX_EXPRESSION_WRAPPER_HPP
 #define FUNCTIONAL_MATRIX_EXPRESSION_WRAPPER_HPP
 
-#include "include_fdagwr.hpp"
-#include "traits_fdagwr.hpp"
+#include <functional>
+#include <type_traits>
+#include <utility>
+
+
+template< typename INPUT, typename OUTPUT >
+using FUNC_OBJ = std::function< OUTPUT (INPUT const &) >;
+
+
+
 
 //! A wrapper for expressions
 /*!
@@ -44,9 +52,13 @@
    strictly necessary: an alternative is to use a method.
 
  */
-template <class E> 
+template <class E, typename INPUT, typename OUTPUT> 
 struct Expr
 {
+  //type of the function stored
+  using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+
+
   //! Cast operator to derived class (const version)
   /*!
     Remember that this class is meant to be used with CRTP technique.
@@ -58,7 +70,7 @@ struct Expr
   */
   operator const E &() const { return static_cast<const E &>(*this); }
   //! Cast operator to derived class (non const version)
-  operator E &() { return static_cast<E &>(*this); }
+  operator E<INPUT,OUTPUT> &() { return static_cast<E &>(*this); }
   /*! The alternative with a method instead of a cast operator.
      It is less flexible however, but maybe clearer!
   */
@@ -99,7 +111,7 @@ struct Expr
   }
 
   //! Delegates to the wrapped expression the addressing operator
-  FDAGWR_TRAITS::f_type
+  F_OBJ
   operator()
   (std::size_t i, std::size_t j) 
   const
@@ -108,7 +120,7 @@ struct Expr
   }
 
   //! Delegates to the wrapped expression the addressing operator (non const)
-  FDAGWR_TRAITS::f_type &
+  F_OBJ &
   operator()
   (std::size_t i, std::size_t j)
   {
