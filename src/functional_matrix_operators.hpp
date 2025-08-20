@@ -148,7 +148,7 @@ private:
 };
 
 //! Specialization for operation by a scalar
-template <class RO, class OP, typename INPUT = double, typename OUTPUT = double>
+template <class RO, class OP, typename INPUT, typename OUTPUT>
 class BinaryOperator<double, RO, OP, INPUT, OUTPUT>
   : public Expr<BinaryOperator<double, RO, OP, INPUT, OUTPUT>, INPUT, OUTPUT>
 {
@@ -195,7 +195,7 @@ private:
 };
 
 //! Specialization for operation by a scalar
-template <class LO, class OP, typename INPUT = double, typename OUTPUT = double>
+template <class LO, class OP, typename INPUT, typename OUTPUT>
 class BinaryOperator<LO, double, OP, INPUT, OUTPUT>
   : public Expr<BinaryOperator<LO, double, OP, INPUT, OUTPUT>, INPUT, OUTPUT >
 {
