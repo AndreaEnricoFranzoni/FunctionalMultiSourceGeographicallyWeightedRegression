@@ -547,7 +547,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     
     functional_matrix test_op = test_fm_1+test_fm_2;
     functional_matrix test_op2 = log(test_op);
-    test_op = test_op+test_op2;
+    test_op = 5.0*(test_op+test_op2)*2.0;
     Rcout << "FM op: primo: " << test_op(0,0)(el) << ", secondo: " << test_op(0,1)(el) << std::endl;
 
 
