@@ -18,8 +18,8 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_FUNCTIONAL_MATRIX_HPP
-#define FDAGWR_FUNCTIONAL_MATRIX_HPP
+#ifndef FUNCTIONAL_MATRIX_HPP
+#define FUNCTIONAL_MATRIX_HPP
 
 
 #include "include_fdagwr.hpp"
@@ -73,7 +73,7 @@ public:
     functional_matrix(functional_matrix &&) = default;
     //! Copy assign
     functional_matrix &operator=(functional_matrix const &) = default;
-    //! MOve assign
+    //! Move assign
     functional_matrix &operator=(functional_matrix &&) = default;
 
     //! I may build a Vector from an expression!
@@ -84,7 +84,7 @@ public:
         const T &et(e); // casting!
         m_rows = et.rows(); 
         m_cols = et.cols(); 
-        m_data.reserve(et.rows()*et.cols());
+        m_data.reserve(et.size());
         for(std::size_t i = 0; i < et.rows(); ++i){
             for (std::size_t j = 0; j < et.cols(); ++j){
                 m_data.emplace_back(et(i,j));}}
@@ -101,7 +101,7 @@ public:
         const T &et(e); // casting!
         m_rows = et.rows(); 
         m_cols = et.cols();
-        m_data.resize(et.rows()*et.cols());
+        m_data.resize(et.size());
         for(std::size_t i = 0; i < et.rows(); ++i){   
             for (std::size_t j = 0; j < et.cols(); ++j){
                 m_data[j * et.rows() + i] = et(i,j);}}
@@ -147,6 +147,16 @@ public:
     const
     {
         return m_cols;
+    }
+
+    /*!
+    * @brief Number of elements
+    */
+    std::size_t
+    size() 
+    const
+    {
+        return m_rows*m_cols;
     }
 
     //! May be cast to a std::vector &
@@ -230,4 +240,4 @@ cend(functional_matrix const &fm)
   return static_cast<std::vector<FDAGWR_TRAITS::f_type> const &>(fm).cend();
 }
 
-#endif  /*FDAGWR_FUNCTIONAL_MATRIX_HPP*/
+#endif  /*FUNCTIONAL_MATRIX_HPP*/

@@ -18,8 +18,8 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_FUNCTIONAL_MATRIX_OPERATORS_HPP
-#define FDAGWR_FUNCTIONAL_MATRIX_OPERATORS_HPP
+#ifndef FUNCTIONAL_MATRIX_OPERATORS_HPP
+#define FUNCTIONAL_MATRIX_OPERATORS_HPP
 
 
 #include "functional_matrix_expression_wrapper.hpp"
@@ -34,33 +34,59 @@ class BinaryOperator : public Expr<BinaryOperator<LO, RO, OP> >
 public:
   BinaryOperator(LO const &l, RO const &r) : M_lo(l), M_ro(r){};
 
-  // Applies operation on operands
+  /*!
+  * @brief Applies operation on operands
+  */
   FDAGWR_TRAITS::f_type
   operator()(std::size_t i, std::size_t j) const
   {
     return OP()(M_lo(i,j), M_ro(i,j));
   }
 
+  /*!
+  * @brief Rows size
+  */
   std::size_t
-  rows() const
+  rows() 
+  const
   {
     // disabled when NDEBUG is set. Checks if both operands have the same size
     assert(M_lo.rows() == M_ro.rows());
     return M_lo.rows();
   }
 
+  /*!
+  * @brief Cols size
+  */
   std::size_t
-  cols() const
+  cols() 
+  const
   {
     // disabled when NDEBUG is set. Checks if both operands have the same size
     assert(M_lo.cols() == M_ro.cols());
     return M_lo.cols();
   }
 
+  /*!
+  * @brief Data size
+  */
+  std::size_t
+  size() 
+  const
+  {
+    // disabled when NDEBUG is set. Checks if both operands have the same size
+    assert(M_lo.size() == M_ro.size());
+    return M_lo.size();
+  }
+
 private:
   LO const &M_lo;
   RO const &M_ro;
 };
+
+
+
+
 
 //! Unary operator expression.
 template <class RO, class OP>
@@ -69,23 +95,43 @@ class UnaryOperator : public Expr<UnaryOperator<RO, OP> >
 public:
   UnaryOperator(RO const &r) : M_ro(r){};
 
-  // Applies operation on operands
+  /*!
+  * @brief Applies operation on operands
+  */
   FDAGWR_TRAITS::f_type
   operator()(std::size_t i, std::size_t j) const
   {
     return OP()(M_ro(i,j));
   }
 
+  /*!
+  * @brief Rows size
+  */
   std::size_t
-  rows() const
+  rows() 
+  const
   {
     return M_ro.rows();
   }
 
+  /*!
+  * @brief Cols size
+  */
   std::size_t
-  cols() const
+  cols() 
+  const
   {
     return M_ro.cols();
+  }
+
+  /*!
+  * @brief Data size
+  */
+  std::size_t
+  size() 
+  const
+  {
+    return M_ro.size();
   }
 
 private:
@@ -117,6 +163,16 @@ public:
   cols() const
   {
     return M_ro.cols();
+  }
+
+  /*!
+  * @brief Data size
+  */
+  std::size_t
+  size() 
+  const
+  {
+    return M_ro.size();
   }
 
 private:
@@ -151,6 +207,16 @@ public:
     return M_lo.cols();
   }
 
+  /*!
+  * @brief Data size
+  */
+  std::size_t
+  size() 
+  const
+  {
+    return M_lo.size();
+  }
+
 private:
   LO const &M_lo;
   RO const  M_ro;
@@ -182,24 +248,17 @@ struct Multiply
     return [f1,f2](const double& x){return f1(x) * f2(x);};
   }
 
-
-
-  //vedo per fare la moltiplicazione per scalare
-  //la parte nuova parte da qui
   FDAGWR_TRAITS::f_type
   operator()(double a, FDAGWR_TRAITS::f_type f) const
   {
     return [a,f](const double& x){return a * f(x);};
   }
+
   FDAGWR_TRAITS::f_type
   operator()(FDAGWR_TRAITS::f_type f, double a) const
   {
     return [a,f](const double& x){return a * f(x);};
   }
-  //la parte nuova finisce qui
-
-
-
 };
 
 //! The basic Subtraction
@@ -304,4 +363,4 @@ log(RO const &r)
   return LogExpr<RO>(r);
 }
 
-#endif  /*FDAGWR_FUNCTIONAL_MATRIX_OPERATORS_HPP*/
+#endif  /*FUNCTIONAL_MATRIX_OPERATORS_HPP*/

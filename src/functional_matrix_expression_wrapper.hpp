@@ -18,8 +18,8 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_FUNCTIONAL_MATRIX_EXPRESSION_WRAPPER_HPP
-#define FDAGWR_FUNCTIONAL_MATRIX_EXPRESSION_WRAPPER_HPP
+#ifndef FUNCTIONAL_MATRIX_EXPRESSION_WRAPPER_HPP
+#define FUNCTIONAL_MATRIX_EXPRESSION_WRAPPER_HPP
 
 #include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
@@ -91,6 +91,13 @@ struct Expr
     return asDerived().cols();
   }
 
+  std::size_t
+  size()
+  const
+  {
+    return asDerived().rows() * asDerived().cols();
+  }
+
   //! Delegates to the wrapped expression the addressing operator
   FDAGWR_TRAITS::f_type
   operator()
@@ -109,4 +116,4 @@ struct Expr
   }
 };
 
-#endif  /*FDAGWR_FUNCTIONAL_MATRIX_EXPRESSION_WRAPPER_HPP*/
+#endif  /*FUNCTIONAL_MATRIX_EXPRESSION_WRAPPER_HPP*/
