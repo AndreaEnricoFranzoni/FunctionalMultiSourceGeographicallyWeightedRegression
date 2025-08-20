@@ -144,7 +144,7 @@ public:
   {
     return M_lo.rows();
   }
-  
+
   std::size_t
   cols() const
   {
@@ -168,28 +168,47 @@ private:
 struct Add
 {
   FDAGWR_TRAITS::f_type
-  operator()(FDAGWR_TRAITS::f_type i, FDAGWR_TRAITS::f_type j) const
+  operator()(FDAGWR_TRAITS::f_type f1, FDAGWR_TRAITS::f_type f2) const
   {
-    return [i,j](const double& x){return i(x) + j(x);};
+    return [f1,f2](const double& x){return f1(x) + f2(x);};
   }
 };
 //! The basic Multiplication
 struct Multiply
 {
   FDAGWR_TRAITS::f_type
-  operator()(FDAGWR_TRAITS::f_type i, FDAGWR_TRAITS::f_type j) const
+  operator()(FDAGWR_TRAITS::f_type f1, FDAGWR_TRAITS::f_type f2) const
   {
-    return [i,j](const double& x){return i(x) * j(x);};
+    return [f1,f2](const double& x){return f1(x) * f2(x);};
   }
+
+
+
+  //vedo per fare la moltiplicazione per scalare
+  //la parte nuova parte da qui
+  FDAGWR_TRAITS::f_type
+  operator()(double a, FDAGWR_TRAITS::f_type f) const
+  {
+    return [a,f](const double& x){return a * f(x);};
+  }
+  FDAGWR_TRAITS::f_type
+  operator()(FDAGWR_TRAITS::f_type f, double a) const
+  {
+    return [a,f](const double& x){return a * f(x);};
+  }
+  //la parte nuova finisce qui
+
+
+
 };
 
 //! The basic Subtraction
 struct Subtract
 {
   FDAGWR_TRAITS::f_type
-  operator()(FDAGWR_TRAITS::f_type i, FDAGWR_TRAITS::f_type j) const
+  operator()(FDAGWR_TRAITS::f_type f1, FDAGWR_TRAITS::f_type f2) const
   {
-    return [i,j](const double& x){return i(x) - j(x);};
+    return [f1,f2](const double& x){return f1(x) - f2(x);};
   }
 };
 
@@ -197,9 +216,9 @@ struct Subtract
 struct Minus
 {
   FDAGWR_TRAITS::f_type
-  operator()(FDAGWR_TRAITS::f_type j) const
+  operator()(FDAGWR_TRAITS::f_type f) const
   {
-    return [j](const double& x){return -j(x);};
+    return [f](const double& x){return -f(x);};
   }
 };
 
@@ -208,9 +227,9 @@ struct Minus
 struct ExpOP
 {
   FDAGWR_TRAITS::f_type
-  operator()(FDAGWR_TRAITS::f_type j) const
+  operator()(FDAGWR_TRAITS::f_type f) const
   {
-    return [j](const double& x){return std::exp(j(x));};
+    return [f](const double& x){return std::exp(f(x));};
   }
 };
 
@@ -218,9 +237,9 @@ struct ExpOP
 struct LogOP
 {
   FDAGWR_TRAITS::f_type
-  operator()(FDAGWR_TRAITS::f_type j) const
+  operator()(FDAGWR_TRAITS::f_type f) const
   {
-    return [j](const double& x){return std::log(j(x));};
+    return [f](const double& x){return std::log(f(x));};
   }
 };
 
