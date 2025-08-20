@@ -70,7 +70,7 @@ struct Expr
   */
   operator const E &() const { return static_cast<const E &>(*this); }
   //! Cast operator to derived class (non const version)
-  operator E<INPUT,OUTPUT> &() { return static_cast<E &>(*this); }
+  operator E &() { return static_cast<E &>(*this); }
   /*! The alternative with a method instead of a cast operator.
      It is less flexible however, but maybe clearer!
   */
