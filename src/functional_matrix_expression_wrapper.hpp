@@ -24,9 +24,11 @@
 #include <functional>
 #include <type_traits>
 #include <utility>
+#include <concepts>
 
 
 template< typename INPUT, typename OUTPUT >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 using FUNC_OBJ = std::function< OUTPUT (INPUT const &) >;
 
 
@@ -53,6 +55,7 @@ using FUNC_OBJ = std::function< OUTPUT (INPUT const &) >;
 
  */
 template <class E, typename INPUT = double, typename OUTPUT = double> 
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 struct Expr
 {
   //type of the function stored
