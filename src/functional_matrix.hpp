@@ -23,6 +23,7 @@
 
 
 #include "functional_matrix_expression_wrapper.hpp"
+#include "functional_matrix_utils.hpp"
 #include <utility>
 #include <vector>
 #include <cassert>
@@ -38,6 +39,7 @@ class functional_matrix : public Expr< functional_matrix<INPUT,OUTPUT>, INPUT, O
 {
 //type of the function stored
 using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
 private:
     /*!Number of rows*/
@@ -69,7 +71,7 @@ public:
                     assert((void("Number of rows times number of cols has to be equal to the number of stored functions"), m_rows * m_cols == m_data.size()));
                 }
     //! Construct a Vector of n elements initialised by value   //DA METTERE IL DEFAULT f=[](const INPUT &){return static_cast<OUTPUT>(1.0);} 
-    functional_matrix(std::size_t n_rows, std::size_t n_cols, F_OBJ f) : m_rows(n_rows), m_cols(n_cols), m_data(m_rows*m_cols,f)   {};
+    functional_matrix(std::size_t n_rows, std::size_t n_cols, F_OBJ f = [](F_OBJ_INPUT){return static_cast<OUTPUT>(1);}) : m_rows(n_rows), m_cols(n_cols), m_data(m_rows*m_cols,f)   {};
     //! Copy constructor
     functional_matrix(functional_matrix const &) = default;
     //! Move constructor

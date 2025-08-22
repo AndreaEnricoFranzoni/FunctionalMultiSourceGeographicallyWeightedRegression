@@ -23,6 +23,7 @@
 
 
 #include "functional_matrix_expression_wrapper.hpp"
+#include "functional_matrix_utils.hpp"
 #include <cmath>
 
 
@@ -255,6 +256,21 @@ struct Add
 {
   //type of the function stored
   using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+  using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>; //type of the input(including const ref)
+
+  F_OBJ
+  operator()(F_OBJ f1, F_OBJ f2) 
+  const
+  {
+    return [f1,f2](F_OBJ_INPUT x){return f1(x) + f2(x);};
+  }
+};
+/*
+template <typename INPUT = double, typename OUTPUT = double>
+struct Add
+{
+  //type of the function stored
+  using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
 
   F_OBJ
   operator()(F_OBJ f1, F_OBJ f2) 
@@ -263,6 +279,7 @@ struct Add
     return [f1,f2](const INPUT& x){return f1(x) + f2(x);};
   }
 };
+*/
 //! The basic Multiplication
 template <typename INPUT = double, typename OUTPUT = double>
 struct Multiply
