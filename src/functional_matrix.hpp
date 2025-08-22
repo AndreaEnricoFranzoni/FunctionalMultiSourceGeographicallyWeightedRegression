@@ -35,6 +35,7 @@
   std::vector:double> is the only variable member of the class.
  */
 template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class functional_matrix : public Expr< functional_matrix<INPUT,OUTPUT>, INPUT, OUTPUT >
 {
 //type of the function stored
@@ -207,6 +208,7 @@ public:
   the type returned by begin!
  */
 template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline 
 auto
 begin(functional_matrix<INPUT,OUTPUT> &fm) 
@@ -219,6 +221,7 @@ begin(functional_matrix<INPUT,OUTPUT> &fm)
 }
 
 template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline 
 auto
 end(functional_matrix<INPUT,OUTPUT> &fm) 
@@ -229,6 +232,7 @@ end(functional_matrix<INPUT,OUTPUT> &fm)
 }
 
 template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline 
 auto
 cbegin(functional_matrix<INPUT,OUTPUT> const &fm)
@@ -240,6 +244,7 @@ cbegin(functional_matrix<INPUT,OUTPUT> const &fm)
 }
 
 template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline 
 auto
 cend(functional_matrix<INPUT,OUTPUT> const &fm) 

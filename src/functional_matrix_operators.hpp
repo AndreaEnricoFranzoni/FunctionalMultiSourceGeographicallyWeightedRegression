@@ -31,6 +31,7 @@
 //  CLASSES THAT ENCAPSULATE OPERATIONS
 //! Binary operator expression.
 template <class LO, class RO, class OP, typename INPUT = double, typename OUTPUT = double>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class BinaryOperator : public Expr<BinaryOperator<LO, RO, OP, INPUT, OUTPUT>, INPUT, OUTPUT>
 {
 public:
@@ -96,6 +97,7 @@ private:
 
 //! Unary operator expression.
 template <class RO, class OP, typename INPUT = double, typename OUTPUT = double>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class UnaryOperator : public Expr<UnaryOperator<RO, OP, INPUT, OUTPUT>, INPUT, OUTPUT>
 {
 public:
@@ -150,6 +152,7 @@ private:
 
 //! Specialization for operation by a scalar
 template <class RO, class OP, typename INPUT, typename OUTPUT>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class BinaryOperator<double, RO, OP, INPUT, OUTPUT>
   : public Expr<BinaryOperator<double, RO, OP, INPUT, OUTPUT>, INPUT, OUTPUT>
 {
@@ -197,6 +200,7 @@ private:
 
 //! Specialization for operation by a scalar
 template <class LO, class OP, typename INPUT, typename OUTPUT>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class BinaryOperator<LO, double, OP, INPUT, OUTPUT>
   : public Expr<BinaryOperator<LO, double, OP, INPUT, OUTPUT>, INPUT, OUTPUT >
 {
@@ -252,11 +256,12 @@ private:
   /endcode
 */
 template <typename INPUT = double, typename OUTPUT = double>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 struct Add
 {
   //type of the function stored
   using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
-  using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>; //type of the input(including const ref)
+  using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>; //type of the input(including eventual const ref)
 
   F_OBJ
   operator()(F_OBJ f1, F_OBJ f2) 
@@ -265,129 +270,139 @@ struct Add
     return [f1,f2](F_OBJ_INPUT x){return f1(x) + f2(x);};
   }
 };
-/*
-template <typename INPUT = double, typename OUTPUT = double>
-struct Add
-{
-  //type of the function stored
-  using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
 
-  F_OBJ
-  operator()(F_OBJ f1, F_OBJ f2) 
-  const
-  {
-    return [f1,f2](const INPUT& x){return f1(x) + f2(x);};
-  }
-};
-*/
 //! The basic Multiplication
 template <typename INPUT = double, typename OUTPUT = double>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 struct Multiply
 {
   //type of the function stored
   using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+  using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>; //type of the input(including eventual const ref)
 
   F_OBJ
   operator()(F_OBJ f1, F_OBJ f2) 
   const
   {
-    return [f1,f2](const INPUT& x){return f1(x) * f2(x);};
+    return [f1,f2](F_OBJ_INPUT x){return f1(x) * f2(x);};
   }
 
   F_OBJ
   operator()(double a, F_OBJ f) 
   const
   {
-    return [a,f](const INPUT& x){return a * f(x);};
+    return [a,f](F_OBJ_INPUT x){return a * f(x);};
   }
 
   F_OBJ
   operator()(F_OBJ f, double a) 
   const
   {
-    return [a,f](const INPUT& x){return a * f(x);};
+    return [a,f](F_OBJ_INPUT x){return a * f(x);};
   }
 };
 
 //! The basic Subtraction
 template <typename INPUT = double, typename OUTPUT = double>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 struct Subtract
 {
   //type of the function stored
   using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+  using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>; //type of the input(including eventual const ref)
 
   F_OBJ
   operator()(F_OBJ f1, F_OBJ f2) 
   const
   {
-    return [f1,f2](const INPUT& x){return f1(x) - f2(x);};
+    return [f1,f2](F_OBJ_INPUT x){return f1(x) - f2(x);};
   }
 };
 
 //! Minus operator
 template <typename INPUT = double, typename OUTPUT = double>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 struct Minus
 {
   //type of the function stored
   using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+  using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>; //type of the input(including eventual const ref)
 
   F_OBJ
   operator()(F_OBJ f) 
   const
   {
-    return [f](const INPUT& x){return -f(x);};
+    return [f](F_OBJ_INPUT x){return -f(x);};
   }
 };
 
 // Some fancier operators
 //! Exponential
 template <typename INPUT = double, typename OUTPUT = double>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 struct ExpOP
 {
   //type of the function stored
   using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+  using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>; //type of the input(including eventual const ref)
 
   F_OBJ
   operator()(F_OBJ f) 
   const
   {
-    return [f](const INPUT& x){return std::exp(f(x));};
+    return [f](F_OBJ_INPUT x){return std::exp(f(x));};
   }
 };
 
 //! Logarithm
 template <typename INPUT = double, typename OUTPUT = double>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 struct LogOP
 {
   //type of the function stored
   using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+  using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>; //type of the input(including eventual const ref)
 
   F_OBJ
   operator()(F_OBJ f) 
   const
   {
-    return [f](const INPUT& x){return std::log(f(x));};
+    return [f](F_OBJ_INPUT x){return std::log(f(x));};
   }
 };
 
 // WRAPPING THE BASE OPERATIONS INTO THE OPERATION CLASSES: ARE JUST TYPEDEFS
-template <class LO, class RO, typename INPUT = double, typename OUTPUT = double> using AddExpr = BinaryOperator<LO, RO, Add<INPUT,OUTPUT>, INPUT, OUTPUT>;
+template <class LO, class RO, typename INPUT = double, typename OUTPUT = double>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+using AddExpr = BinaryOperator<LO, RO, Add<INPUT,OUTPUT>, INPUT, OUTPUT>;
 
-template <class LO, class RO, typename INPUT = double, typename OUTPUT = double> using MultExpr = BinaryOperator<LO, RO, Multiply<INPUT,OUTPUT>, INPUT, OUTPUT>;
+template <class LO, class RO, typename INPUT = double, typename OUTPUT = double>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) 
+using MultExpr = BinaryOperator<LO, RO, Multiply<INPUT,OUTPUT>, INPUT, OUTPUT>;
 
-template <class LO, class RO, typename INPUT = double, typename OUTPUT = double> using SubExpr = BinaryOperator<LO, RO, Subtract<INPUT,OUTPUT>, INPUT, OUTPUT>;
+template <class LO, class RO, typename INPUT = double, typename OUTPUT = double>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+using SubExpr = BinaryOperator<LO, RO, Subtract<INPUT,OUTPUT>, INPUT, OUTPUT>;
 
-template <class RO, typename INPUT = double, typename OUTPUT = double> using MinusExpr = UnaryOperator<RO, Minus<INPUT,OUTPUT>, INPUT, OUTPUT>;
+template <class RO, typename INPUT = double, typename OUTPUT = double> 
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+using MinusExpr = UnaryOperator<RO, Minus<INPUT,OUTPUT>, INPUT, OUTPUT>;
 
-template <class RO, typename INPUT = double, typename OUTPUT = double> using ExpExpr = UnaryOperator<RO, ExpOP<INPUT,OUTPUT>, INPUT, OUTPUT>;
+template <class RO, typename INPUT = double, typename OUTPUT = double> 
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+using ExpExpr = UnaryOperator<RO, ExpOP<INPUT,OUTPUT>, INPUT, OUTPUT>;
 
-template <class RO, typename INPUT = double, typename OUTPUT = double> using LogExpr = UnaryOperator<RO, LogOP<INPUT,OUTPUT>, INPUT, OUTPUT>;
+template <class RO, typename INPUT = double, typename OUTPUT = double> 
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+using LogExpr = UnaryOperator<RO, LogOP<INPUT,OUTPUT>, INPUT, OUTPUT>;
+
 
 //  USER LEVEL OPERATORS: THESE ARE THE ONLY ONES THE USER WILL ADOPT
-
 //! Addition of  expression
 template <class LO, class RO, typename INPUT = double, typename OUTPUT = double>
-inline AddExpr<LO, RO, INPUT, OUTPUT>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline 
+AddExpr<LO, RO, INPUT, OUTPUT>
 operator+(LO const &l, RO const &r)
 {
   return AddExpr<LO, RO, INPUT, OUTPUT>(l, r);
@@ -395,21 +410,27 @@ operator+(LO const &l, RO const &r)
 
 //! Multiplication of expressions
 template <class LO, class RO, typename INPUT = double, typename OUTPUT = double>
-inline MultExpr<LO, RO, INPUT, OUTPUT>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline 
+MultExpr<LO, RO, INPUT, OUTPUT>
 operator*(LO const &l, RO const &r)
 {
   return MultExpr<LO, RO, INPUT, OUTPUT>(l, r);
 }
 
 template <class LO, class RO, typename INPUT = double, typename OUTPUT = double>
-inline SubExpr<LO, RO, INPUT, OUTPUT>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline 
+SubExpr<LO, RO, INPUT, OUTPUT>
 operator-(LO const &l, RO const &r)
 {
   return SubExpr<LO, RO, INPUT, OUTPUT>(l, r);
 }
 
 template <class RO, typename INPUT = double, typename OUTPUT = double>
-inline MinusExpr<RO, INPUT, OUTPUT>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline 
+MinusExpr<RO, INPUT, OUTPUT>
 operator-(RO const &r)
 {
   return MinusExpr<RO, INPUT, OUTPUT>(r);
@@ -417,7 +438,9 @@ operator-(RO const &r)
 
 //! Exponential
 template <class RO, typename INPUT = double, typename OUTPUT = double>
-inline ExpExpr<RO, INPUT, OUTPUT>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline 
+ExpExpr<RO, INPUT, OUTPUT>
 exp(RO const &r)
 {
   return ExpExpr<RO, INPUT, OUTPUT>(r);
@@ -425,7 +448,9 @@ exp(RO const &r)
 
 //! Logarithm
 template <class RO, typename INPUT = double, typename OUTPUT = double>
-inline LogExpr<RO, INPUT, OUTPUT>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline 
+LogExpr<RO, INPUT, OUTPUT>
 log(RO const &r)
 {
   return LogExpr<RO, INPUT, OUTPUT>(r);
