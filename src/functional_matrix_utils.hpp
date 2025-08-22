@@ -75,6 +75,7 @@ using output_t = typename function_traits<F>::output_type;
 
 
 
+/*
 int foo(const std::string&);   // solo dichiarata!
 
 int main() {
@@ -99,3 +100,4 @@ int main() {
 
     std::cout << "Tutti i test passati!\n";
 }
+*/
