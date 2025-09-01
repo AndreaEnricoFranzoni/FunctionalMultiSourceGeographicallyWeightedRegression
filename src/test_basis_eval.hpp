@@ -42,6 +42,7 @@ Eigen::SparseMatrix<double> spline_basis_eval(const BsSpace<Triangulation_>& bs_
 int test_fda_PDE(double input_test){
 
 
+  /*
   // build equispaced knots vector
   double a = 0;
   double b = 2;
@@ -84,6 +85,8 @@ int test_fda_PDE(double input_test){
 
   std::cout << "\n\nstiff matrix: [A]_{ij} = int_I (dxx(psi_i) * dxx(psi_j))" << std::endl;
   std::cout << Eigen::Matrix<double, Dynamic, Dynamic>(A) << std::endl;
+  
+  */
 
   return 0;
 
