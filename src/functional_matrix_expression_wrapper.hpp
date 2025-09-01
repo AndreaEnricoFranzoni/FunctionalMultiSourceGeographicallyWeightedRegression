@@ -26,11 +26,7 @@
 #include <utility>
 #include <concepts>
 
-
-template< typename INPUT, typename OUTPUT >
-    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-using FUNC_OBJ = std::function< OUTPUT (INPUT const &) >;
-
+#include "functional_matrix_storing_type.hpp"
 
 
 
