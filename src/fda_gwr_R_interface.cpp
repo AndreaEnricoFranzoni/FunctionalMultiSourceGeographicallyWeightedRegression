@@ -523,8 +523,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     ///////////////////////////////
     /////    FGWR ALGORITHM   /////
     ///////////////////////////////
-    auto fgwr = fgwr_factory<_FGWR_ALGO_>(number_threads);
-    fgwr->compute();
+    auto fgwr_algo = fgwr_factory<_FGWR_ALGO_>(number_threads);
+    fgwr_algo->compute();
 
 
     //returning element
