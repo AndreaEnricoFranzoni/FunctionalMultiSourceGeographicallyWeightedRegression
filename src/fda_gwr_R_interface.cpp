@@ -61,18 +61,6 @@ using namespace Rcpp;
 
 
 
-
-//
-// [[Rcpp::export]]
-void fdagwr_test_function(std::string input_string) {
-
-    Rcout << "First draft of fdagwr.9: " << input_string << std::endl;
-    int test;
-
-    test = test_fda_PDE(5.9);
-}
-
-
 /*!
 * @brief Function to perform Functional Multi-Source Geographically Weighted Regression.
 * @param y_points matrix of double containing the raw response: each row represents a specific abscissa for which the response evaluation is available, each column a statistical unit. Response isa already reconstructed.
@@ -536,24 +524,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 }
 
 
-
-//
-// [[Rcpp::export]]
-Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates,
-                                Rcpp::Nullable<int> num_threads = R_NilValue)
-{
-    using T = double;
-
-    auto coordinates_ = reader_data<T,REM_NAN::MR>(coordinates);
-    std::size_t n_stat_units = coordinates_.rows();
-    //  NUMBER OF THREADS
-    int number_threads = wrap_num_thread(num_threads);
-     
-
-    Rcpp::List l;
-    l["Distanze"] = "";
-    return l;
-}
 
 
 //

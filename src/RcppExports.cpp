@@ -11,16 +11,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// fdagwr_test_function
-void fdagwr_test_function(std::string input_string);
-RcppExport SEXP _fdagwr_fdagwr_test_function(SEXP input_stringSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type input_string(input_stringSEXP);
-    fdagwr_test_function(input_string);
-    return R_NilValue;
-END_RCPP
-}
 // FMSGWR
 Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points, Rcpp::NumericVector t_points, double left_extreme_domain, double right_extreme_domain, Rcpp::NumericMatrix coeff_y_points, Rcpp::NumericVector knots_y_points, Rcpp::Nullable<int> degree_basis_y_points, Rcpp::Nullable<int> n_basis_y_points, Rcpp::NumericMatrix coeff_rec_weights_y_points, Rcpp::Nullable<int> degree_basis_rec_weights_y_points, Rcpp::Nullable<int> n_basis_rec_weights_y_points, Rcpp::List coeff_stationary_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_stationary_cov, Rcpp::NumericVector knots_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stationary_cov, Rcpp::NumericVector penalization_stationary_cov, Rcpp::NumericVector knots_beta_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_beta_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_stationary_cov, Rcpp::List coeff_events_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_events_cov, Rcpp::NumericVector knots_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_events_cov, Rcpp::NumericVector penalization_events_cov, Rcpp::NumericMatrix coordinates_events, double kernel_bandwith_events, Rcpp::NumericVector knots_beta_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_beta_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_events_cov, Rcpp::List coeff_stations_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_stations_cov, Rcpp::NumericVector knots_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stations_cov, Rcpp::NumericVector penalization_stations_cov, Rcpp::NumericMatrix coordinates_stations, double kernel_bandwith_stations, Rcpp::NumericVector knots_beta_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_beta_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_stations_cov, Rcpp::Nullable<int> num_threads, std::string basis_type_y_points, std::string basis_type_rec_weights_y_points, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_stationary_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_events_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_stations_cov);
 RcppExport SEXP _fdagwr_FMSGWR(SEXP y_pointsSEXP, SEXP t_pointsSEXP, SEXP left_extreme_domainSEXP, SEXP right_extreme_domainSEXP, SEXP coeff_y_pointsSEXP, SEXP knots_y_pointsSEXP, SEXP degree_basis_y_pointsSEXP, SEXP n_basis_y_pointsSEXP, SEXP coeff_rec_weights_y_pointsSEXP, SEXP degree_basis_rec_weights_y_pointsSEXP, SEXP n_basis_rec_weights_y_pointsSEXP, SEXP coeff_stationary_covSEXP, SEXP basis_types_stationary_covSEXP, SEXP knots_stationary_covSEXP, SEXP degrees_basis_stationary_covSEXP, SEXP n_basis_stationary_covSEXP, SEXP penalization_stationary_covSEXP, SEXP knots_beta_stationary_covSEXP, SEXP degrees_basis_beta_stationary_covSEXP, SEXP n_basis_beta_stationary_covSEXP, SEXP coeff_events_covSEXP, SEXP basis_types_events_covSEXP, SEXP knots_events_covSEXP, SEXP degrees_basis_events_covSEXP, SEXP n_basis_events_covSEXP, SEXP penalization_events_covSEXP, SEXP coordinates_eventsSEXP, SEXP kernel_bandwith_eventsSEXP, SEXP knots_beta_events_covSEXP, SEXP degrees_basis_beta_events_covSEXP, SEXP n_basis_beta_events_covSEXP, SEXP coeff_stations_covSEXP, SEXP basis_types_stations_covSEXP, SEXP knots_stations_covSEXP, SEXP degrees_basis_stations_covSEXP, SEXP n_basis_stations_covSEXP, SEXP penalization_stations_covSEXP, SEXP coordinates_stationsSEXP, SEXP kernel_bandwith_stationsSEXP, SEXP knots_beta_stations_covSEXP, SEXP degrees_basis_beta_stations_covSEXP, SEXP n_basis_beta_stations_covSEXP, SEXP num_threadsSEXP, SEXP basis_type_y_pointsSEXP, SEXP basis_type_rec_weights_y_pointsSEXP, SEXP basis_types_beta_stationary_covSEXP, SEXP basis_types_beta_events_covSEXP, SEXP basis_types_beta_stations_covSEXP) {
@@ -79,18 +69,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// test_distance_matrix
-Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_test_distance_matrix(SEXP coordinatesSEXP, SEXP num_threadsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates(coordinatesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(test_distance_matrix(coordinates, num_threads));
-    return rcpp_result_gen;
-END_RCPP
-}
 // FSGWR
 Rcpp::List FSGWR(double input_el, Rcpp::Nullable<int> num_threads);
 RcppExport SEXP _fdagwr_FSGWR(SEXP input_elSEXP, SEXP num_threadsSEXP) {
@@ -117,9 +95,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_fdagwr_fdagwr_test_function", (DL_FUNC) &_fdagwr_fdagwr_test_function, 1},
     {"_fdagwr_FMSGWR", (DL_FUNC) &_fdagwr_FMSGWR, 48},
-    {"_fdagwr_test_distance_matrix", (DL_FUNC) &_fdagwr_test_distance_matrix, 2},
     {"_fdagwr_FSGWR", (DL_FUNC) &_fdagwr_FSGWR, 2},
     {"_fdagwr_FGWR", (DL_FUNC) &_fdagwr_FGWR, 2},
     {NULL, NULL, 0}
