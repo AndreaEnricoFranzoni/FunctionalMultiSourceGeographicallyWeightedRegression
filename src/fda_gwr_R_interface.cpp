@@ -43,6 +43,7 @@
 #include "penalization_matrix.hpp"
 
 #include "functional_data_integration.hpp"
+#include "fgwr_factory.hpp"
 
 #include "test_basis_eval.hpp"
 
@@ -205,10 +206,13 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
 
 
-    Rcout << "fdagwr.29: " << std::endl;
+    Rcout << "fdagwr.9: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                     //data type
+    using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
+    using _FD_OUTPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_y_type;                          //data type for the image of fdata (double)
     using _DOMAIN_ = FDAGWR_TRAITS::basis_geometry;                                 //domain geometry
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::GWR_FMS_ESC;                          //fgwr type (estimating stationary -> station-dependent -> event-dependent)
     constexpr auto _RESPONSE_ = FDAGWR_COVARIATES_TYPES::RESPONSE;                  //enum for the response
     constexpr auto _REC_WEIGHTS_ = FDAGWR_COVARIATES_TYPES::REC_WEIGHTS;            //enum for the response reconstruction weights
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;              //enum for stationary covariates
@@ -488,42 +492,8 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     W_S.compute_weights();
 
 
-/*
-    double el = 1.0;
-    for(std::size_t i = 0; i < W_C.n(); ++i){
-        std::cout << "Unit: " << i+1 << ": " << W_C.weights()[i](el) << std::endl;
-    }
-
-    for(std::size_t i = 0; i < W_E.n(); ++i)
-    {
-        std::cout << "E for unit " << i+1 << std::endl;
-        for(std::size_t j = 0; j < W_E.n(); ++j){std::cout << "Unit: " << j+1 << ": " << W_E.weights()[i][j](el) << std::endl;}
-    }
-
-
-    for(std::size_t i = 0; i < W_S.n(); ++i)
-    {
-        std::cout << "S for unit " << i+1 << std::endl;
-        for(std::size_t j = 0; j < W_S.n(); ++j){std::cout << "Unit: " << j+1 << ": " << W_S.weights()[i][j](el) << std::endl;}
-    }
-*/
-
-
-    /*
-   double el = 0.0;
-   for(std::size_t i = 0; i < number_of_statistical_units_; ++i)
-   {
-        Rcout << "Evaluation of unit " << i + 1 << "-th in location " << el << std::endl;
-        Rcout << "Response: " << y_fd_.eval(el,i) << std::endl;
-        for(std::size_t i_c = 0; i_c < q_C; ++i_c){
-            Rcout << "Stationary covairiate " << i_c + 1 << "-th: " << x_C_fd_.eval(el,i_c,i) << std::endl;}
-        for(std::size_t i_e = 0; i_e < q_E; ++i_e){
-            Rcout << "Event covairiate " << i_e + 1 << "-th: " << x_E_fd_.eval(el,i_e,i) << std::endl;}
-        for(std::size_t i_s = 0; i_s < q_S; ++i_s){
-            Rcout << "Event covairiate " << i_s + 1 << "-th: " << x_S_fd_.eval(el,i_s,i) << std::endl;}
-   }
-    */
-
+   /*
+   //TESTING ETs WITHIN FUNCTIONS
    double el = 1.0;
 
     std::function<double(double const &)> f1 = [](const double &x){return std::pow(x,2);};
@@ -549,6 +519,10 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     functional_matrix test_op2 = log(test_op);
     test_op = 5.0*(test_op+test_op2)*2.0;
     Rcout << "FM op: primo: " << test_op(0,0)(el) << ", secondo: " << test_op(0,1)(el) << std::endl;
+   */
+
+    auto fgwr = fgwr_factory<_FGWR_ALGO_>();
+    fgwr.solve();
 
 
     //returning element

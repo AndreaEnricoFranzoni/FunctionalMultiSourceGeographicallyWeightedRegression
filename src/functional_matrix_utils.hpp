@@ -71,33 +71,3 @@ using output_t = typename function_traits<F>::output_type;
 }   //end namespace fm_utils
 
 #endif  /*FUNCTIONAL_MATRIX_UTILS_HPP*/
-
-
-
-
-/*
-int foo(const std::string&);   // solo dichiarata!
-
-int main() {
-    // 1. std::function
-    using F1 = std::function<int(const std::string&)>;
-    static_assert(std::is_same_v<input_type_t<F1>, std::string>);
-    static_assert(std::is_same_v<param_type_t<F1>, const std::string&>);
-    static_assert(std::is_same_v<output_type_t<F1>, int>);
-
-    // 2. puntatore a funzione
-    using F2 = decltype(&foo);
-    static_assert(std::is_same_v<input_type_t<F2>, std::string>);
-    static_assert(std::is_same_v<param_type_t<F2>, const std::string&>);
-    static_assert(std::is_same_v<output_type_t<F2>, double> == false); // foo ritorna int, non double
-
-    // 3. lambda
-    auto lambda = [](const double& d) { return d * 2.0; };
-    using F3 = decltype(lambda);
-    static_assert(std::is_same_v<input_type_t<F3>, double>);
-    static_assert(std::is_same_v<param_type_t<F3>, const double&>);
-    static_assert(std::is_same_v<output_type_t<F3>, double>);
-
-    std::cout << "Tutti i test passati!\n";
-}
-*/

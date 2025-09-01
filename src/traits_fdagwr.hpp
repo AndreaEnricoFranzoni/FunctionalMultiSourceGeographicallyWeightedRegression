@@ -62,7 +62,9 @@ public:
 };
 
 
-
+/*!
+* @brief General features of the workflow
+*/
 struct FDAGWR_FEATS
 {
   static constexpr std::size_t number_of_geographical_coordinates = static_cast<std::size_t>(2); 
@@ -70,6 +72,19 @@ struct FDAGWR_FEATS
   static constexpr std::string n_basis_string = "Basis number";
 
   static constexpr std::string degree_basis_string = "Basis degree";
+};
+
+
+
+/*!
+* @enum Different possible types for fgwr
+*/
+enum FDAGWR_ALGO
+{
+  GWR_FMS_ESC = 0,  ///< Multi-source: stationary coefficients -> station-dependent coefficients -> event-dependent coefficients
+  GWR_FMS_SEC = 1,  ///< Multi-source: stationary coefficients -> event-dependent coefficients -> station-dependent coefficients
+  GWR_FOS = 2,      ///< One-source: stationary coefficients -> geographically-dependent coefficients 
+  GWR_FST = 3,      ///< Stationary: stationary coefficients
 };
 
 
