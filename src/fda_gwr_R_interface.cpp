@@ -147,7 +147,7 @@ void fdagwr_test_function(std::string input_string) {
 */
 //
 // [[Rcpp::export]]
-Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
+Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                   Rcpp::NumericVector t_points,
                   double left_extreme_domain,
                   double right_extreme_domain,
@@ -558,7 +558,7 @@ Rcpp::List test_distance_matrix(Rcpp::NumericMatrix coordinates,
 
 //
 // [[Rcpp::export]]
-Rcpp::List fsgwr(double input_el = 1,
+Rcpp::List FSGWR(double input_el = 1,
                  Rcpp::Nullable<int> num_threads = R_NilValue){
     //funzione per il source gwr
 
@@ -575,7 +575,7 @@ Rcpp::List fsgwr(double input_el = 1,
 
 //
 // [[Rcpp::export]]
-Rcpp::List fgwr(double input_el=1,
+Rcpp::List FGWR(double input_el=1,
                 Rcpp::Nullable<int> num_threads = R_NilValue){
     //funzione per il gwr
 
