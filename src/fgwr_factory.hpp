@@ -33,7 +33,7 @@
 * @tparam fdagwrType kind The type of Functional Geographical Weighted regression class desired.
 * @param args Arguments to be forwarded to the constructor.
 */
-template< FDAGWR_ALGO fdagwrType, typename INPUT = double, typename OUTPUT = doubleass... Args >
+template< FDAGWR_ALGO fdagwrType, typename INPUT = double, typename OUTPUT = double, class... Args >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::unique_ptr< fgwr<INPUT,OUTPUT> >
 fgwr_factory(Args &&... args)
