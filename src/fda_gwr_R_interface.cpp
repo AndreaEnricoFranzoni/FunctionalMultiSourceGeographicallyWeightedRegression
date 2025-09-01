@@ -45,8 +45,6 @@
 #include "functional_data_integration.hpp"
 #include "fgwr_factory.hpp"
 
-#include "test_basis_eval.hpp"
-
 
 
 #include "functional_matrix.hpp"
