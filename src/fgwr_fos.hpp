@@ -28,10 +28,11 @@
 class fgwr_fos final : public fgwr
 {
 private:
+    std::string m_s;
 
 public:
     /// Constructor.
-    fgwr_fos() = default;
+    fgwr_fos(std::string s): m_s(s) {}
 
     /// Override of the base class method.
     inline 
@@ -40,7 +41,7 @@ public:
     const 
     override
     {
-        std::cout << "OneSource" << std::endl;
+        std::cout << "OneSource: s: " << m_s << std::endl;
     }
 
 };

@@ -28,10 +28,12 @@
 class fgwr_fms_sec final : public fgwr
 {
 private:
+    double m_a;
+    int m_b;
 
 public:
     /// Constructor.
-    fgwr_fms_sec() = default;
+    fgwr_fms_sec(double a, int b): m_a(a), m_b(b) {}
 
     /// Override of the base class method.
     inline 
@@ -40,7 +42,7 @@ public:
     const 
     override
     {
-        std::cout << "SEC" << std::endl;
+        std::cout << "SEC: a: " << m_a << ", b: " << m_b << std::endl;
     }
 
 };
