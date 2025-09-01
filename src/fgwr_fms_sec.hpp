@@ -24,26 +24,28 @@
 #include "fgwr.hpp"
 
 
-/// Computes the jacobian by finite differences.
 class fgwr_fms_sec final : public fgwr
 {
 private:
-    double m_a;
-    int m_b;
 
 public:
-    /// Constructor.
-    fgwr_fms_sec(double a, int b): m_a(a), m_b(b) {}
+    /*!
+    * @brief Constructor
+    */ 
+    fgwr_fms_sec(int number_threads)
+        :
+            fgwr(number_threads)
+            {}
 
-    /// Override of the base class method.
+    /*!
+    * @brief Override of the base class method
+    */ 
     inline 
     void 
     compute() 
     const 
     override
-    {
-        std::cout << "SEC: a: " << m_a << ", b: " << m_b << std::endl;
-    }
+    {}
 
 };
 

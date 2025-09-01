@@ -24,24 +24,28 @@
 #include "fgwr.hpp"
 
 
-/// Computes the jacobian by finite differences.
 class fgwr_fst final : public fgwr
 {
 private:
 
 public:
-    /// Constructor.
-    fgwr_fst() = default;
+    /*!
+    * @brief Constructor
+    */ 
+    fgwr_fst(int number_threads)
+      :
+          fgwr(number_threads)
+          {}
 
-    /// Override of the base class method.
+    /*!
+    * @brief Override of the base class method
+    */ 
     inline 
     void 
     compute() 
     const 
     override
-    {
-        std::cout << "STAT" << std::endl;
-    }
+    {}
 
 };
 

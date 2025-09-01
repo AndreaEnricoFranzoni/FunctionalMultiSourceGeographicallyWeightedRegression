@@ -24,25 +24,28 @@
 #include "fgwr.hpp"
 
 
-/// Computes the jacobian by finite differences.
 class fgwr_fos final : public fgwr
 {
 private:
-    std::string m_s;
 
 public:
-    /// Constructor.
-    fgwr_fos(std::string s): m_s(s) {}
+    /*!
+    * @brief Constructor
+    */ 
+    fgwr_fos(int number_threads)
+      :
+          fgwr(number_threads)
+          {}
 
-    /// Override of the base class method.
+    /*!
+    * @brief Override of the base class method
+    */ 
     inline 
     void 
     compute() 
     const 
     override
-    {
-        std::cout << "OneSource: s: " << m_s << std::endl;
-    }
+    {}
 
 };
 

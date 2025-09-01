@@ -25,14 +25,36 @@
 #include "traits_fdagwr.hpp"
 
 
+/*!
+* @brief Virtual interface to perform the 
+*/
 class fgwr
 {
 private:
-    /* data */
+    /*!Number of threads for OMP*/
+    int m_number_threads;
+
 public:
-    fgwr() = default;
+    /*!
+    * @brief Constructor
+    * @param number_threads number of threads for OMP
+    */
+    fgwr(int number_threads): m_number_threads(number_threads) {}
+
+    /*!
+    * @brief Virtual destructor
+    */
     virtual ~fgwr() = default;
 
+    /*!
+    * @brief Getter for the number of threads for OMP
+    * @return the private m_number_threads
+    */
+    inline int number_threads() const {return m_number_threads;}
+
+    /*!
+    * @brief Virtual method to compute the Functional Geographically Weughted Regression
+    */
     virtual inline void compute() const = 0;
 };
 

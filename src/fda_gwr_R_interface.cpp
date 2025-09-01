@@ -212,7 +212,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
     using _FD_OUTPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_y_type;                          //data type for the image of fdata (double)
     using _DOMAIN_ = FDAGWR_TRAITS::basis_geometry;                                 //domain geometry
-    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::GWR_FOS;                          //fgwr type (estimating stationary -> station-dependent -> event-dependent)
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::GWR_FMS_ESC;                          //fgwr type (estimating stationary -> station-dependent -> event-dependent)
     constexpr auto _RESPONSE_ = FDAGWR_COVARIATES_TYPES::RESPONSE;                  //enum for the response
     constexpr auto _REC_WEIGHTS_ = FDAGWR_COVARIATES_TYPES::REC_WEIGHTS;            //enum for the response reconstruction weights
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;              //enum for stationary covariates
@@ -521,11 +521,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     Rcout << "FM op: primo: " << test_op(0,0)(el) << ", secondo: " << test_op(0,1)(el) << std::endl;
    */
 
-    double m1 = 2.499043;
-    int m2 = 4;
-    std::string ms = "Ciao";
-    //auto fgwr = fgwr_factory<_FGWR_ALGO_>(m1,m2);
-    auto fgwr = fgwr_factory<_FGWR_ALGO_>(ms);
+    auto fgwr = fgwr_factory<_FGWR_ALGO_>(number_threads);
     fgwr->compute();
 
 

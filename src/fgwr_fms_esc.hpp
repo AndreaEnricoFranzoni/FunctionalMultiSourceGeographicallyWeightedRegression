@@ -24,24 +24,30 @@
 #include "fgwr.hpp"
 
 
-/// Computes the jacobian by finite differences.
 class fgwr_fms_esc final : public fgwr
 {
 private:
 
 public:
-  /// Constructor.
-  fgwr_fms_esc() = default;
+    /*!
+    * @brief Constructor
+    */ 
+    fgwr_fms_esc(int number_threads)
+      :
+          fgwr(number_threads)
+          {}
 
-  /// Override of the base class method.
-  inline 
-  void 
-  compute() 
-  const 
-  override
-  {
-    std::cout << "ESC" << std::endl;
-  }
+    /*!
+    * @brief Override of the base class method
+    */ 
+    inline 
+    void 
+    compute() 
+    const 
+    override
+    {
+      std::cout << "ESC, with OMP threads: " << this->number_threads() << std::endl;
+    }
 
 };
 
