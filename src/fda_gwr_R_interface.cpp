@@ -206,7 +206,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
 
 
-    Rcout << "fdagwr.9: " << std::endl;
+    Rcout << "fdagwr.19: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                     //data type
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
@@ -512,15 +512,17 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
     Rcout << "FM: f3(2): " << test_fm_2(0,0)(el) << ", f4(2): " << test_fm_2(0,1)(el) << std::endl;
 
 
-
-    
-    
     functional_matrix test_op = test_fm_1+test_fm_2;
     functional_matrix test_op2 = log(test_op);
     test_op = 5.0*(test_op+test_op2)*2.0;
     Rcout << "FM op: primo: " << test_op(0,0)(el) << ", secondo: " << test_op(0,1)(el) << std::endl;
    */
 
+
+
+    ///////////////////////////////
+    /////    FGWR ALGORITHM   /////
+    ///////////////////////////////
     auto fgwr = fgwr_factory<_FGWR_ALGO_>(number_threads);
     fgwr->compute();
 

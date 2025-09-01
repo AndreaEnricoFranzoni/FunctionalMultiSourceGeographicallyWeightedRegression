@@ -33,8 +33,9 @@
 * @tparam fdagwrType kind The type of Functional Geographical Weighted regression class desired.
 * @param args Arguments to be forwarded to the constructor.
 */
-template <FDAGWR_ALGO fdagwrType, class... Args>
-std::unique_ptr<fgwr>
+template< FDAGWR_ALGO fdagwrType, typename INPUT = double, typename OUTPUT = doubleass... Args >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+std::unique_ptr< fgwr<INPUT,OUTPUT> >
 fgwr_factory(Args &&... args)
 {
     static_assert(fdagwrType == FDAGWR_ALGO::GWR_FMS_ESC ||
@@ -45,19 +46,19 @@ fgwr_factory(Args &&... args)
 
     //FMS_ESC: multi-source: estimating: stationay -> station-dependent -> event-dependent
     if constexpr (fdagwrType == FDAGWR_ALGO::GWR_FMS_ESC)
-        return std::make_unique<fgwr_fms_esc>(std::forward<Args>(args)...);
+        return std::make_unique<fgwr_fms_esc<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
     //FMS_SEC: multi-source: estimating: stationay -> event-dependent -> station-dependent
     if constexpr (fdagwrType == FDAGWR_ALGO::GWR_FMS_SEC)
-        return std::make_unique<fgwr_fms_sec>(std::forward<Args>(args)...);
+        return std::make_unique<fgwr_fms_sec<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
     //GWR_FOS: one-source: estimating: stationary -> geographically dependent
     if constexpr (fdagwrType == FDAGWR_ALGO::GWR_FOS)
-        return std::make_unique<fgwr_fos>(std::forward<Args>(args)...);
+        return std::make_unique<fgwr_fos<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
     //GWR_FST: stationary: estimating: stationary
     if constexpr (fdagwrType == FDAGWR_ALGO::GWR_FST)
-        return std::make_unique<fgwr_fst>(std::forward<Args>(args)...);
+        return std::make_unique<fgwr_fst<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 }
 
 #endif /*FGWR_FACTORY_HPP*/

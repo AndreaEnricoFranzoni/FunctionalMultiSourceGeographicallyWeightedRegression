@@ -24,7 +24,9 @@
 #include "fgwr.hpp"
 
 
-class fgwr_fms_sec final : public fgwr
+template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+class fgwr_fms_sec final : public fgwr<INPUT,OUTPUT>
 {
 private:
 
@@ -34,7 +36,7 @@ public:
     */ 
     fgwr_fms_sec(int number_threads)
         :
-            fgwr(number_threads)
+            fgwr<INPUT,OUTPUT>(number_threads)
             {}
 
     /*!

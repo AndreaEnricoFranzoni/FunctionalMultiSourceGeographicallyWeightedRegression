@@ -24,10 +24,15 @@
 #include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
 
+#include "functional_matrix.hpp"
+#include "functional_matrix_operators.hpp"
+
 
 /*!
 * @brief Virtual interface to perform the 
 */
+template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class fgwr
 {
 private:
@@ -53,7 +58,7 @@ public:
     inline int number_threads() const {return m_number_threads;}
 
     /*!
-    * @brief Virtual method to compute the Functional Geographically Weughted Regression
+    * @brief Virtual method to compute the Functional Geographically Weighted Regression
     */
     virtual inline void compute() const = 0;
 };
