@@ -522,7 +522,7 @@ Rcpp::List fmsgwr(Rcpp::NumericMatrix y_points,
    */
 
     auto fgwr = fgwr_factory<_FGWR_ALGO_>();
-    fgwr.solve();
+    fgwr->compute();
 
 
     //returning element

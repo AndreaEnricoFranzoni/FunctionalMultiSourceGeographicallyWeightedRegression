@@ -33,7 +33,7 @@ public:
     fgwr() = default;
     virtual ~fgwr() = default;
 
-    virtual inline void solve() const = 0;
+    virtual inline void compute() const = 0;
 };
 
 #endif  /*FGWR_ALGO_HPP*/

@@ -25,7 +25,7 @@
 
 
 /// Computes the jacobian by finite differences.
-class fgwr_fos final : public fgwr
+class fgwr_fst final : public fgwr
 {
 private:
 
@@ -36,7 +36,7 @@ public:
     /// Override of the base class method.
     inline 
     void 
-    solve() 
+    compute() 
     const 
     override
     {

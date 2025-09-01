@@ -36,7 +36,7 @@ public:
     /// Override of the base class method.
     inline 
     void 
-    solve() 
+    compute() 
     const 
     override
     {
