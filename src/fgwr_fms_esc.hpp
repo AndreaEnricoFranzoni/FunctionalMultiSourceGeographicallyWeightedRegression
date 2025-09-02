@@ -87,9 +87,9 @@ public:
             fgwr<INPUT,OUTPUT>(a,b,n_intervals,number_threads),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
-            m_Rc{std::forward<SCALAR_MATRIX_OBJ>(Rc)},
-            m_Re{std::forward<SCALAR_MATRIX_OBJ>(Re)},
-            m_Rs{std::forward<SCALAR_MATRIX_OBJ>(Rs)}
+            m_Rc{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rc)},
+            m_Re{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Re)},
+            m_Rs{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rs)}
             {}
 
 
