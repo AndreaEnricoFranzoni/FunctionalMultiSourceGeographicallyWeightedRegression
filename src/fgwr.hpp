@@ -128,7 +128,7 @@ public:
     functional_matrix<INPUT,OUTPUT> 
     compute_functional_operator(const functional_matrix<INPUT,OUTPUT> &X,
                                 const functional_matrix<INPUT,OUTPUT> &base,
-                                const FDAGWR_TRAITS::Dense_Matrix &operator) const;
+                                const FDAGWR_TRAITS::Dense_Matrix &operator_) const;
 
     /*!
     * @brief Virtual method to compute the Functional Geographically Weighted Regression
