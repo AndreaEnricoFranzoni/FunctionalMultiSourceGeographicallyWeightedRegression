@@ -37,7 +37,7 @@ using namespace apsc::NumericalIntegration;
 
 class fd_integration
 {
-
+/*!Integrand function signature*/
 using integrand_type = FunPoint;
 
 private:
@@ -48,7 +48,6 @@ private:
     /*!Quadrature rule*/
     Quadrature m_integration_quadrature;
 
-    
 public:
     /*!Constructor*/
     fd_integration(double a, double b, int intervals):
@@ -65,8 +64,6 @@ public:
     {
         return m_integration_quadrature.apply(f);
     }
-
 };
-
 
 #endif  /*FDAGWR_FUNCTIONAL_DATA_INTEGRATION_HPP*/

@@ -58,6 +58,79 @@ public:
     inline int number_threads() const {return m_number_threads;}
 
     /*!
+    * @brief Compute all the [J_2_tilde_i + R]^(-1)
+    */
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > 
+    compute_penalty(const functional_matrix<INPUT,OUTPUT> &base,
+                    const functional_matrix<INPUT,OUTPUT> &X,
+                    const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
+                    const FDAGWR_TRAITS::Dense_Matrix &R) const;
+
+    /*!
+    * @brief Compute [J_tilde_i + R]^(-1)
+    */
+    std::vector< FDAGWR_TRAITS::Dense_Matrix >
+    compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed,
+                    const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
+                    const FDAGWR_TRAITS::Dense_Matrix &R) const;
+
+    /*!
+    * @brief Compute [J + Rc]^(-1)
+    */
+    FDAGWR_TRAITS::Dense_Matrix
+    compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed,
+                    const functional_matrix<INPUT,OUTPUT> &W,
+                    const FDAGWR_TRAITS::Dense_Matrix &R) const;
+
+    /*!
+    * @brief Compute an operator
+    */
+    std::vector< FDAGWR_TRAITS::Dense_Matrix >
+    compute_operator(const functional_matrix<INPUT,OUTPUT> &lhs,
+                     const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                     const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
+                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                     const functional_matrix<INPUT,OUTPUT> &rhs,
+                     const std::vector< FDAGWR_TRAITS::Dense_Matrix > &penalty) const;
+
+    /*!
+    * @brief Compute an operator
+    */
+    std::vector< FDAGWR_TRAITS::Dense_Matrix >
+    compute_operator(const functional_matrix<INPUT,OUTPUT> &lhs,
+                     const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                     const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
+                     const functional_matrix<INPUT,OUTPUT> &rhs,
+                     const std::vector< FDAGWR_TRAITS::Dense_Matrix > &penalty) const;
+
+    /*!
+    * @brief Compute an operator
+    */
+    std::vector< FDAGWR_TRAITS::Dense_Matrix >
+    compute_operator(const functional_matrix<INPUT,OUTPUT> &lhs,
+                     const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
+                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                     const functional_matrix<INPUT,OUTPUT> &rhs,
+                     const std::vector< FDAGWR_TRAITS::Dense_Matrix > &penalty) const;
+
+    /*!
+    * @brief Compute an operator
+    */
+    std::vector< FDAGWR_TRAITS::Dense_Matrix >
+    compute_operator(const functional_matrix<INPUT,OUTPUT> &lhs,
+                     const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
+                     const functional_matrix<INPUT,OUTPUT> &rhs,
+                     const std::vector< FDAGWR_TRAITS::Dense_Matrix > &penalty) const;
+
+    /*!
+    * @brief Compute a functional operator
+    */
+    functional_matrix<INPUT,OUTPUT> 
+    compute_functional_operator(const functional_matrix<INPUT,OUTPUT> &X,
+                                const functional_matrix<INPUT,OUTPUT> &base,
+                                const FDAGWR_TRAITS::Dense_Matrix &operator) const;
+
+    /*!
     * @brief Virtual method to compute the Functional Geographically Weighted Regression
     */
     virtual inline void compute() const = 0;

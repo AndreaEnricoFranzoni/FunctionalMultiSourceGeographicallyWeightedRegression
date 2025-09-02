@@ -28,6 +28,46 @@ template< typename INPUT = double, typename OUTPUT = double >
 class fgwr_fms_esc final : public fgwr<INPUT,OUTPUT>
 {
 private:
+    /*!Functional response*/
+    functional_matrix<INPUT,OUTPUT> m_y;
+    /*!Basis for response*/
+    functional_matrix<INPUT,OUTPUT> m_phi;
+    /*!Coefficients of the basis expansion for response*/
+    FDAGWR_TRAITS::Dense_Matrix m_c;
+
+    /*!Functional stationary covariates*/
+    functional_matrix<INPUT,OUTPUT> m_Xc;
+    /*!Functional weights for stationary covariates*/
+    functional_matrix<INPUT,OUTPUT> m_Wc;
+    /*!Penalization on the stationary covariates*/
+    FDAGWR_TRAITS::Dense_Matrix m_Rc;
+    /*!Basis for stationary covariates regressors*/
+    functional_matrix<INPUT,OUTPUT> m_omega;
+    /*!Coefficients of the basis expansion for stationary covariates regressors: TO BE COMPUTED*/
+    FDAGWR_TRAITS::Dense_Matrix m_bc;
+
+    /*!Functional event-dependent covariates*/
+    functional_matrix<INPUT,OUTPUT> m_Xe;
+    /*!Functional weights for event-dependent covariates*/
+    std::vector< functional_matrix<INPUT,OUTPUT> > m_We;
+    /*!Penalization on the event-dependent covariates*/
+    FDAGWR_TRAITS::Dense_Matrix m_Re;
+    /*!Basis for event-dependent covariates regressors*/
+    functional_matrix<INPUT,OUTPUT> m_theta;
+    /*!Coefficients of the basis expansion for event-dependent covariates regressors: TO BE COMPUTED*/
+    FDAGWR_TRAITS::Dense_Matrix m_be;
+
+    /*!Functional station-dependent covariates*/
+    functional_matrix<INPUT,OUTPUT> m_Xs;
+    /*!Functional weights for station-dependent covariates*/
+    std::vector< functional_matrix<INPUT,OUTPUT> > m_Ws;
+    /*!Penalization on the station-dependent covariates*/
+    FDAGWR_TRAITS::Dense_Matrix m_Rs;
+    /*!Basis for station-dependent covariates regressors*/
+    functional_matrix<INPUT,OUTPUT> m_psi;
+    /*!Coefficients of the basis expansion for station-dependent covariates regressors: TO BE COMPUTED*/
+    FDAGWR_TRAITS::Dense_Matrix m_bs;
+
 
 public:
     /*!
