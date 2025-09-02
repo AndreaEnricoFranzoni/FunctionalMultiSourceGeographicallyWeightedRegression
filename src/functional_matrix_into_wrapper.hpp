@@ -32,7 +32,7 @@
 template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
 inline
-functional_matrix<INPUT,DOUBLE>
+functional_matrix<INPUT,OUTPUT>
 wrap_into_fm(const functional_data<domain_type,basis_type> &fd,
              int number_threads,
              bool as_column = true)
