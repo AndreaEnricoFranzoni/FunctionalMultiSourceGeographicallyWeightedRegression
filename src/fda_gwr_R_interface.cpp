@@ -49,7 +49,7 @@
 
 #include "functional_matrix.hpp"
 #include "functional_matrix_operators.hpp"
-
+#include "functional_matrix_into_wrapper.hpp"
 
 
 using namespace Rcpp;
@@ -512,7 +512,16 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
         Rcout << "Unit " << i+1 << " of the response evaluated in " << loc << ": " << y_fd_.eval(loc,i) << std::endl;
     }
 
-    //functional_matrix y = 
+    functional_matrix y = wrap_into_fm(y_fd_,number_threads);
+    for(std::size_t i = 0; i < y.rows(); ++i)
+    {
+        Rcout << "Element (" << i ",0) of y evaluated in " << loc << ": " << y(i,0)(loc) << std::endl;
+    }
+
+    for(std::size_t i = 0; i < y_fd_.n(); ++i)
+    {
+        Rcout << "Unit " << i+1 << " of the response evaluated in " << loc << ": " << y_fd_.eval(loc,i) << std::endl;
+    }
 
 
 
