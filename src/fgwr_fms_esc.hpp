@@ -72,11 +72,14 @@ private:
 public:
     /*!
     * @brief Constructor
-    */ 
-    fgwr_fms_esc(int number_threads)
-      :
-          fgwr<INPUT,OUTPUT>(number_threads)
-          {}
+    */
+    template<typename FUNC_MATRIX_OBJ> 
+    fgwr_fms_esc(FUNC_MATRIX_OBJ &&y,
+                 int number_threads)
+        :
+            fgwr<INPUT,OUTPUT>(number_threads),
+            m_y{std::forward<FUNC_MATRIX_OBJ>(y)}
+            {}
 
 
     /*!
@@ -88,7 +91,13 @@ public:
     const 
     override
     {
-      std::cout << "ESC, with OMP threads: " << this->number_threads() << std::endl;
+        std::cout << "ESC, with OMP threads: " << this->number_threads() << std::endl;
+
+        double loc = 0.3;
+        for(std::size_t i = 0; i < m_y.rows(); ++i)
+        {
+        Rcout << "Element (" << i << ",0) of y evaluated in " << loc << ": " << m_y(i,0)(loc) << std::endl;
+        }
     }
 
 };
