@@ -547,6 +547,7 @@ for(std::size_t i = 0; i < Xc.rows(); ++i){
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(coefficients_response_),
+                                                                                    std::move(Xc),
                                                                                     std::move(R_C.PenalizationMatrix()),
                                                                                     std::move(R_E.PenalizationMatrix()),
                                                                                     std::move(R_S.PenalizationMatrix()),

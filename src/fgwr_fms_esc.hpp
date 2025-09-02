@@ -110,9 +110,9 @@ public:
     {
         double loc = 0.3;
 std::cout << "In compute" << std::endl;
-for(std::size_t i = 0; i < Xc.rows(); ++i){
-    for(std::size_t j = 0; j < Xc.cols(); ++j){
-        std::cout << "Unit: " << i+1 << ", covariate: " << j+1 << ", evaluated in " << loc << ": " << Xc(i,j)(loc) << std::endl;}}
+for(std::size_t i = 0; i < m_Xc.rows(); ++i){
+    for(std::size_t j = 0; j < m_Xc.cols(); ++j){
+        std::cout << "Unit: " << i+1 << ", covariate: " << j+1 << ", evaluated in " << loc << ": " << m_Xc(i,j)(loc) << std::endl;}}
     }
 
 };
