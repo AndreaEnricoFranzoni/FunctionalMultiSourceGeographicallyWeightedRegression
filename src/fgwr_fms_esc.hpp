@@ -96,7 +96,7 @@ public:
         double loc = 0.3;
         for(std::size_t i = 0; i < m_y.rows(); ++i)
         {
-        Rcout << "Element (" << i << ",0) of y evaluated in " << loc << ": " << m_y(i,0)(loc) << std::endl;
+            std::cout << "Element (" << i << ",0) of y evaluated in " << loc << ": " << m_y(i,0)(loc) << std::endl;
         }
     }
 
