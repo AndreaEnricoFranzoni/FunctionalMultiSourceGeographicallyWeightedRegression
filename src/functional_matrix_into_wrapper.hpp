@@ -47,7 +47,7 @@ wrap_into_fm(const functional_data<domain_type,basis_type> &fd,
 #pragma omp parallel for shared(fd) num_threads(number_threads)
     for(std::size_t i = 0; i < fd.n(); ++i)
     {
-        f_i[i] = [](F_OBJ_INPUT x){return fd.eval(x,i)};
+        f_i[i] = [=i,&fd](F_OBJ_INPUT x){return fd.eval(x,i);};
     }
 #endif
 
