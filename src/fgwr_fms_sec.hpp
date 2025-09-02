@@ -34,9 +34,12 @@ public:
     /*!
     * @brief Constructor
     */ 
-    fgwr_fms_sec(int number_threads)
+    fgwr_fms_sec(INPUT a,
+                 INPUT b,
+                 int n_intervals,
+                 int number_threads)
         :
-            fgwr<INPUT,OUTPUT>(number_threads)
+            fgwr<INPUT,OUTPUT>(a,b,n_intervals,number_threads)
             {}
 
     /*!

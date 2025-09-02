@@ -27,6 +27,8 @@
 #include "functional_matrix.hpp"
 #include "functional_matrix_operators.hpp"
 
+#include "functional_data_integration.hpp"
+
 
 /*!
 * @brief Virtual interface to perform the 
@@ -36,6 +38,8 @@ template< typename INPUT = double, typename OUTPUT = double >
 class fgwr
 {
 private:
+    /*!Object to perform the integration using trapezoidal quadrature rule*/
+    fd_integration m_integrating;
     /*!Number of threads for OMP*/
     int m_number_threads;
 
@@ -44,7 +48,8 @@ public:
     * @brief Constructor
     * @param number_threads number of threads for OMP
     */
-    fgwr(int number_threads): m_number_threads(number_threads) {}
+    fgwr(INPUT a, INPUT b, int n_intervals, int number_threads)
+        : m_integrating(a,b,n_intervals), m_number_threads(number_threads) {}
 
     /*!
     * @brief Virtual destructor

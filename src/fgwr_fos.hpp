@@ -34,10 +34,13 @@ public:
     /*!
     * @brief Constructor
     */ 
-    fgwr_fos(int number_threads)
-      :
-          fgwr<INPUT,OUTPUT>(number_threads)
-          {}
+    fgwr_fos(INPUT a,
+             INPUT b,
+             int n_intervals,
+             int number_threads)
+        :
+            fgwr<INPUT,OUTPUT>(a,b,n_intervals,number_threads)
+            {}
 
     /*!
     * @brief Override of the base class method

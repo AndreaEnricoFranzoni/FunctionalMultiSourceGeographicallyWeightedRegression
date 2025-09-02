@@ -107,6 +107,7 @@ using namespace Rcpp;
 * @param knots_beta_stations_cov vector of double with the abscissa points with respect which the basis expansions of the stations-dependent covariates (functional regression) coefficients are performed (all elements contained in [a,b]). 
 * @param degrees_basis_beta_stations_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stations-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
 * @param n_basis_beta_stations_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stations-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
+* @param n_intervals_trapezoidal_quadrature number of intervals used while performing integration via trapezoidal quadrature rule
 * @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine running fmsgwr.
 * @param basis_type_y_points string containing the type of basis used for the (functional) response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param basis_type_rec_weights_y_points string containing the type of basis used for the weights to reconstruct the (functional) response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
@@ -175,6 +176,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                   Rcpp::NumericVector knots_beta_stations_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_beta_stations_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_stations_cov,
+                  int n_intervals_trapezoidal_quadrature = 100,
                   Rcpp::Nullable<int> num_threads = R_NilValue,
                   std::string basis_type_y_points = "bsplines",
                   std::string basis_type_rec_weights_y_points = "bsplines",
@@ -218,6 +220,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
+    // NUMBER OF INTERVALS FOR INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
+    int n_intervals = wrap_and_check_n_intervals_trapezoidal_quadrature(n_intervals_trapezoidal_quadrature);
 
 
     //  RESPONSE
@@ -529,7 +533,11 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     /////    FGWR ALGORITHM   /////
     ///////////////////////////////
     //wrapping all the functional elements in a functional_matrix
-    auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),number_threads);
+    auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
+                                                                                    a,
+                                                                                    b,
+                                                                                    n_intervals,
+                                                                                    number_threads);
     fgwr_algo->compute();
 
 

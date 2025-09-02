@@ -75,9 +75,12 @@ public:
     */
     template<typename FUNC_MATRIX_OBJ> 
     fgwr_fms_esc(FUNC_MATRIX_OBJ &&y,
+                 INPUT a,
+                 INPUT b,
+                 int n_intervals,
                  int number_threads)
         :
-            fgwr<INPUT,OUTPUT>(number_threads),
+            fgwr<INPUT,OUTPUT>(a,b,n_intervals,number_threads),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)}
             {}
 

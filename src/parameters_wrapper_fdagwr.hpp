@@ -609,6 +609,26 @@ wrap_and_check_kernel_bandwith(double bandwith)
 
 
 /*!
+* @brief Wrapping the number of intervals for the integration via trapezoidal quadrature rule
+* @param n_intervals number of intervals used for integrating via trapezoidal quadrature rule
+* @return return the number of intervals used for integrating via trapezoidal quadrature rule
+* @note checking that the number of intervals used for integrating via trapezoidal quadrature rule is a positive number, throwing an exception if not
+*/
+inline
+int
+wrap_and_check_n_intervals_trapezoidal_quadrature(int n_intervals)
+{
+  //checking that the number of intervals is positive, throwing an exception if not
+  if (n_intervals <= 0){
+    std::string error_message = "The number of intervals used for integrating via trapezoidal quadrature rule has to be positive";
+    throw std::invalid_argument(error_message);}
+
+  return n_intervals;  
+}
+
+
+
+/*!
 * @brief Wrapping the number of threads for OMP
 * @param num_threads indicates how many threads to be used by multi-threading directives.
 * @return the number of threads
