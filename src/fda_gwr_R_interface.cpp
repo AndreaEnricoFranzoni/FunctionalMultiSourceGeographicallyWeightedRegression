@@ -505,12 +505,21 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Rcout << "FM op: primo: " << test_op(0,0)(el) << ", secondo: " << test_op(0,1)(el) << std::endl;
     //END TESTING ETs WITHIN FUNCTIONS
     */
+    
+    double loc = 0.3;
+    for(std::size_t i = 0; i < y_fd_.n(); ++i)
+    {
+        Rcout << "Unit " << i+1 << " of the response evaluated in " << loc << ": " << y_fd_.eval(loc,i) << std::endl;
+    }
+
+    //functional_matrix y = 
 
 
 
     ///////////////////////////////
     /////    FGWR ALGORITHM   /////
     ///////////////////////////////
+    //wrapping all the functional elements in a functional_matrix
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(number_threads);
     fgwr_algo->compute();
 
