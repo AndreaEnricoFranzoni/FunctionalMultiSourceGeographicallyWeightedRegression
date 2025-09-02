@@ -35,7 +35,7 @@ private:
     /*!Coefficients of the basis expansion for response*/
     FDAGWR_TRAITS::Dense_Matrix m_c;
 
-    /*!Functional stationary covariates*/
+    /*!Functional stationary covariates (n x qc)*/
     functional_matrix<INPUT,OUTPUT> m_Xc;
     /*!Functional weights for stationary covariates*/
     functional_matrix<INPUT,OUTPUT> m_Wc;
@@ -46,7 +46,7 @@ private:
     /*!Coefficients of the basis expansion for stationary covariates regressors: TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_bc;
 
-    /*!Functional event-dependent covariates*/
+    /*!Functional event-dependent covariates (n x qe)*/
     functional_matrix<INPUT,OUTPUT> m_Xe;
     /*!Functional weights for event-dependent covariates*/
     std::vector< functional_matrix<INPUT,OUTPUT> > m_We;
@@ -57,7 +57,7 @@ private:
     /*!Coefficients of the basis expansion for event-dependent covariates regressors: TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_be;
 
-    /*!Functional station-dependent covariates*/
+    /*!Functional station-dependent covariates (n x qs)*/
     functional_matrix<INPUT,OUTPUT> m_Xs;
     /*!Functional weights for station-dependent covariates*/
     std::vector< functional_matrix<INPUT,OUTPUT> > m_Ws;
@@ -73,15 +73,23 @@ public:
     /*!
     * @brief Constructor
     */
-    template<typename FUNC_MATRIX_OBJ> 
+    template<typename FUNC_MATRIX_OBJ, typename SCALAR_MATRIX_OBJ> 
     fgwr_fms_esc(FUNC_MATRIX_OBJ &&y,
+                 SCALAR_MATRIX_OBJ &&c,
+                 SCALAR_MATRIX_OBJ &&Rc,
+                 SCALAR_MATRIX_OBJ &&Re,
+                 SCALAR_MATRIX_OBJ &&Rs,
                  INPUT a,
                  INPUT b,
                  int n_intervals,
                  int number_threads)
         :
             fgwr<INPUT,OUTPUT>(a,b,n_intervals,number_threads),
-            m_y{std::forward<FUNC_MATRIX_OBJ>(y)}
+            m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
+            m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
+            m_Rc{std::forward<SCALAR_MATRIX_OBJ>(Rc)},
+            m_Re{std::forward<SCALAR_MATRIX_OBJ>(Re)},
+            m_Rs{std::forward<SCALAR_MATRIX_OBJ>(Rs)}
             {}
 
 

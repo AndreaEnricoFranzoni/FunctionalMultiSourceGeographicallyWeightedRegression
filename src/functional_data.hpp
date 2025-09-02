@@ -43,7 +43,7 @@ private:
     double m_b;
     /*!Number of statistical units*/
     std::size_t m_n;
-    /*!Coefficients of basis expansion*/
+    /*!Coefficients of basis expansion: each column a statistical unit, each row a coefficient for a specific base*/
     FDAGWR_TRAITS::Dense_Matrix m_fdata_coeff;
     /*!Pointer to the basis: shared_ptr is chosen over unique_ptr since is easir to copy*/
     std::shared_ptr<basis_type<domain_type>> m_fdata_basis;

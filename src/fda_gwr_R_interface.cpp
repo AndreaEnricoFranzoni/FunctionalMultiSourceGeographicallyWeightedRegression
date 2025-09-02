@@ -510,22 +510,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //END TESTING ETs WITHIN FUNCTIONS
     */
     
-    double loc = 0.3;
-    for(std::size_t i = 0; i < y_fd_.n(); ++i)
-    {
-        Rcout << "Unit " << i+1 << " of the response evaluated in " << loc << ": " << y_fd_.eval(loc,i) << std::endl;
-    }
-
-    functional_matrix y = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_,number_threads);
-    for(std::size_t i = 0; i < y.rows(); ++i)
-    {
-        Rcout << "Element (" << i << ",0) of y evaluated in " << loc << ": " << y(i,0)(loc) << std::endl;
-    }
-
-    for(std::size_t i = 0; i < y_fd_.n(); ++i)
-    {
-        Rcout << "Unit " << i+1 << " of the response evaluated in " << loc << ": " << y_fd_.eval(loc,i) << std::endl;
-    }
 
 
 
@@ -533,7 +517,18 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     /////    FGWR ALGORITHM   /////
     ///////////////////////////////
     //wrapping all the functional elements in a functional_matrix
+
+    //response: a column vector of dimension nx1
+    functional_matrix y = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_,number_threads);
+    //Xc: a functional matrix of dimension nxqc
+    functional_matrix Xc = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATIONARY_>(x_C_fd_,number_threads);
+
+    //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
+                                                                                    std::move(coefficients_response_),
+                                                                                    std::move(R_C.PenalizationMatrix()),
+                                                                                    std::move(R_E.PenalizationMatrix()),
+                                                                                    std::move(R_S.PenalizationMatrix()),
                                                                                     a,
                                                                                     b,
                                                                                     n_intervals,

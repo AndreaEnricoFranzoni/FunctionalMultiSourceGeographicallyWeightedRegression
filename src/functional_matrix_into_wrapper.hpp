@@ -40,27 +40,74 @@ wrap_into_fm(const functional_data<domain_type,basis_type> &fd,
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
-    std::vector< F_OBJ > f_i;
-    f_i.resize(fd.n());
+    std::vector< F_OBJ > f;
+    f.resize(fd.n());
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(fd) num_threads(number_threads)
-    for(std::size_t i = 0; i < fd.n(); ++i)
+    for(std::size_t unit_i = 0; unit_i < fd.n(); ++unit_i)
     {
-        f_i[i] = [i,&fd](F_OBJ_INPUT x){return fd.eval(x,i);};
+        f[unit_i] = [unit_i,&fd](F_OBJ_INPUT x){return fd.eval(x,unit_i);};
     }
 #endif
 
     if(as_column == true)
     {
-        functional_matrix<INPUT,OUTPUT> fm(std::move(f_i),fd.n(),1);
+        functional_matrix<INPUT,OUTPUT> fm(std::move(f),fd.n(),1);
         return fm;
     }
     else
     {
-        functional_matrix<INPUT,OUTPUT> fm(std::move(f_i),1,fd.n());
+        functional_matrix<INPUT,OUTPUT> fm(std::move(f),1,fd.n());
         return fm;   
     }
+}
+
+
+
+/*!
+* @brief Function to wrap a functional data covariates object functional_data_covariates into a functional matrix object functional_matrix
+* @note It stores the functions objects column wise, as an n x q matrix, where n is the number of statistical units, q the number of covariates
+*/
+template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type>
+inline
+functional_matrix<INPUT,OUTPUT>
+wrap_into_fm(const functional_data_covariates<domain_type,stationarity_t> &X,
+             int number_threads)
+{
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
+
+    std::vector< F_OBJ > f;
+    f.resize(X.n()*X.q());
+
+#ifdef _OPENMP
+#pragma omp parallel for collapse(2) shared(X) num_threads(number_threads)
+    for (std::size_t unit_i = 0; unit_i < X.n(); ++unit_i) 
+    {
+        for (std::size_t cov_j = 0; cov_j < X.q(); ++cov_j) 
+        {
+            f[cov_j*X.n() + unit_i] = [unit_i,cov_j,&X](F_OBJ_INPUT x){return X.eval(x,cov_j,unit_i);};
+        }
+    }
+#endif
+
+/*
+#ifdef _OPENMP
+#pragma omp parallel for shared(X) num_threads(number_threads)
+    for(std::size_t unit_i = 0; unit_i < X.n(); ++i)
+    {
+        for (std::size_t cov_j = 0; cov_j < X.q(); ++cov_j)
+        {
+            f[cov_j*X.() + unit_i] = [unit_i,cov_j,&X](F_OBJ_INPUT x){return X.eval(x,cov_j,unit_i);};
+        }
+    }
+#endif
+*/
+
+    functional_matrix<INPUT,OUTPUT> fm(std::move(f),X.n(),X.q());
+    return fm;
 }
 
 #endif  /*FUNCTIONAL_MATRIX_INTO_WRAPPER_HPP*/
