@@ -40,7 +40,7 @@ private:
     /*!Functional weights for stationary covariates*/
     functional_matrix<INPUT,OUTPUT> m_Wc;
     /*!Penalization on the stationary covariates*/
-    FDAGWR_TRAITS::Dense_Matrix m_Rc;
+    FDAGWR_TRAITS::Sparse_Matrix m_Rc;
     /*!Basis for stationary covariates regressors*/
     functional_matrix<INPUT,OUTPUT> m_omega;
     /*!Coefficients of the basis expansion for stationary covariates regressors: TO BE COMPUTED*/
@@ -51,7 +51,7 @@ private:
     /*!Functional weights for event-dependent covariates*/
     std::vector< functional_matrix<INPUT,OUTPUT> > m_We;
     /*!Penalization on the event-dependent covariates*/
-    FDAGWR_TRAITS::Dense_Matrix m_Re;
+    FDAGWR_TRAITS::Sparse_Matrix m_Re;
     /*!Basis for event-dependent covariates regressors*/
     functional_matrix<INPUT,OUTPUT> m_theta;
     /*!Coefficients of the basis expansion for event-dependent covariates regressors: TO BE COMPUTED*/
@@ -62,7 +62,7 @@ private:
     /*!Functional weights for station-dependent covariates*/
     std::vector< functional_matrix<INPUT,OUTPUT> > m_Ws;
     /*!Penalization on the station-dependent covariates*/
-    FDAGWR_TRAITS::Dense_Matrix m_Rs;
+    FDAGWR_TRAITS::Sparse_Matrix m_Rs;
     /*!Basis for station-dependent covariates regressors*/
     functional_matrix<INPUT,OUTPUT> m_psi;
     /*!Coefficients of the basis expansion for station-dependent covariates regressors: TO BE COMPUTED*/
@@ -73,12 +73,12 @@ public:
     /*!
     * @brief Constructor
     */
-    template<typename FUNC_MATRIX_OBJ, typename SCALAR_MATRIX_OBJ> 
+    template<typename FUNC_MATRIX_OBJ, typename SCALAR_MATRIX_OBJ, typename SCALAR_SPARSE_MATRIX_OBJ> 
     fgwr_fms_esc(FUNC_MATRIX_OBJ &&y,
                  SCALAR_MATRIX_OBJ &&c,
-                 SCALAR_MATRIX_OBJ &&Rc,
-                 SCALAR_MATRIX_OBJ &&Re,
-                 SCALAR_MATRIX_OBJ &&Rs,
+                 SCALAR_SPARSE_MATRIX_OBJ &&Rc,
+                 SCALAR_SPARSE_MATRIX_OBJ &&Re,
+                 SCALAR_SPARSE_MATRIX_OBJ &&Rs,
                  INPUT a,
                  INPUT b,
                  int n_intervals,
