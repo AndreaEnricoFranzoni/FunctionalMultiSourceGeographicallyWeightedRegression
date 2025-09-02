@@ -28,7 +28,7 @@ template< typename INPUT = double, typename OUTPUT = double >
 class fgwr_fms_esc final : public fgwr<INPUT,OUTPUT>
 {
 private:
-    /*!Functional response*/
+    /*!Functional response (nx1)*/
     functional_matrix<INPUT,OUTPUT> m_y;
     /*!Basis for response*/
     functional_matrix<INPUT,OUTPUT> m_phi;
@@ -76,8 +76,11 @@ public:
     template<typename FUNC_MATRIX_OBJ, typename SCALAR_MATRIX_OBJ, typename SCALAR_SPARSE_MATRIX_OBJ> 
     fgwr_fms_esc(FUNC_MATRIX_OBJ &&y,
                  SCALAR_MATRIX_OBJ &&c,
+                 FUNC_MATRIX_OBJ &&Xc,
                  SCALAR_SPARSE_MATRIX_OBJ &&Rc,
+                 FUNC_MATRIX_OBJ &&Xe,
                  SCALAR_SPARSE_MATRIX_OBJ &&Re,
+                 FUNC_MATRIX_OBJ &&Xs,
                  SCALAR_SPARSE_MATRIX_OBJ &&Rs,
                  INPUT a,
                  INPUT b,
@@ -87,8 +90,11 @@ public:
             fgwr<INPUT,OUTPUT>(a,b,n_intervals,number_threads),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
+            m_Xc{std::forward<FUNC_MATRIX_OBJ>(Xc)},
             m_Rc{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rc)},
+            m_Xe{std::forward<FUNC_MATRIX_OBJ>(Xe)},
             m_Re{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Re)},
+            m_Xs{std::forward<FUNC_MATRIX_OBJ>(Xs)},
             m_Rs{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rs)}
             {}
 
@@ -102,13 +108,11 @@ public:
     const 
     override
     {
-        std::cout << "ESC, with OMP threads: " << this->number_threads() << std::endl;
-
         double loc = 0.3;
-        for(std::size_t i = 0; i < m_y.rows(); ++i)
-        {
-            std::cout << "Element (" << i << ",0) of y evaluated in " << loc << ": " << m_y(i,0)(loc) << std::endl;
-        }
+std::cout << "In compute" << std::endl;
+for(std::size_t i = 0; i < Xc.rows(); ++i){
+    for(std::size_t j = 0; j < Xc.cols(); ++j){
+        std::cout << "Unit: " << i+1 << ", covariate: " << j+1 << ", evaluated in " << loc << ": " << Xc(i,j)(loc) << std::endl;}}
     }
 
 };

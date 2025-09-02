@@ -518,10 +518,31 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     ///////////////////////////////
     //wrapping all the functional elements in a functional_matrix
 
+
+    double loc = 0.3;
+for(std::size_t i = 0; i < number_of_statistical_units_; ++i){
+    for(std::size_t j = 0; j < q_C; ++j){
+        Rcout << "Unit: " << i+1 << ", covariate: " << j+1 << ", evaluated in " << loc << ": " << x_C_fd_.eval(loc, j, i) << std::endl;}}
+
+
+
+
     //response: a column vector of dimension nx1
     functional_matrix y = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_,number_threads);
     //Xc: a functional matrix of dimension nxqc
     functional_matrix Xc = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATIONARY_>(x_C_fd_,number_threads);
+    //Xe: a functional matrix of dimension nxqe
+    functional_matrix Xe = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_EVENT_>(x_E_fd_,number_threads);
+    //Xs: a functional matrix of dimension nxqs
+    functional_matrix Xs = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_,number_threads);
+
+Rcout << "Primo wrapper" << std::endl;
+for(std::size_t i = 0; i < Xc.rows(); ++i){
+    for(std::size_t j = 0; j < Xc.cols(); ++j){
+        Rcout << "Unit: " << i+1 << ", covariate: " << j+1 << ", evaluated in " << loc << ": " << Xc(i,j)(loc) << std::endl;}}
+
+
+
 
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
@@ -567,7 +588,8 @@ Rcpp::List FSGWR(double input_el = 1,
 //
 // [[Rcpp::export]]
 Rcpp::List FGWR(double input_el=1,
-                Rcpp::Nullable<int> num_threads = R_NilValue){
+                Rcpp::Nullable<int> num_threads = R_NilValue)
+{
     //funzione per il gwr
 
     //checking and wrapping input parameters

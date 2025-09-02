@@ -76,7 +76,7 @@ public:
     eval(double loc, std::size_t cov_i, std::size_t unit_j)
     const
     {
-        return m_X[cov_i].eval(loc,unit_j); //evaluation of unit_j-th of covariate cov_i-th in location loc
+        return m_X[cov_i].eval(loc,unit_j); //evaluation of unit_j-th of covariate cov_i-th in location loc (starting from 0)
     }
 };
 
