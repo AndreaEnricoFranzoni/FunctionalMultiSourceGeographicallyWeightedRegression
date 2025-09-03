@@ -108,7 +108,7 @@ public:
     operator()
     (std::size_t i, std::size_t j)
     {
-        return i==j ? m_data[i] : m_null_function;
+        return i==j ? m_data[i] : this->m_null_function;
     }
 
     /*!
@@ -119,7 +119,7 @@ public:
     (std::size_t i, std::size_t j)
     const
     {
-        return i==j ? m_data[i] : m_null_function;
+        return i==j ? m_data[i] : this->m_null_function;
     }
 
     /*!
