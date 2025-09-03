@@ -32,7 +32,7 @@
 //! A class for diagonal matrices of functions
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-class functional_matrix_diagonal : public Expr< functional_matrix_sparse<INPUT,OUTPUT>, INPUT, OUTPUT >
+class functional_matrix_diagonal : public Expr< functional_matrix_diagonal<INPUT,OUTPUT>, INPUT, OUTPUT >
 {
 //type of the function stored
 using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
@@ -187,7 +187,7 @@ public:
     {
         return m_data;
     }
-}
+};
 
 
 //! I want to use range for loops with Vector objects.
