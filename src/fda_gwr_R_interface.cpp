@@ -573,15 +573,43 @@ for(std::size_t i = 0; i < Xc.rows(); ++i){
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f4 = [](const double & x){return x-1;};
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f5 = [](const double & x){return 5;};
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_fdm_vec{f1,f2,f3,f4};
-
     functional_matrix_diagonal test_fdm(test_fdm_vec,n_cols_test);
-    double result_test = test_fdm(0,1)(loc);
-    Rcout << result_test << std::endl;
+
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_fdm_vec2{f2,f3,f4,f5};
+    functional_matrix_diagonal test_fdm2(test_fdm_vec,n_cols_test);
+
+    Rcout << "First" << std::endl;
 
     
     for(std::size_t i = 0; i < test_fdm.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm.cols(); ++j){
             Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm(i,j)(loc) << std::endl;
+        }
+    }
+
+    Rcout << "Second" << std::endl;
+
+    for(std::size_t i = 0; i < test_fdm2.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm2.cols(); ++j){
+            Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm2(i,j)(loc) << std::endl;
+        }
+    }
+
+
+    Rcout << "Somme" << std::endl;
+    auto test_fdm_somma = test_fdm + test_fdm2;
+
+    for(std::size_t i = 0; i < test_fdm_somma.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm_somma.cols(); ++j){
+            Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm_somma(i,j)(loc) << std::endl;
+        }
+    }
+
+    Rcout << "Secondo post" << std::endl;
+
+    for(std::size_t i = 0; i < test_fdm2.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm2.cols(); ++j){
+            Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm2(i,j)(loc) << std::endl;
         }
     }
     
