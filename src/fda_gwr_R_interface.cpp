@@ -519,12 +519,14 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     ///////////////////////////////
     //wrapping all the functional elements in a functional_matrix
 
-
     double loc = 0.3;
+/*
+    
 for(std::size_t i = 0; i < number_of_statistical_units_; ++i){
     for(std::size_t j = 0; j < q_C; ++j){
         Rcout << "Unit: " << i+1 << ", covariate: " << j+1 << ", evaluated in " << loc << ": " << x_C_fd_.eval(loc, j, i) << std::endl;}}
 
+*/
 
 
 
@@ -537,12 +539,14 @@ for(std::size_t i = 0; i < number_of_statistical_units_; ++i){
     //Xs: a functional matrix of dimension nxqs
     functional_matrix Xs = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_,number_threads);
 
+/*
 Rcout << "Primo wrapper" << std::endl;
 for(std::size_t i = 0; i < Xc.rows(); ++i){
     for(std::size_t j = 0; j < Xc.cols(); ++j){
         Rcout << "Unit: " << i+1 << ", covariate: " << j+1 << ", evaluated in " << loc << ": " << Xc(i,j)(loc) << std::endl;}}
 
 
+*/
 
 
     //fgwr algorithm
@@ -559,6 +563,24 @@ for(std::size_t i = 0; i < Xc.rows(); ++i){
                                                                                     n_intervals,
                                                                                     number_threads);
     fgwr_algo->compute();
+
+
+    std::size_t n_rows_test = 4;
+    std::size_t n_cols_test = 4;
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f1 = [](const double & x){return x;};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f2 = [](const double & x){return x + 4;};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f3 = [](const double & x){return x*x;};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f4 = [](const double & x){return x-1;};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f5 = [](const double & x){return 5;};
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_fdm_vec{f1,f2,f3,f4};
+
+    functional_matrix_diagonal test_fdm(test_fdm_vec,n_cols_test);
+
+    for(std::size_t i = 0; i < test_fdm.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm.cols(); ++j){
+            Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm(i,j)(loc) << std::endl;
+        }
+    }
 
 
     //returning element
