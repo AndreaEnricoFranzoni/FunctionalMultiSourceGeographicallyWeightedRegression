@@ -578,13 +578,13 @@ for(std::size_t i = 0; i < Xc.rows(); ++i){
     double result_test = test_fdm(0,1)(loc);
     Rcout << result_test << std::endl;
 
-    /*
+    
     for(std::size_t i = 0; i < test_fdm.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm.cols(); ++j){
             Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm(i,j)(loc) << std::endl;
         }
     }
-    */
+    
 
 
     //returning element

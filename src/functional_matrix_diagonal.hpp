@@ -110,14 +110,7 @@ public:
     operator()
     (std::size_t i, std::size_t j)
     {
-        if(i==j)
-        {
-            return m_data[i];
-        }
-        else
-        {
-            return this->m_null_function_non_static;
-        }
+        return i==j ? m_data[i] : this->m_null_function_non_static;
     }
 
     /*!
