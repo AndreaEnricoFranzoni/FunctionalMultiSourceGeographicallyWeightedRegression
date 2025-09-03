@@ -575,7 +575,7 @@ for(std::size_t i = 0; i < Xc.rows(); ++i){
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_fdm_vec{f1,f2,f3,f4};
 
     functional_matrix_diagonal test_fdm(test_fdm_vec,n_cols_test);
-    Rcout << test_fdm_vec(0,1)(loc) << std::endl;
+    Rcout << test_fdm(0,1)(loc) << std::endl;
 
     /*
     for(std::size_t i = 0; i < test_fdm.rows(); ++i){
