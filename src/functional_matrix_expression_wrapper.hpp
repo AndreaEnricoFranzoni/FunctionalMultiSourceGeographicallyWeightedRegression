@@ -106,7 +106,7 @@ struct Expr
   size()
   const
   {
-    return asDerived().rows() * asDerived().cols();
+    return asDerived().size();
   }
 
   //! Delegates to the wrapped expression the addressing operator

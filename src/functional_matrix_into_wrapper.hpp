@@ -93,19 +93,6 @@ wrap_into_fm(const functional_data_covariates<domain_type,stationarity_t> &X,
     }
 #endif
 
-/*
-#ifdef _OPENMP
-#pragma omp parallel for shared(X) num_threads(number_threads)
-    for(std::size_t unit_i = 0; unit_i < X.n(); ++i)
-    {
-        for (std::size_t cov_j = 0; cov_j < X.q(); ++cov_j)
-        {
-            f[cov_j*X.() + unit_i] = [unit_i,cov_j,&X](F_OBJ_INPUT x){return X.eval(x,cov_j,unit_i);};
-        }
-    }
-#endif
-*/
-
     functional_matrix<INPUT,OUTPUT> fm(std::move(f),X.n(),X.q());
     return fm;
 }

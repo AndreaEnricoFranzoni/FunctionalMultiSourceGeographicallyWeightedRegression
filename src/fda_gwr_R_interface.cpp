@@ -48,6 +48,7 @@
 
 
 #include "functional_matrix.hpp"
+#include "functional_matrix_diagonal.hpp"
 #include "functional_matrix_operators.hpp"
 #include "functional_matrix_into_wrapper.hpp"
 
@@ -194,7 +195,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
 
 
-    Rcout << "fdagwr.39: " << std::endl;
+    Rcout << "fdagwr.9: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                     //data type
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)

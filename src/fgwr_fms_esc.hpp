@@ -30,40 +30,54 @@ class fgwr_fms_esc final : public fgwr<INPUT,OUTPUT>
 private:
     /*!Functional response (nx1)*/
     functional_matrix<INPUT,OUTPUT> m_y;
-    /*!Basis for response*/
+    /*! @brief Basis for response (nxLy)
+    * @todo CAPIRE LE DIMENSIONI E LA STRUTTURA + MATRICE DI FUNZIONI SPARSA
+    */
     functional_matrix<INPUT,OUTPUT> m_phi;
-    /*!Coefficients of the basis expansion for response*/
+    /*!Coefficients of the basis expansion for response ()*/
     FDAGWR_TRAITS::Dense_Matrix m_c;
 
     /*!Functional stationary covariates (n x qc)*/
     functional_matrix<INPUT,OUTPUT> m_Xc;
-    /*!Functional weights for stationary covariates*/
+    /*! @brief Functional weights for stationary covariates (n elements of diagonal n x n)
+    * @todo MATRICE DI FUNZIONI DIANGONALE
+    */
     functional_matrix<INPUT,OUTPUT> m_Wc;
-    /*!Penalization on the stationary covariates*/
+    /*!Scalar matrix with the penalization on the stationary covariates (sparse Lc x Lc, where Lc is the sum of the basis of each C covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Rc;
-    /*!Basis for stationary covariates regressors*/
+    /*! @brief Basis for stationary covariates regressors (sparse qC x Lc)
+    * @todo MATRICE DI FUNZIONI SPARSA
+    */
     functional_matrix<INPUT,OUTPUT> m_omega;
     /*!Coefficients of the basis expansion for stationary covariates regressors: TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_bc;
 
     /*!Functional event-dependent covariates (n x qe)*/
     functional_matrix<INPUT,OUTPUT> m_Xe;
-    /*!Functional weights for event-dependent covariates*/
+    /*! @brief Functional weights for event-dependent covariates (n elements of diagonal n x n)
+    * @todo MATRICE DI FUNZIONI DIANGONALE
+    */
     std::vector< functional_matrix<INPUT,OUTPUT> > m_We;
-    /*!Penalization on the event-dependent covariates*/
+    /*!Scalar matrix with the penalization on the event-dependent covariates (sparse Le x Le, where Le is the sum of the basis of each E covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Re;
-    /*!Basis for event-dependent covariates regressors*/
+    /*! @brief Basis for event-dependent covariates regressors (sparse qE x Le)
+    * @todo MATRICE DI FUNZIONI SPARSA
+    */
     functional_matrix<INPUT,OUTPUT> m_theta;
     /*!Coefficients of the basis expansion for event-dependent covariates regressors: TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_be;
 
     /*!Functional station-dependent covariates (n x qs)*/
     functional_matrix<INPUT,OUTPUT> m_Xs;
-    /*!Functional weights for station-dependent covariates*/
+    /*! @brief Functional weights for station-dependent covariates (n elements of diagonal n x n)
+    * @todo MATRICE DI FUNZIONI DIANGONALE
+    */
     std::vector< functional_matrix<INPUT,OUTPUT> > m_Ws;
-    /*!Penalization on the station-dependent covariates*/
+    /*!Scalar matrix with the penalization on the station-dependent covariates (sparse Ls x Ls, where Ls is the sum of the basis of each S covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Rs;
-    /*!Basis for station-dependent covariates regressors*/
+    /*! @brief Basis for station-dependent covariates regressors (sparse qS x Ls)
+    * @todo MATRICE DI FUNZIONI SPARSA
+    */
     functional_matrix<INPUT,OUTPUT> m_psi;
     /*!Coefficients of the basis expansion for station-dependent covariates regressors: TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_bs;
