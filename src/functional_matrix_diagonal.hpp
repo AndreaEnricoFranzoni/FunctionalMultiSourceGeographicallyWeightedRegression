@@ -39,7 +39,7 @@ using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
 using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
     //null function
-    static constexpr auto m_null_function = [](F_OBJ_INPUT x){ return static_cast<OUTPUT>(0);};
+    static constexpr F_OBJ m_null_function = [](F_OBJ_INPUT x){ return static_cast<OUTPUT>(0);};
 
 private:
     /*!Number of rows*/

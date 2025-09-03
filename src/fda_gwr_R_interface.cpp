@@ -576,11 +576,13 @@ for(std::size_t i = 0; i < Xc.rows(); ++i){
 
     functional_matrix_diagonal test_fdm(test_fdm_vec,n_cols_test);
 
+    /*
     for(std::size_t i = 0; i < test_fdm.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm.cols(); ++j){
             Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm(i,j)(loc) << std::endl;
         }
     }
+    */
 
 
     //returning element
