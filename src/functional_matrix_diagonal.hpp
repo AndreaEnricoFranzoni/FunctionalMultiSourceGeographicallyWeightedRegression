@@ -38,8 +38,10 @@ class functional_matrix_diagonal : public Expr< functional_matrix_diagonal<INPUT
 using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
 using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
-    //null function
+    //null function (const version)
     inline static const F_OBJ m_null_function = [](F_OBJ_INPUT x){ return static_cast<OUTPUT>(0);};
+    //null function (non-const verion)
+    inline static F_OBJ m_null_function_non_static = [](F_OBJ_INPUT x){ return static_cast<OUTPUT>(0);};
 
 private:
     /*!Number of rows*/
@@ -108,7 +110,14 @@ public:
     operator()
     (std::size_t i, std::size_t j)
     {
-        return i==j ? m_data[i] : this->m_null_function;
+        if(i==j)
+        {
+            return m_data[i];
+        }
+        else
+        {
+            return this->m_null_function_non_static;
+        }
     }
 
     /*!
