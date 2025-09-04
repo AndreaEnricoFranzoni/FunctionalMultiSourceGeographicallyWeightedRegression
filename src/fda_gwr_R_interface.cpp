@@ -574,7 +574,7 @@ for(std::size_t i = 0; i < Xc.rows(); ++i){
     fgwr_algo->compute();
 
 
-    std::size_t n_rows_test = 4;
+    std::size_t n_rows_test = 2;
     std::size_t n_cols_test = 4;
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f1 = [](const double & x){return x;};
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f2 = [](const double & x){return x + 4;};
@@ -584,8 +584,23 @@ for(std::size_t i = 0; i < Xc.rows(); ++i){
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_fdm_vec{f1,f2,f3,f4};
     functional_matrix_diagonal test_fdm(test_fdm_vec,n_cols_test);
 
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_fdm_vec2{f1,f2,f3,f4,f2,f3,f4,f5,f3,f4,f5,f1,f4,f5,f1,f2};
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_fdm_vec2{f1,f2,f3,f4,f2,f3,f4,f5};
     functional_matrix test_fdm_dense(test_fdm_vec2,n_rows_test,n_cols_test);
+    Rcout << "Nrows: " << test_fdm_dense.rows() << ", ncols: " << test_fdm_dense.cols() << std::endl;
+    for(std::size_t i = 0; i < test_fdm_dense.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm_dense.cols(); ++j){
+            Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
+        }
+    }
+
+    test_fdm_dense.transpose();
+    Rcout << "Transpose: nrows: " << test_fdm_dense.rows() << ", ncols: " << test_fdm_dense.cols() << std::endl;
+    for(std::size_t i = 0; i < test_fdm_dense.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm_dense.cols(); ++j){
+            Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
+        }
+    }
+
 
     /*
     Rcout << "First" << std::endl;

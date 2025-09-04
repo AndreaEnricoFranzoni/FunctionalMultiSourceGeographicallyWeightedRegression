@@ -128,6 +128,7 @@ public:
     {
         double loc = 0.3;
 
+/*
         std::cout << "In compute" << std::endl;
         for(std::size_t unit_i = 0; unit_i < m_We.size(); ++unit_i)
         {
@@ -137,6 +138,7 @@ public:
                 for(std::size_t j = 0; j < We_i.cols(); ++j){
                     std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << We_i(i,j)(loc) << std::endl;}}
         }
+*/
 
 
 

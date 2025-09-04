@@ -165,6 +165,35 @@ public:
         return m_rows*m_cols;
     }
 
+    /*!
+    * @brief Transposing the functional matrix
+    */
+    void
+    transpose()
+    {
+        if(m_rows!=static_cast<std::size_t>(1) && m_cols!=static_cast<std::size_t>(1))
+        {
+            std::vector< F_OBJ > temp;
+            temp.resize(this->size());
+
+#ifdef _OPENMP
+#pragma omp parallel for collapse(2) shared(X) num_threads(8)
+            for (std::size_t i = 0; i < m_rows; ++i)
+            {
+                for (std::size_t j = 0; j < m_cols; ++j)
+                {
+                    temp[i*m_cols + j] = m_data[j*m_rows + i];
+                }
+            }
+#endif
+            //swap them
+            std::swap(m_data,temp);
+            temp.clear();
+        }
+
+        std::swap(m_rows,m_cols);
+    }
+
     //! May be cast to a std::vector &
     /*!
     This way I can use all the methods of a std::vector!
