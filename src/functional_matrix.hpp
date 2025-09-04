@@ -177,7 +177,7 @@ public:
             temp.resize(this->size());
 
 #ifdef _OPENMP
-#pragma omp parallel for collapse(2) shared(X) num_threads(8)
+#pragma omp parallel for collapse(2) shared(m_rows,m_cols,temp,m_data) num_threads(8)
             for (std::size_t i = 0; i < m_rows; ++i)
             {
                 for (std::size_t j = 0; j < m_cols; ++j)
