@@ -194,6 +194,70 @@ public:
         std::swap(m_rows,m_cols);
     }
 
+    /*!
+    * @brief Getting a specific row, as row vector
+    */
+    functional_matrix
+    get_row(std::size_t idx)
+    const
+    {
+        std::vector< F_OBJ > row;
+        row.resize(m_cols);
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(row,idx,m_rows,m_cols,m_data) num_threads(8)
+    for(std::size_t j = 0; j < m_cols; ++j)
+    {
+        row[j] = m_data[j*m_rows + idx];
+    }
+#endif
+        functional_matrix res(row,1,m_cols);
+        return res;
+    }
+
+    /*!
+    * @brief Getting a specific column, as column vector
+    */
+    functional_matrix
+    get_col(std::size_t idx)
+    const
+    {
+        std::vector< F_OBJ > col;
+        col.resize(m_rows);
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(col,idx,m_rows,m_data) num_threads(8)
+    for(std::size_t i = 0; i < m_rows; ++i)
+    {
+        col[i] = m_data[idx*m_rows + i];
+    }
+#endif
+        functional_matrix res(col,m_rows,1);
+        return res;
+    }
+
+    /*!
+    * @brief Reducing all the elements of the matrix by summation
+    */
+    F_OBJ
+    reduce()
+    const
+    {
+        //functional matrix storing the reduction by summation of all the elements
+        functional_matrix reduction;
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(reduction,m_data) num_threads(8)
+        for(std::size_t i = 0; i < this->size(); ++i)
+        {
+            functional_matrix elem(1,1,m_data[i]);
+            reduction = reduction + elem;       //exploiting ETs
+        }
+#endif
+        return reduction(0,0);
+    }
+    
+
     //! May be cast to a std::vector &
     /*!
     This way I can use all the methods of a std::vector!
