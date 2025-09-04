@@ -619,9 +619,7 @@ for(std::size_t i = 0; i < Xc.rows(); ++i){
             Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
         }
     }
-    Rcout<<"Statics"<<std::endl;
-    Rcout << functional_matrix_diagonal<double,double>::m_null_function(0.4) << std::endl;
-Rcout << functional_matrix_diagonal<double,double>::m_null_function_non_static(0.4) << std::endl;
+
     
 
 
