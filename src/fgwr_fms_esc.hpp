@@ -39,10 +39,8 @@ private:
 
     /*!Functional stationary covariates (n x qc)*/
     functional_matrix<INPUT,OUTPUT> m_Xc;
-    /*! @brief Functional weights for stationary covariates (n elements of diagonal n x n)
-    * @todo MATRICE DI FUNZIONI DIANGONALE
-    */
-    functional_matrix<INPUT,OUTPUT> m_Wc;
+    /*!Functional weights for stationary covariates (n elements of diagonal n x n)*/
+    functional_matrix_diagonal<INPUT,OUTPUT> m_Wc;
     /*!Scalar matrix with the penalization on the stationary covariates (sparse Lc x Lc, where Lc is the sum of the basis of each C covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Rc;
     /*! @brief Basis for stationary covariates regressors (sparse qC x Lc)
@@ -57,7 +55,7 @@ private:
     /*! @brief Functional weights for event-dependent covariates (n elements of diagonal n x n)
     * @todo MATRICE DI FUNZIONI DIANGONALE
     */
-    std::vector< functional_matrix<INPUT,OUTPUT> > m_We;
+    std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > m_We;
     /*!Scalar matrix with the penalization on the event-dependent covariates (sparse Le x Le, where Le is the sum of the basis of each E covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Re;
     /*! @brief Basis for event-dependent covariates regressors (sparse qE x Le)
@@ -72,7 +70,7 @@ private:
     /*! @brief Functional weights for station-dependent covariates (n elements of diagonal n x n)
     * @todo MATRICE DI FUNZIONI DIANGONALE
     */
-    std::vector< functional_matrix<INPUT,OUTPUT> > m_Ws;
+    std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > m_Ws;
     /*!Scalar matrix with the penalization on the station-dependent covariates (sparse Ls x Ls, where Ls is the sum of the basis of each S covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Rs;
     /*! @brief Basis for station-dependent covariates regressors (sparse qS x Ls)
@@ -87,14 +85,21 @@ public:
     /*!
     * @brief Constructor
     */
-    template<typename FUNC_MATRIX_OBJ, typename SCALAR_MATRIX_OBJ, typename SCALAR_SPARSE_MATRIX_OBJ> 
+    template<typename FUNC_MATRIX_OBJ, 
+             typename FUNC_DIAG_MATRIX_OBJ, 
+             typename FUNC_DIAG_MATRIX_VEC_OBJ, 
+             typename SCALAR_MATRIX_OBJ, 
+             typename SCALAR_SPARSE_MATRIX_OBJ> 
     fgwr_fms_esc(FUNC_MATRIX_OBJ &&y,
                  SCALAR_MATRIX_OBJ &&c,
                  FUNC_MATRIX_OBJ &&Xc,
+                 FUNC_DIAG_MATRIX_OBJ &&Wc,
                  SCALAR_SPARSE_MATRIX_OBJ &&Rc,
                  FUNC_MATRIX_OBJ &&Xe,
+                 FUNC_DIAG_MATRIX_VEC_OBJ &&We,
                  SCALAR_SPARSE_MATRIX_OBJ &&Re,
                  FUNC_MATRIX_OBJ &&Xs,
+                 FUNC_DIAG_MATRIX_VEC_OBJ &&Ws,
                  SCALAR_SPARSE_MATRIX_OBJ &&Rs,
                  INPUT a,
                  INPUT b,
@@ -105,10 +110,13 @@ public:
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
             m_Xc{std::forward<FUNC_MATRIX_OBJ>(Xc)},
+            m_Wc{std::forward<FUNC_DIAG_MATRIX_OBJ>(Wc)},
             m_Rc{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rc)},
             m_Xe{std::forward<FUNC_MATRIX_OBJ>(Xe)},
+            m_We{std::forward<FUNC_DIAG_MATRIX_VEC_OBJ>(We)},
             m_Re{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Re)},
             m_Xs{std::forward<FUNC_MATRIX_OBJ>(Xs)},
+            m_Ws{std::forward<FUNC_DIAG_MATRIX_VEC_OBJ>(Ws)},
             m_Rs{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rs)}
             {}
 
@@ -123,12 +131,12 @@ public:
     override
     {
         double loc = 0.3;
-/*
+
 std::cout << "In compute" << std::endl;
-for(std::size_t i = 0; i < m_Xc.rows(); ++i){
-    for(std::size_t j = 0; j < m_Xc.cols(); ++j){
-        std::cout << "Unit: " << i+1 << ", covariate: " << j+1 << ", evaluated in " << loc << ": " << m_Xc(i,j)(loc) << std::endl;}}
-*/
+for(std::size_t i = 0; i < m_Wc.rows(); ++i){
+    for(std::size_t j = 0; j < m_Wc.cols(); ++j){
+        std::cout << "Unit: " << i+1 << ", covariate: " << j+1 << ", evaluated in " << loc << ": " << m_Wc(i,j)(loc) << std::endl;}}
+
     }
 
 };

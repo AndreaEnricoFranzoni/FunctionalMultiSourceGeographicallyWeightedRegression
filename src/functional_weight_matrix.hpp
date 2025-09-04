@@ -26,7 +26,6 @@
 #include "traits_fdagwr.hpp"
 #include "functional_matrix_storing_type.hpp"
 #include "functional_matrix_utils.hpp"
-#include "concepts"
 
 #include <cassert>
 
