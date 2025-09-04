@@ -138,11 +138,11 @@ wrap_into_fm(const functional_weight_matrix_stationary<INPUT,OUTPUT,domain_type,
 * @note It stores the functions objects diagonally, as an n x n matrix, where n is the number of statistical units
 * @todo WRITE IT
 */
-template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry,  template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >
+template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry,  template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::NON_STATIONARY >
     requires (std::integral<INPUT> || std::floating_point<INPUT>) && (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
 inline
 std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >
-wrap_into_fm(const functional_weight_matrix_stationary<INPUT,OUTPUT,domain_type,basis_type,stationarity_t> &W,
+wrap_into_fm(const functional_weight_matrix_non_stationary<INPUT,OUTPUT,domain_type,basis_type,stationarity_t> &W,
              int number_threads)
 {
     static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY   ||
