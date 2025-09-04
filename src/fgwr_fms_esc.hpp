@@ -52,9 +52,7 @@ private:
 
     /*!Functional event-dependent covariates (n x qe)*/
     functional_matrix<INPUT,OUTPUT> m_Xe;
-    /*! @brief Functional weights for event-dependent covariates (n elements of diagonal n x n)
-    * @todo MATRICE DI FUNZIONI DIANGONALE
-    */
+    /*!Functional weights for event-dependent covariates (n elements of diagonal n x n)*/
     std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > m_We;
     /*!Scalar matrix with the penalization on the event-dependent covariates (sparse Le x Le, where Le is the sum of the basis of each E covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Re;
@@ -67,9 +65,7 @@ private:
 
     /*!Functional station-dependent covariates (n x qs)*/
     functional_matrix<INPUT,OUTPUT> m_Xs;
-    /*! @brief Functional weights for station-dependent covariates (n elements of diagonal n x n)
-    * @todo MATRICE DI FUNZIONI DIANGONALE
-    */
+    /*!Functional weights for station-dependent covariates (n elements of diagonal n x n)*/
     std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > m_Ws;
     /*!Scalar matrix with the penalization on the station-dependent covariates (sparse Ls x Ls, where Ls is the sum of the basis of each S covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Rs;
@@ -103,10 +99,10 @@ public:
                  SCALAR_SPARSE_MATRIX_OBJ &&Rs,
                  INPUT a,
                  INPUT b,
-                 int n_intervals,
+                 int n_intervals_integration,
                  int number_threads)
         :
-            fgwr<INPUT,OUTPUT>(a,b,n_intervals,number_threads),
+            fgwr<INPUT,OUTPUT>(a,b,n_intervals_integration,number_threads),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
             m_Xc{std::forward<FUNC_MATRIX_OBJ>(Xc)},
@@ -132,10 +128,17 @@ public:
     {
         double loc = 0.3;
 
-std::cout << "In compute" << std::endl;
-for(std::size_t i = 0; i < m_Wc.rows(); ++i){
-    for(std::size_t j = 0; j < m_Wc.cols(); ++j){
-        std::cout << "Unit: " << i+1 << ", covariate: " << j+1 << ", evaluated in " << loc << ": " << m_Wc(i,j)(loc) << std::endl;}}
+        std::cout << "In compute" << std::endl;
+        for(std::size_t unit_i = 0; unit_i < m_Ws.size(); ++unit_i)
+        {
+            auto Ws_i = m_Ws[unit_i];
+            std::cout << "Unit: " << unit_i+1 << std::endl;
+            for(std::size_t i = 0; i < Ws_i.rows(); ++i){
+                for(std::size_t j = 0; j < Ws_i.cols(); ++j){
+                    std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << Ws_i(i,j)(loc) << std::endl;}}
+        }
+
+
 
     }
 
