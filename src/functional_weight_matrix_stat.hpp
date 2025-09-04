@@ -31,13 +31,17 @@
 */
 
 
-template< class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >  
-    requires fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
-class functional_weight_matrix_stationary : public functional_weight_matrix_base< functional_weight_matrix_stationary<domain_type,basis_type>, domain_type, basis_type >
+template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >  
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
+class functional_weight_matrix_stationary : public functional_weight_matrix_base< functional_weight_matrix_stationary<INPUT,OUTPUT,domain_type,basis_type>, INPUT, OUTPUT, domain_type, basis_type >
 {
+    //type of the function stored
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
+
 private:
     /*!Vector of diagonal matrices storing the weights*/
-    WeightMatrixType<stationarity_t> m_weights;
+    WeightMatrixType<INPUT,OUTPUT,stationarity_t> m_weights;
 
 public:
     /*!
@@ -49,8 +53,8 @@ public:
     functional_weight_matrix_stationary(const functional_data<domain_type,basis_type> &y_recostruction_weights_fd,
                                         int number_threads)
                       : 
-                      functional_weight_matrix_base<functional_weight_matrix_stationary,domain_type,basis_type>(y_recostruction_weights_fd,
-                                                                                                                number_threads) 
+                      functional_weight_matrix_base<functional_weight_matrix_stationary,INPUT,OUTPUT,domain_type,basis_type>(y_recostruction_weights_fd,
+                                                                                                                             number_threads) 
                       {   
                         static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::STATIONARY,
                                       "Functional weight matrix for stationary covariates needs FDAGWR_COVARIATES_TYPES::STATIONARY as template parameter");
@@ -60,7 +64,7 @@ public:
     * @brief Getter for the functional stationary weight matrix
     * @return the private m_weights
     */
-    const WeightMatrixType<stationarity_t>& weights() const {return m_weights;}
+    const WeightMatrixType<INPUT,OUTPUT,stationarity_t>& weights() const {return m_weights;}
 
     /*!
     * @brief Function to compute stationary weights
@@ -79,7 +83,7 @@ public:
 #endif
       for(std::size_t i = 0; i < n_stat_units; ++i)
       {
-        FDAGWR_TRAITS::f_type w_i = [i,this](const double & loc){return this->y_recostruction_weights_fd().eval(loc,i);};
+        F_OBJ w_i = [i,this](F_OBJ_INPUT loc){return this->y_recostruction_weights_fd().eval(loc,i);};
         m_weights[i] = w_i;
       }
     }

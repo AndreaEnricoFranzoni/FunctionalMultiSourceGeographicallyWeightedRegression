@@ -97,4 +97,83 @@ wrap_into_fm(const functional_data_covariates<domain_type,stationarity_t> &X,
     return fm;
 }
 
+
+
+/*!
+* @brief Function to wrap a functional stationary weight matrix object functional_weight_matrix_stationary into a functional diagonal matrix object functional_matrix_diagonal
+* @note It stores the functions objects diagonally, as an n x n matrix, where n is the number of statistical units
+*/
+template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry,  template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>) && (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
+inline
+functional_matrix_diagonal<INPUT,OUTPUT>
+wrap_into_fm(const functional_weight_matrix_stationary<INPUT,OUTPUT,domain_type,basis_type,stationarity_t> &W,
+             int number_threads)
+{
+    static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::STATIONARY,
+                  "Functional weight matrix for stationary covariates needs FDAGWR_COVARIATES_TYPES::STATIONARY as template parameter");
+
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+
+    std::vector< F_OBJ > f;
+    std::size_t n = W.n();
+    f.resize(n);
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(n,W) num_threads(number_threads)
+    for(std::size_t unit_i = 0; unit_i < n; ++unit_i)
+    {
+        f[unit_i] = W.weights()[unit_i];
+    }
+#endif
+
+    functional_matrix_diagonal<INPUT,OUTPUT> fm(std::move(f),n);
+    return fm;
+}
+
+
+
+/*!
+* @brief Function to wrap a functional non-stationary weight matrix object functional_weight_matrix_stationary into a functional diagonal matrix object functional_matrix_diagonal
+* @note It stores the functions objects diagonally, as an n x n matrix, where n is the number of statistical units
+* @todo WRITE IT
+*/
+template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry,  template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>) && (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
+inline
+std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >
+wrap_into_fm(const functional_weight_matrix_stationary<INPUT,OUTPUT,domain_type,basis_type,stationarity_t> &W,
+             int number_threads)
+{
+    static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY   ||
+                  stationarity_t == FDAGWR_COVARIATES_TYPES::EVENT            ||
+                  stationarity_t == FDAGWR_COVARIATES_TYPES::STATION,
+                  "Functional weight matrix for non stationary covariates needs FDAGWR_COVARIATES_TYPES::NON_STATIONARY or FDAGWR_COVARIATES_TYPES::EVENT or FDAGWR_COVARIATES_TYPES::STATION as template parameter");
+
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+
+    std::size_t n = W.n();  //number of statistical units
+    //storing all the functional diagonal matrices
+    std::vector<functional_matrix_diagonal<INPUT,OUTPUT>> fm;
+    fm.reserve(n);
+
+    for(std::size_t i = 0; i < n; ++i)
+    {
+        std::vector< F_OBJ > f;
+        f.resize(n);
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(i,n,W) num_threads(number_threads)
+        for(std::size_t unit_i = 0; unit_i < n; ++unit_i)
+        {
+            f[unit_i] = W.weights()[i][unit_i];
+        }
+#endif
+
+        fm.emplace_back(std::move(f),n);
+    }
+
+    return fm;
+}
+
 #endif  /*FUNCTIONAL_MATRIX_INTO_WRAPPER_HPP*/

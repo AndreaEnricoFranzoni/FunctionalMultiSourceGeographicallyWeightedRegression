@@ -195,7 +195,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
 
 
-    Rcout << "fdagwr.9: " << std::endl;
+    Rcout << "fdagwr.8: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                     //data type
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
@@ -466,20 +466,20 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     //FUNCTIONAL WEIGHT MATRIX
     //stationary
-    functional_weight_matrix_stationary<_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATIONARY_> W_C(rec_weights_y_fd_,
-                                                                                                                   number_threads);
+    functional_weight_matrix_stationary<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATIONARY_> W_C(rec_weights_y_fd_,
+                                                                                                                                                    number_threads);
     W_C.compute_weights();                                                      
     //events
-    functional_weight_matrix_non_stationary<_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_,_KERNEL_,_DISTANCE_> W_E(rec_weights_y_fd_,
-                                                                                                                                      std::move(distances_events_cov_),
-                                                                                                                                      kernel_bandwith_events_cov_,
-                                                                                                                                      number_threads);
+    functional_weight_matrix_non_stationary<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_,_KERNEL_,_DISTANCE_> W_E(rec_weights_y_fd_,
+                                                                                                                                                                       std::move(distances_events_cov_),
+                                                                                                                                                                       kernel_bandwith_events_cov_,
+                                                                                                                                                                       number_threads);
     W_E.compute_weights();                                                                         
     //stations
-    functional_weight_matrix_non_stationary<_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_,_KERNEL_,_DISTANCE_> W_S(rec_weights_y_fd_,
-                                                                                                                                        std::move(distances_stations_cov_),
-                                                                                                                                        kernel_bandwith_stations_cov_,
-                                                                                                                                        number_threads);
+    functional_weight_matrix_non_stationary<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_,_KERNEL_,_DISTANCE_> W_S(rec_weights_y_fd_,
+                                                                                                                                                                         std::move(distances_stations_cov_),
+                                                                                                                                                                         kernel_bandwith_stations_cov_,
+                                                                                                                                                                         number_threads);
     W_S.compute_weights();
 
 
@@ -578,6 +578,7 @@ for(std::size_t i = 0; i < Xc.rows(); ++i){
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_fdm_vec2{f1,f2,f3,f4,f2,f3,f4,f5,f3,f4,f5,f1,f4,f5,f1,f2};
     functional_matrix test_fdm_dense(test_fdm_vec2,n_rows_test,n_cols_test);
 
+    /*
     Rcout << "First" << std::endl;
 
     
@@ -619,6 +620,7 @@ for(std::size_t i = 0; i < Xc.rows(); ++i){
             Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
         }
     }
+    */
 
     
 

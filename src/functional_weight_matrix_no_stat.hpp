@@ -42,14 +42,17 @@ template <KERNEL_FUNC kernel_func>
 using KERNEL_FUNC_T = std::integral_constant<KERNEL_FUNC, kernel_func>;
 
 
-template< class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::NON_STATIONARY, KERNEL_FUNC kernel_func = KERNEL_FUNC::GAUSSIAN, DISTANCE_MEASURE dist_meas = DISTANCE_MEASURE::EUCLIDEAN >  
-    requires fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
-class functional_weight_matrix_non_stationary : public functional_weight_matrix_base< functional_weight_matrix_non_stationary<domain_type,basis_type,stationarity_t,kernel_func,dist_meas>, domain_type, basis_type >
+template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::NON_STATIONARY, KERNEL_FUNC kernel_func = KERNEL_FUNC::GAUSSIAN, DISTANCE_MEASURE dist_meas = DISTANCE_MEASURE::EUCLIDEAN >  
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
+class functional_weight_matrix_non_stationary : public functional_weight_matrix_base< functional_weight_matrix_non_stationary<INPUT,OUTPUT,domain_type,basis_type,stationarity_t,kernel_func,dist_meas>, INPUT, OUTPUT, domain_type, basis_type >
 {
+    //type of the function stored
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
 private:
     /*!Vector of diagonal matrices storing the weights*/
-    WeightMatrixType<stationarity_t> m_weights;
+    WeightMatrixType<INPUT,OUTPUT,stationarity_t> m_weights;
     /*!Distance matrix*/
     distance_matrix<dist_meas> m_distance_matrix;
     /*!Kernel bandwith*/
@@ -75,8 +78,8 @@ public:
                                             double kernel_bwt,
                                             int number_threads)
                                 : 
-                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary,domain_type,basis_type>(y_recostruction_weights_fd,
-                                                                                                                                number_threads),
+                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary,INPUT,OUTPUT,domain_type,basis_type>(y_recostruction_weights_fd,
+                                                                                                                                             number_threads),
                                   m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)},
                                   m_kernel_bandwith(kernel_bwt) 
                                 {                                       
@@ -90,7 +93,7 @@ public:
     * @brief Getter for the functional non-stationary weight matrix
     * @return the private m_weights
     */
-    const WeightMatrixType<stationarity_t>& weights() const {return m_weights;}
+    const WeightMatrixType<INPUT,OUTPUT,stationarity_t>& weights() const {return m_weights;}
 
     /*!
     * @brief Evaluation of kernel function for the non-stationary weights. Tag-dispacther.
@@ -130,14 +133,14 @@ public:
                        [this](double dist){return this->kernel_eval(dist,this->m_kernel_bandwith);});
 
         //preparing the container for the functional non-stationary matrix of unit i-th 
-        std::vector< FDAGWR_TRAITS::f_type > weights_unit_i;
+        std::vector< F_OBJ > weights_unit_i;
         weights_unit_i.reserve(n_stat_units);
 
         //computing the interaction within kernel application to distances and response reconstruction, unit i-th and all the other ones
         for (std::size_t j = 0; j < n_stat_units; ++j)
         {          
           double alpha_i_j = weights_non_stat_unit_i[j];
-          FDAGWR_TRAITS::f_type w_i_j = [j,alpha_i_j,this](const double & loc){ return alpha_i_j * this->y_recostruction_weights_fd().eval(loc,j);};
+          F_OBJ w_i_j = [j,alpha_i_j,this](F_OBJ_INPUT loc){ return alpha_i_j * this->y_recostruction_weights_fd().eval(loc,j);};
           weights_unit_i.push_back(w_i_j);
         }
         

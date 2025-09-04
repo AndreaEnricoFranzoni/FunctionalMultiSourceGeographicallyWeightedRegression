@@ -24,6 +24,7 @@
 
 #include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
+#include "functional_matrix_storing_type.hpp"
 #include "concepts"
 
 #include <cassert>
@@ -40,10 +41,11 @@
 /*!
 * @brief Indicating the container to storing the functional weight matrix
 */
-template <FDAGWR_COVARIATES_TYPES stationarity_t>
+template <typename INPUT = double, typename OUTPUT = double, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY>
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 using WeightMatrixType = std::conditional<stationarity_t == FDAGWR_COVARIATES_TYPES::STATIONARY,
-                                          std::vector< FDAGWR_TRAITS::f_type >,        //se stazionario, ogni elemento del vettore corrisponde ad un valore dell'ascissa, e di conseguenza vi è la giusta matrice peso
-                                          std::vector< std::vector< FDAGWR_TRAITS::f_type >>>::type;
+                                          std::vector< FUNC_OBJ< INPUT,OUTPUT > >,        //se stazionario, ogni elemento del vettore corrisponde ad un valore dell'ascissa, e di conseguenza vi è la giusta matrice peso
+                                          std::vector< std::vector< FUNC_OBJ< INPUT,OUTPUT > >>>::type;
 
 
 
@@ -56,8 +58,8 @@ using WeightMatrixType = std::conditional<stationarity_t == FDAGWR_COVARIATES_TY
 * @tparam kernel_func kernel function for the evaluation of the weights (enumerator)
 * @details It is the base class. Polymorphism is known at compile time thanks to Curiously Recursive Template Pattern (CRTP) 
 */
-template< class D, class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis >
-    requires fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
+template< class D, typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
 class functional_weight_matrix_base
 {
 
