@@ -129,13 +129,13 @@ public:
         double loc = 0.3;
 
         std::cout << "In compute" << std::endl;
-        for(std::size_t unit_i = 0; unit_i < m_Ws.size(); ++unit_i)
+        for(std::size_t unit_i = 0; unit_i < m_We.size(); ++unit_i)
         {
-            auto Ws_i = m_Ws[unit_i];
+            auto We_i = m_We[unit_i];
             std::cout << "Unit: " << unit_i+1 << std::endl;
-            for(std::size_t i = 0; i < Ws_i.rows(); ++i){
-                for(std::size_t j = 0; j < Ws_i.cols(); ++j){
-                    std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << Ws_i(i,j)(loc) << std::endl;}}
+            for(std::size_t i = 0; i < We_i.rows(); ++i){
+                for(std::size_t j = 0; j < We_i.cols(); ++j){
+                    std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << We_i(i,j)(loc) << std::endl;}}
         }
 
 
