@@ -25,6 +25,7 @@
 #include "traits_fdagwr.hpp"
 
 #include "functional_matrix.hpp"
+#include "functional_matrix_diagonal.hpp"
 #include "functional_matrix_operators.hpp"
 
 #include "functional_data_integration.hpp"
