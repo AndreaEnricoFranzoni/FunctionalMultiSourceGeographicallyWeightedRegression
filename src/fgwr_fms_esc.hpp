@@ -127,13 +127,18 @@ public:
     {
         double loc = 0.3;
 
+        for(std::size_t i = 0; i < m_Xc.rows(); ++i){
+            for(std::size_t j = 0; j < m_Xc.cols(); ++j){
+                std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << m_Xc(i,j)(loc) << std::endl;}}
+
+        auto red = m_Xc.reduction();
+        std::cout << "reduction in " << loc << ": " << red(loc) << std::endl;
+
 
 /*
         std::cout << "In compute" << std::endl;
 
-            for(std::size_t i = 0; i < m_Xc.rows(); ++i){
-                for(std::size_t j = 0; j < m_Xc.cols(); ++j){
-                    std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << m_Xc(i,j)(loc) << std::endl;}}
+
         
         auto row_test = m_Xc.get_row(3);
         for(std::size_t i = 0; i < row_test.cols(); ++i){

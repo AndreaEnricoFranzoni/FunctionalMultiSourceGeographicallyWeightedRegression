@@ -566,13 +566,14 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     functional_matrix test_fdm_dense(test,n_rows_test,n_cols_test);
     auto red = test_fdm_dense.reduce();
 
+/*
     for(std::size_t i = 0; i < test_fdm_dense.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm_dense.cols(); ++j){
             Rcout << "Elem (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
         }
     }
-
     Rcout << "Reduction in " << loc << ": " << red(loc) << std::endl;
+*/
     
 
 
