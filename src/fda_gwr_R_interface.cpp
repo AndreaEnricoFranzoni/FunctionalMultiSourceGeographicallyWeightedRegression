@@ -568,7 +568,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     for(std::size_t i = 0; i < test_fdm_dense.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm_dense.cols(); ++j){
-            Rcout << "Elem (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense(i,j) << std::endl;
+            Rcout << "Elem (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
         }
     }
 
