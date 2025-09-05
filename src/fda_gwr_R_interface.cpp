@@ -590,7 +590,13 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     auto test_fdm_dense2_t = test_fdm_dense2.transpose();
     for(std::size_t i = 0; i < test_fdm_dense2_t.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm_dense2_t.cols(); ++j){
-            Rcout << "Elem of 2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2_t(i,j)(loc) << std::endl;
+            Rcout << "Elem of 2 T (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2_t(i,j)(loc) << std::endl;
+        }
+    }
+
+    for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm_dense2.cols(); ++j){
+            Rcout << "Elem of 2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2(i,j)(loc) << std::endl;
         }
     }
     
