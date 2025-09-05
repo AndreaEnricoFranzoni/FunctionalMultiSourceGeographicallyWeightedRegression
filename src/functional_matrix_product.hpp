@@ -36,25 +36,27 @@ template< typename INPUT = double, typename OUTPUT = double >
 inline
 functional_matrix<INPUT,OUTPUT>
 fm_product(const functional_matrix<INPUT,OUTPUT> &M1,
-           const functional_matrix<INPUT,OUTPUT> &M2)
+           const functional_matrix<INPUT,OUTPUT> &M2,
+           int int number_threads)
 {
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
-    std::size_t rows_prod = M1.rows();
-    std::size_t cols_prod = M2.cols();
+    //resulting matrix
+    functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
 
-    functional_matrix<INPUT,OUTPUT> prod(rows_prod,cols_prod);
-
-    for (std::size_t i = 0; i < rows_prod; ++i)
-    {
-        for (std::size_t j = 0; j < cols_prod; ++j)
-        {
+    for (std::size_t i = 0; i < prod.rows(); ++i){
+        for (std::size_t j = 0; j < prod.cols(); ++j){
             functional_matrix<INPUT,OUTPUT> prod_ij = M1.get_row(i)*(M2.get_col(j).transpose());
             prod(i,j) = prod_ij.reduce();
-        }
-    }
-    
+            }}
+
+/*
+#ifdef _OPENMP
+#pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(int number_threads)
+
+#endif
+*/
     return prod;
 }
 
