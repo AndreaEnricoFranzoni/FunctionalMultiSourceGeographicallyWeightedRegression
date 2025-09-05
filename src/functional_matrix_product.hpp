@@ -37,7 +37,7 @@ inline
 functional_matrix<INPUT,OUTPUT>
 fm_product(const functional_matrix<INPUT,OUTPUT> &M1,
            const functional_matrix<INPUT,OUTPUT> &M2,
-           int int number_threads)
+           int number_threads)
 {
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
