@@ -169,7 +169,7 @@ public:
     * @brief Transposing the functional matrix
     */
     void
-    transpose()
+    transposing()
     {
         if(m_rows!=static_cast<std::size_t>(1) && m_cols!=static_cast<std::size_t>(1))
         {
@@ -192,6 +192,16 @@ public:
         }
 
         std::swap(m_rows,m_cols);
+    }
+
+    /*!
+    * @brief Tranpose functional matrix
+    */
+    functional_matrix
+    transpose()
+    {
+        this->transposing();
+        return this;
     }
 
     /*!
