@@ -135,6 +135,15 @@ public:
                 for(std::size_t j = 0; j < m_Xc.cols(); ++j){
                     std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << m_Xc(i,j)(loc) << std::endl;}}
         
+        auto row_test = m_Xc.get_row(3);
+        for(std::size_t i = 0; i < row_test.cols(); ++i){
+            std::cout << "Elem of col " << i+1 << " in row 4 evaluated in " << loc << ": " << row_test(0,i)(loc) << std::endl;
+        }
+
+        auto col_test = m_Xc.get_col(4);
+        for(std::size_t i = 0; i < col_test.rows(); ++i){
+            std::cout << "Elem of row " << i+1 << " in col 5 evaluated in " << loc << ": " << col_test(i,0)(loc) << std::endl;
+        }
         //auto red = m_Xc.reduce();
         //std::cout << "Reduction in " << loc << ": " << red(loc) << std::endl;
 
