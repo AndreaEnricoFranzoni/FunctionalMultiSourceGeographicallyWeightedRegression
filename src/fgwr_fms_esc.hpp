@@ -127,13 +127,19 @@ public:
     {
         double loc = 0.3;
 
+        std::vector<double> el;
+        el.resize(m_Xc.rows()*m_Xc.cols());
+
         for(std::size_t i = 0; i < m_Xc.rows(); ++i){
             for(std::size_t j = 0; j < m_Xc.cols(); ++j){
-                std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << m_Xc(i,j)(loc) << std::endl;}}
+                double yu = m_Xc(i,j)(loc);
+                el[j*m_Xc.rows()+i] = yu;
+                std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << yu << std::endl;}}
 
         auto red = m_Xc.reduce();
         std::cout << "reduction in " << loc << ": " << red(loc) << std::endl;
-
+        auto red2 = std::reduce(el.begin(),el.end());
+        std::cout << "Red2: " << red2 << std::endl
 
 /*
         std::cout << "In compute" << std::endl;
