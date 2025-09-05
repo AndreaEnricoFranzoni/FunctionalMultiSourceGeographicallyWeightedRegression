@@ -243,19 +243,20 @@ public:
     reduce()
     const
     {
-        F_OBJ null_f = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
-        //functional matrix storing the reduction by summation of all the elements
-        functional_matrix reduction(1,1,null_f);
+        F_OBJ reduction = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
 
-#ifdef _OPENMP
-#pragma omp parallel for shared(reduction,m_data) num_threads(8)
         for(std::size_t i = 0; i < this->size(); ++i)
         {
-            functional_matrix elem(1,1,m_data[i]);
-            reduction = reduction + elem;       //exploiting ETs
+            reduction = [reduction,i,&m_data](F_OBJ_INPUT x){return reduction(x) + m_data[i](x);};
         }
+
+/*
+#ifdef _OPENMP
+#pragma omp parallel for shared(reduction,m_data) num_threads(8)
+
 #endif
-        return reduction(0,0);
+*/
+        return reduction;
     }
     
 
