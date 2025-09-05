@@ -39,6 +39,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         const functional_matrix<INPUT,OUTPUT> &M2,
         int number_threads)
 {
+    std::cout << "Dense x dense" << std::endl;
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
@@ -68,6 +69,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         const functional_matrix_diagonal<INPUT,OUTPUT> &M2,
         int number_threads)
 {
+    std::cout << "Dense x diagonal" << std::endl;
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
@@ -103,6 +105,7 @@ fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &M1,
         const functional_matrix<INPUT,OUTPUT> &M2,
         int number_threads)
 {
+    std::cout << "Diagonal x dense" << std::endl;
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
@@ -137,6 +140,7 @@ functional_matrix_diagonal<INPUT,OUTPUT>
 fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &M1,
         const functional_matrix_diagonal<INPUT,OUTPUT> &M2)
 {
+    std::cout << "Diagonal x diagonal" << std::endl;
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
