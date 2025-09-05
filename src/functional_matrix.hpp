@@ -252,8 +252,8 @@ public:
         }
         return reduction;
 */
-        auto func_sum = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)+f2(x);}};
-        
+        std::function<F_OBJ(F_OBJ,F_OBJ)> func_sum = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)+f2(x);};};
+
         return std::reduce(this->m_data.cbegin(),
                            this->m_data.cend(),
                            [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);},
