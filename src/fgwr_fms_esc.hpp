@@ -127,6 +127,8 @@ public:
     {
         double loc = 0.3;
 
+/*
+//for reduction
         std::vector<double> el;
         el.resize(m_Xc.rows()*m_Xc.cols());
 
@@ -146,6 +148,7 @@ public:
                 double yu = m_Xc(i,j)(loc);
                 el[j*m_Xc.rows()+i] = yu;
                 std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << yu << std::endl;}}
+*/
 
 /*
         std::cout << "In compute" << std::endl;
