@@ -250,10 +250,12 @@ public:
             reduction = [reduction,i,this](F_OBJ_INPUT x){return reduction(x) + this->m_data[i](x);};
         }
 
+/*
 #ifdef _OPENMP
 #pragma omp parallel for shared(reduction,m_data) num_threads(8)
 
 #endif
+*/
 
         return reduction;
     }
