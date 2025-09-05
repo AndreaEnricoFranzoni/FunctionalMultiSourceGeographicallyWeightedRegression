@@ -50,8 +50,8 @@ fm_product(const functional_matrix<INPUT,OUTPUT> &M1,
     {
         for (std::size_t j = 0; j < cols_prod; ++j)
         {
-            row_i = M1.get_row(i);
-            col_j = M2.get_col(j);
+            auto row_i = M1.get_row(i);
+            auto col_j = M2.get_col(j);
             col_j.transpose();
             prod(i,j) = (row_i*col_j).reduce();
         }
