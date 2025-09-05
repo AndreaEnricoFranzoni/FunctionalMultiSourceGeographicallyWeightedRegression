@@ -245,17 +245,17 @@ public:
     {
         F_OBJ reduction = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
 
+
+
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(reduction,m_data) num_threads(8)
         for(std::size_t i = 0; i < this->size(); ++i)
         {
             reduction = [reduction,i,this](F_OBJ_INPUT x){return reduction(x) + this->m_data[i](x);};
         }
-
-/*
-#ifdef _OPENMP
-#pragma omp parallel for shared(reduction,m_data) num_threads(8)
-
 #endif
-*/
+
 
         return reduction;
     }
