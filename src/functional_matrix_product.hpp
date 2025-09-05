@@ -52,7 +52,7 @@ fm_product(const functional_matrix<INPUT,OUTPUT> &M1,
         {
             auto col_j = M2.get_col(j);
             col_j.transpose();
-            auto prod_ij = M1.get_row(i)*col_j;
+            functional_matrix<INPUT,OUTPUT> prod_ij = M1.get_row(i)*col_j;
             prod(i,j) = prod_ij.reduce();
         }
     }
