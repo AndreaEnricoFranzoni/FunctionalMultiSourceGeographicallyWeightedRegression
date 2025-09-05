@@ -592,8 +592,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
 
-    functional_matrix test_fm1(120,40000);
-    functional_matrix test_fm2(40000,90);
+    functional_matrix test_fm1(120,200);
+    functional_matrix test_fm2(200,90);
 
     auto prod_test = fm_product<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fm1,test_fm2,number_threads);
     for(std::size_t i = 0; i < prod_test.rows(); ++i){
