@@ -247,7 +247,7 @@ public:
 
         for(std::size_t i = 0; i < this->size(); ++i)
         {
-            reduction = [reduction,i,&m_data](F_OBJ_INPUT x){return reduction(x) + m_data[i](x);};
+            reduction = [reduction,i,this](F_OBJ_INPUT x){return reduction(x) + this->m_data[i](x);};
         }
 
 /*
