@@ -37,7 +37,6 @@ inline
 functional_matrix<INPUT,OUTPUT>
 fm_product(const functional_matrix<INPUT,OUTPUT> &M1,
            const functional_matrix<INPUT,OUTPUT> &M2)
-const
 {
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
@@ -51,7 +50,10 @@ const
     {
         for (std::size_t j = 0; j < cols_prod; ++j)
         {
-            prod(i,j) = (M1.get_row(i) * M2.get_col(j).transpose()).reduce();
+            row_i = M1.get_row(i);
+            col_j = M2.get_col(j);
+            col_j.transpose();
+            prod(i,j) = (row_i*col_j).reduce();
         }
     }
     
