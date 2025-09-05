@@ -243,21 +243,21 @@ public:
     reduce()
     const
     {
+/*
         F_OBJ reduction = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
 
-
-
-
-#ifdef _OPENMP
-#pragma omp parallel for shared(reduction,m_data) num_threads(8)
         for(std::size_t i = 0; i < this->size(); ++i)
         {
             reduction = [reduction,i,this](F_OBJ_INPUT x){return reduction(x) + this->m_data[i](x);};
         }
-#endif
-
-
         return reduction;
+*/
+        auto func_sum = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)+f2(x);}};
+        
+        return std::reduce(this->m_data.cbegin(),
+                           this->m_data.cend(),
+                           [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);},
+                           func_sum);
     }
     
 
