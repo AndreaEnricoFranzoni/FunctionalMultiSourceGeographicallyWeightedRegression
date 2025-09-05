@@ -47,8 +47,7 @@ public:
     */ 
     inline 
     void 
-    compute() 
-    const 
+    compute()  
     override
     {}
 

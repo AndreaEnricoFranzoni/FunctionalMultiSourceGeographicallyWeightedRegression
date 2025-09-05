@@ -122,8 +122,7 @@ public:
     */ 
     inline 
     void 
-    compute() 
-    const 
+    compute()  
     override
     {
         double loc = 0.3;

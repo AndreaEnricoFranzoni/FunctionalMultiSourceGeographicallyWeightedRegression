@@ -139,7 +139,7 @@ public:
     /*!
     * @brief Virtual method to compute the Functional Geographically Weighted Regression
     */
-    virtual inline void compute() const = 0;
+    virtual inline void compute() = 0;
 };
 
 #endif  /*FGWR_ALGO_HPP*/
