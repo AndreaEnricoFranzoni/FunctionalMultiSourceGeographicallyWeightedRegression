@@ -49,7 +49,8 @@ fm_product(const functional_matrix<INPUT,OUTPUT> &M1,
         for (std::size_t j = 0; j < prod.cols(); ++j){
             //functional_matrix<INPUT,OUTPUT> prod_ij = M1.get_row(i)*(M2.get_col(j).transpose());
             //prod(i,j) = prod_ij.reduce();
-            prod(i,j) = (M1.get_row(i)*(M2.get_col(j).transpose())).reduce();
+            
+            prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.get_row(i)*(M2.get_col(j).transpose())).reduce();
             }}
 
 /*
