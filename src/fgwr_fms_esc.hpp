@@ -116,6 +116,11 @@ public:
             m_Rs{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rs)}
             {}
 
+    /*
+    *   !!!!!!!!!!!NB: RITORNARE LE MATRICI SCALARI SIA COME SCALARI CHE COME MATRICI DI FUNZIONI COSTANTI!!!!!!!
+    *   !!!!!!!!!!! NON HO ANCORA SCRITTO UN PRODOTTO TRA MATRICE FUNZIONALE E MATRICE SCALARE!!!!!!!!!!!!!!!!!!!
+    */
+
 
     /*!
     * @brief Override of the base class method

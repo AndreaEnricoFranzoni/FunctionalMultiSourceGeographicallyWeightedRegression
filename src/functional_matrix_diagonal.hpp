@@ -41,7 +41,7 @@ using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
     //null function (const version)
     inline static const F_OBJ m_null_function = [](F_OBJ_INPUT x){ return static_cast<OUTPUT>(0);};
     //null function (non-const verion)
-    inline static F_OBJ m_null_function_non_static = [](F_OBJ_INPUT x){ return static_cast<OUTPUT>(0);};
+    inline static F_OBJ m_null_function_non_const = [](F_OBJ_INPUT x){ return static_cast<OUTPUT>(0);};
 
 private:
     /*!Number of rows*/
@@ -110,7 +110,7 @@ public:
     operator()
     (std::size_t i, std::size_t j)
     {
-        return i==j ? m_data[i] : this->m_null_function_non_static;
+        return i==j ? m_data[i] : this->m_null_function_non_const;
     }
 
     /*!

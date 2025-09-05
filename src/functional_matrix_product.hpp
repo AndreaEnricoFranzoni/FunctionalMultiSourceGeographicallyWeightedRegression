@@ -35,9 +35,9 @@ template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline
 functional_matrix<INPUT,OUTPUT>
-fm_product(const functional_matrix<INPUT,OUTPUT> &M1,
-           const functional_matrix<INPUT,OUTPUT> &M2,
-           int number_threads)
+fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
+        const functional_matrix<INPUT,OUTPUT> &M2,
+        int number_threads)
 {
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
@@ -55,5 +55,86 @@ fm_product(const functional_matrix<INPUT,OUTPUT> &M1,
     return prod;
 }
 
+
+
+/*!
+* @brief Row-by-col product within a functional matrix M1 and a diagoanl functional matrix M2
+*/
+template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline
+functional_matrix<INPUT,OUTPUT>
+fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
+        const functional_matrix_diagonal<INPUT,OUTPUT> &M2,
+        int number_threads)
+{
+    if (M1.cols() != M2.rows())
+		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
+
+    //function that operates summation within two functions
+    std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
+
+    //resulting matrix
+    functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
+
+#ifdef _OPENMP
+#pragma omp parallel for collapse(2) shared(M1,M2,prod,f_prod) num_threads(number_threads)
+    for (std::size_t i = 0; i < prod.rows(); ++i){
+        for (std::size_t j = 0; j < prod.cols(); ++j){            
+            prod(i,j) = f_prod(M1(i,j),M2(j,j));}}  //dense x diagonal: in prod, prod(i,j) = dense(i,j)*diagonal(j,j)
+#endif  
+
+    return prod;
+}
+
+
+
+/*!
+* @brief Row-by-col product within a diagonal functional matrix M1 and a functional matrix M2
+*/
+template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline
+functional_matrix<INPUT,OUTPUT>
+fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &M1,
+        const functional_matrix<INPUT,OUTPUT> &M2,
+        int number_threads)
+{
+    if (M1.cols() != M2.rows())
+		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
+
+    //function that operates summation within two functions
+    std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
+
+    //resulting matrix
+    functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
+
+#ifdef _OPENMP
+#pragma omp parallel for collapse(2) shared(M1,M2,prod,f_prod) num_threads(number_threads)
+    for (std::size_t i = 0; i < prod.rows(); ++i){
+        for (std::size_t j = 0; j < prod.cols(); ++j){            
+            prod(i,j) = f_prod(M1(i,i),M2(i,j));}}  //diagonal x dense: in prod, prod(i,j) = diagonal(i,i)*dense(i,j)
+#endif  
+
+    return prod;
+}
+
+
+
+/*!
+* @brief Row-by-col product within two diagonal functional matrices M1*M2
+*/
+template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline
+functional_matrix_diagonal<INPUT,OUTPUT>
+fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &M1,
+        const functional_matrix_diagonal<INPUT,OUTPUT> &M2)
+{
+    if (M1.cols() != M2.rows())
+		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
+
+    return static_cast<functional_matrix_diagonal<INPUT,OUTPUT>>(M1*M2);
+}
 
 #endif  /*FUNCTIONAL_MATRIX_PRODUCT_HPP*/
