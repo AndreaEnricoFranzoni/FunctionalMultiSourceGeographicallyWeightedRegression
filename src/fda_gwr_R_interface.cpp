@@ -567,9 +567,11 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     functional_matrix test_fdm_dense(test,n_rows_test,n_cols_test);
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test2{f5,f3,f1,f5,f2,f4};
     functional_matrix test_fdm_dense2(test2,n_cols_test,n_rows_test);
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test3{f5,f3,f1,f5,f2,f4,f1,f5,f2,f1,f5,f4};
+    functional_matrix test_fdm_dense3(test3,n_rows_test,4);
 
 
-/*
+
     for(std::size_t i = 0; i < test_fdm_dense.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm_dense.cols(); ++j){
             Rcout << "Elem of 1 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
@@ -587,20 +589,30 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
             Rcout << "Elem of P (" << i << "," << j << ") evaluated in " << loc << ": " << prod_test(i,j)(loc) << std::endl;
         }
     }
-*/
+
+    auto prod_test_f = fm_product<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(fm_product<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fdm_dense,test_fdm_dense2,number_threads),test_fdm_dense3,number_threads);
+    for(std::size_t i = 0; i < prod_test_f.rows(); ++i){
+        for(std::size_t j = 0; j < prod_test_f.cols(); ++j){
+            Rcout << "Elem of PF (" << i << "," << j << ") evaluated in " << loc << ": " << prod_test_f(i,j)(loc) << std::endl;
+        }
+    }
 
 
 
 
+
+
+
+/*
     functional_matrix test_fm1(120,200);
     functional_matrix test_fm2(200,90);
-
     auto prod_test = fm_product<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fm1,test_fm2,number_threads);
     for(std::size_t i = 0; i < prod_test.rows(); ++i){
         for(std::size_t j = 0; j < prod_test.cols(); ++j){
             Rcout << "Elem of P (" << i << "," << j << ") evaluated in " << loc << ": " << prod_test(i,j)(loc) << std::endl;
         }
     }
+*/
 
 
 
