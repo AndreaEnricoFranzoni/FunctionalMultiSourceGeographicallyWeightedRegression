@@ -45,20 +45,13 @@ fm_product(const functional_matrix<INPUT,OUTPUT> &M1,
     //resulting matrix
     functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
 
-    for (std::size_t i = 0; i < prod.rows(); ++i){
-        for (std::size_t j = 0; j < prod.cols(); ++j){
-            //functional_matrix<INPUT,OUTPUT> prod_ij = M1.get_row(i)*(M2.get_col(j).transpose());
-            //prod(i,j) = prod_ij.reduce();
-            
-            prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.get_row(i)*(M2.get_col(j).transpose())).reduce();
-            }}
-
-/*
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(int number_threads)
+    for (std::size_t i = 0; i < prod.rows(); ++i){
+        for (std::size_t j = 0; j < prod.cols(); ++j){            
+            prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.get_row(i)*(M2.get_col(j).transpose())).reduce();}}   //static_cast allows to use immediately .reduce() method
+#endif       
 
-#endif
-*/
     return prod;
 }
 

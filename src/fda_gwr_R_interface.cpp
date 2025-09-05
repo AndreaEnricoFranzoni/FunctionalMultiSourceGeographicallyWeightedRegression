@@ -555,7 +555,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     fgwr_algo->compute();
 
     double loc = 0.3;
-    std::size_t n_rows_test = 2;
+    std::size_t n_rows_test = 3;
     std::size_t n_cols_test = 2;
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f1 = [](const double & x){return x;};
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f2 = [](const double & x){return x + 4;};
@@ -563,12 +563,12 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f4 = [](const double & x){return x-1;};
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f5 = [](const double & x){return 5;};
 
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test{f1,f2,f3,f4};
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test{f1,f2,f3,f4,f5,f3};
     functional_matrix test_fdm_dense(test,n_rows_test,n_cols_test);
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test2{f2,f3,f4,f5};
-    functional_matrix test_fdm_dense2(test2,n_rows_test,n_cols_test);
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test2{f5,f3,f1,f5,f2,f4};
+    functional_matrix test_fdm_dense2(test2,n_cols_test,n_rows_test);
 
-/*
+
     for(std::size_t i = 0; i < test_fdm_dense.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm_dense.cols(); ++j){
             Rcout << "Elem of 1 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
@@ -579,8 +579,17 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
             Rcout << "Elem of 2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2(i,j)(loc) << std::endl;
         }
     }
-*/
 
+    auto prod_test = fm_product<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fdm_dense,test_fdm_dense2,number_threads);
+    for(std::size_t i = 0; i < prod_test.rows(); ++i){
+        for(std::size_t j = 0; j < prod_test.cols(); ++j){
+            Rcout << "Elem of P (" << i << "," << j << ") evaluated in " << loc << ": " << prod_test(i,j)(loc) << std::endl;
+        }
+    }
+
+
+
+/*
     functional_matrix test_fm1(10,6);
     functional_matrix test_fm2(6,14);
 
@@ -590,16 +599,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
             Rcout << "Elem of P (" << i << "," << j << ") evaluated in " << loc << ": " << prod_test(i,j)(loc) << std::endl;
         }
     }
-
-
-/*
-    for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense2.cols(); ++j){
-            Rcout << "Elem of 2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2(i,j)(loc) << std::endl;
-        }
-    }
 */
-    
 
 
     //returning element
