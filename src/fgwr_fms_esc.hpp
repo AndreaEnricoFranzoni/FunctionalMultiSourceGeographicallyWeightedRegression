@@ -139,7 +139,7 @@ public:
         auto red = m_Xc.reduce();
         std::cout << "reduction in " << loc << ": " << red(loc) << std::endl;
         auto red2 = std::reduce(el.begin(),el.end());
-        std::cout << "Red2: " << red2 << std::endl
+        std::cout << "Red2: " << red2 << std::endl;
 
 /*
         std::cout << "In compute" << std::endl;
