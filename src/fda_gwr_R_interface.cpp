@@ -50,6 +50,7 @@
 #include "functional_matrix.hpp"
 #include "functional_matrix_diagonal.hpp"
 #include "functional_matrix_operators.hpp"
+#include "functional_matrix_product.hpp"
 #include "functional_matrix_into_wrapper.hpp"
 
 
@@ -562,17 +563,29 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f4 = [](const double & x){return x-1;};
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f5 = [](const double & x){return 5;};
 
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test{f1,f2,f3,f5};
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test{f1,f2,f3,f4};
     functional_matrix test_fdm_dense(test,n_rows_test,n_cols_test);
-    auto red = test_fdm_dense.reduce();
-
-
     for(std::size_t i = 0; i < test_fdm_dense.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm_dense.cols(); ++j){
-            Rcout << "Elem (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
+            Rcout << "Elem of 1 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
         }
     }
-    Rcout << "Reduction in " << loc << ": " << red(loc) << std::endl;
+
+
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test2{f2,f3,f4,f5};
+    functional_matrix test_fdm_dense2(test2,n_rows_test,n_cols_test);
+    for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm_dense2.cols(); ++j){
+            Rcout << "Elem of 2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2(i,j)(loc) << std::endl;
+        }
+    }
+
+    auto prod_test = fm_product<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fdm_dense,test_fdm_dense2);
+    for(std::size_t i = 0; i < prod_test.rows(); ++i){
+        for(std::size_t j = 0; j < prod_test.cols(); ++j){
+            Rcout << "Elem of P (" << i << "," << j << ") evaluated in " << loc << ": " << prod_test(i,j)(loc) << std::endl;
+        }
+    }
 
     
 
