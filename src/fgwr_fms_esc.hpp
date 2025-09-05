@@ -128,17 +128,16 @@ public:
     {
         double loc = 0.3;
 
-/*
+
         std::cout << "In compute" << std::endl;
-        for(std::size_t unit_i = 0; unit_i < m_We.size(); ++unit_i)
-        {
-            auto We_i = m_We[unit_i];
-            std::cout << "Unit: " << unit_i+1 << std::endl;
-            for(std::size_t i = 0; i < We_i.rows(); ++i){
-                for(std::size_t j = 0; j < We_i.cols(); ++j){
-                    std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << We_i(i,j)(loc) << std::endl;}}
-        }
-*/
+
+            for(std::size_t i = 0; i < m_Xc.rows(); ++i){
+                for(std::size_t j = 0; j < m_Xc.cols(); ++j){
+                    std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << m_Xc(i,j)(loc) << std::endl;}}
+        
+        auto red = m_Xc.reduce();
+        std::cout << "Reduction in " << loc << ": " << red(loc) << std::endl;
+
 
 
 

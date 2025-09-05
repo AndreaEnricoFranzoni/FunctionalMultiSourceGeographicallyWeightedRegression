@@ -244,7 +244,7 @@ public:
     const
     {
         //functional matrix storing the reduction by summation of all the elements
-        functional_matrix reduction;
+        functional_matrix reduction(1,1,[](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);});
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(reduction,m_data) num_threads(8)
