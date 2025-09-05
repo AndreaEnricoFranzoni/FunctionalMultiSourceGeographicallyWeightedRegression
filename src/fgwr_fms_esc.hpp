@@ -131,7 +131,7 @@ public:
             for(std::size_t j = 0; j < m_Xc.cols(); ++j){
                 std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << m_Xc(i,j)(loc) << std::endl;}}
 
-        auto red = m_Xc.reduction();
+        auto red = m_Xc.reduce();
         std::cout << "reduction in " << loc << ": " << red(loc) << std::endl;
 
 
