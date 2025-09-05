@@ -562,7 +562,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f4 = [](const double & x){return x-1;};
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f5 = [](const double & x){return 5;};
 
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test{f1,f2,f3,f4};
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test{f1,f2,f3,f5};
     functional_matrix test_fdm_dense(test,n_rows_test,n_cols_test);
     auto red = test_fdm_dense.reduce();
 
