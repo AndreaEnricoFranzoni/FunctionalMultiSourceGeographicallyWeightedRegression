@@ -201,7 +201,7 @@ public:
     transpose()
     {
         this->transposing();
-        return this;
+        return *this;
     }
 
     /*!
