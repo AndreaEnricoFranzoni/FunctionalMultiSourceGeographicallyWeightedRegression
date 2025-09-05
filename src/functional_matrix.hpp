@@ -243,15 +243,6 @@ public:
     reduce()
     const
     {
-/*
-        F_OBJ reduction = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
-
-        for(std::size_t i = 0; i < this->size(); ++i)
-        {
-            reduction = [reduction,i,this](F_OBJ_INPUT x){return reduction(x) + this->m_data[i](x);};
-        }
-        return reduction;
-*/
         F_OBJ f_null = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
         std::function<F_OBJ(F_OBJ,F_OBJ)> f_sum = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)+f2(x);};};
 
