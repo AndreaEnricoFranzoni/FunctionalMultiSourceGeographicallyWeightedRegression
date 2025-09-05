@@ -182,7 +182,7 @@ public:
             {
                 for (std::size_t j = 0; j < m_cols; ++j)
                 {
-                    temp[i*m_cols + j] = m_data[j*m_rows + i];
+                    temp[i*m_cols + j] = m_data[j*m_rows + i];      //swaps appropriately
                 }
             }
 #endif
@@ -243,8 +243,9 @@ public:
     reduce()
     const
     {
+        F_OBJ null_f = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
         //functional matrix storing the reduction by summation of all the elements
-        functional_matrix reduction(1,1,[](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);});
+        functional_matrix reduction(1,1,null_f);
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(reduction,m_data) num_threads(8)

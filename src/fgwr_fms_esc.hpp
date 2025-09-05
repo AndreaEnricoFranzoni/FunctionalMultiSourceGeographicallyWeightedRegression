@@ -128,6 +128,7 @@ public:
         double loc = 0.3;
 
 
+/*
         std::cout << "In compute" << std::endl;
 
             for(std::size_t i = 0; i < m_Xc.rows(); ++i){
@@ -150,6 +151,7 @@ public:
         for(std::size_t i = 0; i < col_test2.cols(); ++i){
             std::cout << "In Xc transpose, the row 5, previous col 5, elem in col " << i+1 << ", evaluated in " << loc << ": " << col_test2(0,i)(loc) << std::endl;
         }
+*/
 
 
         //auto red = m_Xc.reduce();

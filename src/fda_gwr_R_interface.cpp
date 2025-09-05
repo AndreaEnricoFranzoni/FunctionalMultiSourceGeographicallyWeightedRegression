@@ -519,17 +519,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     ///////////////////////////////
     //wrapping all the functional elements in a functional_matrix
 
-    double loc = 0.3;
-/*
-    
-for(std::size_t i = 0; i < number_of_statistical_units_; ++i){
-    for(std::size_t j = 0; j < q_C; ++j){
-        Rcout << "Unit: " << i+1 << ", covariate: " << j+1 << ", evaluated in " << loc << ": " << x_C_fd_.eval(loc, j, i) << std::endl;}}
-
-*/
-
-
-
     //y: a column vector of dimension nx1
     functional_matrix y = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_,number_threads);
     //Xc: a functional matrix of dimension nxqc
@@ -544,15 +533,6 @@ for(std::size_t i = 0; i < number_of_statistical_units_; ++i){
     functional_matrix Xs = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_,number_threads);
     //Ws: n diagonal functional matrices of dimension nxn
     std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Ws = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_>(W_S,number_threads);
-
-/*
-Rcout << "Primo wrapper" << std::endl;
-for(std::size_t i = 0; i < Xc.rows(); ++i){
-    for(std::size_t j = 0; j < Xc.cols(); ++j){
-        Rcout << "Unit: " << i+1 << ", covariate: " << j+1 << ", evaluated in " << loc << ": " << Xc(i,j)(loc) << std::endl;}}
-
-
-*/
 
 
     //fgwr algorithm
@@ -573,81 +553,26 @@ for(std::size_t i = 0; i < Xc.rows(); ++i){
                                                                                     number_threads);
     fgwr_algo->compute();
 
-
+    double loc = 0.3;
     std::size_t n_rows_test = 2;
-    std::size_t n_cols_test = 4;
+    std::size_t n_cols_test = 2;
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f1 = [](const double & x){return x;};
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f2 = [](const double & x){return x + 4;};
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f3 = [](const double & x){return x*x;};
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f4 = [](const double & x){return x-1;};
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f5 = [](const double & x){return 5;};
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_fdm_vec{f1,f2,f3,f4};
-    functional_matrix_diagonal test_fdm(test_fdm_vec,n_cols_test);
 
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_fdm_vec2{f1,f2,f3,f4,f2,f3,f4,f5};
-    functional_matrix test_fdm_dense(test_fdm_vec2,n_rows_test,n_cols_test);
-/*
-    Rcout << "Nrows: " << test_fdm_dense.rows() << ", ncols: " << test_fdm_dense.cols() << std::endl;
-    for(std::size_t i = 0; i < test_fdm_dense.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense.cols(); ++j){
-            Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
-        }
-    }
-
-    test_fdm_dense.transpose();
-    Rcout << "Transpose: nrows: " << test_fdm_dense.rows() << ", ncols: " << test_fdm_dense.cols() << std::endl;
-    for(std::size_t i = 0; i < test_fdm_dense.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense.cols(); ++j){
-            Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
-        }
-    }
-*/
-
-
-    /*
-    Rcout << "First" << std::endl;
-
-    
-    for(std::size_t i = 0; i < test_fdm.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm.cols(); ++j){
-            Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm(i,j)(loc) << std::endl;
-        }
-    }
-
-    Rcout << "Second" << std::endl;
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test{f1,f2,f3,f4};
+    functional_matrix test_fdm_dense(test,n_rows_test,n_cols_test);
+    auto red = test_fdm_dense.reduce();
 
     for(std::size_t i = 0; i < test_fdm_dense.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm_dense.cols(); ++j){
-            Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
+            Rcout << "Elem (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense(i,j) << std::endl;
         }
     }
 
-
-    Rcout << "Somme" << std::endl;
-    auto test_fdm_somma = test_fdm + test_fdm_dense;
-
-    for(std::size_t i = 0; i < test_fdm_somma.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_somma.cols(); ++j){
-            Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm_somma(i,j)(loc) << std::endl;
-        }
-    }
-
-    Rcout << "First second round" << std::endl;
-    for(std::size_t i = 0; i < test_fdm.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm.cols(); ++j){
-            Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm(i,j)(loc) << std::endl;
-        }
-    }
-
-    Rcout << "Second second roun" << std::endl;
-
-    for(std::size_t i = 0; i < test_fdm_dense.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense.cols(); ++j){
-            Rcout << "Elem (" << i+1 << "," << j+1 << ") in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
-        }
-    }
-    */
-
+    Rcout << "Reduction in " << loc << ": " << red(loc) << std::endl;
     
 
 
