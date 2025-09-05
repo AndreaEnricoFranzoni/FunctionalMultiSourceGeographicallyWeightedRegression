@@ -243,13 +243,12 @@ public:
     reduce()
     const
     {
+        //null function: starting point for reduction
         F_OBJ f_null = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
+        //function that operates summation within two functions
         std::function<F_OBJ(F_OBJ,F_OBJ)> f_sum = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)+f2(x);};};
-
-        return std::reduce(this->m_data.cbegin(),
-                           this->m_data.cend(),
-                           f_null,
-                           f_sum);
+        //reduction
+        return std::reduce(this->m_data.cbegin(),this->m_data.cend(),f_null,f_sum);
     }
     
 
