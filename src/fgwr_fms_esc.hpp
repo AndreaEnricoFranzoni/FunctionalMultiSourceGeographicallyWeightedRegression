@@ -144,6 +144,16 @@ public:
         for(std::size_t i = 0; i < col_test.rows(); ++i){
             std::cout << "Elem of row " << i+1 << " in col 5 evaluated in " << loc << ": " << col_test(i,0)(loc) << std::endl;
         }
+
+        col_test.transpose();
+        for(std::size_t i = 0; i < col_test.cols(); ++i){
+            std::cout << "Elem in col 5 transpose, now in col " << i+1 << ", evaluated in " << loc << ": " << col_test(0,i)(loc) << std::endl;
+        }
+
+            for(std::size_t i = 0; i < m_Xc.rows(); ++i){
+                for(std::size_t j = 0; j < m_Xc.cols(); ++j){
+                    std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << m_Xc(i,j)(loc) << std::endl;}}
+
         //auto red = m_Xc.reduce();
         //std::cout << "Reduction in " << loc << ": " << red(loc) << std::endl;
 
