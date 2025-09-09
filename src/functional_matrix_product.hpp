@@ -180,7 +180,6 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
     //resulting matrix
     functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
     
-
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(number_threads)
     for (std::size_t i = 0; i < prod.rows(); ++i){
@@ -196,12 +195,48 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
             prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.get_row(i)*col_j).reduce();}}   //static_cast allows to use immediately .reduce() method
 #endif        
 
-    std::cout << "Dense x dense scalar at the end: " << prod.rows() << "x" << prod.cols()  << std::endl;
+    return prod;
+}
 
-    double loc = 0.3;
-    for(std::size_t i = 0; i < prod.rows(); ++i){
-        for(std::size_t j = 0; j < prod.cols(); ++j){
-            std::cout << "Elem of P in fm_prod (" << i << "," << j << ") evaluated in " << loc << ": " << prod(i,j)(loc) << std::endl;}}
+
+
+/*!
+* @brief Row-by-col product within a scalar matrix M1 and a functional matrix M2
+*/
+template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline
+functional_matrix<INPUT,OUTPUT>
+fm_prod(const Eigen::MatrixXd &M1,
+        const functional_matrix<INPUT,OUTPUT> &M2,
+        int number_threads)
+{
+    
+    if (M1.cols() != M2.rows())
+		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
+
+    //converting the scalar matrix into one of constant functions
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
+    std::function<F_OBJ(const double &)> scalar_to_const_f = [](const double &a){return [a](F_OBJ_INPUT x){return static_cast<OUTPUT>(a);};};
+
+    //resulting matrix
+    functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
+    
+#ifdef _OPENMP
+#pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(number_threads)
+    for (std::size_t i = 0; i < prod.rows(); ++i){
+        for (std::size_t j = 0; j < prod.cols(); ++j){    
+
+            std::vector<F_OBJ> scalar_f_vec;
+            scalar_f_vec.resize(M1.cols());
+            std::transform(M1.row(i).cbegin(),
+                           M1.row(i).cend(),
+                           scalar_f_vec.begin(),
+                           scalar_to_const_f);      //iterators on Eigen::MatrixXd traverse M2 column-wise (coherent with how elements are stored into a functional_matrix)
+            functional_matrix<INPUT,OUTPUT> row_i(scalar_f_vec,M2.rows(),1);
+            prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(row_i*M2.get_col(j)).reduce();}}   //static_cast allows to use immediately .reduce() method
+#endif        
 
     return prod;
 }
