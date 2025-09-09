@@ -179,7 +179,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
 
     //resulting matrix
     functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
-    std::cout << "Dense x dense scalar: " << prod.rows() << "x" << prod.cols()  << std::endl;
+    
 
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(number_threads)
@@ -196,6 +196,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
             prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.get_row(i)*col_j).reduce();}}   //static_cast allows to use immediately .reduce() method
 #endif        
 
+std::cout << "Dense x dense scalar at the end: " << prod.rows() << "x" << prod.cols()  << std::endl;
     return prod;
 }
 
