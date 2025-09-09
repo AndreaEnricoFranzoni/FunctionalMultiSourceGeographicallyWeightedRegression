@@ -201,8 +201,8 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
     double loc = 0.3;
     for(std::size_t i = 0; i < prod.rows(); ++i){
         for(std::size_t j = 0; j < prod.cols(); ++j){
-            Rcout << "Elem of P in fm_prod (" << i << "," << j << ") evaluated in " << loc << ": " << prod(i,j)(loc) << std::endl;}}
-            
+            std::cout << "Elem of P in fm_prod (" << i << "," << j << ") evaluated in " << loc << ": " << prod(i,j)(loc) << std::endl;}}
+
     return prod;
 }
 
