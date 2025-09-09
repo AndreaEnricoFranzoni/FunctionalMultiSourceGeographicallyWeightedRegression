@@ -583,6 +583,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     }
 
     functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> prod = fm_prod<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fdm_dense3,M2,4);
+    Rcout << "Il prodotto ha " << prod.rows() " righe e " << prod.cols() << " colonne" <<std::endl;
         for(std::size_t i = 0; i < prod.rows(); ++i){
         for(std::size_t j = 0; j < prod.cols(); ++j){
             Rcout << "Elem of P (" << i << "," << j << ") evaluated in " << loc << ": " << prod(i,j)(loc) << std::endl;
