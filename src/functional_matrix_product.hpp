@@ -175,13 +175,13 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
     //converting the scalar matrix into one of constant functions
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
-    std::function<F_OBJ(const double &)> scalar_to_const_f = [](const double &a){return [&a](F_OBJ_INPUT x){return static_cast<OUTPUT>(a);};};
+    std::function<F_OBJ(const double &)> scalar_to_const_f = [](const double &a){return [a](F_OBJ_INPUT x){return static_cast<OUTPUT>(a);};};
 
     //resulting matrix
     functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
 
 #ifdef _OPENMP
-#pragma omp parallel for collapse(2) shared(M1,M2_f,prod) num_threads(number_threads)
+#pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(number_threads)
     for (std::size_t i = 0; i < prod.rows(); ++i){
         for (std::size_t j = 0; j < prod.cols(); ++j){    
 
