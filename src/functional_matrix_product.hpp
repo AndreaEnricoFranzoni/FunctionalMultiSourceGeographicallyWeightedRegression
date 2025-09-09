@@ -168,7 +168,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         const Eigen::MatrixXd &M2,
         int number_threads)
 {
-    std::cout << "Dense x dense scalar: " << M1.rows() << "x" << M2.cols()  << std::endl;
+    
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
@@ -179,6 +179,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
 
     //resulting matrix
     functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
+    std::cout << "Dense x dense scalar: " << prod.rows() << "x" << prod.cols()  << std::endl;
 
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(number_threads)
