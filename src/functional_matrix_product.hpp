@@ -168,7 +168,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         const Eigen::MatrixXd &M2,
         int number_threads)
 {
-    std::cout << "Dense x dense scalar" << std::endl;
+    std::cout << "Dense x dense scalar: " << M1.rows() << "x" << M2.cols()  << std::endl;
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
