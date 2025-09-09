@@ -175,9 +175,9 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
     //converting the scalar matrix into one of constant functions
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
-    std::function<F_OBJ(const double &)> scalar_to_const_f = [](const double &a){return [a](F_OBJ_INPUT x){return a;};};
+    std::function<F_OBJ(const double &)> scalar_to_const_f = [](const double &a){return [a](F_OBJ_INPUT x){return static_cast<OUTPUT>(a);};};
     std::vector<F_OBJ> scalar_f_vec;
-    scalar_f_vec.resize(M2.rows()*M2.cols());
+    scalar_f_vec.resize(M2.size());
     std::transform(M2.cbegin(),
                    M2.cend(),
                    scalar_f_vec.begin(),
