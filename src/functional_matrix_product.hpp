@@ -196,7 +196,13 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
             prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.get_row(i)*col_j).reduce();}}   //static_cast allows to use immediately .reduce() method
 #endif        
 
-std::cout << "Dense x dense scalar at the end: " << prod.rows() << "x" << prod.cols()  << std::endl;
+    std::cout << "Dense x dense scalar at the end: " << prod.rows() << "x" << prod.cols()  << std::endl;
+
+    double loc = 0.3;
+    for(std::size_t i = 0; i < prod.rows(); ++i){
+        for(std::size_t j = 0; j < prod.cols(); ++j){
+            Rcout << "Elem of P in fm_prod (" << i << "," << j << ") evaluated in " << loc << ": " << prod(i,j)(loc) << std::endl;}}
+            
     return prod;
 }
 
