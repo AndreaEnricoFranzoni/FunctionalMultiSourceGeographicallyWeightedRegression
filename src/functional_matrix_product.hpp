@@ -47,19 +47,32 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         const functional_matrix<INPUT,OUTPUT> &M2,
         int number_threads)
 {
-    std::cout << "Dense x dense" << std::endl;
+    std::cout << "Dense x dense second version" << std::endl;
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
+
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
     //resulting matrix
     functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
 
+/*
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(number_threads)
     for (std::size_t i = 0; i < prod.rows(); ++i){
         for (std::size_t j = 0; j < prod.cols(); ++j){            
             prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.row(i)*(M2.col(j).transpose())).reduce();}}   //static_cast allows to use immediately .reduce() method
 #endif       
+*/
+    for(std::size_t i = 0; i < prod.rows(); ++i){
+        for(std::size_t j = 0; j < prod.cols(); ++j){
+            prod(i,j) = std::transform_reduce(M1.get_row(i).cbegin(),   //dot product within the row i-th of M1 and the col j-th of M2
+                                              M1.get_row(i).cend(),
+                                              M2.get_col(j).cbegin(),
+                                              [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);},                                    //starting point
+                                              [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)+f2(x);};},          //reduce operation
+                                              [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};});}}       //transform operation within the two ranges
 
     return prod;
 }
@@ -74,27 +87,26 @@ template< typename INPUT = double, typename OUTPUT = double >
 inline
 functional_matrix<INPUT,OUTPUT>
 fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
-        const functional_matrix_diagonal<INPUT,OUTPUT> &M2,
+        const functional_matrix_diagonal<INPUT,OUTPUT> &D2,
         int number_threads)
 {
-    std::cout << "Dense x diagonal" << std::endl;
-    if (M1.cols() != M2.rows())
+    if (M1.cols() != D2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
-    //function that operates summation within two functions
+    //function that operates the product within two functions
     std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
 
     //resulting matrix
-    functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
+    functional_matrix<INPUT,OUTPUT> prod(M1.rows(),D2.cols());
 
 #ifdef _OPENMP
-#pragma omp parallel for collapse(2) shared(M1,M2,prod,f_prod) num_threads(number_threads)
+#pragma omp parallel for collapse(2) shared(M1,D2,prod,f_prod) num_threads(number_threads)
     for (std::size_t i = 0; i < prod.rows(); ++i){
         for (std::size_t j = 0; j < prod.cols(); ++j){            
-            prod(i,j) = f_prod(M1(i,j),M2(j,j));}}  //dense x diagonal: in prod, prod(i,j) = dense(i,j)*diagonal(j,j)
+            prod(i,j) = f_prod(M1(i,j),D2(j,j));}}  //dense x diagonal: in prod, prod(i,j) = dense(i,j)*diagonal(j,j)
 #endif  
 
     return prod;
@@ -109,12 +121,11 @@ template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline
 functional_matrix<INPUT,OUTPUT>
-fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &M1,
+fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &D1,
         const functional_matrix<INPUT,OUTPUT> &M2,
         int number_threads)
 {
-    std::cout << "Diagonal x dense" << std::endl;
-    if (M1.cols() != M2.rows())
+    if (D1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
@@ -124,13 +135,13 @@ fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &M1,
     std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
 
     //resulting matrix
-    functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
+    functional_matrix<INPUT,OUTPUT> prod(D1.rows(),M2.cols());
 
 #ifdef _OPENMP
-#pragma omp parallel for collapse(2) shared(M1,M2,prod,f_prod) num_threads(number_threads)
+#pragma omp parallel for collapse(2) shared(D1,M2,prod,f_prod) num_threads(number_threads)
     for (std::size_t i = 0; i < prod.rows(); ++i){
         for (std::size_t j = 0; j < prod.cols(); ++j){            
-            prod(i,j) = f_prod(M1(i,i),M2(i,j));}}  //diagonal x dense: in prod, prod(i,j) = diagonal(i,i)*dense(i,j)
+            prod(i,j) = f_prod(D1(i,i),M2(i,j));}}  //diagonal x dense: in prod, prod(i,j) = diagonal(i,i)*dense(i,j)
 #endif  
 
     return prod;
@@ -139,20 +150,19 @@ fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &M1,
 
 
 /*!
-* @brief Row-by-col product within two diagonal functional matrices M1*M2
+* @brief Row-by-col product within two diagonal functional matrices D1*D2
 */
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline
 functional_matrix_diagonal<INPUT,OUTPUT>
-fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &M1,
-        const functional_matrix_diagonal<INPUT,OUTPUT> &M2)
+fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &D1,
+        const functional_matrix_diagonal<INPUT,OUTPUT> &D2)
 {
-    std::cout << "Diagonal x diagonal" << std::endl;
-    if (M1.cols() != M2.rows())
+    if (D1.cols() != D2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
-    return static_cast<functional_matrix_diagonal<INPUT,OUTPUT>>(M1*M2);
+    return static_cast<functional_matrix_diagonal<INPUT,OUTPUT>>(D1*D2);
 }
 
 
