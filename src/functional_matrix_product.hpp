@@ -27,6 +27,7 @@
 #include "functional_matrix_operators.hpp"
 
 #include <Eigen/Dense>
+#include <numberic>
 #include <algorithm>
 #include <iterator>
 
@@ -59,7 +60,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
 
     F_OBJ f_null = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
     std::function<F_OBJ(F_OBJ,F_OBJ)> f_sum = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)+f2(x);};};
-    std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};}
+    std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
 
 /*
 #ifdef _OPENMP
