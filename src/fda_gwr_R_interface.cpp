@@ -585,7 +585,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     auto row_1 = test_fdm_dense3.get_row(1);
     for (auto it = row_1.begin(); it != row_1.end(); ++it)
     {
-        Rcout << *it(loc) << std::endl;
+        Rcout << (*it)(loc) << std::endl;
     }
     
 
