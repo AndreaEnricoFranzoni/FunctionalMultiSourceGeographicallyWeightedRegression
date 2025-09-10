@@ -582,6 +582,13 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
         }
     }
 
+    auto row_1 = test_fdm_dense3.get_row(1);
+    for (auto it = row_1.begin(); it != row_1.end(); ++it)
+    {
+        Rcout << it(loc) << std::endl;
+    }
+    
+
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> prod = fm_prod<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fdm_dense3,M2,4);
     Rcout << "Il prodotto ha " << prod.rows() << " righe e " << prod.cols() << " colonne" <<std::endl;
         for(std::size_t i = 0; i < prod.rows(); ++i){

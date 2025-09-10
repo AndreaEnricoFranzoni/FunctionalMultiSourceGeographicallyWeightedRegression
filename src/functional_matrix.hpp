@@ -27,6 +27,75 @@
 #include <utility>
 #include <vector>
 #include <cassert>
+#include <cstddef>   // std::ptrdiff_t
+#include <iterator>  // std::forward_iterator_tag
+
+
+
+/*!
+* @brief Struct to construct an iterator with stride (for the row-major)
+*/
+template<typename Ptr>
+struct StridedIterator {
+    using value_type        = typename std::remove_pointer<Ptr>::type;
+    using difference_type   = std::ptrdiff_t;
+    using pointer           = Ptr;
+    using reference         = typename std::add_lvalue_reference<value_type>::type;
+    using iterator_category = std::forward_iterator_tag;
+
+    Ptr ptr;
+    std::ptrdiff_t step;
+
+    StridedIterator(Ptr p, std::ptrdiff_t s) : ptr(p), step(s) {}
+
+    reference operator*() const { return *ptr; }
+
+    StridedIterator& operator++() { ptr += step; return *this; }
+
+    bool operator!=(const StridedIterator& other) const { return ptr != other.ptr; }
+};
+
+/*!
+* @brief Row-view
+*/
+template<typename T>
+struct RowView {
+    T* base;
+    size_t row;
+    size_t rows, cols;
+
+    using iterator = StridedIterator<T*>;
+    using const_iterator = StridedIterator<const T*>;
+
+    iterator begin() { return iterator(base + row, rows); }
+    iterator end()   { return iterator(base + cols*rows + row, rows); }
+
+    const_iterator cbegin() const { return const_iterator(base + row, rows); }
+    const_iterator cend()   const { return const_iterator(base + cols*rows + row, rows); }
+};
+
+
+// Col view
+template<typename T>
+struct ColView {
+    T* base;
+    size_t col;
+    size_t rows;
+
+    using iterator = T*;
+    using const_iterator = const T*;
+
+    iterator begin() { return base + col*rows; }
+    iterator end()   { return base + (col+1)*rows; }
+
+    const_iterator cbegin() const { return base + col*rows; }
+    const_iterator cend()   const { return base + (col+1)*rows; }
+};
+
+
+
+
+
 
 
 //! A class for matrices of functions: STORING COLUMN WISE
@@ -204,6 +273,53 @@ public:
         return *this;
     }
 
+
+
+
+
+    /*!
+    * @brief Getting row idx-th, view
+    */
+    RowView< F_OBJ >
+    get_row(std::size_t idx)
+    {
+        return {  m_data.data(), idx, m_rows, m_cols};
+    }
+
+    /*!
+    * @brief Getting row idx-th, view, const
+    */
+    const RowView< F_OBJ >
+    get_row(std::size_t idx)
+    const
+    {
+        return {  m_data.data(), idx, m_rows, m_cols};
+    }
+
+    /*!
+    * @brief Getting col idx-th, view
+    */
+    ColView< F_OBJ >
+    get_col(std::size_t idx)
+    {
+        return {  m_data.data(), idx, m_rows};
+    }
+
+    /*!
+    * @brief Getting col idx-th, view, const
+    */
+    const ColView< F_OBJ >
+    get_col(std::size_t idx)
+    const
+    {
+        return {  m_data.data(), idx, m_rows};
+    }
+
+
+
+
+
+
     /*!
     * @brief Getting row idx-th, as row vector
     */
@@ -353,3 +469,145 @@ cend(functional_matrix<INPUT,OUTPUT> const &fm)
 }
 
 #endif  /*FUNCTIONAL_MATRIX_HPP*/
+
+
+
+
+/*
+Block<MatrixType, Dynamic, 1> col(Index j) {
+    return Block<MatrixType, Dynamic, 1>(*this, 0, j, rows(), 1);
+}
+
+
+
+
+// column view (contigua)
+template<typename T>
+struct ColView {
+    T* base;
+    size_t col, rows;
+
+    T& operator[](size_t i) { return base[col * rows + i]; }
+    const T& operator[](size_t i) const { return base[col * rows + i]; }
+
+    T* begin() { return base + col * rows; }
+    T* end()   { return base + (col + 1) * rows; }
+};
+
+// row view (stride = rows)
+template<typename T>
+struct RowView {
+    T* base;
+    size_t row, rows, cols;
+
+    using iterator = StridedIterator<T>;
+    iterator begin() { return iterator(base + row, rows); }
+    iterator end()   { return iterator(base + cols * rows + row, rows); }
+};
+
+
+*/
+
+
+/*
+#include <cstddef>   // std::ptrdiff_t
+#include <iterator>  // std::forward_iterator_tag
+
+template<typename Ptr>
+struct StridedIterator {
+    using value_type        = typename std::remove_pointer<Ptr>::type;
+    using difference_type   = std::ptrdiff_t;
+    using pointer           = Ptr;
+    using reference         = typename std::add_lvalue_reference<value_type>::type;
+    using iterator_category = std::forward_iterator_tag;
+
+    Ptr ptr;
+    std::ptrdiff_t step;
+
+    StridedIterator(Ptr p, std::ptrdiff_t s) : ptr(p), step(s) {}
+
+    reference operator*() const { return *ptr; }
+
+    StridedIterator& operator++() { ptr += step; return *this; }
+
+    bool operator!=(const StridedIterator& other) const { return ptr != other.ptr; }
+};
+
+
+template<typename T>
+struct RowView {
+    T* base;
+    size_t row;
+    size_t rows, cols;
+
+    using iterator = StridedIterator<T*>;
+    using const_iterator = StridedIterator<const T*>;
+
+    iterator begin() { return iterator(base + row, rows); }
+    iterator end()   { return iterator(base + cols*rows + row, rows); }
+
+    const_iterator cbegin() const { return const_iterator(base + row, rows); }
+    const_iterator cend()   const { return const_iterator(base + cols*rows + row, rows); }
+};
+
+
+template<typename T>
+struct ColView {
+    T* base;
+    size_t col;
+    size_t rows;
+
+    using iterator = T*;
+    using const_iterator = const T*;
+
+    iterator begin() { return base + col*rows; }
+    iterator end()   { return base + (col+1)*rows; }
+
+    const_iterator cbegin() const { return base + col*rows; }
+    const_iterator cend()   const { return base + (col+1)*rows; }
+};
+
+
+
+
+
+
+
+#include <iostream>
+#include <numeric>
+
+template<typename T>
+struct Matrix {
+    size_t rows, cols;
+    std::vector<T> data;
+
+    Matrix(size_t r, size_t c) : rows(r), cols(c), data(r*c) {}
+
+    T& operator()(size_t i, size_t j) { return data[j*rows + i]; }
+    const T& operator()(size_t i, size_t j) const { return data[j*rows + i]; }
+
+    RowView<T> row(size_t i) { return { data.data(), i, rows, cols }; }
+    ColView<T> col(size_t j) { return { data.data(), j, rows }; }
+};
+
+int main() {
+    Matrix<double> A(3,3);
+    double v = 1;
+    for (size_t i=0; i<A.rows; ++i)
+        for (size_t j=0; j<A.cols; ++j)
+            A(i,j) = v++;
+
+    auto r1 = A.row(1);
+    std::cout << "Row 1 via cbegin: ";
+    for (auto it = r1.cbegin(); it != r1.cend(); ++it)
+        std::cout << *it << " ";
+    std::cout << "\n";
+
+    auto c2 = A.col(2);
+    double sum = std::accumulate(c2.cbegin(), c2.cend(), 0.0);
+    std::cout << "Sum of Col 2 = " << sum << "\n";
+}
+
+
+
+*/
