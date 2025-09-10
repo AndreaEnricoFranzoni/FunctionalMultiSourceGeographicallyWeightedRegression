@@ -27,7 +27,7 @@
 #include "functional_matrix_operators.hpp"
 
 #include <Eigen/Dense>
-#include <numberic>
+#include <numeric>
 #include <algorithm>
 #include <iterator>
 
