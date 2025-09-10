@@ -182,16 +182,17 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
     
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(number_threads)
-    for (std::size_t i = 0; i < prod.rows(); ++i){
-        for (std::size_t j = 0; j < prod.cols(); ++j){    
-
-            std::vector<F_OBJ> scalar_f_vec;
-            scalar_f_vec.resize(M2.rows());
-            std::transform(M2.col(j).cbegin(),
-                           M2.col(j).cend(),
-                           scalar_f_vec.begin(),
-                           scalar_to_const_f);      //iterators on Eigen::MatrixXd traverse M2 column-wise (coherent with how elements are stored into a functional_matrix)
-            functional_matrix<INPUT,OUTPUT> col_j(scalar_f_vec,1,M2.rows());
+    for (std::size_t j = 0; j < prod.cols(); ++j){
+        //transforming the j-th col of the scalar matrix into a row vector (coherent for ETs on fm) of functional objects
+        std::vector<F_OBJ> scalar_f_vec;
+        scalar_f_vec.resize(M2.rows());
+        std::transform(M2.col(j).cbegin(),
+                       M2.col(j).cend(),
+                       scalar_f_vec.begin(),
+                       scalar_to_const_f);      //iterators on Eigen::MatrixXd traverse M2 column-wise (coherent with how elements are stored into a functional_matrix)
+        functional_matrix<INPUT,OUTPUT> col_j(scalar_f_vec,1,M2.rows());
+        
+        for (std::size_t i = 0; i < prod.rows(); ++i){    
             prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.get_row(i)*col_j).reduce();}}   //static_cast allows to use immediately .reduce() method
 #endif        
 
@@ -226,15 +227,16 @@ fm_prod(const Eigen::MatrixXd &M1,
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(number_threads)
     for (std::size_t i = 0; i < prod.rows(); ++i){
+        //transforming the i-th row of the scalar matrix into a row vector (already made a column-vector for ETs on fm) of functional objects
+        std::vector<F_OBJ> scalar_f_vec;
+        scalar_f_vec.resize(M1.cols());
+        std::transform(M1.row(i).cbegin(),
+                       M1.row(i).cend(),
+                       scalar_f_vec.begin(),
+                       scalar_to_const_f);      //iterators on Eigen::MatrixXd traverse M2 column-wise (coherent with how elements are stored into a functional_matrix)
+        functional_matrix<INPUT,OUTPUT> row_i(scalar_f_vec,M2.rows(),1);
+        
         for (std::size_t j = 0; j < prod.cols(); ++j){    
-
-            std::vector<F_OBJ> scalar_f_vec;
-            scalar_f_vec.resize(M1.cols());
-            std::transform(M1.row(i).cbegin(),
-                           M1.row(i).cend(),
-                           scalar_f_vec.begin(),
-                           scalar_to_const_f);      //iterators on Eigen::MatrixXd traverse M2 column-wise (coherent with how elements are stored into a functional_matrix)
-            functional_matrix<INPUT,OUTPUT> row_i(scalar_f_vec,M2.rows(),1);
             prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(row_i*M2.get_col(j)).reduce();}}   //static_cast allows to use immediately .reduce() method
 #endif        
 
