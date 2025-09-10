@@ -57,6 +57,10 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
     //resulting matrix
     functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
 
+    F_OBJ f_null = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
+    std::function<F_OBJ(F_OBJ,F_OBJ)> f_sum = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)+f2(x);};};
+    std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};}
+
 /*
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(number_threads)
@@ -70,9 +74,9 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
             prod(i,j) = std::transform_reduce(M1.get_row(i).cbegin(),   //dot product within the row i-th of M1 and the col j-th of M2
                                               M1.get_row(i).cend(),
                                               M2.get_col(j).cbegin(),
-                                              [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);},                                    //starting point
-                                              [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)+f2(x);};},          //reduce operation
-                                              [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};});}}       //transform operation within the two ranges
+                                              f_null,                                    //starting point
+                                              f_sum,          //reduce operation
+                                              f_prod);}}       //transform operation within the two ranges
 
     return prod;
 }
