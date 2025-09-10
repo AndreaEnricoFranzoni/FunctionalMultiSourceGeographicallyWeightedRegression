@@ -58,7 +58,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
 #pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(number_threads)
     for (std::size_t i = 0; i < prod.rows(); ++i){
         for (std::size_t j = 0; j < prod.cols(); ++j){            
-            prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.get_row(i)*(M2.get_col(j).transpose())).reduce();}}   //static_cast allows to use immediately .reduce() method
+            prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.row(i)*(M2.col(j).transpose())).reduce();}}   //static_cast allows to use immediately .reduce() method
 #endif       
 
     return prod;
@@ -193,7 +193,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         functional_matrix<INPUT,OUTPUT> col_j(scalar_f_vec,1,M2.rows());
         
         for (std::size_t i = 0; i < prod.rows(); ++i){    
-            prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.get_row(i)*col_j).reduce();}}   //static_cast allows to use immediately .reduce() method
+            prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.row(i)*col_j).reduce();}}   //static_cast allows to use immediately .reduce() method
 #endif        
 
     return prod;
@@ -237,7 +237,7 @@ fm_prod(const Eigen::MatrixXd &M1,
         functional_matrix<INPUT,OUTPUT> row_i(scalar_f_vec,M2.rows(),1);
         
         for (std::size_t j = 0; j < prod.cols(); ++j){    
-            prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(row_i*M2.get_col(j)).reduce();}}   //static_cast allows to use immediately .reduce() method
+            prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(row_i*M2.col(j)).reduce();}}   //static_cast allows to use immediately .reduce() method
 #endif        
 
     return prod;

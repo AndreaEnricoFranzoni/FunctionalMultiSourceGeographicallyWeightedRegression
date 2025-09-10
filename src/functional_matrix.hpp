@@ -205,23 +205,23 @@ public:
     }
 
     /*!
-    * @brief Getting a specific row, as row vector
+    * @brief Getting row idx-th, as row vector
     */
     functional_matrix
-    get_row(std::size_t idx)
+    row(std::size_t idx)
     const
     {
-        std::vector< F_OBJ > row;
-        row.resize(m_cols);
+        std::vector< F_OBJ > row_idx;
+        row_idx.resize(m_cols);
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(row,idx,m_rows,m_cols,m_data) num_threads(8)
+#pragma omp parallel for shared(row_idx,idx,m_rows,m_cols,m_data) num_threads(8)
     for(std::size_t j = 0; j < m_cols; ++j)
     {
-        row[j] = m_data[j*m_rows + idx];
+        row_idx[j] = m_data[j*m_rows + idx];
     }
 #endif
-        functional_matrix res(row,1,m_cols);
+        functional_matrix res(row_idx,1,m_cols);
         return res;
     }
 
@@ -229,20 +229,20 @@ public:
     * @brief Getting a specific column, as column vector
     */
     functional_matrix
-    get_col(std::size_t idx)
+    col(std::size_t idx)
     const
     {
-        std::vector< F_OBJ > col;
-        col.resize(m_rows);
+        std::vector< F_OBJ > col_idx;
+        col_idx.resize(m_rows);
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(col,idx,m_rows,m_data) num_threads(8)
+#pragma omp parallel for shared(col_idx,idx,m_rows,m_data) num_threads(8)
     for(std::size_t i = 0; i < m_rows; ++i)
     {
-        col[i] = m_data[idx*m_rows + i];
+        col_idx[i] = m_data[idx*m_rows + i];
     }
 #endif
-        functional_matrix res(col,m_rows,1);
+        functional_matrix res(col_idx,m_rows,1);
         return res;
     }
 
