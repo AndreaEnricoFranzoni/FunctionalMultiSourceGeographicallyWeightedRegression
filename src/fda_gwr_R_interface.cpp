@@ -605,6 +605,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     auto R = M2.reshaped(); //NB: .reshaped() mette in ordine per colonne
     std::vector<std::function< double (double const &) >> scalar_f_vec;
     scalar_f_vec.resize(M2.size());
+    std::function<std::function< double (double const &) >(const double &)> scalar_to_const_f = [](const double &a){return [a](const double &x){return static_cast<double>(a);};};
     std::transform(R.cbegin(),
                    R.cend(),
                    scalar_f_vec.begin(),
