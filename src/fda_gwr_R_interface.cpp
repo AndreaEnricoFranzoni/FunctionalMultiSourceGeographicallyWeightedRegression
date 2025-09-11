@@ -599,18 +599,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     }
 
     Eigen::MatrixXd M2 = Eigen::MatrixXd::Random(3,2);  // valori in [-1, 1]
-
+    Rcout << "Using a function to convert" << std::endl;
     Rcout << M2 << std::endl;
 
-    auto R = M2.reshaped(); //NB: .reshaped() mette in ordine per colonne
-    std::vector<std::function< double (double const &) >> scalar_f_vec;
-    scalar_f_vec.resize(M2.size());
-    std::function<std::function< double (double const &) >(const double &)> scalar_to_const_f = [](const double &a){return [a](const double &x){return static_cast<double>(a);};};
-    std::transform(R.cbegin(),
-                   R.cend(),
-                   scalar_f_vec.begin(),
-                   scalar_to_const_f);      //iterators on Eigen::MatrixXd traverse M2 column-wise (coherent with how elements are stored into a functional_matrix)
-    functional_matrix<double,double> M2_f(scalar_f_vec,M2.rows(),M2.cols());
+    functional_matrix<double,double> M2_f = scalar_to_functional<double,double>(M2);
 
     for(std::size_t i = 0; i < M2_f.rows(); ++i){
         for(std::size_t j = 0; j < M2_f.cols(); ++j){
