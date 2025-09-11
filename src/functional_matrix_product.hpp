@@ -48,7 +48,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         const functional_matrix<INPUT,OUTPUT> &M2,
         int number_threads)
 {
-    std::cout << "Dense x dense second version" << std::endl;
+    std::cout << "Dense x dense third version" << std::endl;
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
@@ -64,22 +64,18 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
     //binary operation for transform_reduce
     std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
 
-/*
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(number_threads)
-    for (std::size_t i = 0; i < prod.rows(); ++i){
-        for (std::size_t j = 0; j < prod.cols(); ++j){            
-            prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.row(i)*(M2.col(j).transpose())).reduce();}}   //static_cast allows to use immediately .reduce() method
-#endif       
-*/
     for(std::size_t i = 0; i < prod.rows(); ++i){
         for(std::size_t j = 0; j < prod.cols(); ++j){
-            prod(i,j) = std::transform_reduce(M1.get_row(i).cbegin(),   //dot product within the row i-th of M1 and the col j-th of M2
+            //dot product within the row i-th of M1 and the col j-th of M2
+            prod(i,j) = std::transform_reduce(M1.get_row(i).cbegin(),   
                                               M1.get_row(i).cend(),
                                               M2.get_col(j).cbegin(),
-                                              f_null,                                    //starting point
-                                              f_sum,          //reduce operation
-                                              f_prod);}}       //transform operation within the two ranges
+                                              f_null,                    //initial value (null function)
+                                              f_sum,                     //reduce operation
+                                              f_prod);}}                 //transform operation within the two ranges
+#endif  
 
     return prod;
 }
