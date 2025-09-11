@@ -61,8 +61,8 @@ struct RowView {
     std::size_t rows, cols;
 
 
-    StridedIterator<T*> begin() { return iterator(base + row, rows); }
-    StridedIterator<T*> end()   { return iterator(base + cols*rows + row, rows); }
+    StridedIterator<T*> begin() { return StridedIterator<T*>(base + row, rows); }
+    StridedIterator<T*> end()   { return StridedIterator<T*>(base + cols*rows + row, rows); }
 };
 
 
@@ -76,8 +76,8 @@ struct ConstRowView {
     std::size_t rows, cols;
 
 
-    StridedIterator<const T*> cbegin() const { return iterator(base + row, rows); }
-    StridedIterator<const T*> cend()   const { return iterator(base + cols*rows + row, rows); }
+    StridedIterator<const T*> cbegin() const { return StridedIterator<const T*>(base + row, rows); }
+    StridedIterator<const T*> cend()   const { return StridedIterator<const T*>(base + cols*rows + row, rows); }
 };
 
 
