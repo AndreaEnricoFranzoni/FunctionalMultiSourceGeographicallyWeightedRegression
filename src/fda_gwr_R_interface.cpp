@@ -574,15 +574,15 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Eigen::MatrixXd M2 = Eigen::MatrixXd::Random(3,2);  // valori in [-1, 1]
 
 
-    for(std::size_t i = 0; i < test_fdm_dense3.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense3.cols(); ++j){
-            Rcout << "Elem of 3 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense3(i,j)(loc) << std::endl;
+    for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm_dense2.cols(); ++j){
+            Rcout << "Elem of 2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2(i,j)(loc) << std::endl;
         }
     }
 
     Rcout << M2 << std::endl;
 
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> prod = fm_prod<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fdm_dense3,M2,4);
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> prod = fm_prod<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(M2,test_fdm_dense2,4);
     
     Rcout << "Il prodotto ha " << prod.rows() << " righe e " << prod.cols() << " colonne" <<std::endl;
         for(std::size_t i = 0; i < prod.rows(); ++i){
