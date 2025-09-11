@@ -30,7 +30,6 @@
 #include <cassert> 
 #include <Eigen/Dense>
 #include <algorithm>
-#include <execution>
 
 
 
@@ -380,7 +379,7 @@ scalar_to_functional(const Eigen::Matrix< OUTPUT, Eigen::Dynamic, Eigen::Dynamic
     std::vector< F_OBJ > f_vec;
     f_vec.resize(Ms.size());
     //transforming each element of S into a constant function
-    std::transform(std::execution::par,R.cbegin(),R.cend(),f_vec.begin(),scalar_to_const_func);      
+    std::transform(R.cbegin(),R.cend(),f_vec.begin(),scalar_to_const_func);      
     //constructing the functional matrix
     functional_matrix<INPUT,OUTPUT> Mf(f_vec,Ms.rows(),Ms.cols());
 
