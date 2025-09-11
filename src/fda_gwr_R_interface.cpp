@@ -624,6 +624,9 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
         }
     }
 
+    Rcout << "After" << std::endl;
+    Rcout << M2 << std::endl;
+
 /*
         for(std::size_t i = 0; i < test_fdm_d.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm_d.cols(); ++j){
