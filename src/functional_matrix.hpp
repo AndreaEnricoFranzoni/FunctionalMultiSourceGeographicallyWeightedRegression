@@ -23,77 +23,11 @@
 
 
 #include "functional_matrix_expression_wrapper.hpp"
+#include "functional_matrix_views.hpp"
 #include "functional_matrix_utils.hpp"
 #include <utility>
 #include <vector>
-#include <cassert>
-#include <cstddef>   // std::ptrdiff_t
-#include <iterator>  // std::forward_iterator_tag
-
-
-
-/*!
-* @brief Struct to construct an iterator with stride (for the row-major)
-*/
-template<typename Ptr>
-struct StridedIterator {
-    using value_type        = typename std::remove_pointer<Ptr>::type;
-    using difference_type   = std::ptrdiff_t;
-    using pointer           = Ptr;
-    using reference         = typename std::add_lvalue_reference<value_type>::type;
-    using iterator_category = std::forward_iterator_tag;
-
-    Ptr ptr;
-    std::ptrdiff_t step;
-
-    StridedIterator(Ptr p, std::ptrdiff_t s) : ptr(p), step(s) {}
-
-    reference operator*() const { return *ptr; }
-
-    StridedIterator& operator++() { ptr += step; return *this; }
-
-    bool operator!=(const StridedIterator& other) const { return ptr != other.ptr; }
-};
-
-/*!
-* @brief Row-view
-*/
-template<typename T>
-struct RowView {
-    T* base;
-    size_t row;
-    size_t rows, cols;
-
-    using iterator = StridedIterator<T*>;
-    using const_iterator = StridedIterator<const T*>;
-
-    iterator begin() { return iterator(base + row, rows); }
-    iterator end()   { return iterator(base + cols*rows + row, rows); }
-
-    const_iterator cbegin() const { return const_iterator(base + row, rows); }
-    const_iterator cend()   const { return const_iterator(base + cols*rows + row, rows); }
-};
-
-
-// Col view
-template<typename T>
-struct ColView {
-    T* base;
-    size_t col;
-    size_t rows;
-
-    using iterator = T*;
-    using const_iterator = const T*;
-
-    iterator begin() { return base + col*rows; }
-    iterator end()   { return base + (col+1)*rows; }
-
-    const_iterator cbegin() const { return base + col*rows; }
-    const_iterator cend()   const { return base + (col+1)*rows; }
-};
-
-
-
+#include <cassert> 
 
 
 
@@ -107,9 +41,16 @@ template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class functional_matrix : public Expr< functional_matrix<INPUT,OUTPUT>, INPUT, OUTPUT >
 {
-//type of the function stored
-using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
-using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
+    //type of the function stored and its input
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
+    //aliases for row expression
+    typedef RowView<F_OBJ> RowXpr;              //non-const         
+    typedef ConstRowView<F_OBJ> ConstRowXpr;    //const
+    //aliases for col expression
+    typedef ColView<F_OBJ> ColXpr;              //non-const 
+    typedef ConstColView<F_OBJ> ConstColXpr;    //const
+
 
 private:
     /*!Number of rows*/
@@ -280,7 +221,7 @@ public:
     /*!
     * @brief Getting row idx-th, view
     */
-    RowView< F_OBJ >
+    RowXpr
     get_row(std::size_t idx)
     {
         return {  m_data.data(), idx, m_rows, m_cols};
@@ -289,7 +230,7 @@ public:
     /*!
     * @brief Getting row idx-th, view, const
     */
-    const RowView< F_OBJ >
+    ConstRowXpr
     get_row(std::size_t idx)
     const
     {
@@ -299,7 +240,7 @@ public:
     /*!
     * @brief Getting col idx-th, view
     */
-    ColView< F_OBJ >
+    ColXpr
     get_col(std::size_t idx)
     {
         return {  m_data.data(), idx, m_rows};
@@ -308,7 +249,7 @@ public:
     /*!
     * @brief Getting col idx-th, view, const
     */
-    const ColView< F_OBJ >
+    ConstColXpr
     get_col(std::size_t idx)
     const
     {

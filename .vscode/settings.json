@@ -64,6 +64,7 @@
         "stack": "cpp",
         "typeindex": "cpp",
         "unordered_set": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "utility": "cpp"
     }
 }

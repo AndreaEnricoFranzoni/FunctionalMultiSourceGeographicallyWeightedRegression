@@ -57,9 +57,11 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
 
     //resulting matrix
     functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
-
+    //initial point for f_sum
     F_OBJ f_null = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
+    //reducing operation for transform_reduce
     std::function<F_OBJ(F_OBJ,F_OBJ)> f_sum = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)+f2(x);};};
+    //binary operation for transform_reduce
     std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
 
 /*
