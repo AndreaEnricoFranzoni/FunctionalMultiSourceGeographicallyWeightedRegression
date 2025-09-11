@@ -176,6 +176,44 @@ public:
     }
 
     /*!
+    * @brief Getting row idx-th, view
+    */
+    RowXpr
+    row(std::size_t idx)
+    {
+        return {  m_data.data(), idx, m_rows, m_cols};
+    }
+
+    /*!
+    * @brief Getting row idx-th, view, const
+    */
+    ConstRowXpr
+    row(std::size_t idx)
+    const
+    {
+        return {  m_data.data(), idx, m_rows, m_cols};
+    }
+
+    /*!
+    * @brief Getting col idx-th, view
+    */
+    ColXpr
+    col(std::size_t idx)
+    {
+        return {  m_data.data(), idx, m_rows};
+    }
+
+    /*!
+    * @brief Getting col idx-th, view, const
+    */
+    ConstColXpr
+    col(std::size_t idx)
+    const
+    {
+        return {  m_data.data(), idx, m_rows};
+    }
+
+    /*!
     * @brief Transposing the functional matrix
     */
     void
@@ -200,7 +238,7 @@ public:
             std::swap(m_data,temp);
             temp.clear();
         }
-
+        //swapping number of rows and cols
         std::swap(m_rows,m_cols);
     }
 
@@ -212,95 +250,6 @@ public:
     {
         this->transposing();
         return *this;
-    }
-
-
-
-
-
-    /*!
-    * @brief Getting row idx-th, view
-    */
-    RowXpr
-    get_row(std::size_t idx)
-    {
-        return {  m_data.data(), idx, m_rows, m_cols};
-    }
-
-    /*!
-    * @brief Getting row idx-th, view, const
-    */
-    ConstRowXpr
-    get_row(std::size_t idx)
-    const
-    {
-        return {  m_data.data(), idx, m_rows, m_cols};
-    }
-
-    /*!
-    * @brief Getting col idx-th, view
-    */
-    ColXpr
-    get_col(std::size_t idx)
-    {
-        return {  m_data.data(), idx, m_rows};
-    }
-
-    /*!
-    * @brief Getting col idx-th, view, const
-    */
-    ConstColXpr
-    get_col(std::size_t idx)
-    const
-    {
-        return {  m_data.data(), idx, m_rows};
-    }
-
-
-
-
-
-
-    /*!
-    * @brief Getting row idx-th, as row vector
-    */
-    functional_matrix
-    row(std::size_t idx)
-    const
-    {
-        std::vector< F_OBJ > row_idx;
-        row_idx.resize(m_cols);
-
-#ifdef _OPENMP
-#pragma omp parallel for shared(row_idx,idx,m_rows,m_cols,m_data) num_threads(8)
-    for(std::size_t j = 0; j < m_cols; ++j)
-    {
-        row_idx[j] = m_data[j*m_rows + idx];
-    }
-#endif
-        functional_matrix res(row_idx,1,m_cols);
-        return res;
-    }
-
-    /*!
-    * @brief Getting a specific column, as column vector
-    */
-    functional_matrix
-    col(std::size_t idx)
-    const
-    {
-        std::vector< F_OBJ > col_idx;
-        col_idx.resize(m_rows);
-
-#ifdef _OPENMP
-#pragma omp parallel for shared(col_idx,idx,m_rows,m_data) num_threads(8)
-    for(std::size_t i = 0; i < m_rows; ++i)
-    {
-        col_idx[i] = m_data[idx*m_rows + i];
-    }
-#endif
-        functional_matrix res(col_idx,m_rows,1);
-        return res;
     }
 
     /*!

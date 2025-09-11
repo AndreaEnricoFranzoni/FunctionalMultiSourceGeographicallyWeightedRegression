@@ -572,9 +572,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> testd{f5,f3,f1,f2};
     functional_matrix_diagonal test_fdm_d(testd,4);
 
-    Eigen::MatrixXd M2 = Eigen::MatrixXd::Random(3,2);  // valori in [-1, 1]
 
-    Rcout << M2 << std::endl;
 
     for(std::size_t i = 0; i < test_fdm_dense3.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm_dense3.cols(); ++j){
@@ -597,6 +595,31 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
         for(std::size_t i = 0; i < prod.rows(); ++i){
         for(std::size_t j = 0; j < prod.cols(); ++j){
             Rcout << "Elem of P (" << i << "," << j << ") evaluated in " << loc << ": " << prod(i,j)(loc) << std::endl;
+        }
+    }
+
+    Eigen::MatrixXd M2 = Eigen::MatrixXd::Random(3,2);  // valori in [-1, 1]
+
+    Rcout << M2 << std::endl;
+
+    auto R = M2.reshaped(); //NB: .reshaped() mette in ordine per colonne
+    std::vector<std::function< double (double const &) >> scalar_f_vec;
+    scalar_f_vec.resize(M2.size());
+    std::transform(R.cbegin(),
+                   R.cend(),
+                   scalar_f_vec.begin(),
+                   scalar_to_const_f);      //iterators on Eigen::MatrixXd traverse M2 column-wise (coherent with how elements are stored into a functional_matrix)
+    functional_matrix<INPUT,OUTPUT> M2_f(scalar_f_vec,M2.rows(),M2.cols());
+
+    for(std::size_t i = 0; i < M2_f.rows(); ++i){
+        for(std::size_t j = 0; j < M2_f.cols(); ++j){
+            Rcout << "Elem of S_to_F (" << i << "," << j << ") evaluated in " << 0.3 << ": " << M2_f(i,j)(0.3) << std::endl;
+        }
+    }
+
+    for(std::size_t i = 0; i < M2_f.rows(); ++i){
+        for(std::size_t j = 0; j < M2_f.cols(); ++j){
+            Rcout << "Elem of S_to_F (" << i << "," << j << ") evaluated in " << 0.4 << ": " << M2_f(i,j)(0.4) << std::endl;
         }
     }
 

@@ -28,7 +28,8 @@
 
 
 /*!
-* @brief Struct to construct an iterator with stride (for the row-major)
+* @brief Struct to construct an iterator with stride (necessary for getting the rows if storing as col-major (the case for functional matrices),
+*        since is giving the right step to be added to the offset)
 */
 template<typename Ptr>
 struct StridedIterator {

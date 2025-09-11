@@ -48,30 +48,32 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         const functional_matrix<INPUT,OUTPUT> &M2,
         int number_threads)
 {
-    std::cout << "Dense x dense third version" << std::endl;
+    //checking matrices dimensions
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
+    //type stored by the functional matrix
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    //input type of the elements of the functional matrix
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
-
-    //resulting matrix
-    functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
     //initial point for f_sum
     F_OBJ f_null = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
     //reducing operation for transform_reduce
     std::function<F_OBJ(F_OBJ,F_OBJ)> f_sum = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)+f2(x);};};
     //binary operation for transform_reduce
     std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
+    
+    //resulting matrix
+    functional_matrix<INPUT,OUTPUT> prod(M1.rows(),M2.cols());
 
 #ifdef _OPENMP
-#pragma omp parallel for collapse(2) shared(M1,M2,prod) num_threads(number_threads)
+#pragma omp parallel for collapse(2) shared(M1,M2,prod,f_null,f_sum,f_prod) num_threads(number_threads)
     for(std::size_t i = 0; i < prod.rows(); ++i){
         for(std::size_t j = 0; j < prod.cols(); ++j){
-            //dot product within the row i-th of M1 and the col j-th of M2
-            prod(i,j) = std::transform_reduce(M1.get_row(i).cbegin(),   
-                                              M1.get_row(i).cend(),
-                                              M2.get_col(j).cbegin(),
+            //dot product within the row i-th of M1 and the col j-th of M2: using the views, access to row and cols is O(1)
+            prod(i,j) = std::transform_reduce(M1.row(i).cbegin(),   
+                                              M1.row(i).cend(),
+                                              M2.col(j).cbegin(),
                                               f_null,                    //initial value (null function)
                                               f_sum,                     //reduce operation
                                               f_prod);}}                 //transform operation within the two ranges
@@ -93,12 +95,14 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         const functional_matrix_diagonal<INPUT,OUTPUT> &D2,
         int number_threads)
 {
+    //checking matrices dimensions
     if (M1.cols() != D2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
+    //type stored by the functional matrix
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    //input type of the elements of the functional matrix
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
-
     //function that operates the product within two functions
     std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
 
@@ -128,12 +132,14 @@ fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &D1,
         const functional_matrix<INPUT,OUTPUT> &M2,
         int number_threads)
 {
+    //checking matrices dimensions
     if (D1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
+    //type stored by the functional matrix
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    //input type of the elements of the functional matrix
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
-
     //function that operates summation within two functions
     std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
 
@@ -162,9 +168,11 @@ functional_matrix_diagonal<INPUT,OUTPUT>
 fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &D1,
         const functional_matrix_diagonal<INPUT,OUTPUT> &D2)
 {
+    //checking matrices dimensions
     if (D1.cols() != D2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
+    //using ETs to perform the product
     return static_cast<functional_matrix_diagonal<INPUT,OUTPUT>>(D1*D2);
 }
 
@@ -181,13 +189,15 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         const Eigen::MatrixXd &M2,
         int number_threads)
 {
-    
+    //checking matrices dimensions
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
-    //converting the scalar matrix into one of constant functions
+    //type stored by the functional matrix
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    //input type of the elements of the functional matrix
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
+    //converting the scalar matrix into one of constant functions
     std::function<F_OBJ(const double &)> scalar_to_const_f = [](const double &a){return [a](F_OBJ_INPUT x){return static_cast<OUTPUT>(a);};};
 
     //resulting matrix
