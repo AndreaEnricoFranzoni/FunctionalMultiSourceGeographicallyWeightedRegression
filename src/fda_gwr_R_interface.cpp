@@ -609,7 +609,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                    R.cend(),
                    scalar_f_vec.begin(),
                    scalar_to_const_f);      //iterators on Eigen::MatrixXd traverse M2 column-wise (coherent with how elements are stored into a functional_matrix)
-    functional_matrix<INPUT,OUTPUT> M2_f(scalar_f_vec,M2.rows(),M2.cols());
+    functional_matrix<double,double> M2_f(scalar_f_vec,M2.rows(),M2.cols());
 
     for(std::size_t i = 0; i < M2_f.rows(); ++i){
         for(std::size_t j = 0; j < M2_f.cols(); ++j){
