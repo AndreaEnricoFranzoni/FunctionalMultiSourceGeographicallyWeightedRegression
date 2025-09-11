@@ -186,13 +186,14 @@ template< typename INPUT = double, typename OUTPUT = double >
 inline
 functional_matrix<INPUT,OUTPUT>
 fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
-        const Eigen::MatrixXd &M2,
+        const Eigen::Matrix<OUTPUT,Eigen::Dynamic,Eigen::Dynamic> &S2,
         int number_threads)
 {
     //checking matrices dimensions
-    if (M1.cols() != M2.rows())
+    if (M1.cols() != S2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
+/*
     //type stored by the functional matrix
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
     //input type of the elements of the functional matrix
@@ -217,9 +218,12 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         
         for (std::size_t i = 0; i < prod.rows(); ++i){    
             prod(i,j) = static_cast<functional_matrix<INPUT,OUTPUT>>(M1.row(i)*col_j).reduce();}}   //static_cast allows to use immediately .reduce() method
-#endif        
+#endif  
 
     return prod;
+*/      
+
+    return fm_prod<INPUT,OUTPUT>(M1,scalar_to_functional<INPUT,OUTPUT>(S2),number_threads);
 }
 
 

@@ -571,7 +571,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     functional_matrix test_fdm_dense3(test3,4,3);
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> testd{f5,f3,f1,f2};
     functional_matrix_diagonal test_fdm_d(testd,4);
-
+    Eigen::MatrixXd M2 = Eigen::MatrixXd::Random(3,2);  // valori in [-1, 1]
 
 
     for(std::size_t i = 0; i < test_fdm_dense3.rows(); ++i){
@@ -580,17 +580,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
         }
     }
 
-    for(std::size_t i = 0; i < test_fdm_dense.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense.cols(); ++j){
-            Rcout << "Elem of 1 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
-        }
-    }
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> prod = fm_prod<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fdm_dense3,test_fdm_dense,4);
+    Rcout << M2 << std::endl;
 
-
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> prod = fm_prod<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fdm_dense3,M2,4);
     
-
-    //functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> prod = fm_prod<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fdm_dense3,M2,4);
     Rcout << "Il prodotto ha " << prod.rows() << " righe e " << prod.cols() << " colonne" <<std::endl;
         for(std::size_t i = 0; i < prod.rows(); ++i){
         for(std::size_t j = 0; j < prod.cols(); ++j){
@@ -598,26 +591,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
         }
     }
 
-    Eigen::MatrixXd M2 = Eigen::MatrixXd::Random(3,2);  // valori in [-1, 1]
-    Rcout << "Using a function to convert" << std::endl;
-    Rcout << M2 << std::endl;
 
-    functional_matrix<double,double> M2_f = scalar_to_functional<double,double>(M2);
 
-    for(std::size_t i = 0; i < M2_f.rows(); ++i){
-        for(std::size_t j = 0; j < M2_f.cols(); ++j){
-            Rcout << "Elem of S_to_F (" << i << "," << j << ") evaluated in " << 0.3 << ": " << M2_f(i,j)(0.3) << std::endl;
-        }
-    }
-
-    for(std::size_t i = 0; i < M2_f.rows(); ++i){
-        for(std::size_t j = 0; j < M2_f.cols(); ++j){
-            Rcout << "Elem of S_to_F (" << i << "," << j << ") evaluated in " << 0.4 << ": " << M2_f(i,j)(0.4) << std::endl;
-        }
-    }
-
-    Rcout << "After" << std::endl;
-    Rcout << M2 << std::endl;
 
 /*
         for(std::size_t i = 0; i < test_fdm_d.rows(); ++i){
