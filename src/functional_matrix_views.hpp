@@ -103,7 +103,7 @@ struct ColView {
 * @brief Const col-view
 */
 template<typename T>
-struct ColView {
+struct ConstColView {
     const T* base;
     std::size_t col;
     std::size_t rows;
