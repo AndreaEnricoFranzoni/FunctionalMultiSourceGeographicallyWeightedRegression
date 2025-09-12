@@ -165,10 +165,10 @@ public:
                 {
                     m_data.emplace_back(et(i,j));
                     m_rows_idx.emplace_back(i);
-                    counter_cols += 1;
+                    counter_cols_elem += 1;
                 }
             }
-            m_cols_idx.emplace_back(counter_cols);
+            m_cols_idx.emplace_back(counter_cols_elem);
         }
 
         return *this;
@@ -187,7 +187,7 @@ public:
         //checking that the passed index is coherent with the matrix dimension
         assert(idx < m_rows);            
         //it is sufficient that in the vector containing the rows there is once idx
-        return std::find(m_rows_idx.cbegin(),m_rows_idx.cend(),idx) ! = m_rows_idx.cend();
+        return std::find(m_rows_idx.cbegin(),m_rows_idx.cend(),idx) != m_rows_idx.cend();
     }
 
     /*!
