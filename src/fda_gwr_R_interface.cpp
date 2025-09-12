@@ -540,7 +540,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
 for(std::size_t i = 0; i < bs_C.q(); ++i){
-    for(std::size_t j = 0; j < bs_C.numbers_of_basis(); ++j)
+    for(std::size_t j = 0; j < bs_C.numbers_of_basis()[i]; ++j)
     {
         Rcout << "For covariate " << i << ", base " << j << "-th evaluated in " << 0.3 << ": " << bs_C.systems_of_basis()[i].eval_base(0.3)(0,j) << std::endl;
     }
