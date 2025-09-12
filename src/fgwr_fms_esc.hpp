@@ -133,13 +133,12 @@ public:
     {
         double loc = 0.3;
 
-std::cout << "In compute" << std::endl;
 
         for(std::size_t i = 0; i < omega.rows(); ++i){
     for(std::size_t j = 0; j < omega.cols(); ++j){
             std::string present_s;
             if(omega.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
-            std::cout << "Elem of OMEGA (" << i << "," << j << ") is " << present_s << " evaluated in " << loc << ": " << omega(i,j)(loc) << std::endl;
+            std::cout << "Elem of OMEGA in compute (" << i << "," << j << ") is " << present_s << " evaluated in " << loc << ": " << omega(i,j)(loc) << std::endl;
     }}
 
 /*
