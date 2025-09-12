@@ -134,11 +134,11 @@ public:
         double loc = 0.3;
 
 
-        for(std::size_t i = 0; i < omega.rows(); ++i){
-    for(std::size_t j = 0; j < omega.cols(); ++j){
+        for(std::size_t i = 0; i < m_omega.rows(); ++i){
+    for(std::size_t j = 0; j < m_omega.cols(); ++j){
             std::string present_s;
-            if(omega.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
-            std::cout << "Elem of OMEGA in compute (" << i << "," << j << ") is " << present_s << " evaluated in " << loc << ": " << omega(i,j)(loc) << std::endl;
+            if(m_omega.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
+            std::cout << "Elem of OMEGA in compute (" << i << "," << j << ") is " << present_s << " evaluated in " << loc << ": " << m_omega(i,j)(loc) << std::endl;
     }}
 
 /*
