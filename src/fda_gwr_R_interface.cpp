@@ -563,6 +563,7 @@ for(std::size_t i = 0; i < omega.rows(); ++i){
                                                                                     std::move(Xc),
                                                                                     std::move(Wc),
                                                                                     std::move(R_C.PenalizationMatrix()),
+                                                                                    std::move(omega),
                                                                                     std::move(Xe),
                                                                                     std::move(We),
                                                                                     std::move(R_E.PenalizationMatrix()),
