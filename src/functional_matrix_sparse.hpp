@@ -129,6 +129,7 @@ public:
                 }
                 else
                 {
+                    std::cout << "Entrato nell'else" << std::endl;
                     m_rows_idx.emplace_back(i);
                     counter_cols_elem += 1;
                 }
@@ -171,6 +172,7 @@ public:
                 }
                 else
                 {
+                    std::cout << "Entrato nell'else" << std::endl;
                     m_rows_idx.emplace_back(i);
                     counter_cols_elem += 1;
                 }
