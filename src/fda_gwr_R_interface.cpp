@@ -197,7 +197,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
 
 
-    Rcout << "fdagwr.5: " << std::endl;
+    Rcout << "fdagwr.8: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                     //data type
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
@@ -633,6 +633,9 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     if(std::is_same_v<decltype(test_m_sm_sub),functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>>){Rcout<<"FM"<<std::endl;}
     else{Rcout<<"Not FM"<<std::endl;}
+
+    if(std::is_same_v<decltype(test_m_sm_sub),functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>>){Rcout<<"SFM"<<std::endl;}
+    else{Rcout<<"Not SFM"<<std::endl;}
 
 /*
     for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
