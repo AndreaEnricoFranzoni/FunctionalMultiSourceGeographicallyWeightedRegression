@@ -43,10 +43,8 @@ private:
     functional_matrix_diagonal<INPUT,OUTPUT> m_Wc;
     /*!Scalar matrix with the penalization on the stationary covariates (sparse Lc x Lc, where Lc is the sum of the basis of each C covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Rc;
-    /*! @brief Basis for stationary covariates regressors (sparse qC x Lc)
-    * @todo MATRICE DI FUNZIONI SPARSA
-    */
-    functional_matrix<INPUT,OUTPUT> m_omega;
+    /*!Basis for stationary covariates regressors (sparse qC x Lc)*/
+    functional_matrix_sparse<INPUT,OUTPUT> m_omega;
     /*!Coefficients of the basis expansion for stationary covariates regressors: TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_bc;
 
@@ -82,6 +80,7 @@ public:
     * @brief Constructor
     */
     template<typename FUNC_MATRIX_OBJ, 
+             typename FUNC_SPARSE_MATRIX_OBJ,
              typename FUNC_DIAG_MATRIX_OBJ, 
              typename FUNC_DIAG_MATRIX_VEC_OBJ, 
              typename SCALAR_MATRIX_OBJ, 
@@ -91,6 +90,7 @@ public:
                  FUNC_MATRIX_OBJ &&Xc,
                  FUNC_DIAG_MATRIX_OBJ &&Wc,
                  SCALAR_SPARSE_MATRIX_OBJ &&Rc,
+                 FUNC_SPARSE_MATRIX_OBJ &&omega,
                  FUNC_MATRIX_OBJ &&Xe,
                  FUNC_DIAG_MATRIX_VEC_OBJ &&We,
                  SCALAR_SPARSE_MATRIX_OBJ &&Re,
@@ -108,6 +108,7 @@ public:
             m_Xc{std::forward<FUNC_MATRIX_OBJ>(Xc)},
             m_Wc{std::forward<FUNC_DIAG_MATRIX_OBJ>(Wc)},
             m_Rc{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rc)},
+            m_omega{std::forward<FUNC_SPARSE_MATRIX_OBJ>(omega)},
             m_Xe{std::forward<FUNC_MATRIX_OBJ>(Xe)},
             m_We{std::forward<FUNC_DIAG_MATRIX_VEC_OBJ>(We)},
             m_Re{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Re)},
@@ -132,28 +133,14 @@ public:
     {
         double loc = 0.3;
 
-/*
-//for reduction
-        std::vector<double> el;
-        el.resize(m_Xc.rows()*m_Xc.cols());
+std::cout << "In compute" << std::endl;
 
-        for(std::size_t i = 0; i < m_Xc.rows(); ++i){
-            for(std::size_t j = 0; j < m_Xc.cols(); ++j){
-                double yu = m_Xc(i,j)(loc);
-                el[j*m_Xc.rows()+i] = yu;
-                std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << yu << std::endl;}}
-
-        auto red = m_Xc.reduce();
-        std::cout << "reduction in " << loc << ": " << red(loc) << std::endl;
-        auto red2 = std::reduce(el.begin(),el.end());
-        std::cout << "Red2: " << red2 << std::endl;
-
-        for(std::size_t i = 0; i < m_Xc.rows(); ++i){
-            for(std::size_t j = 0; j < m_Xc.cols(); ++j){
-                double yu = m_Xc(i,j)(loc);
-                el[j*m_Xc.rows()+i] = yu;
-                std::cout << "Elem (" << i+1 << "," << j+1 << ") evaluated in " << loc << ": " << yu << std::endl;}}
-*/
+        for(std::size_t i = 0; i < omega.rows(); ++i){
+    for(std::size_t j = 0; j < omega.cols(); ++j){
+            std::string present_s;
+            if(omega.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
+            std::cout << "Elem of OMEGA (" << i << "," << j << ") is " << present_s << " evaluated in " << loc << ": " << omega(i,j)(loc) << std::endl;
+    }}
 
 /*
         std::cout << "In compute" << std::endl;
