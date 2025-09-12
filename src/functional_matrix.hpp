@@ -102,8 +102,8 @@ public:
         m_rows = et.rows(); 
         m_cols = et.cols(); 
         m_data.reserve(et.size());
-        for(std::size_t i = 0; i < et.rows(); ++i){
-            for (std::size_t j = 0; j < et.cols(); ++j){
+        for (std::size_t j = 0; j < et.cols(); ++j){
+            for(std::size_t i = 0; i < et.rows(); ++i){
                 m_data.emplace_back(et(i,j));}}
     }
 
