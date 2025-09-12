@@ -136,7 +136,7 @@ wrap_into_fm(const basis_type<domain_type> &bs,
     for (std::size_t unit_i = 0; unit_i < n; ++unit_i){
         for (std::size_t l_i = 0; l_i < L; ++l_i){
             row_idx.emplace_back(unit_i);
-            f.emplace_back([l_i,&bs](F_OBJ_INPUT x){return bs.eval_base(x)(0,l_i);};);}}
+            f.emplace_back([l_i,&bs](F_OBJ_INPUT x){return bs.eval_base(x)(0,l_i);});}}
 
     functional_matrix_sparse<INPUT,OUTPUT> fm(f,rows,cols,row_idx,col_idx);
     return fm;
