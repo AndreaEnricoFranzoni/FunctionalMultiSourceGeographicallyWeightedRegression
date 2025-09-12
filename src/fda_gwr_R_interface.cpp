@@ -525,7 +525,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //y: a column vector of dimension nx1
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_,number_threads);
     //phi: a sparse functional matrix nx(n*L), where L is the number of basis for the response
-    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> phi = wrap_into_fm_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_.fdata_basis(),number_of_statistical_units_,number_basis_response_);
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> phi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_.fdata_basis(),number_of_statistical_units_,number_basis_response_);
     //Xc: a functional matrix of dimension nxqc
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xc = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATIONARY_>(x_C_fd_,number_threads);
     //Wc: a diagonal functional matrix of dimension nxn
