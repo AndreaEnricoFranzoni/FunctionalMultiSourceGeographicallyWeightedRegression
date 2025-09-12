@@ -120,7 +120,7 @@ public:
                 //(non prende una non-const ref da un temporaneo o da un const)
                 //inserisco, confronto, e poi tolgo
                 m_data.emplace_back(et(i,j));
-                if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function)
+                if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)
                 {
                     m_data.pop_back();
                 }
@@ -161,7 +161,7 @@ public:
             for(std::size_t i = 0; i < et.rows(); ++i)
             {
                 m_data.emplace_back(et(i,j));
-                if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function)
+                if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)
                 {
                     m_data.pop_back();
                 }
