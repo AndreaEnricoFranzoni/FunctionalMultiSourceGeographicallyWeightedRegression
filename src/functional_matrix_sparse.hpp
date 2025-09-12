@@ -230,7 +230,7 @@ public:
     (std::size_t i, std::size_t j)
     {
         //checking if the element is present: if not, 0 of the right type is returned
-        if(!this->check_presence(i,j)) {    return this->m_null_function_non_const;}
+        if(!this->check_elem_presence(i,j)) {    return this->m_null_function_non_const;}
         //same way of proceeding as above, but using the col index
         auto elem_position = std::find(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),i);
         //taking the distance from the begin to retrain the position in the value's vector
@@ -246,7 +246,7 @@ public:
     const
     {
         //checking if the element is present: if not, 0 of the right type is returned
-        if(!this->check_presence(i,j)) {    return this->m_null_function;}
+        if(!this->check_elem_presence(i,j)) {    return this->m_null_function;}
         //same way of proceeding as above, but using the col index
         auto elem_position = std::find(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),i);
         //taking the distance from the begin to retrain the position in the value's vector
