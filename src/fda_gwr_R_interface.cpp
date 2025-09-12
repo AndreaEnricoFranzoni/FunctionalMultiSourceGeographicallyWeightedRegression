@@ -582,9 +582,34 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     for(std::size_t i = 0; i < test_sm.rows(); ++i){
         for(std::size_t j = 0; j < test_sm.cols(); ++j){
-            Rcout << "Elem of SM (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
-            if (test_sm.check_elem_presence(i,j)){ Rcout << "Present" << std::endl;}
-            else{ Rcout << "Not Present" << std::endl;}
+            Rcout << "Elem of SM 1 (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
+        }
+    }
+
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v2{f3,f5};
+    std::vector<std::size_t> row_idx2{0,0};
+    std::vector<std::size_t> col_idx2{0,1,1,2};
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm2(test_sm_v2,3,3,row_idx2,col_idx2);
+
+    for(std::size_t i = 0; i < test_sm2.rows(); ++i){
+        for(std::size_t j = 0; j < test_sm2.cols(); ++j){
+            Rcout << "Elem of SM 2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm2(i,j)(loc) << std::endl;
+        }
+    }
+
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_sum = test_sm + test_sm2;
+
+    for(std::size_t i = 0; i < test_sm_sum.rows(); ++i){
+        for(std::size_t j = 0; j < test_sm_sum.cols(); ++j){
+            Rcout << "Elem of SM sum (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_sum(i,j)(loc) << std::endl;
+        }
+    }
+
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_prod = test_sm * test_sm2;
+
+    for(std::size_t i = 0; i < test_sm_prod.rows(); ++i){
+        for(std::size_t j = 0; j < test_sm_prod.cols(); ++j){
+            Rcout << "Elem of SM prod (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_prod(i,j)(loc) << std::endl;
         }
     }
 
