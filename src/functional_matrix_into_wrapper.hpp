@@ -135,11 +135,7 @@ wrap_into_fm(const basis_systems<domain_type,basis_type> &bs)
             //row cov_i-th contains a number of elements equal to the number of basis for the covariate cov_i-th
             row_idx.emplace_back(cov_i);
             //storing the basis accordingly to the type
-            if constexpr( basis_type == bsplines_basis )        //bsplines
-            {
-                f.emplace_back([cov_i,base_j](F_OBJ_INPUT x){return bs.systems_of_basis()[cov_i].eval_base(x)(0,base_j);});
-            }
-        }}
+            f.emplace_back([cov_i,base_j,&bs](F_OBJ_INPUT x){return bs.systems_of_basis()[cov_i].eval_base(x)(0,base_j);});}}
     
     functional_matrix_sparse<INPUT,OUTPUT> fm(f,rows,cols,row_idx,col_idx);
     return fm;
