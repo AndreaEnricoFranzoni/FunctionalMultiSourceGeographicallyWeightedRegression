@@ -570,6 +570,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     functional_matrix test_fdm_dense2(test2,2,3);
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test3{f5,f3,f1,f5,f2,f4,f1,f5,f2,f1,f5,f4};
     functional_matrix test_fdm_dense3(test3,4,3);
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test4{f5,f3,f1,f5,f2,f4,f1,f5,f2};
+    functional_matrix test_fdm_dense4(test4,3,3);
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> testd{f5,f3,f1,f2};
     functional_matrix_diagonal test_fdm_d(testd,4);
     Eigen::MatrixXd M2 = Eigen::MatrixXd::Random(3,2);  // valori in [-1, 1]
@@ -610,6 +612,22 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     for(std::size_t i = 0; i < test_sm_prod.rows(); ++i){
         for(std::size_t j = 0; j < test_sm_prod.cols(); ++j){
             Rcout << "Elem of SM prod (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_prod(i,j)(loc) << std::endl;
+        }
+    }
+
+    if(test_sm_prod.check_elem_presence(2,1)){Rcout<<"Present"<<std::endl;}
+    else{Rcout<<"not present"<<std::endl;}
+
+    for(std::size_t i = 0; i < test_fdm_dense4.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm_dense4.cols(); ++j){
+            Rcout << "Elem of DENSE (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense4(i,j)(loc) << std::endl;
+        }
+    }
+
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_m_sm_sub = test_sm_prod - test_fdm_dense4;
+    for(std::size_t i = 0; i < test_m_sm_sub.rows(); ++i){
+        for(std::size_t j = 0; j < test_m_sm_sub.cols(); ++j){
+            Rcout << "Elem of sub (" << i << "," << j << ") evaluated in " << loc << ": " << test_m_sm_sub(i,j)(loc) << std::endl;
         }
     }
 
