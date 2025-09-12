@@ -431,10 +431,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //extracting the template param of the basis for fd (access it in the template params list with ::template_type)  
     using response_basis_tmp_t = extract_template_t< decltype(basis_response_)::element_type >;   
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
-    Rcout << "Valutazioni base risposta" << std::endl;
-    Rcout << y_fd_.fdata_basis().eval_base(0.3).row(0) << std::endl;
-    Rcout << "Valutazioni risposta" << std::endl;
-    Rcout << y_fd_.eval(0.3,0) << std::endl;
+
 
     //response reconstruction weights
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_rec_weights_response_ = basis_fac.create(basis_type_rec_weights_response_,knots_response_eigen_w_,degree_basis_rec_weights_response_,number_basis_rec_weights_response_);
@@ -527,6 +524,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     //y: a column vector of dimension nx1
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_,number_threads);
+    //phi: a sparse functional matrix nx(n*L), where L is the number of basis for the response
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> phi = wrap_into_fm_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_.fdata_basis(),number_of_statistical_units_,number_basis_response_);
     //Xc: a functional matrix of dimension nxqc
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xc = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATIONARY_>(x_C_fd_,number_threads);
     //Wc: a diagonal functional matrix of dimension nxn
@@ -545,6 +544,18 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Ws = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_>(W_S,number_threads);
     //psi: a sparse functional matrix of dimension qsxLs
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
+
+    Rcout << "Valutazioni base risposta" << std::endl;
+    Rcout << y_fd_.fdata_basis().eval_base(0.3).row(0) << std::endl;
+    Rcout << "Valutazioni risposta" << std::endl;
+    Rcout << y_fd_.eval(0.3,0) << std::endl;
+    for(std::size_t i = 0; i < phi.rows(); ++i){
+        for(std::size_t j = 0; j < phi.cols(); ++j){
+            std::string present_s;
+            if(test_sm.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
+            Rcout << "Elem of phi (" << i << "," << j << ") is " << present_s << " evaluated in " << 0.3 << ": " << phi(i,j)(0.3) << std::endl;
+        }
+    }
 
 
     //fgwr algorithm

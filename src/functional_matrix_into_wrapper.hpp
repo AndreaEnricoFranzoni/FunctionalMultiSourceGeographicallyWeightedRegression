@@ -101,6 +101,50 @@ wrap_into_fm(const functional_data_covariates<domain_type,stationarity_t> &X,
 
 
 /*!
+* @brief Function to wrap a basis into a sparse functional matrix functional_matrix_sparse
+* @note It stores the matrix as a block matrix n x n*L, where n is the number of statistical units, L is the the number of basis used
+* @details It is used for the specific mapping of the basis of the response for this model
+*/
+template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
+inline
+functional_matrix_sparse<INPUT,OUTPUT>
+wrap_into_fm(const basis_type<domain_type> &bs,
+             std::size_t n,
+             std::size_t L)
+{
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
+
+    //one row for each unit
+    std::size_t rows = n;
+    //the total number of cols is the product within the number of units and the number of basis
+    std::size_t cols = n*L;
+    //the construction of the matrix by block, only one element for each column
+    std::size_t nnz = n*L;
+
+    //containers storing elements and indices
+    std::vector< F_OBJ > f;
+    f.resize(nnz);
+    std::vector<std::size_t> row_idx;
+    row_idx.resize(nnz);
+    std::vector<std::size_t> col_idx;
+    col_idx.resize(cols + 1);
+    std::iota(col_idx.begin(),col_idx.end(),static_cast<std::size_t>(0));   //cumulative number of elements in the cols is simply an increasing count of naturals
+
+    //filling f
+    for (std::size_t unit_i = 0; unit_i < n; ++unit_i){
+        for (std::size_t l_i = 0; l_i < L; ++l_i){
+            row_idx.emplace_back(unit_i);
+            f.emplace_back([l_i,&bs](F_OBJ_INPUT x){return bs.eval_base(x)(0,l_i);};);}}
+
+    functional_matrix_sparse<INPUT,OUTPUT> fm(f,rows,cols,row_idx,col_idx);
+    return fm;
+}
+
+
+
+/*!
 * @brief Function to wrap a system of basis into a sparse functional matrix functional_matrix_sparse
 * @note It stores the matrix as a block matrix q x L, where q is the number of covariates, L is the sum of the number of basis used for all the covariates
 */
