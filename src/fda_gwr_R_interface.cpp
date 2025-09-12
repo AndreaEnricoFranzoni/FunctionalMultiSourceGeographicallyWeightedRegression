@@ -605,7 +605,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
         }
     }
 
-    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_prod = test_sm * test_sm2;
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_prod = test_sm * test_sm_sum;
 
     for(std::size_t i = 0; i < test_sm_prod.rows(); ++i){
         for(std::size_t j = 0; j < test_sm_prod.cols(); ++j){
