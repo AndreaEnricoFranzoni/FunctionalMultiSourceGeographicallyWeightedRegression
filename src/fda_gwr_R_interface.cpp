@@ -638,6 +638,17 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
             Rcout << "Elem of sub (" << i << "," << j << ") evaluated in " << loc << ": " << test_m_sm_sub(i,j)(loc) << std::endl;
         }
     }
+    auto col_1 = test_m_sm_sub.col(1);
+    Rcout << "Col 2" << std::endl;
+    for(auto it = col_1.cbegin(); it != col_1.cbegin(); ++i){
+        Rcout << (*it)(loc) << std::endl;
+    }
+
+    auto row2 = test_m_sm_sub.row(2);
+    Rcout << "Row 3" << std::endl;
+    for(auto it = row2.cbegin(); it != row2.cbegin(); ++i){
+        Rcout << (*it)(loc) << std::endl;
+    }
 
     if(std::is_same_v<decltype(test_m_sm_sub),functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>>){Rcout<<"FM"<<std::endl;}
     else{Rcout<<"Not FM"<<std::endl;}
