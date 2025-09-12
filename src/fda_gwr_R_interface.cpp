@@ -593,6 +593,17 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     }
 
 
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> double_sm = test_sm + test_sm;
+
+    for(std::size_t i = 0; i < double_sm.rows(); ++i){
+        for(std::size_t j = 0; j < double_sm.cols(); ++j){
+            std::string present_s;
+            if(double_sm.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
+            Rcout << "Elem of double SM (" << i << "," << j << ") is " << present_s << " evaluated in " << loc << ": " << double_sm(i,j)(loc) << std::endl;
+        }
+    }
+
+
 /*
     std::vector<int> v;
     v.reserve(4);
