@@ -30,10 +30,8 @@ class fgwr_fms_esc final : public fgwr<INPUT,OUTPUT>
 private:
     /*!Functional response (nx1)*/
     functional_matrix<INPUT,OUTPUT> m_y;
-    /*! @brief Basis for response (nxLy)
-    * @todo CAPIRE LE DIMENSIONI E LA STRUTTURA + MATRICE DI FUNZIONI SPARSA
-    */
-    functional_matrix<INPUT,OUTPUT> m_phi;
+    /*!Basis for response (nx(nxLy))*/
+    functional_matrix_sparse<INPUT,OUTPUT> m_phi;
     /*!Coefficients of the basis expansion for response ()*/
     FDAGWR_TRAITS::Dense_Matrix m_c;
 
@@ -82,6 +80,7 @@ public:
              typename SCALAR_MATRIX_OBJ, 
              typename SCALAR_SPARSE_MATRIX_OBJ> 
     fgwr_fms_esc(FUNC_MATRIX_OBJ &&y,
+                 FUNC_SPARSE_MATRIX_OBJ &&phi,
                  SCALAR_MATRIX_OBJ &&c,
                  FUNC_MATRIX_OBJ &&Xc,
                  FUNC_DIAG_MATRIX_OBJ &&Wc,
@@ -102,6 +101,7 @@ public:
         :
             fgwr<INPUT,OUTPUT>(a,b,n_intervals_integration,number_threads),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
+            m_phi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(phi)},
             m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
             m_Xc{std::forward<FUNC_MATRIX_OBJ>(Xc)},
             m_Wc{std::forward<FUNC_DIAG_MATRIX_OBJ>(Wc)},
