@@ -631,6 +631,9 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
         }
     }
 
+    if(std::is_same_v<decltype(test_m_sm_sub),functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>>){Rcout<<"FM"<<std::endl;}
+    else{Rcout<<"Not FM"<<std::endl;}
+
 /*
     for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm_dense2.cols(); ++j){
