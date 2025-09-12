@@ -187,7 +187,7 @@ public:
         //checking that the passed index is coherent with the matrix dimension
         assert(idx < m_rows);            
         //it is sufficient that in the vector containing the rows there is once idx
-        return std::find(m_rows_idx.cbegin(),m_rows_idx.cend(),idx) != m_rows_idx.cend();
+        return std::binary_search(m_rows_idx.cbegin(),m_rows_idx.cend(),idx);
     }
 
     /*!
