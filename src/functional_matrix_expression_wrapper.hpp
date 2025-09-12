@@ -25,6 +25,7 @@
 #include <type_traits>
 #include <utility>
 #include <concepts>
+#include <iterator>
 
 #include "functional_matrix_storing_type.hpp"
 
