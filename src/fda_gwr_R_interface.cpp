@@ -552,7 +552,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     for(std::size_t i = 0; i < phi.rows(); ++i){
         for(std::size_t j = 0; j < phi.cols(); ++j){
             std::string present_s;
-            if(test_sm.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
+            if(phi.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
             Rcout << "Elem of phi (" << i << "," << j << ") is " << present_s << " evaluated in " << 0.3 << ": " << phi(i,j)(0.3) << std::endl;
         }
     }
