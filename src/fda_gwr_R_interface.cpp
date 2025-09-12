@@ -640,13 +640,13 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     }
     auto col_1 = test_m_sm_sub.col(1);
     Rcout << "Col 2" << std::endl;
-    for(auto it = col_1.cbegin(); it != col_1.cend(); ++it){
+    for(const auto it = col_1.cbegin(); it != col_1.cend(); ++it){
         Rcout << (*it)(loc) << std::endl;
     }
 
     auto row2 = test_m_sm_sub.row(2);
     Rcout << "Row 3" << std::endl;
-    for(auto it = row2.cbegin(); it != row2.cend(); ++it){
+    for(const auto it = row2.cbegin(); it != row2.cend(); ++it){
         Rcout << (*it)(loc) << std::endl;
     }
 
