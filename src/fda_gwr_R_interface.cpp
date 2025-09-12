@@ -584,7 +584,16 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::vector<std::size_t> col_idx{0,1,1,2};
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm(test_sm_v,3,3,row_idx,col_idx);
 
+    for(std::size_t i = 0; i < test_sm.rows(); ++i){
+        for(std::size_t j = 0; j < test_sm.cols(); ++j){
+            std::string present_s;
+            if(test_sm.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present"}
+            Rcout << "Elem of SM 1 (" << i << "," << j << ") is " << present_s << " evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
+        }
+    }
 
+
+/*
     std::vector<int> v;
     v.reserve(4);
     Rcout << "Size: " << v.size() << ", capacity: " << v.capacity() << std::endl;
@@ -592,14 +601,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Rcout << "Dopo emplace_back: size: " << v.size() << ", capacity: " << v.capacity() << std::endl;
     v.pop_back();
     Rcout << "Dopo pop_back: size: " << v.size() << ", capacity: " << v.capacity() << std::endl;
+*/
+
 
 /*
-    for(std::size_t i = 0; i < test_sm.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm.cols(); ++j){
-            Rcout << "Elem of SM 1 (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
-        }
-    }
-
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v2{f3,f5};
     std::vector<std::size_t> row_idx2{0,0};
     std::vector<std::size_t> col_idx2{0,1,1,2};

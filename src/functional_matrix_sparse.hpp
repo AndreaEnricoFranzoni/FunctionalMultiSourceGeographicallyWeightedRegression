@@ -105,18 +105,17 @@ public:
         m_cols = et.cols();
         m_nnz = et.size(); 
 
+        //reserving the correct amount of capacity
         m_data.reserve(et.size());
         m_rows_idx.reserve(et.size());
-        m_cols_idx.reserve(et.cols() + 1);
-
-
+        m_cols_idx.reserve(et.cols()+1);
+        m_cols_idx.emplace_back(static_cast<std::size_t>(0));           //the first element of the cumulative number of elements per columns is always 0
+        //counter for the cumulative number of elements along columns
         std::size_t counter_cols_elem = 0;
-        m_cols_idx.emplace_back(static_cast<std::size_t>(0));
 
-        for(std::size_t j = 0; j < et.cols(); ++j)
-        {
-            for(std::size_t i = 0; i < et.rows(); ++i)
-            {
+        //looping as this for column-wise storage
+        for(std::size_t j = 0; j < et.cols(); ++j){
+            for(std::size_t i = 0; i < et.rows(); ++i){
                 //il confronto con funzioni è un casino. Siccome non posso confrontare l'indirizzo direttamente (&et(i,j))
                 //(non prende una non-const ref da un temporaneo o da un const)
                 //inserisco, confronto, e poi tolgo
@@ -148,14 +147,14 @@ public:
         m_cols = et.cols();
         m_nnz = et.size();
 
+        //reserving the correct amount of capacity
         m_data.reserve(et.size());
         m_rows_idx.reserve(et.size());
         m_cols_idx.reserve(et.cols()+1);
-
-
+        m_cols_idx.emplace_back(static_cast<std::size_t>(0));           //the first element of the cumulative number of elements per columns is always 0
+        //counter for the cumulative number of elements along columns
         std::size_t counter_cols_elem = 0;
-        m_cols_idx.emplace_back(static_cast<std::size_t>(0));
-
+        
 
         for(std::size_t j = 0; j < et.cols(); ++j)
         {
