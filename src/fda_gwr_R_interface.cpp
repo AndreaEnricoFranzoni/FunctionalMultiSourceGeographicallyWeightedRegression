@@ -646,7 +646,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     else{Rcout<<"Not SFM"<<std::endl;}
 
 
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_m_sub = test_fdm_dense5 - test_fdm_dense4;
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_m_sub = test_fdm_dense5 + test_fdm_dense4;
     for(std::size_t i = 0; i < test_m_sub.rows(); ++i){
         for(std::size_t j = 0; j < test_m_sub.cols(); ++j){
             Rcout << "Elem of sub within dense (" << i << "," << j << ") evaluated in " << loc << ": " << test_m_sub(i,j)(loc) << std::endl;
