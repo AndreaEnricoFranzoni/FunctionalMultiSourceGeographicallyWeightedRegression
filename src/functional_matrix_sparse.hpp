@@ -114,8 +114,6 @@ public:
         std::size_t counter_cols_elem = 0;
         m_cols_idx.emplace_back(static_cast<std::size_t>(0));
 
-        auto* p = ;
-
         for(std::size_t j = 0; j < et.cols(); ++j)
         {
             for(std::size_t i = 0; i < et.rows(); ++i)
@@ -155,7 +153,6 @@ public:
         std::size_t counter_cols_elem = 0;
         m_cols_idx.emplace_back(static_cast<std::size_t>(0));
 
-        auto* p = ;
 
         for(std::size_t j = 0; j < et.cols(); ++j)
         {

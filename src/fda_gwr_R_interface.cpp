@@ -574,6 +574,18 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Eigen::MatrixXd M2 = Eigen::MatrixXd::Random(3,2);  // valori in [-1, 1]
 
 
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v{f1,f2};
+    std::vector<std::size_t> row_idx{1,2};
+    std::vector<std::size_t> col_idx{0,1,1,2};
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm(test_sm_v,3,3,row_idx,col_idx);
+
+    for(std::size_t i = 0; i < test_sm.rows(); ++i){
+        for(std::size_t j = 0; j < test_sm.cols(); ++j){
+            Rcout << "Elem of SM (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
+        }
+    }
+
+/*
     for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm_dense2.cols(); ++j){
             Rcout << "Elem of 2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2(i,j)(loc) << std::endl;
@@ -590,6 +602,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
             Rcout << "Elem of P (" << i << "," << j << ") evaluated in " << loc << ": " << prod(i,j)(loc) << std::endl;
         }
     }
+*/
 
 
 
