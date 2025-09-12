@@ -120,7 +120,8 @@ public:
             {
                 //l'unico modo per vedere che sia una funzione nulla consiste nel vedere
                 //se l'indirizzo dell'elemento (i,j) sia quello della static m_null_function
-                const auto& elem_address = et(i,j);     //indirizzo di et(i,j)
+                //const auto& elem_address = et(i,j);     //indirizzo di et(i,j)
+                const auto* elem_address = &et(i,j);     //indirizzo di et(i,j)
                 if (elem_address != &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function)   //compararlo con quello di functional_matrix_sparse<INPUT,OUTPUT>::m_null_function
                 {
                     m_data.emplace_back(et(i,j));
@@ -160,7 +161,7 @@ public:
             {
                 //l'unico modo per vedere che sia una funzione nulla consiste nel vedere
                 //se l'indirizzo dell'elemento (i,j) sia quello della static m_null_function
-                const auto& elem_address = et(i,j);     //indirizzo di et(i,j)
+                const auto* elem_address = &et(i,j);     //indirizzo di et(i,j)
                 if (elem_address != &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function)   //compararlo con quello di functional_matrix_sparse<INPUT,OUTPUT>::m_null_function
                 {
                     m_data.emplace_back(et(i,j));
