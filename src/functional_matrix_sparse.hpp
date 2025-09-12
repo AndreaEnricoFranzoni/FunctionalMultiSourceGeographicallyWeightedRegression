@@ -110,7 +110,6 @@ public:
         m_cols_idx.reserve(et.cols() + 1);
 
 
-        //PRIMA ALTERNATIVA
         std::size_t counter_cols_elem = 0;
         m_cols_idx.emplace_back(static_cast<std::size_t>(0));
 
@@ -118,19 +117,6 @@ public:
         {
             for(std::size_t i = 0; i < et.rows(); ++i)
             {
-/*
-                //l'unico modo per vedere che sia una funzione nulla consiste nel vedere
-                //se l'indirizzo dell'elemento (i,j) sia quello della static m_null_function
-                //const auto& elem_address = et(i,j);     //indirizzo di et(i,j)
-                //auto* elem_address = &et(i,j);     //indirizzo di et(i,j)
-                if (&et(i,j) != &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)   //compararlo con quello di functional_matrix_sparse<INPUT,OUTPUT>::m_null_function
-                {
-                    m_data.emplace_back(et(i,j));
-                    m_rows_idx.emplace_back(i);
-                    counter_cols_elem += 1;
-                }
-*/
-
                 //il confronto con funzioni è un casino. Siccome non posso confrontare l'indirizzo direttamente (&et(i,j))
                 //(non prende una non-const ref da un temporaneo o da un const)
                 //inserisco, confronto, e poi tolgo
@@ -166,7 +152,7 @@ public:
         m_rows_idx.reserve(et.size());
         m_cols_idx.reserve(et.cols()+1);
 
-        //PRIMA ALTERNATIVA
+
         std::size_t counter_cols_elem = 0;
         m_cols_idx.emplace_back(static_cast<std::size_t>(0));
 
@@ -175,17 +161,6 @@ public:
         {
             for(std::size_t i = 0; i < et.rows(); ++i)
             {
-/*
-                //l'unico modo per vedere che sia una funzione nulla consiste nel vedere
-                //se l'indirizzo dell'elemento (i,j) sia quello della static m_null_function
-                //auto* elem_address = &et(i,j);     //indirizzo di et(i,j)
-                if (&et(i,j) != &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)   //compararlo con quello di functional_matrix_sparse<INPUT,OUTPUT>::m_null_function
-                {
-                    m_data.emplace_back(et(i,j));
-                    m_rows_idx.emplace_back(i);
-                    counter_cols_elem += 1;
-                }
-*/
                 m_data.emplace_back(et(i,j));
                 if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function)
                 {

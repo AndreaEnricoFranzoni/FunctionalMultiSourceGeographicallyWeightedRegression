@@ -584,6 +584,16 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::vector<std::size_t> col_idx{0,1,1,2};
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm(test_sm_v,3,3,row_idx,col_idx);
 
+
+    std::vector<int> v;
+    v.reserve(4);
+    Rcout << "Size: " << v.size() << ", capacity: " << v.capacity() << std::endl;
+    v.emplace_back(1);
+    Rcout << "Dopo emplace_back: size: " << v.size() << ", capacity: " << v.capacity() << std::endl;
+    v.pop_back();
+    Rcout << "Dopo pop_back: size: " << v.size() << ", capacity: " << v.capacity() << std::endl;
+
+/*
     for(std::size_t i = 0; i < test_sm.rows(); ++i){
         for(std::size_t j = 0; j < test_sm.cols(); ++j){
             Rcout << "Elem of SM 1 (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
@@ -663,85 +673,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
             Rcout << "Elem of sub within dense (" << i << "," << j << ") evaluated in " << loc << ": " << test_m_sub(i,j)(loc) << std::endl;
         }
     }
-
-/*
-    for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense2.cols(); ++j){
-            Rcout << "Elem of 2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2(i,j)(loc) << std::endl;
-        }
-    }
-
-    Rcout << M2 << std::endl;
-
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> prod = fm_prod<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(M2,test_fdm_dense2,4);
-    
-    Rcout << "Il prodotto ha " << prod.rows() << " righe e " << prod.cols() << " colonne" <<std::endl;
-        for(std::size_t i = 0; i < prod.rows(); ++i){
-        for(std::size_t j = 0; j < prod.cols(); ++j){
-            Rcout << "Elem of P (" << i << "," << j << ") evaluated in " << loc << ": " << prod(i,j)(loc) << std::endl;
-        }
-    }
 */
 
-
-
-
-/*
-        for(std::size_t i = 0; i < test_fdm_d.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_d.cols(); ++j){
-            Rcout << "Elem of D (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_d(i,j)(loc) << std::endl;
-        }
-    }
-
-
-
-
-*/
-
-
-/*
-    for(std::size_t i = 0; i < test_fdm_dense.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense.cols(); ++j){
-            Rcout << "Elem of 1 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense(i,j)(loc) << std::endl;
-        }
-    }
-    for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense2.cols(); ++j){
-            Rcout << "Elem of 2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2(i,j)(loc) << std::endl;
-        }
-    }
-
-    auto prod_test = fm_prod<>(test_fdm_dense,test_fdm_dense2,number_threads);
-    for(std::size_t i = 0; i < prod_test.rows(); ++i){
-        for(std::size_t j = 0; j < prod_test.cols(); ++j){
-            Rcout << "Elem of P (" << i << "," << j << ") evaluated in " << loc << ": " << prod_test(i,j)(loc) << std::endl;
-        }
-    }
-
-    auto prod_test_f = fm_prod<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(fm_prod<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fdm_dense,test_fdm_dense2,number_threads),test_fdm_dense3,number_threads);
-    for(std::size_t i = 0; i < prod_test_f.rows(); ++i){
-        for(std::size_t j = 0; j < prod_test_f.cols(); ++j){
-            Rcout << "Elem of PF (" << i << "," << j << ") evaluated in " << loc << ": " << prod_test_f(i,j)(loc) << std::endl;
-        }
-    }
-*/
-
-
-
-
-
-
-
-/*
-    functional_matrix test_fm1(120,200);
-    functional_matrix test_fm2(200,90);
-    auto prod_test = fm_prod<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fm1,test_fm2,number_threads);
-    for(std::size_t i = 0; i < prod_test.rows(); ++i){
-        for(std::size_t j = 0; j < prod_test.cols(); ++j){
-            Rcout << "Elem of P (" << i << "," << j << ") evaluated in " << loc << ": " << prod_test(i,j)(loc) << std::endl;
-        }
-    }
-*/
 
 
 
