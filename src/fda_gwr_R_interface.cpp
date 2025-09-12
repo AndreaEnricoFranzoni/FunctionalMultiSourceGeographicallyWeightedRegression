@@ -522,19 +522,39 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //wrapping all the functional elements in a functional_matrix
 
     //y: a column vector of dimension nx1
-    functional_matrix y = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_,number_threads);
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_,number_threads);
     //Xc: a functional matrix of dimension nxqc
-    functional_matrix Xc = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATIONARY_>(x_C_fd_,number_threads);
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xc = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATIONARY_>(x_C_fd_,number_threads);
     //Wc: a diagonal functional matrix of dimension nxn
-    functional_matrix_diagonal Wc = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATIONARY_>(W_C,number_threads);
+    functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Wc = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATIONARY_>(W_C,number_threads);
+    //omega: a sparse functional matrix of dimension qcxLc
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> omega = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_C);
     //Xe: a functional matrix of dimension nxqe
-    functional_matrix Xe = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_EVENT_>(x_E_fd_,number_threads);
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xe = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_EVENT_>(x_E_fd_,number_threads);
     //We: n diagonal functional matrices of dimension nxn
     std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > We = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_>(W_E,number_threads);
     //Xs: a functional matrix of dimension nxqs
-    functional_matrix Xs = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_,number_threads);
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xs = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_,number_threads);
     //Ws: n diagonal functional matrices of dimension nxn
     std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Ws = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_>(W_S,number_threads);
+
+
+for(std::size_t i = 0; i < bs_C.q(); ++i){
+    for(std::size_t j = 0; j < bs_C.numbers_of_basis(); ++j)
+    {
+        Rcout << "For covariate " << i << ", base " << j << "-th evaluated in " << 0.3 << ": " << bs_C.systems_of_basis()[i].eval_base(0.3)(0,j) << std::endl;
+    }
+}
+
+
+for(std::size_t i = 0; i < omega.rows(); ++i){
+    for(std::size_t j = 0; j < omega.cols(); ++j){
+            std::string present_s;
+            if(omega.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
+            Rcout << "Elem of OMEGA (" << i << "," << j << ") is " << present_s << " evaluated in " << 0.3 << ": " << omega(i,j)(0.3) << std::endl;
+    }}
+
+
 
 
     //fgwr algorithm
@@ -579,6 +599,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Eigen::MatrixXd M2 = Eigen::MatrixXd::Random(3,2);  // valori in [-1, 1]
 
 
+/*
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v{f1,f2};
     std::vector<std::size_t> row_idx{1,2};
     std::vector<std::size_t> col_idx{0,1,1,2};
@@ -602,6 +623,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
             Rcout << "Elem of double SM (" << i << "," << j << ") is " << present_s << " evaluated in " << loc << ": " << double_sm(i,j)(loc) << std::endl;
         }
     }
+*/
 
 
 /*

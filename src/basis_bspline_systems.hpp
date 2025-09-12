@@ -108,7 +108,7 @@ public:
     */
     inline 
     FDAGWR_TRAITS::Dense_Matrix 
-    eval_base(double location, std::size_t basis_i) 
+    eval_base(const double &location, std::size_t basis_i) 
     const
     {
         return m_systems_of_basis[basis_i].eval(location);

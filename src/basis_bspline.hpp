@@ -84,7 +84,7 @@ public:
     */
     inline 
     FDAGWR_TRAITS::Dense_Matrix 
-    eval_base(double location) 
+    eval_base(const double &location) 
     const
     override
     {

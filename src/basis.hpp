@@ -104,7 +104,7 @@ public:
     /*!
     * @brief Abstract function to evaluate the basis in a location
     */
-    virtual inline FDAGWR_TRAITS::Dense_Matrix eval_base(double location) const = 0;
+    virtual inline FDAGWR_TRAITS::Dense_Matrix eval_base(const double &location) const = 0;
 };
 
 

@@ -90,7 +90,7 @@ public:
     * @brief Evaluating the correct statistical unit
     */
     double
-    eval(double loc, std::size_t unit_i)
+    eval(const double &loc, std::size_t unit_i)
     const
     {
         return m_fdata_basis->eval_base(loc).row(0) * m_fdata_coeff.col(unit_i);

@@ -101,6 +101,53 @@ wrap_into_fm(const functional_data_covariates<domain_type,stationarity_t> &X,
 
 
 /*!
+* @brief Function to wrap a system of basis into a sparse functional matrix functional_matrix_sparse
+* @note It stores the matrix as a block matrix q x L, where q is the number of covariates, L is the sum of the number of basis used for all the covariates
+*/
+template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
+inline
+functional_matrix_sparse<INPUT,OUTPUT>
+wrap_into_fm(const basis_systems<domain_type,basis_type> &bs)
+{
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
+
+    //one row for each covariate
+    std::size_t rows = bs.q();
+    //the total number of cols is the sum of the number of basis of all the covariates
+    std::size_t cols = std::reduce(bs.numbers_of_basis().cbegin(),bs.numbers_of_basis().cend(),static_cast<std::size_t>(0));
+    //the construction of the matrix by block, only one element for each column
+    std::size_t nnz = cols;
+
+    //containers storing elements and indices
+    std::vector< F_OBJ > f;
+    f.reserve(nnz);
+    std::vector<std::size_t> row_idx;
+    row_idx.reserve(nnz);
+    std::vector<std::size_t> col_idx;
+    col_idx.resize(cols + 1);
+    std::iota(col_idx.begin(),col_idx.end(),static_cast<std::size_t>(0));   //cumulative number of elements in the cols is simply an increasing count of naturals
+
+    //filling f
+    for (std::size_t cov_i = 0; cov_i < bs.q(); ++cov_i){
+        for(std::size_t base_j = 0; base_j < bs.numbers_of_basis()[cov_i]; ++base_j){
+            //row cov_i-th contains a number of elements equal to the number of basis for the covariate cov_i-th
+            row_idx.emplace_back(cov_i);
+            //storing the basis accordingly to the type
+            if constexpr( basis_type == bsplines_basis )        //bsplines
+            {
+                f.emplace_back([cov_i,base_j](F_OBJ_INPUT x){return bs.systems_of_basis()[cov_i].eval_base(x)(0,base_j);});
+            }
+        }}
+    
+    functional_matrix_sparse<INPUT,OUTPUT> fm(f,rows,cols,row_idx,col_idx);
+    return fm;
+}
+
+
+
+/*!
 * @brief Function to wrap a functional stationary weight matrix object functional_weight_matrix_stationary into a functional diagonal matrix object functional_matrix_diagonal
 * @note It stores the functions objects diagonally, as an n x n matrix, where n is the number of statistical units
 */
