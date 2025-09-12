@@ -583,6 +583,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     for(std::size_t i = 0; i < test_sm.rows(); ++i){
         for(std::size_t j = 0; j < test_sm.cols(); ++j){
             Rcout << "Elem of SM (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
+            if (test_sm.check_elem_presence(i,j)){ Rcout << "Present" << std::endl;}
+            else{ Rcout << "Not Present" << std::endl;}
         }
     }
 

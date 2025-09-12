@@ -186,7 +186,7 @@ public:
     {
         //checking that the passed index is coherent with the matrix dimension
         assert(idx < m_rows);            
-        //it is sufficient that in the vector containing the rows there is once idx
+        //it is sufficient that in the vector containing the rows idx there is once idx
         return std::binary_search(m_rows_idx.cbegin(),m_rows_idx.cend(),idx);
     }
 
@@ -199,7 +199,7 @@ public:
     {
         //checking that the passed index is coherent with the matrix dimension
         assert(idx < m_cols); 
-        //it is sufficient that between row i-th and i-th there is an increment in m_inner
+        //it is sufficient that between col i-th and i+1-th there is an increment in number of elements
         return m_cols_idx[idx] < m_cols_idx[idx+1];           
     }
 
@@ -210,11 +210,12 @@ public:
     check_elem_presence(std::size_t i, std::size_t j) 
     const
     {
-        //checking if there is any element in that row and in that col
+        //checking if there row i and col j are present
         if(!this->check_col_presence(j) || !this->check_row_presence(i)){   return false;}
-
         //searching if within the row indeces of the col there is the one requested
-        return std::binary_search(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),i);
+        return std::binary_search(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),         //start of rows idx in col j
+                                  std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),       //end of rows idx in col j
+                                  i);                                                   //row index that has to be in the row
     }
 
 
@@ -229,10 +230,12 @@ public:
     operator()
     (std::size_t i, std::size_t j)
     {
-        //checking if the element is present: if not, 0 of the right type is returned
+        //checking if the element is present: if not, null function is returned
         if(!this->check_elem_presence(i,j)) {    return this->m_null_function_non_const;}
-        //same way of proceeding as above, but using the col index
-        auto elem_position = std::find(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),i);
+        //looking at the position of row of the element in the range indicated by the right column
+        auto elem_position = std::find(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),
+                                       std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),
+                                       i);
         //taking the distance from the begin to retrain the position in the value's vector
         return m_data[std::distance(m_rows_idx.cbegin(),elem_position)]; 
     }
@@ -245,10 +248,12 @@ public:
     (std::size_t i, std::size_t j)
     const
     {
-        //checking if the element is present: if not, 0 of the right type is returned
+        //checking if the element is present: if not, null function is returned
         if(!this->check_elem_presence(i,j)) {    return this->m_null_function;}
-        //same way of proceeding as above, but using the col index
-        auto elem_position = std::find(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),i);
+        //looking at the position of row of the element in the range indicated by the right column
+        auto elem_position = std::find(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),
+                                       std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),
+                                       i);
         //taking the distance from the begin to retrain the position in the value's vector
         return m_data[std::distance(m_rows_idx.cbegin(),elem_position)];  
     }
