@@ -125,9 +125,9 @@ wrap_into_fm(const basis_type<domain_type> &bs,
 
     //containers storing elements and indices
     std::vector< F_OBJ > f;
-    f.resize(nnz);
+    f.reserve(nnz);
     std::vector<std::size_t> row_idx;
-    row_idx.resize(nnz);
+    row_idx.reserve(nnz);
     std::vector<std::size_t> col_idx;
     col_idx.resize(cols + 1);
     std::iota(col_idx.begin(),col_idx.end(),static_cast<std::size_t>(0));   //cumulative number of elements in the cols is simply an increasing count of naturals
