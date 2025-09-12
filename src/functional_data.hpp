@@ -89,7 +89,7 @@ public:
     /*!
     * @brief Getter for the basis
     */
-    const basis_type<domain_type> & fdata_basis() const {return m_fdata_basis;}
+    const basis_type<domain_type> & fdata_basis() const {return *m_fdata_basis;}
 
     /*!
     * @brief Evaluating the correct statistical unit
