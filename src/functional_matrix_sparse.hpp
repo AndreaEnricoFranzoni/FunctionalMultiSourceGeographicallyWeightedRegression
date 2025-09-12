@@ -28,6 +28,8 @@
 #include <vector>
 #include <cassert>
 
+#include <iostream>
+
 
 //! A class for sparse matrices of functions, in compress format: STORING COLUMN WISE (CSC)
 template< typename INPUT = double, typename OUTPUT = double >
@@ -123,6 +125,7 @@ public:
                 if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)
                 {
                     m_data.pop_back();
+                    std::cout << "Entrato nell'if" << std::endl;
                 }
                 else
                 {
@@ -163,6 +166,7 @@ public:
                 m_data.emplace_back(et(i,j));
                 if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)
                 {
+                    std::cout << "Entrato nell'if" << std::endl;
                     m_data.pop_back();
                 }
                 else
