@@ -214,8 +214,8 @@ public:
         if(!this->check_row_presence(i) or !this->check_col_presence(j)){   return false;}
 
         //searching if within the row indeces of the col there is the one requested
-        auto start_search = m_rows_idx.cbegin() + m_cols_idx[j];
-        auto sentinel_search = m_rows_idx.cbegin() + m_cols_idx[j+1];
+        auto start_search = std::next(m_rows_idx.cbegin(),m_cols_idx[j]);
+        auto sentinel_search = std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]);
         return std::binary_search(start_search,sentinel_search,i);
     }
 
