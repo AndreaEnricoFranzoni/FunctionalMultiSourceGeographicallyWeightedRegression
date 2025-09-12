@@ -211,12 +211,10 @@ public:
     const
     {
         //checking if there is any element in that row and in that col
-        if(!this->check_row_presence(i) or !this->check_col_presence(j)){   return false;}
+        if(!this->check_col_presence(j) || !this->check_row_presence(i)){   return false;}
 
         //searching if within the row indeces of the col there is the one requested
-        auto start_search = std::next(m_rows_idx.cbegin(),m_cols_idx[j]);
-        auto sentinel_search = std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]);
-        return std::binary_search(start_search,sentinel_search,i);
+        return std::binary_search(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),i);
     }
 
 
@@ -234,7 +232,7 @@ public:
         //checking if the element is present: if not, 0 of the right type is returned
         if(!this->check_presence(i,j)) {    return this->m_null_function_non_const;}
         //same way of proceeding as above, but using the col index
-        auto elem_position = std::find(m_rows_idx.cbegin() + m_cols_idx[j],m_rows_idx.cbegin() + m_cols_idx[j+1],i);
+        auto elem_position = std::find(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),i);
         //taking the distance from the begin to retrain the position in the value's vector
         return m_data[std::distance(m_rows_idx.cbegin(),elem_position)]; 
     }
@@ -250,7 +248,7 @@ public:
         //checking if the element is present: if not, 0 of the right type is returned
         if(!this->check_presence(i,j)) {    return this->m_null_function;}
         //same way of proceeding as above, but using the col index
-        auto elem_position = std::find(m_rows_idx.cbegin() + m_cols_idx[j],m_rows_idx.cbegin() + m_cols_idx[j+1],i);
+        auto elem_position = std::find(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),i);
         //taking the distance from the begin to retrain the position in the value's vector
         return m_data[std::distance(m_rows_idx.cbegin(),elem_position)];  
     }
