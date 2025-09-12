@@ -54,9 +54,7 @@ private:
     std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > m_We;
     /*!Scalar matrix with the penalization on the event-dependent covariates (sparse Le x Le, where Le is the sum of the basis of each E covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Re;
-    /*! @brief Basis for event-dependent covariates regressors (sparse qE x Le)
-    * @todo MATRICE DI FUNZIONI SPARSA
-    */
+    /*!Basis for event-dependent covariates regressors (sparse qE x Le)*/
     functional_matrix<INPUT,OUTPUT> m_theta;
     /*!Coefficients of the basis expansion for event-dependent covariates regressors: TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_be;
@@ -67,9 +65,7 @@ private:
     std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > m_Ws;
     /*!Scalar matrix with the penalization on the station-dependent covariates (sparse Ls x Ls, where Ls is the sum of the basis of each S covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Rs;
-    /*! @brief Basis for station-dependent covariates regressors (sparse qS x Ls)
-    * @todo MATRICE DI FUNZIONI SPARSA
-    */
+    /*!Basis for station-dependent covariates regressors (sparse qS x Ls)*/
     functional_matrix<INPUT,OUTPUT> m_psi;
     /*!Coefficients of the basis expansion for station-dependent covariates regressors: TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_bs;
@@ -94,9 +90,11 @@ public:
                  FUNC_MATRIX_OBJ &&Xe,
                  FUNC_DIAG_MATRIX_VEC_OBJ &&We,
                  SCALAR_SPARSE_MATRIX_OBJ &&Re,
+                 FUNC_SPARSE_MATRIX_OBJ &&theta,
                  FUNC_MATRIX_OBJ &&Xs,
                  FUNC_DIAG_MATRIX_VEC_OBJ &&Ws,
                  SCALAR_SPARSE_MATRIX_OBJ &&Rs,
+                 FUNC_SPARSE_MATRIX_OBJ &&psi,
                  INPUT a,
                  INPUT b,
                  int n_intervals_integration,
@@ -112,15 +110,12 @@ public:
             m_Xe{std::forward<FUNC_MATRIX_OBJ>(Xe)},
             m_We{std::forward<FUNC_DIAG_MATRIX_VEC_OBJ>(We)},
             m_Re{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Re)},
+            m_theta{std::forward<FUNC_SPARSE_MATRIX_OBJ>(theta)},
             m_Xs{std::forward<FUNC_MATRIX_OBJ>(Xs)},
             m_Ws{std::forward<FUNC_DIAG_MATRIX_VEC_OBJ>(Ws)},
-            m_Rs{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rs)}
+            m_Rs{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rs)},
+            m_psi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(psi)}
             {}
-
-    /*
-    *   !!!!!!!!!!!NB: RITORNARE LE MATRICI SCALARI SIA COME SCALARI CHE COME MATRICI DI FUNZIONI COSTANTI!!!!!!!
-    *   !!!!!!!!!!! NON HO ANCORA SCRITTO UN PRODOTTO TRA MATRICE FUNZIONALE E MATRICE SCALARE!!!!!!!!!!!!!!!!!!!
-    */
 
 
     /*!
@@ -132,44 +127,6 @@ public:
     override
     {
         double loc = 0.3;
-
-
-        for(std::size_t i = 0; i < m_omega.rows(); ++i){
-    for(std::size_t j = 0; j < m_omega.cols(); ++j){
-            std::string present_s;
-            if(m_omega.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
-            std::cout << "Elem of OMEGA in compute (" << i << "," << j << ") is " << present_s << " evaluated in " << loc << ": " << m_omega(i,j)(loc) << std::endl;
-    }}
-
-/*
-        std::cout << "In compute" << std::endl;
-
-
-        
-        auto row_test = m_Xc.get_row(3);
-        for(std::size_t i = 0; i < row_test.cols(); ++i){
-            std::cout << "Elem of col " << i+1 << " in row 4 evaluated in " << loc << ": " << row_test(0,i)(loc) << std::endl;
-        }
-
-        auto col_test = m_Xc.get_col(4);
-        for(std::size_t i = 0; i < col_test.rows(); ++i){
-            std::cout << "Elem of row " << i+1 << " in col 5 evaluated in " << loc << ": " << col_test(i,0)(loc) << std::endl;
-        }
-
-        m_Xc.transpose();
-
-        auto col_test2 = m_Xc.get_row(4);
-        for(std::size_t i = 0; i < col_test2.cols(); ++i){
-            std::cout << "In Xc transpose, the row 5, previous col 5, elem in col " << i+1 << ", evaluated in " << loc << ": " << col_test2(0,i)(loc) << std::endl;
-        }
-*/
-
-
-        //auto red = m_Xc.reduce();
-        //std::cout << "Reduction in " << loc << ": " << red(loc) << std::endl;
-
-
-
 
     }
 

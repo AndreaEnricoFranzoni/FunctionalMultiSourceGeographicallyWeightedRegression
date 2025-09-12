@@ -533,28 +533,14 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xe = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_EVENT_>(x_E_fd_,number_threads);
     //We: n diagonal functional matrices of dimension nxn
     std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > We = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_>(W_E,number_threads);
+    //theta: a sparse functional matrix of dimension qexLe
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> theta = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_E);
     //Xs: a functional matrix of dimension nxqs
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xs = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_,number_threads);
     //Ws: n diagonal functional matrices of dimension nxn
     std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Ws = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_>(W_S,number_threads);
-
-
-for(std::size_t i = 0; i < bs_C.q(); ++i){
-    for(std::size_t j = 0; j < bs_C.numbers_of_basis()[i]; ++j)
-    {
-        Rcout << "For covariate " << i << ", base " << j << "-th evaluated in " << 0.3 << ": " << bs_C.systems_of_basis()[i].eval_base(0.3)(0,j) << std::endl;
-    }
-}
-
-
-for(std::size_t i = 0; i < omega.rows(); ++i){
-    for(std::size_t j = 0; j < omega.cols(); ++j){
-            std::string present_s;
-            if(omega.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
-            Rcout << "Elem of OMEGA (" << i << "," << j << ") is " << present_s << " evaluated in " << 0.3 << ": " << omega(i,j)(0.3) << std::endl;
-    }}
-
-
+    //psi: a sparse functional matrix of dimension qsxLs
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
 
     //fgwr algorithm
@@ -567,9 +553,11 @@ for(std::size_t i = 0; i < omega.rows(); ++i){
                                                                                     std::move(Xe),
                                                                                     std::move(We),
                                                                                     std::move(R_E.PenalizationMatrix()),
+                                                                                    std::move(theta),
                                                                                     std::move(Xs),
                                                                                     std::move(Ws),
                                                                                     std::move(R_S.PenalizationMatrix()),
+                                                                                    std::move(psi),
                                                                                     a,
                                                                                     b,
                                                                                     n_intervals,
