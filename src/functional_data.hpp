@@ -87,6 +87,11 @@ public:
     const FDAGWR_TRAITS::Dense_Matrix & fdata_coeff() const {return m_fdata_coeff;}
 
     /*!
+    * @brief Getter for the basis
+    */
+    const basis_type<domain_type> & fdata_basis() const {return m_fdata_basis;}
+
+    /*!
     * @brief Evaluating the correct statistical unit
     */
     double

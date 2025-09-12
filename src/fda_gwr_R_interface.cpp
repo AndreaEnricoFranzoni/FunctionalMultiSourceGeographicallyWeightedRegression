@@ -431,7 +431,11 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //extracting the template param of the basis for fd (access it in the template params list with ::template_type)  
     using response_basis_tmp_t = extract_template_t< decltype(basis_response_)::element_type >;   
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
-    
+    Rcout << "Valutazioni base risposta" << std::endl;
+    Rcout << y_fd_.fdata_basis().eval_base(0.3).row(0) << std::endl;
+    Rcout << "Valutazioni risposta" << std::endl;
+    Rcout << y_fd_.eval(0.3,0) << std::endl;
+
     //response reconstruction weights
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_rec_weights_response_ = basis_fac.create(basis_type_rec_weights_response_,knots_response_eigen_w_,degree_basis_rec_weights_response_,number_basis_rec_weights_response_);
     //extracting the template param of the basis for fd (access it in the template params list with ::template_type)  
