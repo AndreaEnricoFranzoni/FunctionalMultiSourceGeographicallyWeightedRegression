@@ -215,6 +215,38 @@ public:
     }
 
     /*!
+    * @brief Change all the elements in row idx-th
+    */
+    void
+    row_sub(const std::vector< F_OBJ > &new_row, std::size_t idx)
+    {
+        assert(new_row.size() == m_cols);
+        assert(idx < m_rows); 
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(new_row,idx,m_data,m_rows) num_threads(8)
+        for(std::size_t j = 0; j < new_row.size(); ++j){
+            m_data[j * m_rows + idx] = new_row[j];}
+#endif
+    }
+
+    /*!
+    * @brief Change all the elements in col idx-th
+    */
+    void
+    col_sub(const std::vector< F_OBJ > &new_col, std::size_t idx)
+    {
+        assert(new_col.size() == m_rows);
+        assert(idx < m_cols); 
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(new_col,idx,m_data,m_rows) num_threads(8)
+        for(std::size_t i = 0; i < new_col.size(); ++i){
+            m_data[idx * m_rows + i] = new_col[i];}
+#endif
+    }
+
+    /*!
     * @brief Transposing the functional matrix
     */
     void

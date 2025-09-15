@@ -120,7 +120,7 @@ public:
             for(std::size_t i = 0; i < et.rows(); ++i){
                 //il confronto con funzioni è un casino. Siccome non posso confrontare l'indirizzo direttamente (&et(i,j))
                 //(non prende una non-const ref da un temporaneo o da un const)
-                //inserisco, confronto, e poi tolgo
+                //inserisco, confronto, e poi tolgo: NON FUNZIONA
                 m_data.emplace_back(et(i,j));
                 if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)
                 {
@@ -165,7 +165,7 @@ public:
             for(std::size_t i = 0; i < et.rows(); ++i)
             {
                 m_data.emplace_back(et(i,j));
-                if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)
+                if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)    // NON FUNZIONA
                 {
                     std::cout << "Entrato nell'if" << std::endl;
                     m_data.pop_back();

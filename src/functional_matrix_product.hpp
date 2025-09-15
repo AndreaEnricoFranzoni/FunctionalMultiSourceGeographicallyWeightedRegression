@@ -30,6 +30,7 @@
 #include <numeric>
 #include <algorithm>
 #include <iterator>
+#include <exception>
 
 
 #ifdef _OPENMP
@@ -81,6 +82,98 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
 
     return prod;
 }
+
+
+
+/*!
+* @brief Row-by-col product within a functional matrices M1 and a sparse functional matrix M2
+*/
+template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline 
+functional_matrix<INPUT,OUTPUT>
+fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
+        const functional_matrix_sparse<INPUT,OUTPUT> &SM2)
+{
+    //checking matrices dimensions
+    if (M1.cols() != SM2.rows())
+		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
+
+    //type stored by the functional matrix
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    //input type of the elements of the functional matrix
+    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
+
+    //initial point for f_sum
+    F_OBJ f_null = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
+    //reducing operation for transform_reduce
+    std::function<F_OBJ(F_OBJ,F_OBJ)> f_sum = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)+f2(x);};};
+    //binary operation for transform_reduce
+    std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
+
+    //resulting matrix
+    functional_matrix<INPUT,OUTPUT> prod(M1.rows(),SM2.cols(),f_null);
+
+    for(std::size_t j = 0; j < prod.cols(); ++j){
+        //the number of elements in the col j-th of the sparse matrix
+        std::size_t start_col_j = SM2.cols_idx()[j];
+        std::size_t end_col_j = SM2.cols_idx()[j+1];
+        
+        for(std::size_t i = 0; i < prod.rows(); ++i){
+            //for each element, making the product looping only of the non null elements
+            for(const auto non_null_row = std::next(SM2.rows_idx().cbegin(),start_col_j); non_null_row != std::next(SM2.rows_idx().cbegin(),end_col_j); ++non_null_row){
+                prod(i,j) = f_sum(prod(i,j),f_prod(M1(i,*non_null_row),SM2(*non_null_row,j)));}}}
+
+    return prod;
+}
+
+
+
+/*!
+* @brief Row-by-col product within a functional matrices M1 and a sparse functional matrix SM2
+*/
+template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline 
+functional_matrix<INPUT,OUTPUT>
+fm_prod(const functional_matrix_sparse<INPUT,OUTPUT> &SM1,
+        const functional_matrix<INPUT,OUTPUT> &M2)
+{
+    //checking matrices dimensions
+    if (SM1.cols() != M2.rows())
+		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
+
+    //type stored by the functional matrix
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    //input type of the elements of the functional matrix
+    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
+
+    //initial point for f_sum
+    F_OBJ f_null = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
+    //reducing operation for transform_reduce
+    std::function<F_OBJ(F_OBJ,F_OBJ)> f_sum = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)+f2(x);};};
+    //binary operation for transform_reduce
+    std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
+
+    //resulting matrix
+    functional_matrix<INPUT,OUTPUT> prod(SM1.rows(),M2.cols(),f_null);
+
+    //loop su tutte le colonne di SM1 perchè la matrice sparsa va passata columnwise
+    for(std::size_t j_s = 0; j_s < SM1.cols(); ++j_s){
+        //the number of elements in the col j-th of the sparse matrix
+        std::size_t start_col_j = SM1.cols_idx()[j];
+        std::size_t end_col_j = SM1.cols_idx()[j+1];
+        //loop sulle righe non-nulle della colonna j-th 
+        for(const auto non_null_row = std::next(SM1.rows_idx().cbegin(),start_col_j); non_null_row != std::next(SM1.rows_idx().cbegin(),end_col_j); ++non_null_row){
+            //cosa vado ad aggiornare nel prodotto? In corrispondenza delle riga non nulla non_null_row-th,
+            //devo fare un ulteriore loop sulle colonne di M2, in cui vado a fare i prodotti singoli, sommando verso la fine
+            for (std::size_t j = 0; j < prod.cols(); ++j){
+                //actual products
+                prod(*non_null_row,j) = f_sum( prod(*non_null_row,j), f_prod(SM1(*non_null_row,j_s),M2(j_s,j)) );}}}
+
+    return prod;
+}
+
 
 
 
