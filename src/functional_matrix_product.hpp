@@ -161,8 +161,8 @@ fm_prod(const functional_matrix_sparse<INPUT,OUTPUT> &SM1,
     //loop su tutte le colonne di SM1 perchè la matrice sparsa va passata columnwise
     for(std::size_t j_s = 0; j_s < SM1.cols(); ++j_s){
         //the number of elements in the col j-th of the sparse matrix
-        std::size_t start_col_j = SM1.cols_idx()[j];
-        std::size_t end_col_j = SM1.cols_idx()[j+1];
+        std::size_t start_col_j = SM1.cols_idx()[j_s];
+        std::size_t end_col_j = SM1.cols_idx()[j_s+1];
         //loop sulle righe non-nulle della colonna j-th 
         for(const auto non_null_row = std::next(SM1.rows_idx().cbegin(),start_col_j); non_null_row != std::next(SM1.rows_idx().cbegin(),end_col_j); ++non_null_row){
             //cosa vado ad aggiornare nel prodotto? In corrispondenza delle riga non nulla non_null_row-th,
