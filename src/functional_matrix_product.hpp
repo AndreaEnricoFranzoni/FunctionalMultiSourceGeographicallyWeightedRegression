@@ -127,7 +127,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
                 //products and summations are computed only with respect to the non-null elements
                 for(std::size_t ii = SM2.cols_idx()[j]; ii < SM2.cols_idx()[j+1]; ++ii){
                     std::cout << "Row2 in col "<<j<<": " <<SM2.rows_idx()[ii]<<std::endl;
-                    row_col_j = SM2.rows_idx()[ii];
+                    std::size_t row_col_j = SM2.rows_idx()[ii];
                     prod(i,j) = f_sum(prod(i,j),f_prod(M1(i,row_col_j),SM2(row_col_j,j)));
                 }
 
