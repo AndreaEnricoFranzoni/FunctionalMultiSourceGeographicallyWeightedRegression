@@ -116,47 +116,22 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
     //resulting matrix
     functional_matrix<INPUT,OUTPUT> prod(M1.rows(),SM2.cols(),f_null);
 
-    std::cout << "Col cumulative numbers of sparse matrix are " << SM2.cols_idx().size() << std::endl;
-    for (std::size_t i = 0; i < SM2.cols_idx().size(); ++i)
-    {
-        std::cout << "ci: " << SM2.cols_idx()[i] << std::endl;
-    }
 
-    std::cout << "Row indeces of sparse matrix are " << SM2.rows_idx().size() << std::endl;
-    for (std::size_t i = 0; i < SM2.rows_idx().size(); ++i)
-    {
-        std::cout << "ri: " << SM2.rows_idx()[i] << std::endl;
-    }
-
-
-    //fissata una colonna della seconda, faccio il prodotto con ogni riga della prima
+    //fixing the col in the sparse matrix, computing all the products with that columns
     for(std::size_t j = 0; j < prod.cols(); ++j){
-        //the number of elements in the col j-th of the sparse matrix
-        std::cout << "In col " << j << " there are: " << SM2.cols_idx()[j+1] - SM2.cols_idx()[j] << " elements" << std::endl;
+
         //if there is at least one element in col j-th        
-        if(SM2.cols_idx()[j] <  SM2.cols_idx()[j+1]){
-
-            for(std::size_t ii = SM2.cols_idx()[j]; ii < SM2.cols_idx()[j+1]; ++ii){
-                std::cout << "Row2 in col "<<j<<": " <<SM2.rows_idx()[ii]<<std::endl;
-            }
-
-            std::vector<std::size_t> rows_col_j;
-            rows_col_j.resize(SM2.cols_idx()[j+1] - SM2.cols_idx()[j]);
-            std::copy(std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j]),
-                      std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j+1]),
-                      rows_col_j.begin());
-
-            for(std::size_t iii = 0; iii < rows_col_j.size(); ++iii){std::cout << "Row3 in col "<<j<<": " <<rows_col_j[iii]<<std::endl;}
-
-            auto first_elem_col_j = std::next(SM2.rows_idx().cbegin(),2);        //SM2.cols_idx()[j]
-            auto last_elem_col_j  = std::next(SM2.rows_idx().cbegin(),4);        //SM2.cols_idx()[j+1]
-            //creating a span with the row indeces of col j-th
-            std::span<const std::size_t> rows_in_col_j(first_elem_col_j,last_elem_col_j);
-
-            for(const std::size_t& it : rows_in_col_j){std::cout << "Row in col "<<j<<": " <<it<<std::endl;}
-
+        if(SM2.check_col_presence(j)){
+            //computing all the products
             for(std::size_t i = 0; i < prod.rows(); ++i){
-                //qua, per ogni riga, faccio il prodotto
+                //products and summations are computed only with respect to the non-null elements
+                for(std::size_t ii = SM2.cols_idx()[j]; ii < SM2.cols_idx()[j+1]; ++ii){
+                    std::cout << "Row2 in col "<<j<<": " <<SM2.rows_idx()[ii]<<std::endl;
+                    row_col_j = SM2.rows_idx()[ii];
+                    prod(i,j) = f_sum(prod(i,j),f_prod(M1(i,row_col_j),SM2(row_col_j,j)));
+                }
+
+
 
                 //for each element, making the product looping only of the non null elements
                 //for(auto non_null_row = std::next(SM2.rows_idx().cbegin(),start_col_j); non_null_row != std::next(SM2.rows_idx().cbegin(),end_col_j); ++non_null_row){
@@ -170,13 +145,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
                 //    std::cout << "prod(" << i << "," << j <<"): della densa il (" << i << "," << *it << "), della sparsa il (" << *it << "," << j <<")" << std::endl;
                 //}
 
-/*
-                std::cout << "i=" << i << ", j=" << j <<": start_col_j: " << start_col_j << ", end_col_j: " << end_col_j << std::endl;
-                auto f_ = std::next(SM2.rows_idx().cbegin(),start_col_j);
-                std::cout << "Inizio: " << SM2((*f_),j)(0.3) << std::endl;
-                auto f__ = std::next(SM2.rows_idx().cbegin(),end_col_j - 1);
-                std::cout << "Fine: " << SM2((*f__),j)(0.3) << std::endl;
-*/
+
                 }
         }
     }
