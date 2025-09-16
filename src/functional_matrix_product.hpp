@@ -115,6 +115,13 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
     //resulting matrix
     functional_matrix<INPUT,OUTPUT> prod(M1.rows(),SM2.cols(),f_null);
 
+    std::cout << "Col indeces of sparse matrix are " << SM2.cols_idx().size() << std::endl;
+    for (std::size_t i = 0; i < SM2.cols_idx().size(); ++i)
+    {
+        std::cout << "ci: " << SM2.cols_idx()[i] << std::endl;
+    }
+    
+
     for(std::size_t j = 0; j < prod.cols(); ++j){
         //the number of elements in the col j-th of the sparse matrix
         std::cout << "Start col " << j << ": " << SM2.cols_idx()[j] << std::endl;
@@ -130,9 +137,9 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
                 //              std::next(SM2.rows_idx().cbegin(),end_col_j),
                 //              [&prod,i,j,&M1,&SM2,&f_sum,&f_prod](const std::size_t &row_no_null){ prod(i,j) = f_sum(prod(i,j),f_prod(M1(i,row_no_null),SM2(row_no_null,j)));});
 
-                for(auto it = std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j]); it != std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j+1]); ++it){
-                    std::cout << "prod(" << i << "," << j <<"): della densa il (" << i << "," << *it << "), della sparsa il (" << *it << "," << j <<")" << std::endl;
-                }
+                //for(auto it = std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j]); it != std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j+1]); ++it){
+                //    std::cout << "prod(" << i << "," << j <<"): della densa il (" << i << "," << *it << "), della sparsa il (" << *it << "," << j <<")" << std::endl;
+                //}
 
 /*
                 std::cout << "i=" << i << ", j=" << j <<": start_col_j: " << start_col_j << ", end_col_j: " << end_col_j << std::endl;
