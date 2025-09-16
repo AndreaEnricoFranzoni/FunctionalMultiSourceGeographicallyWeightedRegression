@@ -328,13 +328,6 @@ public:
         return m_cols_idx;
     }
 
-    std::vector< F_OBJ >
-    data()
-    const
-    {
-        return m_data;
-    }
-
     //! May be cast to a std::vector &
     /*!
     This way I can use all the methods of a std::vector!

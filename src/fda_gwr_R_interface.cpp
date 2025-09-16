@@ -594,15 +594,28 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v{f1,f2,f3,f4};
-    std::vector<std::size_t> row_idx{2,1,0,2};
+    std::vector<std::size_t> row_idx{2,0,0,2};
     std::vector<std::size_t> col_idx{0,1,2,2,4};
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm(test_sm_v,3,4,row_idx,col_idx);
 
-    Rcout << "Sparse matrix has " << test_sm.rows() << " rows, " << test_sm.cols() << " cols and " << test_sm.data().size() << "elems";
-    Rcout << "Data:" << std::endl;
-    for(std::size_t i  = 0; i < test_sm.data().size(); ++i){ Rcout << test_sm.data()[i](loc) << std::endl;}
-    for(std::size_t i = 0; i < test_sm.rows_idx().size(); ++i){ Rcout << test_sm.rows_idx()[i] << std::endl;}
-    for(std::size_t i = 0; i < test_sm.cols_idx().size(); ++i){ Rcout << test_sm.cols_idx()[i] << std::endl;}
+    for(std::size_t i = 0; i < test_sm.cols(); ++i){
+        if(test_sm.check_col_presence(i)){Rcout << "Col " << i << " c'è" << std::endl;}
+        else{Rcout << "Col " << i << " non c'è" << std::endl;}
+    }
+
+    for(std::size_t i = 0; i < test_sm.rows(); ++i){
+        if(test_sm.check_row_presence(i)){Rcout << "Row " << i << " c'è" << std::endl;}
+        else{Rcout << "Row " << i << " non c'è" << std::endl;}
+    }
+
+    for(std::size_t i = 0; i < test_sm.rows(); ++i){
+        for(std::size_t j = 0; j < test_sm.cols(); ++j)
+        {
+            if(test_sm.check_elem_presence(i,j)){Rcout << "Elem (" << i <<","<<j<<") c'è" << std::endl;}
+            else{Rcout << "Elem (" << i <<","<<j<<") non c'è" << std::endl;}
+        }
+        
+    }
 
 /*
     for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
