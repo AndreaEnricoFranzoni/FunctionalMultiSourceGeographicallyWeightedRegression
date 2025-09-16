@@ -246,12 +246,12 @@ public:
         assert(i < m_rows && j < m_cols); 
         //check the col presence
         if(!this->check_col_presence(j)) {   return this->m_null_function_non_const;}
-        //looking at the position of row of the element in the range indicated by the right column. Since, for each column, elements of m_rows_idx are ordered, it is possible to relay on std::lower_bound
+        //looking at the position of row of the element in the range indicated by the right column. Since, for each column, elements of m_rows_idx are ordered, it is possible to relay on std::lower_bound (finds the first element, in an ordered range, >= value)
         auto elem = std::lower_bound(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),
-                                     std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),
-                                     i);
+                                    std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),
+                                    i);
         //taking the distance from the begin to retrain the position in the value's vector, if present, null function if not
-        return (elem!=std::next(m_rows_idx.cbegin(),m_cols_idx[j+1])) ? m_data[std::distance(m_rows_idx.cbegin(),elem)] : this->m_null_function_non_const; 
+        return (elem!=std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]) && *elem==i) ? m_data[std::distance(m_rows_idx.cbegin(),elem)] : this->m_null_function_non_const; 
     }
 
     /*!
@@ -267,11 +267,11 @@ public:
         //check the col presence
         if(!this->check_col_presence(j)) {   return this->m_null_function;}
         //looking at the position of row of the element in the range indicated by the right column. Since, for each column, elements of m_rows_idx are ordered, it is possible to relay on std::lower_bound
-        auto elem = std::lower_bound(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),
-                                     std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),
-                                     i);
+        auto elem = std::find(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),
+                              std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),
+                              i);
         //taking the distance from the begin to retrain the position in the value's vector, if present, null function if not
-        return (elem!=std::next(m_rows_idx.cbegin(),m_cols_idx[j+1])) ? m_data[std::distance(m_rows_idx.cbegin(),elem)] : this->m_null_function; 
+        return (elem!=std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]) && *elem==i) ? m_data[std::distance(m_rows_idx.cbegin(),elem)] : this->m_null_function; 
     }
 
 /*
