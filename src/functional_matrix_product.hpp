@@ -121,7 +121,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         
         for(std::size_t i = 0; i < prod.rows(); ++i){
             //for each element, making the product looping only of the non null elements
-            for(const auto non_null_row = std::next(SM2.rows_idx().cbegin(),start_col_j); non_null_row != std::next(SM2.rows_idx().cbegin(),end_col_j); ++non_null_row){
+            for(auto non_null_row = std::next(SM2.rows_idx().cbegin(),start_col_j); non_null_row != std::next(SM2.rows_idx().cbegin(),end_col_j); ++non_null_row){
                 prod(i,j) = f_sum(prod(i,j),f_prod(M1(i,*non_null_row),SM2(*non_null_row,j)));}}}
 
     return prod;
@@ -164,7 +164,7 @@ fm_prod(const functional_matrix_sparse<INPUT,OUTPUT> &SM1,
         std::size_t start_col_j = SM1.cols_idx()[j_s];
         std::size_t end_col_j = SM1.cols_idx()[j_s+1];
         //loop sulle righe non-nulle della colonna j-th 
-        for(const auto non_null_row = std::next(SM1.rows_idx().cbegin(),start_col_j); non_null_row != std::next(SM1.rows_idx().cbegin(),end_col_j); ++non_null_row){
+        for(auto non_null_row = std::next(SM1.rows_idx().cbegin(),start_col_j); non_null_row != std::next(SM1.rows_idx().cbegin(),end_col_j); ++non_null_row){
             //cosa vado ad aggiornare nel prodotto? In corrispondenza delle riga non nulla non_null_row-th,
             //devo fare un ulteriore loop sulle colonne di M2, in cui vado a fare i prodotti singoli, sommando verso la fine
             for (std::size_t j = 0; j < prod.cols(); ++j){
