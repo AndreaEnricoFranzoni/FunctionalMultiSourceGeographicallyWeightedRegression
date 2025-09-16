@@ -56,10 +56,6 @@
 
 
 
-#include <span>
-
-
-
 
 using namespace Rcpp;
 
@@ -599,19 +595,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
 
-    std::vector<std::size_t> v = {10, 20, 30, 40, 50};
 
-    // definiamo il subrange: [cbegin()+1, cbegin()+4) → {20,30,40}
-    auto first = std::next(v.cbegin(), 1);
-    auto last  = std::next(v.cbegin(), 4);
-
-    // span costante sugli elementi (usa const std::size_t)
-    std::span<const std::size_t> sub(first, last);
-
-    // iteriamo sullo span
-    for (const std::size_t& x : sub) {
-        Rcout << x << " ";
-    }
 
 
 

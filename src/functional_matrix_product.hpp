@@ -128,12 +128,17 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         std::cout << "ri: " << SM2.rows_idx()[i] << std::endl;
     }
 
+
     //fissata una colonna della seconda, faccio il prodotto con ogni riga della prima
     for(std::size_t j = 0; j < prod.cols(); ++j){
         //the number of elements in the col j-th of the sparse matrix
         std::cout << "In col " << j << " there are: " << SM2.cols_idx()[j+1] - SM2.cols_idx()[j] << " elements" << std::endl;
         //if there is at least one element in col j-th        
         if(SM2.cols_idx()[j] <  SM2.cols_idx()[j+1]){
+
+            for(std::size_t ii = SM2.cols_idx()[j]; ii < SM2.cols_idx()[j+1]; ++ii){
+                std::cout << "Row2 in col "<<j<<": " <<SM2.rows_idx()[ii]<<std::endl;
+            }
 
             auto first_elem_col_j = std::next(SM2.rows_idx().cbegin(),2);        //SM2.cols_idx()[j]
             auto last_elem_col_j  = std::next(SM2.rows_idx().cbegin(),4);        //SM2.cols_idx()[j+1]
