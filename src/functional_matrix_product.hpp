@@ -135,12 +135,12 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         //if there is at least one element in col j-th        
         if(SM2.cols_idx()[j] <  SM2.cols_idx()[j+1]){
 
-            auto first_elem_col_j = std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j]);
-            auto last_elem_col_j  = std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j+1]);
+            auto first_elem_col_j = std::next(SM2.rows_idx().cbegin(),2);        //SM2.cols_idx()[j]
+            auto last_elem_col_j  = std::next(SM2.rows_idx().cbegin(),4);        //SM2.cols_idx()[j+1]
             //creating a span with the row indeces of col j-th
-            std::span<const std::size_t> col_j(first_elem_col_j,last_elem_col_j);
+            std::span<const std::size_t> rows_in_col_j(first_elem_col_j,last_elem_col_j);
 
-            for(const std::size_t& it : col_j){std::cout << "Row in col "<<j<<": " <<it<<std::endl;}
+            for(const std::size_t& it : rows_in_col_j){std::cout << "Row in col "<<j<<": " <<it<<std::endl;}
 
             for(std::size_t i = 0; i < prod.rows(); ++i){
                 //qua, per ogni riga, faccio il prodotto
