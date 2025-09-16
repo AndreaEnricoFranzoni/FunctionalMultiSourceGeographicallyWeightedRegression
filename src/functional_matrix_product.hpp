@@ -135,6 +135,10 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
                 //              [i,j](const std::size_t &row_no_null_idx){std::cout << "A prod(" << i <<","<<j<<") concorre l'elemento (" << i << ","<<row_no_null_idx<<") della densa e ("<<row_no_null_idx<<","<<j<<") della sparsa"<<std::endl;});
 
                 std::cout << "i=" << i << ", j=" << j <<": start_col_j: " << start_col_j << ", end_col_j: " << end_col_j << std::endl;
+                auto f_ = std::next(SM2.rows_idx().cbegin(),start_col_j);
+                std::cout << "Inizio: " << (*f_)(0.3) << std::endl;
+                auto f__ = std::next(SM2.rows_idx().cbegin(),end_col_j);
+                std::cout << "Fine: " << (*f__)(0.3) << std::endl;
                 }
         }
     }
