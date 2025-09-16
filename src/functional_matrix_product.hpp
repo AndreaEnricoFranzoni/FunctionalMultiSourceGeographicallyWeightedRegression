@@ -31,6 +31,7 @@
 #include <algorithm>
 #include <iterator>
 #include <exception>
+#include <iostream>
 
 
 #ifdef _OPENMP
@@ -124,9 +125,14 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
                 //for each element, making the product looping only of the non null elements
                 //for(auto non_null_row = std::next(SM2.rows_idx().cbegin(),start_col_j); non_null_row != std::next(SM2.rows_idx().cbegin(),end_col_j); ++non_null_row){
                 //    prod(i,j) = f_sum(prod(i,j),f_prod(M1(i,*non_null_row),SM2(*non_null_row,j)));}
+                
+                //std::for_each(std::next(SM2.rows_idx().cbegin(),start_col_j),
+                //              std::next(SM2.rows_idx().cbegin(),end_col_j),
+                //              [&prod,i,j,&M1,&SM2,&f_sum,&f_prod](const std::size_t &row_no_null){ prod(i,j) = f_sum(prod(i,j),f_prod(M1(i,row_no_null),SM2(row_no_null,j)));});
+
                 std::for_each(std::next(SM2.rows_idx().cbegin(),start_col_j),
                               std::next(SM2.rows_idx().cbegin(),end_col_j),
-                              [&prod,i,j,&M1,&SM2,&f_sum,&f_prod](const std::size_t &row_no_null){ prod(i,j) = f_sum(prod(i,j),f_prod(M1(i,row_no_null),SM2(row_no_null,j)));});
+                              [i,j](const std::size_t &row_no_null){std::cout << "A prod(" << i <<","<<j<<") concorre l'elemento (" << i << ","<<row_no_null<<") della densa e ("<<row_no_null<<","<<j<<") della sparsa"<<std::endl;});
                 }}
     }
 
