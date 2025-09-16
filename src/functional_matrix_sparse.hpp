@@ -52,7 +52,7 @@ private:
     std::size_t m_cols;
     /*!Number of non-zero elements*/                              
     std::size_t m_nnz;
-    /*!Vector that contains row indices. Size is nnz, and contains, for each value of m_data, their row.*/           
+    /*!Vector that contains row indices. Size is nnz, and contains, for each value of m_data, their row. NB: for each col, idxs have to be ordered*/           
     std::vector<std::size_t> m_rows_idx;        
     /*! @brief Vector that contains col pointer. Size is m_cols+1, elem i-th of the vector contains the number of nnz elements up to col i+1-th (not inlcuding it) 
     * (list of m_data indexes where each column starts).
@@ -203,7 +203,7 @@ public:
     {
         //checking that the passed index is coherent with the matrix dimension
         assert(idx < m_rows);            
-        //it is sufficient that in the vector containing the rows idx there is once idx
+        //it is sufficient that in the vector containing the rows idx there is once idx: need to go with std::find instead of std::binary_search since elements are not ordered
         return std::find(m_rows_idx.cbegin(),m_rows_idx.cend(),idx) != m_rows_idx.cend();
     }
 
@@ -229,16 +229,11 @@ public:
     {
         //checking if there row i and col j are present
         if(!this->check_col_presence(j) || !this->check_row_presence(i)){   return false;}
-        //searching if within the row indeces of the col there is the one requested
+        //searching if within the row indeces of the col there is the one requested. Since, for each column, elements of m_rows_idx are ordered, it is possible to relay on std::binary_search
         return std::binary_search(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),         //start of rows idx in col j
                                   std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),       //end of rows idx in col j
                                   i);                                                   //row index that has to be in the row
     }
-
-
-
-
-
 
     /*!
     * @brief Returns element (i,j) (being the sparse matrix compressed, it is possible to modify only element already there)
@@ -248,14 +243,11 @@ public:
     (std::size_t i, std::size_t j)
     {
         //checking if the element is present: if not, null function is returned
-        if(!this->check_elem_presence(i,j)) {    
-            std::cout << "Elem (" << i << "," << j << ") not present" << std::endl; 
-            return this->m_null_function_non_const;}
-        std::cout << "Elem (" << i << "," << j << ") present" << std::endl; 
-        //looking at the position of row of the element in the range indicated by the right column
-        auto elem_position = std::find(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),
-                                       std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),
-                                       i);
+        if(!this->check_elem_presence(i,j)) {   return this->m_null_function_non_const;}
+        //looking at the position of row of the element in the range indicated by the right column. Since, for each column, elements of m_rows_idx are ordered, it is possible to relay on std::lower_bound
+        auto elem_position = std::lower_bound(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),
+                                              std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),
+                                              i);
         //taking the distance from the begin to retrain the position in the value's vector
         return m_data[std::distance(m_rows_idx.cbegin(),elem_position)]; 
     }
@@ -270,10 +262,10 @@ public:
     {
         //checking if the element is present: if not, null function is returned
         if(!this->check_elem_presence(i,j)) {    return this->m_null_function;}
-        //looking at the position of row of the element in the range indicated by the right column
-        auto elem_position = std::find(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),
-                                       std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),
-                                       i);
+        //looking at the position of row of the element in the range indicated by the right column. Since, for each column, elements of m_rows_idx are ordered, it is possible to relay on std::lower_bound
+        auto elem_position = std::lower_bound(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),
+                                              std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),
+                                              i);
         //taking the distance from the begin to retrain the position in the value's vector
         return m_data[std::distance(m_rows_idx.cbegin(),elem_position)];  
     }
