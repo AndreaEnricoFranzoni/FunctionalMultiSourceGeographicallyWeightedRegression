@@ -598,6 +598,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::vector<std::size_t> col_idx{0,1,2,2,4};
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm(test_sm_v,3,4,row_idx,col_idx);
 
+    Rcout << "Sparse matrix has " << test_sm.rows() << " rows, " << test_sm.cols() << " cols and " << test_sm.data().size() << "elems";
+    Rcout << "Data:" << std::endl;
+    for(std::size_t i  = 0; i < test_sm.data().size(); ++i){ Rcout << test_sm.data()[i](loc) << std::endl;}
+
 /*
     for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
         for(std::size_t j = 0; j < test_fdm_dense2.cols(); ++j){
