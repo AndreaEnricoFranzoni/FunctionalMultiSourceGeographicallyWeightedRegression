@@ -248,7 +248,10 @@ public:
     (std::size_t i, std::size_t j)
     {
         //checking if the element is present: if not, null function is returned
-        if(!this->check_elem_presence(i,j)) {    return this->m_null_function_non_const;}
+        if(!this->check_elem_presence(i,j)) {    
+            std::cout << "Elem (" << i << "," << j << ") not present" << std::endl; 
+            return this->m_null_function_non_const;}
+        std::cout << "Elem (" << i << "," << j << ") present" << std::endl; 
         //looking at the position of row of the element in the range indicated by the right column
         auto elem_position = std::find(std::next(m_rows_idx.cbegin(),m_cols_idx[j]),
                                        std::next(m_rows_idx.cbegin(),m_cols_idx[j+1]),
