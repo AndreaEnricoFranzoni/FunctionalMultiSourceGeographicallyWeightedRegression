@@ -30,6 +30,7 @@
 #include <numeric>
 #include <algorithm>
 #include <iterator>
+#include <span>
 #include <exception>
 #include <iostream>
 
@@ -126,8 +127,17 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
         //the number of elements in the col j-th of the sparse matrix
         std::cout << "Start col " << j << ": " << SM2.cols_idx()[j] << std::endl;
         std::cout << "End col " << j << ": " << SM2.cols_idx()[j+1] << std::endl;
+
+
         
         if(SM2.cols_idx()[j] <  SM2.cols_idx()[j+1]){
+
+            auto start_col_j = std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j]);
+            auto end_col_j = std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j+1]);
+
+            std::span<std::size_t> col_j(start_col_j,end_col_j);
+
+            for(auto it : col_j){std::cout << "Col "<<j<<": " <<it<<std::endl;}
             for(std::size_t i = 0; i < prod.rows(); ++i){
                 //for each element, making the product looping only of the non null elements
                 //for(auto non_null_row = std::next(SM2.rows_idx().cbegin(),start_col_j); non_null_row != std::next(SM2.rows_idx().cbegin(),end_col_j); ++non_null_row){
