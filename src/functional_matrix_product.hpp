@@ -117,10 +117,8 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
 
     for(std::size_t j = 0; j < prod.cols(); ++j){
         //the number of elements in the col j-th of the sparse matrix
-        std::size_t start_col_j = SM2.cols_idx()[j];
-        std::size_t end_col_j = SM2.cols_idx()[j+1];
         
-        if(start_col_j <  end_col_j){
+        if(SM2.cols_idx()[j] <  SM2.cols_idx()[j+1]){
             for(std::size_t i = 0; i < prod.rows(); ++i){
                 //for each element, making the product looping only of the non null elements
                 //for(auto non_null_row = std::next(SM2.rows_idx().cbegin(),start_col_j); non_null_row != std::next(SM2.rows_idx().cbegin(),end_col_j); ++non_null_row){
@@ -130,8 +128,8 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
                 //              std::next(SM2.rows_idx().cbegin(),end_col_j),
                 //              [&prod,i,j,&M1,&SM2,&f_sum,&f_prod](const std::size_t &row_no_null){ prod(i,j) = f_sum(prod(i,j),f_prod(M1(i,row_no_null),SM2(row_no_null,j)));});
 
-                std::for_each(std::next(SM2.rows_idx().cbegin(),start_col_j),
-                              std::next(SM2.rows_idx().cbegin(),end_col_j),
+                std::for_each(std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j]),
+                              std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j+1]),
                               [i,j](const std::size_t &row_no_null_idx){std::cout << "A prod(" << i <<","<<j<<") concorre l'elemento (" << i << ","<<row_no_null_idx<<") della densa e ("<<row_no_null_idx<<","<<j<<") della sparsa"<<std::endl;});
 
 /*
