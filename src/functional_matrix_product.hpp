@@ -143,7 +143,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
             std::vector<std::size_t> rows_col_j;
             rows_col_j.resize(SM2.cols_idx()[j+1] - SM2.cols_idx()[j]);
             std::copy(std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j]),
-                      std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j]),
+                      std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j+1]),
                       rows_col_j.begin());
 
             for(std::size_t iii = 0; iii < rows_col_j.size(); ++iii){std::cout << "Row3 in col "<<j<<": " <<rows_col_j[iii]<<std::endl;}
