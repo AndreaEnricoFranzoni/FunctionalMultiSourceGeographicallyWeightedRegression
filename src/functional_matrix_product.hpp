@@ -130,15 +130,17 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
                 //              std::next(SM2.rows_idx().cbegin(),end_col_j),
                 //              [&prod,i,j,&M1,&SM2,&f_sum,&f_prod](const std::size_t &row_no_null){ prod(i,j) = f_sum(prod(i,j),f_prod(M1(i,row_no_null),SM2(row_no_null,j)));});
 
-                //std::for_each(std::next(SM2.rows_idx().cbegin(),start_col_j),
-                //              std::next(SM2.rows_idx().cbegin(),end_col_j),
-                //              [i,j](const std::size_t &row_no_null_idx){std::cout << "A prod(" << i <<","<<j<<") concorre l'elemento (" << i << ","<<row_no_null_idx<<") della densa e ("<<row_no_null_idx<<","<<j<<") della sparsa"<<std::endl;});
+                std::for_each(std::next(SM2.rows_idx().cbegin(),start_col_j),
+                              std::next(SM2.rows_idx().cbegin(),end_col_j),
+                              [i,j](const std::size_t &row_no_null_idx){std::cout << "A prod(" << i <<","<<j<<") concorre l'elemento (" << i << ","<<row_no_null_idx<<") della densa e ("<<row_no_null_idx<<","<<j<<") della sparsa"<<std::endl;});
 
+/*
                 std::cout << "i=" << i << ", j=" << j <<": start_col_j: " << start_col_j << ", end_col_j: " << end_col_j << std::endl;
                 auto f_ = std::next(SM2.rows_idx().cbegin(),start_col_j);
                 std::cout << "Inizio: " << SM2((*f_),j)(0.3) << std::endl;
                 auto f__ = std::next(SM2.rows_idx().cbegin(),end_col_j - 1);
                 std::cout << "Fine: " << SM2((*f__),j)(0.3) << std::endl;
+*/
                 }
         }
     }
