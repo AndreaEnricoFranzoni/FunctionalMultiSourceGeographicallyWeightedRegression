@@ -166,13 +166,12 @@ fm_prod(const functional_matrix_sparse<INPUT,OUTPUT> &SM1,
     //loop su tutte le colonne di SM1 perchè la matrice sparsa va passata columnwise
     for(std::size_t j_s = 0; j_s < SM1.cols(); ++j_s){
         //loop sulle righe non-nulle della colonna j-th 
-        for(std::size_t row_i_idx = SM1.cols_idx()[j_s]; row_i_idx < SM1.cols_idx()[j_s]+1; ++row_i_idx){
+        for(std::size_t row_i_idx = SM1.cols_idx()[j_s]; row_i_idx < SM1.cols_idx()[j_s+1]; ++row_i_idx){
             std::size_t i = SM1.rows_idx()[row_i_idx];
             for (std::size_t j = 0; j < prod.cols(); ++j)
             {
                 prod(i,j) = f_sum( prod(i,j), f_prod(SM1(i,j_s),M2(j_s,j)) );
             }
-            
         }
 
 
