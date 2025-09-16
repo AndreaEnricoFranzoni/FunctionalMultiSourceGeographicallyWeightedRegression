@@ -140,6 +140,14 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
                 std::cout << "Row2 in col "<<j<<": " <<SM2.rows_idx()[ii]<<std::endl;
             }
 
+            std::vector<std::size_t> rows_col_j;
+            rows_col_j.resize(SM2.cols_idx()[j+1] - SM2.cols_idx()[j]);
+            std::copy(std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j]),
+                      std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j]),
+                      rows_col_j.begin());
+
+            for(std::size_t iii = 0; iii < rows_col_j.size(); ++iii){std::cout << "Row3 in col "<<j<<": " <<rows_col_j[iii]<<std::endl;}
+
             auto first_elem_col_j = std::next(SM2.rows_idx().cbegin(),2);        //SM2.cols_idx()[j]
             auto last_elem_col_j  = std::next(SM2.rows_idx().cbegin(),4);        //SM2.cols_idx()[j+1]
             //creating a span with the row indeces of col j-th
