@@ -545,18 +545,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //psi: a sparse functional matrix of dimension qsxLs
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
-    Rcout << "Valutazioni base risposta" << std::endl;
-    Rcout << y_fd_.fdata_basis().eval_base(0.3).row(0) << std::endl;
-    Rcout << "Valutazioni risposta" << std::endl;
-    Rcout << y_fd_.eval(0.3,0) << std::endl;
-    for(std::size_t i = 0; i < phi.rows(); ++i){
-        for(std::size_t j = 0; j < phi.cols(); ++j){
-            std::string present_s;
-            if(phi.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
-            Rcout << "Elem of phi (" << i << "," << j << ") is " << present_s << " evaluated in " << 0.3 << ": " << phi(i,j)(0.3) << std::endl;
-        }
-    }
-
 
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
@@ -604,19 +592,53 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Eigen::MatrixXd M2 = Eigen::MatrixXd::Random(3,2);  // valori in [-1, 1]
 
 
-/*
+
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v{f1,f2};
     std::vector<std::size_t> row_idx{1,2};
     std::vector<std::size_t> col_idx{0,1,1,2};
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm(test_sm_v,3,3,row_idx,col_idx);
 
-    for(std::size_t i = 0; i < test_sm.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm.cols(); ++j){
-            std::string present_s;
-            if(test_sm.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
-            Rcout << "Elem of SM 1 (" << i << "," << j << ") is " << present_s << " evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
+    for(std::size_t i = 0; i < test_fdm_dense3.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm_dense3.cols(); ++j){
+            Rcout << "Elem of first factor (dense) (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense3(i,j)(loc) << std::endl;
         }
     }
+
+    for(std::size_t i = 0; i < test_sm.rows(); ++i){
+        for(std::size_t j = 0; j < test_sm.cols(); ++j){
+            Rcout << "Elem of second factor (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
+        }
+    }
+
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_prod(test_fdm_dense4,test_sm);
+    for(std::size_t i = 0; i < test_prod.rows(); ++i){
+        for(std::size_t j = 0; j < test_prod.cols(); ++j){
+            Rcout << "Elem of prod (" << i << "," << j << ") evaluated in " << loc << ": " << test_prod(i,j)(loc) << std::endl;
+        }
+    }
+
+    for(std::size_t i = 0; i < test_sm.rows(); ++i){
+        for(std::size_t j = 0; j < test_sm.cols(); ++j){
+            Rcout << "Elem of first factor (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
+        }
+    }
+
+    for(std::size_t i = 0; i < test_fdm_dense5.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm_dense5.cols(); ++j){
+            Rcout << "Elem of second factor (dense) (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense5(i,j)(loc) << std::endl;
+        }
+    }
+
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_prod2(test_sm,test_fdm_dense5);
+    for(std::size_t i = 0; i < test_prod2.rows(); ++i){
+        for(std::size_t j = 0; j < test_prod2.cols(); ++j){
+            Rcout << "Elem of prod2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_prod2(i,j)(loc) << std::endl;
+        }
+    }
+
+
+/*
+
 
 
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> double_sm = test_sm + test_sm;
@@ -631,15 +653,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 */
 
 
-/*
-    std::vector<int> v;
-    v.reserve(4);
-    Rcout << "Size: " << v.size() << ", capacity: " << v.capacity() << std::endl;
-    v.emplace_back(1);
-    Rcout << "Dopo emplace_back: size: " << v.size() << ", capacity: " << v.capacity() << std::endl;
-    v.pop_back();
-    Rcout << "Dopo pop_back: size: " << v.size() << ", capacity: " << v.capacity() << std::endl;
-*/
 
 
 /*
