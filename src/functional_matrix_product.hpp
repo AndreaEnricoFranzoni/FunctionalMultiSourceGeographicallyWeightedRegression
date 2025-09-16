@@ -138,7 +138,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
             auto first_elem_col_j = std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j]);
             auto last_elem_col_j  = std::next(SM2.rows_idx().cbegin(),SM2.cols_idx()[j+1]);
             //creating a span with the row indeces of col j-th
-            std::span<const std::size_t> col_j(start_col_j,end_col_j);
+            std::span<const std::size_t> col_j(first_elem_col_j,last_elem_col_j);
 
             for(const std::size_t& it : col_j){std::cout << "Row in col "<<j<<": " <<it<<std::endl;}
 
