@@ -75,6 +75,10 @@ public:
                 {
                     //cheack input consistency
                     assert((void("Number of rows times number of cols has to be greater than the number of stored functions"), m_rows * m_cols > m_data.size()));
+                    assert((void("Number of rows indeces has to be equal to the number of stored elements"), m_rows_idx.size() == m_data.size()));
+                    assert((void("Number of cols indeces has to be equal to the number of cols + 1"), m_cols_idx.size() == (m_cols + 1)));
+                    assert(m_cols_idx.front() == 0);
+                    assert(m_cols_idx.back() == m_nnz);
                 }
     //! Move constructor
     functional_matrix_sparse(std::vector< F_OBJ > &&fm,
@@ -86,6 +90,10 @@ public:
                 {
                     //cheack input consistency
                     assert((void("Number of rows times number of cols has to be greater than the number of stored functions"), m_rows * m_cols > m_data.size()));
+                    assert((void("Number of rows indeces has to be equal to the number of stored elements"), m_rows_idx.size() == m_data.size()));
+                    assert((void("Number of cols indeces has to be equal to the number of stored elements + 1"), m_cols_idx.size() == (m_cols + 1)));
+                    assert(m_cols_idx.front() == 0);
+                    assert(m_cols_idx.back() == m_nnz);
                 }
     //! Copy constructor
     functional_matrix_sparse(functional_matrix_sparse const &) = default;

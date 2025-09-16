@@ -593,14 +593,14 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
 
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v{f1,f2};
-    std::vector<std::size_t> row_idx{1,2};
-    std::vector<std::size_t> col_idx{0,1,1,2};
-    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm(test_sm_v,3,3,row_idx,col_idx);
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v{f1,f2,f3,f4};
+    std::vector<std::size_t> row_idx{2,1,0,2};
+    std::vector<std::size_t> col_idx{0,1,2,2,4};
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm(test_sm_v,3,4,row_idx,col_idx);
 
-    for(std::size_t i = 0; i < test_fdm_dense3.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense3.cols(); ++j){
-            Rcout << "Elem of first factor (dense) (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense3(i,j)(loc) << std::endl;
+    for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm_dense2.cols(); ++j){
+            Rcout << "Elem of first factor (dense) (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2(i,j)(loc) << std::endl;
         }
     }
 
@@ -611,7 +611,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     }
 
 
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_prod = fm_prod(test_fdm_dense4,test_sm);
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_prod = fm_prod(test_fdm_dense2,test_sm);
     for(std::size_t i = 0; i < test_prod.rows(); ++i){
         for(std::size_t j = 0; j < test_prod.cols(); ++j){
             Rcout << "Elem of prod (" << i << "," << j << ") evaluated in " << loc << ": " << test_prod(i,j)(loc) << std::endl;
