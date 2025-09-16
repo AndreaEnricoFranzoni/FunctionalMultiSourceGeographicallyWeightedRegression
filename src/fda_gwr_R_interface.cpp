@@ -631,12 +631,14 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
         }
     }
 
+/*
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_prod2 = fm_prod(test_sm,test_fdm_dense5);
     for(std::size_t i = 0; i < test_prod2.rows(); ++i){
         for(std::size_t j = 0; j < test_prod2.cols(); ++j){
             Rcout << "Elem of prod2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_prod2(i,j)(loc) << std::endl;
         }
     }
+*/
 
 
 /*
