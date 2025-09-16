@@ -601,8 +601,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Rcout << "Sparse matrix has " << test_sm.rows() << " rows, " << test_sm.cols() << " cols and " << test_sm.data().size() << "elems";
     Rcout << "Data:" << std::endl;
     for(std::size_t i  = 0; i < test_sm.data().size(); ++i){ Rcout << test_sm.data()[i](loc) << std::endl;}
-    for(std::size_t i = 0; i < test_sm.rows_idx.size(); ++i){ Rcout << test_sm.rows_idx()[i] << std::endl;}
-    for(std::size_t i = 0; i < test_sm.cols_idx.size(); ++i){ Rcout << test_sm.cols_idx()[i] << std::endl;}
+    for(std::size_t i = 0; i < test_sm.rows_idx().size(); ++i){ Rcout << test_sm.rows_idx()[i] << std::endl;}
+    for(std::size_t i = 0; i < test_sm.cols_idx().size(); ++i){ Rcout << test_sm.cols_idx()[i] << std::endl;}
 
 /*
     for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
