@@ -359,14 +359,16 @@ public:
             std::vector<std::size_t> different_rows = m_rows_idx;
             different_rows.insert(different_rows.begin(),static_cast<std::size_t>(0));
             different_rows.push_back(m_rows);
+            std::vector<std::size_t> rows_difference;
+            rows_difference.resize(different_rows.size()-1);
             std::cout <<"Diff rows"<<std::endl;
             for(std::size_t i = 0; i < different_rows.size(); ++i){std::cout << different_rows[i] <<std::endl;}
-            std::adjacent_difference(different_rows.begin(),different_rows.end(),different_rows.begin());
+            std::adjacent_difference(different_rows.begin(),different_rows.end(),rows_difference.begin());
                         std::cout <<"Diff rows after diff"<<std::endl;
-            for(std::size_t i = 0; i < different_rows.size(); ++i){std::cout << different_rows[i] <<std::endl;}
+            for(std::size_t i = 0; i < rows_difference.size(); ++i){std::cout << rows_difference[i] <<std::endl;}
             //the first element is always 0
             std::size_t el = m_cols_idx.back();
-            for(auto it : different_rows){
+            for(auto it : rows_difference){
                 //*it says how many elements have to be insert before increasing it
                 for (std::size_t ii = 0; ii < it; ++ii){
                     m_cols_idx.emplace_back(el);}
