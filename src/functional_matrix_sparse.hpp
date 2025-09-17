@@ -337,8 +337,6 @@ public:
             for(std::size_t i = 1; i <= m_cols; ++i){ //looping from 1 since m_cols_idx has m_cols+1 elements, the first one being always 0
                 if(m_cols_idx[i] > m_cols_idx[i-1]){
                     m_rows_idx.emplace_back(i-1);}}
-            std::cout << "Cap: " << m_rows_idx.capacity() << std::endl;
-            std::cout << "Size: " << m_rows_idx.size() << std::endl;
             //m_cols_idx: only one column containing all the elements
             m_cols_idx = {0,m_nnz};
         }
@@ -419,6 +417,12 @@ public:
         }
         //swap number of rows and cols
         std::swap(m_cols,m_rows);
+
+        std::cout << "Fine trasposto: " << m_rows << " righe e " << m_cols << " colonne" << std::endl;
+        std::cout << "Indici di riga" << std::endl;
+        for(std::size_t i=0; i < m_rows_idx.size(); ++i){std::cout<<m_rows_idx[i]<<std::endl;}
+            std::cout << "Indici di colonna" << std::endl;
+        for(std::size_t i=0; i < m_cols_idx.size(); ++i){std::cout<<m_cols_idx[i]<<std::endl;}
     }
 
     /*!

@@ -622,6 +622,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     auto test_sm_cv_t = test_sm_cv.transpose();
 
 
+/*
     for(std::size_t i = 0; i < test_sm_cv_t.rows(); ++i){
         for(std::size_t j = 0; j < test_sm_cv_t.cols(); ++j){
             Rcout << "Elem of cv T (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_cv_t(i,j)(loc) << std::endl;
@@ -646,6 +647,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     for(std::size_t i = 0; i < test_sm_cv.rows_idx().size(); ++i){Rcout << test_sm_cv.rows_idx()[i] << std::endl;}
     Rcout << "Cv Col idx " << std::endl;
     for(std::size_t i = 0; i < test_sm_cv.cols_idx().size(); ++i){Rcout << test_sm_cv.cols_idx()[i] << std::endl;}
+*/
 
 
 
