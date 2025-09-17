@@ -621,7 +621,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Rcout << "SM T rows idx" << std::endl;
     for(std::size_t i = 0; i < test_sm_t.rows_idx().size(); ++i){Rcout << test_sm_t.rows_idx()[i] << std::endl;}
     Rcout << "SM T cols idx" << std::endl;
-    for(std::size_t i = 0; i < test_sm_t.size(); ++i){Rcout << test_sm_t.cols_idx()[i] << std::endl;}
+    for(std::size_t i = 0; i < test_sm_t.cols_idx().size(); ++i){Rcout << test_sm_t.cols_idx()[i] << std::endl;}
 */
 
 
@@ -653,7 +653,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Rcout << "CV T rows idx" << std::endl;
     for(std::size_t i = 0; i < test_sm_cv_t.rows_idx().size(); ++i){Rcout << test_sm_cv_t.rows_idx()[i] << std::endl;}
     Rcout << "CV T cols idx" << std::endl;
-    for(std::size_t i = 0; i < test_sm_cv_t.size(); ++i){Rcout << test_sm_cv_t.cols_idx()[i] << std::endl;}
+    for(std::size_t i = 0; i < test_sm_cv_t.cols_idx().size(); ++i){Rcout << test_sm_cv_t.cols_idx()[i] << std::endl;}
 */
 
 
@@ -688,7 +688,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Rcout << "RV T rows idx" << std::endl;
     for(std::size_t i = 0; i < test_sm_rv_t.rows_idx().size(); ++i){Rcout << test_sm_rv_t.rows_idx()[i] << std::endl;}
     Rcout << "RV T cols idx" << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv_t.size(); ++i){Rcout << test_sm_rv_t.cols_idx()[i] << std::endl;}
+    for(std::size_t i = 0; i < test_sm_rv_t.cols_idx().size(); ++i){Rcout << test_sm_rv_t.cols_idx()[i] << std::endl;}
 
 
 
