@@ -619,6 +619,22 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::vector<std::size_t> row_idx{2,0,0,2};
     std::vector<std::size_t> col_idx{0,1,2,2,4};
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm(test_sm_v,3,4,row_idx,col_idx);
+    auto test_sm_t = test_sm.transpose();
+
+
+    for(std::size_t i = 0; i < test_sm_t.rows(); ++i){
+        for(std::size_t j = 0; j < test_sm_t.cols(); ++j){
+            Rcout << "Elem of second factor (sparse) T (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_t(i,j)(loc) << std::endl;
+        }
+    }
+
+
+
+    for(std::size_t i = 0; i < test_sm.rows(); ++i){
+        for(std::size_t j = 0; j < test_sm.cols(); ++j){
+            Rcout << "Elem of second factor (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
+        }
+    }
 
 
 

@@ -324,6 +324,120 @@ public:
         return m_cols_idx;
     }
 
+    /*!
+    * @brief Transposing the functional matrix
+    */
+    void
+    transposing()
+    {
+        //row vector ==> col vector
+        if(m_rows == static_cast<std::size_t>(1) && m_cols != static_cast<std::size_t>(1))
+        {
+            //m_data does not change
+
+            //m_rows_idx: looking in m_cols_idx where there is an increase
+            m_rows_idx.clear();
+            m_rows_idx.reserve(m_nnz);
+            for(std::size_t i = 1; i <= m_cols; ++i){ //looping from 1 since m_cols_idx has m_cols+1 elements, the first one being always 0
+                if(m_cols_idx[i] > m_cols_idx[i-1]){
+                    m_rows_idx.emplace_back(i-1);}}
+
+            //m_cols_idx: only one column containing all the elements
+            m_cols_idx = {0,nn_z};
+        }
+
+        //col vector ==> row vector
+        if(m_cols == static_cast<std::size_t>(1) && m_rows != static_cast<std::size_t>(1))
+        {
+            //m_data does not change
+            
+            //m_cols_idx: the old m_rows indeces indicates in which position there will be an increase by one in the new m_cols_idx
+            m_cols_idx.clear();
+            m_cols_idx.reserve(m_rows + 1);
+            m_cols_idx.emplace_back(static_cast<std::size_t>(0));   //first element is always 0
+            //loop solo sulle righe che ho
+            std::vector<std::size_t> different_rows = m_rows_idx;
+            different_rows.insert(different_rows.begin(),static_cast<std::size_t>(0));
+            different_rows.push_back(m_rows);
+            std::adjacent_difference(different_rows.begin(),different_rows.end(),different_rows.begin());
+            //the first element is always 0
+            std::size_t el = m_cols_idx.back();
+            for(auto it : different_rows){
+                //*it says how many elements have to be insert before increasing it
+                for (std::size_t ii = 0; ii < *it; ++ii){
+                    m_cols_idx.emplace_back(el);}
+                el += 1;}
+
+            //m_rows_idx are all 0s, since all the elements will be in the first (and only) row
+            m_rows_idx.clear();
+            m_rows_idx.resize(m_nnz);
+            std::fill(m_rows_idx.begin(),m_rows_idx.end(),static_cast<std::size_t>(0));
+        }
+
+        //general matrix ==> its transpost
+        else
+        {
+            //new container for data
+            std::vector< F_OBJ > temp_data;
+            temp_data.reserve(this->size());
+            //new container for row_idx
+            std::vector<std::size_t> temp_row_idx;
+            temp_row_idx.reserve(this->size());
+            //new container for col_idx
+            std::vector<std::size_t> temp_col_idx;
+            temp_col_idx.reserve(this->rows() + 1);
+            temp_col_idx.emplace_back(static_cast<std::size_t>(0));
+
+            //loop su tutte le righe dell'ogetto originale, che diventeranno le colonne del trasposto
+            for(std::size_t i = 0; i < this->rows(); ++i)
+            {
+                //conto quanti elementi ci sono nella vecchia riga i-th, quindi nuova colonna
+                std::size_t counter_el_row_i = 0;
+                //only if the row i-th is present
+                if(this->check_row_presence(i))
+                {
+                    //trovo tutti gli elementi che sono nella riga i-th
+                    for (std::size_t ii = 0; ii < m_nnz; ++ii)
+                    {
+                        //se l'elemento è nella riga i-th
+                        if(m_row_idx[ii] == i)
+                        {   
+                            //salvo(riga->col: sto salvando per colonne)
+                            temp_data.emplace_back(m_data[ii]);
+                            //un elemento in più in quella colonna
+                            counter_el_row_i += static_cast<std::size_t>(1);
+                            //come i nuovi indici di riga: la posizione ii mi indica dove salvo effettivamente l'elemento nel vettore
+                            //dunque è l'elemento ii+1. Devo trovare il primo elemento negli indici di colonna che è >=(ii+1), e la sua posizione in m_cols_idx,
+                            //tolto 1, mi dà la colonna in cui è salvato, dunque la riga nella trasposta
+                            temp_row_idx.emplace_back(std::distance(m_cols_idx.cbegin(),std::lower_bound(m_cols_idx.cbegin(),m_cols_idx.cend()),ii+1) - 1);
+                        }
+                    }
+                }
+                //salvo quanti elementi in ogni colonna
+                temp_col_idx.emplace_back(temp_col_idx.back() + counter_el_row_i);
+            }
+            //swap operations
+            std::swap(m_data,temp_data);
+            std::swap(temp_row_idx,m_rows_idx);
+            std::swap(temp_col_idx,m_cols_idx);
+        }
+        //swap number of rows and cols
+        std::swap(m_cols,m_rows);
+    }
+
+    /*!
+    * @brief Tranpost of the functional matrix (copy of it)
+    */
+    functional_matrix_sparse<INPUT,OUTPUT>
+    transpose()
+    const
+    {
+        functional_matrix_sparse<INPUT,OUTPUT> transpost_fm(*this);
+        transpost_fm.transposing();
+
+        return transpost_fm;
+    }
+
     //! May be cast to a std::vector &
     /*!
     This way I can use all the methods of a std::vector!
