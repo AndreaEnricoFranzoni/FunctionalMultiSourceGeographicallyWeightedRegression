@@ -596,6 +596,22 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
 
+    auto test_fdm_dense2_t = test_fdm_dense2.transpose();
+
+
+    for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm_dense2.cols(); ++j){
+            Rcout << "Elem of first factor (dense) (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2(i,j)(loc) << std::endl;
+        }
+    }
+
+
+    for(std::size_t i = 0; i < test_fdm_dense2_t.rows(); ++i){
+        for(std::size_t j = 0; j < test_fdm_dense2_t.cols(); ++j){
+            Rcout << "Elem of first factor (dense) T (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2_t(i,j)(loc) << std::endl;
+        }
+    }
+
 
 
 
@@ -631,6 +647,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 */
 
 
+/*
     for(std::size_t i = 0; i < test_sm.rows(); ++i){
         for(std::size_t j = 0; j < test_sm.cols(); ++j){
             Rcout << "Elem of first factor (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
@@ -651,6 +668,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
             Rcout << "Elem of prod2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_prod2(i,j)(loc) << std::endl;
         }
     }
+*/
 
 
 

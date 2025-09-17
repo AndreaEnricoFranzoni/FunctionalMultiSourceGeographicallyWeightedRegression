@@ -276,13 +276,16 @@ public:
     }
 
     /*!
-    * @brief Tranpose functional matrix
+    * @brief Tranpost of the functional matrix (copy of it)
     */
-    functional_matrix
+    functional_matrix<INPUT,OUTPUT>
     transpose()
+    const
     {
-        this->transposing();
-        return *this;
+        functional_matrix<INPUT,OUTPUT> transpost_fm(*this);
+        transpost_fm.transposing();
+
+        return transpost_fm;
     }
 
     /*!

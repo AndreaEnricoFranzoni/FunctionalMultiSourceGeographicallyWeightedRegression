@@ -30,9 +30,7 @@
 #include <numeric>
 #include <algorithm>
 #include <iterator>
-#include <span>
 #include <exception>
-#include <iostream>
 
 
 #ifdef _OPENMP
@@ -167,27 +165,11 @@ fm_prod(const functional_matrix_sparse<INPUT,OUTPUT> &SM1,
     for(std::size_t j_s = 0; j_s < SM1.cols(); ++j_s){
         //loop sulle righe non-nulle della colonna j-th 
         for(std::size_t row_i_idx = SM1.cols_idx()[j_s]; row_i_idx < SM1.cols_idx()[j_s+1]; ++row_i_idx){
+            //row not null
             std::size_t i = SM1.rows_idx()[row_i_idx];
-            for (std::size_t j = 0; j < prod.cols(); ++j)
-            {
-                prod(i,j) = f_sum( prod(i,j), f_prod(SM1(i,j_s),M2(j_s,j)) );
-            }
-        }
-
-
-
-
-/*
-        for(auto non_null_row = std::next(SM1.rows_idx().cbegin(),start_col_j); non_null_row != std::next(SM1.rows_idx().cbegin(),end_col_j); ++non_null_row){
-            //cosa vado ad aggiornare nel prodotto? In corrispondenza delle riga non nulla non_null_row-th,
-            //devo fare un ulteriore loop sulle colonne di M2, in cui vado a fare i prodotti singoli, sommando verso la fine
+            //updating step-by-step that element in the product
             for (std::size_t j = 0; j < prod.cols(); ++j){
-                //actual products
-                prod(*non_null_row,j) = f_sum( prod(*non_null_row,j), f_prod(SM1(*non_null_row,j_s),M2(j_s,j)) );
-            }
-        }
-*/
-    }
+                prod(i,j) = f_sum( prod(i,j), f_prod(SM1(i,j_s),M2(j_s,j)) );}}}
 
     return prod;
 }
