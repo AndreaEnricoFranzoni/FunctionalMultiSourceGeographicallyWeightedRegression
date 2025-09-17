@@ -199,7 +199,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
 
 
-    Rcout << "fdagwr.7: " << std::endl;
+    Rcout << "fdagwr.8: " << std::endl;
 
     using _DATA_TYPE_ = double;                                                     //data type
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)

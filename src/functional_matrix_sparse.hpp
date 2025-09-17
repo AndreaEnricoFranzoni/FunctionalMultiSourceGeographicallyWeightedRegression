@@ -340,6 +340,7 @@ public:
             m_rows_idx.reserve(m_nnz);
             for(std::size_t i = 1; i <= m_cols; ++i){ //looping from 1 since m_cols_idx has m_cols+1 elements, the first one being always 0
                 if(m_cols_idx[i] > m_cols_idx[i-1]){
+                    std::cout << "Da posizione " << i-1 << " a " << i << " c'è un elemento" << std::endl;
                     m_rows_idx.emplace_back(i-1);}}
 
             //m_cols_idx: only one column containing all the elements
