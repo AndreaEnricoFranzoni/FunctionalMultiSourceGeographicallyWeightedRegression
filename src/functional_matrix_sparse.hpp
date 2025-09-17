@@ -340,6 +340,7 @@ public:
             //m_cols_idx: only one column containing all the elements
             std::vector<std::size_t> new_cols_idx{0,m_nnz};
             m_cols_idx = new_cols_idx;
+            new_cols_idx.clear();
         }
 
         //col vector ==> row vector
