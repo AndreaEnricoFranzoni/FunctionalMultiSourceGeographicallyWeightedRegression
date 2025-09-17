@@ -330,7 +330,7 @@ public:
         if(m_rows == static_cast<std::size_t>(1) && m_cols != static_cast<std::size_t>(1))
         {
             //m_data does not change
-
+            std::cout << "R==>C"<<std::endl;
             //m_rows_idx: looking in m_cols_idx where there is an increase
             m_rows_idx.clear();
             m_rows_idx.reserve(m_nnz);
@@ -347,7 +347,7 @@ public:
         if(m_cols == static_cast<std::size_t>(1) && m_rows != static_cast<std::size_t>(1))
         {
             //m_data does not change
-            
+            std::cout << "C==>R"<<std::endl;
             //m_cols_idx: the old m_rows indeces indicates in which position there will be an increase by one in the new m_cols_idx
             m_cols_idx.clear();
             m_cols_idx.reserve(m_rows + 1);
@@ -373,6 +373,7 @@ public:
         //general matrix ==> its transpost
         if(m_cols != static_cast<std::size_t>(1) && m_rows != static_cast<std::size_t>(1))
         {
+            std::cout << "GM"<<std::endl;
             //new container for data
             std::vector< F_OBJ > temp_data;
             temp_data.reserve(this->size());
