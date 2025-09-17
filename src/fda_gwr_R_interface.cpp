@@ -602,6 +602,26 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //Rcout << "Trasposto di una completa" << std::endl;
     auto test_sm_t = test_sm.transpose();
 
+    Rcout << "Matrice generale" << std::endl;
+    for(std::size_t i = 0; i < test_sm.rows(); ++i){
+        for(std::size_t j = 0; j < test_sm.cols(); ++j){
+            Rcout << "Elem of SM (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;}}
+    Rcout << "SM original: rows: " << test_sm.rows() << ", cols: " << test_sm.cols() << std::endl;
+    Rcout << "SM rows idx " << std::endl;
+    for(std::size_t i = 0; i < test_sm.rows_idx().size(); ++i){Rcout << test_sm.rows_idx()[i] << std::endl;}
+    Rcout << "SM cols idx " << std::endl;
+    for(std::size_t i = 0; i < test_sm.cols_idx().size(); ++i){Rcout << test_sm.cols_idx()[i] << std::endl;}
+
+    Rcout << "Trasposto di una SM" << std::endl;
+    for(std::size_t i = 0; i < test_sm_t.rows(); ++i){
+        for(std::size_t j = 0; j < test_sm_t.cols(); ++j){
+            Rcout << "Elem of SM T (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_t(i,j)(loc) << std::endl;}}
+    Rcout << "SM T: rows: " << test_sm_t.rows() << ", cols: " << test_sm_t.cols() << std::endl;
+    Rcout << "SM T rows idx" << std::endl;
+    for(std::size_t i = 0; i < test_sm_t.rows_idx().size(); ++i){Rcout << test_sm_t.rows_idx()[i] << std::endl;}
+    Rcout << "SM T cols idx" << std::endl;
+    for(std::size_t i = 0; i < test_sm_t.size(); ++i){Rcout << test_sm_t.cols_idx()[i] << std::endl;}
+
 
 
     //vettore colonna di matrice sparsa
@@ -613,6 +633,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     auto test_sm_cv_t = test_sm_cv.transpose();
 
 
+/*
     Rcout << "Vettore colonna" << std::endl;
     for(std::size_t i = 0; i < test_sm_cv.rows(); ++i){
         for(std::size_t j = 0; j < test_sm_cv.cols(); ++j){
@@ -632,6 +653,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     for(std::size_t i = 0; i < test_sm_cv_t.rows_idx().size(); ++i){Rcout << test_sm_cv_t.rows_idx()[i] << std::endl;}
     Rcout << "CV T cols idx" << std::endl;
     for(std::size_t i = 0; i < test_sm_cv_t.size(); ++i){Rcout << test_sm_cv_t.cols_idx()[i] << std::endl;}
+*/
 
 
 
