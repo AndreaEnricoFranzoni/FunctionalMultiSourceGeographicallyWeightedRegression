@@ -592,27 +592,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> testd{f5,f3,f1,f2};
     functional_matrix_diagonal test_fdm_d(testd,4);
     Eigen::MatrixXd M2 = Eigen::MatrixXd::Random(3,2);  // valori in [-1, 1]
-
-
-
-
     auto test_fdm_dense2_t = test_fdm_dense2.transpose();
-
-
-    for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense2.cols(); ++j){
-            Rcout << "Elem of first factor (dense) (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2(i,j)(loc) << std::endl;
-        }
-    }
-
-
-    for(std::size_t i = 0; i < test_fdm_dense2_t.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense2_t.cols(); ++j){
-            Rcout << "Elem of first factor (dense) T (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2_t(i,j)(loc) << std::endl;
-        }
-    }
-
-
 
 
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v{f1,f2,f3,f4};
@@ -620,32 +600,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::vector<std::size_t> col_idx{0,1,2,2,4};
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm(test_sm_v,3,4,row_idx,col_idx);
     auto test_sm_t = test_sm.transpose();
-
-
-    for(std::size_t i = 0; i < test_sm_t.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm_t.cols(); ++j){
-            Rcout << "Elem of second factor (sparse) T (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_t(i,j)(loc) << std::endl;
-        }
-    }
-
-    Rcout << "T: rows: " << test_sm_t.rows() << ", cols: " << test_sm_t.cols() << std::endl;
-    Rcout << "Row idx T" << std::endl;
-    for(std::size_t i = 0; i < test_sm_t.rows_idx().size(); ++i){Rcout << test_sm_t.rows_idx()[i] << std::endl;}
-    Rcout << "Col idx T" << std::endl;
-    for(std::size_t i = 0; i < test_sm_t.cols_idx().size(); ++i){Rcout << test_sm_t.cols_idx()[i] << std::endl;}
-
-
-
-    for(std::size_t i = 0; i < test_sm.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm.cols(); ++j){
-            Rcout << "Elem of second factor (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
-        }
-    }
-    Rcout << "Original: rows: " << test_sm.rows() << ", cols: " << test_sm.cols() << std::endl;
-    Rcout << "Row idx " << std::endl;
-    for(std::size_t i = 0; i < test_sm.rows_idx().size(); ++i){Rcout << test_sm.rows_idx()[i] << std::endl;}
-    Rcout << "Col idx " << std::endl;
-    for(std::size_t i = 0; i < test_sm.cols_idx().size(); ++i){Rcout << test_sm.cols_idx()[i] << std::endl;}
 
 
 
@@ -657,9 +611,21 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     auto test_sm_rv_t = test_sm_rv.transpose();
 
 
+    for(std::size_t i = 0; i < test_sm_rv.rows(); ++i){
+        for(std::size_t j = 0; j < test_sm_rv.cols(); ++j){
+            Rcout << "Elem of RV (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_rv(i,j)(loc) << std::endl;
+        }
+    }
+    Rcout << "Rv Original: rows: " << test_sm_rv.rows() << ", cols: " << test_sm_rv.cols() << std::endl;
+    Rcout << "Rv Row idx " << std::endl;
+    for(std::size_t i = 0; i < test_sm_rv.rows_idx().size(); ++i){Rcout << test_sm_rv.rows_idx()[i] << std::endl;}
+    Rcout << "Rv Col idx " << std::endl;
+    for(std::size_t i = 0; i < test_sm_rv.cols_idx().size(); ++i){Rcout << test_sm_rv.cols_idx()[i] << std::endl;}
+
+
     for(std::size_t i = 0; i < test_sm_rv_t.rows(); ++i){
         for(std::size_t j = 0; j < test_sm_rv_t.cols(); ++j){
-            Rcout << "Elem of rv (sparse) T (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_rv_t(i,j)(loc) << std::endl;
+            Rcout << "Elem of rv T (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_rv_t(i,j)(loc) << std::endl;
         }
     }
 
@@ -671,16 +637,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
 
-    for(std::size_t i = 0; i < test_sm_rv.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm_rv.cols(); ++j){
-            Rcout << "Elem of second RV factor (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_rv(i,j)(loc) << std::endl;
-        }
-    }
-    Rcout << "Rv Original: rows: " << test_sm_rv.rows() << ", cols: " << test_sm_rv.cols() << std::endl;
-    Rcout << "Rv Row idx " << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv.rows_idx().size(); ++i){Rcout << test_sm_rv.rows_idx()[i] << std::endl;}
-    Rcout << "Rv Col idx " << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv.cols_idx().size(); ++i){Rcout << test_sm_rv.cols_idx()[i] << std::endl;}
+
 
 
 
@@ -695,7 +652,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     for(std::size_t i = 0; i < test_sm_cv_t.rows(); ++i){
         for(std::size_t j = 0; j < test_sm_cv_t.cols(); ++j){
-            Rcout << "Elem of cv (sparse) T (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_cv_t(i,j)(loc) << std::endl;
+            Rcout << "Elem of cv T (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_cv_t(i,j)(loc) << std::endl;
         }
     }
 
@@ -709,7 +666,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     for(std::size_t i = 0; i < test_sm_cv.rows(); ++i){
         for(std::size_t j = 0; j < test_sm_cv.cols(); ++j){
-            Rcout << "Elem of second cV factor (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_cv(i,j)(loc) << std::endl;
+            Rcout << "Elem of cV (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_cv(i,j)(loc) << std::endl;
         }
     }
     Rcout << "Cv Original: rows: " << test_sm_cv.rows() << ", cols: " << test_sm_cv.cols() << std::endl;
@@ -717,153 +674,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     for(std::size_t i = 0; i < test_sm_cv.rows_idx().size(); ++i){Rcout << test_sm_cv.rows_idx()[i] << std::endl;}
     Rcout << "Cv Col idx " << std::endl;
     for(std::size_t i = 0; i < test_sm_cv.cols_idx().size(); ++i){Rcout << test_sm_cv.cols_idx()[i] << std::endl;}
-
-
-
-/*
-    for(std::size_t i = 0; i < test_fdm_dense2.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense2.cols(); ++j){
-            Rcout << "Elem of first factor (dense) (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense2(i,j)(loc) << std::endl;
-        }
-    }
-
-
-    for(std::size_t i = 0; i < test_sm.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm.cols(); ++j){
-            Rcout << "Elem of second factor (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
-        }
-    }
-
-
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_prod = fm_prod(test_fdm_dense2,test_sm);
-
-    for(std::size_t i = 0; i < test_prod.rows(); ++i){
-        for(std::size_t j = 0; j < test_prod.cols(); ++j){
-            Rcout << "Elem of prod (" << i << "," << j << ") evaluated in " << loc << ": " << test_prod(i,j)(loc) << std::endl;
-        }
-    }
-*/
-
-
-/*
-    for(std::size_t i = 0; i < test_sm.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm.cols(); ++j){
-            Rcout << "Elem of first factor (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
-        }
-    }
-
-    for(std::size_t i = 0; i < test_fdm_dense3.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense3.cols(); ++j){
-            Rcout << "Elem of second factor (dense) (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense3(i,j)(loc) << std::endl;
-        }
-    }
-
-
-
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_prod2 = fm_prod(test_sm,test_fdm_dense3);
-    for(std::size_t i = 0; i < test_prod2.rows(); ++i){
-        for(std::size_t j = 0; j < test_prod2.cols(); ++j){
-            Rcout << "Elem of prod2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_prod2(i,j)(loc) << std::endl;
-        }
-    }
-*/
-
-
-
-/*
-
-
-
-    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> double_sm = test_sm + test_sm;
-
-    for(std::size_t i = 0; i < double_sm.rows(); ++i){
-        for(std::size_t j = 0; j < double_sm.cols(); ++j){
-            std::string present_s;
-            if(double_sm.check_elem_presence(i,j)){present_s="present";}  else{present_s="not present";}
-            Rcout << "Elem of double SM (" << i << "," << j << ") is " << present_s << " evaluated in " << loc << ": " << double_sm(i,j)(loc) << std::endl;
-        }
-    }
-*/
-
-
-
-
-/*
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v2{f3,f5};
-    std::vector<std::size_t> row_idx2{0,0};
-    std::vector<std::size_t> col_idx2{0,1,1,2};
-    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm2(test_sm_v2,3,3,row_idx2,col_idx2);
-
-    for(std::size_t i = 0; i < test_sm2.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm2.cols(); ++j){
-            Rcout << "Elem of SM 2 (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm2(i,j)(loc) << std::endl;
-        }
-    }
-
-    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_sum = test_sm + test_sm2;
-
-    for(std::size_t i = 0; i < test_sm_sum.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm_sum.cols(); ++j){
-            Rcout << "Elem of SM sum (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_sum(i,j)(loc) << std::endl;
-        }
-    }
-
-    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_prod = test_sm * test_sm_sum;
-
-    for(std::size_t i = 0; i < test_sm_prod.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm_prod.cols(); ++j){
-            Rcout << "Elem of SM prod (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_prod(i,j)(loc) << std::endl;
-        }
-    }
-
-    if(test_sm_prod.check_elem_presence(2,1)){Rcout<<"Present"<<std::endl;}
-    else{Rcout<<"not present"<<std::endl;}
-
-    for(std::size_t i = 0; i < test_fdm_dense4.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense4.cols(); ++j){
-            Rcout << "Elem of DENSE 4 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense4(i,j)(loc) << std::endl;
-        }
-    }
-
-    for(std::size_t i = 0; i < test_fdm_dense5.rows(); ++i){
-        for(std::size_t j = 0; j < test_fdm_dense5.cols(); ++j){
-            Rcout << "Elem of DENSE 5 (" << i << "," << j << ") evaluated in " << loc << ": " << test_fdm_dense5(i,j)(loc) << std::endl;
-        }
-    }
-
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_m_sm_sub = test_sm_prod - test_fdm_dense4;
-    for(std::size_t i = 0; i < test_m_sm_sub.rows(); ++i){
-        for(std::size_t j = 0; j < test_m_sm_sub.cols(); ++j){
-            Rcout << "Elem of sub (" << i << "," << j << ") evaluated in " << loc << ": " << test_m_sm_sub(i,j)(loc) << std::endl;
-        }
-    }
-    auto col_1 = test_m_sm_sub.col(1);
-    Rcout << "Col 2" << std::endl;
-    for(auto it = col_1.begin(); it != col_1.end(); ++it){
-        Rcout << (*it)(loc) << std::endl;
-    }
-
-    auto row2 = test_m_sm_sub.row(2);
-    Rcout << "Row 3" << std::endl;
-    for(auto it = row2.begin(); it != row2.end(); ++it){
-        Rcout << (*it)(loc) << std::endl;
-    }
-
-    if(std::is_same_v<decltype(test_m_sm_sub),functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>>){Rcout<<"FM"<<std::endl;}
-    else{Rcout<<"Not FM"<<std::endl;}
-
-    if(std::is_same_v<decltype(test_m_sm_sub),functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>>){Rcout<<"SFM"<<std::endl;}
-    else{Rcout<<"Not SFM"<<std::endl;}
-
-
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_m_sub = test_fdm_dense5 + test_fdm_dense4;
-    for(std::size_t i = 0; i < test_m_sub.rows(); ++i){
-        for(std::size_t j = 0; j < test_m_sub.cols(); ++j){
-            Rcout << "Elem of sub within dense (" << i << "," << j << ") evaluated in " << loc << ": " << test_m_sub(i,j)(loc) << std::endl;
-        }
-    }
-*/
-
 
 
 
