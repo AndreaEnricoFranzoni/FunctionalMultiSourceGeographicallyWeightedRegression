@@ -340,7 +340,7 @@ public:
             m_rows_idx.reserve(m_nnz);
             for(std::size_t i = 1; i <= m_cols; ++i){ //looping from 1 since m_cols_idx has m_cols+1 elements, the first one being always 0
                 if(m_cols_idx[i] > m_cols_idx[i-1]){
-                    m_rows_idx.emplace_back(i-1);}}
+                    m_rows_idx.emplace_back(i);}}
 
             //m_cols_idx: only one column containing all the elements
             m_cols_idx = {0,m_nnz};
@@ -355,15 +355,10 @@ public:
             m_cols_idx.clear();
             m_cols_idx.reserve(m_rows + 1);
             m_cols_idx.emplace_back(static_cast<std::size_t>(0));   //first element is always 0
-            //loop solo sulle righe che ho
+            //loop solo sulle righe che ho, conto ogni quanto appare un elemento
             std::vector<std::size_t> rows_difference = m_rows_idx;
             rows_difference.push_back(m_rows);
-            std::cout <<"Diff rows"<<std::endl;
-            for(std::size_t i = 0; i < rows_difference.size(); ++i){std::cout << rows_difference[i] <<std::endl;}
-            std::adjacent_difference(rows_difference.begin(),rows_difference.end(),rows_difference.begin());
-        
-                        std::cout <<"Diff rows after diff"<<std::endl;
-            for(std::size_t i = 0; i < rows_difference.size(); ++i){std::cout << rows_difference[i] <<std::endl;}
+            std::adjacent_difference(rows_difference.begin(),rows_difference.end(),rows_difference.begin());    //il primo elemento del risultato di std::adjacent_difference è sempre il primo elemento del range in input
             //the first element is always 0
             std::size_t el = m_cols_idx.back();
             for(auto it : rows_difference){
@@ -372,16 +367,10 @@ public:
                     m_cols_idx.emplace_back(el);}
                 el += 1;}
 
-                        std::cout <<"Cols idx in transposing"<<std::endl;
-            for(std::size_t i = 0; i < m_cols_idx.size(); ++i){std::cout << m_cols_idx[i] <<std::endl;}
-
             //m_rows_idx are all 0s, since all the elements will be in the first (and only) row
             m_rows_idx.clear();
             m_rows_idx.resize(m_nnz);
             std::fill(m_rows_idx.begin(),m_rows_idx.end(),static_cast<std::size_t>(0));
-
-                        std::cout <<"Rows idx in transposing"<<std::endl;
-            for(std::size_t i = 0; i < m_rows_idx.size(); ++i){std::cout << m_rows_idx[i] <<std::endl;}
         }
 
         //general matrix ==> its transpost

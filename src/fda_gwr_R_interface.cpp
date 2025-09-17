@@ -603,7 +603,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
 
-
+        //vettore colonna di matrice sparsa
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v_rv{f1,f2,f3};
     std::vector<std::size_t> row_idx_rv{1,5,8};
     std::vector<std::size_t> col_idx_rv{0,3};
@@ -612,39 +612,9 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
 
-    for(std::size_t i = 0; i < test_sm_rv.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm_rv.cols(); ++j){
-            Rcout << "Elem of RV (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_rv(i,j)(loc) << std::endl;
-        }
-    }
-    Rcout << "Rv Original: rows: " << test_sm_rv.rows() << ", cols: " << test_sm_rv.cols() << std::endl;
-    Rcout << "Rv Row idx " << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv.rows_idx().size(); ++i){Rcout << test_sm_rv.rows_idx()[i] << std::endl;}
-    Rcout << "Rv Col idx " << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv.cols_idx().size(); ++i){Rcout << test_sm_rv.cols_idx()[i] << std::endl;}
 
 
-    for(std::size_t i = 0; i < test_sm_rv_t.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm_rv_t.cols(); ++j){
-            Rcout << "Elem of rv T (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_rv_t(i,j)(loc) << std::endl;
-        }
-    }
-
-    Rcout << "Rv T: rows: " << test_sm_rv_t.rows() << ", cols: " << test_sm_rv_t.cols() << std::endl;
-    Rcout << "Rv Row idx T" << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv_t.rows_idx().size(); ++i){Rcout << test_sm_rv_t.rows_idx()[i] << std::endl;}
-    Rcout << "Rv Col idx T has size" << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv_t.cols_idx().size(); ++i){Rcout << test_sm_rv_t.cols_idx()[i] << std::endl;}
-
-
-
-
-
-
-
-
-/*
-
+        //vettore riga di matrice sparsa
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v_cv{f1,f2,f3};
     std::vector<std::size_t> row_idx_cv{0,0,0};
     std::vector<std::size_t> col_idx_cv{0,0,0,1,1,2,2,3};
@@ -677,7 +647,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Rcout << "Cv Col idx " << std::endl;
     for(std::size_t i = 0; i < test_sm_cv.cols_idx().size(); ++i){Rcout << test_sm_cv.cols_idx()[i] << std::endl;}
 
-*/
+
 
     //returning element
     Rcpp::List l;
