@@ -611,6 +611,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     auto test_sm_rv_t = test_sm_rv.transpose();
 
 
+/*
     for(std::size_t i = 0; i < test_sm_rv.rows(); ++i){
         for(std::size_t j = 0; j < test_sm_rv.cols(); ++j){
             Rcout << "Elem of RV (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_rv(i,j)(loc) << std::endl;
@@ -636,6 +637,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     for(std::size_t i = 0; i < test_sm_rv_t.size(); ++i){Rcout << test_sm_rv_t.cols_idx()[i] << std::endl;}
 
 
+*/
 
 
 
