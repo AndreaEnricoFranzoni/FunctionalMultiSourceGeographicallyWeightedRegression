@@ -343,8 +343,12 @@ public:
                     std::cout << "Da posizione " << i-1 << " a " << i << " c'è un elemento" << std::endl;
                     m_rows_idx.emplace_back(i-1);}}
 
+            std::cout << "Indici delle righe nella funzione" << std::endl;
+            for(std::size_t i = 0; i < m_rows_idx.size();++i){std::cout << m_rows_idx[i] << std::endl;}
             //m_cols_idx: only one column containing all the elements
             m_cols_idx = {0,m_nnz};
+                        std::cout << "Indici delle colonne nella funzione" << std::endl;
+            for(std::size_t i = 0; i < m_cols_idx.size();++i){std::cout << m_cols_idx[i] << std::endl;}
         }
 
         //col vector ==> row vector
