@@ -343,7 +343,7 @@ public:
                     m_rows_idx.emplace_back(i-1);}}
 
             //m_cols_idx: only one column containing all the elements
-            m_cols_idx = {0,nn_z};
+            m_cols_idx = {0,m_nnz};
         }
 
         //col vector ==> row vector
@@ -364,7 +364,7 @@ public:
             std::size_t el = m_cols_idx.back();
             for(auto it : different_rows){
                 //*it says how many elements have to be insert before increasing it
-                for (std::size_t ii = 0; ii < *it; ++ii){
+                for (std::size_t ii = 0; ii < it; ++ii){
                     m_cols_idx.emplace_back(el);}
                 el += 1;}
 
@@ -400,7 +400,7 @@ public:
                     for (std::size_t ii = 0; ii < m_nnz; ++ii)
                     {
                         //se l'elemento è nella riga i-th
-                        if(m_row_idx[ii] == i)
+                        if(m_rows_idx[ii] == i)
                         {   
                             //salvo(riga->col: sto salvando per colonne)
                             temp_data.emplace_back(m_data[ii]);
@@ -409,7 +409,7 @@ public:
                             //come i nuovi indici di riga: la posizione ii mi indica dove salvo effettivamente l'elemento nel vettore
                             //dunque è l'elemento ii+1. Devo trovare il primo elemento negli indici di colonna che è >=(ii+1), e la sua posizione in m_cols_idx,
                             //tolto 1, mi dà la colonna in cui è salvato, dunque la riga nella trasposta
-                            temp_row_idx.emplace_back(std::distance(m_cols_idx.cbegin(),std::lower_bound(m_cols_idx.cbegin(),m_cols_idx.cend()),ii+1) - 1);
+                            temp_row_idx.emplace_back(std::distance(m_cols_idx.cbegin(),std::lower_bound(m_cols_idx.cbegin(),m_cols_idx.cend(),ii+1) - 1));
                         }
                     }
                 }
