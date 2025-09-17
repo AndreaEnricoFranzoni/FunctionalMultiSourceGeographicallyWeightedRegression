@@ -599,7 +599,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::vector<std::size_t> row_idx{0,0,0,2};
     std::vector<std::size_t> col_idx{0,1,2,2,4};
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm(test_sm_v,3,4,row_idx,col_idx);
-    //auto test_sm_t = test_sm.transpose();
+    Rcout << "Trasposto di una completa" << std::endl;
+    auto test_sm_t = test_sm.transpose();
 
 
 
@@ -608,7 +609,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::vector<std::size_t> row_idx_rv{1,5,8};
     std::vector<std::size_t> col_idx_rv{0,3};
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_rv(test_sm_v_rv,10,1,row_idx_rv,col_idx_rv);
-    //auto test_sm_rv_t = test_sm_rv.transpose();
+    Rcout << "Trasposto di un vettore colonna" << std::endl;
+    auto test_sm_rv_t = test_sm_rv.transpose();
 
 
 
@@ -619,6 +621,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::vector<std::size_t> row_idx_cv{0,0,0};
     std::vector<std::size_t> col_idx_cv{0,0,0,1,1,2,2,3};
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_cv(test_sm_v_cv,1,7,row_idx_cv,col_idx_cv);
+    Rcout << "Trasposto di un vettore riga" << std::endl;
     auto test_sm_cv_t = test_sm_cv.transpose();
 
 
