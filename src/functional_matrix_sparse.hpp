@@ -339,9 +339,9 @@ public:
                     m_rows_idx.emplace_back(i-1);}}
             //m_cols_idx: only one column containing all the elements
             m_cols_idx.clear();
-            std::vector<std::size_t> new_cols_idx{0,m_nnz};
-            m_cols_idx = new_cols_idx;
-            new_cols_idx.clear();
+            m_cols_idx.reserve(2);
+            m_cols_idx.emplace_back(static_cast<std::size_t>(0));
+            m_cols_idx.emplace_back(m_nnz);
         }
 
         //col vector ==> row vector
