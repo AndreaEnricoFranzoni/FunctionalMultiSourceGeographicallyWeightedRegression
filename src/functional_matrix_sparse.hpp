@@ -376,7 +376,7 @@ public:
         }
 
         //general matrix ==> its transpost
-        else
+        if(m_cols != static_cast<std::size_t>(1) && m_rows != static_cast<std::size_t>(1))
         {
             //new container for data
             std::vector< F_OBJ > temp_data;
