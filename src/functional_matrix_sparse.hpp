@@ -340,12 +340,6 @@ public:
             //m_cols_idx: only one column containing all the elements
             std::vector<std::size_t> new_cols_idx{0,m_nnz};
             m_cols_idx = new_cols_idx;
-
-                    std::cout << "Dentro il branch row==>col" << std::endl;
-        std::cout << "Indici di riga" << std::endl;
-        for(std::size_t i=0; i < m_rows_idx.size(); ++i){std::cout<<m_rows_idx[i]<<std::endl;}
-            std::cout << "Indici di colonna" << std::endl;
-        for(std::size_t i=0; i < m_cols_idx.size(); ++i){std::cout<<m_cols_idx[i]<<std::endl;}
         }
 
         //col vector ==> row vector
@@ -424,12 +418,6 @@ public:
         }
         //swap number of rows and cols
         std::swap(m_cols,m_rows);
-
-        std::cout << "Fine trasposto: " << m_rows << " righe e " << m_cols << " colonne" << std::endl;
-        std::cout << "Indici di riga" << std::endl;
-        for(std::size_t i=0; i < m_rows_idx.size(); ++i){std::cout<<m_rows_idx[i]<<std::endl;}
-            std::cout << "Indici di colonna" << std::endl;
-        for(std::size_t i=0; i < m_cols_idx.size(); ++i){std::cout<<m_cols_idx[i]<<std::endl;}
     }
 
     /*!
