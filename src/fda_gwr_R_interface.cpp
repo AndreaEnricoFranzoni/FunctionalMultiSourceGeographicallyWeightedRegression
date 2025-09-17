@@ -605,7 +605,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v_rv{f1,f2,f3};
-    std::vector<std::size_t> row_idx_rv{0,5,8};
+    std::vector<std::size_t> row_idx_rv{1,5,8};
     std::vector<std::size_t> col_idx_rv{0,3};
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_rv(test_sm_v_rv,10,1,row_idx_rv,col_idx_rv);
     auto test_sm_rv_t = test_sm_rv.transpose();
@@ -633,8 +633,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Rcout << "Rv T: rows: " << test_sm_rv_t.rows() << ", cols: " << test_sm_rv_t.cols() << std::endl;
     Rcout << "Rv Row idx T" << std::endl;
     for(std::size_t i = 0; i < test_sm_rv_t.rows_idx().size(); ++i){Rcout << test_sm_rv_t.rows_idx()[i] << std::endl;}
-    Rcout << "Rv Col idx T" << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv_t.size(); ++i){Rcout << test_sm_rv_t.cols_idx()[i] << std::endl;}
+    Rcout << "Rv Col idx T has size" << std::endl;
+    for(std::size_t i = 0; i < test_sm_rv_t.cols_idx().size(); ++i){Rcout << test_sm_rv_t.cols_idx()[i] << std::endl;}
 
 
 
