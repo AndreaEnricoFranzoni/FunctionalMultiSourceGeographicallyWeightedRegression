@@ -628,6 +628,12 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
         }
     }
 
+    Rcout << "T: rows: " << test_sm_t.rows() << ", cols: " << test_sm_t.cols() << std::endl;
+    Rcout << "Row idx T" << std::endl;
+    for(std::size_t i = 0; i < test_sm_t.rows_idx().size(); ++i){Rcout << test_sm_t.rows_idx()[i] << std::endl;}
+    Rcout << "Col idx T" << std::endl;
+    for(std::size_t i = 0; i < test_sm_t.cols_idx().size(); ++i){Rcout << test_sm_t.cols_idx()[i] << std::endl;}
+
 
 
     for(std::size_t i = 0; i < test_sm.rows(); ++i){
@@ -635,6 +641,11 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
             Rcout << "Elem of second factor (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;
         }
     }
+    Rcout << "Original: rows: " << test_sm.rows() << ", cols: " << test_sm.cols() << std::endl;
+    Rcout << "Row idx " << std::endl;
+    for(std::size_t i = 0; i < test_sm.rows_idx().size(); ++i){Rcout << test_sm.rows_idx()[i] << std::endl;}
+    Rcout << "Col idx " << std::endl;
+    for(std::size_t i = 0; i < test_sm.cols_idx().size(); ++i){Rcout << test_sm.cols_idx()[i] << std::endl;}
 
 
 
