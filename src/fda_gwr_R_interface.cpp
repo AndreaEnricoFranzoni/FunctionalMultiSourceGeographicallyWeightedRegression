@@ -612,7 +612,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //Rcout << "Trasposto di un vettore colonna" << std::endl;
     auto test_sm_cv_t = test_sm_cv.transpose();
 
-/*
+
     Rcout << "Vettore colonna" << std::endl;
     for(std::size_t i = 0; i < test_sm_cv.rows(); ++i){
         for(std::size_t j = 0; j < test_sm_cv.cols(); ++j){
@@ -633,7 +633,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Rcout << "CV T cols idx" << std::endl;
     for(std::size_t i = 0; i < test_sm_cv_t.size(); ++i){Rcout << test_sm_cv_t.cols_idx()[i] << std::endl;}
 
-*/
+
 
 
 
@@ -645,6 +645,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_rv(test_sm_v_rv,1,7,row_idx_rv,col_idx_rv);
     auto test_sm_rv_t = test_sm_rv.transpose();
 
+/*
     Rcout << "Vettore riga" << std::endl;
     for(std::size_t i = 0; i < test_sm_rv.rows(); ++i){
         for(std::size_t j = 0; j < test_sm_rv.cols(); ++j){
@@ -664,6 +665,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     for(std::size_t i = 0; i < test_sm_rv_t.rows_idx().size(); ++i){Rcout << test_sm_rv_t.rows_idx()[i] << std::endl;}
     Rcout << "RV T cols idx" << std::endl;
     for(std::size_t i = 0; i < test_sm_rv_t.size(); ++i){Rcout << test_sm_rv_t.cols_idx()[i] << std::endl;}
+*/
 
 
 
