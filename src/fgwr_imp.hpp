@@ -36,6 +36,8 @@ const
     std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > penalty;
     penalty.resize(m_n);
 
+    FDAGWR_TRAITS::Dense_Matrix _R_ = FDAGWR_TRAITS::Dense_Matrix(R);   //necessary to compute the sum later
+
 #ifdef _OPENMP
 #pragma omp parallel for shared(penalty,base,base_t,X,X_t,W,R,m_n,m_number_threads) num_threads(m_number_threads)
     for(std::size_t i = 0; i < m_n; ++i)
@@ -52,7 +54,7 @@ const
                        [this](const FUNC_OBJ<INPUT,OUTPUT> &f){ return this->m_integrating.integrate(f);});
 
         //performing factorization 
-        penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>( FDAGWR_TRAITS::Dense_Matrix(Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols())) + R );  
+        penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>( FDAGWR_TRAITS::Dense_Matrix(Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols())) + _R_ );  
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
 #endif
