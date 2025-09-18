@@ -56,6 +56,7 @@ const
         std::cout << "Fatto prod4" << std::endl;
         //performing integration and factorization
         FDAGWR_TRAITS::Dense_Matrix _j_tilde_tilde_i_ = this->fm_integration(integrand);
+        std::cout << "Integrato" << std::endl;
         if(std::is_same_v<decltype(_j_tilde_tilde_i_),FDAGWR_TRAITS::Dense_Matrix>){std::cout<<"j_tilde_tile at " << i << " è dense matrix"<<std::endl;}
         else{std::cout<<"j_tilde_tile at " << i << " non è dense matrix"<<std::endl;}
         //FDAGWR_TRAITS::Dense_Matrix inverse_penalty = _j_tilde_tilde_i_ + _R_;
