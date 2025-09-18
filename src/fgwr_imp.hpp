@@ -29,7 +29,7 @@ fgwr<INPUT,OUTPUT>::compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT>
                                     const functional_matrix<INPUT,OUTPUT> &X,
                                     const functional_matrix<INPUT,OUTPUT> &X_t,
                                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                                    const FDAGWR_TRAITS::Dense_Matrix &R)
+                                    const FDAGWR_TRAITS::Sparse_Matrix &R)
 const
 {
     //the vector contains factorization of the matrix
@@ -46,7 +46,7 @@ const
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(fm_prod(base_t,X_t),W[i],m_number_threads),X,m_number_threads),base);
 
         //performing integration and factorization
-        FDAGWR_TRAITS::Dense_Matrix _j_tilde_tilde_i_ = this->fm_integration(integrand).eval();
+        FDAGWR_TRAITS::Dense_Matrix _j_tilde_tilde_i_ = this->fm_integration(integrand);
         FDAGWR_TRAITS::Dense_Matrix inverse_penalty = _j_tilde_tilde_i_ + _R_;
         penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>(inverse_penalty);    //.eval() is needed to evaluate the lazy expression of ETs  
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M

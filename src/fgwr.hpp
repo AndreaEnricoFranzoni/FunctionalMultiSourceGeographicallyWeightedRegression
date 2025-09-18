@@ -103,7 +103,7 @@ public:
                     const functional_matrix<INPUT,OUTPUT> &X,
                     const functional_matrix<INPUT,OUTPUT> &X_t,
                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                    const FDAGWR_TRAITS::Dense_Matrix &R) const;
+                    const FDAGWR_TRAITS::Sparse_Matrix &R) const;
 
     /*!
     * @brief Compute [J_tilde_i + R]^(-1)
@@ -111,7 +111,7 @@ public:
     std::vector< FDAGWR_TRAITS::Dense_Matrix >
     compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed,
                     const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
-                    const FDAGWR_TRAITS::Dense_Matrix &R) const;
+                    const FDAGWR_TRAITS::Sparse_Matrix &R) const;
 
     /*!
     * @brief Compute [J + Rc]^(-1)
