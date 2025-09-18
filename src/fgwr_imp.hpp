@@ -54,7 +54,7 @@ const
         //FDAGWR_TRAITS::Dense_Matrix _j_tilde_tilde_i_ = this->fm_integration(integrand);
 
         //FDAGWR_TRAITS::Dense_Matrix inverse_penalty = _j_tilde_tilde_i_ + _R_;
-        FDAGWR_TRAITS::Dense_Matrix inverse_penalty = _A_ + _B_;
+        FDAGWR_TRAITS::Dense_Matrix inverse_penalty = (_A_ + _B_).eval();
         penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>(inverse_penalty);    //.eval() is needed to evaluate the lazy expression of ETs  
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
