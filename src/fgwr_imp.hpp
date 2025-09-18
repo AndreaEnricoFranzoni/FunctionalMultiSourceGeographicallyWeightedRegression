@@ -39,6 +39,9 @@ const
     FDAGWR_TRAITS::Dense_Matrix _R_ = FDAGWR_TRAITS::Dense_Matrix(R);   //necessary to compute the sum later
     FDAGWR_TRAITS::Dense_Matrix _A_(_R_.rows(),_R_.cols());
     _A_.setZero();
+
+    FDAGWR_TRAITS::Dense_Matrix _B_(_R_.rows(),_R_.cols());
+    _B_.setZero();
 //#ifdef _OPENMP
 //#pragma omp parallel for shared(penalty,base,base_t,X,X_t,W,_R_,m_n,m_number_threads) num_threads(m_number_threads)
 
@@ -51,7 +54,7 @@ const
         //FDAGWR_TRAITS::Dense_Matrix _j_tilde_tilde_i_ = this->fm_integration(integrand);
 
         //FDAGWR_TRAITS::Dense_Matrix inverse_penalty = _j_tilde_tilde_i_ + _R_;
-        FDAGWR_TRAITS::Dense_Matrix inverse_penalty = _A_ + _R_;
+        FDAGWR_TRAITS::Dense_Matrix inverse_penalty = _A_ + _B_;
         penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>(inverse_penalty);    //.eval() is needed to evaluate the lazy expression of ETs  
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
