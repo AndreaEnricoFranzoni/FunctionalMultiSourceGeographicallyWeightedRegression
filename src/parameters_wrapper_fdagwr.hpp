@@ -230,7 +230,7 @@ FDAGWR_TRAITS::Dense_Matrix
 columnize_coeff_resp(const FDAGWR_TRAITS::Dense_Matrix& coeff_resp)
 {
   //Eigen::Map presumes that data are stored col-major (ok)
-  FDAGWR_TRAITS::Dense_Matrix c = Eigen::Map<FDAGWR_TRAITS::Dense_Matrix>(coeff_resp.data(), coeff_resp.size(), 1);
+  FDAGWR_TRAITS::Dense_Matrix c = Eigen::Map<const FDAGWR_TRAITS::Dense_Matrix>(coeff_resp.data(), coeff_resp.size(), 1);
 
   return c;
 }
