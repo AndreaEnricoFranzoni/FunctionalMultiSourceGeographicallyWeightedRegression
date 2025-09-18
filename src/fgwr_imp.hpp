@@ -39,7 +39,7 @@ const
     FDAGWR_TRAITS::Dense_Matrix _R_ = FDAGWR_TRAITS::Dense_Matrix(R);   //necessary to compute the sum later
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(penalty,base,base_t,X,X_t,W,R,m_n,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(penalty,base,base_t,X,X_t,W,_R_,m_n,m_number_threads) num_threads(m_number_threads)
     for(std::size_t i = 0; i < m_n; ++i)
     {
         //dimension: L x L, where L is the number of basis
