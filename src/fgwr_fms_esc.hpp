@@ -148,8 +148,7 @@ public:
                 Eigen::MatrixXd B(2,2);
                 B.setConstant(3);
 
-                Eigen::MatrixXd C;
-                C=  A+B;
+                Eigen::MatrixXd C = A + B;
                 std::cout << C << std::endl;
             }
 
