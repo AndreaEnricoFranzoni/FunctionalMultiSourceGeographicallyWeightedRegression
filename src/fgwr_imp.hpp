@@ -52,7 +52,7 @@ const
                        [this](const FUNC_OBJ<INPUT,OUTPUT> &f){ return this->m_integrating.integrate(f);});
 
         //performing factorization 
-        penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>( Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols()) + R );  
+        penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>( FDAGWR_TRAITS::Dense_Matrix(Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols())) + R );  
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
 #endif
