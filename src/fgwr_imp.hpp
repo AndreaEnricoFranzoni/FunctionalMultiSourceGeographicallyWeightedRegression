@@ -37,11 +37,11 @@ const
     penalty.resize(m_n);
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(penalty,base,base_t,X,X_t,W,R,m_n) num_threads(m_number_threads)
+#pragma omp parallel for shared(penalty,base,base_t,X,X_t,W,R,m_n,m_number_threads) num_threads(m_number_threads)
     for(std::size_t i = 0; i < m_n; ++i)
     {
         //dimension: L x L, where L is the number of basis
-        functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(fm_prod(base_t,X_t),W[i]),X),base);
+        functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(fm_prod(base_t,X_t),W[i],m_number_threads),X,m_number_threads),base);
         //vector to store integration result
         std::vector<OUTPUT> result_integrand;
         result_integrand.resize(integrand.size());
