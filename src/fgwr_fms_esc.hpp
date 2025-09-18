@@ -129,6 +129,10 @@ public:
             m_Rs{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rs)},
             m_psi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(psi)}
             {
+                //checking input consistency
+                assert(We.size() == n);
+                assert(Ws.size() == n);
+
                 m_Xc_t = m_Xc.transpose();
                 m_omega_t = m_omega.transpose();
                 m_Xe_t = m_Xe.transpose();
@@ -148,6 +152,8 @@ public:
     {
         double loc = 0.3;
 
+        j_double_tilde_RE_inv = this->compute_penalty(m_theta,m_theta_t,m_Xe,m_Xe_t,m_We,m_Re); 
+        //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
     }
 
 };

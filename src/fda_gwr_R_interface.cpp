@@ -198,9 +198,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
 
-
-    Rcout << "fdagwr.19: " << std::endl;
-
     using _DATA_TYPE_ = double;                                                     //data type
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
     using _FD_OUTPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_y_type;                          //data type for the image of fdata (double)
@@ -519,6 +516,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
 
+
+    Rcout << "fdagwr.29: " << std::endl;
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),

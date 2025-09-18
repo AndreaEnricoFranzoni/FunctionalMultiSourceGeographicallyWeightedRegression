@@ -36,21 +36,26 @@ const
     std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > penalty;
     penalty.resize(m_n);
 
-    //qua da usare OMP
+#ifdef _OPENMP
+#pragma omp parallel for shared(penalty,base,base_t,X,X_t,W,R,m_n) num_threads(m_number_threads)
     for(std::size_t i = 0; i < m_n; ++i)
     {
         //dimension: L x L, where L is the number of basis
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(fm_prod(base_t,X_t),W[i]),X),base);
+        //vector to store integration result
         std::vector<OUTPUT> result_integrand;
         result_integrand.resize(integrand.size());
+        //integrating every element of the functional matrix
         std::transform(cbegin(integrand),
                        cend(integrand),
                        result_integrand.begin(),
-                       [this](const FUNC_OBJ<INPUT,OUTPUT> &f){this->m_integrating.integrate(f);});
+                       [this](const FUNC_OBJ<INPUT,OUTPUT> &f){ return this->m_integrating.integrate(f);});
 
+        //performing factorization 
         penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>( Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols()) + R );  
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
+#endif
     
     return penalty;
 }
