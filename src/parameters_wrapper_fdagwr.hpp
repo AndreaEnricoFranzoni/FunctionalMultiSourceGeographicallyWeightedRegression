@@ -645,6 +645,46 @@ wrap_and_check_n_intervals_trapezoidal_quadrature(int n_intervals)
 
 
 /*!
+* @brief Wrapping the target error for the integration via trapezoidal quadrature rule
+* @param target_error target error while integrating via trapezoidal quadrature rule
+* @return return the target error for integrating via trapezoidal quadrature rule
+* @note checking that the target error while integrating via trapezoidal quadrature rule is a positive number, throwing an exception if not
+*/
+inline
+double
+wrap_and_check_target_error_trapezoidal_quadrature(double target_error)
+{
+  //checking that the number of intervals is positive, throwing an exception if not
+  if (target_error <= 0){
+    std::string error_message = "The target error while integrating via trapezoidal quadrature rule has to be positive";
+    throw std::invalid_argument(error_message);}
+
+  return target_error;  
+}
+
+
+
+/*!
+* @brief Wrapping the max number of iterations for the integration via trapezoidal quadrature rule
+* @param n_intervals the max number of iterations used for integrating via trapezoidal quadrature rule
+* @return return the max number of iterations used for integrating via trapezoidal quadrature rule
+* @note checking that the max number of iterations used for integrating via trapezoidal quadrature rule is a positive number, throwing an exception if not
+*/
+inline
+int
+wrap_and_check_max_iterations_trapezoidal_quadrature(int max_iterations)
+{
+  //checking that the number of intervals is positive, throwing an exception if not
+  if (max_iterations <= 0){
+    std::string error_message = "The maximum number of iterations for integrating via trapezoidal quadrature rule has to be positive";
+    throw std::invalid_argument(error_message);}
+
+  return max_iterations;  
+}
+
+
+
+/*!
 * @brief Wrapping the number of threads for OMP
 * @param num_threads indicates how many threads to be used by multi-threading directives.
 * @return the number of threads

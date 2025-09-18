@@ -112,7 +112,9 @@ using namespace Rcpp;
 * @param knots_beta_stations_cov vector of double with the abscissa points with respect which the basis expansions of the stations-dependent covariates (functional regression) coefficients are performed (all elements contained in [a,b]). 
 * @param degrees_basis_beta_stations_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stations-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
 * @param n_basis_beta_stations_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stations-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
-* @param n_intervals_trapezoidal_quadrature number of intervals used while performing integration via trapezoidal quadrature rule
+* @param n_intervals_trapezoidal_quadrature number of intervals used while performing integration via adaptive trapezoidal quadrature rule
+* @param target_error_trapezoidal_quadrature target error while integrating via adaptive trapezoidal quadrature rule
+* @param max_iterations_trapezoidal_quadrature max number of iterations for integrating via adaptive trapezoidal quadrature rule
 * @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine running fmsgwr.
 * @param basis_type_y_points string containing the type of basis used for the (functional) response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param basis_type_rec_weights_y_points string containing the type of basis used for the weights to reconstruct the (functional) response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
@@ -182,6 +184,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                   Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_beta_stations_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_stations_cov,
                   int n_intervals_trapezoidal_quadrature = 100,
+                  double target_error_trapezoidal_quadrature = 1e-3,
+                  int max_iterations_trapezoidal_quadrature = 100,
                   Rcpp::Nullable<int> num_threads = R_NilValue,
                   std::string basis_type_y_points = "bsplines",
                   std::string basis_type_rec_weights_y_points = "bsplines",
@@ -224,7 +228,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     int number_threads = wrap_num_thread(num_threads);
     // NUMBER OF INTERVALS FOR INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
     int n_intervals = wrap_and_check_n_intervals_trapezoidal_quadrature(n_intervals_trapezoidal_quadrature);
-
+    // TARGET ERROR WHILE INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
+    double target_error = wrap_and_check_target_error_trapezoidal_quadrature(target_error_trapezoidal_quadrature);
+    // MAXIMUM NUMBER OF ITERATIONS WHILE INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
+    int max_iterations = wrap_and_check_max_iterations_trapezoidal_quadrature(max_iterations_trapezoidal_quadrature);
 
     //  RESPONSE
     //raw data
@@ -517,7 +524,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
 
-    Rcout << "fdagwr.59: " << std::endl;
+    Rcout << "fdagwr.9: " << std::endl;
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),
@@ -537,6 +544,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     a,
                                                                                     b,
                                                                                     n_intervals,
+                                                                                    target_error,
+                                                                                    max_iterations,
                                                                                     number_of_statistical_units_,
                                                                                     number_threads);
     fgwr_algo->compute();

@@ -53,8 +53,8 @@ public:
     * @brief Constructor
     * @param number_threads number of threads for OMP
     */
-    fgwr(INPUT a, INPUT b, int n_intervals_integration, std::size_t n, int number_threads)
-        : m_integrating(a,b,n_intervals_integration), m_n(n), m_number_threads(number_threads) {}
+    fgwr(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, std::size_t n, int number_threads)
+        : m_integrating(a,b,n_intervals_integration,target_error,max_iterations), m_n(n), m_number_threads(number_threads) {}
 
     /*!
     * @brief Virtual destructor

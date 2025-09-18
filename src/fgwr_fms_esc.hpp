@@ -109,10 +109,12 @@ public:
                  INPUT a,
                  INPUT b,
                  int n_intervals_integration,
+                 double target_error_integration,
+                 int max_iterations_integration,
                  std::size_t n,
                  int number_threads)
         :
-            fgwr<INPUT,OUTPUT>(a,b,n_intervals_integration,n,number_threads),
+            fgwr<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error_integration,max_iterations_integration,n,number_threads),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_phi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(phi)},
             m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
