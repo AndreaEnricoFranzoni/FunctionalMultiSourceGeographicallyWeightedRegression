@@ -32,7 +32,8 @@ fgwr<INPUT,OUTPUT>::compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT>
                                     const FDAGWR_TRAITS::Dense_Matrix &R)
 const
 {
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > penalty;
+    //the vector contains factorization of the matrix
+    std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > penalty;
     penalty.resize(m_n);
 
     //qua da usare OMP
@@ -47,8 +48,8 @@ const
                        result_integrand.begin(),
                        [this](const FUNC_OBJ<INPUT,OUTPUT> &f){this->m_integrating.integrate(f);});
 
-        penalty[i] = (Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols()) + R).eval().inverse();   //necessary to use .eval() to exit from ETs
-        // = inv_pen.inverse();
+        penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>( Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols()) + R );  
+        // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
     
     return penalty;
