@@ -623,7 +623,7 @@ Rcpp::List FGWR(double input_el=1,
 
 
 
-    fd_integration integrator(0,1,100);
+    fd_integration integrator(0,1,100,1e-3,100);
 
 
 
