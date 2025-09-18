@@ -32,7 +32,7 @@
 
 #include "functional_data_integration.hpp"
 
-
+#include <iostream>
 /*!
 * @brief Virtual interface to perform the 
 */
