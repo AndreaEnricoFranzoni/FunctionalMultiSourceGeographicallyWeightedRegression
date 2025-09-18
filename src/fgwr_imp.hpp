@@ -45,8 +45,9 @@ const
         //dimension: L x L, where L is the number of basis
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(fm_prod(base_t,X_t),W[i],m_number_threads),X,m_number_threads),base);
 
-        //performing integration and factorization 
-        FDAGWR_TRAITS::Dense_Matrix inverse_penalty = this->fm_integration(integrand) + _R_;
+        //performing integration and factorization
+        FDAGWR_TRAITS::Dense_Matrix _j_tilde_tilde_i_ = this->fm_integration(integrand);
+        FDAGWR_TRAITS::Dense_Matrix inverse_penalty = _j_tilde_tilde_i_ + _R_;
         penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>(inverse_penalty);    //.eval() is needed to evaluate the lazy expression of ETs  
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
