@@ -37,11 +37,11 @@ const
     penalty.resize(m_n);
 
     FDAGWR_TRAITS::Dense_Matrix _R_ = FDAGWR_TRAITS::Dense_Matrix(R);   //necessary to compute the sum later
-    if(std::is_same_v<decltype(_R_),FDAGWR_TRAITS::Dense_Matrix>){std::cout<<"R è dense matrix"<<std::endl;}
-    else{std::cout<<"R non è dense matrix"<<std::endl;}
-
+    if(std::is_same_v<decltype(_R_),Eigen::Matrix<double, -1, -1, 0, -1, -1>>){std::cout<<"SI"<<std::endl;}
+    else{std::cout<<"NO"<<std::endl;}
 //#ifdef _OPENMP
 //#pragma omp parallel for shared(penalty,base,base_t,X,X_t,W,_R_,m_n,m_number_threads) num_threads(m_number_threads)
+/*
     for(std::size_t i = 0; i < m_n; ++i)
     {
         //dimension: L x L, where L is the number of basis
@@ -54,6 +54,7 @@ const
         penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>(inverse_penalty);    //.eval() is needed to evaluate the lazy expression of ETs  
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
+*/
 //#endif
     
     return penalty;
