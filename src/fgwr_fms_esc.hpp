@@ -142,14 +142,7 @@ public:
                 m_Xc_t = m_Xc.transpose();
                 m_psi_t = m_psi.transpose();
 
-                Eigen::MatrixXd A(2,2);
-                A.setConstant(2);
 
-                Eigen::MatrixXd B(2,2);
-                B.setConstant(3);
-
-                Eigen::MatrixXd C = A + B;
-                std::cout << C << std::endl;
             }
 
 

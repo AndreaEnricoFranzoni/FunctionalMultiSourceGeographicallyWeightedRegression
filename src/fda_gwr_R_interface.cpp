@@ -54,7 +54,7 @@
 #include "functional_matrix_product.hpp"
 #include "functional_matrix_into_wrapper.hpp"
 
-
+#include "test_sum.hpp"
 
 
 using namespace Rcpp;
@@ -549,7 +549,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     number_of_statistical_units_,
                                                                                     number_threads);
     fgwr_algo->compute();
-
+        f_sum_test();
 
     //returning element
     Rcpp::List l;
