@@ -47,8 +47,8 @@ const
                        result_integrand.begin(),
                        [this](const FUNC_OBJ<INPUT,OUTPUT> &f){this->m_integrating.integrate(f);});
 
-        FDAGWR_TRAITS::Dense_Matrix inv_pen = Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols()) + R;
-        penalty[i] = inv_pen.inverse();
+        penalty[i] = (Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols()) + R).inverse();
+        // = inv_pen.inverse();
     }
     
     return penalty;
