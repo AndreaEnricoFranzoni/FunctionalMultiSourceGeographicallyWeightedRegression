@@ -637,7 +637,7 @@ Rcpp::List FGWR(double input_el=1,
         std::transform(cbegin(integrand),
                        cend(integrand),
                        result_integrand.begin(),
-                       [&integrator](const FUNC_OBJ<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> &f){integrator.integrate(f);});
+                       [&integrator](const FUNC_OBJ<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> &f){return integrator.integrate(f);});
 
     auto result_integrand_m = Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols());
     Rcout << "Risultato integrali" << std::endl;
