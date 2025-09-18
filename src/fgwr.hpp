@@ -76,7 +76,7 @@ public:
     /*!
     * @brief Compute all the [J_2_tilde_i + R]^(-1)
     */
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > 
+    std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> >
     compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base,
                     const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
                     const functional_matrix<INPUT,OUTPUT> &X,

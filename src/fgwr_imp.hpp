@@ -23,7 +23,7 @@
 
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-std::vector< FDAGWR_TRAITS::Dense_Matrix >
+std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> >
 fgwr<INPUT,OUTPUT>::compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base,
                                     const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
                                     const functional_matrix<INPUT,OUTPUT> &X,
