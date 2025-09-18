@@ -74,9 +74,30 @@ public:
     inline int number_threads() const {return m_number_threads;}
 
     /*!
+    * @brief Integrating element-wise a functional amtrix
+    */
+    inline
+    FDAGWR_TRAITS::Dense_Matrix
+    fm_integration(const functional_matrix<INPUT,OUTPUT> &integrand)
+    const
+    {
+        std::vector<OUTPUT> result_integrand;
+        result_integrand.resize(integrand.size());
+        //integrating every element of the functional matrix
+        std::transform(cbegin(integrand),
+                       cend(integrand),
+                       result_integrand.begin(),
+                       [this](const FUNC_OBJ<INPUT,OUTPUT> &f){ return this->m_integrating.integrate(f);});
+
+        FDAGWR_TRAITS::Dense_Matrix result_integration = Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(), integrand.rows(), integrand.cols());
+
+        return result_integration;
+    }
+
+    /*!
     * @brief Compute all the [J_2_tilde_i + R]^(-1)
     */
-    std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> >
+    std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
     compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base,
                     const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
                     const functional_matrix<INPUT,OUTPUT> &X,

@@ -44,17 +44,9 @@ const
     {
         //dimension: L x L, where L is the number of basis
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(fm_prod(base_t,X_t),W[i],m_number_threads),X,m_number_threads),base);
-        //vector to store integration result
-        std::vector<OUTPUT> result_integrand;
-        result_integrand.resize(integrand.size());
-        //integrating every element of the functional matrix
-        std::transform(cbegin(integrand),
-                       cend(integrand),
-                       result_integrand.begin(),
-                       [this](const FUNC_OBJ<INPUT,OUTPUT> &f){ return this->m_integrating.integrate(f);});
 
-        //performing factorization 
-        penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>( FDAGWR_TRAITS::Dense_Matrix(Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols())) + _R_ );  
+        //performing integration and factorization 
+        penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>( this->fm_integration(integrand) + _R_ );  
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
 #endif
