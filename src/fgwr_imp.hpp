@@ -37,7 +37,7 @@ const
     penalty.resize(m_n);
 
     FDAGWR_TRAITS::Dense_Matrix _R_ = FDAGWR_TRAITS::Dense_Matrix(R);   //necessary to compute the sum later
-    if(std::is_same_v<_R_,FDAGWR_TRAITS::Dense_Matrix>){std::cout<<"R è dense matrix"<<std::endl;}
+    if(std::is_same_v<decltype(_R_),FDAGWR_TRAITS::Dense_Matrix>){std::cout<<"R è dense matrix"<<std::endl;}
     else{std::cout<<"R non è dense matrix"<<std::endl;}
 
 //#ifdef _OPENMP
@@ -49,7 +49,7 @@ const
 
         //performing integration and factorization
         FDAGWR_TRAITS::Dense_Matrix _j_tilde_tilde_i_ = this->fm_integration(integrand);
-        if(std::is_same_v<_j_tilde_tilde_i_,FDAGWR_TRAITS::Dense_Matrix>){std::cout<<"j_tilde_tile at " << i << " è dense matrix"<<std::endl;}
+        if(std::is_same_v<decltype(_j_tilde_tilde_i_),FDAGWR_TRAITS::Dense_Matrix>){std::cout<<"j_tilde_tile at " << i << " è dense matrix"<<std::endl;}
         else{std::cout<<"j_tilde_tile at " << i << " non è dense matrix"<<std::endl;}
         //FDAGWR_TRAITS::Dense_Matrix inverse_penalty = _j_tilde_tilde_i_ + _R_;
         //penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>(inverse_penalty);    //.eval() is needed to evaluate the lazy expression of ETs  
