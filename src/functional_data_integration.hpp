@@ -53,7 +53,7 @@ public:
     fd_integration(double a, double b, int intervals):
         m_integration_domain(a,b), 
         m_integration_mesh(m_integration_domain,intervals),
-        m_integration_quadrature(QuadratureRuleAdaptive<Trapezoidal>(1.e-6, 100), m_integration_mesh)
+        m_integration_quadrature(QuadratureRuleAdaptive<Trapezoidal>(1.e-3, 100), m_integration_mesh)
         {}
 
     /*!Function to perform the integration*/
