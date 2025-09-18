@@ -21,7 +21,7 @@
 #include "fgwr.hpp"
 
 
-template< typename INPUT = double, typename OUTPUT = double >
+template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
 fgwr<INPUT,OUTPUT>::compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base,
@@ -41,13 +41,14 @@ const
         //dimension: L x L, where L is the number of basis
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(fm_prod(base_t,X_t),W[i]),X),base);
         std::vector<OUTPUT> result_integrand;
-        result_integrand.resize(integrand.size())
-        std::transform(integrand.cbegin(),
-                       integrand.cend(),
+        result_integrand.resize(integrand.size());
+        std::transform(cbegin(integrand),
+                       cend(integrand),
                        result_integrand.begin(),
-                       [&m_integrating](const FUNC_OBJ<INPUT,OUTPUT> &f){m_integrating.integrate(f);});
+                       [this](const FUNC_OBJ<INPUT,OUTPUT> &f){this->m_integrating.integrate(f);});
 
-        penalty[i] = (Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols()) + R).inverse();
+        FDAGWR_TRAITS::Dense_Matrix inv_pen = Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols()) + R;
+        penalty[i] = inv_pen.inverse();
     }
     
     return penalty;

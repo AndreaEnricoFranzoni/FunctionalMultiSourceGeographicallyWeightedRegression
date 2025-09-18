@@ -522,7 +522,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),
-                                                                                    std::move(columnize_coeff_resp(coefficients_response_)),
+                                                                                    std::move(c),
                                                                                     std::move(Xc),
                                                                                     std::move(Wc),
                                                                                     std::move(R_C.PenalizationMatrix()),
@@ -538,6 +538,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     a,
                                                                                     b,
                                                                                     n_intervals,
+                                                                                    number_of_statistical_units_,
                                                                                     number_threads);
     fgwr_algo->compute();
 
@@ -631,10 +632,10 @@ Rcpp::List FGWR(double input_el=1,
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> integrand_v{f1,f2,f3,f4,f5,f3};
     functional_matrix integrand(integrand_v,3,2);
 
-    std::vector<OUTPUT> result_integrand;
-    result_integrand.resize(integrand.size())
-        std::transform(integrand.cbegin(),
-                       integrand.cend(),
+    std::vector<_FD_OUTPUT_TYPE_> result_integrand;
+    result_integrand.resize(integrand.size());
+        std::transform(cbegin(integrand),
+                       cend(integrand),
                        result_integrand.begin(),
                        [&integrator](const FUNC_OBJ<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> &f){integrator.integrate(f);});
 

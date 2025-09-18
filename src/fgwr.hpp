@@ -81,7 +81,7 @@ public:
                     const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
                     const functional_matrix<INPUT,OUTPUT> &X,
                     const functional_matrix<INPUT,OUTPUT> &X_t,
-                    const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
+                    const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
                     const FDAGWR_TRAITS::Dense_Matrix &R) const;
 
     /*!
