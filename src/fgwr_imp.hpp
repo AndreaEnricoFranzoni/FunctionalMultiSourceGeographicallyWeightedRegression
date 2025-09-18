@@ -46,23 +46,12 @@ const
     {
         //dimension: L x L, where L is the number of basis
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(fm_prod(base_t,X_t),W[i],m_number_threads),X,m_number_threads),base);
-/*
-        functional_matrix<INPUT,OUTPUT> prod1 = fm_prod(base_t,X_t);
-        std::cout << "Fatto prod1" << std::endl;
-        functional_matrix<INPUT,OUTPUT> prod2 = fm_prod(prod1,W[i],m_number_threads);
-        std::cout << "Fatto prod2" << std::endl;
-        functional_matrix<INPUT,OUTPUT> prod3 = fm_prod(prod2,X,m_number_threads);
-        std::cout << "Fatto prod3" << std::endl;
-        functional_matrix<INPUT,OUTPUT> integrand = fm_prod(prod3,base);
-*/
-        std::cout << "Fatto prodotto" << std::endl;
+
         //performing integration and factorization
         FDAGWR_TRAITS::Dense_Matrix _j_tilde_tilde_i_ = this->fm_integration(integrand);
-        std::cout << "Integrato" << std::endl;
-        if(std::is_same_v<decltype(_j_tilde_tilde_i_),FDAGWR_TRAITS::Dense_Matrix>){std::cout<<"j_tilde_tile at " << i << " è dense matrix"<<std::endl;}
-        else{std::cout<<"j_tilde_tile at " << i << " non è dense matrix"<<std::endl;}
-        //FDAGWR_TRAITS::Dense_Matrix inverse_penalty = _j_tilde_tilde_i_ + _R_;
-        //penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>(inverse_penalty);    //.eval() is needed to evaluate the lazy expression of ETs  
+
+        FDAGWR_TRAITS::Dense_Matrix inverse_penalty = _j_tilde_tilde_i_ + _R_;
+        penalty[i] = Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix>(inverse_penalty);    //.eval() is needed to evaluate the lazy expression of ETs  
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
 //#endif
