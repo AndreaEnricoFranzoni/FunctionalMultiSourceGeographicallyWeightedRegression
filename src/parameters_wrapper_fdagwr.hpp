@@ -221,6 +221,22 @@ wrap_and_check_basis_type(Rcpp::Nullable<Rcpp::CharacterVector> basis_types_name
 
 
 /*!
+* @brief Columnize response basis expansion coefficients one below others, from a Lyxn matrix to a (n*Ly)x1 vector (n is the numer of statistical units, Ly the number if basis used for the basis expansion of the response)
+* @param coeff_resp a Eigen matrix of double such that each row represents a specific base of the response (Ly), and each column a specific statistical units (n), containing basis expansion coefficients
+* @return a Eigen matrix of double of dimension (n*Ly) x 1 containing the column of the input matrices one below the other
+*/
+inline
+FDAGWR_TRAITS::Dense_Matrix
+columnize_coeff_resp(const FDAGWR_TRAITS::Dense_Matrix& coeff_resp)
+{
+  //Eigen::Map presumes that data are stored col-major (ok)
+  FDAGWR_TRAITS::Dense_Matrix c = Eigen::Map<FDAGWR_TRAITS::Dense_Matrix>(coeff_resp.data(), coeff_resp.size(), 1);
+
+  return c;
+}
+
+
+/*!
 * @brief Wrapping the points over which the discrete evaluations of the functional object are available/knots for basis system.
 * @param abscissas vector containing the domain points
 * @param a left domain extreme

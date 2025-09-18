@@ -488,37 +488,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     W_S.compute_weights();
 
 
-   
-    /*
-   //TESTING ETs WITHIN FUNCTIONS
-   double el = 1.0;
-
-    std::function<double(double const &)> f1 = [](const double &x){return std::pow(x,2);};
-    std::function<double(double const &)> f2 = [](const double &x){return std::pow(x,3);};
-    std::vector<std::function<double(double const &)> > test_f1_f2{f1,f2};
-    functional_matrix test_fm_1(test_f1_f2,1,2);
-
-    Rcout << "FM: f1(2): " << test_fm_1(0,0)(el) << ", f2(2): " << test_fm_1(0,1)(el) << std::endl;
-
-
-    std::function<double(double const &)> f3 = [](const double &x){return 1.0 + 2.0*x;};
-    std::function<double(double const &)> f4 = [](const double &x){return 3.0 - x;};
-    std::vector<std::function<double(double const &)> > test_f3_f4{f3,f4};
-    functional_matrix test_fm_2(test_f3_f4,1,2);
-
-    Rcout << "FM: f3(2): " << test_fm_2(0,0)(el) << ", f4(2): " << test_fm_2(0,1)(el) << std::endl;
-
-
-    functional_matrix test_op = test_fm_1+test_fm_2;
-    functional_matrix test_op2 = log(test_op);
-    test_op = 5.0*(test_op+test_op2)*2.0;
-    Rcout << "FM op: primo: " << test_op(0,0)(el) << ", secondo: " << test_op(0,1)(el) << std::endl;
-    //END TESTING ETs WITHIN FUNCTIONS
-    */
-    
-
-
-
     ///////////////////////////////
     /////    FGWR ALGORITHM   /////
     ///////////////////////////////
@@ -528,6 +497,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_,number_threads);
     //phi: a sparse functional matrix nx(n*L), where L is the number of basis for the response
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> phi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_.fdata_basis(),number_of_statistical_units_,number_basis_response_);
+    //c: a dense matrix of double (n*Ly) x 1 containing, one column below the other, the y basis expansion coefficients
+    auto c = columnize_coeff_resp(coefficients_response_);
     //Xc: a functional matrix of dimension nxqc
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xc = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATIONARY_>(x_C_fd_,number_threads);
     //Wc: a diagonal functional matrix of dimension nxn
@@ -551,7 +522,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),
-                                                                                    std::move(coefficients_response_),
+                                                                                    std::move(columnize_coeff_resp(coefficients_response_)),
                                                                                     std::move(Xc),
                                                                                     std::move(Wc),
                                                                                     std::move(R_C.PenalizationMatrix()),
@@ -569,136 +540,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     n_intervals,
                                                                                     number_threads);
     fgwr_algo->compute();
-
-    double loc = 0.3;
-    std::size_t n_rows_test = 3;
-    std::size_t n_cols_test = 2;
-    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f1 = [](const double & x){return x;};
-    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f2 = [](const double & x){return x + 4;};
-    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f3 = [](const double & x){return x*x;};
-    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f4 = [](const double & x){return x-1;};
-    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f5 = [](const double & x){return 5;};
-
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test{f1,f2,f3,f4,f5,f3};
-    functional_matrix test_fdm_dense(test,3,2);
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test2{f5,f3,f1,f5,f2,f4};
-    functional_matrix test_fdm_dense2(test2,2,3);
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test3{f5,f3,f1,f5,f2,f4,f1,f5,f2,f1,f5,f4};
-    functional_matrix test_fdm_dense3(test3,4,3);
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test4{f5,f3,f1,f5,f2,f4,f1,f5,f2};
-    functional_matrix test_fdm_dense4(test4,3,3);
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test5{f2,f4,f1,f5,f3,f5,f1,f3,f5};
-    functional_matrix test_fdm_dense5(test5,3,3);
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> testd{f5,f3,f1,f2};
-    functional_matrix_diagonal test_fdm_d(testd,4);
-    Eigen::MatrixXd M2 = Eigen::MatrixXd::Random(3,2);  // valori in [-1, 1]
-    auto test_fdm_dense2_t = test_fdm_dense2.transpose();
-
-
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v{f1,f2,f3,f4};
-    std::vector<std::size_t> row_idx{0,0,0,2};
-    std::vector<std::size_t> col_idx{0,1,2,2,4};
-    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm(test_sm_v,3,4,row_idx,col_idx);
-    //Rcout << "Trasposto di una completa" << std::endl;
-    auto test_sm_t = test_sm.transpose();
-
-
-    Rcout << "Matrice generale" << std::endl;
-    for(std::size_t i = 0; i < test_sm.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm.cols(); ++j){
-            Rcout << "Elem of SM (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm(i,j)(loc) << std::endl;}}
-    Rcout << "SM original: rows: " << test_sm.rows() << ", cols: " << test_sm.cols() << std::endl;
-    Rcout << "SM rows idx " << std::endl;
-    for(std::size_t i = 0; i < test_sm.rows_idx().size(); ++i){Rcout << test_sm.rows_idx()[i] << std::endl;}
-    Rcout << "SM cols idx " << std::endl;
-    for(std::size_t i = 0; i < test_sm.cols_idx().size(); ++i){Rcout << test_sm.cols_idx()[i] << std::endl;}
-
-    Rcout << "Trasposto di una SM" << std::endl;
-    for(std::size_t i = 0; i < test_sm_t.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm_t.cols(); ++j){
-            Rcout << "Elem of SM T (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_t(i,j)(loc) << std::endl;}}
-    Rcout << "SM T: rows: " << test_sm_t.rows() << ", cols: " << test_sm_t.cols() << std::endl;
-    Rcout << "SM T rows idx" << std::endl;
-    for(std::size_t i = 0; i < test_sm_t.rows_idx().size(); ++i){Rcout << test_sm_t.rows_idx()[i] << std::endl;}
-    Rcout << "SM T cols idx" << std::endl;
-    for(std::size_t i = 0; i < test_sm_t.cols_idx().size(); ++i){Rcout << test_sm_t.cols_idx()[i] << std::endl;}
-
-
-
-
-    //vettore colonna di matrice sparsa
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v_cv{f1,f2,f3};
-    std::vector<std::size_t> row_idx_cv{1,5,8};
-    std::vector<std::size_t> col_idx_cv{0,3};
-    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_cv(test_sm_v_cv,10,1,row_idx_cv,col_idx_cv);
-    //Rcout << "Trasposto di un vettore colonna" << std::endl;
-    auto test_sm_cv_t = test_sm_cv.transpose();
-
-
-/*
-    Rcout << "Vettore colonna" << std::endl;
-    for(std::size_t i = 0; i < test_sm_cv.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm_cv.cols(); ++j){
-            Rcout << "Elem of CV (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_cv(i,j)(loc) << std::endl;}}
-    Rcout << "CV original: rows: " << test_sm_cv.rows() << ", cols: " << test_sm_cv.cols() << std::endl;
-    Rcout << "CV rows idx " << std::endl;
-    for(std::size_t i = 0; i < test_sm_cv.rows_idx().size(); ++i){Rcout << test_sm_cv.rows_idx()[i] << std::endl;}
-    Rcout << "CV cols idx " << std::endl;
-    for(std::size_t i = 0; i < test_sm_cv.cols_idx().size(); ++i){Rcout << test_sm_cv.cols_idx()[i] << std::endl;}
-
-    Rcout << "Trasposto di un vettore colonna" << std::endl;
-    for(std::size_t i = 0; i < test_sm_cv_t.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm_cv_t.cols(); ++j){
-            Rcout << "Elem of CV T (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_cv_t(i,j)(loc) << std::endl;}}
-    Rcout << "CV T: rows: " << test_sm_cv_t.rows() << ", cols: " << test_sm_cv_t.cols() << std::endl;
-    Rcout << "CV T rows idx" << std::endl;
-    for(std::size_t i = 0; i < test_sm_cv_t.rows_idx().size(); ++i){Rcout << test_sm_cv_t.rows_idx()[i] << std::endl;}
-    Rcout << "CV T cols idx" << std::endl;
-    for(std::size_t i = 0; i < test_sm_cv_t.cols_idx().size(); ++i){Rcout << test_sm_cv_t.cols_idx()[i] << std::endl;}
-
-*/
-
-
-
-
-
-
-
-    //vettore riga di matrice sparsa
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v_rv{f1,f2,f3};
-    std::vector<std::size_t> row_idx_rv{0,0,0};
-    std::vector<std::size_t> col_idx_rv{0,0,0,1,1,2,2,3};
-    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_rv(test_sm_v_rv,1,7,row_idx_rv,col_idx_rv);
-    auto test_sm_rv_t = test_sm_rv.transpose();
-
-
-/*
-    Rcout << "Vettore riga" << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm_rv.cols(); ++j){
-            Rcout << "Elem of RV (sparse) (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_rv(i,j)(loc) << std::endl;}}
-    Rcout << "RV original: rows: " << test_sm_rv.rows() << ", cols: " << test_sm_rv.cols() << std::endl;
-    Rcout << "RV rows idx " << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv.rows_idx().size(); ++i){Rcout << test_sm_rv.rows_idx()[i] << std::endl;}
-    Rcout << "RV cols idx " << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv.cols_idx().size(); ++i){Rcout << test_sm_rv.cols_idx()[i] << std::endl;}
-
-    Rcout << "Trasposto di un vettore riga" << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv_t.rows(); ++i){
-        for(std::size_t j = 0; j < test_sm_rv_t.cols(); ++j){
-            Rcout << "Elem of RV T (" << i << "," << j << ") evaluated in " << loc << ": " << test_sm_rv_t(i,j)(loc) << std::endl;}}
-    Rcout << "RV T: rows: " << test_sm_rv_t.rows() << ", cols: " << test_sm_rv_t.cols() << std::endl;
-    Rcout << "RV T rows idx" << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv_t.rows_idx().size(); ++i){Rcout << test_sm_rv_t.rows_idx()[i] << std::endl;}
-    Rcout << "RV T cols idx" << std::endl;
-    for(std::size_t i = 0; i < test_sm_rv_t.cols_idx().size(); ++i){Rcout << test_sm_rv_t.cols_idx()[i] << std::endl;}
-*/
-
-
-
-
-
-
 
 
     //returning element
@@ -739,35 +580,108 @@ Rcpp::List FGWR(double input_el=1,
     //checking and wrapping input parameters
     int number_threads = wrap_num_thread(num_threads);
 
-    Rcout << "NT: " << number_threads << std::endl;
+    using _FD_INPUT_TYPE_ = double;
+    using _FD_OUTPUT_TYPE_ = double;
 
-    //CHECK PARAMETER WRAPPING: BEBUGGING PURPOSES
+
     /*
-    Rcout << "Number of statistical units: " << number_of_statistical_units_ << std::endl;
-    Rcout << "Response " << ", type of basis: " << basis_type_response_ << ", basis degree: " << degree_basis_response_ << ", basis number: " << number_basis_response_ << std::endl;
-    Rcout << "Response rec w" << ", type of basis: " << basis_type_rec_weights_response_ << ", basis degree: " << degree_basis_rec_weights_response_ << ", basis number: " << number_basis_rec_weights_response_ << std::endl;
-    Rcout << "********" << std::endl;
-    Rcout << "Stationary covs: " << q_C << std::endl;
-    for(std::size_t i = 0; i < q_C; ++i)
-    {
-        Rcout << "Covariate " << i+1 << ", " << names_stationary_cov_[i] << ", type of basis: " << basis_types_stationary_cov_[i] << ", basis degree: " << degree_basis_stationary_cov_[i] << ", basis number: " << number_basis_stationary_cov_[i] << std::endl;
-        Rcout << "Covariate regressor " << i+1 << ", type of basis: " << basis_types_beta_stationary_cov_[i] << ", basis degree: " << degree_basis_beta_stationary_cov_[i] << ", basis number: " << number_basis_beta_stationary_cov_[i] << std::endl;
-    }
-    Rcout << "********" << std::endl;
-    Rcout << "Events covs: " << q_E << std::endl;
-    for(std::size_t i = 0; i < q_E; ++i)
-    {
-        Rcout << "Covariate " << i+1 << ", " << names_events_cov_[i] << ", type of basis: " << basis_types_events_cov_[i] << ", basis degree: " << degree_basis_events_cov_[i] << ", basis number: " << number_basis_events_cov_[i] << std::endl;
-        Rcout << "Covariate regressor " << i+1 << ", type of basis: " << basis_types_beta_events_cov_[i] << ", basis degree: " << degree_basis_beta_events_cov_[i] << ", basis number: " << number_basis_beta_events_cov_[i] << std::endl;
-    }
-    Rcout << "********" << std::endl;
-    Rcout << "Stations covs: " << q_S << std::endl;
-    for(std::size_t i = 0; i < q_S; ++i)
-    {
-        Rcout << "Covariate " << i+1 << ", " << names_stations_cov_[i] << ", type of basis: " << basis_types_stations_cov_[i] << ", basis degree: " << degree_basis_stations_cov_[i] << ", basis number: " << number_basis_stations_cov_[i] << std::endl;
-        Rcout << "Covariate regressor " << i+1 << ", type of basis: " << basis_types_beta_stations_cov_[i] << ", basis degree: " << degree_basis_beta_stations_cov_[i] << ", basis number: " << number_basis_beta_stations_cov_[i] << std::endl;
-    }
+   //TESTING ETs WITHIN FUNCTIONS
+   double el = 1.0;
+
+    std::function<double(double const &)> f1 = [](const double &x){return std::pow(x,2);};
+    std::function<double(double const &)> f2 = [](const double &x){return std::pow(x,3);};
+    std::vector<std::function<double(double const &)> > test_f1_f2{f1,f2};
+    functional_matrix test_fm_1(test_f1_f2,1,2);
+
+    Rcout << "FM: f1(2): " << test_fm_1(0,0)(el) << ", f2(2): " << test_fm_1(0,1)(el) << std::endl;
+
+
+    std::function<double(double const &)> f3 = [](const double &x){return 1.0 + 2.0*x;};
+    std::function<double(double const &)> f4 = [](const double &x){return 3.0 - x;};
+    std::vector<std::function<double(double const &)> > test_f3_f4{f3,f4};
+    functional_matrix test_fm_2(test_f3_f4,1,2);
+
+    Rcout << "FM: f3(2): " << test_fm_2(0,0)(el) << ", f4(2): " << test_fm_2(0,1)(el) << std::endl;
+
+
+    functional_matrix test_op = test_fm_1+test_fm_2;
+    functional_matrix test_op2 = log(test_op);
+    test_op = 5.0*(test_op+test_op2)*2.0;
+    Rcout << "FM op: primo: " << test_op(0,0)(el) << ", secondo: " << test_op(0,1)(el) << std::endl;
+    //END TESTING ETs WITHIN FUNCTIONS
     */
+
+
+
+
+    fd_integration integrator(0,1,100);
+
+
+
+    
+    double loc = 0.3;
+    std::size_t n_rows_test = 3;
+    std::size_t n_cols_test = 2;
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f1 = [](const _FD_INPUT_TYPE_ & x){return x;};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f2 = [](const _FD_INPUT_TYPE_ & x){return x + 4;};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f3 = [](const _FD_INPUT_TYPE_ & x){return x*x;};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f4 = [](const _FD_INPUT_TYPE_ & x){return x-1;};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f5 = [](const _FD_INPUT_TYPE_ & x){return 5;};
+
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> integrand_v{f1,f2,f3,f4,f5,f3};
+    functional_matrix integrand(integrand_v,3,2);
+
+    std::vector<OUTPUT> result_integrand;
+    result_integrand.resize(integrand.size())
+        std::transform(integrand.cbegin(),
+                       integrand.cend(),
+                       result_integrand.begin(),
+                       [&integrator](const FUNC_OBJ<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> &f){integrator.integrate(f);});
+
+    auto result_integrand_m = Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols());
+    Rcout << "Risultato integrali" << std::endl;
+    Rcout << result_integrand_m << std::endl;
+    
+
+
+
+    /*
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test2{f5,f3,f1,f5,f2,f4};
+    functional_matrix test_fdm_dense2(test2,2,3);
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test3{f5,f3,f1,f5,f2,f4,f1,f5,f2,f1,f5,f4};
+    functional_matrix test_fdm_dense3(test3,4,3);
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test4{f5,f3,f1,f5,f2,f4,f1,f5,f2};
+    functional_matrix test_fdm_dense4(test4,3,3);
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test5{f2,f4,f1,f5,f3,f5,f1,f3,f5};
+    functional_matrix test_fdm_dense5(test5,3,3);
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> testd{f5,f3,f1,f2};
+    functional_matrix_diagonal test_fdm_d(testd,4);
+    Eigen::MatrixXd M2 = Eigen::MatrixXd::Random(3,2);  // valori in [-1, 1]
+    auto test_fdm_dense2_t = test_fdm_dense2.transpose();
+
+
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v{f1,f2,f3,f4};
+    std::vector<std::size_t> row_idx{0,0,0,2};
+    std::vector<std::size_t> col_idx{0,1,2,2,4};
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm(test_sm_v,3,4,row_idx,col_idx);
+    //Rcout << "Trasposto di una completa" << std::endl;
+    auto test_sm_t = test_sm.transpose();
+
+    //vettore colonna di matrice sparsa
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v_cv{f1,f2,f3};
+    std::vector<std::size_t> row_idx_cv{1,5,8};
+    std::vector<std::size_t> col_idx_cv{0,3};
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_cv(test_sm_v_cv,10,1,row_idx_cv,col_idx_cv);
+    //Rcout << "Trasposto di un vettore colonna" << std::endl;
+    auto test_sm_cv_t = test_sm_cv.transpose();
+
+    //vettore riga di matrice sparsa
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> test_sm_v_rv{f1,f2,f3};
+    std::vector<std::size_t> row_idx_rv{0,0,0};
+    std::vector<std::size_t> col_idx_rv{0,0,0,1,1,2,2,3};
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_sm_rv(test_sm_v_rv,1,7,row_idx_rv,col_idx_rv);
+    auto test_sm_rv_t = test_sm_rv.transpose();
+*/
 
 
 

@@ -32,39 +32,51 @@ private:
     functional_matrix<INPUT,OUTPUT> m_y;
     /*!Basis for response (nx(nxLy))*/
     functional_matrix_sparse<INPUT,OUTPUT> m_phi;
-    /*!Coefficients of the basis expansion for response ()*/
+    /*!Coefficients of the basis expansion for response ((n*Ly)x1): coefficients for each unit are columnized one below the other*/
     FDAGWR_TRAITS::Dense_Matrix m_c;
 
     /*!Functional stationary covariates (n x qc)*/
     functional_matrix<INPUT,OUTPUT> m_Xc;
+    /*!Their transpost (qc x n)*/
+    functional_matrix<INPUT,OUTPUT> m_Xc_t;
     /*!Functional weights for stationary covariates (n elements of diagonal n x n)*/
     functional_matrix_diagonal<INPUT,OUTPUT> m_Wc;
     /*!Scalar matrix with the penalization on the stationary covariates (sparse Lc x Lc, where Lc is the sum of the basis of each C covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Rc;
     /*!Basis for stationary covariates regressors (sparse qC x Lc)*/
     functional_matrix_sparse<INPUT,OUTPUT> m_omega;
+    /*!Their transpost (sparse Lc x qC)*/
+    functional_matrix_sparse<INPUT,OUTPUT> m_omega_t;
     /*!Coefficients of the basis expansion for stationary covariates regressors: TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_bc;
 
     /*!Functional event-dependent covariates (n x qe)*/
     functional_matrix<INPUT,OUTPUT> m_Xe;
+    /*!Their transpost (qe x n)*/
+    functional_matrix<INPUT,OUTPUT> m_Xe_t;
     /*!Functional weights for event-dependent covariates (n elements of diagonal n x n)*/
     std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > m_We;
     /*!Scalar matrix with the penalization on the event-dependent covariates (sparse Le x Le, where Le is the sum of the basis of each E covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Re;
     /*!Basis for event-dependent covariates regressors (sparse qE x Le)*/
-    functional_matrix<INPUT,OUTPUT> m_theta;
+    functional_matrix_sparse<INPUT,OUTPUT> m_theta;
+    /*!Their transpost (sparse Le x qE)*/
+    functional_matrix_sparse<INPUT,OUTPUT> m_theta_t;
     /*!Coefficients of the basis expansion for event-dependent covariates regressors: TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_be;
 
     /*!Functional station-dependent covariates (n x qs)*/
     functional_matrix<INPUT,OUTPUT> m_Xs;
+    /*!Their transpost (qs x n)*/
+    functional_matrix<INPUT,OUTPUT> m_Xs_t;
     /*!Functional weights for station-dependent covariates (n elements of diagonal n x n)*/
     std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > m_Ws;
     /*!Scalar matrix with the penalization on the station-dependent covariates (sparse Ls x Ls, where Ls is the sum of the basis of each S covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Rs;
     /*!Basis for station-dependent covariates regressors (sparse qS x Ls)*/
-    functional_matrix<INPUT,OUTPUT> m_psi;
+    functional_matrix_sparse<INPUT,OUTPUT> m_psi;
+    /*!Their transpost (sparse Ls x qS)*/
+    functional_matrix_sparse<INPUT,OUTPUT> m_psi_t;
     /*!Coefficients of the basis expansion for station-dependent covariates regressors: TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_bs;
 
@@ -97,9 +109,10 @@ public:
                  INPUT a,
                  INPUT b,
                  int n_intervals_integration,
+                 std::size_t n,
                  int number_threads)
         :
-            fgwr<INPUT,OUTPUT>(a,b,n_intervals_integration,number_threads),
+            fgwr<INPUT,OUTPUT>(a,b,n_intervals_integration,n,number_threads),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_phi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(phi)},
             m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
@@ -115,7 +128,14 @@ public:
             m_Ws{std::forward<FUNC_DIAG_MATRIX_VEC_OBJ>(Ws)},
             m_Rs{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rs)},
             m_psi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(psi)}
-            {}
+            {
+                m_Xc_t = m_Xc.transpose();
+                m_omega_t = m_omega.transpose();
+                m_Xe_t = m_Xe.transpose();
+                m_theta_t = m_theta.transpose();
+                m_Xc_t = m_Xc.transpose();
+                m_psi_t = m_psi.transpose();
+            }
 
 
     /*!

@@ -27,6 +27,7 @@
 #include "functional_matrix.hpp"
 #include "functional_matrix_sparse.hpp"
 #include "functional_matrix_diagonal.hpp"
+#include "functional_matrix_product.hpp"
 #include "functional_matrix_operators.hpp"
 
 #include "functional_data_integration.hpp"
@@ -42,6 +43,8 @@ class fgwr
 private:
     /*!Object to perform the integration using trapezoidal quadrature rule*/
     fd_integration m_integrating;
+    /*!Number of statistical units*/
+    std::size_t m_n;
     /*!Number of threads for OMP*/
     int m_number_threads;
 
@@ -50,13 +53,19 @@ public:
     * @brief Constructor
     * @param number_threads number of threads for OMP
     */
-    fgwr(INPUT a, INPUT b, int n_intervals_integration, int number_threads)
-        : m_integrating(a,b,n_intervals_integration), m_number_threads(number_threads) {}
+    fgwr(INPUT a, INPUT b, int n_intervals_integration, std::size_t n, int number_threads)
+        : m_integrating(a,b,n_intervals_integration), m_n(n), m_number_threads(number_threads) {}
 
     /*!
     * @brief Virtual destructor
     */
     virtual ~fgwr() = default;
+
+    /*!
+    * @brief Getter for the number of statistical units
+    * @return the private m_n
+    */
+    inline std::size_t n() const {return m_n;}
 
     /*!
     * @brief Getter for the number of threads for OMP
@@ -68,8 +77,10 @@ public:
     * @brief Compute all the [J_2_tilde_i + R]^(-1)
     */
     std::vector< FDAGWR_TRAITS::Dense_Matrix > 
-    compute_penalty(const functional_matrix<INPUT,OUTPUT> &base,
+    compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base,
+                    const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
                     const functional_matrix<INPUT,OUTPUT> &X,
+                    const functional_matrix<INPUT,OUTPUT> &X_t,
                     const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
                     const FDAGWR_TRAITS::Dense_Matrix &R) const;
 
@@ -142,5 +153,8 @@ public:
     */
     virtual inline void compute() = 0;
 };
+
+
+#include "fgwr_imp.hpp"
 
 #endif  /*FGWR_ALGO_HPP*/
