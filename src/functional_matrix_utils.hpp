@@ -24,6 +24,7 @@
 
 #include <functional>
 #include <type_traits>
+#include <concepts>
 
 
 namespace fm_utils
@@ -67,6 +68,14 @@ using input_param_t = typename function_traits<F>::input_param_type;
 
 template <typename F>
 using output_t = typename function_traits<F>::output_type;
+
+
+
+
+
+//CONCEPT TO AVOID EIGEN OVERLOADING
+template <typename T>
+concept not_eigen = !std::is_base_of_v<Eigen::MatrixBase<T>, T>;
 
 }   //end namespace fm_utils
 

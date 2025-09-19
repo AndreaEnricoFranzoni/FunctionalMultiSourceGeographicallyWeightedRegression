@@ -16,7 +16,6 @@ f_sum_test()
     b.setConstant(5);
 
     Eigen::MatrixXd c = a + b;
-std::cout << c <<std::endl;
 }
 
 
