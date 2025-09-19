@@ -185,7 +185,8 @@ public:
         //B_E_i
         m_B_e = this->compute_operator(m_theta_t,m_Xe_t,m_We,m_Xc,m_omega,j_double_tilde_Re_inv);
         //K_e_s(t)
-        functional_matrix<INPUT,OUTPUT> K_e_s = this->compute_functional_operator(m_Xe,m_theta,m_B_e);
+        std::vector< FDAGWR_TRAITS::Dense_Matrix > m_be_for_K_e_s = this->compute_operator(m_theta_t,m_Xe_t,m_We,m_Xs,m_psi,j_double_tilde_Re_inv);
+        functional_matrix<INPUT,OUTPUT> K_e_s = this->compute_functional_operator(m_Xe,m_theta,m_be_for_K_e_s);
         //X_s_crossed(t)
         functional_matrix<INPUT,OUTPUT> X_s_crossed = fm_prod(m_Xs,m_psi) - K_e_s;
         functional_matrix<INPUT,OUTPUT> X_s_crossed_t = X_s_crossed.transpose();
