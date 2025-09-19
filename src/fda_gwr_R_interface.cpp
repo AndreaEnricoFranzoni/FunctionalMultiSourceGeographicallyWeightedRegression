@@ -644,6 +644,15 @@ Rcpp::List FGWR(double input_el=1,
         }
         Rcout << "\n";
     }
+
+    test_op = 2.0*test_op*4.0;
+    Rcout << "MULT BY SCAL" << std::endl;
+    for(std::size_t i = 0; i < test_op.rows(); ++i){
+        for(std::size_t j = 0; j < test_op.cols(); ++j){
+            Rcout << "MULT BY SCAL(" << i << "," << j << "): " << test_op(i,j)(el) << " ";
+        }
+        Rcout << "\n";
+    }
     //END TESTING ETs WITHIN FUNCTIONS
     
 
