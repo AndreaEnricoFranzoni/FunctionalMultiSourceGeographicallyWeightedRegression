@@ -95,7 +95,8 @@ public:
     }
 
     /*!
-    * @brief Compute all the [J_2_tilde_i + R]^(-1)
+    * @brief Compute all the [J_2_tilde_i + R]^(-1): 
+    * @note FATTO
     */
     std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
     compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base,
@@ -107,67 +108,105 @@ public:
 
     /*!
     * @brief Compute [J_tilde_i + R]^(-1)
+    * @note FATTO
     */
-    std::vector< FDAGWR_TRAITS::Dense_Matrix >
-    compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed,
-                    const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
+    std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
+    compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
+                    const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                    const functional_matrix<INPUT,OUTPUT> &X_crossed,
                     const FDAGWR_TRAITS::Sparse_Matrix &R) const;
 
     /*!
     * @brief Compute [J + Rc]^(-1)
     */
-    FDAGWR_TRAITS::Dense_Matrix
+    Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
     compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed,
-                    const functional_matrix<INPUT,OUTPUT> &W,
-                    const FDAGWR_TRAITS::Dense_Matrix &R) const;
+                    const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
+                    const functional_matrix_diagonal<INPUT,OUTPUT> &W,
+                    const FDAGWR_TRAITS::Sparse_Matrix &R) const;
 
     /*!
     * @brief Compute an operator
+    * @note FATTO
     */
     std::vector< FDAGWR_TRAITS::Dense_Matrix >
-    compute_operator(const functional_matrix<INPUT,OUTPUT> &lhs,
+    compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
                      const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                     const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
+                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
                      const functional_matrix<INPUT,OUTPUT> &X_rhs,
-                     const functional_matrix<INPUT,OUTPUT> &rhs,
-                     const std::vector< FDAGWR_TRAITS::Dense_Matrix > &penalty) const;
+                     const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
+                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
 
     /*!
     * @brief Compute an operator
+    * @note FATTO
     */
     std::vector< FDAGWR_TRAITS::Dense_Matrix >
-    compute_operator(const functional_matrix<INPUT,OUTPUT> &lhs,
+    compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
                      const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                     const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
-                     const functional_matrix<INPUT,OUTPUT> &rhs,
-                     const std::vector< FDAGWR_TRAITS::Dense_Matrix > &penalty) const;
+                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                     const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
+                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
 
     /*!
     * @brief Compute an operator
+    * @note FATTO
     */
     std::vector< FDAGWR_TRAITS::Dense_Matrix >
-    compute_operator(const functional_matrix<INPUT,OUTPUT> &lhs,
-                     const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
+    compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
                      const functional_matrix<INPUT,OUTPUT> &X_rhs,
-                     const functional_matrix<INPUT,OUTPUT> &rhs,
-                     const std::vector< FDAGWR_TRAITS::Dense_Matrix > &penalty) const;
+                     const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
+                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
 
     /*!
     * @brief Compute an operator
+    * @note FATTO
     */
     std::vector< FDAGWR_TRAITS::Dense_Matrix >
-    compute_operator(const functional_matrix<INPUT,OUTPUT> &lhs,
-                     const std::vector< functional_matrix<INPUT,OUTPUT> > &W,
-                     const functional_matrix<INPUT,OUTPUT> &rhs,
-                     const std::vector< FDAGWR_TRAITS::Dense_Matrix > &penalty) const;
+    compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                     const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
+                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
+    
+    /*!
+    * @brief Compute an operator
+    * @note FATTO
+    */
+    std::vector< FDAGWR_TRAITS::Dense_Matrix >
+    compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
+
+    /*!
+    * @brief Compute an operator
+    * @note FATTO
+    */
+    std::vector< FDAGWR_TRAITS::Dense_Matrix >
+    compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
+                     const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
+
+    /*!
+    * @brief Compute the operator for stationary coefficients
+    */
+    FDAGWR_TRAITS::Dense_Matrix
+    compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                     const functional_matrix_diagonal<INPUT,OUTPUT> &W,
+                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                     const Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > &penalty) const;
 
     /*!
     * @brief Compute a functional operator
+    * @note FATTO
     */
     functional_matrix<INPUT,OUTPUT> 
     compute_functional_operator(const functional_matrix<INPUT,OUTPUT> &X,
-                                const functional_matrix<INPUT,OUTPUT> &base,
-                                const FDAGWR_TRAITS::Dense_Matrix &operator_) const;
+                                const functional_matrix_sparse<INPUT,OUTPUT> &base,
+                                const std::vector< FDAGWR_TRAITS::Dense_Matrix > &operator_) const;
 
     /*!
     * @brief Virtual method to compute the Functional Geographically Weighted Regression
