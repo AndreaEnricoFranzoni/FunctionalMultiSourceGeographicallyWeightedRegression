@@ -636,7 +636,7 @@ Rcpp::List FGWR(double input_el=1,
         Rcout << "\n";
     }
 
-    functional_matrix test_op2 = test_fm_1 + test_fm_2 - test_op;
+    functional_matrix test_op2 = test_fm_1 + test_fm_2 + test_op - test_fm_1;
     Rcout << "COMBINATION" << std::endl;
     for(std::size_t i = 0; i < test_op2.rows(); ++i){
         for(std::size_t j = 0; j < test_op2.cols(); ++j){
