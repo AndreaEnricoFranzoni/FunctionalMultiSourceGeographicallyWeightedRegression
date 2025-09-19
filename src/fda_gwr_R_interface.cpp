@@ -549,7 +549,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     number_of_statistical_units_,
                                                                                     number_threads);
     fgwr_algo->compute();
-        f_sum_test();
 
     //returning element
     Rcpp::List l;
@@ -593,9 +592,9 @@ Rcpp::List FGWR(double input_el=1,
     using _FD_OUTPUT_TYPE_ = double;
 
 
-    /*
+    
    //TESTING ETs WITHIN FUNCTIONS
-   double el = 1.0;
+   double el = 2.0;
 
     std::function<double(double const &)> f1 = [](const double &x){return std::pow(x,2);};
     std::function<double(double const &)> f2 = [](const double &x){return std::pow(x,3);};
@@ -618,7 +617,7 @@ Rcpp::List FGWR(double input_el=1,
     test_op = 5.0*(test_op+test_op2)*2.0;
     Rcout << "FM op: primo: " << test_op(0,0)(el) << ", secondo: " << test_op(0,1)(el) << std::endl;
     //END TESTING ETs WITHIN FUNCTIONS
-    */
+    
 
 
 
