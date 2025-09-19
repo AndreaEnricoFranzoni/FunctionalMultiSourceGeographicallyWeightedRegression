@@ -54,7 +54,6 @@
 #include "functional_matrix_product.hpp"
 #include "functional_matrix_into_wrapper.hpp"
 
-#include "test_sum.hpp"
 
 
 using namespace Rcpp;
