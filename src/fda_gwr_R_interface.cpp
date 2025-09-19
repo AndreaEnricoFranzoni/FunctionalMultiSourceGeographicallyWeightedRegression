@@ -597,30 +597,60 @@ Rcpp::List FGWR(double input_el=1,
 
     std::function<double(double const &)> f1 = [](const double &x){return std::pow(x,2);};
     std::function<double(double const &)> f2 = [](const double &x){return std::pow(x,3);};
-    std::vector<std::function<double(double const &)> > test_f1_f2{f1,f2};
-    functional_matrix test_fm_1(test_f1_f2,1,2);
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f3 = [](const _FD_INPUT_TYPE_ & x){return x*x;};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f4 = [](const _FD_INPUT_TYPE_ & x){return x-1;};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f5 = [](const _FD_INPUT_TYPE_ & x){return 5;};
+    std::vector<std::function<double(double const &)> > test_f1_f2{f1,f2,f3,f4,f5,f1};
+    functional_matrix test_fm_1(test_f1_f2,3,2);
 
-    Rcout << "FM: f1(2): " << test_fm_1(0,0)(el) << ", f2(2): " << test_fm_1(0,1)(el) << std::endl;
+    Rcout << "FM1" << std::endl;
+    for(std::size_t i = 0; i < test_fm_1.rows(); ++i){
+        for(std::size_t j = 0; j < test_fm_1.cols(); ++j){
+            Rcout << "FM1(" << i << "," << j << "): " << test_fm_1(i,j)(el) << " ";
+        }
+        Rcout << "\n";
+    }
 
 
-    std::function<double(double const &)> f3 = [](const double &x){return 1.0 + 2.0*x;};
-    std::function<double(double const &)> f4 = [](const double &x){return 3.0 - x;};
-    std::vector<std::function<double(double const &)> > test_f3_f4{f3,f4};
-    functional_matrix test_fm_2(test_f3_f4,1,2);
 
-    Rcout << "FM: f3(2): " << test_fm_2(0,0)(el) << ", f4(2): " << test_fm_2(0,1)(el) << std::endl;
+    std::function<double(double const &)> f6 = [](const double &x){return 1.0 + 2.0*x;};
+    std::function<double(double const &)> f7 = [](const double &x){return 3.0 - x;};
+    std::vector<std::function<double(double const &)> > test_f3_f4{f3,f4,f5,f2,f6,f7};
+    functional_matrix test_fm_2(test_f3_f4,3,2);
+
+    Rcout << "FM2" << std::endl;
+    for(std::size_t i = 0; i < test_fm_2.rows(); ++i){
+        for(std::size_t j = 0; j < test_fm_2.cols(); ++j){
+            Rcout << "FM2(" << i << "," << j << "): " << test_fm_2(i,j)(el) << " ";
+        }
+        Rcout << "\n";
+    }
 
 
     functional_matrix test_op = test_fm_1+test_fm_2;
-    functional_matrix test_op2 = log(test_op);
-    test_op = 5.0*(test_op+test_op2)*2.0;
-    Rcout << "FM op: primo: " << test_op(0,0)(el) << ", secondo: " << test_op(0,1)(el) << std::endl;
+    Rcout << "SOMMA" << std::endl;
+    for(std::size_t i = 0; i < test_op.rows(); ++i){
+        for(std::size_t j = 0; j < test_op.cols(); ++j){
+            Rcout << "SOMMA(" << i << "," << j << "): " << test_op(i,j)(el) << " ";
+        }
+        Rcout << "\n";
+    }
+
+    functional_matrix test_op2 = test_fm_1 + 2*test_fm_2 - test_op;
+    Rcout << "COMBINATION" << std::endl;
+    for(std::size_t i = 0; i < test_op2.rows(); ++i){
+        for(std::size_t j = 0; j < test_op2.cols(); ++j){
+            Rcout << "COMBINATION(" << i << "," << j << "): " << test_op2(i,j)(el) << " ";
+        }
+        Rcout << "\n";
+    }
     //END TESTING ETs WITHIN FUNCTIONS
     
 
 
 
 
+/*
     fd_integration integrator(0,1,100,1e-3,100);
 
 
@@ -648,6 +678,7 @@ Rcpp::List FGWR(double input_el=1,
     auto result_integrand_m = Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(),integrand.rows(),integrand.cols());
     Rcout << "Risultato integrali" << std::endl;
     Rcout << result_integrand_m << std::endl;
+*/
     
 
 
