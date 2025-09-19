@@ -73,9 +73,9 @@ using output_t = typename function_traits<F>::output_type;
 
 
 
-//CONCEPT TO AVOID EIGEN OVERLOADING
+//CONCEPT TO AVOID EIGEN OVERLOADING (sennò gli operatori di Eigen vedono sta roba, e non funzione)
 template <typename T>
-concept not_eigen = !std::is_base_of_v<Eigen::MatrixBase<T>, T>;
+concept not_eigen = !std::is_base_of_v<Eigen::MatrixBase<T>,T>;
 
 }   //end namespace fm_utils
 

@@ -592,6 +592,7 @@ Rcpp::List FGWR(double input_el=1,
 
 
     
+/*
    //TESTING ETs WITHIN FUNCTIONS
    double el = 2.0;
 
@@ -654,6 +655,7 @@ Rcpp::List FGWR(double input_el=1,
         Rcout << "\n";
     }
     //END TESTING ETs WITHIN FUNCTIONS
+*/
     
 
 

@@ -74,7 +74,7 @@ public:
     inline int number_threads() const {return m_number_threads;}
 
     /*!
-    * @brief Integrating element-wise a functional amtrix
+    * @brief Integrating element-wise a functional matrix
     */
     inline
     FDAGWR_TRAITS::Dense_Matrix
