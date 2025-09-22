@@ -62,14 +62,21 @@ struct RowView {
     std::size_t rows, cols;
 
 
-    StridedIterator<T*> begin() { return StridedIterator<T*>(base + row, rows); }
-    StridedIterator<T*> end()   { return StridedIterator<T*>(base + cols*rows + row, rows); }
+    StridedIterator<T*> begin() {   return StridedIterator<T*>(base + row, rows); }
+    StridedIterator<T*> end()   {   return StridedIterator<T*>(base + cols*rows + row, rows); }
+
+    StridedIterator<const T*> begin() const {   return StridedIterator<const T*>(base + row, rows); }
+    StridedIterator<const T*> end()   const {   return StridedIterator<const T*>(base + cols*rows + row, rows); }
+
+    StridedIterator<const T*> cbegin() const {  return begin(); }
+    StridedIterator<const T*> cend()   const {  return end(); }
 };
 
 
 /*!
 * @brief Const row-view
 */
+/*
 template<typename T>
 struct ConstRowView {
     const T* base;
@@ -80,6 +87,7 @@ struct ConstRowView {
     StridedIterator<const T*> cbegin() const { return StridedIterator<const T*>(base + row, rows); }
     StridedIterator<const T*> cend()   const { return StridedIterator<const T*>(base + cols*rows + row, rows); }
 };
+*/
 
 
 /*!
@@ -94,12 +102,19 @@ struct ColView {
 
     T* begin() { return base + col*rows; }
     T* end()   { return base + (col+1)*rows; }
+
+    const T* begin() const { return base + col*rows; }
+    const T* end()   const { return base + (col+1)*rows; }
+
+    const T* cbegin() const { return begin(); }
+    const T* cend()   const { return end(); }
 };
 
 
 /*!
 * @brief Const col-view
 */
+/*
 template<typename T>
 struct ConstColView {
     const T* base;
@@ -110,5 +125,6 @@ struct ConstColView {
     const T* cbegin() { return base + col*rows; }
     const T* cend()   { return base + (col+1)*rows; }
 };
+*/
 
 #endif  /*FUNCTIONAL_MATRIX_VIEWS_HPP*/
