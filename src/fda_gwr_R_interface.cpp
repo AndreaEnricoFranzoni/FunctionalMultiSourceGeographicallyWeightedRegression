@@ -567,7 +567,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //returning element
     Rcpp::List l;
     //regression model used 
-    l["FGW"] = algo_type<_FGWR_ALGO_>;
+    l["FGW"] = algo_type<_FGWR_ALGO_>();
     //stationary basis expansion coefficients
     l["bc"]  = regressor_coefficients["bc"];
     //event dependent basis expansion coefficients
