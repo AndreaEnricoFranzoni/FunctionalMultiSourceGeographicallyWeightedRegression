@@ -217,15 +217,15 @@ public:
         //K_s_c(t)
         functional_matrix<INPUT,OUTPUT> K_s_c = this->compute_functional_operator(m_Xs,m_psi,m_B_s);
         //B_SE_i
-        m_B_se = this->compute_operator(X_s_crossed_t,m_Ws,K_e_c);
+        m_B_se = this->compute_operator(X_s_crossed_t,m_Ws,K_e_c,j_tilde_Rs_inv);
         //B_ES_i
-        m_B_es = this->compute_operator(m_theta_t,m_Xe_t,m_We,K_s_c);
+        m_B_es = this->compute_operator(m_theta_t,m_Xe_t,m_We,K_s_c,j_double_tilde_Re_inv);
         //K_se_c(t)
         functional_matrix<INPUT,OUTPUT> K_se_c = this->compute_functional_operator(m_Xs,m_psi,m_B_se);
         //K_es_c(t)
         functional_matrix<INPUT,OUTPUT> K_es_c = this->compute_functional_operator(m_Xe,m_theta,m_B_es);
         //B_ESE_i
-        m_B_ese = this->compute_operator(m_theta_t,m_Xe_t,m_We,K_se_c);
+        m_B_ese = this->compute_operator(m_theta_t,m_Xe_t,m_We,K_se_c,j_double_tilde_Re_inv);
         //K_ese_c(t)
         functional_matrix<INPUT,OUTPUT> K_ese_c = this->compute_functional_operator(m_Xe,m_theta,m_B_ese); 
 
