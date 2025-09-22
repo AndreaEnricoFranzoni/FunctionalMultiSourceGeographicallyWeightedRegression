@@ -73,22 +73,6 @@ struct RowView {
 };
 
 
-/*!
-* @brief Const row-view
-*/
-/*
-template<typename T>
-struct ConstRowView {
-    const T* base;
-    std::size_t row;
-    std::size_t rows, cols;
-
-
-    StridedIterator<const T*> cbegin() const { return StridedIterator<const T*>(base + row, rows); }
-    StridedIterator<const T*> cend()   const { return StridedIterator<const T*>(base + cols*rows + row, rows); }
-};
-*/
-
 
 /*!
 * @brief Col-view
@@ -109,22 +93,5 @@ struct ColView {
     const T* cbegin() const { return begin(); }
     const T* cend()   const { return end(); }
 };
-
-
-/*!
-* @brief Const col-view
-*/
-/*
-template<typename T>
-struct ConstColView {
-    const T* base;
-    std::size_t col;
-    std::size_t rows;
-
-
-    const T* cbegin() { return base + col*rows; }
-    const T* cend()   { return base + (col+1)*rows; }
-};
-*/
 
 #endif  /*FUNCTIONAL_MATRIX_VIEWS_HPP*/

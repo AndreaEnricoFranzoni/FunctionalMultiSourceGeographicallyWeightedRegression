@@ -46,10 +46,10 @@ class functional_matrix : public Expr< functional_matrix<INPUT,OUTPUT>, INPUT, O
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
     //aliases for row expression
-    typedef RowView<F_OBJ> RowXpr;              //non-const         
+    typedef RowView<F_OBJ> RowXpr;               //non-const         
     typedef RowView<const F_OBJ> ConstRowXpr;    //const
     //aliases for col expression
-    typedef ColView<F_OBJ> ColXpr;              //non-const 
+    typedef ColView<F_OBJ> ColXpr;               //non-const 
     typedef ColView<const F_OBJ> ConstColXpr;    //const
 
 
@@ -196,18 +196,6 @@ public:
     }
 
     /*!
-    * @brief Getting row idx-th, view, const
-    */
-/*
-    ConstRowXpr
-    row(std::size_t idx)
-    const
-    {
-        return {  m_data.data(), idx, m_rows, m_cols};
-    }
-*/
-
-    /*!
     * @brief Getting col idx-th, view
     */
     ColXpr
@@ -225,18 +213,6 @@ public:
     {
         return {  m_data.data(), idx, m_rows};
     }
-
-    /*!
-    * @brief Getting col idx-th, view, const
-    */
-/*
-    ConstColXpr
-    col(std::size_t idx)
-    const
-    {
-        return {  m_data.data(), idx, m_rows};
-    }
-*/
 
     /*!
     * @brief Change all the elements in row idx-th

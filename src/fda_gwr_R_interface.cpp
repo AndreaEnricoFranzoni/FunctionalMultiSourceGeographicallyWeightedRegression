@@ -424,10 +424,13 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //PENALIZATION MATRICES
     //stationary
     penalization_matrix<_DERVIATIVE_PENALIZED_> R_C(std::move(bs_C),lambda_stationary_cov_);
+    std::size_t Lc = R_C.L();
     //events
     penalization_matrix<_DERVIATIVE_PENALIZED_> R_E(std::move(bs_E),lambda_events_cov_);
+    std::size_t Le = R_E.L();
     //stations
     penalization_matrix<_DERVIATIVE_PENALIZED_> R_S(std::move(bs_S),lambda_stations_cov_);
+    std::size_t Ls = R_S.L();
 
 
     //FD OBJECTS: RESPONSE and COVARIATES
@@ -528,18 +531,26 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),
                                                                                     std::move(c),
+                                                                                    number_basis_response_,
                                                                                     std::move(Xc),
                                                                                     std::move(Wc),
                                                                                     std::move(R_C.PenalizationMatrix()),
                                                                                     std::move(omega),
+                                                                                    q_C,
+                                                                                    Lc,
+                                                                                    std::reduce(),
                                                                                     std::move(Xe),
                                                                                     std::move(We),
                                                                                     std::move(R_E.PenalizationMatrix()),
                                                                                     std::move(theta),
+                                                                                    q_E,
+                                                                                    Le,
                                                                                     std::move(Xs),
                                                                                     std::move(Ws),
                                                                                     std::move(R_S.PenalizationMatrix()),
                                                                                     std::move(psi),
+                                                                                    q_S,
+                                                                                    Ls,
                                                                                     a,
                                                                                     b,
                                                                                     n_intervals,
@@ -551,8 +562,19 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     //returning element
     Rcpp::List l;
-
-    l["Type of gwr"] = "fmsgwr";
+    //regression model used 
+    l["FGW"] = algo_type<_FGWR_ALGO_>;
+    //stationary basis expansion coefficients
+    l["bc"]  = fgwr_algo->bc();
+    //event and station dependent basis expansion coefficients
+    Rcpp::List be_l;
+    Rcpp::List bs_l;
+    for (std::size_t i = 0; i < number_of_statistical_units_; ++i){
+        std::string name_el = "Unit " + std::to_string(i+1);
+        be_l[name_el] = fgwr_algo->be()[i];
+        bs_l[name_el] = fgwr_algo->bs()[i];}
+    l["be"]  = be_l;
+    l["bs"]  = bs_l;
 
     return l;
 }
@@ -593,6 +615,7 @@ Rcpp::List FGWR(double input_el=1,
 
     
 
+/*
    //TESTING ETs WITHIN FUNCTIONS
    double el = 2.0;
 
@@ -679,6 +702,11 @@ Rcpp::List FGWR(double input_el=1,
         Rcout << "test su v in parte" << std::endl;
 
         for(std::size_t i = 0; i < test_f1_f2_2.size(); ++i){Rcout << test_f1_f2_2[i](el) << std::endl;}
+*/
+
+
+
+
 /*
     fd_integration integrator(0,1,100,1e-3,100);
 

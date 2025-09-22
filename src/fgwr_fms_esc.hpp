@@ -34,6 +34,8 @@ private:
     functional_matrix_sparse<INPUT,OUTPUT> m_phi;
     /*!Coefficients of the basis expansion for response ((n*Ly)x1): coefficients for each unit are columnized one below the other*/
     FDAGWR_TRAITS::Dense_Matrix m_c;
+    /*!Number of basis used to make basis expansion for y*/
+    std::size_t m_Ly;
 
     /*!Functional stationary covariates (n x qc)*/
     functional_matrix<INPUT,OUTPUT> m_Xc;
@@ -43,12 +45,16 @@ private:
     functional_matrix_diagonal<INPUT,OUTPUT> m_Wc;
     /*!Scalar matrix with the penalization on the stationary covariates (sparse Lc x Lc, where Lc is the sum of the basis of each C covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Rc;
-    /*!Basis for stationary covariates regressors (sparse qC x Lc)*/
+    /*!Basis for stationary covariates regressors (sparse qc x Lc)*/
     functional_matrix_sparse<INPUT,OUTPUT> m_omega;
     /*!Their transpost (sparse Lc x qC)*/
     functional_matrix_sparse<INPUT,OUTPUT> m_omega_t;
-    /*!Coefficients of the basis expansion for stationary covariates regressors: Lcx1: TO BE COMPUTED*/
+    /*!Coefficients of the basis expansion for stationary regressors coefficients: Lcx1: TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_bc;
+    /*!Number of stationary covariates*/
+    std::size_t m_qc;
+    /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the stationary regressors coefficients*/
+    std::size_t m_Lc; 
 
     /*!Functional event-dependent covariates (n x qe)*/
     functional_matrix<INPUT,OUTPUT> m_Xe;
@@ -58,12 +64,16 @@ private:
     std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > m_We;
     /*!Scalar matrix with the penalization on the event-dependent covariates (sparse Le x Le, where Le is the sum of the basis of each E covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Re;
-    /*!Basis for event-dependent covariates regressors (sparse qE x Le)*/
+    /*!Basis for event-dependent covariates regressors (sparse qe x Le)*/
     functional_matrix_sparse<INPUT,OUTPUT> m_theta;
     /*!Their transpost (sparse Le x qE)*/
     functional_matrix_sparse<INPUT,OUTPUT> m_theta_t;
-    /*!Coefficients of the basis expansion for event-dependent covariates regressors: Lex1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
+    /*!Coefficients of the basis expansion for event-dependent regressors: Lex1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_be;
+    /*!Number of event-dependent covariates*/
+    std::size_t m_qe;
+    /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the event-dependent regressors coefficients*/
+    std::size_t m_Le; 
 
     /*!Functional station-dependent covariates (n x qs)*/
     functional_matrix<INPUT,OUTPUT> m_Xs;
@@ -73,12 +83,16 @@ private:
     std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > m_Ws;
     /*!Scalar matrix with the penalization on the station-dependent covariates (sparse Ls x Ls, where Ls is the sum of the basis of each S covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Rs;
-    /*!Basis for station-dependent covariates regressors (sparse qS x Ls)*/
+    /*!Basis for station-dependent covariates regressors (sparse qs x Ls)*/
     functional_matrix_sparse<INPUT,OUTPUT> m_psi;
     /*!Their transpost (sparse Ls x qS)*/
     functional_matrix_sparse<INPUT,OUTPUT> m_psi_t;
     /*!Coefficients of the basis expansion for station-dependent covariates regressors: Lsx1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_bs;
+    /*!Number of station-dependent covariates*/
+    std::size_t m_qs;
+    /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the station-dependent regressors coefficients*/
+    std::size_t m_Ls; 
 
     //A operators
     /*!A_E_i*/
@@ -118,18 +132,25 @@ public:
     fgwr_fms_esc(FUNC_MATRIX_OBJ &&y,
                  FUNC_SPARSE_MATRIX_OBJ &&phi,
                  SCALAR_MATRIX_OBJ &&c,
+                 std::size_t Ly,
                  FUNC_MATRIX_OBJ &&Xc,
                  FUNC_DIAG_MATRIX_OBJ &&Wc,
                  SCALAR_SPARSE_MATRIX_OBJ &&Rc,
                  FUNC_SPARSE_MATRIX_OBJ &&omega,
+                 std::size_t qc,
+                 std::size_t Lc,
                  FUNC_MATRIX_OBJ &&Xe,
                  FUNC_DIAG_MATRIX_VEC_OBJ &&We,
                  SCALAR_SPARSE_MATRIX_OBJ &&Re,
                  FUNC_SPARSE_MATRIX_OBJ &&theta,
+                 std::size_t qe,
+                 std::size_t Le,
                  FUNC_MATRIX_OBJ &&Xs,
                  FUNC_DIAG_MATRIX_VEC_OBJ &&Ws,
                  SCALAR_SPARSE_MATRIX_OBJ &&Rs,
                  FUNC_SPARSE_MATRIX_OBJ &&psi,
+                 std::size_t qs,
+                 std::size_t Ls,
                  INPUT a,
                  INPUT b,
                  int n_intervals_integration,
@@ -142,23 +163,50 @@ public:
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_phi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(phi)},
             m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
+            m_Ly(Ly),
             m_Xc{std::forward<FUNC_MATRIX_OBJ>(Xc)},
             m_Wc{std::forward<FUNC_DIAG_MATRIX_OBJ>(Wc)},
             m_Rc{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rc)},
             m_omega{std::forward<FUNC_SPARSE_MATRIX_OBJ>(omega)},
+            m_qc(qc),
+            m_Lc(Lc),
             m_Xe{std::forward<FUNC_MATRIX_OBJ>(Xe)},
             m_We{std::forward<FUNC_DIAG_MATRIX_VEC_OBJ>(We)},
             m_Re{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Re)},
             m_theta{std::forward<FUNC_SPARSE_MATRIX_OBJ>(theta)},
+            m_qe(qe),
+            m_Le(Le),
             m_Xs{std::forward<FUNC_MATRIX_OBJ>(Xs)},
             m_Ws{std::forward<FUNC_DIAG_MATRIX_VEC_OBJ>(Ws)},
             m_Rs{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rs)},
-            m_psi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(psi)}
+            m_psi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(psi)},
+            m_qs(qs),
+            m_Ls(Ls)
             {
                 //checking input consistency
-                assert(We.size() == n);
-                assert(Ws.size() == n);
+                //response
+                assert((m_y.rows() == n) && (m_y.cols() == 1));
+                assert((m_phi.rows() == n) && (m_phi.cols() == m_Ly*n));
+                assert((m_c.rows() == m_Ly*n) && (m_c.cols() == 1));
+                //stationary covariates
+                assert((m_Xc.rows() == n) && (m_Xc.cols() == m_qc));
+                assert((m_Wc.rows() == n) && (m_Wc.cols() == n));
+                assert((m_Rc.rows() == m_Lc) && (m_Rc.cols() == m_Lc));
+                assert((m_omega.rows() == m_qc) && (m_omega.cols() == m_Lc));
+                //event-dependent covariates
+                assert((m_Xe.rows() == n) && (m_Xe.cols() == m_qe));
+                assert(m_We.size() == n);
+                std::for_each(m_We.cbegin(),m_We.cend(),[n](const auto &w){assert((w.rows() == n) && (w.cols() == n));});
+                assert((m_Re.rows() == m_Le) && (m_Re.cols() == m_Le));
+                assert((m_theta.rows() == m_qe) && (m_theta.cols() == m_Le));
+                //station-dependent covariates
+                assert((m_Xs.rows() == n) && (m_Xs.cols() == m_qs));
+                assert(m_Ws.size() == n);
+                std::for_each(m_Ws.cbegin(),m_Ws.cend(),[n](const auto &w){assert((w.rows() == n) && (w.cols() == n));});
+                assert((m_Rs.rows() == m_Ls) && (m_Rs.cols() == m_Ls));
+                assert((m_psi.rows() == m_qs) && (m_psi.cols() == m_Ls));
 
+                //compute all the transpost necessary for the computations
                 m_Xc_t = m_Xc.transpose();
                 m_omega_t = m_omega.transpose();
                 m_Xe_t = m_Xe.transpose();
@@ -167,9 +215,24 @@ public:
                 m_psi_t = m_psi.transpose();
             }
 
+    
+    /*!
+    * @brief Getter for the coefficient of the basis expansion of the stationary regressors coefficients
+    */
+    const FDAGWR_TRAITS::Dense_Matrix & bc const {  return m_bc;}
 
     /*!
-    * @brief Override of the base class method
+    * @brief Getter for the coefficienst of the basis expansion of the event-dependent regressors coefficients
+    */            
+    const std::vector< FDAGWR_TRAITS::Dense_Matrix > & be const {   return m_be;}
+    
+    /*!
+    * @brief Getter for the coefficients of the basis expansion of the station-dependent regressors coefficients
+    */ 
+    const std::vector< FDAGWR_TRAITS::Dense_Matrix > & bs const {   return m_bs;}
+
+    /*!
+    * @brief Override of the base class method to perform fgwr fms esc algorithm
     */ 
     inline 
     void 
