@@ -92,10 +92,10 @@ template < FDAGWR_ALGO fdagwr_algo >
 std::string
 algo_type()
 {
-  if constexpr ( fdagwr_cov_t == FDAGWR_ALGO::GWR_FMS_ESC )    {   return "FGWR_FMS_ESC";}
-  if constexpr ( fdagwr_cov_t == FDAGWR_ALGO::GWR_FMS_SEC )    {   return "FGWR_FMS_SEC";}
-  if constexpr ( fdagwr_cov_t == FDAGWR_ALGO::GWR_FOS )        {   return "FGWR_FS";}
-  if constexpr ( fdagwr_cov_t == FDAGWR_ALGO::GWR_FST )        {   return "FGWR";}
+  if constexpr ( fdagwr_algo == FDAGWR_ALGO::GWR_FMS_ESC )    {   return "FGWR_FMS_ESC";}
+  if constexpr ( fdagwr_algo == FDAGWR_ALGO::GWR_FMS_SEC )    {   return "FGWR_FMS_SEC";}
+  if constexpr ( fdagwr_algo == FDAGWR_ALGO::GWR_FOS )        {   return "FGWR_FS";}
+  if constexpr ( fdagwr_algo == FDAGWR_ALGO::GWR_FST )        {   return "FGWR";}
 };
 
 
