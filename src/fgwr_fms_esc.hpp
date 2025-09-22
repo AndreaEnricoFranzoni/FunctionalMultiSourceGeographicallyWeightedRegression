@@ -231,7 +231,7 @@ public:
 
 
         //y_new(t)
-        functional_matrix<INPUT,OUTPUT> y_new = fm_prod(m_phi - H_e - H_s + H_se + H_es - H_ese,m_c,this->number_threads());
+        functional_matrix<INPUT,OUTPUT> y_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_e - H_s + H_se + H_es - H_ese),m_c,this->number_threads());
         functional_matrix<INPUT,OUTPUT> X_c_crossed = fm_prod(m_Xc,m_omega) - K_e_c - K_s_c + K_se_c + K_es_c - K_ese_c;
         functional_matrix<INPUT,OUTPUT> X_c_crossed_t = X_c_crossed.transpose();
         //[J + Rc]^-1
