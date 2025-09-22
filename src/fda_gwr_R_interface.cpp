@@ -637,12 +637,12 @@ Rcpp::List FGWR(double input_el=1,
         Rcout << "\n";
     }
 
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_op2 = functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fm_1+test_fm_2);
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_op3 = functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fm_1+test_fm_2);
     if(std::is_same_v<decltype(functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>(test_fm_1+test_fm_2)),functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>>){Rcout<<"SOMMA2SI"<<std::endl;}
     else{Rcout<<"SOMMA2NO"<<std::endl;}
-    for(std::size_t i = 0; i < test_op2.rows(); ++i){
-        for(std::size_t j = 0; j < test_op2.cols(); ++j){
-            Rcout << "SOMMA2(" << i << "," << j << "): " << test_op2(i,j)(el) << " ";
+    for(std::size_t i = 0; i < test_op3.rows(); ++i){
+        for(std::size_t j = 0; j < test_op3.cols(); ++j){
+            Rcout << "SOMMA2(" << i << "," << j << "): " << test_op3(i,j)(el) << " ";
         }
         Rcout << "\n";
     }
