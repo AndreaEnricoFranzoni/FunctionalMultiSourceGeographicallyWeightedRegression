@@ -118,6 +118,7 @@ public:
 
     /*!
     * @brief Compute [J + Rc]^(-1)
+    * @note FATTO
     */
     Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
     compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed,
@@ -192,6 +193,7 @@ public:
 
     /*!
     * @brief Compute the operator for stationary coefficients
+    * @note FATTO
     */
     FDAGWR_TRAITS::Dense_Matrix
     compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,

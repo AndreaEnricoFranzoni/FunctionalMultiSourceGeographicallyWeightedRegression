@@ -21,6 +21,10 @@
 #include <algorithm>
 #include <stdexcept>
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 /*!
 * @file meshGenerators.cpp
 * @brief Contains implementation of the class for generating an unidimensional mesh. Little modification: retained only the part for an uniform mesh.
@@ -40,9 +44,12 @@ Uniform::operator()() const
     throw std::runtime_error("At least two elements");
   MeshNodes    mesh(n + 1);
   double const h = (b - a) / static_cast<double>(n);
+#ifdef _OPENMP
 #pragma omp parallel for
+#endif
   for(auto i = 0u; i < n; ++i)
     mesh[i] = a + h * i;
+    
   mesh[n] = b;
   return mesh;
   

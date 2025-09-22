@@ -69,6 +69,7 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
 
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(M1,M2,prod,f_null,f_sum,f_prod) num_threads(number_threads)
+#endif  
     for(std::size_t i = 0; i < prod.rows(); ++i){
         for(std::size_t j = 0; j < prod.cols(); ++j){
             //dot product within the row i-th of M1 and the col j-th of M2: using the views, access to row and cols is O(1)
@@ -78,7 +79,6 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
                                               f_null,                    //initial value (null function)
                                               f_sum,                     //reduce operation
                                               f_prod);}}                 //transform operation within the two ranges
-#endif  
 
     return prod;
 }
@@ -204,10 +204,10 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
 
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(M1,D2,prod,f_prod) num_threads(number_threads)
+#endif 
     for (std::size_t i = 0; i < prod.rows(); ++i){
         for (std::size_t j = 0; j < prod.cols(); ++j){            
-            prod(i,j) = f_prod(M1(i,j),D2(j,j));}}  //dense x diagonal: in prod, prod(i,j) = dense(i,j)*diagonal(j,j)
-#endif  
+            prod(i,j) = f_prod(M1(i,j),D2(j,j));}}  //dense x diagonal: in prod, prod(i,j) = dense(i,j)*diagonal(j,j) 
 
     return prod;
 }
@@ -241,10 +241,10 @@ fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &D1,
 
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(D1,M2,prod,f_prod) num_threads(number_threads)
+#endif  
     for (std::size_t i = 0; i < prod.rows(); ++i){
         for (std::size_t j = 0; j < prod.cols(); ++j){            
             prod(i,j) = f_prod(D1(i,i),M2(i,j));}}  //diagonal x dense: in prod, prod(i,j) = diagonal(i,i)*dense(i,j)
-#endif  
 
     return prod;
 }

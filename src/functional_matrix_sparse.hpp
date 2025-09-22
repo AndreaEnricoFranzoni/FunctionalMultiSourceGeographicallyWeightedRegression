@@ -171,7 +171,7 @@ public:
             for(std::size_t i = 0; i < et.rows(); ++i)
             {
                 m_data.emplace_back(et(i,j));
-                if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)    // NON FUNZIONA
+                if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)    // NON FUNZIONA: RITORNA UNA SPARSA CON GLI 0 PERO' SALVATI
                 {
                     m_data.pop_back();
                 }

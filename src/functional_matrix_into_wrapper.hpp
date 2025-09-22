@@ -46,11 +46,11 @@ wrap_into_fm(const functional_data<domain_type,basis_type> &fd,
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(fd) num_threads(number_threads)
+#endif
     for(std::size_t unit_i = 0; unit_i < fd.n(); ++unit_i)
     {
         f[unit_i] = [unit_i,&fd](F_OBJ_INPUT x){return fd.eval(x,unit_i);};
     }
-#endif
 
     if(as_column == true)
     {
@@ -85,6 +85,7 @@ wrap_into_fm(const functional_data_covariates<domain_type,stationarity_t> &X,
 
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(X) num_threads(number_threads)
+#endif
     for (std::size_t unit_i = 0; unit_i < X.n(); ++unit_i) 
     {
         for (std::size_t cov_j = 0; cov_j < X.q(); ++cov_j) 
@@ -92,7 +93,6 @@ wrap_into_fm(const functional_data_covariates<domain_type,stationarity_t> &X,
             f[cov_j*X.n() + unit_i] = [unit_i,cov_j,&X](F_OBJ_INPUT x){return X.eval(x,cov_j,unit_i);};
         }
     }
-#endif
 
     functional_matrix<INPUT,OUTPUT> fm(std::move(f),X.n(),X.q());
     return fm;
@@ -209,11 +209,11 @@ wrap_into_fm(const functional_weight_matrix_stationary<INPUT,OUTPUT,domain_type,
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(n,W) num_threads(number_threads)
+#endif
     for(std::size_t unit_i = 0; unit_i < n; ++unit_i)
     {
         f[unit_i] = W.weights()[unit_i];
     }
-#endif
 
     functional_matrix_diagonal<INPUT,OUTPUT> fm(std::move(f),n);
     return fm;
@@ -252,11 +252,11 @@ wrap_into_fm(const functional_weight_matrix_non_stationary<INPUT,OUTPUT,domain_t
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(i,n,W) num_threads(number_threads)
+#endif
         for(std::size_t unit_i = 0; unit_i < n; ++unit_i)
         {
             f[unit_i] = W.weights()[i][unit_i];
         }
-#endif
 
         fm.emplace_back(std::move(f),n);
     }

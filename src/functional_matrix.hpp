@@ -225,9 +225,9 @@ public:
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(new_row,idx,m_data,m_rows) num_threads(8)
+#endif
         for(std::size_t j = 0; j < new_row.size(); ++j){
             m_data[j * m_rows + idx] = new_row[j];}
-#endif
     }
 
     /*!
@@ -241,9 +241,9 @@ public:
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(new_col,idx,m_data,m_rows) num_threads(8)
+#endif
         for(std::size_t i = 0; i < new_col.size(); ++i){
             m_data[idx * m_rows + i] = new_col[i];}
-#endif
     }
 
     /*!
@@ -259,6 +259,7 @@ public:
 
 #ifdef _OPENMP
 #pragma omp parallel for collapse(2) shared(m_rows,m_cols,temp,m_data) num_threads(8)
+#endif
             for (std::size_t i = 0; i < m_rows; ++i)
             {
                 for (std::size_t j = 0; j < m_cols; ++j)
@@ -266,7 +267,6 @@ public:
                     temp[i*m_cols + j] = m_data[j*m_rows + i];      //swaps appropriately
                 }
             }
-#endif
             //swap them
             std::swap(m_data,temp);
             temp.clear();

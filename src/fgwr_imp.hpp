@@ -47,6 +47,7 @@ const
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(penalty,base,base_t,X,X_t,W,_R_,m_n,m_number_threads) num_threads(m_number_threads)
+#endif
     for(std::size_t i = 0; i < m_n; ++i)
     {
         //dimension: L x L, where L is the number of basis
@@ -56,7 +57,6 @@ const
         penalty[i] = Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >( this->fm_integration(integrand) + _R_ );    
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
-#endif
     
     return penalty;
 }
@@ -83,6 +83,7 @@ const
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(penalty,X_crossed_t,X_crossed,W,_R_,m_n,m_number_threads) num_threads(m_number_threads)
+#endif
     for(std::size_t i = 0; i < m_n; ++i)
     {
         //dimension: L x L, where L is the number of basis
@@ -92,7 +93,6 @@ const
         penalty[i] = Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >( this->fm_integration(integrand) + _R_ );    
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
-#endif
     
     return penalty;
 }
@@ -139,7 +139,8 @@ const
     operator_.resize(m_n);
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(operator_,penalty,base_lhs,X_rhs,X_lhs,base_rhs,W,m_n,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(operator_,penalty,base_lhs,X_lhs,X_rhs,base_rhs,W,m_n,m_number_threads) num_threads(m_number_threads)
+#endif
     for(std::size_t i = 0; i < m_n; ++i)
     {       
         //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
@@ -148,7 +149,6 @@ const
         //performing integration and multiplication with the penalty (inverse factorized)
         operator_[i] = penalty[i].solve(this->fm_integration(integrand)); 
     }
-#endif
 
     return operator_;
 }
@@ -171,6 +171,7 @@ const
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(operator_,penalty,base_lhs,X_lhs,base_rhs,W,m_n,m_number_threads) num_threads(m_number_threads)
+#endif
     for(std::size_t i = 0; i < m_n; ++i)
     {       
         //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
@@ -179,10 +180,10 @@ const
         //performing integration and multiplication with the penalty (inverse factorized)
         operator_[i] = penalty[i].solve(this->fm_integration(integrand)); 
     }
-#endif
 
     return operator_;
 }
+
 
 
 template< typename INPUT = double, typename OUTPUT = double >
@@ -201,6 +202,7 @@ const
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(operator_,penalty,X_lhs,X_rhs,base_rhs,W,m_n,m_number_threads) num_threads(m_number_threads)
+#endif
     for(std::size_t i = 0; i < m_n; ++i)
     {       
         //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
@@ -209,7 +211,6 @@ const
         //performing integration and multiplication with the penalty (inverse factorized)
         operator_[i] = penalty[i].solve(this->fm_integration(integrand)); 
     }
-#endif
 
     return operator_;
 }
@@ -232,6 +233,7 @@ const
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(operator_,penalty,X_lhs,base_rhs,W,m_n,m_number_threads) num_threads(m_number_threads)
+#endif
     for(std::size_t i = 0; i < m_n; ++i)
     {       
         //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
@@ -240,7 +242,6 @@ const
         //performing integration and multiplication with the penalty (inverse factorized)
         operator_[i] = penalty[i].solve(this->fm_integration(integrand)); 
     }
-#endif
 
     return operator_;
 }
@@ -262,6 +263,7 @@ const
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(operator_,penalty,X_lhs,X_rhs,W,m_n,m_number_threads) num_threads(m_number_threads)
+#endif
     for(std::size_t i = 0; i < m_n; ++i)
     {       
         //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
@@ -270,7 +272,6 @@ const
         //performing integration and multiplication with the penalty (inverse factorized)
         operator_[i] = penalty[i].solve(this->fm_integration(integrand)); 
     }
-#endif
 
     return operator_;
 }
@@ -292,6 +293,7 @@ const
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(operator_,penalty,base_lhs,X_lhs,X_rhs,W,m_n,m_number_threads) num_threads(m_number_threads)
+#endif
     for(std::size_t i = 0; i < m_n; ++i)
     {       
         //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
@@ -300,7 +302,6 @@ const
         //performing integration and multiplication with the penalty (inverse factorized)
         operator_[i] = penalty[i].solve(this->fm_integration(integrand)); 
     }
-#endif
 
     return operator_;
 }
@@ -316,7 +317,7 @@ fgwr<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lh
 const
 {
     //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
-    functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(X_lhs,W[i],m_number_threads),X_rhs,m_number_threads);
+    functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(X_lhs,W,m_number_threads),X_rhs,m_number_threads);
 
     //performing integration and multiplication with the penalty (inverse factorized)
     return penalty.solve(this->fm_integration(integrand)); 
@@ -342,15 +343,14 @@ const
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(func_oper,x_times_base,operator_,m_n,m_number_threads) num_threads(m_number_threads)
+#endif
     for(std::size_t i = 0; i < m_n; ++i){
         //trnasforming the scalar matrix into a functional one, with constant functions
-        functional_matrix<INPUT,OUTPUT> scalar_operator = scalar_to_functional(operator_[i]);
         std::vector< F_OBJ<INPUT,OUTPUT> > row_i_v(x_times_base.row(i).cbegin(),x_times_base.row(i).cend());
         functional_matrix<INPUT,OUTPUT> row_i(row_i_v,1,base.cols());
-        functional_matrix<INPUT,OUTPUT> row_i_prod = fm_prod(x_times_base,scalar_operator,m_number_threads);
-        func_oper.row_sub(row_i_prod,i);
+        functional_matrix<INPUT,OUTPUT> row_i_prod = fm_prod(row_i,operator_[i],m_number_threads);
+        func_oper.row_sub(row_i_prod.as_vector(),i);
     }
-#endif
 
     return func_oper;
 }
