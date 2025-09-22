@@ -318,7 +318,7 @@ public:
     * @brief Getter for the coefficient of the basis expansion of the stationary regressors coefficients
     */
     inline 
-    ResultTuple 
+    CoefficientsTuple 
     compute()
     const 
     override

@@ -23,7 +23,7 @@
 
 
 #include "traits_fdagwr.hpp"
-
+#include <RcppEigen.h>
 
 
 // Primaria: vuota
@@ -67,6 +67,50 @@ int main() {
 }
 
 */
+
+
+
+
+
+
+
+// helper per convertire std::vector<Eigen::MatrixXd> in Rcpp::List
+Rcpp::List 
+toRList(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& mats) 
+{
+    Rcpp::List out(mats.size());
+    for (size_t i = 0; i < mats.size(); i++) {
+        out[i] = Rcpp::wrap(mats[i]); // RcppEigen converte Eigen::MatrixXd
+    }
+    return out;
+}
+
+// funzione di conversione generale
+Rcpp::List wrap_coefficients_to_R_list(const CoefficientsTuple& r) {
+    return std::visit([](auto&& tup) -> Rcpp::List {
+        using T = std::decay_t<decltype(tup)>;
+        
+        if constexpr (std::is_same_v<T, std::tuple<FDAGWR_TRAITS::Dense_Matrix >>) {
+            return Rcpp::List::create(
+                Rcpp::Named("bc") = std::get<0>(tup)
+            );
+        } 
+        else if constexpr (std::is_same_v<T, std::tuple<FDAGWR_TRAITS::Dense_Matrix , std::vector<FDAGWR_TRAITS::Dense_Matrix >>>) {
+            return Rcpp::List::create(
+                Rcpp::Named("bc") = std::get<0>(tup),
+                Rcpp::Named("bns") = toRList(std::get<1>(tup))
+            );
+        } 
+        else if constexpr (std::is_same_v<T, std::tuple<FDAGWR_TRAITS::Dense_Matrix , std::vector<FDAGWR_TRAITS::Dense_Matrix >, std::vector<FDAGWR_TRAITS::Dense_Matrix >>>) {
+            return Rcpp::List::create(
+                Rcpp::Named("bc") = std::get<0>(tup),
+                Rcpp::Named("be") = toRList(std::get<1>(tup)),
+                Rcpp::Named("bs") = toRList(std::get<2>(tup))
+            );
+        }
+    }, r);
+}
+
 
 
 

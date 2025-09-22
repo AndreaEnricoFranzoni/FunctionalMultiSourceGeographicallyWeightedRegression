@@ -23,8 +23,6 @@
 
 #include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
-#include <tuple>
-#include <variant>
 
 #include "functional_matrix.hpp"
 #include "functional_matrix_sparse.hpp"
@@ -37,11 +35,7 @@
 #include <iostream>
 
 
-using ResultTuple = std::variant<
-    std::tuple< FDAGWR_TRAITS::Dense_Matrix>, 
-    std::tuple< FDAGWR_TRAITS::Dense_Matrix, std::vector< FDAGWR_TRAITS::Dense_Matrix >>, 
-    std::tuple< FDAGWR_TRAITS::Dense_Matrix, std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< FDAGWR_TRAITS::Dense_Matrix >>
->;
+
 
 
 
@@ -231,7 +225,7 @@ public:
     /*!
     * @brief Function to return the result, tuple of different dimension depending on the algo used
     */
-    virtual inline ResultTuple regressorCoefficients() const = 0;
+    virtual inline CoefficientsTuple regressorCoefficients() const = 0;
 };
 
 
