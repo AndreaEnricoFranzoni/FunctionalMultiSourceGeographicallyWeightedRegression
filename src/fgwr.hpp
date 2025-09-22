@@ -99,11 +99,11 @@ public:
     * @note FATTO
     */
     std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
-    compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base,
-                    const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
-                    const functional_matrix<INPUT,OUTPUT> &X,
+    compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
                     const functional_matrix<INPUT,OUTPUT> &X_t,
                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                    const functional_matrix<INPUT,OUTPUT> &X,
+                    const functional_matrix_sparse<INPUT,OUTPUT> &base,
                     const FDAGWR_TRAITS::Sparse_Matrix &R) const;
 
     /*!
@@ -121,9 +121,9 @@ public:
     * @note FATTO
     */
     Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
-    compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed,
-                    const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
+    compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
                     const functional_matrix_diagonal<INPUT,OUTPUT> &W,
+                    const functional_matrix<INPUT,OUTPUT> &X_crossed,
                     const FDAGWR_TRAITS::Sparse_Matrix &R) const;
 
     /*!

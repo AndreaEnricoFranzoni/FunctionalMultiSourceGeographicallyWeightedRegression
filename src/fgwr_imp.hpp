@@ -31,11 +31,11 @@
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> >
-fgwr<INPUT,OUTPUT>::compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base,
-                                    const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
-                                    const functional_matrix<INPUT,OUTPUT> &X,
+fgwr<INPUT,OUTPUT>::compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
                                     const functional_matrix<INPUT,OUTPUT> &X_t,
                                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                                    const functional_matrix<INPUT,OUTPUT> &X,
+                                    const functional_matrix_sparse<INPUT,OUTPUT> &base,
                                     const FDAGWR_TRAITS::Sparse_Matrix &R)
 const
 {
@@ -69,9 +69,9 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
-fgwr<INPUT,OUTPUT>::compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed,
-                                    const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
+fgwr<INPUT,OUTPUT>::compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
                                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                                    const functional_matrix<INPUT,OUTPUT> &X_crossed,
                                     const FDAGWR_TRAITS::Sparse_Matrix &R) 
 const
 {
@@ -104,9 +104,9 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
-fgwr<INPUT,OUTPUT>::compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed,
-                                    const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
+fgwr<INPUT,OUTPUT>::compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
                                     const functional_matrix_diagonal<INPUT,OUTPUT> &W,
+                                    const functional_matrix<INPUT,OUTPUT> &X_crossed,
                                     const FDAGWR_TRAITS::Sparse_Matrix &R) 
 const
 {
@@ -346,7 +346,7 @@ const
 #endif
     for(std::size_t i = 0; i < m_n; ++i){
         //trnasforming the scalar matrix into a functional one, with constant functions
-        std::vector< F_OBJ<INPUT,OUTPUT> > row_i_v(x_times_base.row(i).cbegin(),x_times_base.row(i).cend());
+        std::vector< FUNC_OBJ<INPUT,OUTPUT> > row_i_v(x_times_base.row(i).cbegin(),x_times_base.row(i).cend());
         functional_matrix<INPUT,OUTPUT> row_i(row_i_v,1,base.cols());
         functional_matrix<INPUT,OUTPUT> row_i_prod = fm_prod(row_i,operator_[i],m_number_threads);
         func_oper.row_sub(row_i_prod.as_vector(),i);

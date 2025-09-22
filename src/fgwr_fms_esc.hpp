@@ -177,7 +177,7 @@ public:
     override
     {
         //(j_tilde_tilde + Re)^-1
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta,m_theta_t,m_Xe,m_Xe_t,m_We,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
         //A_E_i
         m_A_e = this->compute_operator(m_theta_t,m_Xe_t,m_We,m_phi,j_double_tilde_Re_inv);
         //B_E_i
@@ -232,10 +232,10 @@ public:
 
         //y_new(t)
         functional_matrix<INPUT,OUTPUT> y_new = fm_prod(m_phi - H_e - H_s + H_se + H_es - H_ese,m_c,this->number_threads());
-        functional_matrix<INPUT,OUTPUT> X_c_crossed = fm_prod(m_XC,m_omega) - K_e_c - K_s_c + K_se_c + K_es_c - K_ese_c;
+        functional_matrix<INPUT,OUTPUT> X_c_crossed = fm_prod(m_Xc,m_omega) - K_e_c - K_s_c + K_se_c + K_es_c - K_ese_c;
         functional_matrix<INPUT,OUTPUT> X_c_crossed_t = X_c_crossed.transpose();
         //[J + Rc]^-1
-        Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> j_Rc_inv = this->compute_penalty(X_c_crossed,X_c_crossed_t,m_Wc,m_Rc);
+        Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> j_Rc_inv = this->compute_penalty(X_c_crossed_t,m_Wc,X_c_crossed,m_Rc);
         
 
         //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
@@ -250,7 +250,7 @@ public:
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         FDAGWR_TRAITS::Dense_Matrix c_tilde_hat = m_c;
         //y_tilde_new(t)
-        functional_matrix<INPUT,OUTPUT> y_tilde_new = fm_prod(m_phi - H_e,c_tilde_hat,this->number_threads())
+        functional_matrix<INPUT,OUTPUT> y_tilde_new = fm_prod(m_phi - H_e,c_tilde_hat,this->number_threads());
 
 
         //COMPUTING all the m_bs, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
@@ -258,7 +258,7 @@ public:
 
 
         //y_tilde_tilde_hat(t)
-        functional_matrix<INPUT,OUTPUT> y_tilde_tilde_hat = y_tilde_hat - this->compute_functional_operator(m_Xs,m_psi,m_Bs);
+        functional_matrix<INPUT,OUTPUT> y_tilde_tilde_hat = y_tilde_hat - this->compute_functional_operator(m_Xs,m_psi,m_B_s);
 
 
         //COMPUTING all the m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE EVENT-DEPENDENT BETAS
