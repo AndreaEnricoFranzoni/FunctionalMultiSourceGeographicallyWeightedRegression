@@ -557,21 +557,26 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     max_iterations,
                                                                                     number_of_statistical_units_,
                                                                                     number_threads);
+    
+    //computing the algo
     //fgwr_algo->compute();
+    //retrieving the results                                                                                
+    auto regressor_coefficients = fgwr_algo->regressorCoefficients();
+    
 
     //returning element
     Rcpp::List l;
     //regression model used 
     l["FGW"] = algo_type<_FGWR_ALGO_>;
     //stationary basis expansion coefficients
-    l["bc"]  = fgwr_algo->bc();
+    l["bc"]  = std::get<0>(regressor_coefficients);
     //event and station dependent basis expansion coefficients
     Rcpp::List be_l;
     Rcpp::List bs_l;
     for (std::size_t i = 0; i < number_of_statistical_units_; ++i){
         std::string name_el = "Unit " + std::to_string(i+1);
-        be_l[name_el] = fgwr_algo->be()[i];
-        bs_l[name_el] = fgwr_algo->bs()[i];}
+        be_l[name_el] = std::get<1>(regressor_coefficients)[i];
+        bs_l[name_el] = std::get<2>(regressor_coefficients)[i];}
     l["be"]  = be_l;
     l["bs"]  = bs_l;
 

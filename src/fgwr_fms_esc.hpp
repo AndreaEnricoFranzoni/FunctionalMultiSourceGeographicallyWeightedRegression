@@ -216,20 +216,6 @@ public:
             }
 
     
-    /*!
-    * @brief Getter for the coefficient of the basis expansion of the stationary regressors coefficients
-    */
-    const FDAGWR_TRAITS::Dense_Matrix & bc() const {  return m_bc;}
-
-    /*!
-    * @brief Getter for the coefficienst of the basis expansion of the event-dependent regressors coefficients
-    */            
-    const std::vector< FDAGWR_TRAITS::Dense_Matrix > & be() const {   return m_be;}
-    
-    /*!
-    * @brief Getter for the coefficients of the basis expansion of the station-dependent regressors coefficients
-    */ 
-    const std::vector< FDAGWR_TRAITS::Dense_Matrix > & bs() const {   return m_bs;}
 
     /*!
     * @brief Override of the base class method to perform fgwr fms esc algorithm
@@ -327,6 +313,19 @@ public:
         //COMPUTING all the m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE EVENT-DEPENDENT BETAS
         m_be = this->compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde_tilde_hat,j_double_tilde_Re_inv);
     }
+
+    /*!
+    * @brief Getter for the coefficient of the basis expansion of the stationary regressors coefficients
+    */
+    inline 
+    ResultTuple 
+    compute()
+    const 
+    override
+    {
+        return std::tuple{m_bc,m_be,m_bs};
+    }
+
 
 };
 
