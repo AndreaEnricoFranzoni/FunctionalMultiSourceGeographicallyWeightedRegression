@@ -219,17 +219,17 @@ public:
     /*!
     * @brief Getter for the coefficient of the basis expansion of the stationary regressors coefficients
     */
-    const FDAGWR_TRAITS::Dense_Matrix & bc const {  return m_bc;}
+    const FDAGWR_TRAITS::Dense_Matrix & bc() const {  return m_bc;}
 
     /*!
     * @brief Getter for the coefficienst of the basis expansion of the event-dependent regressors coefficients
     */            
-    const std::vector< FDAGWR_TRAITS::Dense_Matrix > & be const {   return m_be;}
+    const std::vector< FDAGWR_TRAITS::Dense_Matrix > & be() const {   return m_be;}
     
     /*!
     * @brief Getter for the coefficients of the basis expansion of the station-dependent regressors coefficients
     */ 
-    const std::vector< FDAGWR_TRAITS::Dense_Matrix > & bs const {   return m_bs;}
+    const std::vector< FDAGWR_TRAITS::Dense_Matrix > & bs() const {   return m_bs;}
 
     /*!
     * @brief Override of the base class method to perform fgwr fms esc algorithm
