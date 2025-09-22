@@ -675,7 +675,7 @@ Rcpp::List FGWR(double input_el=1,
     Rcout << "test su v completo" << std::endl;
 
     for(std::size_t i = 0; i < test_f1_f2.size(); ++i){Rcout << test_f1_f2[i](el) << std::endl;}
-    std::vector<std::function<double(double const &)> > test_f1_f2_2(test_f1_f2.cbegin() + 2, test_f1_f2.cbegin() + 4);
+    std::vector<std::function<double(double const &)> > test_f1_f2_2(std::next(test_f1_f2.cbegin(),2),std::next(test_f1_f2.cbegin(), 4));
         Rcout << "test su v in parte" << std::endl;
 
         for(std::size_t i = 0; i < test_f1_f2_2.size(); ++i){Rcout << test_f1_f2_2[i](el) << std::endl;}
