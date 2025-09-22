@@ -196,13 +196,13 @@ public:
                 //event-dependent covariates
                 assert((m_Xe.rows() == this->n()) && (m_Xe.cols() == m_qe));
                 assert(m_We.size() == this->n());
-                std::for_each(m_We.cbegin(),m_We.cend(),[this](const auto &w){assert((w.rows() == this->n()) && (w.cols() == this->n()));});
+                for (const auto& w : m_We) {    assert((w.rows() == this->n()) && (w.cols() == this->n()));}
                 assert((m_Re.rows() == m_Le) && (m_Re.cols() == m_Le));
                 assert((m_theta.rows() == m_qe) && (m_theta.cols() == m_Le));
                 //station-dependent covariates
                 assert((m_Xs.rows() == this->n()) && (m_Xs.cols() == m_qs));
                 assert(m_Ws.size() == this->n());
-                std::for_each(m_Ws.cbegin(),m_Ws.cend(),[this](const auto &w){assert((w.rows() == this->n()) && (w.cols() == this->n()));});
+                for (const auto& w : m_Ws) {    assert((w.rows() == this->n()) && (w.cols() == this->n()));}
                 assert((m_Rs.rows() == m_Ls) && (m_Rs.cols() == m_Ls));
                 assert((m_psi.rows() == m_qs) && (m_psi.cols() == m_Ls));
 
