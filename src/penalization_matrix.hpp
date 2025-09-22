@@ -71,10 +71,10 @@ public:
     template< typename BASIS_SPACE >
     penalization_matrix(BASIS_SPACE&& bs,
                         const std::vector<double>& lambdas)
-        :   
+        :
+        m_q(bs.q()),   
         m_Lj(bs.numbers_of_basis()),
-        m_L(std::reduce(bs.numbers_of_basis().cbegin(),bs.numbers_of_basis().cend(),static_cast<std::size_t>(0))),
-        m_q(bs.q())
+        m_L(std::reduce(bs.numbers_of_basis().cbegin(),bs.numbers_of_basis().cend(),static_cast<std::size_t>(0)))
             {   
                 //storing the penalty for each covariate in an Eigen::Triplet
                 std::vector<Eigen::Triplet<double>> penalty_matrices_triplets;

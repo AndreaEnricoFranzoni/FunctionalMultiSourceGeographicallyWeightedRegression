@@ -250,7 +250,7 @@ public:
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         FDAGWR_TRAITS::Dense_Matrix c_tilde_hat = m_c;
         //y_tilde_new(t)
-        functional_matrix<INPUT,OUTPUT> y_tilde_new = fm_prod(m_phi - H_e,c_tilde_hat,this->number_threads());
+        functional_matrix<INPUT,OUTPUT> y_tilde_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_e),c_tilde_hat,this->number_threads());
 
 
         //COMPUTING all the m_bs, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
