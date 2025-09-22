@@ -47,10 +47,10 @@ class functional_matrix : public Expr< functional_matrix<INPUT,OUTPUT>, INPUT, O
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
     //aliases for row expression
     typedef RowView<F_OBJ> RowXpr;              //non-const         
-    typedef ConstRowView<const F_OBJ> ConstRowXpr;    //const
+    typedef RowView<const F_OBJ> ConstRowXpr;    //const
     //aliases for col expression
     typedef ColView<F_OBJ> ColXpr;              //non-const 
-    typedef ConstColView<const F_OBJ> ConstColXpr;    //const
+    typedef ColView<const F_OBJ> ConstColXpr;    //const
 
 
 private:
