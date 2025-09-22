@@ -559,11 +559,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     number_threads);
     
     //computing the algo
-    //fgwr_algo->compute();
+    fgwr_algo->compute();
     //retrieving the results                                                                                
     Rcpp::List regressor_coefficients = wrap_coefficients_to_R_list(fgwr_algo->regressorCoefficients());
     
-
     //returning element
     Rcpp::List l;
     //regression model used 
