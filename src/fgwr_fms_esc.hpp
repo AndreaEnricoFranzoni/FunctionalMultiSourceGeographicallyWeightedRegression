@@ -319,7 +319,7 @@ public:
     */
     inline 
     CoefficientsTuple 
-    compute()
+    regressorCoefficients()
     const 
     override
     {
