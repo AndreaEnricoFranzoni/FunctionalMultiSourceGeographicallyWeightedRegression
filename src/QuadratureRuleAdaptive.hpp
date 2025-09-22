@@ -139,11 +139,12 @@ QuadratureRuleAdaptive<SQR>::apply(FunPoint const &f, double const &a,
         }
     }
   // std::clog<<"Number of Iterations in Adaptive Rule="<<counter<<std::endl;
+/*
   if(counter >= maxIter_)
     // throw std::runtime_error("Max number iteration exceeded in
     // QuadratureRuleAdaptive");
-    std::cerr << "Max number iteration exceeded in QuadratureRuleAdaptive: "
-              << counter << std::endl;
+    std::cerr << "Max number iteration exceeded in QuadratureRuleAdaptive: "<< counter << std::endl;
+*/
   return result;
 }
 } // namespace apsc::NumericalIntegration
