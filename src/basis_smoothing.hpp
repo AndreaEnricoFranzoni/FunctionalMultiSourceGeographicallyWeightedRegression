@@ -93,7 +93,7 @@ basis_smoothing_fdata(const functional_matrix<INPUT,OUTPUT> &fd,
 
     FDAGWR_TRAITS::Dense_Matrix c(basis.number_of_basis(),fd.rows());
 
-    for (std::size_t i = 0; i < fd.rows(); ++i){ c.col(i) = basis_smoothing(fd(i,0),basis,knots).col(0);}
+    for (std::size_t i = 0; i < fd.rows(); ++i){ c.col(i) = basis_smoothing_fdatum(fd(i,0),basis,knots).col(0);}
     
     return c;
 }
