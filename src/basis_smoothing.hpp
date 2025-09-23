@@ -41,9 +41,9 @@ template< typename INPUT = double, typename OUTPUT = double, class domain_type =
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type>
 inline
 FDAGWR_TRAITS::Dense_Matrix
-basis_smoothing(const FUNC_OBJ<INPUT,OUTPUT> &f,
-                const basis_base_class<domain_type> & basis,
-                const FDAGWR_TRAITS::Dense_Matrix & knots)
+basis_smoothing_fdatum(const FUNC_OBJ<INPUT,OUTPUT> &f,
+                       const basis_base_class<domain_type> & basis,
+                       const FDAGWR_TRAITS::Dense_Matrix & knots)
 {
     //devo fare una matrice psi che non è altro che una matrice che in ogni colonna valuta la base su tutti i knots
     //Eigen::Matrix<double, Dynamic, Dynamic> locs(n_locs + 1, 1);
@@ -85,9 +85,9 @@ template< typename INPUT = double, typename OUTPUT = double, class domain_type =
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type>
 inline
 FDAGWR_TRAITS::Dense_Matrix
-basis_smoothing_fd(const functional_matrix<INPUT,OUTPUT> &fd,
-                   const basis_base_class<domain_type> & basis,
-                   const FDAGWR_TRAITS::Dense_Matrix & knots)
+basis_smoothing_fdata(const functional_matrix<INPUT,OUTPUT> &fd,
+                      const basis_base_class<domain_type> & basis,
+                      const FDAGWR_TRAITS::Dense_Matrix & knots)
 {
     assert(fd.cols() == 1);
 
@@ -115,9 +115,9 @@ template< typename INPUT = double, typename OUTPUT = double, class domain_type =
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type>
 inline
 FDAGWR_TRAITS::Dense_Matrix
-basis_smoothing(const FDAGWR_TRAITS::Dense_Matrix & f_ev,
-                const basis_base_class<domain_type> & basis,
-                const FDAGWR_TRAITS::Dense_Matrix & knots)
+basis_smoothing_fdatum_ev(const FDAGWR_TRAITS::Dense_Matrix & f_ev,
+                          const basis_base_class<domain_type> & basis,
+                          const FDAGWR_TRAITS::Dense_Matrix & knots)
 {
     assert((f_ev.rows() == knots.rows()) && (f_ev.cols() == 1) && (knots.cols() == 1));
 

@@ -257,12 +257,12 @@ public:
     std::vector<std::function<OUTPUT(const INPUT &)>> fd_v{sin_tes,cos_tes};
     functional_matrix<INPUT,OUTPUT> fd_test(fd_v,2,1);
 
-    auto res = basis_smoothing_fd<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>>(fd_test,*m_basis_y,m_knots_y);
+    auto res = basis_smoothing_fdata<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>>(fd_test,*m_basis_y,m_knots_y);
 
     std::cout << "Check" << std::endl;
     std::cout << res << std::endl;
 
-    auto res2 = basis_smoothing<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>>(sin_tes,*m_basis_y,m_knots_y);
+    auto res2 = basis_smoothing_fdatum<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>>(sin_tes,*m_basis_y,m_knots_y);
 
         std::cout << "Check2" << std::endl;
     std::cout << res2 << std::endl;
