@@ -538,7 +538,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> fd_v{sin_tes,cos_tes};
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> fd_test(fd_v,2,1);
 
-    auto res = basis_smoothin_fd<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(fd_test,*basis_y_,abscissa_points_eigen_w_);
+    auto res = basis_smoothing_fd<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(fd_test,*basis_y_,abscissa_points_eigen_w_);
 
 
 
