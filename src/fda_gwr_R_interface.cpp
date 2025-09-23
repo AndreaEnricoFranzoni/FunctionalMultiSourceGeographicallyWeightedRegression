@@ -499,7 +499,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     /////    FGWR ALGORITHM   /////
     ///////////////////////////////
     //wrapping all the functional elements in a functional_matrix
-
+    Rcout << "coeff resp: rows: " << coefficients_response_.rows() << ", cols: " << coefficients_response_.cols() << std::endl;
+    Rcout << coefficients_response_ << std::endl;
     //y: a column vector of dimension nx1
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_,number_threads);
     //phi: a sparse functional matrix nx(n*L), where L is the number of basis for the response
