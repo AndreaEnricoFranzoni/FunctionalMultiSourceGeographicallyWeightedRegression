@@ -48,7 +48,7 @@ basis_smoothing(const FUNC_OBJ<INPUT,OUTPUT> &f,
     if(basis.type() == FDAGWR_BASIS_TYPES::_bsplines_)
     {
         
-        Eigen::SparseMatrix<double> psi = bsplines_basis_evaluation(basis.basis(),knots);
+        Eigen::SparseMatrix<double> psi = basis.eval_base_on_locs(knots);
         Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> solver;
         //fa (t(Psi)*Psi)^(-1) * t(Psi)
         solver.compute(psi);

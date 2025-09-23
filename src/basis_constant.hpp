@@ -71,6 +71,20 @@ public:
         //wrap the output into a dense matrix: HA UNA RIGA, N_BASIS COLONNE
         return FDAGWR_TRAITS::Dense_Matrix::Ones(1,1);
     }
+
+    /*!
+    * @brief evaluating the basis basis_i over a set of locations. Overriding the method
+    * @note locations è una FDAGWR_TRAITS::Dense_Matrix of dimensions n_locs x 1
+    */
+    inline 
+    FDAGWR_TRAITS::Sparse_Matrix 
+    eval_base_on_locs(const FDAGWR_TRAITS::Dense_Matrix &locations) 
+    const
+    override
+    {
+        FDAGWR_TRAITS::Dense_Matrix evals = FDAGWR_TRAITS::Dense_Matrix:Ones(locations.rows(), 1);
+        return evals.sparseView();  // conversione a SparseMatrix
+    }
 };
 
 #endif  /*FDAGWR_CONSTANT_BASIS_HPP*/
