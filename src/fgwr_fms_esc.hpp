@@ -213,10 +213,26 @@ public:
                 m_theta_t = m_theta.transpose();
                 m_Xc_t = m_Xc.transpose();
                 m_psi_t = m_psi.transpose();
+
+                std::cout << "Input dimensions" << std::endl;
+                std::cout << "m_y rows: " << m_y.rows() << ", m_y cols: " << m_y.cols() << std::endl;
+                std::cout << "m_phi rows: " << m_phi.rows() << ", m_phi cols: " << m_phi.cols() << std::endl;
+                std::cout << "m_c rows: " << m_c.rows() << ", m_c cols: " << m_c.cols() << std::endl;
+                std::cout << "m_Xc rows: " << m_Xc.rows() << ", m_Xc cols: " << m_Xc.cols() << std::endl;
+                std::cout << "m_Wc rows: " << m_Wc.rows() << ", m_Wc cols: " << m_Wc.cols() << std::endl;
+                std::cout << "m_Rc rows: " << m_Rc.rows() << ", m_Rc cols: " << m_Rc.cols() << std::endl;
+                std::cout << "m_omega rows: " << m_omega.rows() << ", m_omega cols: " << m_omega.cols() << std::endl;
+                std::cout << "m_Xe rows: " << m_Xe.rows() << ", m_Xe cols: " << m_Xe.cols() << std::endl;
+                std::cout << "m_We rows: " << m_We[0].rows() << ", m_We cols: " << m_We[0].cols() << std::endl;
+                std::cout << "m_Re rows: " << m_Re.rows() << ", m_Re cols: " << m_Re.cols() << std::endl;
+                std::cout << "m_theta rows: " << m_theta.rows() << ", m_theta cols: " << m_theta.cols() << std::endl;
+                std::cout << "m_Xs rows: " << m_Xs.rows() << ", m_Xs cols: " << m_Xs.cols() << std::endl;
+                std::cout << "m_Ws rows: " << m_Ws[0].rows() << ", m_Ws cols: " << m_Ws[0].cols() << std::endl;
+                std::cout << "m_Rs rows: " << m_Rs.rows() << ", m_Rs cols: " << m_Rs.cols() << std::endl;
+                std::cout << "m_psi rows: " << m_psi.rows() << ", m_psi cols: " << m_psi.cols() << std::endl;
             }
-
     
-
+            
     /*!
     * @brief Override of the base class method to perform fgwr fms esc algorithm
     */ 
@@ -231,15 +247,15 @@ public:
         //A_E_i
         std::cout << "Computing A_e_i" << std::endl;
         m_A_e = this->compute_operator(m_theta_t,m_Xe_t,m_We,m_phi,j_double_tilde_Re_inv);
-        std::cout << "A_e_i rows: " << m_A_e.rows() << ", A_e_i cols: " << m_A_e.cols() << std::endl;
+        std::cout << "A_e_i rows: " << m_A_e[0].rows() << ", A_e_i cols: " << m_A_e[0].cols() << std::endl;
         //B_E_i
         std::cout << "Computing B_e_i" << std::endl;
         m_B_e = this->compute_operator(m_theta_t,m_Xe_t,m_We,m_Xc,m_omega,j_double_tilde_Re_inv);
-        std::cout << "B_e_i rows: " << m_B_e.rows() << ", B_e_i cols: " << m_B_e.cols() << std::endl;
+        std::cout << "B_e_i rows: " << m_B_e[0].rows() << ", B_e_i cols: " << m_B_e[0].cols() << std::endl;
         //K_e_s(t)
         std::cout << "Computing Be_for_K_e_s" << std::endl;
         std::vector< FDAGWR_TRAITS::Dense_Matrix > Be_for_K_e_s = this->compute_operator(m_theta_t,m_Xe_t,m_We,m_Xs,m_psi,j_double_tilde_Re_inv);
-        std::cout << "Be_for_K_e_s rows: " << Be_for_K_e_s.rows() << ", Be_for_K_e_s cols: " << Be_for_K_e_s.cols() << std::endl;
+        std::cout << "Be_for_K_e_s rows: " << Be_for_K_e_s[0].rows() << ", Be_for_K_e_s cols: " << Be_for_K_e_s[0].cols() << std::endl;
         std::cout << "Computing K_e_s" << std::endl;
         functional_matrix<INPUT,OUTPUT> K_e_s = this->compute_functional_operator(m_Xe,m_theta,Be_for_K_e_s);
         std::cout << "K_e_s rows: " << K_e_s.rows() << ", K_e_s cols: " << K_e_s.cols() << std::endl;
@@ -255,7 +271,7 @@ public:
         //A_S_i
         std::cout << "Computing m_A_s" << std::endl;
         m_A_s = this->compute_operator(X_s_crossed_t,m_Ws,m_phi,j_tilde_Rs_inv);
-        std::cout << "m_A_s rows: " << m_A_s.rows() << ", m_A_s cols: " << m_A_s.cols() << std::endl;
+        std::cout << "m_A_s rows: " << m_A_s[0].rows() << ", m_A_s cols: " << m_A_s[0].cols() << std::endl;
         //H_e(t)
         std::cout << "Computing H_e" << std::endl;
         functional_matrix<INPUT,OUTPUT> H_e = this->compute_functional_operator(m_Xe,m_theta,m_A_e);
@@ -267,7 +283,7 @@ public:
         //A_SE_i
         std::cout << "Computing m_A_se" << std::endl;
         m_A_se = this->compute_operator(X_s_crossed_t,m_Ws,H_e,j_tilde_Rs_inv);
-        std::cout << "m_A_se rows: " << m_A_se.rows() << ", m_A_se cols: " << m_A_se.cols() << std::endl;
+        std::cout << "m_A_se rows: " << m_A_se[0].rows() << ", m_A_se cols: " << m_A_se[0].cols() << std::endl;
         //H_se(t)
         std::cout << "Computing H_se" << std::endl;
         functional_matrix<INPUT,OUTPUT> H_se = this->compute_functional_operator(m_Xs,m_psi,m_A_se);
@@ -275,7 +291,7 @@ public:
         //A_ES_i
         std::cout << "Computing A_ES_i" << std::endl;
         m_A_es = this->compute_operator(m_omega_t,m_Xe_t,m_We,H_s,j_double_tilde_Re_inv);
-        std::cout << "m_A_es rows: " << m_A_es.rows() << ", m_A_es cols: " << m_A_es.cols() << std::endl;
+        std::cout << "m_A_es rows: " << m_A_es[0].rows() << ", m_A_es cols: " << m_A_es[0].cols() << std::endl;
         //H_es(t)
         std::cout << "Computing H_es" << std::endl;
         functional_matrix<INPUT,OUTPUT> H_es = this->compute_functional_operator(m_Xe,m_omega,m_A_es);
@@ -283,7 +299,7 @@ public:
         //A_ESE_i
         std::cout << "Computing A_ESE_i" << std::endl;
         m_A_ese = this->compute_operator(m_omega_t,m_Xe_t,m_We,H_se,j_double_tilde_Re_inv);
-        std::cout << "m_A_ese rows: " << m_A_ese.rows() << ", m_A_ese cols: " << m_A_ese.cols() << std::endl;
+        std::cout << "m_A_ese rows: " << m_A_ese[0].rows() << ", m_A_ese cols: " << m_A_ese[0].cols() << std::endl;
         //H_ese(t)
         std::cout << "Computing H_ese" << std::endl;
         functional_matrix<INPUT,OUTPUT> H_ese = this->compute_functional_operator(m_Xe,m_omega,m_A_ese);
@@ -292,7 +308,7 @@ public:
         //B_S_i
         std::cout << "Computing m_B_s" << std::endl;
         m_B_s = this->compute_operator(X_s_crossed_t,m_Ws,m_Xc,m_omega,j_tilde_Rs_inv);
-        std::cout << "m_B_s rows: " << m_B_s.rows() << ", m_B_s cols: " << m_B_s.cols() << std::endl;
+        std::cout << "m_B_s rows: " << m_B_s[0].rows() << ", m_B_s cols: " << m_B_s[0].cols() << std::endl;
         //K_e_c(t)
         std::cout << "Computing K_e_c" << std::endl;
         functional_matrix<INPUT,OUTPUT> K_e_c = this->compute_functional_operator(m_Xe,m_theta,m_B_e);
@@ -304,11 +320,11 @@ public:
         //B_SE_i
         std::cout << "Computing m_B_se" << std::endl;
         m_B_se = this->compute_operator(X_s_crossed_t,m_Ws,K_e_c,j_tilde_Rs_inv);
-        std::cout << "m_B_se rows: " << m_B_se.rows() << ", m_B_se cols: " << m_B_se.cols() << std::endl;
+        std::cout << "m_B_se rows: " << m_B_se[0].rows() << ", m_B_se cols: " << m_B_se[0].cols() << std::endl;
         //B_ES_i
         std::cout << "Computing m_B_es" << std::endl;
         m_B_es = this->compute_operator(m_theta_t,m_Xe_t,m_We,K_s_c,j_double_tilde_Re_inv);
-        std::cout << "m_B_es rows: " << m_B_es.rows() << ", m_B_es cols: " << m_B_es.cols() << std::endl;
+        std::cout << "m_B_es rows: " << m_B_es[0].rows() << ", m_B_es cols: " << m_B_es[0].cols() << std::endl;
         //K_se_c(t)
         std::cout << "Computing K_se_c" << std::endl;
         functional_matrix<INPUT,OUTPUT> K_se_c = this->compute_functional_operator(m_Xs,m_psi,m_B_se);
@@ -320,7 +336,7 @@ public:
         //B_ESE_i
         std::cout << "Computing m_B_ese" << std::endl;
         m_B_ese = this->compute_operator(m_theta_t,m_Xe_t,m_We,K_se_c,j_double_tilde_Re_inv);
-        std::cout << "m_B_ese rows: " << m_B_ese.rows() << ", m_B_ese cols: " << m_B_ese.cols() << std::endl;
+        std::cout << "m_B_ese rows: " << m_B_ese[0].rows() << ", m_B_ese cols: " << m_B_ese[0].cols() << std::endl;
         //K_ese_c(t)
         std::cout << "Computing K_ese_c" << std::endl;
         functional_matrix<INPUT,OUTPUT> K_ese_c = this->compute_functional_operator(m_Xe,m_theta,m_B_ese); 
@@ -366,7 +382,7 @@ public:
         //COMPUTING all the m_bs, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
         std::cout << "Computing m_bs" << std::endl;
         m_bs = this->compute_operator(X_s_crossed_t,m_Ws,y_tilde_new,j_tilde_Rs_inv);
-        std::cout << "m_bs rows: " << m_bs.rows() << ", m_bs cols: " << m_bs.cols() << std::endl;
+        std::cout << "m_bs rows: " << m_bs[0].rows() << ", m_bs cols: " << m_bs[0].cols() << std::endl;
 
 
         //y_tilde_tilde_hat(t)
@@ -378,7 +394,7 @@ public:
         //COMPUTING all the m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE EVENT-DEPENDENT BETAS
         std::cout << "Computing m_be" << std::endl;
         m_be = this->compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde_tilde_hat,j_double_tilde_Re_inv);
-        std::cout << "m_be rows: " << m_be.rows() << ", m_be cols: " << m_be.cols() << std::endl;
+        std::cout << "m_be rows: " << m_be[0].rows() << ", m_be cols: " << m_be[0].cols() << std::endl;
     }
 
     /*!
