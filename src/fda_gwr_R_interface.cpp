@@ -245,8 +245,9 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     //  ABSCISSA POINTS of response
     std::vector<double> abscissa_points_ = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
+
     check_dim_input<_RESPONSE_>(response_.rows(), abscissa_points_.size(), "points for evaluation of raw data vector");   //check that size of abscissa points and number of evaluations of fd raw data coincide
-    FDAGWR_TRAITS::Dense_Vector abscissa_points_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(abscissa_points_.data(),abscissa_points_.size());
+    FDAGWR_TRAITS::Dense_Matrix abscissa_points_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(abscissa_points_.data(),abscissa_points_.size(),1);
     double a = left_extreme_domain;
     double b = right_extreme_domain;
 
@@ -533,7 +534,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Eigen::Matrix<double, Dynamic, Dynamic> locs(n_locs + 1, 1);
     for(int i = 0; i <= n_locs; ++i) { locs(i, 0) = (b - a)/n_locs * i; }
     Eigen::MatrixXd colMat = response_.col(0);  // già dimensione 4x1
-    auto res = basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(y(0,0),*basis_y_,abscissa_points_,colMat);
+    auto res = basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(y(0,0),*basis_y_,abscissa_points_eigen_w_,colMat);
 
 
 
