@@ -430,10 +430,10 @@ public:
         m_bc = FDAGWR_TRAITS::Dense_Matrix::Constant(m_Lc,1,4.0);
 
         std::vector<FDAGWR_TRAITS::Dense_Matrix> be;
-        be.resize(n);
+        be.resize(this->n());
         std::vector<FDAGWR_TRAITS::Dense_Matrix> bs;
-        bs.resize(n);
-        for (std::size_t i = 0; i < n; ++i)
+        bs.resize(this->n());
+        for (std::size_t i = 0; i < this->n(); ++i)
         {
             be[i] = FDAGWR_TRAITS::Dense_Matrix::Constant(m_Le,1,i+5.0);
             bs[i] = FDAGWR_TRAITS::Dense_Matrix::Constant(m_Ls,1,2.0*i);
