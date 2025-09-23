@@ -239,6 +239,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::size_t number_of_statistical_units_ = response_.cols();
     //coefficients matrix
     auto coefficients_response_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coeff_y_points);
+    //c: a dense matrix of double (n*Ly) x 1 containing, one column below the other, the y basis expansion coefficients
+    auto c = columnize_coeff_resp(coefficients_response_);
     //reconstruction weights coefficients matrix
     auto coefficients_rec_weights_response_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coeff_rec_weights_y_points);
 
@@ -506,7 +508,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //phi: a sparse functional matrix nx(n*L), where L is the number of basis for the response
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> phi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_.fdata_basis(),number_of_statistical_units_,number_basis_response_);
     //c: a dense matrix of double (n*Ly) x 1 containing, one column below the other, the y basis expansion coefficients
-    auto c = columnize_coeff_resp(coefficients_response_);
     //basis used for doing response basis expansion
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_y = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     //Xc: a functional matrix of dimension nxqc
