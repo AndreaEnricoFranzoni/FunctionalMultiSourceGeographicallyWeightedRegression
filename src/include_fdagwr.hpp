@@ -43,6 +43,7 @@
 #include <numeric>
 #include <variant>
 #include <utility>
+#include <numbers>
 
 #ifdef _OPENMP
 #include <omp.h>

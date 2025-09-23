@@ -104,6 +104,7 @@ public:
     const
     override
     {
+        //ritorna una matrice n_locs x n_basis
         return bsplines_basis_evaluation<domain_type>(m_basis, locations);
     }
 };

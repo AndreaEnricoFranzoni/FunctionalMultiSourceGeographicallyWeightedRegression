@@ -84,6 +84,7 @@ public:
     {
         FDAGWR_TRAITS::Dense_Matrix evals = FDAGWR_TRAITS::Dense_Matrix::Ones(locations.rows(), 1);
         return evals.sparseView();  // conversione a SparseMatrix
+        //ritorna una matrice di 1s n_locs x 1
     }
 };
 

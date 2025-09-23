@@ -530,11 +530,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_y_ = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
-    int n_locs = 20;
-    Eigen::Matrix<double, Dynamic, Dynamic> locs(n_locs + 1, 1);
-    for(int i = 0; i <= n_locs; ++i) { locs(i, 0) = (b - a)/n_locs * i; }
-    Eigen::MatrixXd colMat = response_.col(0);  // già dimensione 4x1
-    auto res = basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(y(0,0),*basis_y_,abscissa_points_eigen_w_,colMat);
+
+    //Eigen::MatrixXd colMat = response_.col(0);  // già dimensione 4x1
+    std::function<double(const double &)> sin_tes = [](const double& x){return std::sin(2*std::numbers::pi*x);};
+    auto res = basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(sin_tes,*basis_y_,abscissa_points_eigen_w_);
 
 
 
