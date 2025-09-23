@@ -532,7 +532,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     int n_locs = 20;
     Eigen::Matrix<double, Dynamic, Dynamic> locs(n_locs + 1, 1);
     for(int i = 0; i <= n_locs; ++i) { locs(i, 0) = (b - a)/n_locs * i; }
-    auto res = basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(y(0,0),*basis_y_,locs);
+    Eigen::MatrixXd colMat = response_.col(0);  // già dimensione 4x1
+    auto res = basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(y(0,0),*basis_y_,abscissa_points_,colMat);
 
 
 

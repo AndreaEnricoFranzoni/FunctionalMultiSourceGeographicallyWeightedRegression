@@ -38,7 +38,8 @@ inline
 FDAGWR_TRAITS::Dense_Matrix
 basis_smoothing(const FUNC_OBJ<INPUT,OUTPUT> &f,
                 const basis_base_class<domain_type> & basis,
-                const FDAGWR_TRAITS::Dense_Matrix & knots)
+                const FDAGWR_TRAITS::Dense_Matrix & knots,
+                const FDAGWR_TRAITS::Dense_Matrix & f_ev)
 {
     //devo fare una matrice psi che non è altro che una matrice che in ogni colonna valuta la base su tutti i knots
     //Eigen::Matrix<double, Dynamic, Dynamic> locs(n_locs + 1, 1);
@@ -53,10 +54,13 @@ basis_smoothing(const FUNC_OBJ<INPUT,OUTPUT> &f,
         //fa (t(Psi)*Psi)^(-1) * t(Psi)
         solver.compute(psi);
 
+/*
         FDAGWR_TRAITS::Dense_Matrix f_evaluated(knots.rows(),1);
         for(std::size_t i = 0; i < knots.rows(); ++i){    f_evaluated(i,0) = f(knots(i,0));}
     
         return solver.solve(f_evaluated);
+*/
+        return solver.solve(f_ev);
     }
     //constant basis
     if(basis.type() == FDAGWR_BASIS_TYPES::_constant_)
@@ -64,9 +68,7 @@ basis_smoothing(const FUNC_OBJ<INPUT,OUTPUT> &f,
         FDAGWR_TRAITS::Dense_Matrix c = FDAGWR_TRAITS::Dense_Matrix::Zero(1,1);
         for(std::size_t i = 0; i < knots.rows(); ++i){    c(0,0) += f(knots(i,0));}
 
-        c(0,0) = c(0,0)/knots.rows();
-
-        return c;
+        return c/knots.rows();
     }
 
 }
