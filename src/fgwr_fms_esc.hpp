@@ -427,6 +427,21 @@ public:
         m_be = this->compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde_tilde_hat,j_double_tilde_Re_inv);
         std::cout << "m_be rows: " << m_be[0].rows() << ", m_be cols: " << m_be[0].cols() << std::endl;
 */
+        m_bc = FDAGWR_TRAITS::Dense_Matrix::Constant(m_Lc,1,4.0);
+
+        std::vector<FDAGWR_TRAITS::Dense_Matrix> be;
+        be.resize(n);
+        std::vector<FDAGWR_TRAITS::Dense_Matrix> bs;
+        bs.resize(n);
+        for (std::size_t i = 0; i < n; ++i)
+        {
+            be[i] = FDAGWR_TRAITS::Dense_Matrix::Constant(m_Le,1,i+5.0);
+            bs[i] = FDAGWR_TRAITS::Dense_Matrix::Constant(m_Ls,1,2.0*i);
+        }
+
+        m_be = be;
+        m_bs = bs;
+        
     }
 
     /*!
