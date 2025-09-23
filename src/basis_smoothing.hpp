@@ -24,7 +24,7 @@
 #include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
 
-#include "functional_matrix_storing_type.hpp"
+#include "functional_matrix.hpp"
 #include "basis_include.hpp"
 
 #include <cassert>
@@ -71,8 +71,33 @@ basis_smoothing(const FUNC_OBJ<INPUT,OUTPUT> &f,
 
         return c/knots.rows();
     }
-
 }
+
+
+
+
+
+/*!
+* @brief Fa lo smoothing di un più fd, dando indietro una matrice in cui ogni riga rappresenta una base, ogni colonna un'unità statistica, tutte però rispetto alla medesima base
+* @param fd è un vettore colonna contenente funzioni
+*/
+template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type>
+inline
+FDAGWR_TRAITS::Dense_Matrix
+basis_smoothing_fd(const functional_matrix<INPUT,OUTPUT> &fd,
+                   const basis_base_class<domain_type> & basis,
+                   const FDAGWR_TRAITS::Dense_Matrix & knots)
+{
+    assert(fd.cols() == 1);
+
+    FDAGWR_TRAITS::Dense_Matrix c(basis.number_of_basis(),fd.rows());
+
+    for (std::size_t i = 0; i < d.rows(); ++i){ c.col(i) = basis_smoothing(fd(i,0),basis,knots);}
+    
+    return c;
+}
+
 
 
 

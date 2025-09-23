@@ -533,7 +533,12 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     //Eigen::MatrixXd colMat = response_.col(0);  // già dimensione 4x1
     std::function<double(const double &)> sin_tes = [](const double& x){return std::sin(2*std::numbers::pi*x);};
-    auto res = basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(sin_tes,*basis_y_,abscissa_points_eigen_w_);
+    std::function<double(const double &)> cos_tes = [](const double& x){return std::cos(2*std::numbers::pi*x);};
+
+    std::vector<std::function<double(const double &)>> fd_v{sin_tes,cos_tes};
+    functional_matrix<double,double> fd_test(fd_v,2,1);
+
+    auto res = basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(fd_test,*basis_y_,abscissa_points_eigen_w_);
 
 
 
