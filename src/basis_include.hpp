@@ -33,9 +33,9 @@ struct FDAGWR_BASIS_TYPES
 {
   static constexpr std::size_t _number_implemented_basis_types_ = static_cast<std::size_t>(2);
 
-  static constexpr std::string _bsplines_ = "bsplines";
+  static constexpr std::string _bsplines_ = "Bsplines";
 
-  static constexpr std::string _constant_ = "constant";
+  static constexpr std::string _constant_ = "Constant";
 
   static constexpr std::array<std::string,FDAGWR_BASIS_TYPES::_number_implemented_basis_types_> _implemented_basis_{FDAGWR_BASIS_TYPES::_bsplines_,
                                                                                                                     FDAGWR_BASIS_TYPES::_constant_};

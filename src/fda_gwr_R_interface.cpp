@@ -524,10 +524,21 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //psi: a sparse functional matrix of dimension qsxLs
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
+
+
+
+
+    std::unique_ptr<basis_base_class<_DOMAIN_>> basis_y_ = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     int n_locs = 20;
     Eigen::Matrix<double, Dynamic, Dynamic> locs(n_locs + 1, 1);
     for(int i = 0; i <= n_locs; ++i) { locs(i, 0) = (b - a)/n_locs * i; }
-    auto res = bspline_basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(y(0,0),y_fd_.fdata_basis(),locs);
+    auto res = bspline_basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(y(0,0),*basis_y_,locs);
+
+
+
+
+
+
 
 
     Rcout << "fdagwr.01:" << std::endl;
