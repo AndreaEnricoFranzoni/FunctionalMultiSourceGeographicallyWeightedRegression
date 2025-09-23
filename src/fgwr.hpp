@@ -31,13 +31,10 @@
 #include "functional_matrix_operators.hpp"
 
 #include "functional_data_integration.hpp"
+#include "basis_include.hpp"
+#include "parameters_wrapper_fdagwr.hpp"
 
 #include <iostream>
-
-
-
-
-
 
 
 /*!

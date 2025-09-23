@@ -506,6 +506,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> phi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_.fdata_basis(),number_of_statistical_units_,number_basis_response_);
     //c: a dense matrix of double (n*Ly) x 1 containing, one column below the other, the y basis expansion coefficients
     auto c = columnize_coeff_resp(coefficients_response_);
+    //basis used for doing response basis expansion
+    std::unique_ptr<basis_base_class<_DOMAIN_>> basis_y = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     //Xc: a functional matrix of dimension nxqc
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xc = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATIONARY_>(x_C_fd_,number_threads);
     //Wc: a diagonal functional matrix of dimension nxn
@@ -527,32 +529,14 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
 
-
-
-    std::unique_ptr<basis_base_class<_DOMAIN_>> basis_y_ = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
-
-    //Eigen::MatrixXd colMat = response_.col(0);  // già dimensione 4x1
-    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> sin_tes = [](const _FD_INPUT_TYPE_& x){return std::sin(2*std::numbers::pi*x);};
-    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> cos_tes = [](const _FD_INPUT_TYPE_& x){return std::cos(2*std::numbers::pi*x);};
-
-    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> fd_v{sin_tes,cos_tes};
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> fd_test(fd_v,2,1);
-
-    auto res = basis_smoothing_fd<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(fd_test,*basis_y_,abscissa_points_eigen_w_);
-
-
-
-
-
-
-
-
-    Rcout << "fdagwr.01:" << std::endl;
+    Rcout << "fdagwr.02:" << std::endl;
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),
                                                                                     std::move(c),
                                                                                     number_basis_response_,
+                                                                                    std::move(basis_y),
+                                                                                    std::move(abscissa_points_eigen_w_),
                                                                                     std::move(Xc),
                                                                                     std::move(Wc),
                                                                                     std::move(R_C.PenalizationMatrix()),
@@ -580,7 +564,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     number_threads);
     
     //computing the algo
-    //fgwr_algo->compute();
+    fgwr_algo->compute();
     //retrieving the results                                                                                
     Rcpp::List regressor_coefficients = wrap_coefficients_to_R_list(fgwr_algo->regressorCoefficients());
 
@@ -595,8 +579,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     l["be"]  = regressor_coefficients["be"];
     //station dependent basis expansion coefficients
     l["bs"]  = regressor_coefficients["bs"];
-
-    l["c"] = res;
 
     return l;
 }

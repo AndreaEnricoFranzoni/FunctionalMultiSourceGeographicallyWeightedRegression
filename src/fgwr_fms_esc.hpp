@@ -36,6 +36,10 @@ private:
     FDAGWR_TRAITS::Dense_Matrix m_c;
     /*!Number of basis used to make basis expansion for y*/
     std::size_t m_Ly;
+    /*!Basis used for y (the functions put in m_phi)*/
+    std::unique_ptr<basis_base_class<FDAGWR_TRAITS::basis_geometry>> m_basis_y;
+    /*!Knots for the response, used at the beginning to obtain y basis expansion coefficients via smoothing*/
+    FDAGWR_TRAITS::Dense_Matri m_knots_y;
 
     /*!Functional stationary covariates (n x qc)*/
     functional_matrix<INPUT,OUTPUT> m_Xc;
@@ -133,6 +137,8 @@ public:
                  FUNC_SPARSE_MATRIX_OBJ &&phi,
                  SCALAR_MATRIX_OBJ &&c,
                  std::size_t Ly,
+                 std::unique_ptr<basis_base_class<FDAGWR_TRAITS::basis_geometry>> basis_y,
+                 SCALAR_MATRIX_OBJ &&knots_y,
                  FUNC_MATRIX_OBJ &&Xc,
                  FUNC_DIAG_MATRIX_OBJ &&Wc,
                  SCALAR_SPARSE_MATRIX_OBJ &&Rc,
@@ -164,6 +170,8 @@ public:
             m_phi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(phi)},
             m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
             m_Ly(Ly),
+            m_basis_y(std::move(basis_y)),
+            m_knots_y{std::forward<SCALAR_MATRIX_OBJ>(knots_y)},
             m_Xc{std::forward<FUNC_MATRIX_OBJ>(Xc)},
             m_Wc{std::forward<FUNC_DIAG_MATRIX_OBJ>(Wc)},
             m_Rc{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rc)},
@@ -241,6 +249,29 @@ public:
     compute()  
     override
     {
+
+
+    std::function<OUTPUT(const INPUT &)> sin_tes = [](const INPUT& x){return std::sin(2*std::numbers::pi*x);};
+    std::function<OUTPUT(const INPUT &)> cos_tes = [](const INPUT& x){return std::cos(2*std::numbers::pi*x);};
+
+    std::vector<std::function<OUTPUT(const INPUT &)>> fd_v{sin_tes,cos_tes};
+    functional_matrix<INPUT,OUTPUT> fd_test(fd_v,2,1);
+
+    auto res = basis_smoothing_fd<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(fd_test,*m_basis_y,m_knots_y);
+
+    std::cout << "Check" << std::endl;
+    std::cout << res << std::endl;
+
+    auto res2 = basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(sin_tes,*m_basis_y,m_knots_y);
+
+        std::cout << "Check2" << std::endl;
+    std::cout << res2 << std::endl;
+
+    auto res3 = columnize_coeff_resp(res);
+            std::cout << "Check3" << std::endl;
+    std::cout << res3 << std::endl;
+
+/*
         std::cout << "Computing (j_tilde_tilde + Re)^-1" << std::endl;
         //(j_tilde_tilde + Re)^-1
         std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
@@ -395,6 +426,7 @@ public:
         std::cout << "Computing m_be" << std::endl;
         m_be = this->compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde_tilde_hat,j_double_tilde_Re_inv);
         std::cout << "m_be rows: " << m_be[0].rows() << ", m_be cols: " << m_be[0].cols() << std::endl;
+*/
     }
 
     /*!
