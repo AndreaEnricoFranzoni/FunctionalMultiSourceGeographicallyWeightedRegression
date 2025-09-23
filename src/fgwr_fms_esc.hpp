@@ -294,7 +294,7 @@ public:
         std::cout << "m_A_es rows: " << m_A_es[0].rows() << ", m_A_es cols: " << m_A_es[0].cols() << std::endl;
         //H_es(t)
         std::cout << "Computing H_es" << std::endl;
-        functional_matrix<INPUT,OUTPUT> H_es = this->compute_functional_operator(m_Xe,m_omega,m_A_es);
+        functional_matrix<INPUT,OUTPUT> H_es = this->compute_functional_operator(m_Xe,m_theta,m_A_es);
         std::cout << "H_es rows: " << H_es.rows() << ", H_es cols: " << H_es.cols() << std::endl;
         //A_ESE_i
         std::cout << "Computing A_ESE_i" << std::endl;

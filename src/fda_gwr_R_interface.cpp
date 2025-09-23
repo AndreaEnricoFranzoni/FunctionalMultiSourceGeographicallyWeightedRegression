@@ -54,7 +54,7 @@
 #include "functional_matrix_product.hpp"
 #include "functional_matrix_into_wrapper.hpp"
 
-
+#include "basis_smoothing.hpp"
 
 using namespace Rcpp;
 
@@ -524,6 +524,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //psi: a sparse functional matrix of dimension qsxLs
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
+    int n_locs = 20;
+    Eigen::Matrix<double, Dynamic, Dynamic> locs(n_locs + 1, 1);
+    for(int i = 0; i <= n_locs; ++i) { locs(i, 0) = (b - a)/n_locs * i; }
+    auto res = bspline_basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(y(0,0),y_fd_.fdata_basis(),locs);
 
 
     Rcout << "fdagwr.01:" << std::endl;
@@ -559,9 +563,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     number_threads);
     
     //computing the algo
-    fgwr_algo->compute();
+    //fgwr_algo->compute();
     //retrieving the results                                                                                
     Rcpp::List regressor_coefficients = wrap_coefficients_to_R_list(fgwr_algo->regressorCoefficients());
+
     
     //returning element
     Rcpp::List l;
@@ -573,6 +578,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     l["be"]  = regressor_coefficients["be"];
     //station dependent basis expansion coefficients
     l["bs"]  = regressor_coefficients["bs"];
+
+    l["c"] = res;
 
     return l;
 }
