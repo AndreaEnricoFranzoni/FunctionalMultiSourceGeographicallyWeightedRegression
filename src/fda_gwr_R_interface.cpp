@@ -532,11 +532,11 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_y_ = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
 
     //Eigen::MatrixXd colMat = response_.col(0);  // già dimensione 4x1
-    std::function<double(const double &)> sin_tes = [](const double& x){return std::sin(2*std::numbers::pi*x);};
-    std::function<double(const double &)> cos_tes = [](const double& x){return std::cos(2*std::numbers::pi*x);};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> sin_tes = [](const _FD_INPUT_TYPE_& x){return std::sin(2*std::numbers::pi*x);};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> cos_tes = [](const _FD_INPUT_TYPE_& x){return std::cos(2*std::numbers::pi*x);};
 
-    std::vector<std::function<double(const double &)>> fd_v{sin_tes,cos_tes};
-    functional_matrix<double,double> fd_test(fd_v,2,1);
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)>> fd_v{sin_tes,cos_tes};
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> fd_test(fd_v,2,1);
 
     auto res = basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(fd_test,*basis_y_,abscissa_points_eigen_w_);
 
