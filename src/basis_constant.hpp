@@ -82,7 +82,7 @@ public:
     const
     override
     {
-        FDAGWR_TRAITS::Dense_Matrix evals = FDAGWR_TRAITS::Dense_Matrix:Ones(locations.rows(), 1);
+        FDAGWR_TRAITS::Dense_Matrix evals = FDAGWR_TRAITS::Dense_Matrix::Ones(locations.rows(), 1);
         return evals.sparseView();  // conversione a SparseMatrix
     }
 };
