@@ -250,28 +250,6 @@ public:
     override
     {
 
-
-    std::function<OUTPUT(const INPUT &)> sin_tes = [](const INPUT& x){return std::sin(2*std::numbers::pi*x);};
-    std::function<OUTPUT(const INPUT &)> cos_tes = [](const INPUT& x){return std::cos(2*std::numbers::pi*x);};
-
-    std::vector<std::function<OUTPUT(const INPUT &)>> fd_v{sin_tes,cos_tes};
-    functional_matrix<INPUT,OUTPUT> fd_test(fd_v,2,1);
-
-    auto res = basis_smoothing_fdata<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(fd_test,*m_basis_y,m_knots_y);
-
-    std::cout << "Check" << std::endl;
-    std::cout << res << std::endl;
-
-    auto res2 = basis_smoothing_fdatum<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(sin_tes,*m_basis_y,m_knots_y);
-
-        std::cout << "Check2" << std::endl;
-    std::cout << res2 << std::endl;
-
-    auto res3 = columnize_coeff_resp(res);
-            std::cout << "Check3" << std::endl;
-    std::cout << res3 << std::endl;
-
-/*
         std::cout << "Computing (j_tilde_tilde + Re)^-1" << std::endl;
         //(j_tilde_tilde + Re)^-1
         std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
@@ -312,13 +290,13 @@ public:
         functional_matrix<INPUT,OUTPUT> H_s = this->compute_functional_operator(m_Xs,m_psi,m_A_s);
         std::cout << "H_s rows: " << H_s.rows() << ", H_s cols: " << H_s.cols() << std::endl;
         //A_SE_i
-        std::cout << "Computing m_A_se" << std::endl;
-        m_A_se = this->compute_operator(X_s_crossed_t,m_Ws,H_e,j_tilde_Rs_inv);
-        std::cout << "m_A_se rows: " << m_A_se[0].rows() << ", m_A_se cols: " << m_A_se[0].cols() << std::endl;
+        //std::cout << "Computing m_A_se" << std::endl;
+        //m_A_se = this->compute_operator(X_s_crossed_t,m_Ws,H_e,j_tilde_Rs_inv);
+        //std::cout << "m_A_se rows: " << m_A_se[0].rows() << ", m_A_se cols: " << m_A_se[0].cols() << std::endl;
         //H_se(t)
-        std::cout << "Computing H_se" << std::endl;
-        functional_matrix<INPUT,OUTPUT> H_se = this->compute_functional_operator(m_Xs,m_psi,m_A_se);
-        std::cout << "H_se rows: " << H_se.rows() << ", H_se cols: " << H_se.cols() << std::endl;
+        //std::cout << "Computing H_se" << std::endl;
+        //functional_matrix<INPUT,OUTPUT> H_se = this->compute_functional_operator(m_Xs,m_psi,m_A_se);
+        //std::cout << "H_se rows: " << H_se.rows() << ", H_se cols: " << H_se.cols() << std::endl;
         //A_ES_i
         std::cout << "Computing A_ES_i" << std::endl;
         m_A_es = this->compute_operator(m_theta_t,m_Xe_t,m_We,H_s,j_double_tilde_Re_inv);
@@ -328,13 +306,13 @@ public:
         functional_matrix<INPUT,OUTPUT> H_es = this->compute_functional_operator(m_Xe,m_theta,m_A_es);
         std::cout << "H_es rows: " << H_es.rows() << ", H_es cols: " << H_es.cols() << std::endl;
         //A_ESE_i
-        std::cout << "Computing A_ESE_i" << std::endl;
-        m_A_ese = this->compute_operator(m_theta_t,m_Xe_t,m_We,H_se,j_double_tilde_Re_inv);
-        std::cout << "m_A_ese rows: " << m_A_ese[0].rows() << ", m_A_ese cols: " << m_A_ese[0].cols() << std::endl;
+        //std::cout << "Computing A_ESE_i" << std::endl;
+        //m_A_ese = this->compute_operator(m_theta_t,m_Xe_t,m_We,H_se,j_double_tilde_Re_inv);
+        //std::cout << "m_A_ese rows: " << m_A_ese[0].rows() << ", m_A_ese cols: " << m_A_ese[0].cols() << std::endl;
         //H_ese(t)
-        std::cout << "Computing H_ese" << std::endl;
-        functional_matrix<INPUT,OUTPUT> H_ese = this->compute_functional_operator(m_Xe,m_omega,m_A_ese);
-        std::cout << "H_ese rows: " << H_ese.rows() << ", H_ese cols: " << H_ese.cols() << std::endl;
+        //std::cout << "Computing H_ese" << std::endl;
+        //functional_matrix<INPUT,OUTPUT> H_ese = this->compute_functional_operator(m_Xe,m_omega,m_A_ese);
+        //std::cout << "H_ese rows: " << H_ese.rows() << ", H_ese cols: " << H_ese.cols() << std::endl;
 
         //B_S_i
         std::cout << "Computing m_B_s" << std::endl;
@@ -349,37 +327,39 @@ public:
         functional_matrix<INPUT,OUTPUT> K_s_c = this->compute_functional_operator(m_Xs,m_psi,m_B_s);
         std::cout << "K_s_c rows: " << K_s_c.rows() << ", K_s_c cols: " << K_s_c.cols() << std::endl;
         //B_SE_i
-        std::cout << "Computing m_B_se" << std::endl;
-        m_B_se = this->compute_operator(X_s_crossed_t,m_Ws,K_e_c,j_tilde_Rs_inv);
-        std::cout << "m_B_se rows: " << m_B_se[0].rows() << ", m_B_se cols: " << m_B_se[0].cols() << std::endl;
+        //std::cout << "Computing m_B_se" << std::endl;
+        //m_B_se = this->compute_operator(X_s_crossed_t,m_Ws,K_e_c,j_tilde_Rs_inv);
+        //std::cout << "m_B_se rows: " << m_B_se[0].rows() << ", m_B_se cols: " << m_B_se[0].cols() << std::endl;
         //B_ES_i
         std::cout << "Computing m_B_es" << std::endl;
         m_B_es = this->compute_operator(m_theta_t,m_Xe_t,m_We,K_s_c,j_double_tilde_Re_inv);
         std::cout << "m_B_es rows: " << m_B_es[0].rows() << ", m_B_es cols: " << m_B_es[0].cols() << std::endl;
         //K_se_c(t)
-        std::cout << "Computing K_se_c" << std::endl;
-        functional_matrix<INPUT,OUTPUT> K_se_c = this->compute_functional_operator(m_Xs,m_psi,m_B_se);
-        std::cout << "K_se_c rows: " << K_se_c.rows() << ", K_se_c cols: " << K_se_c.cols() << std::endl;
+        //std::cout << "Computing K_se_c" << std::endl;
+        //functional_matrix<INPUT,OUTPUT> K_se_c = this->compute_functional_operator(m_Xs,m_psi,m_B_se);
+        //std::cout << "K_se_c rows: " << K_se_c.rows() << ", K_se_c cols: " << K_se_c.cols() << std::endl;
         //K_es_c(t)
         std::cout << "Computing K_es_c" << std::endl;
         functional_matrix<INPUT,OUTPUT> K_es_c = this->compute_functional_operator(m_Xe,m_theta,m_B_es);
         std::cout << "K_es_c rows: " << K_es_c.rows() << ", K_es_c cols: " << K_es_c.cols() << std::endl;
         //B_ESE_i
-        std::cout << "Computing m_B_ese" << std::endl;
-        m_B_ese = this->compute_operator(m_theta_t,m_Xe_t,m_We,K_se_c,j_double_tilde_Re_inv);
-        std::cout << "m_B_ese rows: " << m_B_ese[0].rows() << ", m_B_ese cols: " << m_B_ese[0].cols() << std::endl;
+        //std::cout << "Computing m_B_ese" << std::endl;
+        //m_B_ese = this->compute_operator(m_theta_t,m_Xe_t,m_We,K_se_c,j_double_tilde_Re_inv);
+        //std::cout << "m_B_ese rows: " << m_B_ese[0].rows() << ", m_B_ese cols: " << m_B_ese[0].cols() << std::endl;
         //K_ese_c(t)
-        std::cout << "Computing K_ese_c" << std::endl;
-        functional_matrix<INPUT,OUTPUT> K_ese_c = this->compute_functional_operator(m_Xe,m_theta,m_B_ese); 
-        std::cout << "K_ese_c rows: " << K_ese_c.rows() << ", K_ese_c cols: " << K_ese_c.cols() << std::endl;
+        //std::cout << "Computing K_ese_c" << std::endl;
+        //functional_matrix<INPUT,OUTPUT> K_ese_c = this->compute_functional_operator(m_Xe,m_theta,m_B_ese); 
+        //std::cout << "K_ese_c rows: " << K_ese_c.rows() << ", K_ese_c cols: " << K_ese_c.cols() << std::endl;
 
 
         //y_new(t)
         std::cout << "Computing y_new" << std::endl;
-        functional_matrix<INPUT,OUTPUT> y_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_e - H_s + H_se + H_es - H_ese),m_c,this->number_threads());
+        //functional_matrix<INPUT,OUTPUT> y_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_e - H_s + H_se + H_es - H_ese),m_c,this->number_threads());
+        functional_matrix<INPUT,OUTPUT> y_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_e - H_s + H_es),m_c,this->number_threads());
         std::cout << "y_new rows: " << y_new.rows() << ", y_new cols: " << y_new.cols() << std::endl;
         std::cout << "Computing X_c_crossed" << std::endl;
-        functional_matrix<INPUT,OUTPUT> X_c_crossed = fm_prod(m_Xc,m_omega) - K_e_c - K_s_c + K_se_c + K_es_c - K_ese_c;
+        //functional_matrix<INPUT,OUTPUT> X_c_crossed = fm_prod(m_Xc,m_omega) - K_e_c - K_s_c + K_se_c + K_es_c - K_ese_c;
+        functional_matrix<INPUT,OUTPUT> X_c_crossed = fm_prod(m_Xc,m_omega) - K_e_c - K_s_c + K_es_c;
         functional_matrix<INPUT,OUTPUT> X_c_crossed_t = X_c_crossed.transpose();
         std::cout << "X_c_crossed rows: " << X_c_crossed.rows() << ", X_c_crossed cols: " << X_c_crossed.cols() << std::endl;
         //[J + Rc]^-1
@@ -397,12 +377,9 @@ public:
         std::cout << "Computing y_tilde_hat" << std::endl;
         functional_matrix<INPUT,OUTPUT> y_tilde_hat = m_y - fm_prod(fm_prod(m_Xc,m_omega),m_bc,this->number_threads());
         std::cout << "y_tilde_hat rows: " << y_tilde_hat.rows() << ", y_tilde_hat cols: " << y_tilde_hat.cols() << std::endl;
-        //c_tilde_hat
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// TODO: QUI BISOGNA SMOOTHARE CON LE PHI y_tilde_hat PER OTTENERE c_tilde_hat (E INCOLONNARLI) /////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        //c_tilde_hat: smoothing on y_tilde_hat(t) with respect of the basis of y
         std::cout << "Computing c_tilde_hat" << std::endl;
-        FDAGWR_TRAITS::Dense_Matrix c_tilde_hat = m_c;
+        FDAGWR_TRAITS::Dense_Matrix c_tilde_hat = basis_smoothing_fdata<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_y);;
         std::cout << "c_tilde_hat rows: " << c_tilde_hat.rows() << ", c_tilde_hat cols: " << c_tilde_hat.cols() << std::endl;
         //y_tilde_new(t)
         std::cout << "Computing y_tilde_new" << std::endl;
@@ -425,23 +402,7 @@ public:
         //COMPUTING all the m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE EVENT-DEPENDENT BETAS
         std::cout << "Computing m_be" << std::endl;
         m_be = this->compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde_tilde_hat,j_double_tilde_Re_inv);
-        std::cout << "m_be rows: " << m_be[0].rows() << ", m_be cols: " << m_be[0].cols() << std::endl;
-*/
-        m_bc = FDAGWR_TRAITS::Dense_Matrix::Constant(m_Lc,1,4.0);
-
-        std::vector<FDAGWR_TRAITS::Dense_Matrix> be;
-        be.resize(this->n());
-        std::vector<FDAGWR_TRAITS::Dense_Matrix> bs;
-        bs.resize(this->n());
-        for (std::size_t i = 0; i < this->n(); ++i)
-        {
-            be[i] = FDAGWR_TRAITS::Dense_Matrix::Constant(m_Le,1,i+5.0);
-            bs[i] = FDAGWR_TRAITS::Dense_Matrix::Constant(m_Ls,1,2.0*i);
-        }
-
-        m_be = be;
-        m_bs = bs;
-        
+        std::cout << "m_be rows: " << m_be[0].rows() << ", m_be cols: " << m_be[0].cols() << std::endl;  
     }
 
     /*!
