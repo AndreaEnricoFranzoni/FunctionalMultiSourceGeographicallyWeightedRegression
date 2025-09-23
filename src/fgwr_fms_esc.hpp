@@ -232,7 +232,7 @@ public:
                 std::cout << "m_psi rows: " << m_psi.rows() << ", m_psi cols: " << m_psi.cols() << std::endl;
             }
     
-            
+
     /*!
     * @brief Override of the base class method to perform fgwr fms esc algorithm
     */ 
@@ -290,7 +290,7 @@ public:
         std::cout << "H_se rows: " << H_se.rows() << ", H_se cols: " << H_se.cols() << std::endl;
         //A_ES_i
         std::cout << "Computing A_ES_i" << std::endl;
-        m_A_es = this->compute_operator(m_omega_t,m_Xe_t,m_We,H_s,j_double_tilde_Re_inv);
+        m_A_es = this->compute_operator(m_theta_t,m_Xe_t,m_We,H_s,j_double_tilde_Re_inv);
         std::cout << "m_A_es rows: " << m_A_es[0].rows() << ", m_A_es cols: " << m_A_es[0].cols() << std::endl;
         //H_es(t)
         std::cout << "Computing H_es" << std::endl;
@@ -298,7 +298,7 @@ public:
         std::cout << "H_es rows: " << H_es.rows() << ", H_es cols: " << H_es.cols() << std::endl;
         //A_ESE_i
         std::cout << "Computing A_ESE_i" << std::endl;
-        m_A_ese = this->compute_operator(m_omega_t,m_Xe_t,m_We,H_se,j_double_tilde_Re_inv);
+        m_A_ese = this->compute_operator(m_theta_t,m_Xe_t,m_We,H_se,j_double_tilde_Re_inv);
         std::cout << "m_A_ese rows: " << m_A_ese[0].rows() << ", m_A_ese cols: " << m_A_ese[0].cols() << std::endl;
         //H_ese(t)
         std::cout << "Computing H_ese" << std::endl;
