@@ -530,6 +530,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
     Rcout << "fdagwr.02:" << std::endl;
+    Rcout << "c pre: rows: " << c.rows() << ", cols: " << c.cols() << std::endl;
+    Rcout << c << std::endl;
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),
@@ -564,7 +566,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     number_threads);
     
     //computing the algo
-    fgwr_algo->compute();
+    //fgwr_algo->compute();
     //retrieving the results                                                                                
     Rcpp::List regressor_coefficients = wrap_coefficients_to_R_list(fgwr_algo->regressorCoefficients());
 
