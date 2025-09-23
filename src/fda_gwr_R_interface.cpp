@@ -501,13 +501,13 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     /////    FGWR ALGORITHM   /////
     ///////////////////////////////
     //wrapping all the functional elements in a functional_matrix
-    Rcout << "coeff resp: rows: " << coefficients_response_.rows() << ", cols: " << coefficients_response_.cols() << std::endl;
-    Rcout << coefficients_response_ << std::endl;
+
     //y: a column vector of dimension nx1
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_,number_threads);
     //phi: a sparse functional matrix nx(n*L), where L is the number of basis for the response
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> phi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(y_fd_.fdata_basis(),number_of_statistical_units_,number_basis_response_);
     //c: a dense matrix of double (n*Ly) x 1 containing, one column below the other, the y basis expansion coefficients
+    //already done at the beginning
     //basis used for doing response basis expansion
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_y = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     //Xc: a functional matrix of dimension nxqc
@@ -532,8 +532,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
     Rcout << "fdagwr.02:" << std::endl;
-    Rcout << "c pre: rows: " << c.rows() << ", cols: " << c.cols() << std::endl;
-    Rcout << c << std::endl;
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),
@@ -568,7 +566,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     number_threads);
     
     //computing the algo
-    //fgwr_algo->compute();
+    fgwr_algo->compute();
     //retrieving the results                                                                                
     Rcpp::List regressor_coefficients = wrap_coefficients_to_R_list(fgwr_algo->regressorCoefficients());
 
