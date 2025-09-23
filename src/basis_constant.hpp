@@ -56,7 +56,7 @@ public:
     const 
     override
     {
-        return "Constant";
+        return "constant";
     }
 
     /*!

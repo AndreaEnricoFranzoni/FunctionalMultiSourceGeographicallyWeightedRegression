@@ -76,7 +76,7 @@ public:
     const 
     override
     {
-        return "Bsplines";
+        return "bsplines";
     }
 
     /*!
