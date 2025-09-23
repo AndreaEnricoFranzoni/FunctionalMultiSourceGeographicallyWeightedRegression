@@ -39,7 +39,7 @@ private:
     /*!Basis used for y (the functions put in m_phi)*/
     std::unique_ptr<basis_base_class<FDAGWR_TRAITS::basis_geometry>> m_basis_y;
     /*!Knots for the response, used at the beginning to obtain y basis expansion coefficients via smoothing*/
-    FDAGWR_TRAITS::Dense_Matri m_knots_y;
+    FDAGWR_TRAITS::Dense_Matrix m_knots_y;
 
     /*!Functional stationary covariates (n x qc)*/
     functional_matrix<INPUT,OUTPUT> m_Xc;
@@ -257,12 +257,12 @@ public:
     std::vector<std::function<OUTPUT(const INPUT &)>> fd_v{sin_tes,cos_tes};
     functional_matrix<INPUT,OUTPUT> fd_test(fd_v,2,1);
 
-    auto res = basis_smoothing_fd<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(fd_test,*m_basis_y,m_knots_y);
+    auto res = basis_smoothing_fd<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>>(fd_test,*m_basis_y,m_knots_y);
 
     std::cout << "Check" << std::endl;
     std::cout << res << std::endl;
 
-    auto res2 = basis_smoothing<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_>(sin_tes,*m_basis_y,m_knots_y);
+    auto res2 = basis_smoothing<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>>(sin_tes,*m_basis_y,m_knots_y);
 
         std::cout << "Check2" << std::endl;
     std::cout << res2 << std::endl;
