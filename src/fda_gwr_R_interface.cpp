@@ -531,7 +531,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
 
-    Rcout << "fdagwr.02:" << std::endl;
+    Rcout << "fdagwr.03:" << std::endl;
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),
