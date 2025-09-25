@@ -624,6 +624,28 @@ wrap_and_check_kernel_bandwith(double bandwith)
 
 
 
+
+/*!
+* @brief Wrapping the number of knots used for smoothing the response without the non-stationary components
+* @param n_knots number of knots used for smoothing the response without the non-stationary components
+* @return return the number of knots used for smoothing the response without the non-stationary components
+* @note checking that the number of knots used for smoothing the response without the non-stationary components is a positive number, throwing an exception if not
+*/
+inline
+int
+wrap_and_check_n_knots_smoothing(int n_knots)
+{
+  //checking that the number of intervals is positive, throwing an exception if not
+  if (n_knots <= 0){
+    std::string error_message = "The number of knots used for smoothing the response without the non-stationary components has to be positive";
+    throw std::invalid_argument(error_message);}
+
+  return n_knots;  
+}
+
+
+
+
 /*!
 * @brief Wrapping the number of intervals for the integration via trapezoidal quadrature rule
 * @param n_intervals number of intervals used for integrating via trapezoidal quadrature rule

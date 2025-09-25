@@ -111,6 +111,7 @@ using namespace Rcpp;
 * @param knots_beta_stations_cov vector of double with the abscissa points with respect which the basis expansions of the stations-dependent covariates (functional regression) coefficients are performed (all elements contained in [a,b]). 
 * @param degrees_basis_beta_stations_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stations-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
 * @param n_basis_beta_stations_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stations-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
+* @param n_knots_smoothing number of knots used to perform the smoothing on the response obtained leaving out all the non-stationary components
 * @param n_intervals_trapezoidal_quadrature number of intervals used while performing integration via adaptive trapezoidal quadrature rule
 * @param target_error_trapezoidal_quadrature target error while integrating via adaptive trapezoidal quadrature rule
 * @param max_iterations_trapezoidal_quadrature max number of iterations for integrating via adaptive trapezoidal quadrature rule
@@ -182,6 +183,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                   Rcpp::NumericVector knots_beta_stations_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_beta_stations_cov,
                   Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_stations_cov,
+                  int n_knots_smoothing = 100,
                   int n_intervals_trapezoidal_quadrature = 100,
                   double target_error_trapezoidal_quadrature = 1e-3,
                   int max_iterations_trapezoidal_quadrature = 100,
@@ -225,6 +227,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
+    // NUMBER OF KNOTS TO PERFORM SMOOTHING ON THE RESPONSE WITHOUT THE NON-STATIONARY COMPONENTS
+    int n_knots_smoothing_y_new = wrap_and_check_n_knots_smoothing(n_knots_smoothing);
     // NUMBER OF INTERVALS FOR INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
     int n_intervals = wrap_and_check_n_intervals_trapezoidal_quadrature(n_intervals_trapezoidal_quadrature);
     // TARGET ERROR WHILE INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
@@ -252,6 +256,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     FDAGWR_TRAITS::Dense_Matrix abscissa_points_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(abscissa_points_.data(),abscissa_points_.size(),1);
     double a = left_extreme_domain;
     double b = right_extreme_domain;
+    //knots for performing smoothing
+    FDAGWR_TRAITS::Dense_Matrix knots_smoothing = Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
+    Rcout << "Knots for smoothing: " << knots_smoothing.rows() << " x " << knots_smoothing.cols() << std::endl;
+    Rcout << knots_smoothing << std::endl;
 
 
     //  KNOTS
@@ -529,24 +537,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //psi: a sparse functional matrix of dimension qsxLs
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
-    double loc = 0.3;
-
-    Rcout << "Printing Wc" << std::endl;
-    for(std::size_t j = 0; j < Wc.size(); ++j){ Rcout << "Wc(" << j << "," << j << "): " << Wc(j,j)(loc) << std::endl;}
-
-    Rcout << "Printing We" << std::endl;
-    for(std::size_t i = 0; i < We.size(); ++i)
-    {
-        Rcout << "We[" << i << "]" << std::endl;
-        for(std::size_t j = 0; j < We[i].size(); ++j){ Rcout << "We[" << i << "](" << j << "," << j << "): " << We[i](j,j)(loc) << std::endl;}
-    }
-
-    Rcout << "Printing Ws" << std::endl;
-    for(std::size_t i = 0; i < Ws.size(); ++i)
-    {
-        Rcout << "Ws[" << i << "]" << std::endl;
-        for(std::size_t j = 0; j < Ws[i].size(); ++j){ Rcout << "Ws[" << i << "](" << j << "," << j << "): " << Ws[i](j,j)(loc) << std::endl;}
-    }
 
     Rcout << "fdagwr.03:" << std::endl;
     //fgwr algorithm

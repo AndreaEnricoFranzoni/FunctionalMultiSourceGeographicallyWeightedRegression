@@ -39,7 +39,7 @@ private:
     /*!Basis used for y (the functions put in m_phi)*/
     std::unique_ptr<basis_base_class<FDAGWR_TRAITS::basis_geometry>> m_basis_y;
     /*!Knots for the response, used at the beginning to obtain y basis expansion coefficients via smoothing*/
-    FDAGWR_TRAITS::Dense_Matrix m_knots_y;
+    FDAGWR_TRAITS::Dense_Matrix m_knots_smoothing;
 
     /*!Functional stationary covariates (n x qc)*/
     functional_matrix<INPUT,OUTPUT> m_Xc;
@@ -138,7 +138,7 @@ public:
                  SCALAR_MATRIX_OBJ &&c,
                  std::size_t Ly,
                  std::unique_ptr<basis_base_class<FDAGWR_TRAITS::basis_geometry>> basis_y,
-                 SCALAR_MATRIX_OBJ &&knots_y,
+                 SCALAR_MATRIX_OBJ &&knots_smoothing,
                  FUNC_MATRIX_OBJ &&Xc,
                  FUNC_DIAG_MATRIX_OBJ &&Wc,
                  SCALAR_SPARSE_MATRIX_OBJ &&Rc,
@@ -171,7 +171,7 @@ public:
             m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
             m_Ly(Ly),
             m_basis_y(std::move(basis_y)),
-            m_knots_y{std::forward<SCALAR_MATRIX_OBJ>(knots_y)},
+            m_knots_smoothing{std::forward<SCALAR_MATRIX_OBJ>(knots_smoothing)},
             m_Xc{std::forward<FUNC_MATRIX_OBJ>(Xc)},
             m_Wc{std::forward<FUNC_DIAG_MATRIX_OBJ>(Wc)},
             m_Rc{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rc)},
@@ -382,7 +382,7 @@ public:
         std::cout << "y_tilde_hat rows: " << y_tilde_hat.rows() << ", y_tilde_hat cols: " << y_tilde_hat.cols() << std::endl;
         //c_tilde_hat: smoothing on y_tilde_hat(t) with respect of the basis of y
         std::cout << "Computing c_tilde_hat" << std::endl;
-        FDAGWR_TRAITS::Dense_Matrix c_tilde_hat = columnize_coeff_resp(basis_smoothing_fdata<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_y));
+        FDAGWR_TRAITS::Dense_Matrix c_tilde_hat = columnize_coeff_resp(basis_smoothing_fdata<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_smoothing));
         std::cout << "c_tilde_hat rows: " << c_tilde_hat.rows() << ", c_tilde_hat cols: " << c_tilde_hat.cols() << std::endl;
         std::cout << c_tilde_hat << std::endl;
         //y_tilde_new(t)
