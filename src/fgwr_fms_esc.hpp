@@ -226,7 +226,7 @@ public:
                 std::cout << "m_y rows: " << m_y.rows() << ", m_y cols: " << m_y.cols() << std::endl;
                 std::cout << "m_phi rows: " << m_phi.rows() << ", m_phi cols: " << m_phi.cols() << std::endl;
                 std::cout << "m_c rows: " << m_c.rows() << ", m_c cols: " << m_c.cols() << std::endl;
-                std::cout << "m_knots_y rows: " << m_knots_y.rows() << ", m_knots_y cols: " << m_knots_y.cols() << std::endl;
+                std::cout << "m_knots_smoothing rows: " << m_knots_smoothing.rows() << ", m_knots_smoothing cols: " << m_knots_smoothing.cols() << std::endl;
                 std::cout << "m_Xc rows: " << m_Xc.rows() << ", m_Xc cols: " << m_Xc.cols() << std::endl;
                 std::cout << "m_Wc rows: " << m_Wc.rows() << ", m_Wc cols: " << m_Wc.cols() << std::endl;
                 std::cout << "m_Rc rows: " << m_Rc.rows() << ", m_Rc cols: " << m_Rc.cols() << std::endl;
