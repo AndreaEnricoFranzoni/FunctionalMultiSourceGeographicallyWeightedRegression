@@ -251,13 +251,13 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     //  ABSCISSA POINTS of response
     std::vector<double> abscissa_points_ = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
-
+    // wrapper into eigen
     check_dim_input<_RESPONSE_>(response_.rows(), abscissa_points_.size(), "points for evaluation of raw data vector");   //check that size of abscissa points and number of evaluations of fd raw data coincide
     FDAGWR_TRAITS::Dense_Matrix abscissa_points_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(abscissa_points_.data(),abscissa_points_.size(),1);
     double a = left_extreme_domain;
     double b = right_extreme_domain;
     //knots for performing smoothing
-    FDAGWR_TRAITS::Dense_Matrix knots_smoothing = Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
+    FDAGWR_TRAITS::Dense_Matrix knots_smoothing = FDAGWR_TRAITS::Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
     Rcout << "Knots for smoothing: " << knots_smoothing.rows() << " x " << knots_smoothing.cols() << std::endl;
     Rcout << knots_smoothing << std::endl;
 
