@@ -530,6 +530,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
     double loc = 0.3;
+
+    Rcout << "Printing Wc" << std::endl;
+    for(std::size_t j = 0; j < Wc.size(); ++i){ Rcout << "Wc(" << j << "," << j << "): " << Wc(j,j)(loc) << std::endl;}
+
     Rcout << "Printing We" << std::endl;
     for(std::size_t i = 0; i < We.size(); ++i)
     {

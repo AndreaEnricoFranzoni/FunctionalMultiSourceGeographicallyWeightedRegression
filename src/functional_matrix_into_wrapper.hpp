@@ -215,7 +215,7 @@ wrap_into_fm(const functional_weight_matrix_stationary<INPUT,OUTPUT,domain_type,
         f[unit_i] = W.weights()[unit_i];
     }
 
-    functional_matrix_diagonal<INPUT,OUTPUT> fm(std::move(f),n);
+    functional_matrix_diagonal<INPUT,OUTPUT> fm(f,n);
     return fm;
 }
 
