@@ -532,20 +532,20 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     double loc = 0.3;
 
     Rcout << "Printing Wc" << std::endl;
-    for(std::size_t j = 0; j < Wc.size(); ++i){ Rcout << "Wc(" << j << "," << j << "): " << Wc(j,j)(loc) << std::endl;}
+    for(std::size_t j = 0; j < Wc.size(); ++j){ Rcout << "Wc(" << j << "," << j << "): " << Wc(j,j)(loc) << std::endl;}
 
     Rcout << "Printing We" << std::endl;
     for(std::size_t i = 0; i < We.size(); ++i)
     {
         Rcout << "We[" << i << "]" << std::endl;
-        for(std::size_t j = 0; j < We[i].size(); ++i){ Rcout << "We[" << i << "](" << j << "," << j << "): " << We[i](j,j)(loc) << std::endl;}
+        for(std::size_t j = 0; j < We[i].size(); ++j){ Rcout << "We[" << i << "](" << j << "," << j << "): " << We[i](j,j)(loc) << std::endl;}
     }
 
     Rcout << "Printing Ws" << std::endl;
     for(std::size_t i = 0; i < Ws.size(); ++i)
     {
         Rcout << "Ws[" << i << "]" << std::endl;
-        for(std::size_t j = 0; j < Ws[i].size(); ++i){ Rcout << "Ws[" << i << "](" << j << "," << j << "): " << Ws[i](j,j)(loc) << std::endl;}
+        for(std::size_t j = 0; j < Ws[i].size(); ++j){ Rcout << "Ws[" << i << "](" << j << "," << j << "): " << Ws[i](j,j)(loc) << std::endl;}
     }
 
     Rcout << "fdagwr.03:" << std::endl;
