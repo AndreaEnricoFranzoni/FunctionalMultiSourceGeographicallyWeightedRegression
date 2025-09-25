@@ -73,6 +73,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// test_kamy
+void test_kamy();
+RcppExport SEXP _fdagwr_test_kamy() {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    test_kamy();
+    return R_NilValue;
+END_RCPP
+}
 // FSGWR
 Rcpp::List FSGWR(double input_el, Rcpp::Nullable<int> num_threads);
 RcppExport SEXP _fdagwr_FSGWR(SEXP input_elSEXP, SEXP num_threadsSEXP) {
@@ -100,6 +109,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_FMSGWR", (DL_FUNC) &_fdagwr_FMSGWR, 52},
+    {"_fdagwr_test_kamy", (DL_FUNC) &_fdagwr_test_kamy, 0},
     {"_fdagwr_FSGWR", (DL_FUNC) &_fdagwr_FSGWR, 2},
     {"_fdagwr_FGWR", (DL_FUNC) &_fdagwr_FGWR, 2},
     {NULL, NULL, 0}

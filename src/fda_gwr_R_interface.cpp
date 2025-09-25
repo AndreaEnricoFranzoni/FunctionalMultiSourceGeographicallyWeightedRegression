@@ -258,8 +258,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     double b = right_extreme_domain;
     //knots for performing smoothing
     FDAGWR_TRAITS::Dense_Matrix knots_smoothing = FDAGWR_TRAITS::Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
-    Rcout << "Knots for smoothing: " << knots_smoothing.rows() << " x " << knots_smoothing.cols() << std::endl;
-    Rcout << knots_smoothing << std::endl;
+
 
 
     //  KNOTS
@@ -592,6 +591,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     return l;
 }
 
+// [[Rcpp::export]]
+void test_kamy() {
+  Rcout << "Su Kami funziona!"<< std::endl;
+}
 
 
 

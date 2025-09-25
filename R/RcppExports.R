@@ -5,6 +5,10 @@ FMSGWR <- function(y_points, t_points, left_extreme_domain, right_extreme_domain
     .Call(`_fdagwr_FMSGWR`, y_points, t_points, left_extreme_domain, right_extreme_domain, coeff_y_points, knots_y_points, degree_basis_y_points, n_basis_y_points, coeff_rec_weights_y_points, degree_basis_rec_weights_y_points, n_basis_rec_weights_y_points, coeff_stationary_cov, basis_types_stationary_cov, knots_stationary_cov, degrees_basis_stationary_cov, n_basis_stationary_cov, penalization_stationary_cov, knots_beta_stationary_cov, degrees_basis_beta_stationary_cov, n_basis_beta_stationary_cov, coeff_events_cov, basis_types_events_cov, knots_events_cov, degrees_basis_events_cov, n_basis_events_cov, penalization_events_cov, coordinates_events, kernel_bandwith_events, knots_beta_events_cov, degrees_basis_beta_events_cov, n_basis_beta_events_cov, coeff_stations_cov, basis_types_stations_cov, knots_stations_cov, degrees_basis_stations_cov, n_basis_stations_cov, penalization_stations_cov, coordinates_stations, kernel_bandwith_stations, knots_beta_stations_cov, degrees_basis_beta_stations_cov, n_basis_beta_stations_cov, n_knots_smoothing, n_intervals_trapezoidal_quadrature, target_error_trapezoidal_quadrature, max_iterations_trapezoidal_quadrature, num_threads, basis_type_y_points, basis_type_rec_weights_y_points, basis_types_beta_stationary_cov, basis_types_beta_events_cov, basis_types_beta_stations_cov)
 }
 
+test_kamy <- function() {
+    invisible(.Call(`_fdagwr_test_kamy`))
+}
+
 FSGWR <- function(input_el = 1, num_threads = NULL) {
     .Call(`_fdagwr_FSGWR`, input_el, num_threads)
 }
