@@ -232,11 +232,13 @@ public:
                 std::cout << "m_Rc rows: " << m_Rc.rows() << ", m_Rc cols: " << m_Rc.cols() << std::endl;
                 std::cout << "m_omega rows: " << m_omega.rows() << ", m_omega cols: " << m_omega.cols() << std::endl;
                 std::cout << "m_Xe rows: " << m_Xe.rows() << ", m_Xe cols: " << m_Xe.cols() << std::endl;
-                std::cout << "m_We rows: " << m_We[0].rows() << ", m_We cols: " << m_We[0].cols() << std::endl;
+                std::cout << "Number of elements in m_We: " << m_We.size() << std::endl;
+                for(std::size_t i = 0; i < m_We.size(); ++i){   std::cout << "m_We[" << i << "] rows: " << m_We[i].rows() << ", cols: " << m_We[i].cols() << std::endl;}
                 std::cout << "m_Re rows: " << m_Re.rows() << ", m_Re cols: " << m_Re.cols() << std::endl;
                 std::cout << "m_theta rows: " << m_theta.rows() << ", m_theta cols: " << m_theta.cols() << std::endl;
                 std::cout << "m_Xs rows: " << m_Xs.rows() << ", m_Xs cols: " << m_Xs.cols() << std::endl;
-                std::cout << "m_Ws rows: " << m_Ws[0].rows() << ", m_Ws cols: " << m_Ws[0].cols() << std::endl;
+                std::cout << "Number of elements in m_Ws: " << m_Ws.size() << std::endl;
+                for(std::size_t i = 0; i < m_Ws.size(); ++i){   std::cout << "m_Ws[" << i << "] rows: " << m_Ws[i].rows() << ", cols: " << m_Ws[i].cols() << std::endl;}
                 std::cout << "m_Rs rows: " << m_Rs.rows() << ", m_Rs cols: " << m_Rs.cols() << std::endl;
                 std::cout << "m_psi rows: " << m_psi.rows() << ", m_psi cols: " << m_psi.cols() << std::endl;
             }

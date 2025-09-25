@@ -529,7 +529,20 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //psi: a sparse functional matrix of dimension qsxLs
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
+    double loc = 0.3;
+    Rcout << "Printing We" << std::endl;
+    for(std::size_t i = 0; i < We.size(); ++i)
+    {
+        Rcout << "We[" << i << "]" << std::endl;
+        for(std::size_t j = 0; j < We[i].size(); ++i){ Rcout << "We[" << i << "](" << j << "," << j << "): " << We[i](j,j)(loc) << std::endl;}
+    }
 
+    Rcout << "Printing Ws" << std::endl;
+    for(std::size_t i = 0; i < Ws.size(); ++i)
+    {
+        Rcout << "Ws[" << i << "]" << std::endl;
+        for(std::size_t j = 0; j < Ws[i].size(); ++i){ Rcout << "Ws[" << i << "](" << j << "," << j << "): " << Ws[i](j,j)(loc) << std::endl;}
+    }
 
     Rcout << "fdagwr.03:" << std::endl;
     //fgwr algorithm
@@ -566,7 +579,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     number_threads);
     
     //computing the algo
-    fgwr_algo->compute();
+    //fgwr_algo->compute();
     //retrieving the results                                                                                
     Rcpp::List regressor_coefficients = wrap_coefficients_to_R_list(fgwr_algo->regressorCoefficients());
 

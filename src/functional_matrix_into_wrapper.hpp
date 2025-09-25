@@ -258,7 +258,8 @@ wrap_into_fm(const functional_weight_matrix_non_stationary<INPUT,OUTPUT,domain_t
             f[unit_i] = W.weights()[i][unit_i];
         }
 
-        fm.emplace_back(std::move(f),n);
+        //fm.emplace_back(std::move(f),n);
+        fm.emplace_back(f,n);
     }
 
     return fm;
