@@ -153,6 +153,30 @@ public:
         //ritorna una matrice n_locs x n_basis
         return bsplines_basis_evaluation<domain_type>(m_basis, locations);
     }
+
+    /*!
+    * @brief Performing the smoothing of fdata, discrete evaluations, relatively to the abscissa in knots, given by f_ev
+    * @param f_ev an n_locs x 1 matrix with the evaluations of the fdata in correspondence of the knots
+    * @param knots knots over which evaluating the basis, and for which it is available the evaluation of the functional datum
+    * @return a dense matrix of dimension n_basis x 1, with the coefficient of the basis expansion
+    */
+    inline
+    FDAGWR_TRAITS::Dense_Matrix
+    smoothing(const FDAGWR_TRAITS::Dense_Matrix & f_ev, 
+              const FDAGWR_TRAITS::Dense_Matrix & knots) 
+    const
+    override
+    {
+        assert((f_ev.rows() == knots.rows()) && (f_ev.cols() == 1) && (knots.cols() == 1));
+
+        //psi: an knots.size() x number of basis matrix: each row represents a knot, every column a basis: contains its evaluation
+        Eigen::SparseMatrix<double> psi = m_basis.eval_base_on_locs(knots);
+        Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> solver;
+        //performs (t(Psi)*Psi)^(-1) * t(Psi)
+        solver.compute(psi);
+
+        return solver.solve(f_ev);
+    }
 };
 
 #endif  /*FDAGWR_BSPLINES_BASIS_HPP*/

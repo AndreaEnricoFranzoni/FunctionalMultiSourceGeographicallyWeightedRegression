@@ -382,7 +382,7 @@ public:
         std::cout << "y_tilde_hat rows: " << y_tilde_hat.rows() << ", y_tilde_hat cols: " << y_tilde_hat.cols() << std::endl;
         //c_tilde_hat: smoothing on y_tilde_hat(t) with respect of the basis of y
         std::cout << "Computing c_tilde_hat" << std::endl;
-        FDAGWR_TRAITS::Dense_Matrix c_tilde_hat = columnize_coeff_resp(basis_smoothing_fdata<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_smoothing));
+        FDAGWR_TRAITS::Dense_Matrix c_tilde_hat = columnize_coeff_resp(fm_smoothing<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_smoothing));
         std::cout << "c_tilde_hat rows: " << c_tilde_hat.rows() << ", c_tilde_hat cols: " << c_tilde_hat.cols() << std::endl;
         std::cout << c_tilde_hat << std::endl;
         //y_tilde_new(t)

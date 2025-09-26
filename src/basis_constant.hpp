@@ -86,6 +86,28 @@ public:
         return evals.sparseView();  // conversione a SparseMatrix
         //ritorna una matrice di 1s n_locs x 1
     }
+
+    /*!
+    * @brief Performing the smoothing of fdata, discrete evaluations, relatively to the abscissa in knots, given by f_ev
+    * @param f_ev an n_locs x 1 matrix with the evaluations of the fdata in correspondence of the knots
+    * @param knots knots over which evaluating the basis, and for which it is available the evaluation of the functional datum
+    * @return a dense matrix of dimension 1 x 1, with the coefficient of the basis expansion
+    */
+    inline
+    FDAGWR_TRAITS::Dense_Matrix
+    smoothing(const FDAGWR_TRAITS::Dense_Matrix & f_ev, 
+              const FDAGWR_TRAITS::Dense_Matrix & knots) 
+    const
+    override
+    {
+        assert((f_ev.rows() == knots.rows()) && (f_ev.cols() == 1) && (knots.cols() == 1));
+
+        std::size_t number_knots = knots.rows();
+        FDAGWR_TRAITS::Dense_Matrix c = FDAGWR_TRAITS::Dense_Matrix::Zero(1,1);
+        for(std::size_t i = 0; i < number_knots; ++i){    c(0,0) += f_ev(i,0);}
+
+        return c/number_knots;
+    }
 };
 
 #endif  /*FDAGWR_CONSTANT_BASIS_HPP*/

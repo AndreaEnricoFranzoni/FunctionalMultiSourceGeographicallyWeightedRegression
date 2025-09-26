@@ -26,6 +26,8 @@
 #include "traits_fdagwr.hpp"
 #include "concepts_fdagwr.hpp"
 
+#include <cassert>
+
 
 template< typename domain_type = FDAGWR_TRAITS::basis_geometry >
     requires fdagwr_concepts::as_interval<domain_type>
@@ -110,6 +112,11 @@ public:
     * @brief Abstract function to evaluate the basis over a set of locations
     */
     virtual inline FDAGWR_TRAITS::Sparse_Matrix eval_base_on_locs(const FDAGWR_TRAITS::Dense_Matrix &locations) const = 0;
+
+    /*!
+    * @brief Abstract function to perform the smoothing over an evaluated functional datum, given the knots for the smoothing
+    */
+    virtual inline FDAGWR_TRAITS::Dense_Matrix smoothing(const FDAGWR_TRAITS::Dense_Matrix & f_ev, const FDAGWR_TRAITS::Dense_Matrix & knots) const = 0;
 };
 
 
