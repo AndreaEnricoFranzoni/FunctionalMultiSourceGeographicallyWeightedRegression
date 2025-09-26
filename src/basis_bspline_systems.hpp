@@ -70,7 +70,6 @@ public:
                         m_numbers_of_basis(numbers_of_basis),
                         m_q(q)
                      {
-                        std::cout<<"Nel costruttore del sistema di basi"<<std::endl;
                         //constructing systems of bsplines given knots and orders of the basis  
                         m_systems_of_basis.reserve(m_q);
                         for(std::size_t i = 0; i < m_q; ++i){  m_systems_of_basis.emplace_back(m_knots.nodes(), m_basis_degrees[i], m_numbers_of_basis[i]);}

@@ -51,13 +51,11 @@ public:
                         :
                             m_q(q)
                         {
-                            std::cout<<"Nel costruttore delle covariate fd"<<std::endl;
                             m_n = m_q > 0 ? coeff[0].cols() : 0;
 
                             m_X.reserve(m_q);
                             for(std::size_t i = 0; i < m_q; ++i)
                             {
-                                std::cout<<"Fd cov "<<i+1<<std::endl;
                                 std::unique_ptr<basis_base_class<domain_type>> basis_i = factoryBasis.create(basis_types[i],knots,basis_degrees[i],basis_numbers[i]);
                                 m_X.emplace_back(std::move(coeff[i]),std::move(basis_i));
                                 //functional_data< domain_type,basis_base_class > x_i(std::move(coeff[i]),std::move(basis_i));

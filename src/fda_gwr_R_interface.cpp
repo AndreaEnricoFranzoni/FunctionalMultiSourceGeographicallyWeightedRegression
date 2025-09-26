@@ -27,7 +27,7 @@
 #include "utility_fdagwr.hpp"
 
 
-#include "data_reader.hpp"
+#include "utility/data_reader.hpp"
 #include "parameters_wrapper_fdagwr.hpp"
 
 
@@ -447,7 +447,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //FD OBJECTS: RESPONSE and COVARIATES
     //response
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_response_ = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
-    Rcout << basis_response_->eval_base_on_locs(knots_smoothing) << std::endl;
     //extracting the template param of the basis for fd (access it in the template params list with ::template_type)  
     using response_basis_tmp_t = extract_template_t< decltype(basis_response_)::element_type >;   
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
@@ -538,14 +537,6 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //psi: a sparse functional matrix of dimension qsxLs
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
-
-
-        std::function< _FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_&) > f1 = [](const _FD_INPUT_TYPE_&x){return std::sin(2*std::numbers::pi*x);};
-    std::function< _FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_&) > f2 = [](const _FD_INPUT_TYPE_&x){return std::cos(2*std::numbers::pi*x);};
-    std::vector< std::function< _FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_&) > > v_f{f1,f2};
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> fm_t(v_f,2,1);
-    auto sm = fm_smoothing(fm_t,*basis_y,knots_smoothing);
-    Rcout << sm << std::endl;
 
     Rcout << "fdagwr.09:" << std::endl;
     //fgwr algorithm
