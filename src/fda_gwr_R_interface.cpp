@@ -248,7 +248,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     auto c = columnize_coeff_resp(coefficients_response_);
     //reconstruction weights coefficients matrix
     auto coefficients_rec_weights_response_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coeff_rec_weights_y_points);
-
+Rcout << coefficients_response_ << std::endl;
 
     //  ABSCISSA POINTS of response
     std::vector<double> abscissa_points_ = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
