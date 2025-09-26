@@ -74,15 +74,6 @@ public:
                         //constructing systems of bsplines given knots and orders of the basis  
                         m_systems_of_basis.reserve(m_q);
                         for(std::size_t i = 0; i < m_q; ++i){  m_systems_of_basis.emplace_back(m_knots.nodes(), m_basis_degrees[i], m_numbers_of_basis[i]);}
-
-/*
-                        m_systems_of_basis.reserve(m_q);
-                        for(std::size_t i = 0; i < m_q; ++i){
-                            std::cout<<"Base "<<i+1<<std::endl;
-                            basis_type<domain_type> bs_i(m_knots.nodes(), m_basis_degrees[i], m_numbers_of_basis[i]);  
-                            m_systems_of_basis.push_back(bs_i);}
-*/
-
                      }
 
     /*!

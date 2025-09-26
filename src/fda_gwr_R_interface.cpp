@@ -452,7 +452,8 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //extracting the template param of the basis for fd (access it in the template params list with ::template_type)  
     using response_basis_tmp_t = extract_template_t< decltype(basis_response_)::element_type >;   
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
-
+    
+    Rcout << *(basis_response_).eval_base_on_locs(knots_smoothing) << std::endl;
 
     //response reconstruction weights
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_rec_weights_response_ = basis_fac.create(basis_type_rec_weights_response_,knots_response_eigen_w_,degree_basis_rec_weights_response_,number_basis_rec_weights_response_);
@@ -543,7 +544,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
 
-    Rcout << "fdagwr.06:" << std::endl;
+    Rcout << "fdagwr.09:" << std::endl;
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),
