@@ -449,11 +449,11 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //FD OBJECTS: RESPONSE and COVARIATES
     //response
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_response_ = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
+    Rcout << basis_response_->eval_base_on_locs(knots_smoothing) << std::endl;
     //extracting the template param of the basis for fd (access it in the template params list with ::template_type)  
     using response_basis_tmp_t = extract_template_t< decltype(basis_response_)::element_type >;   
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
     
-    Rcout << basis_response_->eval_base_on_locs(knots_smoothing) << std::endl;
 
     //response reconstruction weights
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_rec_weights_response_ = basis_fac.create(basis_type_rec_weights_response_,knots_response_eigen_w_,degree_basis_rec_weights_response_,number_basis_rec_weights_response_);
