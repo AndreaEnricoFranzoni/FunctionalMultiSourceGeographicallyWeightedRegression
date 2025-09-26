@@ -415,16 +415,19 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     //BASIS SYSTEMS FOR THE BETAS
     //stationary (Omega)
+    Rcout << "Sto per costruire omega" << std::endl;
     basis_systems< _DOMAIN_, bsplines_basis > bs_C(knots_beta_stationary_cov_eigen_w_, 
                                                   degree_basis_beta_stationary_cov_, 
                                                   number_basis_beta_stationary_cov_, 
                                                   q_C);
     //events (Theta)
+    Rcout << "Sto per costruire theta" << std::endl;
     basis_systems< _DOMAIN_, bsplines_basis > bs_E(knots_beta_events_cov_eigen_w_, 
                                                   degree_basis_beta_events_cov_, 
                                                   number_basis_beta_events_cov_, 
                                                   q_E);
     //stations (Psi)
+    Rcout << "Sto per costruire psi" << std::endl;
     basis_systems< _DOMAIN_, bsplines_basis > bs_S(knots_beta_stations_cov_eigen_w_,  
                                                   degree_basis_beta_stations_cov_, 
                                                   number_basis_beta_stations_cov_, 
@@ -458,6 +461,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     functional_data< _DOMAIN_, rec_weights_response_basis_tmp_t::template_type > rec_weights_y_fd_(std::move(coefficients_rec_weights_response_),std::move(basis_rec_weights_response_));
     
     //stationary covariates
+    Rcout << "Sto per costruire xc" << std::endl;
     functional_data_covariates<_DOMAIN_,_STATIONARY_> x_C_fd_(coefficients_stationary_cov_,
                                                               q_C,
                                                               basis_types_stationary_cov_,
@@ -467,6 +471,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                               basis_fac);
     
     //events covariates
+    Rcout << "Sto per costruire xe" << std::endl;
     functional_data_covariates<_DOMAIN_,_EVENT_> x_E_fd_(coefficients_events_cov_,
                                                          q_E,
                                                          basis_types_events_cov_,
@@ -476,6 +481,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                          basis_fac);
     
     //stations covariates
+    Rcout << "Sto per costruire xs" << std::endl;
     functional_data_covariates<_DOMAIN_,_STATION_> x_S_fd_(coefficients_stations_cov_,
                                                            q_S,
                                                            basis_types_stations_cov_,
