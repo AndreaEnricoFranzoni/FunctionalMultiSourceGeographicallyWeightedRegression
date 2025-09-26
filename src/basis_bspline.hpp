@@ -170,7 +170,7 @@ public:
         assert((f_ev.rows() == knots.rows()) && (f_ev.cols() == 1) && (knots.cols() == 1));
 
         //psi: an knots.size() x number of basis matrix: each row represents a knot, every column a basis: contains its evaluation
-        Eigen::SparseMatrix<double> psi = m_basis.eval_base_on_locs(knots);
+        Eigen::SparseMatrix<double> psi = this->eval_base_on_locs(knots);
         Eigen::SparseQR<Eigen::SparseMatrix<double>, Eigen::COLAMDOrdering<int>> solver;
         //performs (t(Psi)*Psi)^(-1) * t(Psi)
         solver.compute(psi);
