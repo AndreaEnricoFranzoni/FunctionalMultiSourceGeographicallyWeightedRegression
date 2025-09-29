@@ -21,19 +21,19 @@
 #ifndef FGWR_ALGO_HPP
 #define FGWR_ALGO_HPP
 
-#include "include_fdagwr.hpp"
-#include "traits_fdagwr.hpp"
+#include "../utility/include_fdagwr.hpp"
+#include "../utility/traits_fdagwr.hpp"
 
-#include "functional_matrix.hpp"
-#include "functional_matrix_sparse.hpp"
-#include "functional_matrix_diagonal.hpp"
-#include "functional_matrix_product.hpp"
-#include "functional_matrix_operators.hpp"
-#include "functional_matrix_smoothing.hpp"
+#include "../functional_matrix/functional_matrix.hpp"
+#include "../functional_matrix/functional_matrix_sparse.hpp"
+#include "../functional_matrix/functional_matrix_diagonal.hpp"
+#include "../functional_matrix/functional_matrix_product.hpp"
+#include "../functional_matrix/functional_matrix_operators.hpp"
+#include "../functional_matrix/functional_matrix_smoothing.hpp"
 
-#include "functional_data_integration.hpp"
-#include "basis_include.hpp"
-#include "parameters_wrapper_fdagwr.hpp"
+#include "../integration/functional_data_integration.hpp"
+#include "../basis/basis_include.hpp"
+#include "../utility/parameters_wrapper_fdagwr.hpp"
 
 #include <iostream>
 

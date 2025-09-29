@@ -22,7 +22,7 @@
 #define FGWR_FACTORY_HPP
 
 
-#include "traits_fdagwr.hpp"
+#include "../utility/traits_fdagwr.hpp"
 #include "fgwr_fms_esc.hpp"
 #include "fgwr_fms_sec.hpp"
 #include "fgwr_fos.hpp"

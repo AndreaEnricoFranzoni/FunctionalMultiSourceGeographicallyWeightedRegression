@@ -24,7 +24,7 @@
 #include "functional_matrix_storing_type.hpp"
 #include "functional_matrix.hpp"
 #include "functional_matrix_diagonal.hpp"
-#include "traits_fdagwr.hpp"
+#include "../utility/traits_fdagwr.hpp"
 
 
 /*!

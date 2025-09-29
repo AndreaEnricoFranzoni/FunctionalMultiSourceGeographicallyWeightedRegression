@@ -23,8 +23,8 @@
 #include <RcppEigen.h>
 
 
-#include "../include_fdagwr.hpp"
-#include "../traits_fdagwr.hpp"
+#include "include_fdagwr.hpp"
+#include "traits_fdagwr.hpp"
 #include "removing_nan.hpp"
 
 

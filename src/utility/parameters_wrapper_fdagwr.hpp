@@ -26,8 +26,8 @@
 
 #include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
-#include "basis_include.hpp"
-#include "utility/data_reader.hpp"
+#include "../basis/basis_include.hpp"
+#include "data_reader.hpp"
 
 #include <stdexcept>
 

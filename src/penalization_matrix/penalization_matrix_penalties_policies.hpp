@@ -20,8 +20,8 @@
 #ifndef FDAGWR_PENALTIES_POLICIES_HPP
 #define FDAGWR_PENALTIES_POLICIES_HPP
 
-#include "traits_fdagwr.hpp"
-#include "basis_bspline_systems.hpp"
+#include "../utility/traits_fdagwr.hpp"
+#include "../basis/basis_bspline_systems.hpp"
 
 
 /*!

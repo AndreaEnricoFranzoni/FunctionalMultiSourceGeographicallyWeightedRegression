@@ -22,10 +22,10 @@
 #define FDAGWR_FUNCTIONAL_DATA_HPP
 
 
-#include "include_fdagwr.hpp"
-#include "traits_fdagwr.hpp"
-#include "concepts_fdagwr.hpp"
-#include "basis_include.hpp"
+#include "../utility/include_fdagwr.hpp"
+#include "../utility/traits_fdagwr.hpp"
+#include "../utility/concepts_fdagwr.hpp"
+#include "../basis/basis_include.hpp"
 
 
 
@@ -63,7 +63,7 @@ public:
                 m_fdata_basis(std::move(fdata_basis))  
             {
                 //checking that coefficients dimensions are consistent
-                assert((void("Number of knots = number of basis - degree + 1"), m_fdata_coeff.rows() == m_fdata_basis->number_of_basis() ));
+                assert((void("Number of basis has to be equal to the number of basis expansion coefficients"), m_fdata_coeff.rows() == m_fdata_basis->number_of_basis() ));
             }
 
     /*!

@@ -21,40 +21,39 @@
 #include <RcppEigen.h>
 
 
-#include "include_fdagwr.hpp"
-#include "traits_fdagwr.hpp"
-#include "concepts_fdagwr.hpp"
-#include "utility_fdagwr.hpp"
-
-
+#include "utility/include_fdagwr.hpp"
+#include "utility/traits_fdagwr.hpp"
+#include "utility/concepts_fdagwr.hpp"
+#include "utility/utility_fdagwr.hpp"
 #include "utility/data_reader.hpp"
-#include "parameters_wrapper_fdagwr.hpp"
+#include "utility/parameters_wrapper_fdagwr.hpp"
+
+#include "basis/basis_include.hpp"
+#include "basis/basis_bspline_systems.hpp"
+#include "basis/basis_factory_proxy.hpp"
+
+#include "functional_data/functional_data.hpp"
+#include "functional_data/functional_data_covariates.hpp"
+
+#include "weight_matrix/functional_weight_matrix_stat.hpp"
+#include "weight_matrix/functional_weight_matrix_no_stat.hpp"
+#include "weight_matrix/distance_matrix.hpp"
+
+#include "penalization_matrix/penalization_matrix.hpp"
+
+#include "integration/functional_data_integration.hpp"
+
+#include "fgwr/fgwr_factory.hpp"
+
+#include "functional_matrix/functional_matrix.hpp"
+#include "functional_matrix/functional_matrix_sparse.hpp"
+#include "functional_matrix/functional_matrix_diagonal.hpp"
+#include "functional_matrix/functional_matrix_operators.hpp"
+#include "functional_matrix/functional_matrix_product.hpp"
+#include "functional_matrix/functional_matrix_into_wrapper.hpp"
 
 
-#include "basis_include.hpp"
-#include "basis_bspline_systems.hpp"
-#include "basis_factory_proxy.hpp"
 
-#include "functional_data.hpp"
-#include "functional_data_covariates.hpp"
-#include "functional_weight_matrix_stat.hpp"
-#include "functional_weight_matrix_no_stat.hpp"
-#include "distance_matrix.hpp"
-#include "penalization_matrix.hpp"
-
-#include "functional_data_integration.hpp"
-#include "fgwr_factory.hpp"
-
-
-#include "functional_matrix.hpp"
-#include "functional_matrix_sparse.hpp"
-#include "functional_matrix_diagonal.hpp"
-#include "functional_matrix_operators.hpp"
-#include "functional_matrix_product.hpp"
-#include "functional_matrix_into_wrapper.hpp"
-
-
-#include "functional_matrix_smoothing.hpp"
 
 
 using namespace Rcpp;
@@ -237,6 +236,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     // MAXIMUM NUMBER OF ITERATIONS WHILE INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
     int max_iterations = wrap_and_check_max_iterations_trapezoidal_quadrature(max_iterations_trapezoidal_quadrature);
 
+
     //  RESPONSE
     //raw data
     auto response_ = reader_data<_DATA_TYPE_,_NAN_REM_>(y_points);       //Eigen dense matrix type (auto is necessary )
@@ -248,7 +248,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     auto c = columnize_coeff_resp(coefficients_response_);
     //reconstruction weights coefficients matrix
     auto coefficients_rec_weights_response_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coeff_rec_weights_y_points);
-Rcout << coefficients_response_ << std::endl;
+
 
     //  ABSCISSA POINTS of response
     std::vector<double> abscissa_points_ = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
@@ -257,12 +257,9 @@ Rcout << coefficients_response_ << std::endl;
     FDAGWR_TRAITS::Dense_Matrix abscissa_points_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(abscissa_points_.data(),abscissa_points_.size(),1);
     double a = left_extreme_domain;
     double b = right_extreme_domain;
-    //knots for performing smoothing
-    FDAGWR_TRAITS::Dense_Matrix knots_smoothing = FDAGWR_TRAITS::Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
 
 
-
-    //  KNOTS
+    //  KNOTS (for basis expansion and for smoothing)
     //response
     std::vector<double> knots_response_ = wrap_abscissas(knots_y_points,a,b);
     FDAGWR_TRAITS::Dense_Vector knots_response_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_.data(),knots_response_.size());
@@ -284,6 +281,8 @@ Rcout << coefficients_response_ << std::endl;
     //stations beta cov
     std::vector<double> knots_beta_stations_cov_ = wrap_abscissas(knots_beta_stations_cov,a,b);
     FDAGWR_TRAITS::Dense_Vector knots_beta_stations_cov_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stations_cov_.data(),knots_beta_stations_cov_.size());
+    //knots for performing smoothing (n_knots_smoothing_y_new knots equally spaced in (a,b))
+    FDAGWR_TRAITS::Dense_Matrix knots_smoothing = FDAGWR_TRAITS::Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
 
 
     //  COVARIATES names, coefficients and how many (q_), for every type
@@ -538,7 +537,7 @@ Rcout << coefficients_response_ << std::endl;
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
 
-    Rcout << "fdagwr.09:" << std::endl;
+    Rcout << "fdagwr.19:" << std::endl;
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),

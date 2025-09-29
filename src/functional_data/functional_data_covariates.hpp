@@ -23,8 +23,8 @@
 
 
 #include "functional_data.hpp"
-#include "basis_include.hpp"
-#include "basis_factory_proxy.hpp"
+#include "../basis/basis_include.hpp"
+#include "../basis/basis_factory_proxy.hpp"
 
 
 template< typename domain_type = FDAGWR_TRAITS::basis_geometry, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >

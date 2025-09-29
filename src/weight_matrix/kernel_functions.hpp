@@ -17,39 +17,32 @@
 // OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
-
-#ifndef FDAGWR_INCLUDE_HPP
-#define FDAGWR_INCLUDE_HPP
-
-
-#include <Eigen/Dense>
-#include <Eigen/Sparse>
-
-#include "fdaPDE-core/fdaPDE/splines.h"
-
-#include <vector>
-#include <string>
-#include <array>
-#include <tuple>
-#include <map>
-#include <set>
-#include <memory>
-#include <functional>
-#include <type_traits>
-#include <concepts>
-#include <algorithm>
-#include <iterator>
-#include <cmath>
-#include <numeric>
-#include <variant>
-#include <utility>
-#include <numbers>
-
-#ifdef _OPENMP
-#include <omp.h>
-#endif
+#ifndef FDAGWR_KERNEL_FUNC_HPP
+#define FDAGWR_KERNEL_FUNC_HPP
 
 
-#include <iostream>
+#include "../utility/include_fdagwr.hpp"
+#include "../utility/traits_fdagwr.hpp"
 
-#endif  /*FDAGWR_INCLUDE_HPP*/
+/*!
+* @file kernel_functions.hpp
+* @brief Containing the definitions of the different kernel functions
+* @author Andrea Enrico Franzoni
+*/
+
+
+/*!
+* @brief Template function for the gaussian kernel
+* @tparam T type of the data
+* @param distance a double indicating the distance
+* @param bandwith kernel bandawith
+* @return the evaluation of the kernel in the distance
+*/
+template<typename T>
+T gaussian_kernel(T distance, T bandwith)
+{   
+        //gaussian kernel function
+        return std::exp((-static_cast<double>(1)/static_cast<double>(2))*std::pow((distance/bandwith),static_cast<int>(2)));
+};
+
+#endif /*FDAGWR_KERNEL_FUNC_HPP*/

@@ -22,12 +22,12 @@
 #define FDAGWR_BASIS_FACTORY_HPP
 
 
-#include "include_fdagwr.hpp"
-#include "traits_fdagwr.hpp"
-#include "concepts_fdagwr.hpp"
+#include "../utility/include_fdagwr.hpp"
+#include "../utility/traits_fdagwr.hpp"
+#include "../utility/concepts_fdagwr.hpp"
+#include "../utility/factory.hpp"
+#include "../utility/factory_proxy.hpp"
 #include "basis_include.hpp"
-#include "factory.hpp"
-#include "factory_proxy.hpp"
 
 
 

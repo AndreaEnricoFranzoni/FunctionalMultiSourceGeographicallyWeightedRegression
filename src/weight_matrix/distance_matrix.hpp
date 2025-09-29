@@ -21,8 +21,8 @@
 #define FDAGWR_DISTANCE_MATRIX_HPP
 
 
-#include "include_fdagwr.hpp"
-#include "traits_fdagwr.hpp"
+#include "../utility/include_fdagwr.hpp"
+#include "../utility/traits_fdagwr.hpp"
 #include <cassert>
 
 

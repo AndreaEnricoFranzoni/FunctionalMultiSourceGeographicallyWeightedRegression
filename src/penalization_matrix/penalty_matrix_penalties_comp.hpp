@@ -17,32 +17,30 @@
 // OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
-#ifndef FDAGWR_KERNEL_FUNC_HPP
-#define FDAGWR_KERNEL_FUNC_HPP
+
+#ifndef FDAGWR_PENALTIES_COMP_HPP
+#define FDAGWR_PENALTIES_COMP_HPP
+
+#include "../utility/traits_fdagwr.hpp"
+#include "../basis/basis_bspline_systems.hpp"
+#include "penalization_matrix_penalties_policies.hpp"
 
 
-#include "include_fdagwr.hpp"
-#include "traits_fdagwr.hpp"
-
-/*!
-* @file kernel_functions.hpp
-* @brief Containing the definitions of the different kernel functions
-* @author Andrea Enrico Franzoni
-*/
-
-
-/*!
-* @brief Template function for the gaussian kernel
-* @tparam T type of the data
-* @param distance a double indicating the distance
-* @param bandwith kernel bandawith
-* @return the evaluation of the kernel in the distance
-*/
-template<typename T>
-T gaussian_kernel(T distance, T bandwith)
-{   
-        //gaussian kernel function
-        return std::exp((-static_cast<double>(1)/static_cast<double>(2))*std::pow((distance/bandwith),static_cast<int>(2)));
+template <class PENALTY_ORDER_policy> 
+class penalty_computation
+{
+public:
+  
+  FDAGWR_TRAITS::Sparse_Matrix 
+  operator()
+  (const basis_systems< FDAGWR_TRAITS::basis_geometry, bsplines_basis > &bs, std::size_t system_number) 
+  const 
+  {   
+    return penalty_computing(bs, system_number);}
+  
+private:
+  /*!Policy to correctly compute the penalization*/
+  PENALTY_ORDER_policy penalty_computing;
 };
 
-#endif /*FDAGWR_KERNEL_FUNC_HPP*/
+#endif  /*FDAGWR_PENALTIES_COMP_HPP*/

@@ -22,9 +22,9 @@
 #define FDAGWR_PENALIZATION_MATRIX_HPP
 
 
-#include "include_fdagwr.hpp"
-#include "traits_fdagwr.hpp"
-#include "basis_bspline_systems.hpp"
+#include "../utility/include_fdagwr.hpp"
+#include "../utility/traits_fdagwr.hpp"
+#include "../basis/basis_bspline_systems.hpp"
 #include "penalty_matrix_penalties_comp.hpp"
 
 /*!

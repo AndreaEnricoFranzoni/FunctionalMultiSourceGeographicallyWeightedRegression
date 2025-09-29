@@ -22,10 +22,10 @@
 #define FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_HPP
 
 
-#include "include_fdagwr.hpp"
-#include "traits_fdagwr.hpp"
-#include "functional_matrix_storing_type.hpp"
-#include "functional_matrix_utils.hpp"
+#include "../utility/include_fdagwr.hpp"
+#include "../utility/traits_fdagwr.hpp"
+#include "../functional_matrix/functional_matrix_storing_type.hpp"
+#include "../functional_matrix/functional_matrix_utils.hpp"
 
 #include <cassert>
 

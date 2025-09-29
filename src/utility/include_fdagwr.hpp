@@ -18,29 +18,38 @@
 // fdagwr.
 
 
-#ifndef FDAGWR_PENALTIES_COMP_HPP
-#define FDAGWR_PENALTIES_COMP_HPP
-
-#include "traits_fdagwr.hpp"
-#include "basis_bspline_systems.hpp"
-#include "penalization_matrix_penalties_policies.hpp"
+#ifndef FDAGWR_INCLUDE_HPP
+#define FDAGWR_INCLUDE_HPP
 
 
-template <class PENALTY_ORDER_policy> 
-class penalty_computation
-{
-public:
-  
-  FDAGWR_TRAITS::Sparse_Matrix 
-  operator()
-  (const basis_systems< FDAGWR_TRAITS::basis_geometry, bsplines_basis > &bs, std::size_t system_number) 
-  const 
-  {   
-    return penalty_computing(bs, system_number);}
-  
-private:
-  /*!Policy to correctly compute the penalization*/
-  PENALTY_ORDER_policy penalty_computing;
-};
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
 
-#endif  /*FDAGWR_PENALTIES_COMP_HPP*/
+#include "../fdaPDE-core/fdaPDE/splines.h"
+
+#include <vector>
+#include <string>
+#include <array>
+#include <tuple>
+#include <map>
+#include <set>
+#include <memory>
+#include <functional>
+#include <type_traits>
+#include <concepts>
+#include <algorithm>
+#include <iterator>
+#include <cmath>
+#include <numeric>
+#include <variant>
+#include <utility>
+#include <numbers>
+
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
+
+#include <iostream>
+
+#endif  /*FDAGWR_INCLUDE_HPP*/

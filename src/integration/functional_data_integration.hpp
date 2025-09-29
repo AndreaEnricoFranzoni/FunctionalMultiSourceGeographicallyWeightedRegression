@@ -22,9 +22,9 @@
 #define FDAGWR_FUNCTIONAL_DATA_INTEGRATION_HPP
 
 
-#include "include_fdagwr.hpp"
-#include "traits_fdagwr.hpp"
-#include "concepts_fdagwr.hpp"
+#include "../utility/include_fdagwr.hpp"
+#include "../utility/traits_fdagwr.hpp"
+#include "../utility/concepts_fdagwr.hpp"
 
 #include "mesh.hpp"
 #include "numerical_integration.hpp"

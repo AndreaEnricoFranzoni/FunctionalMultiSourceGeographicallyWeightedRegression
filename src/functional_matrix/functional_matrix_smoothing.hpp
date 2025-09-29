@@ -21,11 +21,11 @@
 #ifndef FUNCTIONAL_MATRIX_SMOOTHING_HPP
 #define FUNCTIONAL_MATRIX_SMOOTHING_HPP
 
-#include "include_fdagwr.hpp"
-#include "traits_fdagwr.hpp"
+#include "../utility/include_fdagwr.hpp"
+#include "../utility/traits_fdagwr.hpp"
 
 #include "functional_matrix.hpp"
-#include "basis_include.hpp"
+#include "../basis/basis_include.hpp"
 
 #include <cassert>
 
