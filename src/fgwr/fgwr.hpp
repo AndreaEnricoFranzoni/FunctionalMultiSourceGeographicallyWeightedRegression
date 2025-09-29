@@ -48,6 +48,8 @@ class fgwr
 private:
     /*!Object to perform the integration using trapezoidal quadrature rule*/
     fd_integration m_integrating;
+    /*!Abscissa points over which there are the evaluations of the raw fd*/
+    std::vector<INPUT> m_abscissa_points;
     /*!Number of statistical units*/
     std::size_t m_n;
     /*!Number of threads for OMP*/
@@ -58,13 +60,19 @@ public:
     * @brief Constructor
     * @param number_threads number of threads for OMP
     */
-    fgwr(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, std::size_t n, int number_threads)
-        : m_integrating(a,b,n_intervals_integration,target_error,max_iterations), m_n(n), m_number_threads(number_threads) {}
+    fgwr(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, const std::vector<INPUT> & abscissa_points, std::size_t n, int number_threads)
+        : m_integrating(a,b,n_intervals_integration,target_error,max_iterations), m_abscissa_points(abscissa_points), m_n(n), m_number_threads(number_threads) {}
 
     /*!
     * @brief Virtual destructor
     */
     virtual ~fgwr() = default;
+
+    /*!
+    * @brief Getter for the abscissa points
+    * @return the private
+    */
+    const std::vector<INPUT>& abscissa_points() const {return m_abscissa_points;}
 
     /*!
     * @brief Getter for the number of statistical units
@@ -219,6 +227,16 @@ public:
     * @brief Virtual method to compute the Functional Geographically Weighted Regression
     */
     virtual inline void compute() = 0;
+
+    /*!
+    * @brief Virtual method to refactor the b
+    */
+    virtual inline void computeBs() = 0;
+
+    /*!
+    * @brief Virtual method to compute the betas
+    */
+    virtual inline void computeBetas() = 0;
 
     /*!
     * @brief Function to return the result, tuple of different dimension depending on the algo used

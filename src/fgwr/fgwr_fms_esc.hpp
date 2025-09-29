@@ -59,6 +59,8 @@ private:
     std::size_t m_qc;
     /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the stationary regressors coefficients*/
     std::size_t m_Lc; 
+    /*!Number of basis, for each stationary covariate, to perform the basis expansion of the regressors coefficients for the stationary regressors coefficients*/
+    std::vector<std::size_t> m_Lc_j;
 
     /*!Functional event-dependent covariates (n x qe)*/
     functional_matrix<INPUT,OUTPUT> m_Xe;
@@ -78,6 +80,8 @@ private:
     std::size_t m_qe;
     /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the event-dependent regressors coefficients*/
     std::size_t m_Le; 
+    /*!Number of basis, for each event-dependent covariate, to perform the basis expansion of the regressors coefficients for the event-dependent regressors coefficients*/
+    std::vector<std::size_t> m_Le_j;
 
     /*!Functional station-dependent covariates (n x qs)*/
     functional_matrix<INPUT,OUTPUT> m_Xs;
@@ -97,6 +101,8 @@ private:
     std::size_t m_qs;
     /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the station-dependent regressors coefficients*/
     std::size_t m_Ls; 
+    /*!Number of basis, for each station-dependent covariate, to perform the basis expansion of the regressors coefficients for the station-dependent regressors coefficients*/
+    std::vector<std::size_t> m_Ls_j;
 
     //A operators
     /*!A_E_i*/
@@ -145,27 +151,31 @@ public:
                  FUNC_SPARSE_MATRIX_OBJ &&omega,
                  std::size_t qc,
                  std::size_t Lc,
+                 const std::vector<std::size_t> & Lc_j,
                  FUNC_MATRIX_OBJ &&Xe,
                  FUNC_DIAG_MATRIX_VEC_OBJ &&We,
                  SCALAR_SPARSE_MATRIX_OBJ &&Re,
                  FUNC_SPARSE_MATRIX_OBJ &&theta,
                  std::size_t qe,
                  std::size_t Le,
+                 const std::vector<std::size_t> & Le_j,
                  FUNC_MATRIX_OBJ &&Xs,
                  FUNC_DIAG_MATRIX_VEC_OBJ &&Ws,
                  SCALAR_SPARSE_MATRIX_OBJ &&Rs,
                  FUNC_SPARSE_MATRIX_OBJ &&psi,
                  std::size_t qs,
                  std::size_t Ls,
+                 const std::vector<std::size_t> & Ls_j,
                  INPUT a,
                  INPUT b,
                  int n_intervals_integration,
                  double target_error_integration,
                  int max_iterations_integration,
+                 const std::vector<INPUT> & abscissa_points,
                  std::size_t n,
                  int number_threads)
         :
-            fgwr<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error_integration,max_iterations_integration,n,number_threads),
+            fgwr<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error_integration,max_iterations_integration,abscissa_points,n,number_threads),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_phi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(phi)},
             m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
@@ -178,18 +188,21 @@ public:
             m_omega{std::forward<FUNC_SPARSE_MATRIX_OBJ>(omega)},
             m_qc(qc),
             m_Lc(Lc),
+            m_Lc_j(Lc_j),
             m_Xe{std::forward<FUNC_MATRIX_OBJ>(Xe)},
             m_We{std::forward<FUNC_DIAG_MATRIX_VEC_OBJ>(We)},
             m_Re{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Re)},
             m_theta{std::forward<FUNC_SPARSE_MATRIX_OBJ>(theta)},
             m_qe(qe),
             m_Le(Le),
+            m_Le_j(Le_j),
             m_Xs{std::forward<FUNC_MATRIX_OBJ>(Xs)},
             m_Ws{std::forward<FUNC_DIAG_MATRIX_VEC_OBJ>(Ws)},
             m_Rs{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rs)},
             m_psi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(psi)},
             m_qs(qs),
-            m_Ls(Ls)
+            m_Ls(Ls),
+            m_Ls_j(Ls_j),
             {
                 //checking input consistency
                 //response
@@ -221,6 +234,27 @@ public:
                 m_theta_t = m_theta.transpose();
                 m_Xc_t = m_Xc.transpose();
                 m_psi_t = m_psi.transpose();
+
+                for (std::size_t i = 0; i < this->abscissa_points().size(); ++i)
+                {
+                    std::cout << "Abscissa " << i << ": " << this->abscissa_points()[i] << std::endl;
+                }
+                
+                for (std::size_t i = 0; i < m_qc; ++i)
+                {
+                    std::cout << "Stationary cov " << i << " has " << m_Lc_j[i] << " basis" << std::endl;
+                }
+
+                for (std::size_t i = 0; i < m_qe; ++i)
+                {
+                    std::cout << "Event cov " << i << " has " << m_Le_j[i] << " basis" << std::endl;
+                }
+
+                for (std::size_t i = 0; i < m_qs; ++i)
+                {
+                    std::cout << "Station cov " << i << " has " << m_Ls_j[i] << " basis" << std::endl;
+                }
+                
 
 /*
                 std::cout << "Input dimensions" << std::endl;
@@ -419,7 +453,17 @@ public:
             m_be.push_back(Eigen::MatrixXd::Constant(m_Le,1,i+4));
             m_bs.push_back(Eigen::MatrixXd::Constant(m_Ls,1,i+2.4));
         }
-        
+    }
+
+    /*!
+    * @brief Virtual method to wrap the results of the compute method
+    */
+    inline 
+    void 
+    computeBs()
+    override
+    {
+
     }
 
     /*!

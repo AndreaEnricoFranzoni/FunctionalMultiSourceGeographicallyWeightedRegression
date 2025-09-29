@@ -122,7 +122,22 @@ using namespace Rcpp;
 * @param basis_types_beta_events_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariates (functional regression) coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param basis_types_beta_stations_cov vector of strings, element i-th containing the type of basis used for the i-th stations-dependent covariates (functional regression) coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @return an R list containing:
-* -
+*         - "FGWR": string containing the type of fgwr used ("FGWR_FMS_ESC")
+*         - "C": a list containing, for each stationary covariate:
+*                - "b": a 1xLc_j vector of double, containing the coefficients of the basis expansion of the beta
+*                - "beta": a 1xsize(t_points) vector of double, containing the evaluation of the beta over t_points
+*                - "basis": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant".
+*                - "basis number": the number of basis used for performing the beta basis expansion 
+*         - "E": a list containing, for each event-dependent covariate:
+*                - "b": a list containing, for each statistical unit (ordered as put in input), a 1xLe_j vector of double, containing the coefficients of the basis expansion of the beta for each statistical unit
+*                - "beta": a list containing, for each statistical unit (ordered as put in input), a 1xsize(t_points) vector of double, containing the evaluation of the beta for each statistical unit over t_points
+*                - "basis": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant".
+*                - "basis number": the number of basis used for performing the beta basis expansion 
+*         - "S": a list containing, for each station-dependent covariate:
+*                - "b": a list containing, for each statistical unit (ordered as put in input), a 1xLs_j vector of double, containing the coefficients of the basis expansion of the beta for each statistical unit
+*                - "beta": a list containing, for each statistical unit (ordered as put in input), a 1xsize(t_points) vector of double, containing the evaluation of the beta for each statistical unit over t_points
+*                - "basis": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant".
+*                - "basis number": the number of basis used for performing the beta basis expansion 
 * 
 * @details constant basis are used, for a covariate, if it resembles a scalar shape. It consists of a straight line with y-value equal to 1 all over the data domain.
 *          Can be seen as a B-spline basis with degree 0, number of basis 1, using one knot, consequently having only one coefficient for the only basis for each statistical unit.
@@ -251,7 +266,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
     //  ABSCISSA POINTS of response
-    std::vector<double> abscissa_points_ = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
+    std::vector<_FD_INPUT_TYPE_> abscissa_points_ = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
     // wrapper into eigen
     check_dim_input<_RESPONSE_>(response_.rows(), abscissa_points_.size(), "points for evaluation of raw data vector");   //check that size of abscissa points and number of evaluations of fd raw data coincide
     FDAGWR_TRAITS::Dense_Matrix abscissa_points_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(abscissa_points_.data(),abscissa_points_.size(),1);
@@ -435,12 +450,15 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //stationary
     penalization_matrix<_DERVIATIVE_PENALIZED_> R_C(std::move(bs_C),lambda_stationary_cov_);
     std::size_t Lc = R_C.L();
+    std::vector<std::size_t> Lc_j = R_C.Lj();
     //events
     penalization_matrix<_DERVIATIVE_PENALIZED_> R_E(std::move(bs_E),lambda_events_cov_);
     std::size_t Le = R_E.L();
+    std::vector<std::size_t> Le_j = R_E.Lj();
     //stations
     penalization_matrix<_DERVIATIVE_PENALIZED_> R_S(std::move(bs_S),lambda_stations_cov_);
     std::size_t Ls = R_S.L();
+    std::vector<std::size_t> Ls_j = R_S.Lj();
 
 
     //FD OBJECTS: RESPONSE and COVARIATES
@@ -551,23 +569,27 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     std::move(omega),
                                                                                     q_C,
                                                                                     Lc,
+                                                                                    Lc_j,
                                                                                     std::move(Xe),
                                                                                     std::move(We),
                                                                                     std::move(R_E.PenalizationMatrix()),
                                                                                     std::move(theta),
                                                                                     q_E,
                                                                                     Le,
+                                                                                    Le_j,
                                                                                     std::move(Xs),
                                                                                     std::move(Ws),
                                                                                     std::move(R_S.PenalizationMatrix()),
                                                                                     std::move(psi),
                                                                                     q_S,
                                                                                     Ls,
+                                                                                    Ls_j,
                                                                                     a,
                                                                                     b,
                                                                                     n_intervals,
                                                                                     target_error,
                                                                                     max_iterations,
+                                                                                    abscissa_points_,
                                                                                     number_of_statistical_units_,
                                                                                     number_threads);
     
@@ -580,7 +602,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //returning element
     Rcpp::List l;
     //regression model used 
-    l["FGW"] = algo_type<_FGWR_ALGO_>();
+    l["FGWR"] = algo_type<_FGWR_ALGO_>();
     //stationary basis expansion coefficients
     l["bc"]  = regressor_coefficients["bc"];
     //event dependent basis expansion coefficients

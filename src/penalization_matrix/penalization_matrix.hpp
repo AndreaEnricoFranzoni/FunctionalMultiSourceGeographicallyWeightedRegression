@@ -117,6 +117,11 @@ public:
     */
     const FDAGWR_TRAITS::Sparse_Matrix& PenalizationMatrix() const {return m_PenalizationMatrix;}
 
+    /*! 
+    * @brief Getter for the number of basis for each covariate
+    */
+    std::vector<std::size_t> Lj() const {return m_Lj;}
+
     /*!
     * @brief Getter for the dimension of the penalization matrix
     */
