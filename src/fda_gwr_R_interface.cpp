@@ -578,7 +578,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
 
     std::function<double(const double &)> f_t = [](const double &x){return std::pow(x,4);};
-    fd_integration integrator_t(0,10,10,1e-6,100);
+    fd_integration integrator_t(0,5,100,1e-6,100);
     double res_t = integrator_t.integrate(f_t);
     Rcout << "R test: " << res_t << std::endl;
 
