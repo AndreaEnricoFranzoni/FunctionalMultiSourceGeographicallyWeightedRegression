@@ -412,12 +412,12 @@ public:
         std::cout << "m_be rows: " << m_be[0].rows() << ", m_be cols: " << m_be[0].cols() << std::endl;
 */
 
-        m_bc = Eigen::MatrixXd::SetConstant(m_Lc,1,4.6);
+        m_bc = Eigen::MatrixXd::Constant(m_Lc,1,4.6);
 
         for(std::size_t i = 0; i < this->n(); ++i)
         {
-            m_be.push_back(Eigen::MatrixXd::SetConstant(m_Le,1,i+4));
-            m_bs.push_back(Eigen::MatrixXd::SetConstant(m_Ls,1,i+2.4));
+            m_be.push_back(Eigen::MatrixXd::Constant(m_Le,1,i+4));
+            m_bs.push_back(Eigen::MatrixXd::Constant(m_Ls,1,i+2.4));
         }
         
     }
