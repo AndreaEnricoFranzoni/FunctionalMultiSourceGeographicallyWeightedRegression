@@ -416,8 +416,8 @@ public:
 
         for(std::size_t i = 0; i < this->n(); ++i)
         {
-            m_be.emplace_back(Eigen::MatrixXd::SetConstant(m_Le,1,i+4));
-            m_bs.emplace_back(Eigen::MatrixXd::SetConstant(m_Ls,1,i+2.4));
+            m_be.push_back(Eigen::MatrixXd::SetConstant(m_Le,1,i+4));
+            m_bs.push_back(Eigen::MatrixXd::SetConstant(m_Ls,1,i+2.4));
         }
         
     }
