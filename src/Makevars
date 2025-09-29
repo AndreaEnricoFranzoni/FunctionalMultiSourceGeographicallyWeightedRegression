@@ -12,6 +12,20 @@ OS = $(shell uname -s)
 ARCH = $(shell uname -m)
 
 
+
+# to link all the .cpp
+SOURCES = $(wildcard *.cpp */*.cpp */*/*.cpp)
+OBJECTS = $(SOURCES:.cpp=.o)
+
+$(SHLIB): $(OBJECTS)
+
+
+
+
+
+
+
+
 # macOS
 ifeq ($(OS),Darwin)
     # Homebrew path depending on the architecture
