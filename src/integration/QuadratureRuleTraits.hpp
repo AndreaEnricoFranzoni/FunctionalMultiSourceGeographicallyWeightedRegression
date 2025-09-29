@@ -9,7 +9,7 @@
 #define EXAMPLES_SRC_QUADRATURERULE_BASEVERSION_QUADRATURERULETRAITS_HPP_
 #include "CloningUtilities.hpp"
 #include "../functional_matrix/functional_matrix_storing_type.hpp"
-#include "../include/traits_fdagwr.hpp"
+#include "../utility/traits_fdagwr.hpp"
 #include <functional>
 #include <memory>
 // This is a simple trait, just in a namespace
