@@ -467,6 +467,17 @@ public:
     }
 
     /*!
+    * @brief Virtual method to wrap the results of the compute method
+    */
+    inline 
+    void 
+    computeBetas()
+    override
+    {
+
+    }
+
+    /*!
     * @brief Getter for the coefficient of the basis expansion of the stationary regressors coefficients
     */
     inline 

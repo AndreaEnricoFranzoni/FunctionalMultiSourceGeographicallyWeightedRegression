@@ -51,6 +51,29 @@ public:
     override
     {}
 
+    /*!
+    * @brief Virtual method to wrap the results of the compute method
+    */
+    inline 
+    void 
+    computeBs()
+    override
+    {
+
+    }
+
+    /*!
+    * @brief Virtual method to wrap the results of the compute method
+    */
+    inline 
+    void 
+    computeBetas()
+    override
+    {
+
+    }
+
+
 };
 
 #endif  /*FGWR_FMS_SEC_ALGO_HPP*/
