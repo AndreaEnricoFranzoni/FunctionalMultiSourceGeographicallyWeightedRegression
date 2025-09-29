@@ -222,6 +222,7 @@ public:
                 m_Xc_t = m_Xc.transpose();
                 m_psi_t = m_psi.transpose();
 
+/*
                 std::cout << "Input dimensions" << std::endl;
                 std::cout << "m_y rows: " << m_y.rows() << ", m_y cols: " << m_y.cols() << std::endl;
                 std::cout << "m_phi rows: " << m_phi.rows() << ", m_phi cols: " << m_phi.cols() << std::endl;
@@ -241,6 +242,7 @@ public:
                 for(std::size_t i = 0; i < m_Ws.size(); ++i){   std::cout << "m_Ws[" << i << "] rows: " << m_Ws[i].rows() << ", cols: " << m_Ws[i].cols() << std::endl;}
                 std::cout << "m_Rs rows: " << m_Rs.rows() << ", m_Rs cols: " << m_Rs.cols() << std::endl;
                 std::cout << "m_psi rows: " << m_psi.rows() << ", m_psi cols: " << m_psi.cols() << std::endl;
+*/
             }
     
 
@@ -253,6 +255,7 @@ public:
     override
     {
 
+/*
         std::cout << "Computing (j_tilde_tilde + Re)^-1" << std::endl;
         //(j_tilde_tilde + Re)^-1
         std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
@@ -406,7 +409,17 @@ public:
         //COMPUTING all the m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE EVENT-DEPENDENT BETAS
         std::cout << "Computing m_be" << std::endl;
         m_be = this->compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde_tilde_hat,j_double_tilde_Re_inv);
-        std::cout << "m_be rows: " << m_be[0].rows() << ", m_be cols: " << m_be[0].cols() << std::endl;  
+        std::cout << "m_be rows: " << m_be[0].rows() << ", m_be cols: " << m_be[0].cols() << std::endl;
+*/
+
+        m_bc = Eigen::MatrixXd::SetConstant(m_Lc,1,4.6);
+
+        for(std::size_t i = 0; i < this->n(); ++i)
+        {
+            m_be.emplace_back(Eigen::MatrixXd::SetConstant(m_Le,1,i+4));
+            m_bs.emplace_back(Eigen::MatrixXd::SetConstant(m_Ls,1,i+2.4));
+        }
+        
     }
 
     /*!
