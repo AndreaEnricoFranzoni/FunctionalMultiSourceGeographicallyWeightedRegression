@@ -202,7 +202,7 @@ public:
             m_psi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(psi)},
             m_qs(qs),
             m_Ls(Ls),
-            m_Ls_j(Ls_j),
+            m_Ls_j(Ls_j)
             {
                 //checking input consistency
                 //response
