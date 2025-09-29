@@ -14,24 +14,24 @@ namespace apsc::NumericalIntegration
 class Simpson final : public StandardQuadratureRule<3>
 {
 public:
-  Simpson();
-  std::unique_ptr<QuadratureRuleBase> clone() const override;
+  Simpson(): StandardQuadratureRule<3>{{1. / 3, 4. / 3, 1. / 3}, {-1.0, 0.0, 1.0}, 4} {}
+  std::unique_ptr<QuadratureRuleBase> clone() const override {return std::make_unique<Simpson>(*this);}
 };
 
 //! Midpoint rule
 class MidPoint final : public StandardQuadratureRule<1>
 {
 public:
-  MidPoint();
-  std::unique_ptr<QuadratureRuleBase> clone() const override;
+  MidPoint() : StandardQuadratureRule<1>{{2.0}, {0.0}, 2} {}
+  std::unique_ptr<QuadratureRuleBase> clone() const override {return std::make_unique<MidPoint>(*this);}
 };
 
 //! Trapezoidal rule
 class Trapezoidal final : public StandardQuadratureRule<2>
 {
 public:
-  Trapezoidal();
-  std::unique_ptr<QuadratureRuleBase> clone() const override;
+  Trapezoidal(): StandardQuadratureRule<2>{{1., 1.}, {-1.0, 1.0}, 2}  {}
+  std::unique_ptr<QuadratureRuleBase> clone() const override{return std::make_unique<Trapezoidal>(*this);}
 };
 
 } // namespace apsc::NumericalIntegration

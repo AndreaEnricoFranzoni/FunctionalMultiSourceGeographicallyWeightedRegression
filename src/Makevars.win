@@ -9,18 +9,6 @@
 
 
 
-# to link all the .cpp
-SOURCES = $(wildcard *.cpp */*.cpp */*/*.cpp)
-OBJECTS = $(SOURCES:.cpp=.o)
-
-$(SHLIB): $(OBJECTS)
-
-
-
-
-
-
-
 ###############
 ## OPENMP    ##
 ###############

@@ -23,6 +23,8 @@
 #include "meshGenerators.hpp"
 #include <functional>
 #include <vector>
+#include <algorithm>
+#include <numeric>
 
 /*!
 * @file mesh.hpp
@@ -43,7 +45,11 @@ public:
     \param d  A domain
     \param n  Number of intervals (not nodes!)
   */
-  Mesh1D(Domain1D const &d, unsigned int const &n);
+  Mesh1D(Domain1D const &d, unsigned int const &n) : myDomain(d)
+  {
+    Uniform g(d, n);
+    myNodes = g();
+  }
   //! Constructor for an variably spaced mesh
   /*!
     \param gf the policy for generating mesh
@@ -54,7 +60,11 @@ public:
   /*!
     @param mg a mesh generator
    */
-  void reset(OneDMeshGenerator const &mg);
+  void reset(OneDMeshGenerator const &mg)
+  {
+    myDomain = mg.getDomain();
+    myNodes = mg();
+  }
 
   //! Number of nodes.
   unsigned int
@@ -106,9 +116,19 @@ public:
     return myDomain;
   }
   //! The max mesh size.
-  double hmin() const;
+  double hmin() const
+  {
+    std::vector<double> tmp(myNodes.size());
+    std::adjacent_difference(myNodes.begin(), myNodes.end(), tmp.begin());
+    return *std::max_element(++tmp.begin(), tmp.end());
+  }
   //! The max mesh size.
-  double hmax() const;
+  double hmax() const
+  {
+    std::vector<double> tmp(myNodes.size());
+    std::adjacent_difference(myNodes.begin(), myNodes.end(), tmp.begin());
+    return *std::min_element(++tmp.begin(), tmp.end());
+  }
 
 private:
   Domain1D            myDomain;

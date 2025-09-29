@@ -20,6 +20,8 @@
 #ifndef HH_DOMAIN_HH
 #define HH_DOMAIN_HH
 
+#include <cmath>
+
 /*!
 * @file domain.hpp
 * @brief Contains the class for an unidimensioanl domain. 
@@ -37,7 +39,7 @@ class Domain1D
 {
 public:
   //! Constructor. Default creates (0,1)
-  explicit Domain1D(double const &a = 0., double const &b = 1.);
+  explicit Domain1D(double const &a = 0., double const &b = 1.) : M_a(a), M_b(b) {}
   /*! \defgroup Accessor Accessing elements
     @{ */
   double
@@ -60,7 +62,10 @@ public:
   {
     return M_b;
   }
-  double length() const;
+  double length() const
+  {
+    return std::abs(M_b - M_a);
+  }
   /*! @}*/
 private:
   double M_a;
