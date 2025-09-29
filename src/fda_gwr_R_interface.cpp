@@ -577,6 +577,11 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     Rcpp::List regressor_coefficients = wrap_coefficients_to_R_list(fgwr_algo->regressorCoefficients());
 
 
+    std::function<double(const double &)> f_t = [](const double &x){return std::pow(x,4);};
+    fd_integration integrator_t(0,10,10,1e-6,100);
+    double res_t = integrator_t.integrate(f_t);
+    Rcout << "R test: " << res_t << std::endl;
+
 
     
     //returning element
