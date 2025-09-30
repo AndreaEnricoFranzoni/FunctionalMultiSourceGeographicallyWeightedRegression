@@ -536,7 +536,7 @@ public:
             functional_matrix<INPUT,OUTPUT> basis_c_j(basis_j,1,m_Bc[j].rows());
 
             //compute the beta
-            FUNC_OBJ<INPUT,OUTPUT> beta_c_j = fm_prod(basis_c_j,m_Bc[j])(0,0);
+            FUNC_OBJ<INPUT,OUTPUT> beta_c_j = fm_prod<INPUT,OUTPUT>(basis_c_j,m_Bc[j])(0,0);
             //eval the beta
             std::vector< OUTPUT > beta_c_j_ev; 
             beta_c_j_ev.resize(this->abscissa_points().size());
@@ -566,7 +566,7 @@ public:
             for(std::size_t i = 0; i < this->n(); ++i)
             {
                 //compute the beta j-th for unit i-th
-                FUNC_OBJ<INPUT,OUTPUT> beta_e_j_i = fm_prod(basis_e_j,m_Be[j][i]);
+                FUNC_OBJ<INPUT,OUTPUT> beta_e_j_i = fm_prod<INPUT,OUTPUT>(basis_e_j,m_Be[j][i]);
                 //eval the beta
                 std::vector< OUTPUT > beta_e_j_i_ev; 
                 beta_e_j_i_ev.reserve(this->abscissa_points().size());
@@ -599,7 +599,7 @@ public:
             for(std::size_t i = 0; i < this->n(); ++i)
             {
                 //compute the beta j-th for unit i-th
-                FUNC_OBJ<INPUT,OUTPUT> beta_s_j_i = fm_prod(basis_s_j,m_Bs[j][i]);
+                FUNC_OBJ<INPUT,OUTPUT> beta_s_j_i = fm_prod<INPUT,OUTPUT>(basis_s_j,m_Bs[j][i]);
                 //eval the beta
                 std::vector< OUTPUT > beta_s_j_i_ev; 
                 beta_s_j_i_ev.reserve(this->abscissa_points().size());
@@ -632,7 +632,7 @@ public:
     const
     override
     {
-        return std::tuple{m_beta_,m_beta_e,m_beta_s};
+        return std::tuple{m_beta_c,m_beta_e,m_beta_s};
     }
 
 
