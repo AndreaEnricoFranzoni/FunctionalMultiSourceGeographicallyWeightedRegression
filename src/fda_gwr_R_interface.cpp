@@ -460,6 +460,15 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     std::size_t Ls = R_S.L();
     std::vector<std::size_t> Ls_j = R_S.Lj();
 
+                std::cout << "Numero basi per qc" << std::endl;
+                for(std::size_t i = 0; i < < Lc_j.size(); ++i){std::cout << Lc_j[i] << std::endl;}
+
+                                std::cout << "Numero basi per qe" << std::endl;
+                for(std::size_t i = 0; i < < Lc_e.size(); ++i){std::cout << Lc_e[i] << std::endl;}
+
+                                std::cout << "Numero basi per qs" << std::endl;
+                for(std::size_t i = 0; i < < Lc_s.size(); ++i){std::cout << Lc_s[i] << std::endl;}
+
 
     //FD OBJECTS: RESPONSE and COVARIATES
     //response
@@ -554,7 +563,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //psi: a sparse functional matrix of dimension qsxLs
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
-
+/*
     Rcout << "fdagwr.29:" << std::endl;
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
@@ -596,21 +605,21 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //computing the algo
     fgwr_algo->compute();
     //evaluating the betas
-    fgwr_algo->evalBetas();
+    //fgwr_algo->evalBetas();
     //retrieving the results                                                                                
     Rcpp::List b_coefficients = wrap_b_to_R_list(fgwr_algo->bCoefficients());
-
+*/
     
     //returning element
     Rcpp::List l;
     //regression model used 
     l["FGWR"] = algo_type<_FGWR_ALGO_>();
     //stationary basis expansion coefficients
-    l["bc"]  = b_coefficients["bc"];
+    //l["bc"]  = b_coefficients["bc"];
     //event dependent basis expansion coefficients
-    l["be"]  = b_coefficients["be"];
+    //l["be"]  = b_coefficients["be"];
     //station dependent basis expansion coefficients
-    l["bs"]  = b_coefficients["bs"];
+    //l["bs"]  = b_coefficients["bs"];
 
     return l;
 }
