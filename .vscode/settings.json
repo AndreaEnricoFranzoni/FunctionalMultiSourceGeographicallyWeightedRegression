@@ -66,6 +66,7 @@
         "unordered_set": "cpp",
         "functional": "cpp",
         "utility": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "list": "cpp"
     }
 }
