@@ -53,8 +53,12 @@ private:
     functional_matrix_sparse<INPUT,OUTPUT> m_omega;
     /*!Their transpost (sparse Lc x qC)*/
     functional_matrix_sparse<INPUT,OUTPUT> m_omega_t;
-    /*!Coefficients of the basis expansion for stationary regressors coefficients: Lcx1: TO BE COMPUTED*/
+    /*!Coefficients of the basis expansion for stationary regressors coefficients: Lcx1 (used for the computation): TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_bc;
+    /*!Coefficients of the basis expansion for stationary regressors coefficients: every element is 1xLc_j*/
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_Bc;
+    /*!Discrete evaluation of all the beta_c: a vector of dimension qc, containing, for all the stationary covariates, the discrete ev of the respective beta*/
+    std::vector< std::vector<OUTPUT> > m_beta_c;
     /*!Number of stationary covariates*/
     std::size_t m_qc;
     /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the stationary regressors coefficients*/
@@ -76,6 +80,10 @@ private:
     functional_matrix_sparse<INPUT,OUTPUT> m_theta_t;
     /*!Coefficients of the basis expansion for event-dependent regressors: Lex1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_be;
+    /*!Coefficients of the basis expansion for event-dependent regressors coefficients: every of the qe elements are n 1xLe_j matrices, one for each statistical unit*/
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > > m_Be;
+    /*!Discrete evaluation of all the beta_e: a vector of dimension qe, containing, for all the event-dependent covariates, the discrete ev of the respective beta, for each statistical unit*/
+    std::vector< std::vector< std::vector<OUTPUT> > > m_beta_e;
     /*!Number of event-dependent covariates*/
     std::size_t m_qe;
     /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the event-dependent regressors coefficients*/
@@ -97,6 +105,10 @@ private:
     functional_matrix_sparse<INPUT,OUTPUT> m_psi_t;
     /*!Coefficients of the basis expansion for station-dependent covariates regressors: Lsx1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_bs;
+    /*!Coefficients of the basis expansion for station-dependent regressors coefficients: every of the qe elements are n 1xLs_j matrices, one for each statistical unit*/
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > > m_Bs;
+    /*!Discrete evaluation of all the beta_s: a vector of dimension qs, containing, for all the station-dependent covariates, the discrete ev of the respective beta, for each statistical unit*/
+    std::vector< std::vector< std::vector<OUTPUT> > > m_beta_s;
     /*!Number of station-dependent covariates*/
     std::size_t m_qs;
     /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the station-dependent regressors coefficients*/
@@ -214,18 +226,21 @@ public:
                 assert((m_Wc.rows() == this->n()) && (m_Wc.cols() == this->n()));
                 assert((m_Rc.rows() == m_Lc) && (m_Rc.cols() == m_Lc));
                 assert((m_omega.rows() == m_qc) && (m_omega.cols() == m_Lc));
+                assert((m_Lc_j.size() == m_qc) && (std::reduce(m_Lc_j.cebgin(),m_Lc_j.cend(),static_cast<std::size_t>(0)) == m_Lc));
                 //event-dependent covariates
                 assert((m_Xe.rows() == this->n()) && (m_Xe.cols() == m_qe));
                 assert(m_We.size() == this->n());
                 for (const auto& w : m_We) {    assert((w.rows() == this->n()) && (w.cols() == this->n()));}
                 assert((m_Re.rows() == m_Le) && (m_Re.cols() == m_Le));
                 assert((m_theta.rows() == m_qe) && (m_theta.cols() == m_Le));
+                assert((m_Le_j.size() == m_qe) && (std::reduce(m_Le_j.cebgin(),m_Le_j.cend(),static_cast<std::size_t>(0)) == m_Le));
                 //station-dependent covariates
                 assert((m_Xs.rows() == this->n()) && (m_Xs.cols() == m_qs));
                 assert(m_Ws.size() == this->n());
                 for (const auto& w : m_Ws) {    assert((w.rows() == this->n()) && (w.cols() == this->n()));}
                 assert((m_Rs.rows() == m_Ls) && (m_Rs.cols() == m_Ls));
                 assert((m_psi.rows() == m_qs) && (m_psi.cols() == m_Ls));
+                assert((m_Ls_j.size() == m_qs) && (std::reduce(m_Ls_j.cebgin(),m_Ls_j.cend(),static_cast<std::size_t>(0)) == m_Ls));
 
                 //compute all the transpost necessary for the computations
                 m_Xc_t = m_Xc.transpose();
@@ -234,6 +249,30 @@ public:
                 m_theta_t = m_theta.transpose();
                 m_Xc_t = m_Xc.transpose();
                 m_psi_t = m_psi.transpose();
+                
+
+/*
+                //PRINT FOR DEBUGGING
+                std::cout << "Input dimensions" << std::endl;
+                std::cout << "m_y rows: " << m_y.rows() << ", m_y cols: " << m_y.cols() << std::endl;
+                std::cout << "m_phi rows: " << m_phi.rows() << ", m_phi cols: " << m_phi.cols() << std::endl;
+                std::cout << "m_c rows: " << m_c.rows() << ", m_c cols: " << m_c.cols() << std::endl;
+                std::cout << "m_knots_smoothing rows: " << m_knots_smoothing.rows() << ", m_knots_smoothing cols: " << m_knots_smoothing.cols() << std::endl;
+                std::cout << "m_Xc rows: " << m_Xc.rows() << ", m_Xc cols: " << m_Xc.cols() << std::endl;
+                std::cout << "m_Wc rows: " << m_Wc.rows() << ", m_Wc cols: " << m_Wc.cols() << std::endl;
+                std::cout << "m_Rc rows: " << m_Rc.rows() << ", m_Rc cols: " << m_Rc.cols() << std::endl;
+                std::cout << "m_omega rows: " << m_omega.rows() << ", m_omega cols: " << m_omega.cols() << std::endl;
+                std::cout << "m_Xe rows: " << m_Xe.rows() << ", m_Xe cols: " << m_Xe.cols() << std::endl;
+                std::cout << "Number of elements in m_We: " << m_We.size() << std::endl;
+                for(std::size_t i = 0; i < m_We.size(); ++i){   std::cout << "m_We[" << i << "] rows: " << m_We[i].rows() << ", cols: " << m_We[i].cols() << std::endl;}
+                std::cout << "m_Re rows: " << m_Re.rows() << ", m_Re cols: " << m_Re.cols() << std::endl;
+                std::cout << "m_theta rows: " << m_theta.rows() << ", m_theta cols: " << m_theta.cols() << std::endl;
+                std::cout << "m_Xs rows: " << m_Xs.rows() << ", m_Xs cols: " << m_Xs.cols() << std::endl;
+                std::cout << "Number of elements in m_Ws: " << m_Ws.size() << std::endl;
+                for(std::size_t i = 0; i < m_Ws.size(); ++i){   std::cout << "m_Ws[" << i << "] rows: " << m_Ws[i].rows() << ", cols: " << m_Ws[i].cols() << std::endl;}
+                std::cout << "m_Rs rows: " << m_Rs.rows() << ", m_Rs cols: " << m_Rs.cols() << std::endl;
+                std::cout << "m_psi rows: " << m_psi.rows() << ", m_psi cols: " << m_psi.cols() << std::endl;
+
 
                 for (std::size_t i = 0; i < this->abscissa_points().size(); ++i)
                 {
@@ -254,28 +293,6 @@ public:
                 {
                     std::cout << "Station cov " << i << " has " << m_Ls_j[i] << " basis" << std::endl;
                 }
-                
-
-/*
-                std::cout << "Input dimensions" << std::endl;
-                std::cout << "m_y rows: " << m_y.rows() << ", m_y cols: " << m_y.cols() << std::endl;
-                std::cout << "m_phi rows: " << m_phi.rows() << ", m_phi cols: " << m_phi.cols() << std::endl;
-                std::cout << "m_c rows: " << m_c.rows() << ", m_c cols: " << m_c.cols() << std::endl;
-                std::cout << "m_knots_smoothing rows: " << m_knots_smoothing.rows() << ", m_knots_smoothing cols: " << m_knots_smoothing.cols() << std::endl;
-                std::cout << "m_Xc rows: " << m_Xc.rows() << ", m_Xc cols: " << m_Xc.cols() << std::endl;
-                std::cout << "m_Wc rows: " << m_Wc.rows() << ", m_Wc cols: " << m_Wc.cols() << std::endl;
-                std::cout << "m_Rc rows: " << m_Rc.rows() << ", m_Rc cols: " << m_Rc.cols() << std::endl;
-                std::cout << "m_omega rows: " << m_omega.rows() << ", m_omega cols: " << m_omega.cols() << std::endl;
-                std::cout << "m_Xe rows: " << m_Xe.rows() << ", m_Xe cols: " << m_Xe.cols() << std::endl;
-                std::cout << "Number of elements in m_We: " << m_We.size() << std::endl;
-                for(std::size_t i = 0; i < m_We.size(); ++i){   std::cout << "m_We[" << i << "] rows: " << m_We[i].rows() << ", cols: " << m_We[i].cols() << std::endl;}
-                std::cout << "m_Re rows: " << m_Re.rows() << ", m_Re cols: " << m_Re.cols() << std::endl;
-                std::cout << "m_theta rows: " << m_theta.rows() << ", m_theta cols: " << m_theta.cols() << std::endl;
-                std::cout << "m_Xs rows: " << m_Xs.rows() << ", m_Xs cols: " << m_Xs.cols() << std::endl;
-                std::cout << "Number of elements in m_Ws: " << m_Ws.size() << std::endl;
-                for(std::size_t i = 0; i < m_Ws.size(); ++i){   std::cout << "m_Ws[" << i << "] rows: " << m_Ws[i].rows() << ", cols: " << m_Ws[i].cols() << std::endl;}
-                std::cout << "m_Rs rows: " << m_Rs.rows() << ", m_Rs cols: " << m_Rs.cols() << std::endl;
-                std::cout << "m_psi rows: " << m_psi.rows() << ", m_psi cols: " << m_psi.cols() << std::endl;
 */
             }
     
@@ -447,46 +464,175 @@ public:
 */
 
         m_bc = Eigen::MatrixXd::Constant(m_Lc,1,4.6);
+        m_be.reserve(this->n());
+        m_bs.reserve(this->n());
 
         for(std::size_t i = 0; i < this->n(); ++i)
         {
             m_be.push_back(Eigen::MatrixXd::Constant(m_Le,1,i+4));
             m_bs.push_back(Eigen::MatrixXd::Constant(m_Ls,1,i+2.4));
         }
+
+        //
+        //wrapping the b from the shape useful for the computation into a more useful format
+        //
+        //stationary covariates
+        m_Bc.reserve(m_qc);
+        for(std::size_t j = 0; j < m_qc; ++j){
+            //for each stationary covariates
+            std::size_t start_idx = j == 0    ? 0 : m_Lc_j[j-1];
+            //taking the right coefficients of the basis expansion
+            FDAGWR_TRAITS::Dense_Matrix Bc_j = m_bc.block(start_idx,0,m_Lc_j[j],1);
+            m_Bc.push_back(Bc_j);}
+        //event-dependent covariates
+        m_Be.reserve(m_qe);
+        for(std::size_t j = 0; j < m_qe; ++j){
+            //for each event-dependent covariates
+            std::size_t start_idx = j == 0    ? 0 : m_Le_j[j-1];
+            std::vector< FDAGWR_TRAITS::Dense_Matrix > Be_j;
+            Be_j.reserve(this->n());
+            //for all the units
+            for(std::size_t i = 0; i < this->n(); ++i){
+                //taking the right coefficients of the basis expansion
+                FDAGWR_TRAITS::Dense_Matrix Be_j_i = m_be[i].block(start_idx,0,m_Le_j[j],1);
+                Be_j.push_back(Be_j_i);}
+            m_Be.push_back(Be_j);}
+        //station-dependent covariates
+        m_Bs.reserve(m_qs);
+        for(std::size_t j = 0; j < m_qs; ++j){
+            //for each event-dependent covariates
+            std::size_t start_idx = j == 0    ? 0 : m_Ls_j[j-1];
+            std::vector< FDAGWR_TRAITS::Dense_Matrix > Bs_j;
+            Bs_j.reserve(this->n());
+            //for all the units
+            for(std::size_t i = 0; i < this->n(); ++i){
+                //taking the right coefficients of the basis expansion
+                FDAGWR_TRAITS::Dense_Matrix Bs_j_i = m_bs[i].block(start_idx,0,m_Ls_j[j],1);
+                Bs_j.push_back(Bs_j_i);}
+            m_Bs.push_back(Bs_j);}
     }
 
     /*!
-    * @brief Virtual method to wrap the results of the compute method
+    * @brief Virtual method to obtain a discrete version of the betas
     */
     inline 
     void 
-    computeBs()
+    evalBetas()
     override
     {
+        //BETA_C
+        m_beta_c.reserve(m_qc);
 
-    }
+        for(std::size_t j = 0; j < m_qc; ++j)
+        {
+            //retrieving the basis
+            std::vector< FUNC_OBJ<INPUT,OUTPUT> > basis_j;
+            basis_j.reserve(m_Bc[j].rows());
+            std::size_t start_idx = j == 0    ? 0 : m_Lc_j[j-1];
+            for(std::size_t k = start_idx; k < m_Lc_j[j]; ++k)
+            {
+                basis_j.push_back(m_omega(j,k));
+            }
+            functional_matrix<INPUT,OUTPUT> basis_c_j(basis_j,1,m_Bc[j].rows());
 
-    /*!
-    * @brief Virtual method to wrap the results of the compute method
-    */
-    inline 
-    void 
-    computeBetas()
-    override
-    {
+            //compute the beta
+            FUNC_OBJ<INPUT,OUTPUT> beta_c_j = fm_product(basis_c_j,m_Bc[j])(0,0);
+            //eval the beta
+            std::vector< OUTPUT > beta_c_j_ev; 
+            beta_c_j_ev.resize(this->abscissa_points().size());
+            std::transform(this->abscissa_points().cbegin(),this->abscissa_points().cend(),beta_c_j_ev.begin(),[&beta_c_j](const INPUT &x){return beta_c_j(x);});
+            m_beta_c.push_back(beta_c_j_ev);
+        }
 
+
+        //BETA_E
+        m_beta_e.reserve(m_qe);
+
+        for(std::size_t j = 0; j < m_qe; ++j)
+        {
+            //retrieving the basis
+            std::vector< FUNC_OBJ<INPUT,OUTPUT> > basis_j;
+            basis_j.reserve(m_Be[j][0].rows());
+            std::size_t start_idx = j == 0    ? 0 : m_Le_j[j-1];
+            for(std::size_t k = start_idx; k < m_Le_j[j]; ++k)
+            {
+                basis_j.push_back(m_theta(j,k));
+            }
+            functional_matrix<INPUT,OUTPUT> basis_e_j(basis_j,1,m_Be[j][0].rows());
+
+            //evaluating the betas in every unit
+            std::vector< std::vector<OUTPUT> > beta_e_j_ev;
+            beta_e_j_ev.reserve(this->n());
+            for(std::size_t i = 0; i < this->n(); ++i)
+            {
+                //compute the beta j-th for unit i-th
+                FUNC_OBJ<INPUT,OUTPUT> beta_e_j_i = fm_product(basis_e_j,m_Be[j][i]);
+                //eval the beta
+                std::vector< OUTPUT > beta_e_j_i_ev; 
+                beta_e_j_i_ev.reserve(this->abscissa_points().size());
+                std::transform(this->abscissa_points().cbegin(),this->abscissa_points().cend(),beta_e_j_i_ev.begin(),[&beta_e_j_i](const INPUT &x){return beta_e_j_i(x);});
+                beta_e_j_ev.push_back(beta_e_j_i_ev);
+            }
+
+            m_beta_e.push_back(beta_e_j_ev);
+        }
+
+
+        //BETA_S
+        m_beta_s.reserve(m_qs);
+
+        for(std::size_t j = 0; j < m_qs; ++j)
+        {
+            //retrieving the basis
+            std::vector< FUNC_OBJ<INPUT,OUTPUT> > basis_j;
+            basis_j.reserve(m_Bs[j][0].rows());
+            std::size_t start_idx = j == 0    ? 0 : m_Ls_j[j-1];
+            for(std::size_t k = start_idx; k < m_Ls_j[j]; ++k)
+            {
+                basis_j.push_back(m_psi(j,k));
+            }
+            functional_matrix<INPUT,OUTPUT> basis_s_j(basis_j,1,m_Bs[j][0].rows());
+
+            //evaluating the betas in every unit
+            std::vector< std::vector<OUTPUT> > beta_s_j_ev;
+            beta_s_j_ev.reserve(this->n());
+            for(std::size_t i = 0; i < this->n(); ++i)
+            {
+                //compute the beta j-th for unit i-th
+                FUNC_OBJ<INPUT,OUTPUT> beta_s_j_i = fm_product(basis_s_j,m_Bs[j][i]);
+                //eval the beta
+                std::vector< OUTPUT > beta_s_j_i_ev; 
+                beta_s_j_i_ev.reserve(this->abscissa_points().size());
+                std::transform(this->abscissa_points().cbegin(),this->abscissa_points().cend(),beta_s_j_i_ev.begin(),[&beta_s_j_i](const INPUT &x){return beta_s_j_i(x);});
+                beta_s_j_ev.push_back(beta_s_j_i_ev);
+            }
+            
+            m_beta_s.push_back(beta_s_j_ev);
+        }
     }
 
     /*!
     * @brief Getter for the coefficient of the basis expansion of the stationary regressors coefficients
     */
     inline 
-    CoefficientsTuple 
-    regressorCoefficients()
+    BTuple 
+    bCoefficients()
     const 
     override
     {
-        return std::tuple{m_bc,m_be,m_bs};
+        return std::tuple{m_Bc,m_Be,m_Bs};
+    }
+
+    /*!
+    * @brief
+    */
+    inline 
+    BetasTuple 
+    betas() 
+    const
+    override
+    {
+        return std::tuple{m_beta_,m_beta_e,m_beta_s};
     }
 
 

@@ -79,31 +79,59 @@ Rcpp::List
 toRList(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& mats) 
 {
     Rcpp::List out(mats.size());
-    for (size_t i = 0; i < mats.size(); i++) {
+    for (std::size_t i = 0; i < mats.size(); i++) {
         out[i] = Rcpp::wrap(mats[i]); // RcppEigen converte Eigen::MatrixXd
     }
     return out;
 }
 
+// helper per convertire std::vector<std::vector<Eigen::MatrixXd>> in Rcpp::List con Rcpp::List come argomenti
+Rcpp::List
+toRList(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& mats )
+{
+    Rcpp::List outerList;
+    outerList.reserve(mats.size());
+
+    for(const auto& innerVec : mats){
+        Rcpp::List innerList(innerVec.size());
+        Rcpp::CharacterVector innerNames(innerVec.size());
+
+        for(std::size_t i = 0; i < innerVec.size(); ++i){
+            innerList[i] = Rcpp::wrap(innerVec[i]);
+            innerNames[i] = Rcpp::String("Unit ") + std::to_string(i+1);
+        }
+
+        innerList.names() = innerNames;
+        outerList.push_back(innerList);
+    }
+
+    return outerList;
+}
+
+
+
+
+
+
 // funzione di conversione generale
-Rcpp::List wrap_coefficients_to_R_list(const CoefficientsTuple& r) {
+Rcpp::List wrap_b_to_R_list(const BTuple& r) {
     return std::visit([](auto&& tup) -> Rcpp::List {
         using T = std::decay_t<decltype(tup)>;
         
-        if constexpr (std::is_same_v<T, std::tuple<FDAGWR_TRAITS::Dense_Matrix >>) {
+        if constexpr (std::is_same_v< T,  std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix > > >) {
             return Rcpp::List::create(
-                Rcpp::Named("bc") = std::get<0>(tup)
+                Rcpp::Named("bc") = toRList(std::get<0>(tup))
             );
         } 
-        else if constexpr (std::is_same_v<T, std::tuple<FDAGWR_TRAITS::Dense_Matrix , std::vector<FDAGWR_TRAITS::Dense_Matrix >>>) {
+        else if constexpr (std::is_same_v< T, std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > > > >) {
             return Rcpp::List::create(
-                Rcpp::Named("bc") = std::get<0>(tup),
-                Rcpp::Named("bns") = toRList(std::get<1>(tup))
+                Rcpp::Named("bc") = toRList(std::get<0>(tup)),
+                Rcpp::Named("bnc") = toRList(std::get<1>(tup))
             );
         } 
-        else if constexpr (std::is_same_v<T, std::tuple<FDAGWR_TRAITS::Dense_Matrix , std::vector<FDAGWR_TRAITS::Dense_Matrix >, std::vector<FDAGWR_TRAITS::Dense_Matrix >>>) {
+        else if constexpr (std::is_same_v< T, std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > >, std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > > > >) {
             return Rcpp::List::create(
-                Rcpp::Named("bc") = std::get<0>(tup),
+                Rcpp::Named("bc") = toRList(std::get<0>(tup)),
                 Rcpp::Named("be") = toRList(std::get<1>(tup)),
                 Rcpp::Named("bs") = toRList(std::get<2>(tup))
             );

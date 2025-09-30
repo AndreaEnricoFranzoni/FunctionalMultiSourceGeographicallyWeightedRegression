@@ -229,19 +229,19 @@ public:
     virtual inline void compute() = 0;
 
     /*!
-    * @brief Virtual method to refactor the b
-    */
-    virtual inline void computeBs() = 0;
-
-    /*!
     * @brief Virtual method to compute the betas
     */
-    virtual inline void computeBetas() = 0;
+    virtual inline void evalBetas() = 0;
 
     /*!
-    * @brief Function to return the result, tuple of different dimension depending on the algo used
+    * @brief Function to return the coefficients of the betas basis expansion, tuple of different dimension depending on the algo used
     */
-    virtual inline CoefficientsTuple regressorCoefficients() const = 0;
+    virtual inline BTuple bCoefficients() const = 0;
+
+    /*!
+    * @brief Function to return the the betas evaluated, tuple of different dimension depending on the algo used
+    */
+    virtual inline BetasTuple betas() const = 0;
 };
 
 

@@ -595,8 +595,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     
     //computing the algo
     fgwr_algo->compute();
+    //evaluating the betas
+    fgwr_algo->evalBetas();
     //retrieving the results                                                                                
-    Rcpp::List regressor_coefficients = wrap_coefficients_to_R_list(fgwr_algo->regressorCoefficients());
+    Rcpp::List b_coefficients = wrap_b_to_R_list(fgwr_algo->bCoefficients());
 
     
     //returning element
@@ -604,11 +606,11 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //regression model used 
     l["FGWR"] = algo_type<_FGWR_ALGO_>();
     //stationary basis expansion coefficients
-    l["bc"]  = regressor_coefficients["bc"];
+    l["bc"]  = b_coefficients["bc"];
     //event dependent basis expansion coefficients
-    l["be"]  = regressor_coefficients["be"];
+    l["be"]  = b_coefficients["be"];
     //station dependent basis expansion coefficients
-    l["bs"]  = regressor_coefficients["bs"];
+    l["bs"]  = b_coefficients["bs"];
 
     return l;
 }
