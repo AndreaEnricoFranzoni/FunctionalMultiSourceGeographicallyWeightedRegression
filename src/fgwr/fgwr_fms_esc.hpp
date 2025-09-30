@@ -521,6 +521,7 @@ public:
 
 
 
+/*
             std::cout << ".compute() done" <<std::endl;
 
             for(std::size_t i = 0; i < m_Bc.size(); ++i){
@@ -538,6 +539,7 @@ public:
                 for(std::size_t j = 0;  j < m_Bs[i].size(); ++j){
                     std::cout << "Unit " << j+1 << "-th" << m_Bs[i][j].rows() << " rows, " << m_Bs[i][j].cols() << "cols" << std::endl;
                     std::cout << m_Bs[i][j] << std::endl;}}
+*/
     }
 
     /*!
