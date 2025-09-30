@@ -469,6 +469,7 @@ public:
         std::cout << "m_be rows: " << m_be[0].rows() << ", m_be cols: " << m_be[0].cols() << std::endl;
 */
 
+        //DEFAULT AI B: PARTE DA TOGLIERE
         m_bc = Eigen::MatrixXd::Constant(m_Lc,1,4.6);
         m_be.reserve(this->n());
         m_bs.reserve(this->n());
@@ -479,8 +480,13 @@ public:
             m_bs.push_back(Eigen::MatrixXd::Constant(m_Ls,1,i+2.4));
         }
 
+
+
+
+
+
         //
-        //wrapping the b from the shape useful for the computation into a more useful format
+        //wrapping the b from the shape useful for the computation into a more useful format: TENERE
         //
         //stationary covariates
         m_Bc.reserve(m_qc);
@@ -575,6 +581,8 @@ public:
         }
 
 
+/*
+
         //BETA_E
         m_beta_e.reserve(m_qe);
 
@@ -639,6 +647,8 @@ public:
             
             m_beta_s.push_back(beta_s_j_ev);
         }
+
+*/
     }
 
     /*!
