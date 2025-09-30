@@ -464,10 +464,10 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                 for(std::size_t i = 0; i < < Lc_j.size(); ++i){std::cout << Lc_j[i] << std::endl;}
 
                                 std::cout << "Numero basi per qe" << std::endl;
-                for(std::size_t i = 0; i < < Lc_e.size(); ++i){std::cout << Lc_e[i] << std::endl;}
+                for(std::size_t i = 0; i < < Le_j.size(); ++i){std::cout << Le_j[i] << std::endl;}
 
                                 std::cout << "Numero basi per qs" << std::endl;
-                for(std::size_t i = 0; i < < Lc_s.size(); ++i){std::cout << Lc_s[i] << std::endl;}
+                for(std::size_t i = 0; i < < Ls_j.size(); ++i){std::cout << Ls_j[i] << std::endl;}
 
 
     //FD OBJECTS: RESPONSE and COVARIATES
