@@ -249,16 +249,7 @@ public:
                 m_theta_t = m_theta.transpose();
                 m_Xc_t = m_Xc.transpose();
                 m_psi_t = m_psi.transpose();
-
-                std::cout << "Numero basi per qc" << std::endl;
-                for(std::size_t i = 0; i  < m_Lc_j.size(); ++i){std::cout << m_Lc_j[i] << std::endl;}
-
-                                std::cout << "Numero basi per qe" << std::endl;
-                for(std::size_t i = 0; i < m_Le_j.size(); ++i){std::cout << m_Le_j[i] << std::endl;}
-
-                                std::cout << "Numero basi per qs" << std::endl;
-                for(std::size_t i = 0; i < m_Ls_j.size(); ++i){std::cout << m_Ls_j[i] << std::endl;}
-                
+         
 
 /*
                 //PRINT FOR DEBUGGING
@@ -271,16 +262,22 @@ public:
                 std::cout << "m_Wc rows: " << m_Wc.rows() << ", m_Wc cols: " << m_Wc.cols() << std::endl;
                 std::cout << "m_Rc rows: " << m_Rc.rows() << ", m_Rc cols: " << m_Rc.cols() << std::endl;
                 std::cout << "m_omega rows: " << m_omega.rows() << ", m_omega cols: " << m_omega.cols() << std::endl;
+                std::cout << "Numero basi per qc" << std::endl;
+                for(std::size_t i = 0; i  < m_Lc_j.size(); ++i){std::cout << m_Lc_j[i] << std::endl;}
                 std::cout << "m_Xe rows: " << m_Xe.rows() << ", m_Xe cols: " << m_Xe.cols() << std::endl;
                 std::cout << "Number of elements in m_We: " << m_We.size() << std::endl;
                 for(std::size_t i = 0; i < m_We.size(); ++i){   std::cout << "m_We[" << i << "] rows: " << m_We[i].rows() << ", cols: " << m_We[i].cols() << std::endl;}
                 std::cout << "m_Re rows: " << m_Re.rows() << ", m_Re cols: " << m_Re.cols() << std::endl;
                 std::cout << "m_theta rows: " << m_theta.rows() << ", m_theta cols: " << m_theta.cols() << std::endl;
+                std::cout << "Numero basi per qe" << std::endl;
+                for(std::size_t i = 0; i < m_Le_j.size(); ++i){std::cout << m_Le_j[i] << std::endl;}
                 std::cout << "m_Xs rows: " << m_Xs.rows() << ", m_Xs cols: " << m_Xs.cols() << std::endl;
                 std::cout << "Number of elements in m_Ws: " << m_Ws.size() << std::endl;
                 for(std::size_t i = 0; i < m_Ws.size(); ++i){   std::cout << "m_Ws[" << i << "] rows: " << m_Ws[i].rows() << ", cols: " << m_Ws[i].cols() << std::endl;}
                 std::cout << "m_Rs rows: " << m_Rs.rows() << ", m_Rs cols: " << m_Rs.cols() << std::endl;
                 std::cout << "m_psi rows: " << m_psi.rows() << ", m_psi cols: " << m_psi.cols() << std::endl;
+                std::cout << "Numero basi per qs" << std::endl;
+                for(std::size_t i = 0; i < m_Ls_j.size(); ++i){std::cout << m_Ls_j[i] << std::endl;}
 
 
                 for (std::size_t i = 0; i < this->abscissa_points().size(); ++i)
@@ -519,6 +516,8 @@ public:
                 FDAGWR_TRAITS::Dense_Matrix Bs_j_i = m_bs[i].block(start_idx,0,m_Ls_j[j],1);
                 Bs_j.push_back(Bs_j_i);}
             m_Bs.push_back(Bs_j);}
+
+            std::cout << ".compute() done" <<std::endl;
     }
 
     /*!
