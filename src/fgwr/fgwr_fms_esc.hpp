@@ -524,19 +524,19 @@ public:
             std::cout << ".compute() done" <<std::endl;
 
             for(std::size_t i = 0; i < m_Bc.size(); ++i){
-                std::cout << "Cov C " << i+1 << "-th dim: " << m_Bc[i].rows() << " rows, " << m_Bc[i].cols << "cols" << std::endl;
+                std::cout << "Cov C " << i+1 << "-th dim: " << m_Bc[i].rows() << " rows, " << m_Bc[i].cols() << "cols" << std::endl;
                 std::cout << m_Bc[i] << std::endl;}
 
             for(std::size_t i = 0; i < m_Be.size(); ++i){
                 std::cout << "Cov E " << i+1 << "-th" << std::endl;
                 for(std::size_t j = 0;  j < m_Be[i].size(); ++j){
-                    std::cout << "Unit " << j+1 << "-th" << m_Be[i][j].rows() << " rows, " << m_Be[i][j].cols << "cols" << std::endl;
+                    std::cout << "Unit " << j+1 << "-th" << m_Be[i][j].rows() << " rows, " << m_Be[i][j].cols() << "cols" << std::endl;
                     std::cout << m_Be[i][j] << std::endl;}}
 
             for(std::size_t i = 0; i < m_Bs.size(); ++i){
                 std::cout << "Cov S " << i+1 << "-th" << std::endl;
                 for(std::size_t j = 0;  j < m_Bs[i].size(); ++j){
-                    std::cout << "Unit " << j+1 << "-th" << m_Bs[i][j].rows() << " rows, " << m_Bs[i][j].cols << "cols" << std::endl;
+                    std::cout << "Unit " << j+1 << "-th" << m_Bs[i][j].rows() << " rows, " << m_Bs[i][j].cols() << "cols" << std::endl;
                     std::cout << m_Bs[i][j] << std::endl;}}
     }
 
