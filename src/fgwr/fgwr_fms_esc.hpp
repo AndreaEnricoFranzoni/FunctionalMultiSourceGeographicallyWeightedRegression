@@ -251,13 +251,13 @@ public:
                 m_psi_t = m_psi.transpose();
 
                 std::cout << "Numero basi per qc" << std::endl;
-                for(std::size_t i = 0; i < < m_Lc_j.size(); ++i){std::cout << m_Lc_j[i] << std::endl;}
+                for(std::size_t i = 0; i  < m_Lc_j.size(); ++i){std::cout << m_Lc_j[i] << std::endl;}
 
                                 std::cout << "Numero basi per qe" << std::endl;
-                for(std::size_t i = 0; i < < m_Le_j.size(); ++i){std::cout << m_Le_j[i] << std::endl;}
+                for(std::size_t i = 0; i < m_Le_j.size(); ++i){std::cout << m_Le_j[i] << std::endl;}
 
                                 std::cout << "Numero basi per qs" << std::endl;
-                for(std::size_t i = 0; i < < m_Ls_j.size(); ++i){std::cout << m_Ls_j[i] << std::endl;}
+                for(std::size_t i = 0; i < m_Ls_j.size(); ++i){std::cout << m_Ls_j[i] << std::endl;}
                 
 
 /*
