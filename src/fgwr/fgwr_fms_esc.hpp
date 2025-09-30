@@ -566,7 +566,7 @@ public:
             for(std::size_t i = 0; i < this->n(); ++i)
             {
                 //compute the beta j-th for unit i-th
-                FUNC_OBJ<INPUT,OUTPUT> beta_e_j_i = fm_prod<INPUT,OUTPUT>(basis_e_j,m_Be[j][i],this->number_threads());
+                FUNC_OBJ<INPUT,OUTPUT> beta_e_j_i = fm_prod<INPUT,OUTPUT>(basis_e_j,m_Be[j][i],this->number_threads())(0,0);
                 //eval the beta
                 std::vector< OUTPUT > beta_e_j_i_ev; 
                 beta_e_j_i_ev.reserve(this->abscissa_points().size());
@@ -599,7 +599,7 @@ public:
             for(std::size_t i = 0; i < this->n(); ++i)
             {
                 //compute the beta j-th for unit i-th
-                FUNC_OBJ<INPUT,OUTPUT> beta_s_j_i = fm_prod<INPUT,OUTPUT>(basis_s_j,m_Bs[j][i],this->number_threads());
+                FUNC_OBJ<INPUT,OUTPUT> beta_s_j_i = fm_prod<INPUT,OUTPUT>(basis_s_j,m_Bs[j][i],this->number_threads())(0,0);
                 //eval the beta
                 std::vector< OUTPUT > beta_s_j_i_ev; 
                 beta_s_j_i_ev.reserve(this->abscissa_points().size());
