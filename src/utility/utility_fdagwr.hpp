@@ -89,20 +89,19 @@ toRList(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& mats)
 Rcpp::List
 toRList(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& mats )
 {
-    Rcpp::List outerList;
-    outerList.reserve(mats.size());
+    Rcpp::List outerList(mats.size());
 
-    for(const auto& innerVec : mats){
-        Rcpp::List innerList(innerVec.size());
-        Rcpp::CharacterVector innerNames(innerVec.size());
+    for(std::size_t i = 0; i < mats.size(); ++i){
+        Rcpp::List innerList(mats[i].size());
+        Rcpp::CharacterVector innerNames(mats[i].size());
 
-        for(std::size_t i = 0; i < innerVec.size(); ++i){
-            innerList[i] = Rcpp::wrap(innerVec[i]);
-            innerNames[i] = Rcpp::String("Unit ") + std::to_string(i+1);
+        for(std::size_t j = 0; j < mats[i].size(); ++j){
+            innerList[j] = Rcpp::wrap(mats[i][j]);
+            innerNames[j] = std::string("Unit ") + std::to_string(i+1);
         }
 
         innerList.names() = innerNames;
-        outerList.push_back(innerList);
+        outerList[i]=(innerList);
     }
 
     return outerList;
