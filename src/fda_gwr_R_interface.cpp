@@ -592,10 +592,11 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     abscissa_points_,
                                                                                     number_of_statistical_units_,
                                                                                     number_threads);
-    /*
+
     //computing the algo
     fgwr_algo->compute();
-    //evaluating the betas
+     /*
+    //evaluating the betas   
     //fgwr_algo->evalBetas();
     //retrieving the results                                                                                
     Rcpp::List b_coefficients = wrap_b_to_R_list(fgwr_algo->bCoefficients());
