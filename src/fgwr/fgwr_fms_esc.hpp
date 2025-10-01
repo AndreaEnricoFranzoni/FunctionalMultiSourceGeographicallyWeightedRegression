@@ -537,8 +537,8 @@ public:
         
 
         //BETA_E
-        m_beta_e = this->eval_betas(m_Be,m_theta,m_Le_j,m_qe,this->abscissa_points());
-/*
+        //m_beta_e = this->eval_betas(m_Be,m_theta,m_Le_j,m_qe,this->abscissa_points());
+
         m_beta_e.reserve(m_qe);
 
         for(std::size_t j = 0; j < m_qe; ++j)
@@ -567,7 +567,7 @@ public:
 
             m_beta_e.push_back(beta_e_j_ev);
         }
-*/
+
 
 
         //BETA_S
