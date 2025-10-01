@@ -556,6 +556,27 @@ public:
         }
 
 
+
+
+
+
+
+        std::cout << "Printing beta c" << std::endl;
+        for (std::size_t i = 0; i < m_beta_c.size(); ++i)
+        {
+            std::cout << "Covariate C " << i+1 << "-th" << std::endl;
+            for(std::size_t j = 0; j < m_beta_c[i].size(); ++j)
+            {
+                std::cout << m_beta_c[i][j] << std::endl;
+            }
+        }
+        
+
+
+
+
+
+
         //BETA_E
         m_beta_e.reserve(m_qe);
 
@@ -585,6 +606,32 @@ public:
 
             m_beta_e.push_back(beta_e_j_ev);
         }
+
+
+
+
+
+
+        std::cout << "Printing beta e" << std::endl;
+        for (std::size_t i = 0; i < m_beta_e.size(); ++i)
+        {
+            std::cout << "Covariate E " << i+1 << "-th" << std::endl;
+            for(std::size_t j = 0; j < m_beta_e[i].size(); ++j)
+            {
+                std::cout << "Unit " << j << "-th" << std::endl;
+
+                for(std::size k = 0; k < m_beta_e[i][j].size(); ++k)
+                {
+                    std::cout << m_beta_e[i][j][k] << std::endl;
+                }
+            }
+        }
+
+
+
+
+
+
 
 
         //BETA_S
@@ -618,6 +665,24 @@ public:
             }
             
             m_beta_s.push_back(beta_s_j_ev);
+        }
+
+
+
+
+        std::cout << "Printing beta s" << std::endl;
+        for (std::size_t i = 0; i < m_beta_s.size(); ++i)
+        {
+            std::cout << "Covariate S " << i+1 << "-th" << std::endl;
+            for(std::size_t j = 0; j < m_beta_s[i].size(); ++j)
+            {
+                std::cout << "Unit " << j << "-th" << std::endl;
+
+                for(std::size k = 0; k < m_beta_s[i][j].size(); ++k)
+                {
+                    std::cout << m_beta_s[i][j][k] << std::endl;
+                }
+            }
         }
     }
 
