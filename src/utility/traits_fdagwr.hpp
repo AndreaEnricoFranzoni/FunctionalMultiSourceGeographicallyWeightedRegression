@@ -109,13 +109,13 @@ using BTuple = std::variant<
 
 struct FDAGWR_B_NAMES
 {
-  static constexpr std::string bc  = "bc";
+  static constexpr std::string bc  = "Bc";
 
-  static constexpr std::string bnc = "bnc";
+  static constexpr std::string bnc = "Bnc";
 
-  static constexpr std::string be  = "be";
+  static constexpr std::string be  = "Be";
 
-  static constexpr std::string bs  = "bs";
+  static constexpr std::string bs  = "Bs";
 };
 
 
@@ -128,13 +128,13 @@ using BetasTuple = std::variant<
 
 struct FDAGWR_BETAS_NAMES
 {
-  static constexpr std::string beta_c  = "beta_c";
+  static constexpr std::string beta_c  = "Beta_c";
 
-  static constexpr std::string beta_nc = "beta_nc";
+  static constexpr std::string beta_nc = "Beta_nc";
 
-  static constexpr std::string beta_e  = "beta_e";
+  static constexpr std::string beta_e  = "Beta_e";
 
-  static constexpr std::string beta_s  = "beta_s";
+  static constexpr std::string beta_s  = "Beta_s";
 };
 
 

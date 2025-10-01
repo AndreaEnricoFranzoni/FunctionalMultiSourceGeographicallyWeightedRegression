@@ -55,7 +55,7 @@ private:
     functional_matrix_sparse<INPUT,OUTPUT> m_omega_t;
     /*!Coefficients of the basis expansion for stationary regressors coefficients: Lcx1 (used for the computation): TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_bc;
-    /*!Coefficients of the basis expansion for stationary regressors coefficients: every element is 1xLc_j*/
+    /*!Coefficients of the basis expansion for stationary regressors coefficients: every element is Lc_jx1*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_Bc;
     /*!Discrete evaluation of all the beta_c: a vector of dimension qc, containing, for all the stationary covariates, the discrete ev of the respective beta*/
     std::vector< std::vector<OUTPUT> > m_beta_c;
@@ -490,6 +490,8 @@ public:
         //wrapping the b from the shape useful for the computation into a more useful format: TENERE
         //
         //stationary covariates
+        m_Bc = wrap_b(m_bc,m_Lc_j);
+/*
         m_Bc.reserve(m_qc);
         for(std::size_t j = 0; j < m_qc; ++j){
             //for each stationary covariates
@@ -497,7 +499,10 @@ public:
             //taking the right coefficients of the basis expansion
             FDAGWR_TRAITS::Dense_Matrix Bc_j = m_bc.block(start_idx,0,m_Lc_j[j],1);
             m_Bc.push_back(Bc_j);}
+*/
         //event-dependent covariates
+        m_Be = wrap_b(m_be,m_Le_j);
+/*
         m_Be.reserve(m_qe);
         for(std::size_t j = 0; j < m_qe; ++j){
             //for each event-dependent covariates
@@ -510,7 +515,10 @@ public:
                 FDAGWR_TRAITS::Dense_Matrix Be_j_i = m_be[i].block(start_idx,0,m_Le_j[j],1);
                 Be_j.push_back(Be_j_i);}
             m_Be.push_back(Be_j);}
+*/
         //station-dependent covariates
+        m_Bs = wrap_b(m_be,m_Ls_j);
+/*
         m_Bs.reserve(m_qs);
         for(std::size_t j = 0; j < m_qs; ++j){
             //for each event-dependent covariates
@@ -523,6 +531,7 @@ public:
                 FDAGWR_TRAITS::Dense_Matrix Bs_j_i = m_bs[i].block(start_idx,0,m_Ls_j[j],1);
                 Bs_j.push_back(Bs_j_i);}
             m_Bs.push_back(Bs_j);}
+*/
     }
 
     /*!

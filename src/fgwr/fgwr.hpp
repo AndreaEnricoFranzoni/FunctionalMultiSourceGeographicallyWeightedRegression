@@ -224,6 +224,20 @@ public:
                                 const std::vector< FDAGWR_TRAITS::Dense_Matrix > &operator_) const;
 
     /*!
+    * @brief Wrap b, for stationary covariates
+    */
+    std::vector< FDAGWR_TRAITS::Dense_Matrix >
+    wrap_b(const FDAGWR_TRAITS::Dense_Matrix& b,
+           const std::vector<std::size_t>& L_j) const;
+
+    /*!
+    * @brief Wrap b, for non-stationary covariates
+    */
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>
+    wrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
+           const std::vector<std::size_t>& L_j) const;
+
+    /*!
     * @brief Virtual method to compute the Functional Geographically Weighted Regression
     */
     virtual inline void compute() = 0;

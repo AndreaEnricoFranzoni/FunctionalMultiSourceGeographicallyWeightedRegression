@@ -354,3 +354,66 @@ const
 
     return func_oper;
 }
+
+
+
+//////////////////////
+/////// WRAP B ///////
+//////////////////////
+template< typename INPUT, typename OUTPUT >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+std::vector< FDAGWR_TRAITS::Dense_Matrix >
+fgwr<INPUT,OUTPUT>::wrap_b(const FDAGWR_TRAITS::Dense_Matrix& b,
+                           const std::vector<std::size_t>& L_j)
+const
+{
+    //for stationary covariate
+    //input coherency
+    assert((b.cols() == 1) && (b.rows() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));
+    //number of covariates
+    std::size_t q = L_j.size();
+    //container
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > B;
+    B.reserve(q);
+    for(std::size_t j = 0; j < q; ++j){
+        //for each stationary covariates
+        std::size_t start_idx = std::reduce(L_j.cbegin(),std::next(L_j.cbegin(),j),static_cast<std::size_t>(0));
+        //taking the right coefficients of the basis expansion
+        FDAGWR_TRAITS::Dense_Matrix B_j = b.block(start_idx,0,L_j[j],1);
+        B.push_back(B_j);}
+
+    return B;
+}
+
+
+
+template< typename INPUT, typename OUTPUT >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > >
+fgwr<INPUT,OUTPUT>::wrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
+                           const std::vector<std::size_t>& L_j) 
+const
+{
+    //for non stationary covariates
+    //number of covariates
+    std::size_t q = L_j.size();
+    //input coherency
+    assert(b.size() == this->n());
+    for(std::size_t i = 0; i < this->n(); ++i){     assert((b[i].cols() == 1) && (b[i].rows() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));}
+    //container
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> B;    
+    B.reserve(q);
+    for(std::size_t j = 0; j < q; ++j){
+        //for each event-dependent covariates
+        std::size_t start_idx = std::reduce(L_j.cbegin(),std::next(L_j.cbegin(),j),static_cast<std::size_t>(0));
+        std::vector< FDAGWR_TRAITS::Dense_Matrix > B_j;
+        B_j.reserve(this->n());
+        //for all the units
+        for(std::size_t i = 0; i < this->n(); ++i){
+            //taking the right coefficients of the basis expansion
+            FDAGWR_TRAITS::Dense_Matrix B_j_i = b[i].block(start_idx,0,L_j[j],1);
+            B_j.push_back(B_j_i);}
+        B.push_back(B_j);}
+
+    return B;
+}
