@@ -509,7 +509,7 @@ public:
     override
     {
         //BETA_C
-        m_beta_c = eval_betas(m_Bc,m_omega,m_Lc_j,m_qc,this->abscissa_points());
+        m_beta_c = this->eval_betas(m_Bc,m_omega,m_Lc_j,m_qc,this->abscissa_points());
 
 
 /*
@@ -537,7 +537,7 @@ public:
         
 
         //BETA_E
-        m_beta_e = eval_betas(m_Be,m_theta,m_Le_j,m_qe,this->abscissa_points());
+        m_beta_e = this->eval_betas(m_Be,m_theta,m_Le_j,m_qe,this->abscissa_points());
 /*
         m_beta_e.reserve(m_qe);
 
@@ -571,7 +571,7 @@ public:
 
 
         //BETA_S
-        m_beta_s = eval_betas(m_Bs,m_psi,m_Ls_j,m_qs,this->abscissa_points());
+        m_beta_s = this->eval_betas(m_Bs,m_psi,m_Ls_j,m_qs,this->abscissa_points());
 /*
         m_beta_s.reserve(m_qs);
 

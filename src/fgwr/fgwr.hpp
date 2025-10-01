@@ -228,14 +228,16 @@ public:
     */
     std::vector< FDAGWR_TRAITS::Dense_Matrix >
     wrap_b(const FDAGWR_TRAITS::Dense_Matrix& b,
-           const std::vector<std::size_t>& L_j) const;
+           const std::vector<std::size_t>& L_j,
+           std::size_t q) const;
 
     /*!
     * @brief Wrap b, for non-stationary covariates
     */
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>
     wrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
-           const std::vector<std::size_t>& L_j) const;
+           const std::vector<std::size_t>& L_j,
+           std::size_t q) const;
 
     /*!
     * @brief Evaluation of the betas, for stationary covariates

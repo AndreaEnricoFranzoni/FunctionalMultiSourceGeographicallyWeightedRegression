@@ -481,7 +481,7 @@ const
     //input coherency
     assert((B.size() == q) && (L_j.size() == q) && (basis_B.rows() == q) && (basis_B.cols() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));
     for(std::size_t j = 0; j < q; ++j){  
-        assert(B[j].size() == this->n())   
+        assert(B[j].size() == this->n());   
         for(std::size_t i = 0; i < this->n(); ++i){     assert((B[j][i].rows() == L_j[j]) && (B[j][i].cols() == 1));}}
         
     //container
