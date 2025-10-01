@@ -479,8 +479,8 @@ public:
 
         for(std::size_t i = 0; i < this->n(); ++i)
         {
-            m_be.push_back(Eigen::MatrixXd::Constant(m_Le,1,i+4));
-            m_bs.push_back(Eigen::MatrixXd::Constant(m_Ls,1,i+2.4));
+            m_be.push_back(Eigen::MatrixXd::Random(m_Le,1,i+4));
+            m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1,i+2.4));
         }
         //FINE PARTE DA TOGLIERE
 
@@ -509,36 +509,11 @@ public:
     override
     {
         //BETA_C
-        m_beta_c = this->eval_betas(m_Bc,m_omega,m_Lc_j,m_qc,this->abscissa_points());
-
-
-/*
-        m_beta_c.reserve(m_qc);
-
-        for(std::size_t j = 0; j < m_qc; ++j)
-        {
-            //retrieving the basis
-            std::vector< FUNC_OBJ<INPUT,OUTPUT> > basis_j;
-            basis_j.reserve(m_Bc[j].rows());
-            std::size_t start_idx = std::reduce(m_Lc_j.cbegin(),std::next(m_Lc_j.cbegin(),j),static_cast<std::size_t>(0));
-            std::size_t end_idx = start_idx + m_Lc_j[j];
-            for(std::size_t k = start_idx; k < end_idx; ++k){   basis_j.push_back(m_omega(j,k));}
-            functional_matrix<INPUT,OUTPUT> basis_c_j(basis_j,1,m_Bc[j].rows());
-
-            //compute the beta
-            FUNC_OBJ<INPUT,OUTPUT> beta_c_j = fm_prod<INPUT,OUTPUT>(basis_c_j,m_Bc[j],this->number_threads())(0,0);
-            //eval the beta
-            std::vector< OUTPUT > beta_c_j_ev; 
-            beta_c_j_ev.resize(this->abscissa_points().size());
-            std::transform(this->abscissa_points().cbegin(),this->abscissa_points().cend(),beta_c_j_ev.begin(),[&beta_c_j](const INPUT &x){return beta_c_j(x);});
-            m_beta_c.push_back(beta_c_j_ev);
-        }
-*/
-        
-
+        m_beta_c = this->eval_betas(m_Bc,m_omega,m_Lc_j,m_qc,this->abscissa_points());        
         //BETA_E
         //m_beta_e = this->eval_betas(m_Be,m_theta,m_Le_j,m_qe,this->abscissa_points());
 
+/*
         m_beta_e.reserve(m_qe);
 
         for(std::size_t j = 0; j < m_qe; ++j)
@@ -567,6 +542,7 @@ public:
 
             m_beta_e.push_back(beta_e_j_ev);
         }
+*/
 
 
 

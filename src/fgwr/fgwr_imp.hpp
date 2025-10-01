@@ -516,7 +516,7 @@ const
             beta_j_ev.push_back(beta_j_i_ev);
         }
 
-    beta.push_back(beta_j_ev);
+        beta.push_back(beta_j_ev);
     }
 
     return beta;
