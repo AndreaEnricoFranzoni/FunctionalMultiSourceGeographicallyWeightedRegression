@@ -123,21 +123,24 @@ using namespace Rcpp;
 * @param basis_types_beta_stations_cov vector of strings, element i-th containing the type of basis used for the i-th stations-dependent covariates (functional regression) coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @return an R list containing:
 *         - "FGWR": string containing the type of fgwr used ("FGWR_FMS_ESC")
-*         - "C": a list containing, for each stationary covariate:
-*                - "b": a 1xLc_j vector of double, containing the coefficients of the basis expansion of the beta
-*                - "beta": a 1xsize(t_points) vector of double, containing the evaluation of the beta over t_points
-*                - "basis": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant".
-*                - "basis number": the number of basis used for performing the beta basis expansion 
-*         - "E": a list containing, for each event-dependent covariate:
-*                - "b": a list containing, for each statistical unit (ordered as put in input), a 1xLe_j vector of double, containing the coefficients of the basis expansion of the beta for each statistical unit
-*                - "beta": a list containing, for each statistical unit (ordered as put in input), a 1xsize(t_points) vector of double, containing the evaluation of the beta for each statistical unit over t_points
-*                - "basis": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant".
-*                - "basis number": the number of basis used for performing the beta basis expansion 
-*         - "S": a list containing, for each station-dependent covariate:
-*                - "b": a list containing, for each statistical unit (ordered as put in input), a 1xLs_j vector of double, containing the coefficients of the basis expansion of the beta for each statistical unit
-*                - "beta": a list containing, for each statistical unit (ordered as put in input), a 1xsize(t_points) vector of double, containing the evaluation of the beta for each statistical unit over t_points
-*                - "basis": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant".
-*                - "basis number": the number of basis used for performing the beta basis expansion 
+*         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")):
+*                 - "Basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "Basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)
+*                 - "Basis_number": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)
+*                 - "Basis_knots": the knots used to create the basis system for the beta (is the input knots_beta_stationary_cov)
+*         - "Beta_c":
+*         - "Be": a list containing, for each event-dependent covariate regression coefficent (each element is named with the element names in the list coeff_events_cov (default, if not given: "CovE*")):
+*                 - "Basis_coeff": a list, containg, for each unit, a Le_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "Basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_events_cov)
+*                 - "Basis_number": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_events_cov)
+*                 - "Basis_knots": the knots used to create the basis system for the beta (is the input knots_beta_events_cov)
+*         - "Beta_e": 
+*         - "Bs": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")):
+*                 - "Basis_coeff": a list, containg, for each unit, a Ls_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "Basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_stations_cov)
+*                 - "Basis_number": the number of basis used for performing the beta basis expansion (eespective elements of n_basis_beta_stations_cov)
+*                 - "Basis_knots": the knots used to create the basis system for the beta (is the input knots_beta_stations_cov)
+*         - "Beta_s":
 * 
 * @details constant basis are used, for a covariate, if it resembles a scalar shape. It consists of a straight line with y-value equal to 1 all over the data domain.
 *          Can be seen as a B-spline basis with degree 0, number of basis 1, using one knot, consequently having only one coefficient for the only basis for each statistical unit.
@@ -619,6 +622,7 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                  knots_beta_stations_cov_);
     //betas
     Rcpp::List betas = wrap_beta_to_R_list(fgwr_algo->betas(),
+                                           abscissa_points_,
                                            names_stationary_cov_,
                                            {},
                                            names_events_cov_,

@@ -84,9 +84,15 @@ toRList(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
         bool add_unit_number = false) 
 {
     Rcpp::List out(b.size());
+    Rcpp::CharacterVector names(b.size());
     for (std::size_t i = 0; i < b.size(); i++) {
         out[i] = Rcpp::wrap(b[i]); // RcppEigen converte Eigen::MatrixXd
+        names[i] = std::string("Unit ") + std::to_string(i+1);
     }
+
+    if add_unit_number
+        out.names() = names;
+
     return out;
 }
 
@@ -209,6 +215,22 @@ toRList(const std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>& betas)
     return out;
 }
 
+/*!
+* @brief Converte un std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>> in una R list con vettori di double (betas stazionari), con extra infos
+*/
+Rcpp::List 
+toRList(const std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>& betas,
+        const std::vector< FDAGWR_TRAITS::fd_obj_x_type>& abscissas) 
+{
+    Rcpp::List out(betas.size());
+    for (size_t j = 0; j < b.size(); ++j) {
+        Rcpp::List elem = Rcpp::List::create(Rcpp::Named("Beta_eval") = Rcpp::NumericVector(betas[j].cbegin(), betas[j].cend()),
+                                             Rcpp::Named("Abscissa")  = Rcpp::NumericVector(abscissas.cbegin(), abscissas.cend()));
+
+        out[j] = elem;}
+
+    return out;
+}
 
 
 
@@ -239,6 +261,37 @@ toRList(const std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_typ
     return outerList;
 }
 
+/*!
+* @brief Converte un std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> in una R list con vettori di double (betas non stazionari), con extra infos
+*/
+Rcpp::List 
+toRList(const std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>>& betas,
+        const std::vector< FDAGWR_TRAITS::fd_obj_x_type>& abscissas) 
+{
+
+    Rcpp::List outerList(betas.size());
+
+    for(std::size_t i = 0; i < betas.size(); ++i){
+        Rcpp::List innerList(betas[i].size());
+        Rcpp::CharacterVector innerNames(betas[i].size());
+
+        for(std::size_t j = 0; j < betas[i].size(); ++j){
+            innerList[j] = Rcpp::NumericVector(betas[i][j].cbegin(), betas[i][j].cend());
+            innerNames[j] = std::string("Unit ") + std::to_string(j+1);
+        }
+
+        innerList.names() = innerNames;
+
+        //adding the abscissas
+        Rcpp::List elem = Rcpp::List::create(
+            Rcpp::Named("Beta_eval") = innerList,
+            Rcpp::Named("Abscissa")  = Rcpp::NumericVector(abscissas.cbegin(), abscissas.cend()));
+
+        outerList[i]=elem;
+    }
+
+    return outerList;
+}
 
 
 
@@ -270,7 +323,6 @@ wrap_b_to_R_list(const BTuple& b,
         using T = std::decay_t<decltype(tup)>;
 
         if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>>>) {
-            //Rcpp::List bc = toRList(std::get<0>(tup));
             Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,knots_bc);
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
@@ -279,12 +331,10 @@ wrap_b_to_R_list(const BTuple& b,
         }
         else if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>> >>) {
-            //Rcpp::List bc = toRList(std::get<0>(tup));
             Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,knots_bc);
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
 
-            //Rcpp::List bnc = toRList(std::get<1>(tup));
             Rcpp::List bnc = toRList(std::get<1>(tup),basis_type_bnc,basis_number_bnc,knots_bnc);
             if (!names_bnc.empty())
                 bnc.names() = Rcpp::CharacterVector(names_bnc.cbegin(), names_bnc.cend());
@@ -295,17 +345,15 @@ wrap_b_to_R_list(const BTuple& b,
         else if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>>,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>> >>) {
-            //Rcpp::List bc = toRList(std::get<0>(tup));
+
             Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,knots_bc);
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
 
-            //Rcpp::List be = toRList(std::get<1>(tup));
             Rcpp::List be = toRList(std::get<1>(tup),basis_type_be,basis_number_be,knots_be);
             if (!names_be.empty())
                 be.names() = Rcpp::CharacterVector(names_be.cbegin(), names_be.cend());
 
-            //Rcpp::List bs = toRList(std::get<2>(tup));
             Rcpp::List bs = toRList(std::get<2>(tup),basis_type_bs,basis_number_bs,knots_bs);
             if (!names_bs.empty())
                 bs.names() = Rcpp::CharacterVector(names_bs.cbegin(), names_bs.cend());
@@ -324,6 +372,7 @@ wrap_b_to_R_list(const BTuple& b,
 */
 Rcpp::List 
 wrap_beta_to_R_list(const BetasTuple& betas,
+                    const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & abscissas,
                     const std::vector<std::string>& names_beta_c  = {},
                     const std::vector<std::string>& names_beta_nc = {},
                     const std::vector<std::string>& names_beta_e  = {},
@@ -333,7 +382,8 @@ wrap_beta_to_R_list(const BetasTuple& betas,
         using T = std::decay_t<decltype(tup)>;
 
         if constexpr (std::is_same_v< T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> >) {
-            Rcpp::List beta_c = toRList(std::get<0>(tup));
+            //Rcpp::List beta_c = toRList(std::get<0>(tup));
+            Rcpp::List beta_c = toRList(std::get<0>(tup),abscissas);
             if (!names_beta_c.empty())
                 beta_c.names() = Rcpp::CharacterVector(names_beta_c.cbegin(), names_beta_c.cend());
 
@@ -341,11 +391,13 @@ wrap_beta_to_R_list(const BetasTuple& betas,
         }
         else if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>,
                                                          std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> > >) {
-            Rcpp::List beta_c = toRList(std::get<0>(tup));
+            //Rcpp::List beta_c = toRList(std::get<0>(tup));
+            Rcpp::List beta_c = toRList(std::get<0>(tup),abscissas);
             if (!names_beta_c.empty())
                 beta_c.names() = Rcpp::CharacterVector(names_beta_c.cbegin(), names_beta_c.cend());
 
-            Rcpp::List beta_nc = toRList(std::get<1>(tup));
+            //Rcpp::List beta_nc = toRList(std::get<1>(tup));
+            Rcpp::List beta_nc = toRList(std::get<1>(tup),abscissas);
             if (!names_beta_nc.empty())
                 beta_nc.names() = Rcpp::CharacterVector(names_beta_nc.cbegin(), names_beta_nc.cend());
 
@@ -355,15 +407,18 @@ wrap_beta_to_R_list(const BetasTuple& betas,
         else if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>,
                                                          std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>>,
                                                          std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> >>) {
-            Rcpp::List beta_c = toRList(std::get<0>(tup));
+            //Rcpp::List beta_c = toRList(std::get<0>(tup));
+            Rcpp::List beta_c = toRList(std::get<0>(tup),abscissas);
             if (!names_beta_c.empty())
                 beta_c.names() = Rcpp::CharacterVector(names_beta_c.cbegin(), names_beta_c.cend());
 
-            Rcpp::List beta_e = toRList(std::get<1>(tup));
+            //Rcpp::List beta_e = toRList(std::get<1>(tup));
+            Rcpp::List beta_e = toRList(std::get<1>(tup),abscissas);
             if (!names_beta_e.empty())
                 beta_e.names() = Rcpp::CharacterVector(names_beta_e.cbegin(), names_beta_e.cend());
 
-            Rcpp::List beta_s = toRList(std::get<2>(tup));
+            //Rcpp::List beta_s = toRList(std::get<2>(tup));
+            Rcpp::List beta_s = toRList(std::get<2>(tup),abscissas);
             if (!names_beta_s.empty())
                 beta_s.names() = Rcpp::CharacterVector(names_beta_s.cbegin(), names_beta_s.cend());
 
