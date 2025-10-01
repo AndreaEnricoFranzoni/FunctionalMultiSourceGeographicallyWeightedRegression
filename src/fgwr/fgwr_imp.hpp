@@ -364,14 +364,13 @@ template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
 fgwr<INPUT,OUTPUT>::wrap_b(const FDAGWR_TRAITS::Dense_Matrix& b,
-                           const std::vector<std::size_t>& L_j)
+                           const std::vector<std::size_t>& L_j,
+                           std::size_t q)
 const
 {
     //for stationary covariate
     //input coherency
-    assert((b.cols() == 1) && (b.rows() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));
-    //number of covariates
-    std::size_t q = L_j.size();
+    assert((L_j.size() == q) && (b.cols() == 1) && (b.rows() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));
     //container
     std::vector< FDAGWR_TRAITS::Dense_Matrix > B;
     B.reserve(q);
@@ -391,14 +390,13 @@ template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > >
 fgwr<INPUT,OUTPUT>::wrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
-                           const std::vector<std::size_t>& L_j) 
+                           const std::vector<std::size_t>& L_j,
+                           std::size_t q) 
 const
 {
     //for non stationary covariates
-    //number of covariates
-    std::size_t q = L_j.size();
     //input coherency
-    assert(b.size() == this->n());
+    assert((b.size() == this->n()) && (L_j.size() == q));
     for(std::size_t i = 0; i < this->n(); ++i){     assert((b[i].cols() == 1) && (b[i].rows() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));}
     //container
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> B;    
@@ -416,4 +414,110 @@ const
         B.push_back(B_j);}
 
     return B;
+}
+
+
+
+
+//////////////////////
+///// WRAP BETAS /////
+//////////////////////
+template< typename INPUT, typename OUTPUT >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+std::vector< std::vector< OUTPUT >>
+fgwr<INPUT,OUTPUT>::eval_betas(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& B,
+                               const functional_matrix_sparse<INPUT,OUTPUT>& basis_B,
+                               const std::vector<std::size_t>& L_j,
+                               std::size_t q,
+                               const std::vector< INPUT >& abscissas) 
+const
+{
+    //stationary betas
+    //input coherency
+    assert((B.size() == q) && (L_j.size() == q) && (basis_B.rows() == q) && (basis_B.cols() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));
+    for(std::size_t j = 0; j < q; ++j){     assert((B[j].rows() == L_j[j]) && (B[j].cols() == 1));}
+    //container
+    std::vector< std::vector< OUTPUT >> beta;
+    beta.reserve(q);
+    //aliases
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
+
+    for(std::size_t j = 0; j < q; ++j)
+    {
+        //retrieving the basis
+        std::vector< F_OBJ > basis_j_v;
+        basis_j_v.reserve(B[j].rows());
+        std::size_t start_idx = std::reduce(L_j.cbegin(),std::next(L_j.cbegin(),j),static_cast<std::size_t>(0));
+        std::size_t end_idx = start_idx + L_j[j];
+        for(std::size_t k = start_idx; k < end_idx; ++k){   basis_j_v.push_back(basis_B(j,k));}
+        functional_matrix<INPUT,OUTPUT> basis_j(basis_j_v,1,B[j].rows());
+
+        //compute the beta
+        FUNC_OBJ<INPUT,OUTPUT> beta_j = fm_prod<INPUT,OUTPUT>(basis_j,B[j],this->number_threads())(0,0);
+        //eval the beta
+        std::vector< OUTPUT > beta_j_ev; 
+        beta_j_ev.resize(abscissas.size());
+        std::transform(abscissas.cbegin(),abscissas.cend(),beta_j_ev.begin(),[&beta_j](F_OBJ_INPUT x){return beta_j(x);});
+        beta.push_back(beta_j_ev);
+    }
+
+    return beta;
+}
+
+
+
+template< typename INPUT, typename OUTPUT >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+std::vector< std::vector< std::vector< OUTPUT >>>
+fgwr<INPUT,OUTPUT>::eval_betas(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& B,
+                               const functional_matrix_sparse<INPUT,OUTPUT>& basis_B,
+                               const std::vector<std::size_t>& L_j,
+                               std::size_t q,
+                               const std::vector< INPUT >& abscissas)
+const
+{
+    //non-stationary betas
+    //input coherency
+    assert((B.size() == q) && (L_j.size() == q) && (basis_B.rows() == q) && (basis_B.cols() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));
+    for(std::size_t j = 0; j < q; ++j){  
+        assert(B[j].size() == this->n())   
+        for(std::size_t i = 0; i < this->n(); ++i){     assert((B[j][i].rows() == L_j[j]) && (B[j][i].cols() == 1));}}
+        
+    //container
+    std::vector< std::vector< std::vector< OUTPUT >>> beta;
+    beta.reserve(q);
+    //aliases
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
+    
+
+    for(std::size_t j = 0; j < q; ++j)
+    {
+        //retrieving the basis
+        std::vector< F_OBJ > basis_j_v;
+        basis_j_v.reserve(L_j[j]);
+        std::size_t start_idx = std::reduce(L_j.cbegin(),std::next(L_j.cbegin(),j),static_cast<std::size_t>(0));
+        std::size_t end_idx = start_idx + L_j[j];
+        for(std::size_t k = start_idx; k < end_idx; ++k){   basis_j_v.push_back(basis_B(j,k));}
+        functional_matrix<INPUT,OUTPUT> basis_j(basis_j_v,1,L_j[j]);
+
+        //evaluating the betas in every unit
+        std::vector< std::vector<OUTPUT> > beta_j_ev;
+        beta_j_ev.reserve(this->n());
+        for(std::size_t i = 0; i < this->n(); ++i)
+        {
+            //compute the beta j-th for unit i-th
+            FUNC_OBJ<INPUT,OUTPUT> beta_j_i = fm_prod<INPUT,OUTPUT>(basis_j,B[j][i],this->number_threads())(0,0);
+            //eval the beta
+            std::vector< OUTPUT > beta_j_i_ev; 
+            beta_j_i_ev.resize(abscissas.size());
+            std::transform(abscissas.cbegin(),abscissas.cend(),beta_j_i_ev.begin(),[&beta_j_i](F_OBJ_INPUT x){return beta_j_i(x);});
+            beta_j_ev.push_back(beta_j_i_ev);
+        }
+
+    beta.push_back(beta_j_ev);
+    }
+
+    return beta;
 }

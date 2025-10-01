@@ -58,7 +58,7 @@ private:
     /*!Coefficients of the basis expansion for stationary regressors coefficients: every element is Lc_jx1*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_Bc;
     /*!Discrete evaluation of all the beta_c: a vector of dimension qc, containing, for all the stationary covariates, the discrete ev of the respective beta*/
-    std::vector< std::vector<OUTPUT> > m_beta_c;
+    std::vector< std::vector< OUTPUT >> m_beta_c;
     /*!Number of stationary covariates*/
     std::size_t m_qc;
     /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the stationary regressors coefficients*/
@@ -81,9 +81,9 @@ private:
     /*!Coefficients of the basis expansion for event-dependent regressors: Lex1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_be;
     /*!Coefficients of the basis expansion for event-dependent regressors coefficients: every of the qe elements are n 1xLe_j matrices, one for each statistical unit*/
-    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > > m_Be;
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> m_Be;
     /*!Discrete evaluation of all the beta_e: a vector of dimension qe, containing, for all the event-dependent covariates, the discrete ev of the respective beta, for each statistical unit*/
-    std::vector< std::vector< std::vector<OUTPUT> > > m_beta_e;
+    std::vector< std::vector< std::vector< OUTPUT >>> m_beta_e;
     /*!Number of event-dependent covariates*/
     std::size_t m_qe;
     /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the event-dependent regressors coefficients*/
@@ -108,7 +108,7 @@ private:
     /*!Coefficients of the basis expansion for station-dependent regressors coefficients: every of the qe elements are n 1xLs_j matrices, one for each statistical unit*/
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > > m_Bs;
     /*!Discrete evaluation of all the beta_s: a vector of dimension qs, containing, for all the station-dependent covariates, the discrete ev of the respective beta, for each statistical unit*/
-    std::vector< std::vector< std::vector<OUTPUT> > > m_beta_s;
+    std::vector< std::vector< std::vector< OUTPUT >>> m_beta_s;
     /*!Number of station-dependent covariates*/
     std::size_t m_qs;
     /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the station-dependent regressors coefficients*/
@@ -469,6 +469,9 @@ public:
         std::cout << "m_be rows: " << m_be[0].rows() << ", m_be cols: " << m_be[0].cols() << std::endl;
 */
 
+
+
+
         //DEFAULT AI B: PARTE DA TOGLIERE
         m_bc = Eigen::MatrixXd::Random(m_Lc,1);
         m_be.reserve(this->n());
@@ -490,48 +493,11 @@ public:
         //wrapping the b from the shape useful for the computation into a more useful format: TENERE
         //
         //stationary covariates
-        m_Bc = this->wrap_b(m_bc,m_Lc_j);
-/*
-        m_Bc.reserve(m_qc);
-        for(std::size_t j = 0; j < m_qc; ++j){
-            //for each stationary covariates
-            std::size_t start_idx = std::reduce(m_Lc_j.cbegin(),std::next(m_Lc_j.cbegin(),j),static_cast<std::size_t>(0));
-            //taking the right coefficients of the basis expansion
-            FDAGWR_TRAITS::Dense_Matrix Bc_j = m_bc.block(start_idx,0,m_Lc_j[j],1);
-            m_Bc.push_back(Bc_j);}
-*/
+        m_Bc = this->wrap_b(m_bc,m_Lc_j,m_qc);
         //event-dependent covariates
-        m_Be = this->wrap_b(m_be,m_Le_j);
-/*
-        m_Be.reserve(m_qe);
-        for(std::size_t j = 0; j < m_qe; ++j){
-            //for each event-dependent covariates
-            std::size_t start_idx = std::reduce(m_Le_j.cbegin(),std::next(m_Le_j.cbegin(),j),static_cast<std::size_t>(0));
-            std::vector< FDAGWR_TRAITS::Dense_Matrix > Be_j;
-            Be_j.reserve(this->n());
-            //for all the units
-            for(std::size_t i = 0; i < this->n(); ++i){
-                //taking the right coefficients of the basis expansion
-                FDAGWR_TRAITS::Dense_Matrix Be_j_i = m_be[i].block(start_idx,0,m_Le_j[j],1);
-                Be_j.push_back(Be_j_i);}
-            m_Be.push_back(Be_j);}
-*/
+        m_Be = this->wrap_b(m_be,m_Le_j,m_qe);
         //station-dependent covariates
-        m_Bs = this->wrap_b(m_be,m_Ls_j);
-/*
-        m_Bs.reserve(m_qs);
-        for(std::size_t j = 0; j < m_qs; ++j){
-            //for each event-dependent covariates
-            std::size_t start_idx = std::reduce(m_Ls_j.cbegin(),std::next(m_Ls_j.cbegin(),j),static_cast<std::size_t>(0));
-            std::vector< FDAGWR_TRAITS::Dense_Matrix > Bs_j;
-            Bs_j.reserve(this->n());
-            //for all the units
-            for(std::size_t i = 0; i < this->n(); ++i){
-                //taking the right coefficients of the basis expansion
-                FDAGWR_TRAITS::Dense_Matrix Bs_j_i = m_bs[i].block(start_idx,0,m_Ls_j[j],1);
-                Bs_j.push_back(Bs_j_i);}
-            m_Bs.push_back(Bs_j);}
-*/
+        m_Bs = this->wrap_b(m_be,m_Ls_j,m_qs);
     }
 
     /*!
@@ -543,6 +509,10 @@ public:
     override
     {
         //BETA_C
+        m_beta_c = eval_betas(m_Bc,m_omega,m_Lc_j,m_qc,this->abscissa_points());
+
+
+/*
         m_beta_c.reserve(m_qc);
 
         for(std::size_t j = 0; j < m_qc; ++j)
@@ -563,20 +533,21 @@ public:
             std::transform(this->abscissa_points().cbegin(),this->abscissa_points().cend(),beta_c_j_ev.begin(),[&beta_c_j](const INPUT &x){return beta_c_j(x);});
             m_beta_c.push_back(beta_c_j_ev);
         }
+*/
         
 
         //BETA_E
+        m_beta_e = eval_betas(m_Be,m_theta,m_Le_j,m_qe,this->abscissa_points());
+/*
         m_beta_e.reserve(m_qe);
 
         for(std::size_t j = 0; j < m_qe; ++j)
         {
             //retrieving the basis
             std::vector< FUNC_OBJ<INPUT,OUTPUT> > basis_j;
-            std::cout << "Numero basi cov " << j << ": " << m_Be[j][0].rows() << std::endl;
             basis_j.reserve(m_Be[j][0].rows());
             std::size_t start_idx = std::reduce(m_Le_j.cbegin(),std::next(m_Le_j.cbegin(),j),static_cast<std::size_t>(0));
             std::size_t end_idx = start_idx + m_Le_j[j];
-            std::cout << "start_idx: " << start_idx << ", end_idx: " << end_idx << std::endl;
             for(std::size_t k = start_idx; k < end_idx; ++k){   basis_j.push_back(m_theta(j,k));}
             functional_matrix<INPUT,OUTPUT> basis_e_j(basis_j,1,m_Be[j][0].rows());
 
@@ -596,9 +567,12 @@ public:
 
             m_beta_e.push_back(beta_e_j_ev);
         }
+*/
 
 
         //BETA_S
+        m_beta_s = eval_betas(m_Bs,m_psi,m_Ls_j,m_qs,this->abscissa_points());
+/*
         m_beta_s.reserve(m_qs);
 
         for(std::size_t j = 0; j < m_qs; ++j)
@@ -630,24 +604,7 @@ public:
             
             m_beta_s.push_back(beta_s_j_ev);
         }
-
-
-
-
-        std::cout << "Printing beta s" << std::endl;
-        for (std::size_t i = 0; i < m_beta_s.size(); ++i)
-        {
-            std::cout << "Covariate S " << i+1 << "-th" << std::endl;
-            for(std::size_t j = 0; j < m_beta_s[i].size(); ++j)
-            {
-                std::cout << "Unit " << j << "-th" << std::endl;
-
-                for(std::size_t k = 0; k < m_beta_s[i][j].size(); ++k)
-                {
-                    std::cout << m_beta_s[i][j][k] << std::endl;
-                }
-            }
-        }
+*/
     }
 
     /*!
