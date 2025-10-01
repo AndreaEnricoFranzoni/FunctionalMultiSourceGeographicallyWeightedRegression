@@ -275,7 +275,7 @@ Rcpp::List wrap_beta_to_R_list(const BetasTuple& r,
 
             Rcpp::List beta_e = toRList(std::get<1>(tup));
             if (!names_beta_e.empty())
-                betae.names() = Rcpp::CharacterVector(names_beta_e.cbegin(), names_beta_e.cend());
+                beta_e.names() = Rcpp::CharacterVector(names_beta_e.cbegin(), names_beta_e.cend());
 
             Rcpp::List beta_s = toRList(std::get<2>(tup));
             if (!names_beta_s.empty())

@@ -618,11 +618,13 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     l["FGWR"] = algo_type<_FGWR_ALGO_>();
     //stationary covariate basis expansion coefficients for beta_c
     l[FDAGWR_B_NAMES::bc]  = b_coefficients[FDAGWR_B_NAMES::bc];
-    l["beta_c"] = betas[]
+    l[FDAGWR_BETAS_NAMES::beta_c] = betas[FDAGWR_BETAS_NAMES::beta_c];
     //event-dependent covariate basis expansion coefficients for beta_e
     l[FDAGWR_B_NAMES::be]  = b_coefficients[FDAGWR_B_NAMES::be];
+    l[FDAGWR_BETAS_NAMES::beta_e] = betas[FDAGWR_BETAS_NAMES::beta_e];
     //station-dependent covariate basis expansion coefficients for beta_s
     l[FDAGWR_B_NAMES::bs]  = b_coefficients[FDAGWR_B_NAMES::bs];
+    l[FDAGWR_BETAS_NAMES::beta_s] = betas[FDAGWR_BETAS_NAMES::beta_s];
 
     return l;
 }
