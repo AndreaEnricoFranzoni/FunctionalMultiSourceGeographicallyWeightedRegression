@@ -100,16 +100,6 @@ algo_type()
 
 
 
-/*
-using CoefficientsTuple = std::variant<
-    std::tuple< FDAGWR_TRAITS::Dense_Matrix >, 
-    std::tuple< FDAGWR_TRAITS::Dense_Matrix, std::vector< FDAGWR_TRAITS::Dense_Matrix > >, 
-    std::tuple< FDAGWR_TRAITS::Dense_Matrix, std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< FDAGWR_TRAITS::Dense_Matrix > >
->;
-*/
-
-
-
 using BTuple = std::variant<
     std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix > >, 
     std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > > >, 
