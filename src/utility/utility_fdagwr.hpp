@@ -113,6 +113,7 @@ toRList(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& mats )
 
 
 // funzione di conversione dei b coefficients
+/*
 Rcpp::List wrap_b_to_R_list(const BTuple& r) {
     return std::visit([](auto&& tup) -> Rcpp::List {
         using T = std::decay_t<decltype(tup)>;
@@ -137,6 +138,60 @@ Rcpp::List wrap_b_to_R_list(const BTuple& r) {
         }
     }, r);
 }
+
+*/
+
+
+Rcpp::List wrap_b_to_R_list(const BTuple& r,
+                            const std::vector<std::string>& names_bc = {},
+                            const std::vector<std::string>& names_bnc = {},
+                            const std::vector<std::string>& names_be = {},
+                            const std::vector<std::string>& names_bs = {}) {
+    return std::visit([&](auto&& tup) -> Rcpp::List {
+        using T = std::decay_t<decltype(tup)>;
+
+        if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>>>) {
+            Rcpp::List bc = toRList(std::get<0>(tup));
+            if (!names_bc.empty())
+                bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
+
+            return Rcpp::List::create(Rcpp::Named("bc") = bc);
+        }
+        else if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>,
+                                                       std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>> >>) {
+            Rcpp::List bc = toRList(std::get<0>(tup));
+            if (!names_bc.empty())
+                bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
+
+            Rcpp::List bnc = toRList(std::get<1>(tup));
+            if (!names_bnc.empty())
+                bnc.names() = Rcpp::CharacterVector(names_bnc.cbegin(), names_bnc.cend());
+
+            return Rcpp::List::create(Rcpp::Named("bc") = bc,
+                                      Rcpp::Named("bnc") = bnc);
+        }
+        else if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>,
+                                                       std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>>,
+                                                       std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>> >>) {
+            Rcpp::List bc = toRList(std::get<0>(tup));
+            if (!names_bc.empty())
+                bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
+
+            Rcpp::List be = toRList(std::get<1>(tup));
+            if (!names_be.empty())
+                be.names() = Rcpp::CharacterVector(names_be.cbegin(), names_be.cend());
+
+            Rcpp::List bs = toRList(std::get<2>(tup));
+            if (!names_bs.empty())
+                bs.names() = Rcpp::CharacterVector(names_bs.cbegin(), names_bs.cend());
+
+            return Rcpp::List::create(Rcpp::Named("bc") = bc,
+                                      Rcpp::Named("be") = be,
+                                      Rcpp::Named("bs") = bs);
+        }
+    }, r);
+}
+
 
 
 
