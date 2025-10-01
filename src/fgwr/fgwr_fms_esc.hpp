@@ -490,7 +490,7 @@ public:
         //wrapping the b from the shape useful for the computation into a more useful format: TENERE
         //
         //stationary covariates
-        m_Bc = wrap_b(m_bc,m_Lc_j);
+        m_Bc = this->wrap_b(m_bc,m_Lc_j);
 /*
         m_Bc.reserve(m_qc);
         for(std::size_t j = 0; j < m_qc; ++j){
@@ -501,7 +501,7 @@ public:
             m_Bc.push_back(Bc_j);}
 */
         //event-dependent covariates
-        m_Be = wrap_b(m_be,m_Le_j);
+        m_Be = this->wrap_b(m_be,m_Le_j);
 /*
         m_Be.reserve(m_qe);
         for(std::size_t j = 0; j < m_qe; ++j){
@@ -517,7 +517,7 @@ public:
             m_Be.push_back(Be_j);}
 */
         //station-dependent covariates
-        m_Bs = wrap_b(m_be,m_Ls_j);
+        m_Bs = this->wrap_b(m_be,m_Ls_j);
 /*
         m_Bs.reserve(m_qs);
         for(std::size_t j = 0; j < m_qs; ++j){
