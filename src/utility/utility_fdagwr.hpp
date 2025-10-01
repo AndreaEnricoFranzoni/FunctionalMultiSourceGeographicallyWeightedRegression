@@ -90,8 +90,7 @@ toRList(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
         names[i] = std::string("Unit ") + std::to_string(i+1);
     }
 
-    if add_unit_number
-        out.names() = names;
+    if (add_unit_number){   out.names() = names;}
 
     return out;
 }
@@ -223,7 +222,7 @@ toRList(const std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>& betas,
         const std::vector< FDAGWR_TRAITS::fd_obj_x_type>& abscissas) 
 {
     Rcpp::List out(betas.size());
-    for (size_t j = 0; j < b.size(); ++j) {
+    for (size_t j = 0; j < betas.size(); ++j) {
         Rcpp::List elem = Rcpp::List::create(Rcpp::Named("Beta_eval") = Rcpp::NumericVector(betas[j].cbegin(), betas[j].cend()),
                                              Rcpp::Named("Abscissa")  = Rcpp::NumericVector(abscissas.cbegin(), abscissas.cend()));
 
