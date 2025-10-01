@@ -136,7 +136,7 @@ toRList(const std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_typ
         Rcpp::CharacterVector innerNames(betas[i].size());
 
         for(std::size_t j = 0; j < betas[i].size(); ++j){
-            innerList[j] = toRList(betas[i]);
+            innerList[j] = Rcpp::NumericVector(betas[i].cbegin(), betas[i].cend())
             innerNames[j] = std::string("Unit ") + std::to_string(j+1);
         }
 
