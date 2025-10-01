@@ -197,3 +197,68 @@ Rcpp::List wrap_b_to_R_list(const BTuple& r,
 
 
 #endif  /*FDAGWR_UTILITIES_HPP*/
+
+
+
+
+/*
+#include <Rcpp.h>
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+Rcpp::List creaListaFinale(const BTuple& r) {
+    // Richiamo wrap_b_to_R_list per ottenere i coefficienti
+    Rcpp::List b_list = wrap_b_to_R_list(r);
+
+    // --- primo elemento: FWGR
+    std::string fwgr_str = "FWGR string"; // oppure passala come parametro
+
+    // --- secondo elemento: C
+    Rcpp::List bc = b_list["bc"];           // vettore di q elementi
+    int q = bc.size();
+    Rcpp::List C(q);
+    for (int i = 0; i < q; ++i) {
+        // ogni elemento di bc è già una lista o un NumericVector
+        Rcpp::NumericVector coeff = bc[i];
+
+        // esempi dummy per beta, type, number, knots (puoi sostituire con dati reali)
+        Rcpp::NumericVector beta = Rcpp::NumericVector::create(0.1, 0.2, 0.3);
+        std::string type = "type_example";
+        int number = i + 1;
+        Rcpp::NumericVector knots = Rcpp::NumericVector::create(0.5, 1.5);
+
+        C[i] = Rcpp::List::create(
+            Rcpp::Named("coefficiente") = coeff,
+            Rcpp::Named("beta") = beta,
+            Rcpp::Named("type") = type,
+            Rcpp::Named("number") = number,
+            Rcpp::Named("knots") = knots
+        );
+    }
+
+    // --- terzo elemento: E
+    Rcpp::List be = b_list.containsElementNamed("be") ? b_list["be"] : Rcpp::List();
+    int k = be.size();
+    Rcpp::List E(k);
+    for (int i = 0; i < k; ++i) {
+        Rcpp::List first_sublist  = Rcpp::List::create(be[i], be[i]);  // esempio, inserisci dati reali
+        Rcpp::List second_sublist = Rcpp::List::create(be[i], be[i]);  // esempio
+        E[i] = Rcpp::List::create(first_sublist, second_sublist);
+    }
+
+    // --- quarto elemento: S uguale a E
+    Rcpp::List S = clone(E);
+
+    // --- costruisco lista finale
+    Rcpp::List out = Rcpp::List::create(
+        Rcpp::Named("FWGR") = fwgr_str,
+        Rcpp::Named("C") = C,
+        Rcpp::Named("E") = E,
+        Rcpp::Named("S") = S
+    );
+
+    return out;
+}
+
+*/
+

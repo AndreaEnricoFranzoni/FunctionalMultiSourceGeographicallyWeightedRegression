@@ -490,19 +490,24 @@ public:
         //
         //stationary covariates
         m_Bc.reserve(m_qc);
+        std::cout << "C" << std::endl;
         for(std::size_t j = 0; j < m_qc; ++j){
             //for each stationary covariates
-            std::size_t start_idx = j == 0    ? 0 : m_Lc_j[j-1];
+            std::size_t start_idx = std::reduce(m_Lc_j.cbegin(),std::next(m_Lc_j.cbegin(),j),static_cast<std::size_t>(0));
+            std::size_t end_idx   = std::reduce(m_Lc_j.cbegin(),std::next(m_Lc_j.cbegin(),j+1),static_cast<std::size_t>(0));
+            std::cout << "Cov: " << j << ", start_idx: " << start_idx << ", end_idx: " << end_idx << std::endl;
             //taking the right coefficients of the basis expansion
-            FDAGWR_TRAITS::Dense_Matrix Bc_j = m_bc.block(start_idx,0,m_Lc_j[j],1);
+            FDAGWR_TRAITS::Dense_Matrix Bc_j = m_bc.block(start_idx,0,end_idx,1);
             m_Bc.push_back(Bc_j);}
         //event-dependent covariates
         m_Be.reserve(m_qe);
+        std::cout << "E" << std::endl;
         for(std::size_t j = 0; j < m_qe; ++j){
             //for each event-dependent covariates
             std::size_t start_idx = j == 0    ? 0 : m_Le_j[j-1];
             std::vector< FDAGWR_TRAITS::Dense_Matrix > Be_j;
             Be_j.reserve(this->n());
+            std::cout << "Cov: " << j << ", start_idx: " << start_idx << ", end_idx: " << m_Le_j[j] << std::endl;
             //for all the units
             for(std::size_t i = 0; i < this->n(); ++i){
                 //taking the right coefficients of the basis expansion
@@ -511,11 +516,13 @@ public:
             m_Be.push_back(Be_j);}
         //station-dependent covariates
         m_Bs.reserve(m_qs);
+        std::cout << "E" << std::endl;
         for(std::size_t j = 0; j < m_qs; ++j){
             //for each event-dependent covariates
             std::size_t start_idx = j == 0    ? 0 : m_Ls_j[j-1];
             std::vector< FDAGWR_TRAITS::Dense_Matrix > Bs_j;
             Bs_j.reserve(this->n());
+            std::cout << "Cov: " << j << ", start_idx: " << start_idx << ", end_idx: " << m_Ls_j[j] << std::endl;
             //for all the units
             for(std::size_t i = 0; i < this->n(); ++i){
                 //taking the right coefficients of the basis expansion
