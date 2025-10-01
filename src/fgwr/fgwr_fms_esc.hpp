@@ -620,7 +620,7 @@ public:
             {
                 std::cout << "Unit " << j << "-th" << std::endl;
 
-                for(std::size k = 0; k < m_beta_e[i][j].size(); ++k)
+                for(std::size_t k = 0; k < m_beta_e[i][j].size(); ++k)
                 {
                     std::cout << m_beta_e[i][j][k] << std::endl;
                 }
@@ -678,7 +678,7 @@ public:
             {
                 std::cout << "Unit " << j << "-th" << std::endl;
 
-                for(std::size k = 0; k < m_beta_s[i][j].size(); ++k)
+                for(std::size_t k = 0; k < m_beta_s[i][j].size(); ++k)
                 {
                     std::cout << m_beta_s[i][j][k] << std::endl;
                 }
