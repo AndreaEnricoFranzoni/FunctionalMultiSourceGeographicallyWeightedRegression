@@ -480,7 +480,6 @@ public:
             m_bs.push_back(Eigen::MatrixXd::Constant(m_Ls,1,i+2.4));
         }
 
-        std::cout << m_bc << std::endl;
 
 
 
@@ -565,11 +564,9 @@ public:
             //retrieving the basis
             std::vector< FUNC_OBJ<INPUT,OUTPUT> > basis_j;
             basis_j.reserve(m_Bc[j].rows());
-            std::size_t start_idx = j == 0    ? 0 : m_Lc_j[j-1];
-            for(std::size_t k = start_idx; k < m_Lc_j[j]; ++k)
-            {
-                basis_j.push_back(m_omega(j,k));
-            }
+            std::size_t start_idx = std::reduce(m_Lc_j.cbegin(),std::next(m_Lc_j.cbegin(),j),static_cast<std::size_t>(0));
+            std::size_t end_idx = start_idx + m_Lc_j[j];
+            for(std::size_t k = start_idx; k < end_idx; ++k){   basis_j.push_back(m_omega(j,k));}
             functional_matrix<INPUT,OUTPUT> basis_c_j(basis_j,1,m_Bc[j].rows());
 
             //compute the beta
