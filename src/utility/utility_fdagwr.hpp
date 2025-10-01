@@ -252,26 +252,26 @@ wrap_b_to_R_list(const BTuple& b,
                  const std::vector<std::string>& names_bc                    = {},
                  const std::vector<std::string>& basis_type_bc               = {},
                  const std::vector<std::size_t>& basis_number_bc             = {},
-                 const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & kntos_bc  = {},
+                 const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & knots_bc  = {},
                  const std::vector<std::string>& names_bnc                   = {}, 
                  const std::vector<std::string>& basis_type_bnc              = {},
                  const std::vector<std::size_t>& basis_number_bnc            = {},
-                 const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & kntos_bnc = {},
+                 const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & knots_bnc = {},
                  const std::vector<std::string>& names_be                    = {},
                  const std::vector<std::string>& basis_type_be               = {},
                  const std::vector<std::size_t>& basis_number_be             = {},
-                 const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & kntos_be  = {},
+                 const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & knots_be  = {},
                  const std::vector<std::string>& names_bs                    = {},
                  const std::vector<std::string>& basis_type_bs               = {},
                  const std::vector<std::size_t>& basis_number_bs             = {},
-                 const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & kntos_bs  = {}) 
+                 const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & knots_bs  = {}) 
 {
     return std::visit([&](auto&& tup) -> Rcpp::List {
         using T = std::decay_t<decltype(tup)>;
 
         if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>>>) {
             //Rcpp::List bc = toRList(std::get<0>(tup));
-            Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,kntos_bc);
+            Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,knots_bc);
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
 
@@ -280,12 +280,12 @@ wrap_b_to_R_list(const BTuple& b,
         else if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>> >>) {
             //Rcpp::List bc = toRList(std::get<0>(tup));
-            Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,kntos_bc);
+            Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,knots_bc);
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
 
             //Rcpp::List bnc = toRList(std::get<1>(tup));
-            Rcpp::List bnc = toRList(std::get<1>(tup),basis_type_bnc,basis_number_bnc,kntos_bnc);
+            Rcpp::List bnc = toRList(std::get<1>(tup),basis_type_bnc,basis_number_bnc,knots_bnc);
             if (!names_bnc.empty())
                 bnc.names() = Rcpp::CharacterVector(names_bnc.cbegin(), names_bnc.cend());
 
@@ -296,17 +296,17 @@ wrap_b_to_R_list(const BTuple& b,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>>,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>> >>) {
             //Rcpp::List bc = toRList(std::get<0>(tup));
-            Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,kntos_bc);
+            Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,knots_bc);
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
 
             //Rcpp::List be = toRList(std::get<1>(tup));
-            Rcpp::List be = toRList(std::get<1>(tup),basis_type_be,basis_number_be,kntos_be);
+            Rcpp::List be = toRList(std::get<1>(tup),basis_type_be,basis_number_be,knots_be);
             if (!names_be.empty())
                 be.names() = Rcpp::CharacterVector(names_be.cbegin(), names_be.cend());
 
             //Rcpp::List bs = toRList(std::get<2>(tup));
-            Rcpp::List bs = toRList(std::get<1>(tup),basis_type_bs,basis_number_bs,kntos_bs);
+            Rcpp::List bs = toRList(std::get<2>(tup),basis_type_bs,basis_number_bs,knots_bs);
             if (!names_bs.empty())
                 bs.names() = Rcpp::CharacterVector(names_bs.cbegin(), names_bs.cend());
 
