@@ -598,10 +598,11 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //evaluating the betas   
     //fgwr_algo->evalBetas();
     //retrieving the results                                                                                
-    Rcpp::List b_coefficients = wrap_b_to_R_list(r = fgwr_algo->bCoefficients(),
-                                                 names_bc = names_stationary_cov_rcpp_,
-                                                 names_be = names_events_cov_,
-                                                 names_bs = names_stations_cov_);
+    Rcpp::List b_coefficients = wrap_b_to_R_list(fgwr_algo->bCoefficients(),
+                                                 names_stationary_cov_,
+                                                 {},
+                                                 names_events_cov_,
+                                                 names_stations_cov_);
 
     
     //returning element
