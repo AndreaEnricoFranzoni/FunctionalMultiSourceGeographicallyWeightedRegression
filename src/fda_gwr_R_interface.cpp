@@ -276,25 +276,25 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
 
     //  KNOTS (for basis expansion and for smoothing)
     //response
-    std::vector<double> knots_response_ = wrap_abscissas(knots_y_points,a,b);
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_ = wrap_abscissas(knots_y_points,a,b);
     FDAGWR_TRAITS::Dense_Vector knots_response_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_.data(),knots_response_.size());
     //stationary cov
-    std::vector<double> knots_stationary_cov_ = wrap_abscissas(knots_stationary_cov,a,b);
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_stationary_cov_ = wrap_abscissas(knots_stationary_cov,a,b);
     FDAGWR_TRAITS::Dense_Vector knots_stationary_cov_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_stationary_cov_.data(),knots_stationary_cov_.size());
     //beta stationary cov
-    std::vector<double> knots_beta_stationary_cov_ = wrap_abscissas(knots_beta_stationary_cov,a,b);
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stationary_cov_ = wrap_abscissas(knots_beta_stationary_cov,a,b);
     FDAGWR_TRAITS::Dense_Vector knots_beta_stationary_cov_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stationary_cov_.data(),knots_beta_stationary_cov_.size());
     //events cov
-    std::vector<double> knots_events_cov_ = wrap_abscissas(knots_events_cov,a,b);
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_events_cov_ = wrap_abscissas(knots_events_cov,a,b);
     FDAGWR_TRAITS::Dense_Vector knots_events_cov_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_events_cov_.data(),knots_events_cov_.size());
     //beta events cov
-    std::vector<double> knots_beta_events_cov_ = wrap_abscissas(knots_beta_events_cov,a,b);
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_events_cov_ = wrap_abscissas(knots_beta_events_cov,a,b);
     FDAGWR_TRAITS::Dense_Vector knots_beta_events_cov_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_events_cov_.data(),knots_beta_events_cov_.size());
     //stations cov
-    std::vector<double> knots_stations_cov_ = wrap_abscissas(knots_stations_cov,a,b);
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_stations_cov_ = wrap_abscissas(knots_stations_cov,a,b);
     FDAGWR_TRAITS::Dense_Vector knots_stations_cov_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_stations_cov_.data(),knots_stations_cov_.size());
     //stations beta cov
-    std::vector<double> knots_beta_stations_cov_ = wrap_abscissas(knots_beta_stations_cov,a,b);
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stations_cov_ = wrap_abscissas(knots_beta_stations_cov,a,b);
     FDAGWR_TRAITS::Dense_Vector knots_beta_stations_cov_eigen_w_ = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stations_cov_.data(),knots_beta_stations_cov_.size());
     //knots for performing smoothing (n_knots_smoothing_y_new knots equally spaced in (a,b))
     FDAGWR_TRAITS::Dense_Matrix knots_smoothing = FDAGWR_TRAITS::Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
@@ -593,17 +593,30 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
                                                                                     number_of_statistical_units_,
                                                                                     number_threads);
 
-    //computing the algo
+    //computing the b
     fgwr_algo->compute();
     //evaluating the betas   
     fgwr_algo->evalBetas();
-    //retrieving the results     
-    //bs                                                                           
+
+    //retrieving the results, wrapping them in order to be returned into R
+    //b                                                                        
     Rcpp::List b_coefficients = wrap_b_to_R_list(fgwr_algo->bCoefficients(),
                                                  names_stationary_cov_,
+                                                 basis_types_beta_stationary_cov_,
+                                                 number_basis_beta_stationary_cov_,
+                                                 knots_beta_stationary_cov_,
+                                                 {},
+                                                 {},
+                                                 {},
                                                  {},
                                                  names_events_cov_,
-                                                 names_stations_cov_);
+                                                 basis_types_beta_events_cov_,
+                                                 number_basis_beta_events_cov_,
+                                                 knots_beta_events_cov_,
+                                                 names_stations_cov_,
+                                                 basis_types_beta_stations_cov_,
+                                                 number_basis_beta_stations_cov_,
+                                                 knots_beta_stations_cov_);
     //betas
     Rcpp::List betas = wrap_beta_to_R_list(fgwr_algo->betas(),
                                            names_stationary_cov_,
@@ -618,12 +631,15 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     l["FGWR"] = algo_type<_FGWR_ALGO_>();
     //stationary covariate basis expansion coefficients for beta_c
     l[FDAGWR_B_NAMES::bc]  = b_coefficients[FDAGWR_B_NAMES::bc];
+    //beta_c
     l[FDAGWR_BETAS_NAMES::beta_c] = betas[FDAGWR_BETAS_NAMES::beta_c];
     //event-dependent covariate basis expansion coefficients for beta_e
     l[FDAGWR_B_NAMES::be]  = b_coefficients[FDAGWR_B_NAMES::be];
+    //beta_e
     l[FDAGWR_BETAS_NAMES::beta_e] = betas[FDAGWR_BETAS_NAMES::beta_e];
     //station-dependent covariate basis expansion coefficients for beta_s
     l[FDAGWR_B_NAMES::bs]  = b_coefficients[FDAGWR_B_NAMES::bs];
+    //beta_s
     l[FDAGWR_BETAS_NAMES::beta_s] = betas[FDAGWR_BETAS_NAMES::beta_s];
 
     return l;

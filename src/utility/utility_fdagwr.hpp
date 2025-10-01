@@ -73,49 +73,135 @@ int main() {
 
 
 
-
+/////////////////////////
+/// WRAP B STATIONARY ///
+/////////////////////////
 /*!
-* @brief Converte un vettore di Eigen::MatrixXd in una R list con matrici di double
+* @brief Converte un vettore di Eigen::MatrixXd in una R list con matrici di double (b stazionari)
 */
 Rcpp::List 
-toRList(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& mats) 
+toRList(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
+        bool add_unit_number = false) 
 {
-    Rcpp::List out(mats.size());
-    for (std::size_t i = 0; i < mats.size(); i++) {
-        out[i] = Rcpp::wrap(mats[i]); // RcppEigen converte Eigen::MatrixXd
+    Rcpp::List out(b.size());
+    for (std::size_t i = 0; i < b.size(); i++) {
+        out[i] = Rcpp::wrap(b[i]); // RcppEigen converte Eigen::MatrixXd
     }
     return out;
 }
 
 /*!
-* @brief Converte un vettore di vettori di Eigen::MatrixXd in una R list con liste di matrici di double
+* @brief Helper per aggiungere extra info ai b stazionari
+*/
+Rcpp::List 
+enrichB(const FDAGWR_TRAITS::Dense_Matrix& b,
+        const std::string& basis_type,
+        std::size_t basis_number,
+        const std::vector<FDAGWR_TRAITS::fd_obj_x_type>& basis_knots) 
+{
+    return Rcpp::List::create(Rcpp::Named("Basis_coeff")  = Rcpp::wrap(b),
+                              Rcpp::Named("Basis_type")   = basis_type,
+                              Rcpp::Named("Basis_number") = basis_number,
+                              Rcpp::Named("Basis_knots")  = Rcpp::NumericVector(basis_knots.cbegin(), basis_knots.cend()));
+}
+
+/*!
+* @brief Converte un vettore di Eigen::MatrixXd in una R list con matrici di double (b stazionari), con extra infos
+*/
+Rcpp::List 
+toRList(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
+        const std::vector<std::string>& basis_type,
+        const std::vector<std::size_t>& basis_number,
+        const std::vector<FDAGWR_TRAITS::fd_obj_x_type>& basis_knots) 
+{
+    Rcpp::List out(b.size());
+    for (size_t j = 0; j < b.size(); ++j) {
+        out[j] = enrichB(b[j],
+                         basis_type[j],
+                         basis_number[j],
+                         basis_knots);
+    }
+    return out;
+}
+
+
+
+
+/////////////////////////////
+/// WRAP B NON-STATIONARY ///
+/////////////////////////////
+/*!
+* @brief Converte un vettore di vettori di Eigen::MatrixXd in una R list con liste di matrici di double (b non stazionari)
 */
 Rcpp::List
-toRList(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& mats )
+toRList(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& b)
 {
-    Rcpp::List outerList(mats.size());
+    Rcpp::List outerList(b.size());
 
-    for(std::size_t i = 0; i < mats.size(); ++i){
-        Rcpp::List innerList(mats[i].size());
-        Rcpp::CharacterVector innerNames(mats[i].size());
+    for(std::size_t i = 0; i < b.size(); ++i){
+        Rcpp::List innerList(b[i].size());
+        Rcpp::CharacterVector innerNames(b[i].size());
 
-        for(std::size_t j = 0; j < mats[i].size(); ++j){
-            innerList[j] = Rcpp::wrap(mats[i][j]);
+        for(std::size_t j = 0; j < b[i].size(); ++j){
+            innerList[j] = Rcpp::wrap(b[i][j]);
             innerNames[j] = std::string("Unit ") + std::to_string(j+1);
         }
 
         innerList.names() = innerNames;
         outerList[i]=(innerList);
     }
-
     return outerList;
 }
 
 /*!
-* @brief Converte un vettore di vettore di double in una R list di vettori di double
+* @brief Helper per aggiungere extra info ai b non stazionari
 */
 Rcpp::List 
-toRList(const std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>& betas) {
+enrichB(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
+        const std::string& basis_type,
+        std::size_t basis_number,
+        const std::vector<FDAGWR_TRAITS::fd_obj_x_type>& basis_knots) 
+{
+    return Rcpp::List::create(Rcpp::Named("Basis_coeff")  = toRList(b,true),
+                              Rcpp::Named("Basis_type")   = basis_type,
+                              Rcpp::Named("Basis_number") = basis_number,
+                              Rcpp::Named("Basis_knots")  = Rcpp::NumericVector(basis_knots.cbegin(), basis_knots.cend()));
+}
+
+
+/*!
+* @brief Converte un vettore di vettori di Eigen::MatrixXd in una R list con liste di matrici di double (b non stazionari), con extra info
+*/
+Rcpp::List 
+toRList(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& b,
+        const std::vector<std::string>& basis_type,
+        const std::vector<std::size_t>& basis_number,
+        const std::vector<FDAGWR_TRAITS::fd_obj_x_type>& basis_knots) 
+{
+    Rcpp::List out(b.size());
+    for (size_t j = 0; j < b.size(); ++j) {
+        out[j] = enrichB(b[j],
+                         basis_type[j],
+                         basis_number[j],
+                         basis_knots);
+    }
+    return out;
+}
+
+
+
+
+
+
+/////////////////////////////
+/// WRAP BETAS STATIONARY ///
+/////////////////////////////
+/*!
+* @brief Converte un vettore di vettore di double in una R list di vettori di double (betas stazionari)
+*/
+Rcpp::List 
+toRList(const std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>& betas) 
+{
     Rcpp::List out(betas.size());
     for (size_t i = 0; i < betas.size(); ++i) {
         out[i] = Rcpp::NumericVector(betas[i].cbegin(), betas[i].cend());
@@ -123,8 +209,14 @@ toRList(const std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>& betas) {
     return out;
 }
 
+
+
+
+/////////////////////////////////
+/// WRAP BETAS NON-STATIONARY ///
+/////////////////////////////////
 /*!
-* @brief Converte un vettore di vettori di double in una R list con liste di vettori di double
+* @brief Converte un vettore di vettori di double in una R list con liste di vettori di double (betas non stazionari)
 */
 Rcpp::List
 toRList(const std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>>& betas)
@@ -152,47 +244,34 @@ toRList(const std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_typ
 
 
 
-
-// funzione di conversione dei b coefficients
-/*
-Rcpp::List wrap_b_to_R_list(const BTuple& r) {
-    return std::visit([](auto&& tup) -> Rcpp::List {
-        using T = std::decay_t<decltype(tup)>;
-        
-        if constexpr (std::is_same_v< T,  std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix > > >) {
-            return Rcpp::List::create(
-                Rcpp::Named("bc") = toRList(std::get<0>(tup))
-            );
-        } 
-        else if constexpr (std::is_same_v< T, std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > > > >) {
-            return Rcpp::List::create(
-                Rcpp::Named("bc") = toRList(std::get<0>(tup)),
-                Rcpp::Named("bnc") = toRList(std::get<1>(tup))
-            );
-        } 
-        else if constexpr (std::is_same_v< T, std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > >, std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > > > >) {
-            return Rcpp::List::create(
-                Rcpp::Named("bc") = toRList(std::get<0>(tup)),
-                Rcpp::Named("be") = toRList(std::get<1>(tup)),
-                Rcpp::Named("bs") = toRList(std::get<2>(tup))
-            );
-        }
-    }, r);
-}
-
+/*!
+* @brief Wrapping the b
 */
-
-
-Rcpp::List wrap_b_to_R_list(const BTuple& r,
-                            const std::vector<std::string>& names_bc = {},
-                            const std::vector<std::string>& names_bnc = {},
-                            const std::vector<std::string>& names_be = {},
-                            const std::vector<std::string>& names_bs = {}) {
+Rcpp::List 
+wrap_b_to_R_list(const BTuple& b,
+                 const std::vector<std::string>& names_bc                    = {},
+                 const std::vector<std::string>& basis_type_bc               = {},
+                 const std::vector<std::size_t>& basis_number_bc             = {},
+                 const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & kntos_bc  = {},
+                 const std::vector<std::string>& names_bnc                   = {}, 
+                 const std::vector<std::string>& basis_type_bnc              = {},
+                 const std::vector<std::size_t>& basis_number_bnc            = {},
+                 const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & kntos_bnc = {},
+                 const std::vector<std::string>& names_be                    = {},
+                 const std::vector<std::string>& basis_type_be               = {},
+                 const std::vector<std::size_t>& basis_number_be             = {},
+                 const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & kntos_be  = {},
+                 const std::vector<std::string>& names_bs                    = {},
+                 const std::vector<std::string>& basis_type_bs               = {},
+                 const std::vector<std::size_t>& basis_number_bs             = {},
+                 const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & kntos_bs  = {}) 
+{
     return std::visit([&](auto&& tup) -> Rcpp::List {
         using T = std::decay_t<decltype(tup)>;
 
         if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>>>) {
-            Rcpp::List bc = toRList(std::get<0>(tup));
+            //Rcpp::List bc = toRList(std::get<0>(tup));
+            Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,kntos_bc);
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
 
@@ -200,11 +279,13 @@ Rcpp::List wrap_b_to_R_list(const BTuple& r,
         }
         else if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>> >>) {
-            Rcpp::List bc = toRList(std::get<0>(tup));
+            //Rcpp::List bc = toRList(std::get<0>(tup));
+            Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,kntos_bc);
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
 
-            Rcpp::List bnc = toRList(std::get<1>(tup));
+            //Rcpp::List bnc = toRList(std::get<1>(tup));
+            Rcpp::List bnc = toRList(std::get<1>(tup),basis_type_bnc,basis_number_bnc,kntos_bnc);
             if (!names_bnc.empty())
                 bnc.names() = Rcpp::CharacterVector(names_bnc.cbegin(), names_bnc.cend());
 
@@ -214,15 +295,18 @@ Rcpp::List wrap_b_to_R_list(const BTuple& r,
         else if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>>,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>> >>) {
-            Rcpp::List bc = toRList(std::get<0>(tup));
+            //Rcpp::List bc = toRList(std::get<0>(tup));
+            Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,kntos_bc);
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
 
-            Rcpp::List be = toRList(std::get<1>(tup));
+            //Rcpp::List be = toRList(std::get<1>(tup));
+            Rcpp::List be = toRList(std::get<1>(tup),basis_type_be,basis_number_be,kntos_be);
             if (!names_be.empty())
                 be.names() = Rcpp::CharacterVector(names_be.cbegin(), names_be.cend());
 
-            Rcpp::List bs = toRList(std::get<2>(tup));
+            //Rcpp::List bs = toRList(std::get<2>(tup));
+            Rcpp::List bs = toRList(std::get<1>(tup),basis_type_bs,basis_number_bs,kntos_bs);
             if (!names_bs.empty())
                 bs.names() = Rcpp::CharacterVector(names_bs.cbegin(), names_bs.cend());
 
@@ -230,19 +314,21 @@ Rcpp::List wrap_b_to_R_list(const BTuple& r,
                                       Rcpp::Named(FDAGWR_B_NAMES::be) = be,
                                       Rcpp::Named(FDAGWR_B_NAMES::bs) = bs);
         }
-    }, r);
+    }, b);
 }
 
 
 
-
-
-
-Rcpp::List wrap_beta_to_R_list(const BetasTuple& r,
-                               const std::vector<std::string>& names_beta_c  = {},
-                               const std::vector<std::string>& names_beta_nc = {},
-                               const std::vector<std::string>& names_beta_e  = {},
-                               const std::vector<std::string>& names_beta_s  = {}) {
+/*!
+* @brief Wrapping the betas
+*/
+Rcpp::List 
+wrap_beta_to_R_list(const BetasTuple& betas,
+                    const std::vector<std::string>& names_beta_c  = {},
+                    const std::vector<std::string>& names_beta_nc = {},
+                    const std::vector<std::string>& names_beta_e  = {},
+                    const std::vector<std::string>& names_beta_s  = {}) 
+{
     return std::visit([&](auto&& tup) -> Rcpp::List {
         using T = std::decay_t<decltype(tup)>;
 
@@ -285,76 +371,7 @@ Rcpp::List wrap_beta_to_R_list(const BetasTuple& r,
                                       Rcpp::Named(FDAGWR_BETAS_NAMES::beta_e) = beta_e,
                                       Rcpp::Named(FDAGWR_BETAS_NAMES::beta_s) = beta_s);
         }
-    }, r);
+    }, betas);
 }
-
-
-
-
 
 #endif  /*FDAGWR_UTILITIES_HPP*/
-
-
-
-
-/*
-#include <Rcpp.h>
-using namespace Rcpp;
-
-// [[Rcpp::export]]
-Rcpp::List creaListaFinale(const BTuple& r) {
-    // Richiamo wrap_b_to_R_list per ottenere i coefficienti
-    Rcpp::List b_list = wrap_b_to_R_list(r);
-
-    // --- primo elemento: FWGR
-    std::string fwgr_str = "FWGR string"; // oppure passala come parametro
-
-    // --- secondo elemento: C
-    Rcpp::List bc = b_list["bc"];           // vettore di q elementi
-    int q = bc.size();
-    Rcpp::List C(q);
-    for (int i = 0; i < q; ++i) {
-        // ogni elemento di bc è già una lista o un NumericVector
-        Rcpp::NumericVector coeff = bc[i];
-
-        // esempi dummy per beta, type, number, knots (puoi sostituire con dati reali)
-        Rcpp::NumericVector beta = Rcpp::NumericVector::create(0.1, 0.2, 0.3);
-        std::string type = "type_example";
-        int number = i + 1;
-        Rcpp::NumericVector knots = Rcpp::NumericVector::create(0.5, 1.5);
-
-        C[i] = Rcpp::List::create(
-            Rcpp::Named("coefficiente") = coeff,
-            Rcpp::Named("beta") = beta,
-            Rcpp::Named("type") = type,
-            Rcpp::Named("number") = number,
-            Rcpp::Named("knots") = knots
-        );
-    }
-
-    // --- terzo elemento: E
-    Rcpp::List be = b_list.containsElementNamed("be") ? b_list["be"] : Rcpp::List();
-    int k = be.size();
-    Rcpp::List E(k);
-    for (int i = 0; i < k; ++i) {
-        Rcpp::List first_sublist  = Rcpp::List::create(be[i], be[i]);  // esempio, inserisci dati reali
-        Rcpp::List second_sublist = Rcpp::List::create(be[i], be[i]);  // esempio
-        E[i] = Rcpp::List::create(first_sublist, second_sublist);
-    }
-
-    // --- quarto elemento: S uguale a E
-    Rcpp::List S = clone(E);
-
-    // --- costruisco lista finale
-    Rcpp::List out = Rcpp::List::create(
-        Rcpp::Named("FWGR") = fwgr_str,
-        Rcpp::Named("C") = C,
-        Rcpp::Named("E") = E,
-        Rcpp::Named("S") = S
-    );
-
-    return out;
-}
-
-*/
-

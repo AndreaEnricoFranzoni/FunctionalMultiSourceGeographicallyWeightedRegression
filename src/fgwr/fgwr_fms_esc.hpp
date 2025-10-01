@@ -249,57 +249,6 @@ public:
                 m_theta_t = m_theta.transpose();
                 m_Xc_t = m_Xc.transpose();
                 m_psi_t = m_psi.transpose();
-         
-
-/*
-                //PRINT FOR DEBUGGING
-                std::cout << "Input dimensions" << std::endl;
-                std::cout << "m_y rows: " << m_y.rows() << ", m_y cols: " << m_y.cols() << std::endl;
-                std::cout << "m_phi rows: " << m_phi.rows() << ", m_phi cols: " << m_phi.cols() << std::endl;
-                std::cout << "m_c rows: " << m_c.rows() << ", m_c cols: " << m_c.cols() << std::endl;
-                std::cout << "m_knots_smoothing rows: " << m_knots_smoothing.rows() << ", m_knots_smoothing cols: " << m_knots_smoothing.cols() << std::endl;
-                std::cout << "m_Xc rows: " << m_Xc.rows() << ", m_Xc cols: " << m_Xc.cols() << std::endl;
-                std::cout << "m_Wc rows: " << m_Wc.rows() << ", m_Wc cols: " << m_Wc.cols() << std::endl;
-                std::cout << "m_Rc rows: " << m_Rc.rows() << ", m_Rc cols: " << m_Rc.cols() << std::endl;
-                std::cout << "m_omega rows: " << m_omega.rows() << ", m_omega cols: " << m_omega.cols() << std::endl;
-                std::cout << "Numero basi per qc" << std::endl;
-                for(std::size_t i = 0; i  < m_Lc_j.size(); ++i){std::cout << m_Lc_j[i] << std::endl;}
-                std::cout << "m_Xe rows: " << m_Xe.rows() << ", m_Xe cols: " << m_Xe.cols() << std::endl;
-                std::cout << "Number of elements in m_We: " << m_We.size() << std::endl;
-                for(std::size_t i = 0; i < m_We.size(); ++i){   std::cout << "m_We[" << i << "] rows: " << m_We[i].rows() << ", cols: " << m_We[i].cols() << std::endl;}
-                std::cout << "m_Re rows: " << m_Re.rows() << ", m_Re cols: " << m_Re.cols() << std::endl;
-                std::cout << "m_theta rows: " << m_theta.rows() << ", m_theta cols: " << m_theta.cols() << std::endl;
-                std::cout << "Numero basi per qe" << std::endl;
-                for(std::size_t i = 0; i < m_Le_j.size(); ++i){std::cout << m_Le_j[i] << std::endl;}
-                std::cout << "m_Xs rows: " << m_Xs.rows() << ", m_Xs cols: " << m_Xs.cols() << std::endl;
-                std::cout << "Number of elements in m_Ws: " << m_Ws.size() << std::endl;
-                for(std::size_t i = 0; i < m_Ws.size(); ++i){   std::cout << "m_Ws[" << i << "] rows: " << m_Ws[i].rows() << ", cols: " << m_Ws[i].cols() << std::endl;}
-                std::cout << "m_Rs rows: " << m_Rs.rows() << ", m_Rs cols: " << m_Rs.cols() << std::endl;
-                std::cout << "m_psi rows: " << m_psi.rows() << ", m_psi cols: " << m_psi.cols() << std::endl;
-                std::cout << "Numero basi per qs" << std::endl;
-                for(std::size_t i = 0; i < m_Ls_j.size(); ++i){std::cout << m_Ls_j[i] << std::endl;}
-
-
-                for (std::size_t i = 0; i < this->abscissa_points().size(); ++i)
-                {
-                    std::cout << "Abscissa " << i << ": " << this->abscissa_points()[i] << std::endl;
-                }
-                
-                for (std::size_t i = 0; i < m_qc; ++i)
-                {
-                    std::cout << "Stationary cov " << i << " has " << m_Lc_j[i] << " basis" << std::endl;
-                }
-
-                for (std::size_t i = 0; i < m_qe; ++i)
-                {
-                    std::cout << "Event cov " << i << " has " << m_Le_j[i] << " basis" << std::endl;
-                }
-
-                for (std::size_t i = 0; i < m_qs; ++i)
-                {
-                    std::cout << "Station cov " << i << " has " << m_Ls_j[i] << " basis" << std::endl;
-                }
-*/
             }
     
 
@@ -512,75 +461,8 @@ public:
         m_beta_c = this->eval_betas(m_Bc,m_omega,m_Lc_j,m_qc,this->abscissa_points());        
         //BETA_E
         m_beta_e = this->eval_betas(m_Be,m_theta,m_Le_j,m_qe,this->abscissa_points());
-
-/*
-        m_beta_e.reserve(m_qe);
-
-        for(std::size_t j = 0; j < m_qe; ++j)
-        {
-            //retrieving the basis
-            std::vector< FUNC_OBJ<INPUT,OUTPUT> > basis_j;
-            basis_j.reserve(m_Be[j][0].rows());
-            std::size_t start_idx = std::reduce(m_Le_j.cbegin(),std::next(m_Le_j.cbegin(),j),static_cast<std::size_t>(0));
-            std::size_t end_idx = start_idx + m_Le_j[j];
-            for(std::size_t k = start_idx; k < end_idx; ++k){   basis_j.push_back(m_theta(j,k));}
-            functional_matrix<INPUT,OUTPUT> basis_e_j(basis_j,1,m_Be[j][0].rows());
-
-            //evaluating the betas in every unit
-            std::vector< std::vector<OUTPUT> > beta_e_j_ev;
-            beta_e_j_ev.reserve(this->n());
-            for(std::size_t i = 0; i < this->n(); ++i)
-            {
-                //compute the beta j-th for unit i-th
-                FUNC_OBJ<INPUT,OUTPUT> beta_e_j_i = fm_prod<INPUT,OUTPUT>(basis_e_j,m_Be[j][i],this->number_threads())(0,0);
-                //eval the beta
-                std::vector< OUTPUT > beta_e_j_i_ev; 
-                beta_e_j_i_ev.resize(this->abscissa_points().size());
-                std::transform(this->abscissa_points().cbegin(),this->abscissa_points().cend(),beta_e_j_i_ev.begin(),[&beta_e_j_i](const INPUT &x){return beta_e_j_i(x);});
-                beta_e_j_ev.push_back(beta_e_j_i_ev);
-            }
-
-            m_beta_e.push_back(beta_e_j_ev);
-        }
-*/
-
-
-
         //BETA_S
         m_beta_s = this->eval_betas(m_Bs,m_psi,m_Ls_j,m_qs,this->abscissa_points());
-/*
-        m_beta_s.reserve(m_qs);
-
-        for(std::size_t j = 0; j < m_qs; ++j)
-        {
-            //retrieving the basis
-            std::vector< FUNC_OBJ<INPUT,OUTPUT> > basis_j;
-            basis_j.reserve(m_Bs[j][0].rows());
-            std::size_t start_idx = std::reduce(m_Ls_j.cbegin(),std::next(m_Ls_j.cbegin(),j),static_cast<std::size_t>(0));
-            std::size_t end_idx = start_idx + m_Ls_j[j];
-            for(std::size_t k = start_idx; k < end_idx; ++k)
-            {
-                basis_j.push_back(m_psi(j,k));
-            }
-            functional_matrix<INPUT,OUTPUT> basis_s_j(basis_j,1,m_Bs[j][0].rows());
-
-            //evaluating the betas in every unit
-            std::vector< std::vector<OUTPUT> > beta_s_j_ev;
-            beta_s_j_ev.reserve(this->n());
-            for(std::size_t i = 0; i < this->n(); ++i)
-            {
-                //compute the beta j-th for unit i-th
-                FUNC_OBJ<INPUT,OUTPUT> beta_s_j_i = fm_prod<INPUT,OUTPUT>(basis_s_j,m_Bs[j][i],this->number_threads())(0,0);
-                //eval the beta
-                std::vector< OUTPUT > beta_s_j_i_ev; 
-                beta_s_j_i_ev.resize(this->abscissa_points().size());
-                std::transform(this->abscissa_points().cbegin(),this->abscissa_points().cend(),beta_s_j_i_ev.begin(),[&beta_s_j_i](const INPUT &x){return beta_s_j_i(x);});
-                beta_s_j_ev.push_back(beta_s_j_i_ev);
-            }
-            
-            m_beta_s.push_back(beta_s_j_ev);
-        }
-*/
     }
 
     /*!

@@ -360,6 +360,8 @@ const
 //////////////////////
 /////// WRAP B ///////
 //////////////////////
+
+//for stationary covariate
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
@@ -368,24 +370,25 @@ fgwr<INPUT,OUTPUT>::wrap_b(const FDAGWR_TRAITS::Dense_Matrix& b,
                            std::size_t q)
 const
 {
-    //for stationary covariate
     //input coherency
     assert((L_j.size() == q) && (b.cols() == 1) && (b.rows() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));
     //container
     std::vector< FDAGWR_TRAITS::Dense_Matrix > B;
     B.reserve(q);
-    for(std::size_t j = 0; j < q; ++j){
+    for(std::size_t j = 0; j < q; ++j)
+    {
         //for each stationary covariates
         std::size_t start_idx = std::reduce(L_j.cbegin(),std::next(L_j.cbegin(),j),static_cast<std::size_t>(0));
         //taking the right coefficients of the basis expansion
         FDAGWR_TRAITS::Dense_Matrix B_j = b.block(start_idx,0,L_j[j],1);
-        B.push_back(B_j);}
+        B.push_back(B_j);
+    }
 
     return B;
 }
 
 
-
+//for non stationary covariates
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > >
@@ -394,14 +397,14 @@ fgwr<INPUT,OUTPUT>::wrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
                            std::size_t q) 
 const
 {
-    //for non stationary covariates
     //input coherency
     assert((b.size() == this->n()) && (L_j.size() == q));
     for(std::size_t i = 0; i < this->n(); ++i){     assert((b[i].cols() == 1) && (b[i].rows() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));}
     //container
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> B;    
     B.reserve(q);
-    for(std::size_t j = 0; j < q; ++j){
+    for(std::size_t j = 0; j < q; ++j)
+    {
         //for each event-dependent covariates
         std::size_t start_idx = std::reduce(L_j.cbegin(),std::next(L_j.cbegin(),j),static_cast<std::size_t>(0));
         std::vector< FDAGWR_TRAITS::Dense_Matrix > B_j;
@@ -411,7 +414,8 @@ const
             //taking the right coefficients of the basis expansion
             FDAGWR_TRAITS::Dense_Matrix B_j_i = b[i].block(start_idx,0,L_j[j],1);
             B_j.push_back(B_j_i);}
-        B.push_back(B_j);}
+        B.push_back(B_j);
+    }
 
     return B;
 }
@@ -420,8 +424,10 @@ const
 
 
 //////////////////////
-///// WRAP BETAS /////
+///// EVAL BETAS /////
 //////////////////////
+
+//stationary betas
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector< OUTPUT >>
@@ -432,7 +438,7 @@ fgwr<INPUT,OUTPUT>::eval_betas(const std::vector< FDAGWR_TRAITS::Dense_Matrix >&
                                const std::vector< INPUT >& abscissas) 
 const
 {
-    //stationary betas
+    
     //input coherency
     assert((B.size() == q) && (L_j.size() == q) && (basis_B.rows() == q) && (basis_B.cols() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));
     for(std::size_t j = 0; j < q; ++j){     assert((B[j].rows() == L_j[j]) && (B[j].cols() == 1));}
@@ -466,7 +472,7 @@ const
 }
 
 
-
+//non-stationary betas
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector< std::vector< OUTPUT >>>
@@ -477,7 +483,6 @@ fgwr<INPUT,OUTPUT>::eval_betas(const std::vector< std::vector< FDAGWR_TRAITS::De
                                const std::vector< INPUT >& abscissas)
 const
 {
-    //non-stationary betas
     //input coherency
     assert((B.size() == q) && (L_j.size() == q) && (basis_B.rows() == q) && (basis_B.cols() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));
     for(std::size_t j = 0; j < q; ++j){  
