@@ -107,11 +107,35 @@ using BTuple = std::variant<
 >;
 
 
+struct FDAGWR_B_NAMES
+{
+  static constexpr std::string bc  = "bc";
+
+  static constexpr std::string bnc = "bnc";
+
+  static constexpr std::string be  = "be";
+
+  static constexpr std::string bs  = "bs";
+};
+
+
 using BetasTuple = std::variant<
     std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > > >, 
     std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > >, std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > > > >, 
     std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > >, std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > > >, std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > > > > 
 >;
+
+
+struct FDAGWR_BETAS_NAMES
+{
+  static constexpr std::string beta_c  = "beta_c";
+
+  static constexpr std::string beta_nc = "beta_nc";
+
+  static constexpr std::string beta_e  = "beta_e";
+
+  static constexpr std::string beta_s  = "beta_s";
+};
 
 
 

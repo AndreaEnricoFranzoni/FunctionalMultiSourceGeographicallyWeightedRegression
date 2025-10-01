@@ -196,7 +196,7 @@ Rcpp::List wrap_b_to_R_list(const BTuple& r,
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
 
-            return Rcpp::List::create(Rcpp::Named("bc") = bc);
+            return Rcpp::List::create(Rcpp::Named(FDAGWR_B_NAMES::bc) = bc);
         }
         else if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>> >>) {
@@ -208,8 +208,8 @@ Rcpp::List wrap_b_to_R_list(const BTuple& r,
             if (!names_bnc.empty())
                 bnc.names() = Rcpp::CharacterVector(names_bnc.cbegin(), names_bnc.cend());
 
-            return Rcpp::List::create(Rcpp::Named("bc") = bc,
-                                      Rcpp::Named("bnc") = bnc);
+            return Rcpp::List::create(Rcpp::Named(FDAGWR_B_NAMES::bc)  = bc,
+                                      Rcpp::Named(FDAGWR_B_NAMES::bnc) = bnc);
         }
         else if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>>,
@@ -226,9 +226,9 @@ Rcpp::List wrap_b_to_R_list(const BTuple& r,
             if (!names_bs.empty())
                 bs.names() = Rcpp::CharacterVector(names_bs.cbegin(), names_bs.cend());
 
-            return Rcpp::List::create(Rcpp::Named("bc") = bc,
-                                      Rcpp::Named("be") = be,
-                                      Rcpp::Named("bs") = bs);
+            return Rcpp::List::create(Rcpp::Named(FDAGWR_B_NAMES::bc) = bc,
+                                      Rcpp::Named(FDAGWR_B_NAMES::be) = be,
+                                      Rcpp::Named(FDAGWR_B_NAMES::bs) = bs);
         }
     }, r);
 }
@@ -239,51 +239,51 @@ Rcpp::List wrap_b_to_R_list(const BTuple& r,
 
 
 Rcpp::List wrap_beta_to_R_list(const BetasTuple& r,
-                               const std::vector<std::string>& names_bc = {},
-                               const std::vector<std::string>& names_bnc = {},
-                               const std::vector<std::string>& names_be = {},
-                               const std::vector<std::string>& names_bs = {}) {
+                               const std::vector<std::string>& names_beta_c  = {},
+                               const std::vector<std::string>& names_beta_nc = {},
+                               const std::vector<std::string>& names_beta_e  = {},
+                               const std::vector<std::string>& names_beta_s  = {}) {
     return std::visit([&](auto&& tup) -> Rcpp::List {
         using T = std::decay_t<decltype(tup)>;
 
         if constexpr (std::is_same_v< T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> >) {
-            Rcpp::List bc = toRList(std::get<0>(tup));
-            if (!names_bc.empty())
-                bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
+            Rcpp::List beta_c = toRList(std::get<0>(tup));
+            if (!names_beta_c.empty())
+                beta_c.names() = Rcpp::CharacterVector(names_beta_c.cbegin(), names_beta_c.cend());
 
-            return Rcpp::List::create(Rcpp::Named("beta_c") = bc);
+            return Rcpp::List::create(Rcpp::Named(FDAGWR_BETAS_NAMES::beta_c) = beta_c);
         }
         else if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>,
                                                          std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> > >) {
-            Rcpp::List bc = toRList(std::get<0>(tup));
-            if (!names_bc.empty())
-                bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
+            Rcpp::List beta_c = toRList(std::get<0>(tup));
+            if (!names_beta_c.empty())
+                beta_c.names() = Rcpp::CharacterVector(names_beta_c.cbegin(), names_beta_c.cend());
 
-            Rcpp::List bnc = toRList(std::get<1>(tup));
-            if (!names_bnc.empty())
-                bnc.names() = Rcpp::CharacterVector(names_bnc.cbegin(), names_bnc.cend());
+            Rcpp::List beta_nc = toRList(std::get<1>(tup));
+            if (!names_beta_nc.empty())
+                beta_nc.names() = Rcpp::CharacterVector(names_beta_nc.cbegin(), names_beta_nc.cend());
 
-            return Rcpp::List::create(Rcpp::Named("beta_c") = bc,
-                                      Rcpp::Named("beta_nc") = bnc);
+            return Rcpp::List::create(Rcpp::Named(FDAGWR_BETAS_NAMES::beta_c)  = beta_c,
+                                      Rcpp::Named(FDAGWR_BETAS_NAMES::beta_nc) = beta_nc);
         }
         else if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>,
                                                          std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>>,
                                                          std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> >>) {
-            Rcpp::List bc = toRList(std::get<0>(tup));
-            if (!names_bc.empty())
-                bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
+            Rcpp::List beta_c = toRList(std::get<0>(tup));
+            if (!names_beta_c.empty())
+                beta_c.names() = Rcpp::CharacterVector(names_beta_c.cbegin(), names_beta_c.cend());
 
-            Rcpp::List be = toRList(std::get<1>(tup));
-            if (!names_be.empty())
-                be.names() = Rcpp::CharacterVector(names_be.cbegin(), names_be.cend());
+            Rcpp::List beta_e = toRList(std::get<1>(tup));
+            if (!names_beta_e.empty())
+                betae.names() = Rcpp::CharacterVector(names_beta_e.cbegin(), names_beta_e.cend());
 
-            Rcpp::List bs = toRList(std::get<2>(tup));
-            if (!names_bs.empty())
-                bs.names() = Rcpp::CharacterVector(names_bs.cbegin(), names_bs.cend());
+            Rcpp::List beta_s = toRList(std::get<2>(tup));
+            if (!names_beta_s.empty())
+                beta_s.names() = Rcpp::CharacterVector(names_beta_s.cbegin(), names_beta_s.cend());
 
-            return Rcpp::List::create(Rcpp::Named("beta_c") = bc,
-                                      Rcpp::Named("beta_e") = be,
-                                      Rcpp::Named("beta_s") = bs);
+            return Rcpp::List::create(Rcpp::Named(FDAGWR_BETAS_NAMES::beta_c) = beta_c,
+                                      Rcpp::Named(FDAGWR_BETAS_NAMES::beta_e) = beta_e,
+                                      Rcpp::Named(FDAGWR_BETAS_NAMES::beta_s) = beta_s);
         }
     }, r);
 }
