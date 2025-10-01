@@ -584,6 +584,7 @@ public:
         {
             //retrieving the basis
             std::vector< FUNC_OBJ<INPUT,OUTPUT> > basis_j;
+            std::cout << "Numero basi cov " << j << ": " << m_Be[j][0].rows() << std::endl;
             basis_j.reserve(m_Be[j][0].rows());
             std::size_t start_idx = std::reduce(m_Le_j.cbegin(),std::next(m_Le_j.cbegin(),j),static_cast<std::size_t>(0));
             std::size_t end_idx = start_idx + m_Le_j[j];
