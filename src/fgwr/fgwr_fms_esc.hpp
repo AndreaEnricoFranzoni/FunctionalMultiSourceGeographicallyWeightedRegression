@@ -588,7 +588,7 @@ public:
             basis_j.reserve(m_Be[j][0].rows());
             std::size_t start_idx = std::reduce(m_Le_j.cbegin(),std::next(m_Le_j.cbegin(),j),static_cast<std::size_t>(0));
             std::size_t end_idx = start_idx + m_Le_j[j];
-            std::cout << "start_idx: " << start_idx << ", end_idx: " << std::endl;
+            std::cout << "start_idx: " << start_idx << ", end_idx: " << end_idx << std::endl;
             for(std::size_t k = start_idx; k < end_idx; ++k){   basis_j.push_back(m_theta(j,k));}
             functional_matrix<INPUT,OUTPUT> basis_e_j(basis_j,1,m_Be[j][0].rows());
 
