@@ -579,8 +579,6 @@ public:
         }
 
 
-/*
-
         //BETA_E
         m_beta_e.reserve(m_qe);
 
@@ -589,11 +587,9 @@ public:
             //retrieving the basis
             std::vector< FUNC_OBJ<INPUT,OUTPUT> > basis_j;
             basis_j.reserve(m_Be[j][0].rows());
-            std::size_t start_idx = j == 0    ? 0 : m_Le_j[j-1];
-            for(std::size_t k = start_idx; k < m_Le_j[j]; ++k)
-            {
-                basis_j.push_back(m_theta(j,k));
-            }
+            std::size_t start_idx = std::reduce(m_Le_j.cbegin(),std::next(m_Le_j.cbegin(),j),static_cast<std::size_t>(0));
+            std::size_t end_idx = start_idx + m_Le_j[j];
+            for(std::size_t k = start_idx; k < end_idx; ++k){   basis_j.push_back(m_theta(j,k));}
             functional_matrix<INPUT,OUTPUT> basis_e_j(basis_j,1,m_Be[j][0].rows());
 
             //evaluating the betas in every unit
@@ -622,8 +618,9 @@ public:
             //retrieving the basis
             std::vector< FUNC_OBJ<INPUT,OUTPUT> > basis_j;
             basis_j.reserve(m_Bs[j][0].rows());
-            std::size_t start_idx = j == 0    ? 0 : m_Ls_j[j-1];
-            for(std::size_t k = start_idx; k < m_Ls_j[j]; ++k)
+            std::size_t start_idx = std::reduce(m_Ls_j.cbegin(),std::next(m_Ls_j.cbegin(),j),static_cast<std::size_t>(0));
+            std::size_t end_idx = start_idx + m_Ls_j[j];
+            for(std::size_t k = start_idx; k < end_idx; ++k)
             {
                 basis_j.push_back(m_psi(j,k));
             }
@@ -645,8 +642,6 @@ public:
             
             m_beta_s.push_back(beta_s_j_ev);
         }
-
-*/
     }
 
     /*!
