@@ -303,14 +303,17 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     //  COVARIATES names, coefficients and how many (q_), for every type
     //stationary 
     std::vector<std::string> names_stationary_cov_ = wrap_covariates_names<_STATIONARY_>(coeff_stationary_cov);
+    Rcpp::CharacterVector names_stationary_cov_rcpp_(names_stationary_cov_.cbegin(),names_stationary_cov_.cend());  //to assign later the name to the result
     std::size_t q_C = names_stationary_cov_.size();    //number of stationary covariates
     std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_stationary_cov_ = wrap_covariates_coefficients<_STATIONARY_>(coeff_stationary_cov);    
     //events
     std::vector<std::string> names_events_cov_ = wrap_covariates_names<_EVENT_>(coeff_events_cov);
+    Rcpp::CharacterVector names_events_cov_rcpp_(names_events_cov_.cbegin(),names_events_cov_.cend());              //to assign later the name to the result
     std::size_t q_E = names_events_cov_.size();        //number of events related covariates
     std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<_EVENT_>(coeff_events_cov);
     //stations
     std::vector<std::string> names_stations_cov_ = wrap_covariates_names<_STATION_>(coeff_stations_cov);
+    Rcpp::CharacterVector names_stations_cov_rcpp_(names_stations_cov_.cbegin(),names_stations_cov_.cend());         //to assign later the name to the result
     std::size_t q_S = names_stations_cov_.size();      //number of stations related covariates
     std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<_STATION_>(coeff_stations_cov);
 
@@ -607,10 +610,13 @@ Rcpp::List FMSGWR(Rcpp::NumericMatrix y_points,
     l["FGWR"] = algo_type<_FGWR_ALGO_>();
     //stationary basis expansion coefficients
     l["bc"]  = b_coefficients["bc"];
+    l["bc"].names() = names_stationary_cov_rcpp_;
     //event dependent basis expansion coefficients
     l["be"]  = b_coefficients["be"];
+    l["be"].names() = names_events_cov_rcpp_;
     //station dependent basis expansion coefficients
     l["bs"]  = b_coefficients["bs"];
+    l["bs"].names() = names_stations_cov_rcpp_;
 
     return l;
 }

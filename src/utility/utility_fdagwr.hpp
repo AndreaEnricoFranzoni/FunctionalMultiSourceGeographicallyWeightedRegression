@@ -97,7 +97,7 @@ toRList(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& mats )
 
         for(std::size_t j = 0; j < mats[i].size(); ++j){
             innerList[j] = Rcpp::wrap(mats[i][j]);
-            innerNames[j] = std::string("Unit ") + std::to_string(i+1);
+            innerNames[j] = std::string("Unit ") + std::to_string(j+1);
         }
 
         innerList.names() = innerNames;
@@ -112,7 +112,7 @@ toRList(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& mats )
 
 
 
-// funzione di conversione generale
+// funzione di conversione dei b coefficients
 Rcpp::List wrap_b_to_R_list(const BTuple& r) {
     return std::visit([](auto&& tup) -> Rcpp::List {
         using T = std::decay_t<decltype(tup)>;
