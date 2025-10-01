@@ -601,7 +601,7 @@ public:
                 FUNC_OBJ<INPUT,OUTPUT> beta_e_j_i = fm_prod<INPUT,OUTPUT>(basis_e_j,m_Be[j][i],this->number_threads())(0,0);
                 //eval the beta
                 std::vector< OUTPUT > beta_e_j_i_ev; 
-                beta_e_j_i_ev.reserve(this->abscissa_points().size());
+                beta_e_j_i_ev.resize(this->abscissa_points().size());
                 std::transform(this->abscissa_points().cbegin(),this->abscissa_points().cend(),beta_e_j_i_ev.begin(),[&beta_e_j_i](const INPUT &x){return beta_e_j_i(x);});
                 beta_e_j_ev.push_back(beta_e_j_i_ev);
             }
@@ -661,7 +661,7 @@ public:
                 FUNC_OBJ<INPUT,OUTPUT> beta_s_j_i = fm_prod<INPUT,OUTPUT>(basis_s_j,m_Bs[j][i],this->number_threads())(0,0);
                 //eval the beta
                 std::vector< OUTPUT > beta_s_j_i_ev; 
-                beta_s_j_i_ev.reserve(this->abscissa_points().size());
+                beta_s_j_i_ev.resize(this->abscissa_points().size());
                 std::transform(this->abscissa_points().cbegin(),this->abscissa_points().cend(),beta_s_j_i_ev.begin(),[&beta_s_j_i](const INPUT &x){return beta_s_j_i(x);});
                 beta_s_j_ev.push_back(beta_s_j_i_ev);
             }
