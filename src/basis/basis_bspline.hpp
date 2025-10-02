@@ -105,6 +105,12 @@ public:
                     //cheack input consistency
                     assert((void("Number of knots = number of basis - degree + 1"), this->number_knots() == (m_number_of_basis - m_degree + static_cast<std::size_t>(1))));
                 }
+    
+    //Move and copy constructor 
+    bsplines_basis(const bsplines_basis&) = default;
+    bsplines_basis(bsplines_basis&&) noexcept = default;
+    bsplines_basis& operator=(const bsplines_basis&) = default;
+    bsplines_basis& operator=(bsplines_basis&&) noexcept = default;
                 
     /*!
     * @brief Getter for the basis
@@ -180,3 +186,48 @@ public:
 };
 
 #endif  /*FDAGWR_BSPLINES_BASIS_HPP*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+template< typename domain_type = FDAGWR_TRAITS::basis_geometry >
+requires fdagwr_concepts::as_interval<domain_type>
+class bsplines_basis : public basis_base_class<domain_type>
+{
+    using BasisSpace = BsSpace<domain_type>;
+
+private:
+    BasisSpace m_basis;
+
+public:
+    static constexpr std::size_t bsplines_degree_default =
+        static_cast<std::size_t>(3); 
+
+    // 🔹 costruttore principale
+    bsplines_basis(const FDAGWR_TRAITS::Dense_Vector& knots,
+                   std::size_t degree,
+                   std::size_t number_of_basis)    
+        : basis_base_class<domain_type>(knots, degree, number_of_basis),
+          m_basis(this->knots(), this->degree())
+    {
+        assert((void("Number of knots = number of basis - degree + 1"),
+                this->number_knots() ==
+                  (m_number_of_basis - m_degree + static_cast<std::size_t>(1))));
+    }
+
+    // 🔹 permetti al vector di muovere/copiare gli oggetti
+
+
+    ~bsplines_basis() = default;
+};

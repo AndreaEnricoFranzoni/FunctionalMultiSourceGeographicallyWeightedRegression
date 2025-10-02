@@ -46,6 +46,12 @@ public:
                 basis_base_class<domain_type>(knots,constant_basis<domain_type>::degree_constant_basis,constant_basis<domain_type>::number_of_basis_constant_basis)
             {}
 
+    //Move and copy constructor 
+    constant_basis(const constant_basis&) = default;
+    constant_basis(constant_basis&&) noexcept = default;
+    constant_basis& operator=(const constant_basis&) = default;
+    constant_basis& operator=(constant_basis&&) noexcept = default;
+
     /*!
     * @brief Giving the basis type
     * @return std::string
