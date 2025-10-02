@@ -673,13 +673,10 @@ Rcpp::List FSGWR(double input_el = 1,
                  Rcpp::Nullable<int> num_threads = R_NilValue){
     //funzione per il source gwr
 
-    //checking and wrapping input parameters
-    int number_threads = wrap_num_thread(num_threads);
-
     //returning element
     Rcpp::List l;
 
-    l["Type of gwr"] = "fsgwr";
+    l["FGWR"] = "FSGWR";
     return l;
 }
 
@@ -692,10 +689,10 @@ Rcpp::List FGWR(double input_el=1,
     //funzione per il gwr
 
     //checking and wrapping input parameters
-    int number_threads = wrap_num_thread(num_threads);
+    //int number_threads = wrap_num_thread(num_threads);
 
-    using _FD_INPUT_TYPE_ = double;
-    using _FD_OUTPUT_TYPE_ = double;
+    //using _FD_INPUT_TYPE_ = double;
+    //using _FD_OUTPUT_TYPE_ = double;
 
 
     
@@ -869,7 +866,7 @@ Rcpp::List FGWR(double input_el=1,
     //returning element
     Rcpp::List l;
 
-    l["Type of gwr"] = "fgwr";
+    l["FGWR"] = "FGWR";
 
     return l;
 }
