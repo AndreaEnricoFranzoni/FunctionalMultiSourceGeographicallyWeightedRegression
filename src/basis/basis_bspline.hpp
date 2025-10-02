@@ -27,25 +27,25 @@
 
 
 // do not use this if you have other namespaces loaded
-using namespace fdapde;
+//using namespace fdapde;
 
 // evaluates a basis system \{ \phi_1(t), \phi_2(t), ..., \phi_N(t) \} at a set of locations \{ t_1, t_2, ..., t_n \}
 template <typename Triangulation_, typename CoordsMatrix_>
     //requires(internals::is_eigen_dense_xpr_v<CoordsMatrix_>)
-    requires(fdagwr_concepts::as_interval<Triangulation_> && internals::is_eigen_dense_xpr_v<CoordsMatrix_>)
+    requires(fdagwr_concepts::as_interval<Triangulation_> && fdapde::internals::is_eigen_dense_xpr_v<CoordsMatrix_>)
 inline 
 Eigen::SparseMatrix<double> 
-bsplines_basis_evaluation(const BsSpace<Triangulation_>& bs_space, 
+bsplines_basis_evaluation(const fdapde::BsSpace<Triangulation_>& bs_space, 
                           CoordsMatrix_&& coords) 
 {
     static constexpr int embed_dim = Triangulation_::embed_dim;
-    fdapde_assert(coords.rows() > 0 && coords.cols() == embed_dim);
+    fdapde::fdapde_assert(coords.rows() > 0 && coords.cols() == embed_dim);
 
     int n_shape_functions = bs_space.n_shape_functions();
     int n_dofs = bs_space.n_dofs();
     int n_locs = coords.rows();
     Eigen::SparseMatrix<double> psi_(n_locs, n_dofs);    
-    std::vector<Triplet<double>> triplet_list;
+    std::vector<Eigen::Triplet<double>> triplet_list;
     triplet_list.reserve(n_locs * n_shape_functions);
 
     Eigen::Matrix<int, Dynamic, 1> cell_id = bs_space.triangulation().locate(coords);
@@ -84,7 +84,7 @@ class bsplines_basis :  public basis_base_class<domain_type>
 * @brief Alias for the basis space
 * @note calling the constructor of BsSpace in the constructor of the class
 */
-using BasisSpace = BsSpace<domain_type>;
+using BasisSpace = fdapde::BsSpace<domain_type>;
 
 private:
     /*!Bslines*/
