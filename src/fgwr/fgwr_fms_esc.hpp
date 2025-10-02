@@ -421,6 +421,7 @@ public:
 
 
 
+
         //DEFAULT AI B: PARTE DA TOGLIERE
         m_bc = Eigen::MatrixXd::Random(m_Lc,1);
         m_be.reserve(this->n());
@@ -432,6 +433,7 @@ public:
             m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1));
         }
         //FINE PARTE DA TOGLIERE
+
 
 
 
