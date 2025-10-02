@@ -75,7 +75,8 @@ public:
                         for(std::size_t i = 0; i < m_q; ++i){  
                             //basis_type<domain_type> basis_i(m_knots.nodes(), m_basis_degrees[i], m_numbers_of_basis[i]);
                             //m_systems_of_basis.push_back(basis_i);
-                            m_systems_of_basis.emplace_back(m_knots.nodes(), m_basis_degrees[i], m_numbers_of_basis[i]);
+                            //m_systems_of_basis.emplace_back(m_knots.nodes(), m_basis_degrees[i], m_numbers_of_basis[i]);
+                            m_systems_of_basis.emplace_back(knots, m_basis_degrees[i], m_numbers_of_basis[i]);
                         }
                      }
 
