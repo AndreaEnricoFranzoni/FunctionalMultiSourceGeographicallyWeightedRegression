@@ -39,7 +39,7 @@ bsplines_basis_evaluation(const fdapde::BsSpace<Triangulation_>& bs_space,
                           CoordsMatrix_&& coords) 
 {
     static constexpr int embed_dim = Triangulation_::embed_dim;
-    fdapde::fdapde_assert(coords.rows() > 0 && coords.cols() == embed_dim);
+    fdapde_assert(coords.rows() > 0 && coords.cols() == embed_dim);
 
     int n_shape_functions = bs_space.n_shape_functions();
     int n_dofs = bs_space.n_dofs();
