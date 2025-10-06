@@ -68,7 +68,7 @@ using namespace Rcpp;
 //
 // [[Rcpp::export]]
 void check_installation_fdagwr() {
-  Rcout << "fdagwr.5 has been installed"<< std::endl;}
+  Rcout << "fdagwr.6 has been installed"<< std::endl;}
 
 
 /*!
@@ -281,7 +281,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     auto c = columnize_coeff_resp(coefficients_response_);
     //reconstruction weights coefficients matrix
     auto coefficients_rec_weights_response_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coeff_rec_weights_y_points);
-
+    auto coefficients_rec_weights_response_out_ = coefficients_rec_weights_response_;
 
     //  ABSCISSA POINTS of response
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ = wrap_abscissas(t_points,left_extreme_domain,right_extreme_domain);
@@ -680,7 +680,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_type_rec_weights_response_;
     response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_rec_weights_response_;
     response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_response_;
-    response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = Rcpp::wrap(coefficients_rec_weights_response_);
+    response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = Rcpp::wrap(coefficients_rec_weights_response_out_);
     inputs_info[covariate_type<FDAGWR_COVARIATES_TYPES::REC_WEIGHTS>()] = response_rec_w_input;
     //input of E
     Rcpp::List E_input;
