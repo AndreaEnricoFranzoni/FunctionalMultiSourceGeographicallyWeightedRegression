@@ -327,7 +327,6 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     std::vector<std::string> names_events_cov_ = wrap_covariates_names<_EVENT_>(coeff_events_cov);
     std::size_t q_E = names_events_cov_.size();        //number of events related covariates
     std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<_EVENT_>(coeff_events_cov);
-    std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_events_cov_out_ = coefficients_events_cov_;
     //stations
     std::vector<std::string> names_stations_cov_ = wrap_covariates_names<_STATION_>(coeff_stations_cov);
     std::size_t q_S = names_stations_cov_.size();      //number of stations related covariates
@@ -675,6 +674,14 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_response_;
     response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_response_;
     inputs_info[covariate_type<FDAGWR_COVARIATES_TYPES::RESPONSE>()] = response_input;
+    //input of w for y  
+    Rcpp::List response_rec_w_input;
+    response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_rec_weights_response_;
+    response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_type_rec_weights_response_;
+    response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_rec_weights_response_;
+    response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_response_;
+    response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = Rcpp::wrap(coefficients_rec_weights_response_);
+    inputs_info[covariate_type<FDAGWR_COVARIATES_TYPES::REC_WEIGHTS>()] = response_rec_w_input;
     //input of E
     Rcpp::List E_input;
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_events_cov_;
@@ -690,12 +697,13 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     beta_E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_beta_events_cov_;
     beta_E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_beta_events_cov_;
     inputs_info["beta_" + covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()] = beta_E_input;
-    //input of S
+    //input of S    
     Rcpp::List S_input;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_stations_cov_;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_stations_cov_;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_stations_cov_;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_stations_cov_;
+    S_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = toRList(coefficients_stations_cov_,false);
     inputs_info["cov_" + covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()] = S_input;
     //input of Beta S
     Rcpp::List beta_S_input;
