@@ -376,7 +376,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     auto number_and_degree_basis_beta_stationary_cov_ = wrap_and_check_basis_number_and_degree<_STATIONARY_>(n_basis_beta_stationary_cov,degrees_basis_beta_stationary_cov,knots_beta_stationary_cov_.size(),q_C,basis_types_beta_stationary_cov_);
     std::vector<std::size_t> number_basis_beta_stationary_cov_ = number_and_degree_basis_beta_stationary_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> degree_basis_beta_stationary_cov_ = number_and_degree_basis_beta_stationary_cov_[FDAGWR_FEATS::degree_basis_string];
-    //events cov
+    //events cov    
     auto number_and_degree_basis_events_cov_ = wrap_and_check_basis_number_and_degree<_EVENT_>(n_basis_events_cov,degrees_basis_events_cov,knots_events_cov_.size(),q_E,basis_types_events_cov_);
     std::vector<std::size_t> number_basis_events_cov_ = number_and_degree_basis_events_cov_[FDAGWR_FEATS::n_basis_string];
     std::vector<std::size_t> degree_basis_events_cov_ = number_and_degree_basis_events_cov_[FDAGWR_FEATS::degree_basis_string];
@@ -661,8 +661,45 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     l[FDAGWR_B_NAMES::bs]  = b_coefficients[FDAGWR_B_NAMES::bs];
     //beta_s
     l[FDAGWR_BETAS_NAMES::beta_s] = betas[FDAGWR_BETAS_NAMES::beta_s];
+
+    //returning all the elements needed to perform prediction
+    Rcpp::List elem_for_pred;
+    Rcpp::List inputs_info;
     //p res
-    l["p_res"] = p_res;
+    elem_for_pred["p_res"] = p_res;
+    //input of y
+    Rcpp::List response_input;
+    response_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = basis_type_response_;
+    response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_type_response_;
+    response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_response_;
+    inputs_info[covariate_type<FDAGWR_COVARIATES_TYPES::RESPONSE>] = response_input;
+    //input of E
+    Rcpp::List E_input;
+    E_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_events_cov_;
+    E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_events_cov_;
+    E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_events_cov_;
+    inputs_info[covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>] = E_input;
+    //input of Beta E
+    Rcpp::List beta_E_input;
+    beta_E_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_beta_events_cov_;
+    beta_E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_beta_events_cov_;
+    beta_E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_beta_events_cov_;
+    inputs_info["beta_" + covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>] = beta_E_input;
+    //input of S
+    Rcpp::List S_input;
+    S_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_stations_cov_;
+    S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_stations_cov_;
+    S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_stations_cov_;
+    inputs_info[covariate_type<FDAGWR_COVARIATES_TYPES::STATION>] = S_input;
+    //input of Beta S
+    Rcpp::List beta_S_input;
+    beta_S_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_beta_stations_cov_;
+    beta_S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_beta_stations_cov_;
+    beta_S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_beta_stations_cov_;
+    inputs_info["beta_" + covariate_type<FDAGWR_COVARIATES_TYPES::STATION>] = beta_S_input;
+    //adding all the elements to perform prediction
+    elem_for_pred["inputs_info"] = inputs_info;
+    l["elems_for_pred"] = elem_for_pred;
 
     return l;
 }

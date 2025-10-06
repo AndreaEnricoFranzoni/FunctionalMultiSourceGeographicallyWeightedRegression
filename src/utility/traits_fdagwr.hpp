@@ -148,6 +148,17 @@ using PartialResidualTuple = std::variant<
 
 
 
+struct FDAGWR_HELPERS_for_PRED_NAMES
+{
+  static constexpr std::string n_basis = "basis_num";
+
+  static constexpr std::string basis_t = "basis_type";
+
+  static constexpr std::string basis_deg = "basis_deg";
+};
+
+
+
 /*!
 * @enum FDAGWR_COVARIATES_TYPES
 * @brief different types of functional covariates
