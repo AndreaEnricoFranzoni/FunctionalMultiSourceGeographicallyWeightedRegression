@@ -68,7 +68,7 @@ using namespace Rcpp;
 //
 // [[Rcpp::export]]
 void check_installation_fdagwr() {
-  Rcout << "fdagwr.8 has been installed"<< std::endl;}
+  Rcout << "fdagwr.5 has been installed"<< std::endl;}
 
 
 /*!
@@ -681,7 +681,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_events_cov_;
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_events_cov_;
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_events_cov_;
-    E_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = toRList(coefficients_events_cov_out_,false);
+    E_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = toRList(coefficients_events_cov_,false);
     inputs_info["cov_" + covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()] = E_input;
     //input of Beta E   
     Rcpp::List beta_E_input;
