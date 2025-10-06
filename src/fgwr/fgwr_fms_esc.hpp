@@ -129,6 +129,8 @@ private:
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_A_ese;
 
     //B operators
+    /*!B_E_i while computing K_E_S(t)*/
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_B_e_for_K_e_s;
     /*!B_E_i*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_B_e;
     /*!B_S_i*/
@@ -139,6 +141,10 @@ private:
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_B_es;
     /*!B_ESE_i*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_B_ese;
+
+    //c_tilde_hat (necessary to save partial residuals and performing predictions)
+    /*!c_tilde_hat*/
+    FDAGWR_TRAITS::Dense_Matrix m_c_tilde_hat;
 
 
 public:
@@ -261,7 +267,7 @@ public:
     override
     {
 
-
+/*
         std::cout << "Computing (j_tilde_tilde + Re)^-1" << std::endl;
         //(j_tilde_tilde + Re)^-1
         std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
@@ -273,10 +279,11 @@ public:
         std::cout << "Computing B_e_i" << std::endl;
         m_B_e = this->compute_operator(m_theta_t,m_Xe_t,m_We,m_Xc,m_omega,j_double_tilde_Re_inv);
         std::cout << "B_e_i rows: " << m_B_e[0].rows() << ", B_e_i cols: " << m_B_e[0].cols() << std::endl;
-        //K_e_s(t)
+        //B_E_i_for_K_e_s
         std::cout << "Computing Be_for_K_e_s" << std::endl;
-        std::vector< FDAGWR_TRAITS::Dense_Matrix > Be_for_K_e_s = this->compute_operator(m_theta_t,m_Xe_t,m_We,m_Xs,m_psi,j_double_tilde_Re_inv);
+        m_B_e_for_K_e_s = this->compute_operator(m_theta_t,m_Xe_t,m_We,m_Xs,m_psi,j_double_tilde_Re_inv);
         std::cout << "Be_for_K_e_s rows: " << Be_for_K_e_s[0].rows() << ", Be_for_K_e_s cols: " << Be_for_K_e_s[0].cols() << std::endl;
+        //K_e_s(t)
         std::cout << "Computing K_e_s" << std::endl;
         functional_matrix<INPUT,OUTPUT> K_e_s = this->compute_functional_operator(m_Xe,m_theta,Be_for_K_e_s);
         std::cout << "K_e_s rows: " << K_e_s.rows() << ", K_e_s cols: " << K_e_s.cols() << std::endl;
@@ -391,7 +398,7 @@ public:
         std::cout << "y_tilde_hat rows: " << y_tilde_hat.rows() << ", y_tilde_hat cols: " << y_tilde_hat.cols() << std::endl;
         //c_tilde_hat: smoothing on y_tilde_hat(t) with respect of the basis of y
         std::cout << "Computing c_tilde_hat" << std::endl;
-        FDAGWR_TRAITS::Dense_Matrix c_tilde_hat = columnize_coeff_resp(fm_smoothing<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_smoothing));
+        m_c_tilde_hat = columnize_coeff_resp(fm_smoothing<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_smoothing));
         std::cout << "c_tilde_hat rows: " << c_tilde_hat.rows() << ", c_tilde_hat cols: " << c_tilde_hat.cols() << std::endl;
         std::cout << c_tilde_hat << std::endl;
         //y_tilde_new(t)
@@ -421,19 +428,25 @@ public:
 
 
 
-/*
+*/
         //DEFAULT AI B: PARTE DA TOGLIERE
         m_bc = Eigen::MatrixXd::Random(m_Lc,1);
+        m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
+
+        m_A_e.reserve(this->n());
+        m_B_e_for_K_e_s.reserve(this->n());
         m_be.reserve(this->n());
         m_bs.reserve(this->n());
 
         for(std::size_t i = 0; i < this->n(); ++i)
         {
+            m_A_e.push_back(Eigen::MatrixXd::Random(m_Le,m_Ly*this->n()));
+            m_B_e_for_K_e_s.push_back(Eigen::MatrixXd::Random(m_Le,Ls));
             m_be.push_back(Eigen::MatrixXd::Random(m_Le,1));
             m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1));
         }
         //FINE PARTE DA TOGLIERE
-*/
+
 
 
 
@@ -493,6 +506,17 @@ public:
         return std::tuple{m_beta_c,m_beta_e,m_beta_s};
     }
 
+    /*!
+    * @brief Getter for the objects needed for reconstructing the partial residuals
+    */
+    inline
+    PartialResidualTuple
+    PRes()
+    const
+    override
+    {
+        return std::tuple{m_c_tilde_hat,m_A_e,m_B_e_for_K_e_s};
+    }
 };
 
 #endif  /*FGWR_FMS_ESC_ALGO_HPP*/

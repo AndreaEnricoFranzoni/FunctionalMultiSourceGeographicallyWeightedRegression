@@ -641,6 +641,8 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
                                            {},
                                            names_events_cov_,
                                            names_stations_cov_);
+    //elements for partial residuals
+    Rcpp::List p_res = wrap_PRes_to_R_list(fgwr_algo->PRes());
 
     
     //returning element
@@ -659,6 +661,8 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     l[FDAGWR_B_NAMES::bs]  = b_coefficients[FDAGWR_B_NAMES::bs];
     //beta_s
     l[FDAGWR_BETAS_NAMES::beta_s] = betas[FDAGWR_BETAS_NAMES::beta_s];
+    //p res
+    l["p_res"] = p_res;
 
     return l;
 }

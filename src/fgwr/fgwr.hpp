@@ -278,6 +278,11 @@ public:
     * @brief Function to return the the betas evaluated, tuple of different dimension depending on the algo used
     */
     virtual inline BetasTuple betas() const = 0;
+
+    /*!
+    * @brief Function to return extra objects useful for reporting the functional partial residuals
+    */
+    virtual inline PartialResidualTuple PRes() const = 0;
 };
 
 

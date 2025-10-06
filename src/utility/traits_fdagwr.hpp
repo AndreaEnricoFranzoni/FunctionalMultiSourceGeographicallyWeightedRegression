@@ -139,6 +139,15 @@ struct FDAGWR_BETAS_NAMES
 
 
 
+
+using PartialResidualTuple = std::variant<
+    std::monostate,
+    std::tuple< int, int >,
+    std::tuple< FDAGWR_TRAITS::Dense_Matrix, std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< FDAGWR_TRAITS::Dense_Matrix > >
+>;
+
+
+
 /*!
 * @enum FDAGWR_COVARIATES_TYPES
 * @brief different types of functional covariates
