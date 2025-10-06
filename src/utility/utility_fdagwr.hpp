@@ -440,18 +440,18 @@ wrap_PRes_to_R_list(const PartialResidualTuple& p_res)
     //two sources
     if constexpr (std::is_same_v<T, std::tuple< FDAGWR_TRAITS::Dense_Matrix, std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< FDAGWR_TRAITS::Dense_Matrix >>>) {
       auto [a, b, c] = val;
-      return List::create(Rcpp::Named("c_tilde_hat") = Rcpp::wrap(std::get<0>(tup)),
-                          Rcpp::Named("A__")         = toRList(std::get<1>(tup),false),
-                          Rcpp::Named("B__for_K")    = toRList(std::get<2>(tup),false));
+      return Rcpp::List::create(Rcpp::Named("c_tilde_hat") = Rcpp::wrap(std::get<0>(tup)),
+                                Rcpp::Named("A__")         = toRList(std::get<1>(tup),false),
+                                Rcpp::Named("B__for_K")    = toRList(std::get<2>(tup),false));
     } 
     //one source
     else if constexpr (std::is_same_v<T, std::tuple<int, int>>) {
-      auto [a, b] = val;
-      return List::create(a, b);
+      auto [a, b] = tup;
+      return Rcpp::List::create(a, b);
     } 
     //stationary
     else {
-      return List::create(); // lista vuota
+      return Rcpp::List::create(); // lista vuota
     }
   }, p_res);
 }

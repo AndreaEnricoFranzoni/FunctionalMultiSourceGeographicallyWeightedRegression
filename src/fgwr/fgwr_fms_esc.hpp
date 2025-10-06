@@ -441,7 +441,7 @@ public:
         for(std::size_t i = 0; i < this->n(); ++i)
         {
             m_A_e.push_back(Eigen::MatrixXd::Random(m_Le,m_Ly*this->n()));
-            m_B_e_for_K_e_s.push_back(Eigen::MatrixXd::Random(m_Le,Ls));
+            m_B_e_for_K_e_s.push_back(Eigen::MatrixXd::Random(m_Le,m_Ls));
             m_be.push_back(Eigen::MatrixXd::Random(m_Le,1));
             m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1));
         }
