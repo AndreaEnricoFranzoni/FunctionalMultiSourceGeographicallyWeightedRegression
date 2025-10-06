@@ -666,40 +666,46 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     Rcpp::List elem_for_pred;
     Rcpp::List inputs_info;
     //p res
-    elem_for_pred["p_res"] = p_res;
+    elem_for_pred[FDAGWR_HELPERS_for_PRED_NAMES::p_res] = p_res;
     //input of y
     Rcpp::List response_input;
-    response_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = basis_type_response_;
+    response_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_response_;
     response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_type_response_;
     response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_response_;
+    response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_response_;
     inputs_info[covariate_type<FDAGWR_COVARIATES_TYPES::RESPONSE>()] = response_input;
     //input of E
     Rcpp::List E_input;
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_events_cov_;
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_events_cov_;
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_events_cov_;
+    E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_events_cov_;
+    E_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = 
     inputs_info[covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()] = E_input;
-    //input of Beta E
+    //input of Beta E   
     Rcpp::List beta_E_input;
     beta_E_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_beta_events_cov_;
     beta_E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_beta_events_cov_;
     beta_E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_beta_events_cov_;
+    beta_E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_beta_events_cov_;
     inputs_info["beta_" + covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()] = beta_E_input;
     //input of S
     Rcpp::List S_input;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_stations_cov_;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_stations_cov_;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_stations_cov_;
+    S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_stations_cov_;
     inputs_info[covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()] = S_input;
     //input of Beta S
     Rcpp::List beta_S_input;
     beta_S_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_beta_stations_cov_;
     beta_S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_beta_stations_cov_;
     beta_S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_beta_stations_cov_;
+    S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_beta_stations_cov_;
     inputs_info["beta_" + covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()] = beta_S_input;
     //adding all the elements to perform prediction
-    elem_for_pred["inputs_info"] = inputs_info;
-    l["elems_for_pred"] = elem_for_pred;
+    elem_for_pred[FDAGWR_HELPERS_for_PRED_NAMES::inputs_info] = inputs_info;
+    l[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred] = elem_for_pred;
 
     return l;
 }

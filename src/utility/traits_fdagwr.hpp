@@ -150,11 +150,21 @@ using PartialResidualTuple = std::variant<
 
 struct FDAGWR_HELPERS_for_PRED_NAMES
 {
+  static constexpr std::string elem_for_pred = "predictor_info";
+
+  static constexpr std::string p_res = "partial_res";
+
+  static constexpr std::string inputs_info = "inputs_info";
+
+  static constexpr std::string coeff_basis = "basis_coeff";
+
   static constexpr std::string n_basis = "basis_num";
 
   static constexpr std::string basis_t = "basis_type";
 
   static constexpr std::string basis_deg = "basis_deg";
+
+  static constexpr std::string basis_knots = "knots";
 };
 
 
