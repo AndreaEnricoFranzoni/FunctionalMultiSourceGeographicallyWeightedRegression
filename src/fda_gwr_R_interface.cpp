@@ -1137,7 +1137,7 @@ basis_number_beta_stations_cov_,basis_type_beta_stations_cov_,basis_degree_beta_
     {
         Rcout << "Cov " << coefficients_events_cov_[i] << std::endl;
     }
-    coefficients_events_cov_
+    
     
 
     Rcpp::List l;
