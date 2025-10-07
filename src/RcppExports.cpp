@@ -102,15 +102,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// FMSGWR_ESC
-Rcpp::List FMSGWR_ESC(double input_el, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_FMSGWR_ESC(SEXP input_elSEXP, SEXP num_threadsSEXP) {
+// FMSGWR_SEC
+Rcpp::List FMSGWR_SEC(double input_el, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_FMSGWR_SEC(SEXP input_elSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type input_el(input_elSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(FMSGWR_ESC(input_el, num_threads));
+    rcpp_result_gen = Rcpp::wrap(FMSGWR_SEC(input_el, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -143,7 +143,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_check_installation_fdagwr", (DL_FUNC) &_fdagwr_check_installation_fdagwr, 0},
     {"_fdagwr_FMSGWR_ESC", (DL_FUNC) &_fdagwr_FMSGWR_ESC, 52},
     {"_fdagwr_predict_FMSGWR_ESC", (DL_FUNC) &_fdagwr_predict_FMSGWR_ESC, 10},
-    {"_fdagwr_FMSGWR_ESC", (DL_FUNC) &_fdagwr_FMSGWR_ESC, 2},
+    {"_fdagwr_FMSGWR_SEC", (DL_FUNC) &_fdagwr_FMSGWR_SEC, 2},
     {"_fdagwr_FSGWR", (DL_FUNC) &_fdagwr_FSGWR, 2},
     {"_fdagwr_FGWR", (DL_FUNC) &_fdagwr_FGWR, 2},
     {NULL, NULL, 0}

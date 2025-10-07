@@ -848,7 +848,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
 //
 // [[Rcpp::export]]
-Rcpp::List FMSGWR_ESC(double input_el = 1,
+Rcpp::List FMSGWR_SEC(double input_el = 1,
                       Rcpp::Nullable<int> num_threads = R_NilValue)
 {
     constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::GWR_FMS_SEC;                          //fgwr type (estimating stationary -> event-dependent -> station-dependent)

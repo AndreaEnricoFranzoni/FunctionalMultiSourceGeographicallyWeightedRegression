@@ -13,8 +13,8 @@ predict_FMSGWR_ESC <- function(coeff_stationary_cov_to_pred, coeff_events_cov_to
     .Call(`_fdagwr_predict_FMSGWR_ESC`, coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coordinates_events_to_pred, coeff_stations_cov_to_pred, coordinates_stations_to_pred, partial_res, n_intervals_trapezoidal_quadrature, target_error_trapezoidal_quadrature, max_iterations_trapezoidal_quadrature, num_threads)
 }
 
-FMSGWR_ESC <- function(input_el = 1, num_threads = NULL) {
-    .Call(`_fdagwr_FMSGWR_ESC`, input_el, num_threads)
+FMSGWR_SEC <- function(input_el = 1, num_threads = NULL) {
+    .Call(`_fdagwr_FMSGWR_SEC`, input_el, num_threads)
 }
 
 FSGWR <- function(input_el = 1, num_threads = NULL) {
