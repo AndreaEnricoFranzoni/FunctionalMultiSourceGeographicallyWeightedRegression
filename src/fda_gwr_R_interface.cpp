@@ -955,21 +955,21 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     //lists with the input of the training
     Rcpp::List training_input    = fitted_model[FDAGWR_HELPERS_for_PRED_NAMES::inputs_info];
     //list with elements of the response
-    Rcpp::List response_input            = training_input[FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_RESPONSE_>];
+    Rcpp::List response_input            = training_input[FDAGWR_HELPERS_for_PRED_NAMES::covariate_type<_RESPONSE_>()];
     //list with elements of response reconstruction weights
-    Rcpp::List response_rec_w_input      = training_input[FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_REC_WEIGHTS_>];
+    Rcpp::List response_rec_w_input      = training_input[FDAGWR_HELPERS_for_PRED_NAMES::covariate_type<_REC_WEIGHTS_>()];
     //list with elements of stationary covariates
-    Rcpp::List stationary_cov_input      = training_input[FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATIONARY_>];
+    Rcpp::List stationary_cov_input      = training_input[FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type<_STATIONARY_>()];
     //list with elements of the beta of stationary covariates
-    Rcpp::List beta_stationary_cov_input = training_input[FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATIONARY_>];
+    Rcpp::List beta_stationary_cov_input = training_input[FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type<_STATIONARY_>()];
     //list with elements of events-dependent covariates
-    Rcpp::List events_cov_input          = training_input[FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>];
+    Rcpp::List events_cov_input          = training_input[FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type<_EVENT_>()];
     //list with elements of the beta of events-dependent covariates
-    Rcpp::List beta_events_cov_input     = training_input[FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>];
+    Rcpp::List beta_events_cov_input     = training_input[FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type<_EVENT_>()];
     //list with elements of stations-dependent covariates
-    Rcpp::List stations_cov_input        = training_input[FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>];
+    Rcpp::List stations_cov_input        = training_input[FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type<_STATION_>()];
     //list with elements of the beta of stations-dependent covariates
-    Rcpp::List beta_stations_cov_input   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>];
+    Rcpp::List beta_stations_cov_input   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type<_STATION_>()];
 
     //domain
     std::size_t n_train = training_input[FDAGWR_HELPERS_for_PRED_NAMES::n];
@@ -1016,8 +1016,8 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     FDAGWR_TRAITS::Dense_Vector knots_stations_cov_eigen_w_             = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_stations_cov_.data(),knots_stations_cov_.size());
     std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<_STATIONARY_>(stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
     std::vector<double> lambdas_stations_ = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::penalties];
-    auto coordinates_stations_            = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::coords]);
-    double kernel_bdw_events_             = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker];
+    auto coordinates_stations_            = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::coords];
+    double kernel_bdw_stations_           = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker];
     
     ///////////////
     //// BETAS ////
