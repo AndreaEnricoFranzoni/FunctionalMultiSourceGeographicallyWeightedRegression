@@ -403,11 +403,13 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     //  DISTANCES
     //events    DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
     auto coordinates_events_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coordinates_events);
+    auto coordinates_events_out_ = coordinates_events_;
     check_dim_input<_EVENT_>(number_of_statistical_units_,coordinates_events_.rows(),"coordinates matrix rows");
     check_dim_input<_EVENT_>(FDAGWR_FEATS::number_of_geographical_coordinates,coordinates_events_.cols(),"coordinates matrix columns");
     distance_matrix<_DISTANCE_> distances_events_cov_(std::move(coordinates_events_),number_threads);
     //stations  DISTANCES HAVE TO BE COMPUTED WITH THE .compute_distances() method
     auto coordinates_stations_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coordinates_stations);
+    auto coordinates_stations_out_ = coordinates_stations_;
     check_dim_input<_STATION_>(number_of_statistical_units_,coordinates_stations_.rows(),"coordinates matrix rows");
     check_dim_input<_STATION_>(FDAGWR_FEATS::number_of_geographical_coordinates,coordinates_stations_.cols(),"coordinates matrix columns");
     distance_matrix<_DISTANCE_> distances_stations_cov_(std::move(coordinates_stations_),number_threads);
@@ -689,6 +691,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_events_cov_;
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_events_cov_;
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = toRList(coefficients_events_cov_,false);
+    E_input["coordinates"] = coordinates_events_out_;
     inputs_info["cov_" + covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()] = E_input;
     //input of Beta E   
     Rcpp::List beta_E_input;
@@ -704,6 +707,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_stations_cov_;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_stations_cov_;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = toRList(coefficients_stations_cov_,false);
+    S_input["coordinates"] = coordinates_stations_out_;
     inputs_info["cov_" + covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()] = S_input;
     //input of Beta S
     Rcpp::List beta_S_input;
