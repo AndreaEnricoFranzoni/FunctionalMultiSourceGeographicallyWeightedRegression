@@ -82,6 +82,38 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// predict_FMSGWR_ESC
+Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_events_cov_to_pred, Rcpp::NumericMatrix coordinates_events_to_pred, Rcpp::List coeff_stations_cov_to_pred, Rcpp::NumericMatrix coordinates_stations_to_pred, Rcpp::List partial_res, int n_intervals_trapezoidal_quadrature, double target_error_trapezoidal_quadrature, int max_iterations_trapezoidal_quadrature, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_predict_FMSGWR_ESC(SEXP coeff_stationary_cov_to_predSEXP, SEXP coeff_events_cov_to_predSEXP, SEXP coordinates_events_to_predSEXP, SEXP coeff_stations_cov_to_predSEXP, SEXP coordinates_stations_to_predSEXP, SEXP partial_resSEXP, SEXP n_intervals_trapezoidal_quadratureSEXP, SEXP target_error_trapezoidal_quadratureSEXP, SEXP max_iterations_trapezoidal_quadratureSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stationary_cov_to_pred(coeff_stationary_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_events_cov_to_pred(coeff_events_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_events_to_pred(coordinates_events_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stations_cov_to_pred(coeff_stations_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_stations_to_pred(coordinates_stations_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type partial_res(partial_resSEXP);
+    Rcpp::traits::input_parameter< int >::type n_intervals_trapezoidal_quadrature(n_intervals_trapezoidal_quadratureSEXP);
+    Rcpp::traits::input_parameter< double >::type target_error_trapezoidal_quadrature(target_error_trapezoidal_quadratureSEXP);
+    Rcpp::traits::input_parameter< int >::type max_iterations_trapezoidal_quadrature(max_iterations_trapezoidal_quadratureSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(predict_FMSGWR_ESC(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coordinates_events_to_pred, coeff_stations_cov_to_pred, coordinates_stations_to_pred, partial_res, n_intervals_trapezoidal_quadrature, target_error_trapezoidal_quadrature, max_iterations_trapezoidal_quadrature, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// FMSGWR_ESC
+Rcpp::List FMSGWR_ESC(double input_el, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_FMSGWR_ESC(SEXP input_elSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type input_el(input_elSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(FMSGWR_ESC(input_el, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 // FSGWR
 Rcpp::List FSGWR(double input_el, Rcpp::Nullable<int> num_threads);
 RcppExport SEXP _fdagwr_FSGWR(SEXP input_elSEXP, SEXP num_threadsSEXP) {
@@ -110,6 +142,8 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_check_installation_fdagwr", (DL_FUNC) &_fdagwr_check_installation_fdagwr, 0},
     {"_fdagwr_FMSGWR_ESC", (DL_FUNC) &_fdagwr_FMSGWR_ESC, 52},
+    {"_fdagwr_predict_FMSGWR_ESC", (DL_FUNC) &_fdagwr_predict_FMSGWR_ESC, 10},
+    {"_fdagwr_FMSGWR_ESC", (DL_FUNC) &_fdagwr_FMSGWR_ESC, 2},
     {"_fdagwr_FSGWR", (DL_FUNC) &_fdagwr_FSGWR, 2},
     {"_fdagwr_FGWR", (DL_FUNC) &_fdagwr_FGWR, 2},
     {NULL, NULL, 0}

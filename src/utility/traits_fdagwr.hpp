@@ -165,6 +165,18 @@ struct FDAGWR_HELPERS_for_PRED_NAMES
   static constexpr std::string basis_deg = "basis_deg";
 
   static constexpr std::string basis_knots = "knots";
+
+  static constexpr std::string penalties = "penalizations";
+
+  static constexpr std::string coords = "coordinates";
+
+  static constexpr std::string bdw_ker = "kernel_bwd_";
+
+  static constexpr std::string cov = "cov_";
+
+  static constexpr std::string beta = "beta_";
+
+  static constexpr std::string abscissa = "abscissa";
 };
 
 

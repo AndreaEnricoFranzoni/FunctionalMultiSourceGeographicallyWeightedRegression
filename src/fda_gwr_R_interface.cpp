@@ -155,7 +155,49 @@ void check_installation_fdagwr() {
 *         - "Beta_s": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:
 *                 - "Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit
 *                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)
-* 
+*         - "predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:
+*                             - "partial_res": a list containing information to compute the partial residuals:
+*                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon
+*                                              - "A__": vector of matrices with the operator A_e for each statistical unit
+*                                              - "B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit
+*                             - "inputs_info": a list containing information about the data used to fit the model:
+*                                              - "Response": list:
+*                                                            - "basis_num":
+*                                                            - "basis_type":
+*                                                            - "basis_deg":
+*                                                            - "knots":
+*                                              - "Response reconstruction weights": list:
+*                                                            - "basis_num":
+*                                                            - "basis_type":
+*                                                            - "basis_deg":
+*                                                            - "knots":
+*                                                            - "basis_coeff":
+*                                              - "cov_Event": list:
+*                                                            - "basis_num":
+*                                                            - "basis_type":
+*                                                            - "basis_deg":
+*                                                            - "knots":
+*                                                            - "basis_coeff":
+*                                                            - "coordinates":
+*                                                            - "kernel_bwd_Event":
+*                                              - "beta_Event": list:
+*                                                            - "basis_num":
+*                                                            - "basis_type":
+*                                                            - "basis_deg":
+*                                                            - "knots":
+*                                              - "cov_Station": list:
+*                                                            - "basis_num":
+*                                                            - "basis_type":
+*                                                            - "basis_deg":
+*                                                            - "knots":
+*                                                            - "basis_coeff":
+*                                                            - "coordinates":
+*                                                            - "kernel_bwd_Station":
+*                                              - "beta_Station": list:
+*                                                            - "basis_num":
+*                                                            - "basis_type":
+*                                                            - "basis_deg":
+*                                                            - "knots":
 * @details constant basis are used, for a covariate, if it resembles a scalar shape. It consists of a straight line with y-value equal to 1 all over the data domain.
 *          Can be seen as a B-spline basis with degree 0, number of basis 1, using one knot, consequently having only one coefficient for the only basis for each statistical unit.
 *          fmsgwr sets all the feats accordingly if reads constant basis.
@@ -684,6 +726,13 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_response_;
     response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = Rcpp::wrap(coefficients_rec_weights_response_out_);
     inputs_info[covariate_type<FDAGWR_COVARIATES_TYPES::REC_WEIGHTS>()] = response_rec_w_input;
+    //input of C
+    Rcpp::List C_input;
+    C_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_stationary_cov_;
+    C_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_stationary_cov_;
+    C_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_stationary_cov_;
+    C_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_stationary_cov_;
+    inputs_info[FDAGWR_HELPERS_for_PRED_NAMES::cov + covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()] = C_input;
     //input of E
     Rcpp::List E_input;
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_events_cov_;
@@ -691,15 +740,17 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_events_cov_;
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_events_cov_;
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = toRList(coefficients_events_cov_,false);
-    E_input["coordinates"] = coordinates_events_out_;
-    inputs_info["cov_" + covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()] = E_input;
+    E_input[FDAGWR_HELPERS_for_PRED_NAMES::penalties] = lambda_events_cov_;
+    E_input[FDAGWR_HELPERS_for_PRED_NAMES::coords] = Rcpp::wrap(coordinates_events_out_);
+    E_input[FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker + covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()] = kernel_bandwith_events;
+    inputs_info[FDAGWR_HELPERS_for_PRED_NAMES::cov + covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()] = E_input;
     //input of Beta E   
     Rcpp::List beta_E_input;
     beta_E_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_beta_events_cov_;
     beta_E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_beta_events_cov_;
     beta_E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_beta_events_cov_;
     beta_E_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_beta_events_cov_;
-    inputs_info["beta_" + covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()] = beta_E_input;
+    inputs_info[FDAGWR_HELPERS_for_PRED_NAMES::beta + covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()] = beta_E_input;
     //input of S    
     Rcpp::List S_input;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_stations_cov_;
@@ -707,15 +758,19 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_stations_cov_;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_stations_cov_;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = toRList(coefficients_stations_cov_,false);
-    S_input["coordinates"] = coordinates_stations_out_;
-    inputs_info["cov_" + covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()] = S_input;
+    S_input[FDAGWR_HELPERS_for_PRED_NAMES::penalties] = lambda_stations_cov_;
+    S_input[FDAGWR_HELPERS_for_PRED_NAMES::coords] = Rcpp::wrap(coordinates_stations_out_);
+    S_input[FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker + covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()] = kernel_bandwith_stations;
+    inputs_info[FDAGWR_HELPERS_for_PRED_NAMES::cov + covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()] = S_input;
     //input of Beta S
     Rcpp::List beta_S_input;
     beta_S_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_beta_stations_cov_;
     beta_S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_beta_stations_cov_;
     beta_S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_beta_stations_cov_;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_beta_stations_cov_;
-    inputs_info["beta_" + covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()] = beta_S_input;
+    inputs_info[FDAGWR_HELPERS_for_PRED_NAMES::beta + covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()] = beta_S_input;
+    //abscissa
+    inputs_info[FDAGWR_HELPERS_for_PRED_NAMES::abscissa] = abscissa_points_;
     //adding all the elements to perform prediction
     elem_for_pred[FDAGWR_HELPERS_for_PRED_NAMES::inputs_info] = inputs_info;
     l[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred] = elem_for_pred;
@@ -723,6 +778,89 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     return l;
 }
 
+/*!
+* @brief
+* @param partial_res: a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:
+*                             - "partial_res": a list containing information to compute the partial residuals:
+*                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon
+*                                              - "A__": vector of matrices with the operator A_e for each statistical unit
+*                                              - "B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit
+*                             - "inputs_info": a list containing information about the data used to fit the model:
+*                                              - "Response": list:
+*                                                            - "basis_num":
+*                                                            - "basis_type":
+*                                                            - "basis_deg":
+*                                                            - "knots":
+*                                              - "Response reconstruction weights": list:
+*                                                            - "basis_num":
+*                                                            - "basis_type":
+*                                                            - "basis_deg":
+*                                                            - "knots":
+*                                                            - "basis_coeff":
+*                                              - "cov_Event": list:
+*                                                            - "basis_num":
+*                                                            - "basis_type":
+*                                                            - "basis_deg":
+*                                                            - "knots":
+*                                                            - "basis_coeff":
+*                                                            - "coordinates":
+*                                                            - "kernel_bwd_Event":
+*                                              - "beta_Event": list:
+*                                                            - "basis_num":
+*                                                            - "basis_type":
+*                                                            - "basis_deg":
+*                                                            - "knots":
+*                                              - "cov_Station": list:
+*                                                            - "basis_num":
+*                                                            - "basis_type":
+*                                                            - "basis_deg":
+*                                                            - "knots":
+*                                                            - "basis_coeff":
+*                                                            - "coordinates":
+*                                                            - "kernel_bwd_Station":
+*                                              - "beta_Station": list:
+*                                                            - "basis_num":
+*                                                            - "basis_type":
+*                                                            - "basis_deg":
+*                                                            - "knots":
+* @details NB: LE COVARIATE DEVONO ESSERE SAMPLATE IN CORRISPONDENZA DEI SAMPLE POINTS CHE SONO STATI USATI NEL FITTING
+* @todo LE BASI DEVONO ESSERE LE STESSE??????? DICO AD ESE TRA LE STAZTIONARIE CHE HO USATO NEL FITTING E LE NUOVE?
+*/
+//
+// [[Rcpp::export]]
+Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
+                              Rcpp::List coeff_events_cov_to_pred,
+                              Rcpp::NumericMatrix coordinates_events_to_pred,
+                              Rcpp::List coeff_stations_cov_to_pred,
+                              Rcpp::NumericMatrix coordinates_stations_to_pred,
+                              Rcpp::List partial_res,
+                              int n_intervals_trapezoidal_quadrature = 100,
+                              double target_error_trapezoidal_quadrature = 1e-3,
+                              int max_iterations_trapezoidal_quadrature = 100,
+                              Rcpp::Nullable<int> num_threads = R_NilValue)
+{
+    Rcpp::List l;
+    return l;
+}
+
+
+
+
+//
+// [[Rcpp::export]]
+Rcpp::List FMSGWR_ESC(double input_el = 1,
+                      Rcpp::Nullable<int> num_threads = R_NilValue)
+{
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::GWR_FMS_SEC;                          //fgwr type (estimating stationary -> event-dependent -> station-dependent)
+    
+    
+    //returning element
+    Rcpp::List l;
+    //regression model used 
+    l["FGWR"] = algo_type<_FGWR_ALGO_>();
+
+    return l;
+}
 
 
 
@@ -730,15 +868,20 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
 //
 // [[Rcpp::export]]
 Rcpp::List FSGWR(double input_el = 1,
-                 Rcpp::Nullable<int> num_threads = R_NilValue){
-    //funzione per il source gwr
-
+                 Rcpp::Nullable<int> num_threads = R_NilValue)
+{
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::GWR_FOS;                          //fgwr type (estimating stationary -> non-stationary)
+    
+    
     //returning element
     Rcpp::List l;
+    //regression model used 
+    l["FGWR"] = algo_type<_FGWR_ALGO_>();
 
-    l["FGWR"] = "FSGWR";
     return l;
 }
+
+
 
 
 //
@@ -746,16 +889,78 @@ Rcpp::List FSGWR(double input_el = 1,
 Rcpp::List FGWR(double input_el=1,
                 Rcpp::Nullable<int> num_threads = R_NilValue)
 {
-    //funzione per il gwr
 
-    //checking and wrapping input parameters
-    //int number_threads = wrap_num_thread(num_threads);
-
-    //using _FD_INPUT_TYPE_ = double;
-    //using _FD_OUTPUT_TYPE_ = double;
-
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::GWR_FST;                          //fgwr type (estimating stationary)
 
     
+    //returning element
+    Rcpp::List l;
+    //regression model used 
+    l["FGWR"] = algo_type<_FGWR_ALGO_>();
+
+    return l;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
    //TESTING ETs WITHIN FUNCTIONS
@@ -920,13 +1125,3 @@ Rcpp::List FGWR(double input_el=1,
     auto test_sm_rv_t = test_sm_rv.transpose();
 */
 
-
-
-
-    //returning element
-    Rcpp::List l;
-
-    l["FGWR"] = "FGWR";
-
-    return l;
-}
