@@ -739,4 +739,28 @@ wrap_num_thread(Rcpp::Nullable<int> num_threads)
 #endif
 }
 
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+///// FUNCTIONS to check input consistency for the predict function input  /////
+////////////////////////////////////////////////////////////////////////////////
+template< FDAGWR_ALGO fdagwr_algo >
+void
+wrap_predict_input(Rcpp::List pred_input)
+{
+  //fmsgwr esc
+  if constexpr( fdagwr_algo == FDAGWR_ALGO::GWR_FMS_ESC)
+  {
+    //check input list
+    if (pred_input.size() != 8){ throw std::invalid_argument("Lenght of input list has to be 8");}
+
+    //check that derives from the right algorithm
+    if( pred_input["FGWR"] != algo_type<_FGWR_ALGO_>()){ throw std::invalid_argument("It is not a fitted FMS_GWR_ESC");}
+  }
+}
+
+
+
+
 #endif  /*FDAGWR_WRAP_PARAMS_HPP*/

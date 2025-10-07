@@ -156,6 +156,8 @@ struct FDAGWR_HELPERS_for_PRED_NAMES
 
   static constexpr std::string inputs_info = "inputs_info";
 
+  static constexpr std::string q = "number_covariates";
+
   static constexpr std::string coeff_basis = "basis_coeff";
 
   static constexpr std::string n_basis = "basis_num";
@@ -176,7 +178,13 @@ struct FDAGWR_HELPERS_for_PRED_NAMES
 
   static constexpr std::string beta = "beta_";
 
+  static constexpr std::string n = "n";
+
   static constexpr std::string abscissa = "abscissa";
+
+  static constexpr std::string a = "a";
+
+  static constexpr std::string b = "b";
 };
 
 
