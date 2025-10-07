@@ -1087,15 +1087,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
 
 
-/*
 
-,,,,,,,,
-q_s,basis_number_stations_cov_,basis_type_stations_cov_,basis_degree_stations_cov_,knots_stations_cov_,knots_stations_cov_eigen_w_,coefficients_stations_cov_,lambdas_stations_,coordinates_stations_,kernel_bdw_stations_
-basis_number_beta_stationary_cov_,basis_type_beta_stationary_cov_,basis_degree_beta_stationary_cov_,knots_beta_stationary_cov_,knots_beta_stationary_cov_eigen_w_,bc
-basis_number_beta_events_cov_,basis_type_beta_events_cov_,basis_degree_beta_events_cov_,knots_beta_events_cov_,knots_beta_events_cov_eigen_w_
-basis_number_beta_stations_cov_,basis_type_beta_stations_cov_,basis_degree_beta_stations_cov_,knots_beta_stations_cov_,knots_beta_stations_cov_eigen_w_
-
-*/
 
     Rcout << "Print for debugging" << std::endl;
 /*
@@ -1111,8 +1103,9 @@ basis_number_beta_stations_cov_,basis_type_beta_stations_cov_,basis_degree_beta_
     Rcout << knots_response_rec_w_eigen_w_ << std::endl;
     Rcout << "coef:" << std::endl;
     Rcout << coeff_response_rec_w_ << std::endl;
-*/
-    Rcout << "Stationary cov: sono " << q_c << ", knots:" <<std::endl;
+
+
+        Rcout << "Stationary cov: sono " << q_c << ", knots:" <<std::endl;
     for(std::size_t i = 0; i < knots_stationary_cov_.size(); ++i){Rcout << knots_stationary_cov_[i] << std::endl;}
     Rcout << knots_stationary_cov_eigen_w_ << std::endl;
 
@@ -1121,8 +1114,7 @@ basis_number_beta_stations_cov_,basis_type_beta_stations_cov_,basis_degree_beta_
         Rcout << "Cov " << i+1 << "-th: nb: " << basis_number_stationary_cov_[i] << ", t: " << basis_type_stationary_cov_[i] << ", deg: "<< basis_degree_stationary_cov_[i] << std::endl;
     }
 
-
-        Rcout << "Event cov: sono " << q_e << ", kernel: " << kernel_bdw_events_ << ", knots:" <<std::endl;
+            Rcout << "Event cov: sono " << q_e << ", kernel: " << kernel_bdw_events_ << ", knots:" <<std::endl;
     for(std::size_t i = 0; i < knots_events_cov_.size(); ++i){Rcout << knots_events_cov_[i] << std::endl;}
     Rcout << knots_events_cov_eigen_w_ << std::endl;
 
@@ -1137,6 +1129,52 @@ basis_number_beta_stations_cov_,basis_type_beta_stations_cov_,basis_degree_beta_
     {
         Rcout << "Cov " << coefficients_events_cov_[i] << std::endl;
     }
+*/
+
+
+
+        Rcout << "Station cov: sono " << q_s << ", kernel: " << kernel_bdw_stations_ << ", knots:" <<std::endl;
+    for(std::size_t i = 0; i < knots_stations_cov_.size(); ++i){Rcout << knots_stations_cov_[i] << std::endl;}
+    Rcout << knots_stations_cov_eigen_w_ << std::endl;
+
+    for(std::size_t i = 0; i < q_s; ++i)
+    {
+        Rcout << "Cov " << i+1 << "-th: nb: " << basis_number_stations_cov_[i] << ", t: " << basis_type_stations_cov_[i] << ", deg: "<< basis_degree_stations_cov_[i] << ", lambdas: " << lambdas_stations_[i] << std::endl;
+    }
+    Rcout << "Coordinates:" << std::endl;
+    Rcout << coordinates_stations_ << std::endl;
+    Rcout << "Coeff" << std::endl;
+        for(std::size_t i = 0; i < q_s; ++i)
+    {
+        Rcout << "Cov " << coefficients_stations_cov_[i] << std::endl;
+    }
+
+
+
+            Rcout << "Beta stationary cov: sono " <<std::endl;
+    for(std::size_t i = 0; i < knots_beta_stationary_cov_.size(); ++i){Rcout << knots_beta_stationary_cov_[i] << std::endl;}
+    Rcout << knots_beta_stationary_cov_eigen_w_ << std::endl;
+
+    for(std::size_t i = 0; i < q_c; ++i)
+    {
+        Rcout << "Cov " << i+1 << "-th: nb: " << basis_number_beta_stationary_cov_[i] << ", t: " << basis_type_beta_stationary_cov_[i] << ", deg: "<< basis_degree_beta_stationary_cov_[i] << std::endl;
+    }
+
+    Rcout << "Coeff" << std::endl;
+        for(std::size_t i = 0; i < q_c; ++i)
+    {
+        Rcout << bc[i] << std::endl;
+    }
+
+
+
+
+    /*
+
+basis_number_beta_events_cov_,basis_type_beta_events_cov_,basis_degree_beta_events_cov_,knots_beta_events_cov_,knots_beta_events_cov_eigen_w_
+basis_number_beta_stations_cov_,basis_type_beta_stations_cov_,basis_degree_beta_stations_cov_,knots_beta_stations_cov_,knots_beta_stations_cov_eigen_w_
+
+*/
     
     
 
