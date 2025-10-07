@@ -907,7 +907,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
     //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
-    if(units_to_be_predicted <= 0){ Rcout << "Number of unit to be predicted has to be a positive number" << std::endl;}
+
 
     using _DATA_TYPE_ = double;                                                     //data type
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
@@ -923,6 +923,10 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;                        //enum for euclidean distance within statistical units locations
     constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                                //kernel function to smooth the distances within statistcal units locations
     constexpr auto _NAN_REM_ = REM_NAN::MR;                                         //how to remove nan (with mean of non-nans)
+    
+    if(units_to_be_predicted <= 0){ Rcout << "Number of unit to be predicted has to be a positive number" << std::endl;}
+    //checking that the model_fitted contains a fit from FMSGWR_ESC
+    wrap_predict_input<_FGWR_ALGO_>(model_fitted);
     
     //instance of the factory for the basis
     basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());    
@@ -944,81 +948,105 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     ////////////////////////////////////////////////////////////
     /////// RETRIEVING INFORMATION FROM THE MODEL FITTED ///////
     ////////////////////////////////////////////////////////////
-    //input dimension for the fitted model
-    wrap_predict_input<_FGWR_ALGO_>(model_fitted);
+    //list with the fitted model
+    Rcpp::List fitted_model      = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred];
+    //list with partial residuals
+    Rcpp::List partial_residuals = fitted_model[FDAGWR_HELPERS_for_PRED_NAMES::p_res];
+    //lists with the input of the training
+    Rcpp::List training_input    = fitted_model[FDAGWR_HELPERS_for_PRED_NAMES::inputs_info];
+    //list with elements of the response
+    Rcpp::List response_input            = training_input[FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_RESPONSE_>];
+    //list with elements of response reconstruction weights
+    Rcpp::List response_rec_w_input      = training_input[FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_REC_WEIGHTS_>];
+    //list with elements of stationary covariates
+    Rcpp::List stationary_cov_input      = training_input[FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATIONARY_>];
+    //list with elements of the beta of stationary covariates
+    Rcpp::List beta_stationary_cov_input = training_input[FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATIONARY_>];
+    //list with elements of events-dependent covariates
+    Rcpp::List events_cov_input          = training_input[FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>];
+    //list with elements of the beta of events-dependent covariates
+    Rcpp::List beta_events_cov_input     = training_input[FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>];
+    //list with elements of stations-dependent covariates
+    Rcpp::List stations_cov_input        = training_input[FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>];
+    //list with elements of the beta of stations-dependent covariates
+    Rcpp::List beta_stations_cov_input   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>];
+
     //domain
-    _FD_INPUT_TYPE_ a = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::a];
-    _FD_INPUT_TYPE_ b = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::b];
-    std::vector<_FD_INPUT_TYPE_> abscissa_points_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::abscissa];
+    std::size_t n_train = training_input[FDAGWR_HELPERS_for_PRED_NAMES::n];
+    _FD_INPUT_TYPE_ a   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::a];
+    _FD_INPUT_TYPE_ b   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::b];
+    std::vector<_FD_INPUT_TYPE_> abscissa_points_ = training_input[FDAGWR_HELPERS_for_PRED_NAMES::abscissa];
     //RESPONSE
-    std::size_t basis_number_response_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_RESPONSE_>][FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
-    std::string basis_type_response_   = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_RESPONSE_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
-    std::size_t basis_degree_response_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_RESPONSE_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
-    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_RESPONSE_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
+    std::size_t basis_number_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
+    std::string basis_type_response_   = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
+    std::size_t basis_degree_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_response_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_.data(),knots_response_.size());
     //RESPONDE RECONSTRUCTION WEIGHTS
-    std::size_t basis_number_response_rec_w_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_REC_WEIGHTS_>][FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
-    std::string basis_type_response_rec_w_   = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_REC_WEIGHTS_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
-    std::size_t basis_degree_response_rec_w_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_REC_WEIGHTS_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
-    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_rec_w_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_REC_WEIGHTS_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
+    std::size_t basis_number_response_rec_w_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
+    std::string basis_type_response_rec_w_   = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
+    std::size_t basis_degree_response_rec_w_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_rec_w_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_response_rec_w_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_rec_w_.data(),knots_response_rec_w_.size());
-    auto coeff_response_rec_w_ = reader_data<_DATA_TYPE_,_NAN_REM_>(model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_REC_WEIGHTS_>][FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);  
+    auto coeff_response_rec_w_ = reader_data<_DATA_TYPE_,_NAN_REM_>(response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);  
     //STATIONARY COV
-    std::size_t q_c                                       = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATIONARY_>][FDAGWR_HELPERS_for_PRED_NAMES::q];
-    std::vector<std::size_t> basis_number_stationary_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATIONARY_>][FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
-    std::vector<std::string> basis_type_stationary_cov_   = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATIONARY_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
-    std::vector<std::size_t> basis_degree_stationary_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATIONARY_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
-    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_stationary_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATIONARY_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
+    std::size_t q_c                                       = stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::q];
+    std::vector<std::size_t> basis_number_stationary_cov_ = stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
+    std::vector<std::string> basis_type_stationary_cov_   = stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
+    std::vector<std::size_t> basis_degree_stationary_cov_ = stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_stationary_cov_ = stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_stationary_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_stationary_cov_.data(),knots_stationary_cov_.size());
     //EVENTS COV
-    std::size_t q_e                                   = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::q];
-    std::vector<std::size_t> basis_number_events_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
-    std::vector<std::string> basis_type_events_cov_   = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
-    std::vector<std::size_t> basis_degree_events_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
-    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_events_cov_       = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
+    std::size_t q_e                                   = events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::q];
+    std::vector<std::size_t> basis_number_events_cov_ = events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
+    std::vector<std::string> basis_type_events_cov_   = events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
+    std::vector<std::size_t> basis_degree_events_cov_ = events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_events_cov_       = events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_events_cov_eigen_w_             = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_events_cov_.data(),knots_events_cov_.size());
-    std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<_STATIONARY_>(model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
-    std::vector<double> lambdas_events_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::penalties];
-    auto coordinates_events_            = reader_data<_DATA_TYPE_,_NAN_REM_>(model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::coords]);     
-    double kernel_bdw_events_           = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker];
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_events_cov_ = wrap_covariates_coefficients<_EVENT_>(events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
+    std::vector<double> lambdas_events_ = events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::penalties];
+    auto coordinates_events_            = reader_data<_DATA_TYPE_,_NAN_REM_>(events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::coords]);     
+    double kernel_bdw_events_           = events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker];
     //STATIONS COV
-    std::size_t q_s                                     = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>][FDAGWR_HELPERS_for_PRED_NAMES::q];
-    std::vector<std::size_t> basis_number_stations_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>][FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
-    std::vector<std::string> basis_type_stations_cov_   = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
-    std::vector<std::size_t> basis_degree_stations_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
-    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_stations_cov_       = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
+    std::size_t q_s                                     = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::q];
+    std::vector<std::size_t> basis_number_stations_cov_ = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
+    std::vector<std::string> basis_type_stations_cov_   = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
+    std::vector<std::size_t> basis_degree_stations_cov_ = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_stations_cov_       = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_stations_cov_eigen_w_             = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_stations_cov_.data(),knots_stations_cov_.size());
-    std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<_STATIONARY_>(model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>][FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
-    std::vector<double> lambdas_stations_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>][FDAGWR_HELPERS_for_PRED_NAMES::penalties];
-    auto coordinates_stations_            = reader_data<_DATA_TYPE_,_NAN_REM_>(model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::coords]);
-    double kernel_bdw_events_             = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::cov + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>][FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker];
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<_STATIONARY_>(stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
+    std::vector<double> lambdas_stations_ = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::penalties];
+    auto coordinates_stations_            = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::coords]);
+    double kernel_bdw_events_             = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker];
     
     ///////////////
     //// BETAS ////
     ///////////////
     //STATIONARY BETAS
-    std::vector<std::size_t> basis_number_beta_stationary_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATIONARY_>][FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
-    std::vector<std::string> basis_type_beta_stationary_cov_   = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATIONARY_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
-    std::vector<std::size_t> basis_degree_beta_stationary_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATIONARY_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
-    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stationary_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATIONARY_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
+    std::vector<std::size_t> basis_number_beta_stationary_cov_ = beta_stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
+    std::vector<std::string> basis_type_beta_stationary_cov_   = beta_stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
+    std::vector<std::size_t> basis_degree_beta_stationary_cov_ = beta_stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stationary_cov_ = beta_stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_beta_stationary_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stationary_cov_.data(),knots_beta_stationary_cov_.size());
     //saving the betas basis expansion coefficients
     std::vector<FDAGWR_TRAITS::Dense_Matrix> bc;
     bc.reserve(q_c);
+    Rcpp::List bc_list = model_fitted[FDAGWR_B_NAMES::bc];
     for(std::size_t i = 0; i < q_c; ++i){
-        auto bc_i = reader_data<_DATA_TYPE_,_NAN_REM_>(model_fitted[FDAGWR_B_NAMES::bc][i][FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
+        Rcpp::List bc_i_list = bc_list[i];
+        auto bc_i = reader_data<_DATA_TYPE_,_NAN_REM_>(bc_i_list[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
         bc.push_back(bc_i);}
     //EVENTS BETAS
-    std::vector<std::size_t> basis_number_beta_events_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
-    std::vector<std::string> basis_type_beta_events_cov_   = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
-    std::vector<std::size_t> basis_degree_beta_events_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
-    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_events_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_EVENT_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
+    std::vector<std::size_t> basis_number_beta_events_cov_ = beta_events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
+    std::vector<std::string> basis_type_beta_events_cov_   = beta_events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
+    std::vector<std::size_t> basis_degree_beta_events_cov_ = beta_events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_events_cov_ = beta_events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_beta_events_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_events_cov_.data(),knots_beta_events_cov_.size()); 
     //STATIONS BETAS
-    std::vector<std::size_t> basis_number_beta_stations_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>][FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
-    std::vector<std::string> basis_type_beta_stations_cov_   = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
-    std::vector<std::size_t> basis_degree_beta_stations_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
-    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stations_cov_ = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred][FDAGWR_HELPERS_for_PRED_NAMES::inputs_info][FDAGWR_HELPERS_for_PRED_NAMES::beta + FDAGWR_HELPERS_for_PRED_NAMES::covariate_type()<_STATION_>][FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
+    std::vector<std::size_t> basis_number_beta_stations_cov_ = beta_stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
+    std::vector<std::string> basis_type_beta_stations_cov_   = beta_stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
+    std::vector<std::size_t> basis_degree_beta_stations_cov_ = beta_stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stations_cov_ = beta_stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_beta_stations_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stations_cov_.data(),knots_beta_stations_cov_.size());
     
     
