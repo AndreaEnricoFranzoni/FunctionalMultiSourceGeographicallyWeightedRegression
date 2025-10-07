@@ -790,7 +790,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     beta_S_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis]  = number_basis_beta_stations_cov_;
     beta_S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t] = basis_types_beta_stations_cov_;
     beta_S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]  = degree_basis_beta_stations_cov_;
-    S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_beta_stations_cov_;
+    beta_S_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = knots_beta_stations_cov_;
     inputs_info[FDAGWR_HELPERS_for_PRED_NAMES::beta + covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()] = beta_S_input;
     //domain
     inputs_info[FDAGWR_HELPERS_for_PRED_NAMES::n] = number_of_statistical_units_;
