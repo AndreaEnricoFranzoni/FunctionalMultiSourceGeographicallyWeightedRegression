@@ -764,7 +764,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = toRList(coefficients_events_cov_,false);
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::penalties] = lambda_events_cov_;
     E_input[FDAGWR_HELPERS_for_PRED_NAMES::coords] = Rcpp::wrap(coordinates_events_out_);
-    E_input[FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker + covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()] = kernel_bandwith_events;
+    E_input[FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker] = kernel_bandwith_events;
     inputs_info[FDAGWR_HELPERS_for_PRED_NAMES::cov + covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()] = E_input;
     //input of Beta E   
     Rcpp::List beta_E_input;
@@ -783,7 +783,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = toRList(coefficients_stations_cov_,false);
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::penalties] = lambda_stations_cov_;
     S_input[FDAGWR_HELPERS_for_PRED_NAMES::coords] = Rcpp::wrap(coordinates_stations_out_);
-    S_input[FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker + covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()] = kernel_bandwith_stations;
+    S_input[FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker] = kernel_bandwith_stations;
     inputs_info[FDAGWR_HELPERS_for_PRED_NAMES::cov + covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()] = S_input;
     //input of Beta S
     Rcpp::List beta_S_input;
