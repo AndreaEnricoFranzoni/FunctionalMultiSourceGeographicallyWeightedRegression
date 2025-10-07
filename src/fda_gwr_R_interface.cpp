@@ -1023,7 +1023,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     FDAGWR_TRAITS::Dense_Vector knots_stations_cov_eigen_w_             = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_stations_cov_.data(),knots_stations_cov_.size());
     std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<_STATIONARY_>(stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
     std::vector<double> lambdas_stations_ = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::penalties];
-    auto coordinates_stations_            = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::coords];
+    auto coordinates_stations_            = reader_data<_DATA_TYPE_,_NAN_REM_>(stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::coords]);
     double kernel_bdw_stations_           = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker];
     
     ///////////////
