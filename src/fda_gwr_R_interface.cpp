@@ -1163,7 +1163,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     Rcout << "Coeff" << std::endl;
         for(std::size_t i = 0; i < q_c; ++i)
     {
-        Rcout << "Cov " << i+1 << "-th coeff"
+        Rcout << "Cov " << i+1 << "-th coeff" << std::endl;
         Rcout << bc[i] << std::endl;
 
     }
