@@ -1163,19 +1163,35 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     Rcout << "Coeff" << std::endl;
         for(std::size_t i = 0; i < q_c; ++i)
     {
+        Rcout << "Cov " << i+1 << "-th coeff"
         Rcout << bc[i] << std::endl;
+
     }
 
 
 
+                Rcout << "Beta event cov: sono " <<std::endl;
+    for(std::size_t i = 0; i < knots_beta_events_cov_.size(); ++i){Rcout << knots_beta_events_cov_[i] << std::endl;}
+    Rcout << knots_beta_events_cov_eigen_w_ << std::endl;
 
-    /*
+    for(std::size_t i = 0; i < q_e; ++i)
+    {
+        Rcout << "Cov " << i+1 << "-th: nb: " << basis_number_beta_events_cov_[i] << ", t: " << basis_type_beta_events_cov_[i] << ", deg: "<< basis_degree_beta_events_cov_[i] << std::endl;
+    }
 
-basis_number_beta_events_cov_,basis_type_beta_events_cov_,basis_degree_beta_events_cov_,knots_beta_events_cov_,knots_beta_events_cov_eigen_w_
-basis_number_beta_stations_cov_,basis_type_beta_stations_cov_,basis_degree_beta_stations_cov_,knots_beta_stations_cov_,knots_beta_stations_cov_eigen_w_
 
-*/
-    
+
+                Rcout << "Beta station cov: sono " <<std::endl;
+    for(std::size_t i = 0; i < knots_beta_stations_cov_.size(); ++i){Rcout << knots_beta_stations_cov_[i] << std::endl;}
+    Rcout << knots_beta_stations_cov_eigen_w_ << std::endl;
+
+    for(std::size_t i = 0; i < q_s; ++i)
+    {
+        Rcout << "Cov " << i+1 << "-th: nb: " << basis_number_beta_stations_cov_[i] << ", t: " << basis_type_beta_stations_cov_[i] << ", deg: "<< basis_degree_beta_stations_cov_[i] << std::endl;
+    }
+
+
+
     
 
     Rcpp::List l;
