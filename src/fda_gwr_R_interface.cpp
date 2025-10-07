@@ -1098,7 +1098,7 @@ basis_number_beta_stations_cov_,basis_type_beta_stations_cov_,basis_degree_beta_
     Rcout << "Response: nb: " << basis_number_response_ << ", t: " << basis_type_response_ << ", deg: " << basis_degree_response_ << ", knots: " << std::endl;
     for(std::size_t i = 0; i < knots_response_.size(); ++i){Rcout << knots_response_[i] << std::endl;}
     Rcout << knots_response_eigen_w_ << std::endl;
-    Rcout "Response rec w: nb: " << basis_number_response_rec_w_ << ", t: " << basis_type_response_rec_w_ << ", deg: " << basis_degree_response_rec_w_ << ", knots: " << std::endl;
+    Rcout << "Response rec w: nb: " << basis_number_response_rec_w_ << ", t: " << basis_type_response_rec_w_ << ", deg: " << basis_degree_response_rec_w_ << ", knots: " << std::endl;
     for(std::size_t i = 0; i < knots_response_rec_w_.size(); ++i){Rcout << knots_response_rec_w_[i] << std::endl;}
     Rcout << knots_response_rec_w_eigen_w_ << std::endl;
     Rcout << "coef:" << std::endl;
