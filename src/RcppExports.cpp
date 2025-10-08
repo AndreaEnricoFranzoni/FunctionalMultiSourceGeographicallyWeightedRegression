@@ -11,12 +11,12 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// check_installation_fdagwr
-void check_installation_fdagwr();
-RcppExport SEXP _fdagwr_check_installation_fdagwr() {
+// installation_fdagwr
+void installation_fdagwr();
+RcppExport SEXP _fdagwr_installation_fdagwr() {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    check_installation_fdagwr();
+    installation_fdagwr();
     return R_NilValue;
 END_RCPP
 }
@@ -141,7 +141,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_fdagwr_check_installation_fdagwr", (DL_FUNC) &_fdagwr_check_installation_fdagwr, 0},
+    {"_fdagwr_installation_fdagwr", (DL_FUNC) &_fdagwr_installation_fdagwr, 0},
     {"_fdagwr_FMSGWR_ESC", (DL_FUNC) &_fdagwr_FMSGWR_ESC, 52},
     {"_fdagwr_predict_FMSGWR_ESC", (DL_FUNC) &_fdagwr_predict_FMSGWR_ESC, 11},
     {"_fdagwr_FMSGWR_SEC", (DL_FUNC) &_fdagwr_FMSGWR_SEC, 2},

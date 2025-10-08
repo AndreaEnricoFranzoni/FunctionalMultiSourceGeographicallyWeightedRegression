@@ -274,15 +274,15 @@ public:
         //A_E_i
         std::cout << "Computing A_e_i" << std::endl;
         m_A_e = this->compute_operator(m_theta_t,m_Xe_t,m_We,m_phi,j_double_tilde_Re_inv);
-        std::cout << "A_e_i rows: " << m_A_e[0].rows() << ", A_e_i cols: " << m_A_e[0].cols() << std::endl;
+        for(std::size_t i = 0; i < m_A_e.size(); ++i){std::cout << "A_e_i " << i+1 << "-th rows: " << m_A_e[i].rows() << ", cols: " << m_A_e[i].cols() << std::endl;}
         //B_E_i
         std::cout << "Computing B_e_i" << std::endl;
         m_B_e = this->compute_operator(m_theta_t,m_Xe_t,m_We,m_Xc,m_omega,j_double_tilde_Re_inv);
-        std::cout << "B_e_i rows: " << m_B_e[0].rows() << ", B_e_i cols: " << m_B_e[0].cols() << std::endl;
+        for(std::size_t i = 0; i < m_B_e.size(); ++i){std::cout << "B_e_i " << i+1 << "-th rows: " << m_B_e[i].rows() << ", cols: " << m_B_e[i].cols() << std::endl;}
         //B_E_i_for_K_e_s
         std::cout << "Computing Be_for_K_e_s" << std::endl;
         m_B_e_for_K_e_s = this->compute_operator(m_theta_t,m_Xe_t,m_We,m_Xs,m_psi,j_double_tilde_Re_inv);
-        std::cout << "Be_for_K_e_s rows: " << Be_for_K_e_s[0].rows() << ", Be_for_K_e_s cols: " << Be_for_K_e_s[0].cols() << std::endl;
+        for(std::size_t i = 0; i < m_B_e_for_K_e_s.size(); ++i){std::cout << "Be_for_K_e_s " << i+1 << "-th rows: " << m_B_e_for_K_e_s[i].rows() << ", cols: " << m_B_e_for_K_e_s[i].cols() << std::endl;}
         //K_e_s(t)
         std::cout << "Computing K_e_s" << std::endl;
         functional_matrix<INPUT,OUTPUT> K_e_s = this->compute_functional_operator(m_Xe,m_theta,Be_for_K_e_s);
@@ -299,7 +299,7 @@ public:
         //A_S_i
         std::cout << "Computing m_A_s" << std::endl;
         m_A_s = this->compute_operator(X_s_crossed_t,m_Ws,m_phi,j_tilde_Rs_inv);
-        std::cout << "m_A_s rows: " << m_A_s[0].rows() << ", m_A_s cols: " << m_A_s[0].cols() << std::endl;
+        for(std::size_t i = 0; i < m_A_s.size(); ++i){std::cout << "m_A_s " << i+1 << "-th rows: " << m_A_s[i].rows() << ", cols: " << m_A_s[i].cols() << std::endl;}
         //H_e(t)
         std::cout << "Computing H_e" << std::endl;
         functional_matrix<INPUT,OUTPUT> H_e = this->compute_functional_operator(m_Xe,m_theta,m_A_e);
@@ -319,7 +319,7 @@ public:
         //A_ES_i
         std::cout << "Computing A_ES_i" << std::endl;
         m_A_es = this->compute_operator(m_theta_t,m_Xe_t,m_We,H_s,j_double_tilde_Re_inv);
-        std::cout << "m_A_es rows: " << m_A_es[0].rows() << ", m_A_es cols: " << m_A_es[0].cols() << std::endl;
+        for(std::size_t i = 0; i < m_A_es.size(); ++i){std::cout << "m_A_es " << i+1 << "-th rows: " << m_A_es[i].rows() << ", cols: " << m_A_es[i].cols() << std::endl;}
         //H_es(t)
         std::cout << "Computing H_es" << std::endl;
         functional_matrix<INPUT,OUTPUT> H_es = this->compute_functional_operator(m_Xe,m_theta,m_A_es);
@@ -336,7 +336,7 @@ public:
         //B_S_i
         std::cout << "Computing m_B_s" << std::endl;
         m_B_s = this->compute_operator(X_s_crossed_t,m_Ws,m_Xc,m_omega,j_tilde_Rs_inv);
-        std::cout << "m_B_s rows: " << m_B_s[0].rows() << ", m_B_s cols: " << m_B_s[0].cols() << std::endl;
+        for(std::size_t i = 0; i < m_B_s.size(); ++i){std::cout << "m_B_s " << i+1 << "-th rows: " << m_B_s[i].rows() << ", cols: " << m_B_s[i].cols() << std::endl;}
         //K_e_c(t)
         std::cout << "Computing K_e_c" << std::endl;
         functional_matrix<INPUT,OUTPUT> K_e_c = this->compute_functional_operator(m_Xe,m_theta,m_B_e);
@@ -352,7 +352,7 @@ public:
         //B_ES_i
         std::cout << "Computing m_B_es" << std::endl;
         m_B_es = this->compute_operator(m_theta_t,m_Xe_t,m_We,K_s_c,j_double_tilde_Re_inv);
-        std::cout << "m_B_es rows: " << m_B_es[0].rows() << ", m_B_es cols: " << m_B_es[0].cols() << std::endl;
+        for(std::size_t i = 0; i < m_B_es.size(); ++i){std::cout << "m_B_es " << i+1 << "-th rows: " << m_B_es[i].rows() << ", cols: " << m_B_es[i].cols() << std::endl;}
         //K_se_c(t)
         //std::cout << "Computing K_se_c" << std::endl;
         //functional_matrix<INPUT,OUTPUT> K_se_c = this->compute_functional_operator(m_Xs,m_psi,m_B_se);
@@ -399,20 +399,17 @@ public:
         //c_tilde_hat: smoothing on y_tilde_hat(t) with respect of the basis of y
         std::cout << "Computing c_tilde_hat" << std::endl;
         m_c_tilde_hat = columnize_coeff_resp(fm_smoothing<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_smoothing));
-        std::cout << "c_tilde_hat rows: " << c_tilde_hat.rows() << ", c_tilde_hat cols: " << c_tilde_hat.cols() << std::endl;
+        std::cout << "c_tilde_hat rows: " << m_c_tilde_hat.rows() << ", c_tilde_hat cols: " << m_c_tilde_hat.cols() << std::endl;
         //y_tilde_new(t)
         std::cout << "Computing y_tilde_new" << std::endl;
-        functional_matrix<INPUT,OUTPUT> y_tilde_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_e),c_tilde_hat,this->number_threads());
+        functional_matrix<INPUT,OUTPUT> y_tilde_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_e),m_c_tilde_hat,this->number_threads());
         std::cout << "y_tilde_new rows: " << y_tilde_new.rows() << ", y_tilde_new cols: " << y_tilde_new.cols() << std::endl;
 
 
         //COMPUTING all the m_bs, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
         std::cout << "Computing m_bs" << std::endl;
         m_bs = this->compute_operator(X_s_crossed_t,m_Ws,y_tilde_new,j_tilde_Rs_inv);
-        for (std::size_t i = 0; i < m_bs.size(); ++i)
-        {
-            std::cout << "m_bs unit " << i+1 << "-th rows: " << m_bs[i].rows() << ", m_bs cols: " << m_bs[i].cols() << std::endl;
-        }
+        for (std::size_t i = 0; i < m_bs.size(); ++i){std::cout << "m_bs unit " << i+1 << "-th rows: " << m_bs[i].rows() << ", m_bs cols: " << m_bs[i].cols() << std::endl;}
         
         
 
@@ -428,10 +425,7 @@ public:
         m_be = this->compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde_tilde_hat,j_double_tilde_Re_inv);
         
 
-        for (std::size_t i = 0; i < m_be.size(); ++i)
-        {
-            std::cout << "m_be unit " << i+1 << "-th rows: " << m_be[i].rows() << ", m_bs cols: " << m_be[i].cols() << std::endl;
-        }
+        for (std::size_t i = 0; i < m_be.size(); ++i){std::cout << "m_be unit " << i+1 << "-th rows: " << m_be[i].rows() << ", m_bs cols: " << m_be[i].cols() << std::endl;}
 
 
 

@@ -67,8 +67,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void check_installation_fdagwr() {
-  Rcout << "fdagwr has been installed"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr has been installed"<< std::endl;}
 
 
 /*!
