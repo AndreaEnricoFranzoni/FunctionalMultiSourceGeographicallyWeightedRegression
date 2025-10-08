@@ -285,7 +285,7 @@ public:
         for(std::size_t i = 0; i < m_B_e_for_K_e_s.size(); ++i){std::cout << "Be_for_K_e_s " << i+1 << "-th rows: " << m_B_e_for_K_e_s[i].rows() << ", cols: " << m_B_e_for_K_e_s[i].cols() << std::endl;}
         //K_e_s(t)
         std::cout << "Computing K_e_s" << std::endl;
-        functional_matrix<INPUT,OUTPUT> K_e_s = this->compute_functional_operator(m_Xe,m_theta,Be_for_K_e_s);
+        functional_matrix<INPUT,OUTPUT> K_e_s = this->compute_functional_operator(m_Xe,m_theta,m_B_e_for_K_e_s);
         std::cout << "K_e_s rows: " << K_e_s.rows() << ", K_e_s cols: " << K_e_s.cols() << std::endl;
         //X_s_crossed(t)
         std::cout << "Computing X_s_crossed" << std::endl;
