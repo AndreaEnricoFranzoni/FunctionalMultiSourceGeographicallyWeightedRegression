@@ -1107,15 +1107,15 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> > test_f1_f2{f1,f2,f3,f4,f5,f1};
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_fm_1(test_f1_f2,3,2);
 
-    std::vector<OUTPUT> result_integrand;
-    result_integrand.resize(integrand.size());
+    std::vector<_FD_OUTPUT_TYPE_> result_integrand;
+    result_integrand.resize(test_fm_1.size());
 
 #ifdef _OPENMP
 #pragma omp parallel for shared(test_fm_1,result_integrand) num_threads(number_threads)
 #endif
-    for(std::size_t i = 0; i < as_vector().size(); ++i)
+    for(std::size_t i = 0; i < test_fm_1.size(); ++i)
     {
-        result_integrand[i] = integration_test.integrate(as_vector()[i]);
+        result_integrand[i] = integration_test.integrate(test_fm_1.as_vector()[i]);
     }
 
     FDAGWR_TRAITS::Dense_Matrix result_integration = Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(), test_fm_1.rows(), test_fm_1.cols());
