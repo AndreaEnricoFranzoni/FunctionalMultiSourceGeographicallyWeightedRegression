@@ -978,7 +978,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     //list with elements of the beta of stations-dependent covariates
     Rcpp::List beta_stations_cov_input   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::beta + covariate_type<_STATION_>()];
 
-    //domain
+    //DOMAIN INFORMATION
     std::size_t n_train = training_input[FDAGWR_HELPERS_for_PRED_NAMES::n];
     _FD_INPUT_TYPE_ a   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::a];
     _FD_INPUT_TYPE_ b   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::b];
@@ -996,7 +996,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_rec_w_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_response_rec_w_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_rec_w_.data(),knots_response_rec_w_.size());
     auto coeff_response_rec_w_ = reader_data<_DATA_TYPE_,_NAN_REM_>(response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);  
-    //STATIONARY COV    
+    //STATIONARY COV        
     std::size_t q_c                                       = stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::q];
     std::vector<std::size_t> basis_number_stationary_cov_ = stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
     std::vector<std::string> basis_type_stationary_cov_   = stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
@@ -1021,27 +1021,23 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector<std::size_t> basis_degree_stations_cov_ = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_stations_cov_       = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_stations_cov_eigen_w_             = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_stations_cov_.data(),knots_stations_cov_.size());
-    std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<_STATIONARY_>(stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_stations_cov_ = wrap_covariates_coefficients<_STATION_>(stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
     std::vector<double> lambdas_stations_ = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::penalties];
     auto coordinates_stations_            = reader_data<_DATA_TYPE_,_NAN_REM_>(stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::coords]);
-    double kernel_bdw_stations_           = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker];
-    
-    ///////////////
-    //// BETAS ////
-    ///////////////     
+    double kernel_bdw_stations_           = stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker];    
     //STATIONARY BETAS
     std::vector<std::size_t> basis_number_beta_stationary_cov_ = beta_stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
     std::vector<std::string> basis_type_beta_stationary_cov_   = beta_stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
     std::vector<std::size_t> basis_degree_beta_stationary_cov_ = beta_stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stationary_cov_ = beta_stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_beta_stationary_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stationary_cov_.data(),knots_beta_stationary_cov_.size());
-    //saving the betas basis expansion coefficients
+    //saving the betas basis expansion coefficients for stationary covariates
     std::vector<FDAGWR_TRAITS::Dense_Matrix> bc;
     bc.reserve(q_c);
     Rcpp::List bc_list = model_fitted[FDAGWR_B_NAMES::bc];
     for(std::size_t i = 0; i < q_c; ++i){
         Rcpp::List bc_i_list = bc_list[i];
-        auto bc_i = reader_data<_DATA_TYPE_,_NAN_REM_>(bc_i_list[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
+        auto bc_i = reader_data<_DATA_TYPE_,_NAN_REM_>(bc_i_list[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);  //sono tutte 15x1
         bc.push_back(bc_i);}
     //EVENTS BETAS  
     std::vector<std::size_t> basis_number_beta_events_cov_ = beta_events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
@@ -1055,8 +1051,24 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector<std::size_t> basis_degree_beta_stations_cov_ = beta_stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stations_cov_ = beta_stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_beta_stations_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stations_cov_.data(),knots_beta_stations_cov_.size());
-    
-    
+    //saving the betas basis expansion coefficients for station-dependent covariates
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> bs;
+    bs.reserve(q_s);
+    Rcpp::List bs_list = model_fitted[FDAGWR_B_NAMES::bs];
+    for(std::size_t i = 0; i < bs_list.size(); ++i){
+        Rcpp::List bs_i_list = bs_list[i];
+        auto bs_i = wrap_covariates_coefficients<_STATION_>(bs_i_list[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
+        bs.push_back(bs_i);}
+
+    for(std::size_t i = 0; i < bs.size(); ++i){
+        Rcout << "bs cov " << i+1 << "-th" << std::endl;
+        for(std::size_t j = 0; j < bs[i].size(); ++j){
+            Rcout << "Unit of the fitted model " << j+1 << "-th" << std::endl;
+            Rcout << bs[i][j] << std::endl;
+        }
+    }
+
+
     //////////////////////////////////////////////
     ///// WRAPPING COVARIATES TO BE PREDICTED ////
     //////////////////////////////////////////////
@@ -1081,6 +1093,9 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     
 
 
+
+
+
     ///////////////////////////////////////////////////////
     //////////////7/ DISTANCES NEED TO BE COMPUTED   //////
     ///////////////////////////////////////////////////////
@@ -1089,113 +1104,87 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
 
 
-    Rcout << "Print for debugging" << std::endl;
-/*
-    Rcout << "Number of stat u for training: " << n_train << std::endl;
-    Rcout << "Number of u to be predicted" << units_to_be_predicted << std::endl;
-    Rcout << "a: " << a << ", b: " << b << ", domain:" << std::endl;
-    for(std::size_t i = 0; i < abscissa_points_.size(); ++i){Rcout << abscissa_points_[i] << std::endl;}
-    Rcout << "Response: nb: " << basis_number_response_ << ", t: " << basis_type_response_ << ", deg: " << basis_degree_response_ << ", knots: " << std::endl;
-    for(std::size_t i = 0; i < knots_response_.size(); ++i){Rcout << knots_response_[i] << std::endl;}
-    Rcout << knots_response_eigen_w_ << std::endl;
-    Rcout << "Response rec w: nb: " << basis_number_response_rec_w_ << ", t: " << basis_type_response_rec_w_ << ", deg: " << basis_degree_response_rec_w_ << ", knots: " << std::endl;
-    for(std::size_t i = 0; i < knots_response_rec_w_.size(); ++i){Rcout << knots_response_rec_w_[i] << std::endl;}
-    Rcout << knots_response_rec_w_eigen_w_ << std::endl;
-    Rcout << "coef:" << std::endl;
-    Rcout << coeff_response_rec_w_ << std::endl;
-
-
-        Rcout << "Stationary cov: sono " << q_c << ", knots:" <<std::endl;
-    for(std::size_t i = 0; i < knots_stationary_cov_.size(); ++i){Rcout << knots_stationary_cov_[i] << std::endl;}
-    Rcout << knots_stationary_cov_eigen_w_ << std::endl;
-
-    for(std::size_t i = 0; i < q_c; ++i)
-    {
-        Rcout << "Cov " << i+1 << "-th: nb: " << basis_number_stationary_cov_[i] << ", t: " << basis_type_stationary_cov_[i] << ", deg: "<< basis_degree_stationary_cov_[i] << std::endl;
-    }
-
-            Rcout << "Event cov: sono " << q_e << ", kernel: " << kernel_bdw_events_ << ", knots:" <<std::endl;
-    for(std::size_t i = 0; i < knots_events_cov_.size(); ++i){Rcout << knots_events_cov_[i] << std::endl;}
-    Rcout << knots_events_cov_eigen_w_ << std::endl;
-
-    for(std::size_t i = 0; i < q_e; ++i)
-    {
-        Rcout << "Cov " << i+1 << "-th: nb: " << basis_number_events_cov_[i] << ", t: " << basis_type_events_cov_[i] << ", deg: "<< basis_degree_events_cov_[i] << ", lambdas: " << lambdas_events_[i] << std::endl;
-    }
-    Rcout << "Coordinates:" << std::endl;
-    Rcout << coordinates_events_ << std::endl;
-    Rcout << "Coeff" << std::endl;
-        for(std::size_t i = 0; i < q_e; ++i)
-    {
-        Rcout << "Cov " << coefficients_events_cov_[i] << std::endl;
-    }
-
-        Rcout << "Station cov: sono " << q_s << ", kernel: " << kernel_bdw_stations_ << ", knots:" <<std::endl;
-    for(std::size_t i = 0; i < knots_stations_cov_.size(); ++i){Rcout << knots_stations_cov_[i] << std::endl;}
-    Rcout << knots_stations_cov_eigen_w_ << std::endl;
-
-    for(std::size_t i = 0; i < q_s; ++i)
-    {
-        Rcout << "Cov " << i+1 << "-th: nb: " << basis_number_stations_cov_[i] << ", t: " << basis_type_stations_cov_[i] << ", deg: "<< basis_degree_stations_cov_[i] << ", lambdas: " << lambdas_stations_[i] << std::endl;
-    }
-    Rcout << "Coordinates:" << std::endl;
-    Rcout << coordinates_stations_ << std::endl;
-    Rcout << "Coeff" << std::endl;
-        for(std::size_t i = 0; i < q_s; ++i)
-    {
-        Rcout << "Cov " << coefficients_stations_cov_[i] << std::endl;
-    }
-
-
-                Rcout << "Beta event cov: sono " <<std::endl;
-    for(std::size_t i = 0; i < knots_beta_events_cov_.size(); ++i){Rcout << knots_beta_events_cov_[i] << std::endl;}
-    Rcout << knots_beta_events_cov_eigen_w_ << std::endl;
-
-    for(std::size_t i = 0; i < q_e; ++i)
-    {
-        Rcout << "Cov " << i+1 << "-th: nb: " << basis_number_beta_events_cov_[i] << ", t: " << basis_type_beta_events_cov_[i] << ", deg: "<< basis_degree_beta_events_cov_[i] << std::endl;
-    }
 
 
 
 
-
-                Rcout << "Beta station cov: sono " <<std::endl;
-    for(std::size_t i = 0; i < knots_beta_stations_cov_.size(); ++i){Rcout << knots_beta_stations_cov_[i] << std::endl;}
-    Rcout << knots_beta_stations_cov_eigen_w_ << std::endl;
-
-    for(std::size_t i = 0; i < q_s; ++i)
-    {
-        Rcout << "Cov " << i+1 << "-th: nb: " << basis_number_beta_stations_cov_[i] << ", t: " << basis_type_beta_stations_cov_[i] << ", deg: "<< basis_degree_beta_stations_cov_[i] << std::endl;
-    }
-*/
-
-
-
-
-
-
-
-            Rcout << "Beta stationary cov: sono " <<std::endl;
-    for(std::size_t i = 0; i < knots_beta_stationary_cov_.size(); ++i){Rcout << knots_beta_stationary_cov_[i] << std::endl;}
-    Rcout << knots_beta_stationary_cov_eigen_w_ << std::endl;
-
-    for(std::size_t i = 0; i < q_c; ++i)
-    {
-        Rcout << "Cov " << i+1 << "-th: nb: " << basis_number_beta_stationary_cov_[i] << ", t: " << basis_type_beta_stationary_cov_[i] << ", deg: "<< basis_degree_beta_stationary_cov_[i] << std::endl;
-    }
-
-    Rcout << "Coeff" << std::endl;
-        for(std::size_t i = 0; i < q_c; ++i)
-    {
-        Rcout << "Cov " << i+1 << "-th coeff of " << bc[i].rows() << " rows and " << bc[i].cols() << std::endl;
-        Rcout << bc[i] << std::endl;
-
-    }
+    ////////////////////////////////
+    /////    OBJECT CREATION   /////
+    ////////////////////////////////
+    //BASIS SYSTEMS FOR THE BETAS
+    //stationary (Omega)
+    basis_systems< _DOMAIN_, bsplines_basis > bs_C(knots_beta_stationary_cov_eigen_w_, 
+                                                   basis_degree_beta_stationary_cov_, 
+                                                   basis_number_beta_stationary_cov_, 
+                                                   q_c);
+    //events (Theta)
+    basis_systems< _DOMAIN_, bsplines_basis > bs_E(knots_beta_events_cov_eigen_w_, 
+                                                   basis_degree_beta_events_cov_, 
+                                                   basis_number_beta_events_cov_, 
+                                                   q_e);
+    //stations (Psi)
+    basis_systems< _DOMAIN_, bsplines_basis > bs_S(knots_beta_stations_cov_eigen_w_,  
+                                                   basis_degree_beta_stations_cov_, 
+                                                   basis_number_beta_stations_cov_, 
+                                                   q_s);
 
 
+    //PENALIZATION MATRICES                                               
+    //events
+    penalization_matrix<_DERVIATIVE_PENALIZED_> R_E(std::move(bs_E),lambdas_events_);
+    std::size_t Le = R_E.L();
+    std::vector<std::size_t> Le_j = R_E.Lj();
+    //stations
+    penalization_matrix<_DERVIATIVE_PENALIZED_> R_S(std::move(bs_S),lambdas_stations_);
+    std::size_t Ls = R_S.L();
+    std::vector<std::size_t> Ls_j = R_S.Lj();
 
 
+    //MODEL FITTED COVARIATES
+    //events covariates
+    functional_data_covariates<_DOMAIN_,_EVENT_> x_E_fd_(coefficients_events_cov_,
+                                                         q_e,
+                                                         basis_type_events_cov_,
+                                                         basis_degree_events_cov_,
+                                                         basis_number_events_cov_,
+                                                         knots_events_cov_eigen_w_,
+                                                         basis_fac);
+    
+    //stations covariates
+    functional_data_covariates<_DOMAIN_,_STATION_> x_S_fd_(coefficients_stations_cov_,
+                                                           q_s,
+                                                           basis_type_stations_cov_,
+                                                           basis_degree_stations_cov_,
+                                                           basis_number_stations_cov_,
+                                                           knots_stations_cov_eigen_w_,
+                                                           basis_fac);
+
+
+    //TO BE PREDICTED COVARIATES  
+    //stationary covariates
+    functional_data_covariates<_DOMAIN_,_STATION_> x_C_fd_to_be_pred_(coefficients_stationary_cov_to_be_pred_,
+                                                                      q_c,
+                                                                      basis_type_stationary_cov_,
+                                                                      basis_degree_stationary_cov_,
+                                                                      basis_number_stationary_cov_,
+                                                                      knots_stationary_cov_eigen_w_,
+                                                                      basis_fac);
+    //events covariates
+    functional_data_covariates<_DOMAIN_,_STATION_> x_E_fd_to_be_pred_(coefficients_events_cov_to_be_pred_,
+                                                                      q_e,
+                                                                      basis_type_events_cov_,
+                                                                      basis_degree_events_cov_,
+                                                                      basis_number_events_cov_,
+                                                                      knots_events_cov_eigen_w_,
+                                                                      basis_fac);
+    //stations covariates
+    functional_data_covariates<_DOMAIN_,_STATION_> x_S_fd_to_be_pred_(coefficients_stations_cov_to_be_pred_,
+                                                                      q_s,
+                                                                      basis_type_stations_cov_,
+                                                                      basis_degree_stations_cov_,
+                                                                      basis_number_stations_cov_,
+                                                                      knots_stations_cov_eigen_w_,
+                                                                      basis_fac);
 
 
 
