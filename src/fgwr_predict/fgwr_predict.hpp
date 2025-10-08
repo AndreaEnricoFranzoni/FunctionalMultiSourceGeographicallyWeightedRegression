@@ -44,10 +44,8 @@ class fgwr_predict
 private:
     /*!Object to perform the integration using trapezoidal quadrature rule*/
     fd_integration m_integrating;
-    /*!Abscissa points over which there are the evaluations of the raw fd*/
-    std::vector<INPUT> m_abscissa_points;
-    /*!Number of statistical units*/
-    std::size_t m_n;
+    /*!Number of statistical units used to train the model*/
+    std::size_t m_n_train;
     /*!Number of threads for OMP*/
     int m_number_threads;
 
@@ -56,31 +54,122 @@ public:
     * @brief Constructor
     * @param number_threads number of threads for OMP
     */
-    fgwr_predict(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, const std::vector<INPUT> & abscissa_points, std::size_t n, int number_threads)
-                : m_integrating(a,b,n_intervals_integration,target_error,max_iterations), m_abscissa_points(abscissa_points), m_n(n), m_number_threads(number_threads) {}
+    fgwr_predict(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, std::size_t n_train, int number_threads)
+                : m_integrating(a,b,n_intervals_integration,target_error,max_iterations), m_n_train(n_train), m_number_threads(number_threads) {}
 
     /*!
     * @brief Virtual destructor
     */
-    virtual ~fgwr() = default;
-
-    /*!
-    * @brief Getter for the abscissa points
-    * @return the private
-    */
-    const std::vector<INPUT>& abscissa_points() const {return m_abscissa_points;}
+    virtual ~fgwr_predict() = default;
 
     /*!
     * @brief Getter for the number of statistical units
     * @return the private m_n
     */
-    inline std::size_t n() const {return m_n;}
+    inline std::size_t n_train() const {return m_n_train;}
 
     /*!
     * @brief Getter for the number of threads for OMP
     * @return the private m_number_threads
     */
     inline int number_threads() const {return m_number_threads;}
-}
+
+    /*!
+    * @brief Integrating element-wise a functional matrix
+    */
+    inline
+    FDAGWR_TRAITS::Dense_Matrix
+    fm_integration(const functional_matrix<INPUT,OUTPUT> &integrand)
+    const
+    {
+        std::vector<OUTPUT> result_integrand;
+        result_integrand.resize(integrand.size());
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(integrand,m_integrating,result_integrand) num_threads(m_number_threads)
+#endif
+        for(std::size_t i = 0; i < integrand.size(); ++i){
+            result_integrand[i] = m_integrating.integrate(integrand.as_vector()[i]);}
+
+        FDAGWR_TRAITS::Dense_Matrix result_integration = Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(), integrand.rows(), integrand.cols());
+
+        return result_integration;
+    }
+
+    /*!
+    * @brief Compute all the [J_2_tilde_i + R]^(-1): 
+    * @note FATTO
+    */
+    std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
+    compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
+                    const functional_matrix<INPUT,OUTPUT> &X_t,
+                    const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                    const functional_matrix<INPUT,OUTPUT> &X,
+                    const functional_matrix_sparse<INPUT,OUTPUT> &base,
+                    const FDAGWR_TRAITS::Sparse_Matrix &R) const;
+
+    /*!
+    * @brief Compute [J_tilde_i + R]^(-1)
+    * @note FATTO
+    */
+    inline
+    std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
+    compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
+                    const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                    const functional_matrix<INPUT,OUTPUT> &X_crossed,
+                    const FDAGWR_TRAITS::Sparse_Matrix &R) const;
+
+
+    /*!
+    * @brief Compute an operator
+    * @note FATTO
+    */
+    std::vector< FDAGWR_TRAITS::Dense_Matrix >
+    compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
+
+    /*!
+    * @brief Compute an operator
+    * @note FATTO
+    */
+    std::vector< FDAGWR_TRAITS::Dense_Matrix >
+    compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
+                     const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
+
+
+    /*!
+    * @brief Compute a functional operator
+    * @note FATTO
+    */
+    functional_matrix<INPUT,OUTPUT> 
+    compute_functional_operator(const functional_matrix<INPUT,OUTPUT> &X,
+                                const functional_matrix_sparse<INPUT,OUTPUT> &base,
+                                const std::vector< FDAGWR_TRAITS::Dense_Matrix > &operator_) const;
+
+    /*!
+    * @brief Wrap b, for non-stationary covariates
+    */
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>
+    wrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
+           const std::vector<std::size_t>& L_j,
+           std::size_t q) const;
+
+    /*!
+    * @brief Compute partial residuals
+    */
+    virtual inline void computePartialResiduals() = 0;
+
+    /*!
+    * @brief Updating the non-stationary betas
+    */                            
+    virtual inline void computeBetasNewUnits(const std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >> &W) = 0;
+};
+
+#include "fgwr_predict_imp.hpp"
 
 #endif  /*FGWR_PREDICT_HPP*/

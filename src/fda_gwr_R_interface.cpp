@@ -1098,6 +1098,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     ///////////////////////////////////////////////////////
 
 
+/*
     fd_integration integration_test(a,b,n_intervals,target_error,max_iterations);   //number_threads
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f1 = [](const double &x){return std::pow(x,2);};
     std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f2 = [](const double &x){return std::pow(x,3);};
@@ -1120,6 +1121,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
     FDAGWR_TRAITS::Dense_Matrix result_integration = Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(), test_fm_1.rows(), test_fm_1.cols());
     Rcout << result_integration << std::endl;
+*/
 
     ////////////////////////////////
     /////    OBJECT CREATION   /////

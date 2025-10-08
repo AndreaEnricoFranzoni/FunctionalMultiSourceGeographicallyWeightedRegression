@@ -41,14 +41,14 @@ const
 {
     //the vector contains factorization of the matrix
     std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > penalty;
-    penalty.resize(m_n);
+    penalty.resize(W.size());
 
     FDAGWR_TRAITS::Dense_Matrix _R_ = FDAGWR_TRAITS::Dense_Matrix(R);   //necessary to compute the sum later
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(penalty,base,base_t,X,X_t,W,_R_,m_n,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(penalty,base,base_t,X,X_t,W,_R_,m_number_threads) num_threads(m_number_threads)
 #endif
-    for(std::size_t i = 0; i < m_n; ++i)
+    for(std::size_t i = 0; i < W.size(); ++i)
     {
         //dimension: L x L, where L is the number of basis
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(fm_prod(base_t,X_t),W[i],m_number_threads),X,m_number_threads),base);
@@ -77,14 +77,14 @@ const
 {
     //the vector contains factorization of the matrix
     std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > penalty;
-    penalty.resize(m_n);
+    penalty.resize(W.size());
 
     FDAGWR_TRAITS::Dense_Matrix _R_ = FDAGWR_TRAITS::Dense_Matrix(R);   //necessary to compute the sum later
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(penalty,X_crossed_t,X_crossed,W,_R_,m_n,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(penalty,X_crossed_t,X_crossed,W,_R_,m_number_threads) num_threads(m_number_threads)
 #endif
-    for(std::size_t i = 0; i < m_n; ++i)
+    for(std::size_t i = 0; i < W.size(); ++i)
     {
         //dimension: L x L, where L is the number of basis
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(X_crossed_t,W[i],m_number_threads),X_crossed,m_number_threads);
@@ -136,12 +136,12 @@ const
 {
     //the vector contains factorization of the matrix
     std::vector< FDAGWR_TRAITS::Dense_Matrix > operator_;
-    operator_.resize(m_n);
+    operator_.resize(W.size());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(operator_,penalty,base_lhs,X_lhs,X_rhs,base_rhs,W,m_n,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(operator_,penalty,base_lhs,X_lhs,X_rhs,base_rhs,W,m_number_threads) num_threads(m_number_threads)
 #endif
-    for(std::size_t i = 0; i < m_n; ++i)
+    for(std::size_t i = 0; i < W.size(); ++i)
     {       
         //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(fm_prod(base_lhs,X_lhs),W[i],m_number_threads),X_rhs,m_number_threads),base_rhs);
@@ -167,12 +167,12 @@ const
 {
     //the vector contains factorization of the matrix
     std::vector< FDAGWR_TRAITS::Dense_Matrix > operator_;
-    operator_.resize(m_n);
+    operator_.resize(W.size());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(operator_,penalty,base_lhs,X_lhs,base_rhs,W,m_n,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(operator_,penalty,base_lhs,X_lhs,base_rhs,W,m_number_threads) num_threads(m_number_threads)
 #endif
-    for(std::size_t i = 0; i < m_n; ++i)
+    for(std::size_t i = 0; i < W.size(); ++i)
     {       
         //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(base_lhs,X_lhs),W[i],m_number_threads),base_rhs);
@@ -198,12 +198,12 @@ const
 {
     //the vector contains factorization of the matrix
     std::vector< FDAGWR_TRAITS::Dense_Matrix > operator_;
-    operator_.resize(m_n);
+    operator_.resize(W.size());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(operator_,penalty,X_lhs,X_rhs,base_rhs,W,m_n,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(operator_,penalty,X_lhs,X_rhs,base_rhs,W,m_number_threads) num_threads(m_number_threads)
 #endif
-    for(std::size_t i = 0; i < m_n; ++i)
+    for(std::size_t i = 0; i < W.size(); ++i)
     {       
         //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(X_lhs,W[i],m_number_threads),X_rhs,m_number_threads),base_rhs);
@@ -229,12 +229,12 @@ const
 {
     //the vector contains factorization of the matrix
     std::vector< FDAGWR_TRAITS::Dense_Matrix > operator_;
-    operator_.resize(m_n);
+    operator_.resize(W.size());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(operator_,penalty,X_lhs,base_rhs,W,m_n,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(operator_,penalty,X_lhs,base_rhs,W,m_number_threads) num_threads(m_number_threads)
 #endif
-    for(std::size_t i = 0; i < m_n; ++i)
+    for(std::size_t i = 0; i < W.size(); ++i)
     {       
         //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(X_lhs,W[i],m_number_threads),base_rhs);
@@ -259,12 +259,12 @@ const
 {
     //the vector contains factorization of the matrix
     std::vector< FDAGWR_TRAITS::Dense_Matrix > operator_;
-    operator_.resize(m_n);
+    operator_.resize(W.size());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(operator_,penalty,X_lhs,X_rhs,W,m_n,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(operator_,penalty,X_lhs,X_rhs,W,m_number_threads) num_threads(m_number_threads)
 #endif
-    for(std::size_t i = 0; i < m_n; ++i)
+    for(std::size_t i = 0; i < W.size(); ++i)
     {       
         //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(X_lhs,W[i],m_number_threads),X_rhs,m_number_threads);
@@ -289,12 +289,12 @@ const
 {
     //the vector contains factorization of the matrix
     std::vector< FDAGWR_TRAITS::Dense_Matrix > operator_;
-    operator_.resize(m_n);
+    operator_.resize(W.size());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(operator_,penalty,base_lhs,X_lhs,X_rhs,W,m_n,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(operator_,penalty,base_lhs,X_lhs,X_rhs,W,m_number_threads) num_threads(m_number_threads)
 #endif
-    for(std::size_t i = 0; i < m_n; ++i)
+    for(std::size_t i = 0; i < W.size(); ++i)
     {       
         //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(base_lhs,X_lhs),W[i],m_number_threads),X_rhs,m_number_threads);

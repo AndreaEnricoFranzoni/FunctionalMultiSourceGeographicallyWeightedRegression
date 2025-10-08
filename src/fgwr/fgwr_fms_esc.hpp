@@ -253,7 +253,7 @@ public:
                 m_omega_t = m_omega.transpose();
                 m_Xe_t = m_Xe.transpose();
                 m_theta_t = m_theta.transpose();
-                m_Xc_t = m_Xc.transpose();
+                m_Xs_t = m_Xs.transpose();
                 m_psi_t = m_psi.transpose();
             }
     
@@ -415,7 +415,7 @@ public:
 
         //y_tilde_tilde_hat(t)
         std::cout << "Computing y_tilde_tilde_hat" << std::endl;
-        functional_matrix<INPUT,OUTPUT> y_tilde_tilde_hat = y_tilde_hat - this->compute_functional_operator(m_Xs,m_psi,m_B_s);
+        functional_matrix<INPUT,OUTPUT> y_tilde_tilde_hat = y_tilde_hat - this->compute_functional_operator(m_Xs,m_psi,m_bs);
         std::cout << "y_tilde_tilde_hat rows: " << y_tilde_tilde_hat.rows() << ", y_tilde_tilde_hat cols: " << y_tilde_tilde_hat.cols() << std::endl;
 
 

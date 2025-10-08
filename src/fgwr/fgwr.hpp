@@ -96,11 +96,12 @@ public:
     {
         std::vector<OUTPUT> result_integrand;
         result_integrand.resize(integrand.size());
-        //integrating every element of the functional matrix
-        std::transform(cbegin(integrand),
-                       cend(integrand),
-                       result_integrand.begin(),
-                       [this](const FUNC_OBJ<INPUT,OUTPUT> &f){ return this->m_integrating.integrate(f);});
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(integrand,m_integrating,result_integrand) num_threads(m_number_threads)
+#endif
+        for(std::size_t i = 0; i < integrand.size(); ++i){
+            result_integrand[i] = m_integrating.integrate(integrand.as_vector()[i]);}
 
         FDAGWR_TRAITS::Dense_Matrix result_integration = Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(), integrand.rows(), integrand.cols());
 
