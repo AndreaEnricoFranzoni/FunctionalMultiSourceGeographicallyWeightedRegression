@@ -267,7 +267,7 @@ public:
     override
     {
 
-/*
+
         std::cout << "Computing (j_tilde_tilde + Re)^-1" << std::endl;
         //(j_tilde_tilde + Re)^-1
         std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
@@ -400,7 +400,6 @@ public:
         std::cout << "Computing c_tilde_hat" << std::endl;
         m_c_tilde_hat = columnize_coeff_resp(fm_smoothing<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_smoothing));
         std::cout << "c_tilde_hat rows: " << c_tilde_hat.rows() << ", c_tilde_hat cols: " << c_tilde_hat.cols() << std::endl;
-        std::cout << c_tilde_hat << std::endl;
         //y_tilde_new(t)
         std::cout << "Computing y_tilde_new" << std::endl;
         functional_matrix<INPUT,OUTPUT> y_tilde_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_e),c_tilde_hat,this->number_threads());
@@ -410,7 +409,12 @@ public:
         //COMPUTING all the m_bs, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
         std::cout << "Computing m_bs" << std::endl;
         m_bs = this->compute_operator(X_s_crossed_t,m_Ws,y_tilde_new,j_tilde_Rs_inv);
-        std::cout << "m_bs rows: " << m_bs[0].rows() << ", m_bs cols: " << m_bs[0].cols() << std::endl;
+        for (std::size_t i = 0; i < m_bs.size(); ++i)
+        {
+            std::cout << "m_bs unit " << i+1 << "-th rows: " << m_bs[i].rows() << ", m_bs cols: " << m_bs[i].cols() << std::endl;
+        }
+        
+        
 
 
         //y_tilde_tilde_hat(t)
@@ -422,13 +426,20 @@ public:
         //COMPUTING all the m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE EVENT-DEPENDENT BETAS
         std::cout << "Computing m_be" << std::endl;
         m_be = this->compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde_tilde_hat,j_double_tilde_Re_inv);
-        std::cout << "m_be rows: " << m_be[0].rows() << ", m_be cols: " << m_be[0].cols() << std::endl;
+        
+
+        for (std::size_t i = 0; i < m_be.size(); ++i)
+        {
+            std::cout << "m_be unit " << i+1 << "-th rows: " << m_be[i].rows() << ", m_bs cols: " << m_be[i].cols() << std::endl;
+        }
 
 
 
 
 
-*/
+
+
+/*
         //DEFAULT AI B: PARTE DA TOGLIERE
         m_bc = Eigen::MatrixXd::Random(m_Lc,1);
         m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
@@ -446,6 +457,7 @@ public:
             m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1));
         }
         //FINE PARTE DA TOGLIERE
+*/
 
 
 
