@@ -1052,21 +1052,18 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stations_cov_ = beta_stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_beta_stations_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stations_cov_.data(),knots_beta_stations_cov_.size());
     //saving the betas basis expansion coefficients for station-dependent covariates
-    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> bs;
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix>> bs;
     bs.reserve(q_s);
     Rcpp::List bs_list = model_fitted[FDAGWR_B_NAMES::bs];
     for(std::size_t i = 0; i < bs_list.size(); ++i){
         Rcpp::List bs_i_list = bs_list[i];
         auto bs_i = wrap_covariates_coefficients<_STATION_>(bs_i_list[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
         bs.push_back(bs_i);}
+    //PARTIAL RESIDUALS
+    auto c_tilde_hat = reader_data<_DATA_TYPE_,_NAN_REM_>(partial_residuals[FDAGWR_HELPERS_for_PRED_NAMES::p_res_c_tilde_hat]);
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> A_E_i = wrap_covariates_coefficients<_RESPONSE_>(partial_residuals[FDAGWR_HELPERS_for_PRED_NAMES::p_res_A__]);
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> B_E_for_K_i = wrap_covariates_coefficients<_RESPONSE_>(partial_residuals[FDAGWR_HELPERS_for_PRED_NAMES::p_res_B__for_K]);
 
-    for(std::size_t i = 0; i < bs.size(); ++i){
-        Rcout << "bs cov " << i+1 << "-th" << std::endl;
-        for(std::size_t j = 0; j < bs[i].size(); ++j){
-            Rcout << "Unit of the fitted model " << j+1 << "-th" << std::endl;
-            Rcout << bs[i][j] << std::endl;
-        }
-    }
 
 
     //////////////////////////////////////////////
@@ -1101,12 +1098,28 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     ///////////////////////////////////////////////////////
 
 
+    fd_integration integration_test(a,b,n_intervals,target_error,max_iterations);   //number_threads
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f1 = [](const double &x){return std::pow(x,2);};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f2 = [](const double &x){return std::pow(x,3);};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f3 = [](const _FD_INPUT_TYPE_ & x){return x*x;};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f4 = [](const _FD_INPUT_TYPE_ & x){return x-1;};
+    std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> f5 = [](const _FD_INPUT_TYPE_ & x){return 5;};
+    std::vector<std::function<_FD_OUTPUT_TYPE_(const _FD_INPUT_TYPE_ &)> > test_f1_f2{f1,f2,f3,f4,f5,f1};
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> test_fm_1(test_f1_f2,3,2);
 
+    std::vector<OUTPUT> result_integrand;
+    result_integrand.resize(integrand.size());
 
+#ifdef _OPENMP
+#pragma omp parallel for shared(test_fm_1,result_integrand) num_threads(number_threads)
+#endif
+    for(std::size_t i = 0; i < as_vector().size(); ++i)
+    {
+        result_integrand[i] = integration_test.integrate(as_vector()[i]);
+    }
 
-
-
-
+    FDAGWR_TRAITS::Dense_Matrix result_integration = Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(), test_fm_1.rows(), test_fm_1.cols());
+    Rcout << result_integration << std::endl;
 
     ////////////////////////////////
     /////    OBJECT CREATION   /////

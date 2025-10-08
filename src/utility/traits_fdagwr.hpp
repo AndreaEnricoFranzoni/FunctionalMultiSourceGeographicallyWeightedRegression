@@ -185,6 +185,12 @@ struct FDAGWR_HELPERS_for_PRED_NAMES
   static constexpr std::string a = "a";
 
   static constexpr std::string b = "b";
+
+  static constexpr std::string p_res_c_tilde_hat = "c_tilde_hat";
+
+  static constexpr std::string p_res_A__ = "A__";
+
+  static constexpr std::string p_res_B__for_K = "B__for_K";
 };
 
 
