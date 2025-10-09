@@ -170,7 +170,7 @@ public:
     /*!
     * @brief Dewrap b, for non-stationary covariates: me li incolonna tutti
     */
-    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>
+    std::vector< FDAGWR_TRAITS::Dense_Matrix >
     dewrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
            const std::vector<std::size_t>& L_j,
            std::size_t n) const;
