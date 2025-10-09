@@ -309,4 +309,42 @@ fm_prod(const Eigen::Matrix<OUTPUT,Eigen::Dynamic,Eigen::Dynamic> &S1,
     return fm_prod<INPUT,OUTPUT>(scalar_to_functional<INPUT,OUTPUT>(S1),M2,number_threads);
 }
 
+
+
+/*!
+* @brief Row-by-col product within a sparse functional matrix SM1 and a scalar matrix M2
+*/
+template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline
+functional_matrix<INPUT,OUTPUT>
+fm_prod(const functional_matrix_sparse<INPUT,OUTPUT> &SM1,
+        const Eigen::Matrix<OUTPUT,Eigen::Dynamic,Eigen::Dynamic> &S2)
+{
+    //checking matrices dimensions
+    if (SM1.cols() != S2.rows())
+		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");    
+
+    return fm_prod<INPUT,OUTPUT>(SM1,scalar_to_functional<INPUT,OUTPUT>(S2));
+}
+
+
+
+/*!
+* @brief Row-by-col product within a scalar matrix S1 and a sparse functional matrix SM2
+*/
+template< typename INPUT = double, typename OUTPUT = double >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+inline
+functional_matrix<INPUT,OUTPUT>
+fm_prod(const Eigen::Matrix<OUTPUT,Eigen::Dynamic,Eigen::Dynamic> &S1,
+        const functional_matrix_sparse<INPUT,OUTPUT> &SM2)
+{
+    //checking matrices dimensions
+    if (S1.cols() != SM2.rows())
+		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
+
+    return fm_prod<INPUT,OUTPUT>(scalar_to_functional<INPUT,OUTPUT>(S1),SM2);
+}
+
 #endif  /*FUNCTIONAL_MATRIX_PRODUCT_HPP*/
