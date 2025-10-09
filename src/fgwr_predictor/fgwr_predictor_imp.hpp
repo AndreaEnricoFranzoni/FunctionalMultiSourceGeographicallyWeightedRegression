@@ -273,7 +273,7 @@ const
     std::size_t q = L_j.size();
     for(std::size_t j = 0; j < q; ++j){ assert(b[j].size() == n);}
 
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > b_dewrapped:
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > b_dewrapped;
     b_dewrapped.reserve(n);
 
     for(std::size_t i = 0; i < n; ++i){
