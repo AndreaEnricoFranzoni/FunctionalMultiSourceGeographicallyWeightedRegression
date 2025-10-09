@@ -226,7 +226,7 @@ public:
         m_X_s_train_crossed = fm_prod(m_Xs_train,m_psi) - m_K_e_s;
         m_X_s_train_crossed_t = m_X_s_train_crossed.transpose();
         //y_tilde_hat(t) n_trainx1
-        m_y_tilde_hat = fm_prod(m_phi,m_c_tilde_hat,this->number_threads());
+        m_y_tilde_hat = fm_prod(m_phi,m_c_tilde_hat);
         //He(t) n_trainx(n_train*Ly)
         m_H_e = this->compute_functional_operator(m_Xe_train,m_theta,m_A_e);
         //y_tilde_new(t) n_trainx1
