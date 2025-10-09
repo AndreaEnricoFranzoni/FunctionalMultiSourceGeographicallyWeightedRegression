@@ -1188,7 +1188,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     
     //TO BE PREDICTED COVARIATES  
     //stationary covariates
-    functional_data_covariates<_DOMAIN_,_STATION_> x_C_fd_to_be_pred_(coefficients_stationary_cov_to_be_pred_,
+    functional_data_covariates<_DOMAIN_,_STATIONARY_> x_C_fd_to_be_pred_(coefficients_stationary_cov_to_be_pred_,
                                                                       q_C,
                                                                       basis_types_stationary_cov_,
                                                                       degree_basis_stationary_cov_,
@@ -1196,7 +1196,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                                                                       knots_stationary_cov_eigen_w_,
                                                                       basis_fac);
     //events covariates
-    functional_data_covariates<_DOMAIN_,_STATION_> x_E_fd_to_be_pred_(coefficients_events_cov_to_be_pred_,
+    functional_data_covariates<_DOMAIN_,_EVENT_>   x_E_fd_to_be_pred_(coefficients_events_cov_to_be_pred_,
                                                                       q_E,
                                                                       basis_types_events_cov_,
                                                                       degree_basis_events_cov_,
