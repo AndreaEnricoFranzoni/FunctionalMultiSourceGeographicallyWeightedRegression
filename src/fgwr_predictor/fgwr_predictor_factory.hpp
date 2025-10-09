@@ -35,7 +35,7 @@
 */
 template< FDAGWR_ALGO fdagwrType, typename INPUT = double, typename OUTPUT = double, class... Args >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-std::unique_ptr< fgwr<INPUT,OUTPUT> >
+std::unique_ptr< fgwr_predictor<INPUT,OUTPUT> >
 fgwr_predictor_factory(Args &&... args)
 {
     static_assert(fdagwrType == FDAGWR_ALGO::GWR_FMS_ESC ||
@@ -46,7 +46,7 @@ fgwr_predictor_factory(Args &&... args)
 
     //FMS_ESC: multi-source: estimating: stationay -> station-dependent -> event-dependent
     if constexpr (fdagwrType == FDAGWR_ALGO::GWR_FMS_ESC)
-        return std::make_unique<fgwr_fms_esc_predict<INPUT,OUTPUT>>(std::forward<Args>(args)...);
+        return std::make_unique<fgwr_fms_esc_predictor<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
     //FMS_SEC: multi-source: estimating: stationay -> event-dependent -> station-dependent
     //if constexpr (fdagwrType == FDAGWR_ALGO::GWR_FMS_SEC)
