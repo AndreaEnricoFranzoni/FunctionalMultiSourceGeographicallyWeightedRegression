@@ -267,7 +267,7 @@ public:
     override
     {
 
-
+/*
         std::cout << "Computing (j_tilde_tilde + Re)^-1" << std::endl;
         //(j_tilde_tilde + Re)^-1
         std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
@@ -426,6 +426,7 @@ public:
         
 
         for (std::size_t i = 0; i < m_be.size(); ++i){std::cout << "m_be unit " << i+1 << "-th rows: " << m_be[i].rows() << ", m_bs cols: " << m_be[i].cols() << std::endl;}
+*/
 
 
 
@@ -433,7 +434,6 @@ public:
 
 
 
-/*
         //DEFAULT AI B: PARTE DA TOGLIERE
         m_bc = Eigen::MatrixXd::Random(m_Lc,1);
         m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
@@ -451,7 +451,7 @@ public:
             m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1));
         }
         //FINE PARTE DA TOGLIERE
-*/
+
 
 
 
