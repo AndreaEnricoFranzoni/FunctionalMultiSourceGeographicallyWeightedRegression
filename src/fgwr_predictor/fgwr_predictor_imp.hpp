@@ -241,7 +241,7 @@ const
     assert(b.size() == L_j.size());
     for(std::size_t i = 0; i < b.size(); ++i){  assert((b[i].cols()==1) && (b[i].rows()==L_j[i]));}
 
-    FDAGWR_TRAITS::Dense_Matrix b_dewrapped(std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t(0)),1);
+    FDAGWR_TRAITS::Dense_Matrix b_dewrapped(std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0)),1);
 
     for(std::size_t j = 0; j < L_j.size(); ++j)
     {
