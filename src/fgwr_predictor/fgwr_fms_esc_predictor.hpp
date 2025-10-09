@@ -128,6 +128,7 @@ public:
              typename FUNC_SPARSE_MATRIX_OBJ,
              typename SCALAR_MATRIX_OBJ, 
              typename SCALAR_MATRIX_OBJ_VEC,
+             typename SCALAR_MATRIX_OBJ_VEC_VEC,
              typename SCALAR_SPARSE_MATRIX_OBJ>
     fgwr_fms_esc_predictor(SCALAR_MATRIX_OBJ_VEC &&Bc_fitted,
                            SCALAR_MATRIX_OBJ_VEC &&Bs_fitted,
@@ -160,7 +161,7 @@ public:
                            std::size_t n_train, 
                            int number_threads)
             :   
-                    fgwr_predict<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,abscissa_points),
+                    fgwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations),
                     m_Bc_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC>(Bc_fitted)},
                     m_Bs_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC_VEC>(Bs_fitted)},
                     m_omega{std::forward<FUNC_SPARSE_MATRIX_OBJ>(omega)},
@@ -223,7 +224,7 @@ public:
         m_K_e_s = this->compute_functional_operator(m_Xe_train,m_theta,m_B_e_for_K_e_s);
         //X_s_crossed(t) n_train x Ls
         m_X_s_train_crossed = fm_prod(m_Xs_train,m_psi) - m_K_e_s;
-        m_X_s_train_crossed_t = m_X_s_crossed.transpose();
+        m_X_s_train_crossed_t = m_X_s_train_crossed.transpose();
         //y_tilde_hat(t) n_trainx1
         m_y_tilde_hat = fm_prod(m_phi,m_c_tilde_hat);
         //He(t) n_trainx(n_train*Ly)
@@ -241,8 +242,8 @@ public:
     override
     {
         assert(W.size() == 2);
-        std::string id_We = covariate_type()<FDAGWR_COVARIATES_TYPES::EVENT>;
-        std::string id_Ws = covariate_type()<FDAGWR_COVARIATES_TYPES::STATION>;
+        std::string id_We = covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>();
+        std::string id_Ws = covariate_type<FDAGWR_COVARIATES_TYPES::STATION>();
         assert(W.at[id_We].size() == W.at[id_Ws].size());
         std::size_t n_pred = W.at[id_We].size();
 
