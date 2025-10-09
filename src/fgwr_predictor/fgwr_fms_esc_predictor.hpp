@@ -226,9 +226,9 @@ public:
         m_X_s_train_crossed = fm_prod(m_Xs_train,m_psi) - m_K_e_s;
         m_X_s_train_crossed_t = m_X_s_train_crossed.transpose();
         //y_tilde_hat(t) n_trainx1
-        m_y_tilde_hat = fm_prod(m_phi,m_c_tilde_hat);
+        m_y_tilde_hat = fm_prod(m_phi,m_c_tilde_hat,this->number_threads());
         //He(t) n_trainx(n_train*Ly)
-        m_H_e = compute_functional_operator(m_Xe_train,m_theta,m_A_e);
+        m_H_e = this->compute_functional_operator(m_Xe_train,m_theta,m_A_e);
         //y_tilde_new(t) n_trainx1
         m_y_tilde_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - m_H_e),m_c_tilde_hat,this->number_threads());
         //y_tilde_tilde_hat(t) n_trainx1
@@ -244,8 +244,8 @@ public:
         assert(W.size() == 2);
         std::string id_We = covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>();
         std::string id_Ws = covariate_type<FDAGWR_COVARIATES_TYPES::STATION>();
-        assert(W.at[id_We].size() == W.at[id_Ws].size());
-        std::size_t n_pred = W.at[id_We].size();
+        assert(W.at(id_We).size() == W.at(id_Ws).size());
+        std::size_t n_pred = W.at(id_We).size();
 
         //compute the non-stationary betas in the new locations
         //penalties in the new locations
