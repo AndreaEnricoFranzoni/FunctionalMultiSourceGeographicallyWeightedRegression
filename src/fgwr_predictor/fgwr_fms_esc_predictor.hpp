@@ -21,11 +21,11 @@
 #ifndef FGWR_FMS_ESC_PREDICT_HPP
 #define FGWR_FMS_ESC_PREDICT_HPP
 
-#include "fgwr_predict.hpp"
+#include "fgwr_predictor.hpp"
 
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-class fgwr_fms_esc_predict final : public fgwr_predict<INPUT,OUTPUT>
+class fgwr_fms_esc_predictor final : public fgwr_predictor<INPUT,OUTPUT>
 {
 private:
     //
@@ -36,14 +36,21 @@ private:
     FDAGWR_TRAITS::Dense_Matrix m_bc_fitted;
     /*!Coefficients of the basis expansion for stationary regressors coefficients: every element is Lc_jx1*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_Bc_fitted;
-    /*!Coefficients of the basis expansion for event-dependent regressors: Lex1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_be_fitted;
-    /*!Coefficients of the basis expansion for event-dependent regressors coefficients: every of the qe elements are n 1xLe_j matrices, one for each statistical unit*/
-    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> m_Be_fitted;
     /*!Coefficients of the basis expansion for station-dependent covariates regressors: Lsx1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_bs_fitted;
     /*!Coefficients of the basis expansion for station-dependent regressors coefficients: every of the qe elements are n 1xLs_j matrices, one for each statistical unit*/
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> m_Bs_fitted;
+    //
+    //Computing the betas in the new stance
+    //
+    /*!Coefficients of the basis expansion for event-dependent regressors: Lex1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_be_pred;
+    /*!Coefficients of the basis expansion for event-dependent regressors coefficients: every of the qe elements are n 1xLe_j matrices, one for each statistical unit*/
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> m_Be_pred;
+    /*!Coefficients of the basis expansion for station-dependent covariates regressors: Lsx1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_bs_pred;
+    /*!Coefficients of the basis expansion for station-dependent regressors coefficients: every of the qe elements are n 1xLs_j matrices, one for each statistical unit*/
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> m_Bs_pred;
 
     //Basis used for the regression coefficients
     /*!Basis for stationary covariates regressors (sparse qc x Lc)*/
@@ -111,17 +118,7 @@ private:
     functional_matrix<INPUT,OUTPUT> m_y_tilde_tilde_hat;
 
 
-    //
-    //Computing the betas in the new stance
-    //
-    /*!Coefficients of the basis expansion for event-dependent regressors: Lex1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_be_pred;
-    /*!Coefficients of the basis expansion for event-dependent regressors coefficients: every of the qe elements are n 1xLe_j matrices, one for each statistical unit*/
-    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> m_Be_pred;
-    /*!Coefficients of the basis expansion for station-dependent covariates regressors: Lsx1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_bs_pred;
-    /*!Coefficients of the basis expansion for station-dependent regressors coefficients: every of the qe elements are n 1xLs_j matrices, one for each statistical unit*/
-    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> m_Bs_pred;
+
 
 public:
     /*!
@@ -131,49 +128,40 @@ public:
              typename FUNC_SPARSE_MATRIX_OBJ,
              typename SCALAR_MATRIX_OBJ, 
              typename SCALAR_MATRIX_OBJ_VEC,
-             typename SCALAR_MATRIX_OBJ_VEC_VEC,
              typename SCALAR_SPARSE_MATRIX_OBJ>
-    fgwr_fms_esc_predict(SCALAR_MATRIX_OBJ &&bc_fitted,
-                         SCALAR_MATRIX_OBJ_VEC &&Bc_fitted,
-                         SCALAR_MATRIX_OBJ_VEC &&be_fitted,
-                         SCALAR_MATRIX_OBJ_VEC_VEC &&Be_fitted,
-                         SCALAR_MATRIX_OBJ_VEC &&bs_fitted,
-                         SCALAR_MATRIX_OBJ_VEC_VEC &&Bs_fitted,
-                         FUNC_SPARSE_MATRIX_OBJ &&omega,
-                         std::size_t qc,
-                         std::size_t Lc,
-                         const std::vector<std::size_t> &Lc_j,
-                         FUNC_SPARSE_MATRIX_OBJ &&theta,
-                         std::size_t qe,
-                         std::size_t Le,
-                         const std::vector<std::size_t> &Le_j,
-                         FUNC_SPARSE_MATRIX_OBJ &&psi,
-                         std::size_t qs,
-                         std::size_t Ls,
-                         const std::vector<std::size_t> &Ls_j,
-                         FUNC_SPARSE_MATRIX_OBJ &&phi,
-                         std::size_t Ly,
-                         SCALAR_MATRIX_OBJ &&c_tilde_hat,
-                         SCALAR_MATRIX_OBJ_VEC &&A_e,
-                         SCALAR_MATRIX_OBJ_VEC &&B_e_for_K_e_s,
-                         FUNC_MATRIX_OBJ &&Xe_train,
-                         SCALAR_SPARSE_MATRIX_OBJ &&Re,
-                         FUNC_MATRIX_OBJ &&Xs_train,
-                         SCALAR_SPARSE_MATRIX_OBJ &&Rs,
-                         INPUT a, 
-                         INPUT b, 
-                         int n_intervals_integration, 
-                         double target_error, 
-                         int max_iterations, 
-                         std::size_t n_train, 
-                         int number_threads)
+    fgwr_fms_esc_predictor(SCALAR_MATRIX_OBJ_VEC &&Bc_fitted,
+                           SCALAR_MATRIX_OBJ_VEC &&Bs_fitted,
+                           FUNC_SPARSE_MATRIX_OBJ &&omega,
+                           std::size_t qc,
+                           std::size_t Lc,
+                           const std::vector<std::size_t> &Lc_j,
+                           FUNC_SPARSE_MATRIX_OBJ &&theta,
+                           std::size_t qe,
+                           std::size_t Le,
+                           const std::vector<std::size_t> &Le_j,
+                           FUNC_SPARSE_MATRIX_OBJ &&psi,
+                           std::size_t qs,
+                           std::size_t Ls,
+                           const std::vector<std::size_t> &Ls_j,
+                           FUNC_SPARSE_MATRIX_OBJ &&phi,
+                           std::size_t Ly,
+                           SCALAR_MATRIX_OBJ &&c_tilde_hat,
+                           SCALAR_MATRIX_OBJ_VEC &&A_e,
+                           SCALAR_MATRIX_OBJ_VEC &&B_e_for_K_e_s,
+                           FUNC_MATRIX_OBJ &&Xe_train,
+                           SCALAR_SPARSE_MATRIX_OBJ &&Re,
+                           FUNC_MATRIX_OBJ &&Xs_train,
+                           SCALAR_SPARSE_MATRIX_OBJ &&Rs,
+                           INPUT a, 
+                           INPUT b, 
+                           int n_intervals_integration, 
+                           double target_error, 
+                           int max_iterations, 
+                           std::size_t n_train, 
+                           int number_threads)
             :   
                     fgwr_predict<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,abscissa_points),
-                    m_bc_fitted{std::forward<SCALAR_MATRIX_OBJ>(bc_fitted)},
                     m_Bc_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC>(Bc_fitted)},
-                    m_be_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC>(be_fitted)},
-                    m_Be_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC_VEC>(Be_fitted)},
-                    m_bs_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC>(bs_fitted)},
                     m_Bs_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC_VEC>(Bs_fitted)},
                     m_omega{std::forward<FUNC_SPARSE_MATRIX_OBJ>(omega)},
                     m_qc(qc),
@@ -190,17 +178,38 @@ public:
                     m_phi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(phi)},
                     m_Ly(Ly),
                     m_c_tilde_hat{std::forward<SCALAR_MATRIX_OBJ>(c_tilde_hat)},
+                    m_A_e{std::forward<SCALAR_MATRIX_OBJ_VEC>(A_e)},
+                    m_B_e_for_K_e_s{std::forward<SCALAR_MATRIX_OBJ_VEC>(B_e_for_K_e_s)},
                     m_Xe_train{std::forward<FUNC_MATRIX_OBJ>(Xe_train)},
                     m_Re{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Re)},
                     m_Xs_train{std::forward<FUNC_MATRIX_OBJ>(Xs_train)},
                     m_Rs{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rs)}
             {
+                //input coherency
+                assert(m_Bc_fitted.size() == m_qc);
+                assert(m_Bs_fitted.size() == m_qs);
+                for(std::size_t j = 0; j < m_qs; ++j){  assert(m_Bs_fitted[j].size() == this->n_train());}
+                assert((m_omega.rows() == m_qc) && (m_omega.cols() == Lc));
+                assert((m_theta.rows() == m_qe) && (m_theta.cols() == Le));
+                assert((m_psi.rows() == m_qs) && (m_psi.cols() == Ls));
+                assert((m_phi.rows() == this->n_train()) && (m_phi.cols() == (this->n_train()*m_Ly)));
+                assert((m_c_tilde_hat.rows() == (this->n_train()*m_Ly)) && (m_c_tilde_hat.cols() == 1));
+                assert(m_A_e.size() == this->n_train());
+                for(std::size_t i = 0; i < this->n_train(); ++i){   assert((m_A_e[i].rows() == m_Le) && (m_A_e[i].cols() == (this->n_train()*m_Ly)));}
+                assert(m_B_e_for_K_e_s.size() == this->n_train());
+                for(std::size_t i = 0; i < this->n_train(); ++i){   assert((m_B_e_for_K_e_s[i].rows() == m_Le) && (m_B_e_for_K_e_s[i].cols() == m_Ls));}
+
                 //compute the transpost
                 m_omega_t = m_omega.transpose();
                 m_theta_t = m_theta.transpose();
                 m_psi_t = m_psi.transpose();
                 m_Xe_train_t = m_Xe_train.transpose();
                 m_Xs_train_t = m_Xs_train.transpose();
+
+                //dewrappare i b_train
+                m_bc_fitted = this->dewrap_b(m_Bc_fitted,m_Lc_j);
+                //bs_fitted
+                m_bs_fitted = this->dewrap_b(m_Bs_fitted,m_Ls_j,this->n_train());
             }
 
     
@@ -228,7 +237,7 @@ public:
 
     inline
     void
-    computeBetasNewUnits(const std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >> &W)
+    computeBetaNew(const std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >> &W)
     override
     {
         assert(W.size() == 2);
@@ -256,6 +265,9 @@ public:
         m_Be_pred = this->wrap_b(m_be_pred,m_Le_j,m_qe,n_pred);
         //station-dependent covariates
         m_Bs_pred = this->wrap_b(m_bs_pred,m_Ls_j,m_qs,n_pred);
+
+
+        //crearli come una std::function
     }
 };
 

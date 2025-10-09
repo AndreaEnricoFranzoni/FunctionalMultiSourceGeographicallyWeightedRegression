@@ -45,6 +45,8 @@
 
 #include "fgwr/fgwr_factory.hpp"
 
+#include "fgwr_predictor/fgwr_predictor_factory.hpp"
+
 #include "functional_matrix/functional_matrix.hpp"
 #include "functional_matrix/functional_matrix_sparse.hpp"
 #include "functional_matrix/functional_matrix_diagonal.hpp"
@@ -1031,13 +1033,13 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stationary_cov_ = beta_stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_beta_stationary_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stationary_cov_.data(),knots_beta_stationary_cov_.size());
     //saving the betas basis expansion coefficients for stationary covariates
-    std::vector<FDAGWR_TRAITS::Dense_Matrix> bc;
-    bc.reserve(q_C);
-    Rcpp::List bc_list = model_fitted[FDAGWR_B_NAMES::bc];
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> Bc;
+    Bc.reserve(q_C);
+    Rcpp::List Bc_list = model_fitted[FDAGWR_B_NAMES::bc];
     for(std::size_t i = 0; i < q_C; ++i){
-        Rcpp::List bc_i_list = bc_list[i];
-        auto bc_i = reader_data<_DATA_TYPE_,_NAN_REM_>(bc_i_list[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);  //sono tutte 15x1
-        bc.push_back(bc_i);}
+        Rcpp::List Bc_i_list = Bc_list[i];
+        auto Bc_i = reader_data<_DATA_TYPE_,_NAN_REM_>(Bc_i_list[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);  //sono tutte Lc_jx1
+        Bc.push_back(Bc_i);}
     //EVENTS BETAS  
     std::vector<std::size_t> number_basis_beta_events_cov_ = beta_events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
     std::vector<std::string> basis_types_beta_events_cov_  = beta_events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
@@ -1051,13 +1053,13 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stations_cov_ = beta_stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_beta_stations_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stations_cov_.data(),knots_beta_stations_cov_.size());
     //saving the betas basis expansion coefficients for station-dependent covariates
-    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix>> bs;
-    bs.reserve(q_S);
-    Rcpp::List bs_list = model_fitted[FDAGWR_B_NAMES::bs];
-    for(std::size_t i = 0; i < bs_list.size(); ++i){
-        Rcpp::List bs_i_list = bs_list[i];
-        auto bs_i = wrap_covariates_coefficients<_STATION_>(bs_i_list[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
-        bs.push_back(bs_i);}
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix>> Bs; //vettore esterno: per ogni covariata S. Interno: per ogni unità di training
+    Bs.reserve(q_S);
+    Rcpp::List Bs_list = model_fitted[FDAGWR_B_NAMES::bs];
+    for(std::size_t i = 0; i < q_S; ++i){
+        Rcpp::List Bs_i_list = Bs_list[i];
+        auto Bs_i = wrap_covariates_coefficients<_STATION_>(Bs_i_list[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
+        Bs.push_back(Bs_i);}
     //PARTIAL RESIDUALS
     auto c_tilde_hat = reader_data<_DATA_TYPE_,_NAN_REM_>(partial_residuals[FDAGWR_HELPERS_for_PRED_NAMES::p_res_c_tilde_hat]);
     std::vector<FDAGWR_TRAITS::Dense_Matrix> A_E_i = wrap_covariates_coefficients<_RESPONSE_>(partial_residuals[FDAGWR_HELPERS_for_PRED_NAMES::p_res_A__]);
@@ -1094,6 +1096,10 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     penalization_matrix<_DERVIATIVE_PENALIZED_> R_S(std::move(bs_S),lambda_stations_cov_);
     std::size_t Ls = R_S.L();
     std::vector<std::size_t> Ls_j = R_S.Lj();
+    
+    //additional info stationary
+    std::size_t Lc = std::reduce(number_basis_beta_stationary_cov_.cbegin(),number_basis_beta_stationary_cov_.cend(),static_cast<std::size_t>(0));
+    std::vector<std::size_t> Lc_j = number_basis_beta_stationary_cov_;
 
 
     //MODEL FITTED COVARIATES
@@ -1115,6 +1121,26 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                                                                  knots_stations_cov_eigen_w_,
                                                                  basis_fac);
 
+
+    //wrapping all the functional elements in a functional_matrix
+    //omega: a sparse functional matrix of dimension qcxLc
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> omega = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_C);
+    //theta: a sparse functional matrix of dimension qexLe
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> theta = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_E);
+    //psi: a sparse functional matrix of dimension qsxLs
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
+    //phi: a sparse functional matrix n_trainx(n_train*Ly), where L is the number of basis for the response
+    std::unique_ptr<basis_base_class<_DOMAIN_>> basis_response_ = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> phi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,response_basis_tmp_t::template_type>(*basis_response_,n_train,number_basis_response_);
+    //Xe_train: a functional matrix of dimension n_trainxqe
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xe_train = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_EVENT_>(x_E_fd_train_,number_threads);
+    //Xs_train: a functional matrix of dimension n_trainxqs
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xs_train = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_train_,number_threads);
+
+    
+
+    //Ws: n diagonal functional matrices of dimension nxn
+    //std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Ws = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_>(W_S,number_threads);
 
 
 
@@ -1185,6 +1211,12 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                                                                       knots_stations_cov_eigen_w_,
                                                                       basis_fac);
 
+    //Xc_new: a functional matrix of dimension n_newxqc
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xc_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATIONARY_>(x_C_fd_to_be_pred_,number_threads);                                                               
+    //Xe_new: a functional matrix of dimension n_newxqe
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xe_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_EVENT_>(x_E_fd_to_be_pred_,number_threads);
+    //Xs_new: a functional matrix of dimension n_newxqs
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xs_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_to_be_pred_,number_threads);
 
 
 
@@ -1197,7 +1229,42 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
 
 
+    //fgwr predictor
+    auto fgwr_predictor = fgwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
+                                                                                                   std::move(Bs),
+                                                                                                   std::move(omega),
+                                                                                                   q_C,
+                                                                                                   Lc,
+                                                                                                   Lc_j,
+                                                                                                   std::move(theta),
+                                                                                                   q_E,
+                                                                                                   Le,
+                                                                                                   Le_j,
+                                                                                                   std::move(psi),
+                                                                                                   q_S,
+                                                                                                   Ls,
+                                                                                                   Ls_j,
+                                                                                                   std::move(phi),
+                                                                                                   number_basis_response_,
+                                                                                                   std::move(c_tilde_hat),
+                                                                                                   std::move(A_E_i),
+                                                                                                   std::move(B_E_for_K_i),
+                                                                                                   std::move(Xe_train),
+                                                                                                   std::move(R_E.PenalizationMatrix()),
+                                                                                                   std::move(Xs_train),
+                                                                                                   std::move(R_S.PenalizationMatrix()),
+                                                                                                   a,
+                                                                                                   b,
+                                                                                                   n_intervals,
+                                                                                                   target_error,
+                                                                                                   max_iterations,
+                                                                                                   n_train,
+                                                                                                   number_threads);
 
+    //retrieve partial residuals
+    //fgwr_predictor->computePartialResiduals();
+    //compute the new betas for non-stationary covariates
+    //fgwr_predictor->computeBetaNew()            
 
 
 

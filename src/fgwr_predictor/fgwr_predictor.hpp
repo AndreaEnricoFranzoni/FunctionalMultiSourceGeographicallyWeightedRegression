@@ -18,8 +18,8 @@
 // fdagwr.
 
 
-#ifndef FGWR_PREDICT_HPP
-#define FGWR_PREDICT_HPP
+#ifndef FGWR_PREDICTOR_HPP
+#define FGWR_PREDICTOR_HPP
 
 
 #include "../utility/include_fdagwr.hpp"
@@ -39,7 +39,7 @@
 
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-class fgwr_predict
+class fgwr_predictor
 {
 private:
     /*!Object to perform the integration using trapezoidal quadrature rule*/
@@ -54,8 +54,8 @@ public:
     * @brief Constructor
     * @param number_threads number of threads for OMP
     */
-    fgwr_predict(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, std::size_t n_train, int number_threads)
-                : m_integrating(a,b,n_intervals_integration,target_error,max_iterations), m_n_train(n_train), m_number_threads(number_threads) {}
+    fgwr_predictor(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, std::size_t n_train, int number_threads)
+                   : m_integrating(a,b,n_intervals_integration,target_error,max_iterations), m_n_train(n_train), m_number_threads(number_threads) {}
 
     /*!
     * @brief Virtual destructor
@@ -152,12 +152,27 @@ public:
                                 const std::vector< FDAGWR_TRAITS::Dense_Matrix > &operator_) const;
 
     /*!
-    * @brief Wrap b, for non-stationary covariates
+    * @brief Wrap b, for non-stationary covariates: me li sistema tutti non in colonna, uno per covariata 
     */
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>
     wrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
            const std::vector<std::size_t>& L_j,
            std::size_t q) const;
+
+    /*!
+    * @brief Dewrap b, for stationary covariates: me li incolonna tutti 
+    */
+    FDAGWR_TRAITS::Dense_Matrix 
+    dewrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
+             const std::vector<std::size_t>& L_j) const;
+
+    /*!
+    * @brief Dewrap b, for non-stationary covariates: me li incolonna tutti
+    */
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>
+    dewrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
+           const std::vector<std::size_t>& L_j,
+           std::size_t n) const;
 
     /*!
     * @brief Compute partial residuals
@@ -167,9 +182,9 @@ public:
     /*!
     * @brief Updating the non-stationary betas
     */                            
-    virtual inline void computeBetasNewUnits(const std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >> &W) = 0;
+    virtual inline void computeBetaNew(const std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >> &W) = 0;
 };
 
-#include "fgwr_predict_imp.hpp"
+#include "fgwr_predictor_imp.hpp"
 
-#endif  /*FGWR_PREDICT_HPP*/
+#endif  /*FGWR_PREDICTOR_HPP*/
