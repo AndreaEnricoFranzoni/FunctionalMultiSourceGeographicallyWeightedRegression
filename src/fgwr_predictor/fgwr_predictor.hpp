@@ -60,7 +60,7 @@ public:
     /*!
     * @brief Virtual destructor
     */
-    virtual ~fgwr_predict() = default;
+    virtual ~fgwr_predictor() = default;
 
     /*!
     * @brief Getter for the number of statistical units
@@ -157,7 +157,8 @@ public:
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>
     wrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
            const std::vector<std::size_t>& L_j,
-           std::size_t q) const;
+           std::size_t q,
+           std::size_t n_pred) const;
 
     /*!
     * @brief Dewrap b, for stationary covariates: me li incolonna tutti 
