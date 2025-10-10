@@ -74,7 +74,8 @@ public:
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    template< typename DIST_MATRIX_OBJ >
+    template< typename DIST_MATRIX_OBJ,
+              typename = std::enable_if_t<std::is_same_v<std::decay_t<DIST_MATRIX_OBJ>,distance_matrix<dist_meas>>>>
     functional_weight_matrix_non_stationary(const functional_data<domain_type,basis_type> &y_recostruction_weights_fd,
                                             DIST_MATRIX_OBJ&& distance_matrix,
                                             double kernel_bwt,
@@ -94,9 +95,10 @@ public:
     /*!
     * @brief Costruttore da utilizzare quando si fa predict
     */
-    template< typename DIST_MATRIX_OBJ_PRED >
+    template< typename DIST_MATRIX_OBJ,
+              typename = std::enable_if_t<std::is_same_v<std::decay_t<DIST_MATRIX_OBJ>,distance_matrix_pred<dist_meas>>>>
     functional_weight_matrix_non_stationary(const functional_data<domain_type,basis_type> &y_recostruction_weights_fd,
-                                            DIST_MATRIX_OBJ_PRED&& distance_matrix_pred,
+                                            DIST_MATRIX_OBJ&& distance_matrix_pred,
                                             double kernel_bwt,
                                             int number_threads)
                                 : 
