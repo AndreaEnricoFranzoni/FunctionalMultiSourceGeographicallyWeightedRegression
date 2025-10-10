@@ -635,7 +635,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
         double loc = 0.3;
 
 
-                Rcout "Wc: rows: " << Wc.rows() << ", cols: " << Wc.cols() << std::endl;
+                Rcout << "Wc: rows: " << Wc.rows() << ", cols: " << Wc.cols() << std::endl;
 
         for(std::size_t j = 0; j < Wc.rows(); ++j){
             for(std::size_t k = 0; k < Wc.cols(); ++k){
@@ -647,7 +647,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
 
     Rcout << "We: sono " << We.size() << std::endl;
     for(std::size_t i = 0; i < We.size(); ++i){
-        Rcout "We unit " << i+1 << "-th: rows: " << We[i].rows() << ", cols: " << We[i].cols() << std::endl;
+        Rcout <<"We unit " << i+1 << "-th: rows: " << We[i].rows() << ", cols: " << We[i].cols() << std::endl;
 
         for(std::size_t j = 0; j < We[i].rows(); ++j){
             for(std::size_t k = 0; k < We[i].cols(); ++k){
@@ -658,7 +658,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
 
     Rcout << "Ws: sono " << Ws.size() << std::endl;
     for(std::size_t i = 0; i < Ws.size(); ++i){
-        Rcout "Ws unit " << i+1 << "-th: rows: " << Ws[i].rows() << ", cols: " << Ws[i].cols() << std::endl;
+        Rcout <<"Ws unit " << i+1 << "-th: rows: " << Ws[i].rows() << ", cols: " << Ws[i].cols() << std::endl;
 
         for(std::size_t j = 0; j < Ws[i].rows(); ++j){
             for(std::size_t k = 0; k < Ws[i].cols(); ++k){
@@ -1286,7 +1286,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     double loc = 0.3;
     Rcout << "We_pred: sono " << We_pred.size() << std::endl;
     for(std::size_t i = 0; i < We_pred.size(); ++i){
-        Rcout "We_pred pred unit " << i+1 << "-th: rows: " << We_pred[i].rows() << ", cols: " << We_pred[i].cols() << std::endl;
+        Rcout <<"We_pred pred unit " << i+1 << "-th: rows: " << We_pred[i].rows() << ", cols: " << We_pred[i].cols() << std::endl;
 
         for(std::size_t j = 0; j < We_pred[i].rows(); ++j){
             for(std::size_t k = 0; k < We_pred[i].cols(); ++k){
@@ -1297,7 +1297,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
     Rcout << "Ws_pred: sono " << Ws_pred.size() << std::endl;
     for(std::size_t i = 0; i < Ws_pred.size(); ++i){
-        Rcout "Ws_pred pred unit " << i+1 << "-th: rows: " << Ws_pred[i].rows() << ", cols: " << Ws_pred[i].cols() << std::endl;
+        Rcout <<"Ws_pred pred unit " << i+1 << "-th: rows: " << Ws_pred[i].rows() << ", cols: " << Ws_pred[i].cols() << std::endl;
 
         for(std::size_t j = 0; j < Ws_pred[i].rows(); ++j){
             for(std::size_t k = 0; k < Ws_pred[i].cols(); ++k){
