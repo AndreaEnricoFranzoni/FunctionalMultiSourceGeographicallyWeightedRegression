@@ -639,7 +639,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
 
         for(std::size_t j = 0; j < Wc.rows(); ++j){
             for(std::size_t k = 0; k < Wc.cols(); ++k){
-                Rcout << "Wc[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << Wc(j,k)(loc) << std::endl;
+                Rcout << "Wc ( "<< j << "," << k << "in " << loc << ": " << Wc(j,k)(loc) << std::endl;
             }
         }
 
@@ -1280,7 +1280,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     //We_pred: n_pred diagonal functional matrices of dimension n_trainxn_train
     std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > We_pred = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_>(W_E_pred,number_threads);
     //Ws_pred: n_pred diagonal functional matrices of dimension n_trainxn_train
-    std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Ws_pred = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_>(W_S_pred,number_threads);
+    std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Ws_pred = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_>(W_S_pred,number_threads);
 
 
     double loc = 0.3;

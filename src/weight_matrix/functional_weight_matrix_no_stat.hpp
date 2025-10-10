@@ -184,9 +184,6 @@ public:
     void
     compute_weights_pred()
     {
-      std::cout << "Pred w" << std::endl; 
-      std::cout << "dist: rows: " << m_distance_matrix.rows() << ", cols: " <<  m_distance_matrix.cols() << std::endl;
-      std::cout << "dist pred: rows: " << m_distance_matrix_pred.rows() << ", cols: " <<  m_distance_matrix_pred.cols() << std::endl;
       std::size_t n_train = m_distance_matrix_pred.n_train();
       std::size_t n_pred  = m_distance_matrix_pred.n_pred();
 
@@ -197,7 +194,7 @@ public:
 #endif
       for(std::size_t i_pred = 0; i_pred < n_pred; ++i_pred)
       {
-        std::vector<double> weights_non_stat_unit_i_pred = m_distance_matrix_pred[i_pred];
+        std::vector<double> weights_non_stat_unit_i_pred = m_distance_matrix_pred.distances()[i_pred];
 
         //applying the kernel function to correctly smoothing the distances
         std::transform(weights_non_stat_unit_i_pred.begin(),
