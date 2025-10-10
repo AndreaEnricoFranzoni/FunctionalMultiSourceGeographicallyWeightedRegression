@@ -240,12 +240,13 @@ wrap_into_fm(const functional_weight_matrix_non_stationary<INPUT,OUTPUT,domain_t
 
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
 
+    std::size_t n_matrices = W.weights().size();
     std::size_t n = W.n();  //number of statistical units
     //storing all the functional diagonal matrices
     std::vector<functional_matrix_diagonal<INPUT,OUTPUT>> fm;
-    fm.reserve(n);
+    fm.reserve(n_matrices);
 
-    for(std::size_t i = 0; i < n; ++i)
+    for(std::size_t i = 0; i < n_matrices; ++i)
     {
         std::vector< F_OBJ > f;
         f.resize(n);

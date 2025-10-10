@@ -632,6 +632,46 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
 
+        double loc = 0.3;
+
+
+                Rcout "Wc: rows: " << Wc.rows() << ", cols: " << Wc.cols() << std::endl;
+
+        for(std::size_t j = 0; j < Wc.rows(); ++j){
+            for(std::size_t k = 0; k < Wc.cols(); ++k){
+                Rcout << "Wc[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << Wc(j,k) << std::endl;
+            }
+        }
+
+
+
+    Rcout << "We: sono " << We.size() << std::endl;
+    for(std::size_t i = 0; i < We.size(); ++i){
+        Rcout "We unit " << i+1 << "-th: rows: " << We[i].rows() << ", cols: " << We[i].cols() << std::endl;
+
+        for(std::size_t j = 0; j < We[i].rows(); ++j){
+            for(std::size_t k = 0; k < We[i].cols(); ++k){
+                Rcout << "We[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << We[i](j,k) << std::endl;
+            }
+        }
+    }
+
+    Rcout << "Ws: sono " << Ws.size() << std::endl;
+    for(std::size_t i = 0; i < Ws.size(); ++i){
+        Rcout "Ws unit " << i+1 << "-th: rows: " << Ws[i].rows() << ", cols: " << Ws[i].cols() << std::endl;
+
+        for(std::size_t j = 0; j < Ws[i].rows(); ++j){
+            for(std::size_t k = 0; k < Ws[i].cols(); ++k){
+                Rcout << "Ws[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << Ws[i](j,k) << std::endl;
+            }
+        }
+    }
+
+
+
+
+
+
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),
@@ -1139,25 +1179,6 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     //Xs_train: a functional matrix of dimension n_trainxqs
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xs_train = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_train_,number_threads);
 
-    
-
-    //Ws: n diagonal functional matrices of dimension nxn
-    //std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Ws = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_>(W_S,number_threads);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     //////////////////////////////////////////////
     ///// WRAPPING COVARIATES TO BE PREDICTED ////
@@ -1222,20 +1243,73 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
 
 
-    ///////////////////////////////////////////////////////
-    //////////////// DISTANCES NEED TO BE COMPUTED   //////
-    ///////////////////////////////////////////////////////
+    ////////////////////////////////////////
+    /////////        CONSTRUCTING W   //////
+    ////////////////////////////////////////
+    //distances
     auto coordinates_events_to_pred_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coordinates_events_to_pred);
     check_dim_input<_EVENT_>(units_to_be_predicted,coordinates_events_to_pred_.rows(),"coordinates matrix rows");
     check_dim_input<_EVENT_>(FDAGWR_FEATS::number_of_geographical_coordinates,coordinates_events_to_pred_.cols(),"coordinates matrix columns");
     auto coordinates_stations_to_pred_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coordinates_stations_to_pred);
     check_dim_input<_STATION_>(units_to_be_predicted,coordinates_stations_to_pred_.rows(),"coordinates matrix rows");
     check_dim_input<_STATION_>(FDAGWR_FEATS::number_of_geographical_coordinates,coordinates_stations_to_pred_.cols(),"coordinates matrix columns");
-
     distance_matrix_pred<_DISTANCE_> distances_events_to_pred_(std::move(coordinates_events_),std::move(coordinates_events_to_pred_));
     distance_matrix_pred<_DISTANCE_> distances_stations_to_pred_(std::move(coordinates_stations_),std::move(coordinates_stations_to_pred_));
     distances_events_to_pred_.compute_distances();
     distances_stations_to_pred_.compute_distances();
+    //response reconstruction weights
+    std::unique_ptr<basis_base_class<_DOMAIN_>> basis_rec_weights_response_ = basis_fac.create(basis_type_rec_weights_response_,knots_response_eigen_w_,degree_basis_rec_weights_response_,number_basis_rec_weights_response_);
+    //extracting the template param of the basis for fd (access it in the template params list with ::template_type)  
+    using rec_weights_response_basis_tmp_t = extract_template_t< decltype(basis_rec_weights_response_)::element_type >;   
+    functional_data< _DOMAIN_, rec_weights_response_basis_tmp_t::template_type > rec_weights_y_fd_(std::move(coefficients_rec_weights_response_),std::move(basis_rec_weights_response_));
+    //functional weight matrix
+    //events
+    functional_weight_matrix_non_stationary<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_,_KERNEL_,_DISTANCE_> W_E_pred(rec_weights_y_fd_,
+                                                                                                                                                                            std::move(distances_events_to_pred_),
+                                                                                                                                                                            kernel_bandwith_events_cov_,
+                                                                                                                                                                            number_threads,
+                                                                                                                                                                            true);
+    W_E_pred.compute_weights_pred();                                                                         
+    //stations
+    functional_weight_matrix_non_stationary<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_,_KERNEL_,_DISTANCE_> W_S_pred(rec_weights_y_fd_,
+                                                                                                                                                                              std::move(distances_stations_to_pred_),
+                                                                                                                                                                              kernel_bandwith_stations_cov_,
+                                                                                                                                                                              number_threads,
+                                                                                                                                                                              true);
+    W_S_pred.compute_weights_pred();
+    //We_pred: n_pred diagonal functional matrices of dimension n_trainxn_train
+    std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > We_pred = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_>(W_E_pred,number_threads);
+    //Ws_pred: n_pred diagonal functional matrices of dimension n_trainxn_train
+    std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Ws_pred = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_>(W_S_pred,number_threads);
+
+
+    double loc = 0.3;
+    Rcout << "We_pred: sono " << We_pred.size() << std::endl;
+    for(std::size_t i = 0; i < We_pred.size(); ++i){
+        Rcout "We_pred pred unit " << i+1 << "-th: rows: " << We_pred[i].rows() << ", cols: " << We_pred[i].cols() << std::endl;
+
+        for(std::size_t j = 0; j < We_pred[i].rows(); ++j){
+            for(std::size_t k = 0; k < We_pred[i].cols(); ++k){
+                Rcout << "We_pred[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << We_pred[i](j,k) << std::endl;
+            }
+        }
+    }
+
+    Rcout << "Ws_pred: sono " << Ws_pred.size() << std::endl;
+    for(std::size_t i = 0; i < Ws_pred.size(); ++i){
+        Rcout "Ws_pred pred unit " << i+1 << "-th: rows: " << Ws_pred[i].rows() << ", cols: " << Ws_pred[i].cols() << std::endl;
+
+        for(std::size_t j = 0; j < Ws_pred[i].rows(); ++j){
+            for(std::size_t k = 0; k < Ws_pred[i].cols(); ++k){
+                Rcout << "Ws_pred[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << Ws_pred[i](j,k) << std::endl;
+            }
+        }
+    }
+
+
+
+
+
 
 
     //fgwr predictor

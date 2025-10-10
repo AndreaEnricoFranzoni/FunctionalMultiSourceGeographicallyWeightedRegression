@@ -84,7 +84,8 @@ public:
                                   functional_weight_matrix_base<functional_weight_matrix_non_stationary,INPUT,OUTPUT,domain_type,basis_type>(y_recostruction_weights_fd,number_threads),
                                   m_kernel_bandwith(kernel_bwt),
                                   m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)}                                                                                          
-                                {                                                  
+                                {           
+                                  std::cout << "Train cons" << std::endl;                                       
                                   static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY   ||
                                                 stationarity_t == FDAGWR_COVARIATES_TYPES::EVENT            ||
                                                 stationarity_t == FDAGWR_COVARIATES_TYPES::STATION,
@@ -104,7 +105,8 @@ public:
                                   functional_weight_matrix_base<functional_weight_matrix_non_stationary,INPUT,OUTPUT,domain_type,basis_type>(y_recostruction_weights_fd,number_threads),
                                   m_kernel_bandwith(kernel_bwt),
                                   m_distance_matrix_pred{std::forward<DIST_MATRIX_OBJ>(distance_matrix_pred)}                                                                                          
-                                {                                                  
+                                {              
+                                  std::cout << "Pred cons" << std::endl;                                     
                                   static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY   ||
                                                 stationarity_t == FDAGWR_COVARIATES_TYPES::EVENT            ||
                                                 stationarity_t == FDAGWR_COVARIATES_TYPES::STATION,
@@ -134,6 +136,9 @@ public:
     void
     computing_weights()
     {
+      std::cout << "Train w" << std::endl; 
+      std::cout << "dist: rows: " << m_distance_matrix.rows() << ", cols: " <<  m_distance_matrix.cols() << std::endl;
+      std::cout << "dist pred: rows: " << m_distance_matrix_pred.rows() << ", cols: " <<  m_distance_matrix_pred.cols() << std::endl;
       //to shared the values with OMP
       auto n_stat_units = this->n();
       //preparing the container for the functional non-stationary weight matrix
@@ -179,6 +184,9 @@ public:
     void
     compute_weights_pred()
     {
+      std::cout << "Pred w" << std::endl; 
+      std::cout << "dist: rows: " << m_distance_matrix.rows() << ", cols: " <<  m_distance_matrix.cols() << std::endl;
+      std::cout << "dist pred: rows: " << m_distance_matrix_pred.rows() << ", cols: " <<  m_distance_matrix_pred.cols() << std::endl;
       std::size_t n_train = m_distance_matrix_pred.n_train();
       std::size_t n_pred  = m_distance_matrix_pred.n_pred();
 
