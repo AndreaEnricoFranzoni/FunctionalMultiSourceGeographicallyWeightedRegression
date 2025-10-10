@@ -137,8 +137,6 @@ public:
     computing_weights()
     {
       std::cout << "Train w" << std::endl; 
-      std::cout << "dist: rows: " << m_distance_matrix.rows() << ", cols: " <<  m_distance_matrix.cols() << std::endl;
-      std::cout << "dist pred: rows: " << m_distance_matrix_pred.rows() << ", cols: " <<  m_distance_matrix_pred.cols() << std::endl;
       //to shared the values with OMP
       auto n_stat_units = this->n();
       //preparing the container for the functional non-stationary weight matrix
@@ -184,6 +182,7 @@ public:
     void
     compute_weights_pred()
     {
+      std::cout << "Pred w" << std::endl; 
       std::size_t n_train = m_distance_matrix_pred.n_train();
       std::size_t n_pred  = m_distance_matrix_pred.n_pred();
 
