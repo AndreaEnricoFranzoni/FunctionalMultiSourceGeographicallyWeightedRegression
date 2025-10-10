@@ -72,7 +72,7 @@ public:
                          m_coordinates_train{std::forward<COORDINATES_OBJ>(coordinates_train)},      //pass the coordinates
                          m_n_train(m_coordinates_train.rows()),
                          m_coordinates_pred{std::forward<COORDINATES_OBJ>(coordinates_pred)},                       //if there are locations
-                         m_n_pred(m_coordinates_pred.rows()),
+                         m_n_pred(m_coordinates_pred.rows())
                          {
                             assert((m_coordinates_train.cols() == 2) && (m_coordinates_pred.cols() == 2));
                          }
