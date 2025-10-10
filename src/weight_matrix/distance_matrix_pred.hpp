@@ -99,4 +99,6 @@ public:
     std::vector<std::vector<double>> distances() const {return m_distances;}
 };
 
+#include "distance_matrix_pred_imp.hpp"
+
 #endif  /*FDAGWR_DISTANCE_MATRIX_PRED_HPP*/
