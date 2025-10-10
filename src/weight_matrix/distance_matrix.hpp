@@ -140,7 +140,7 @@ public:
     * @return the pointwise distance within two locations
     * @details a tag dispatcher for the desired distance computation is used
     */
-    double pointwise_distance(double distance, double bandwith) const { return pointwise_distance(distance,bandwith,DISTANCE_MEASURE_T<distance_measure>{});};
+    double pointwise_distance(std::size_t loc_i, std::size_t loc_j) const { return pointwise_distance(loc_i,loc_j,DISTANCE_MEASURE_T<distance_measure>{});};
 
     /*!
     * Function that computes the distances within each pair of statistical units

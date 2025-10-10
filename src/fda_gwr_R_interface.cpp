@@ -38,6 +38,7 @@
 #include "weight_matrix/functional_weight_matrix_stat.hpp"
 #include "weight_matrix/functional_weight_matrix_no_stat.hpp"
 #include "weight_matrix/distance_matrix.hpp"
+#include "weight_matrix/distance_matrix_pred.hpp"
 
 #include "penalization_matrix/penalization_matrix.hpp"
 
@@ -69,7 +70,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr has been installed"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr4 has been installed"<< std::endl;}
 
 
 /*!
@@ -901,7 +902,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
 // [[Rcpp::export]]
 Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                               Rcpp::List coeff_events_cov_to_pred,
-                              Rcpp::NumericMatrix coordinates_events_to_pred,
+                              Rcpp::NumericMatrix coordinates_events_to_pred,   
                               Rcpp::List coeff_stations_cov_to_pred,
                               Rcpp::NumericMatrix coordinates_stations_to_pred,
                               int units_to_be_predicted,
@@ -1222,12 +1223,19 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
 
     ///////////////////////////////////////////////////////
-    //////////////7/ DISTANCES NEED TO BE COMPUTED   //////
+    //////////////// DISTANCES NEED TO BE COMPUTED   //////
     ///////////////////////////////////////////////////////
+    auto coordinates_events_to_pred_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coordinates_events_to_pred);
+    check_dim_input<_EVENT_>(units_to_be_predicted,coordinates_events_to_pred_.rows(),"coordinates matrix rows");
+    check_dim_input<_EVENT_>(FDAGWR_FEATS::number_of_geographical_coordinates,coordinates_events_to_pred_.cols(),"coordinates matrix columns");
+    auto coordinates_stations_to_pred_ = reader_data<_DATA_TYPE_,_NAN_REM_>(coordinates_stations_to_pred);
+    check_dim_input<_STATION_>(units_to_be_predicted,coordinates_stations_to_pred_.rows(),"coordinates matrix rows");
+    check_dim_input<_STATION_>(FDAGWR_FEATS::number_of_geographical_coordinates,coordinates_stations_to_pred_.cols(),"coordinates matrix columns");
 
-
-
-
+    distance_matrix_pred<_DISTANCE_> distances_events_to_pred_(std::move(coordinates_events_),std::move(coordinates_events_to_pred_));
+    distance_matrix_pred<_DISTANCE_> distances_stations_to_pred_(std::move(coordinates_stations_),std::move(coordinates_stations_to_pred_));
+    distances_events_to_pred_.compute_distances();
+    distances_stations_to_pred_.compute_distances();
 
 
     //fgwr predictor
