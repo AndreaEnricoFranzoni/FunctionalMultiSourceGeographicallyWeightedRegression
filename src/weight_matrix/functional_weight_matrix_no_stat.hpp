@@ -81,8 +81,8 @@ public:
                                             double kernel_bwt,
                                             int number_threads)
                                 : 
-                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary,INPUT,OUTPUT,domain_type,basis_type>(y_recostruction_weights_fd,
-                                  m_kernel_bandwith(kernel_bwt)                                                                                                   number_threads),
+                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary,INPUT,OUTPUT,domain_type,basis_type>(y_recostruction_weights_fd,number_threads),
+                                  m_kernel_bandwith(kernel_bwt)                                                                                                   
                                 {                
                                   if constexpr(std::is_same_v<std::decay_t<DIST_MATRIX_OBJ>,distance_matrix<dist_meas>>)
                                   {
@@ -95,7 +95,6 @@ public:
                                     m_distance_matrix_pred = std::forward<DIST_MATRIX_OBJ>(distance_matrix);
                                   }
                                   
-                                    
                                   static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY   ||
                                                 stationarity_t == FDAGWR_COVARIATES_TYPES::EVENT            ||
                                                 stationarity_t == FDAGWR_COVARIATES_TYPES::STATION,
