@@ -108,6 +108,10 @@ private:
 
 
 public:
+    /*!
+    * @brief Default constructor
+    */
+    distance_matrix() = default;
 
     /*!
     * @brief Constructor for the distance matrix (square symmetric matrix containing the distances within each pair of units).

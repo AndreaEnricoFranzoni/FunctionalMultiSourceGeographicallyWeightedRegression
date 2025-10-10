@@ -87,6 +87,11 @@ public:
         m_weights[i] = w_i;
       }
     }
+
+    inline
+    void
+    compute_weights_pred()
+    {}
 };
 
 #endif  /*FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_STATIONARY_HPP*/

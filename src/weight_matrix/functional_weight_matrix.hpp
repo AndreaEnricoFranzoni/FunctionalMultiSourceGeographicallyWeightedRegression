@@ -113,6 +113,13 @@ public:
     {
         static_cast<D*>(this)->computing_weights();   //solving depends on child class: downcasting with CRTP of base to derived
     }
+
+    inline
+    void 
+    compute_weights_pred() 
+    {
+        static_cast<D*>(this)->compute_weights_pred();   //solving depends on child class: downcasting with CRTP of base to derived
+    }
 };
 
 #endif  /*FDAGWR_FUNCTIONAL_WEIGHT_MATRIX_HPP*/

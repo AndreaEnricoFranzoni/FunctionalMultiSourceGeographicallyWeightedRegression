@@ -23,7 +23,7 @@
 
 #include "functional_weight_matrix.hpp"
 #include "distance_matrix.hpp"
-
+#include "distance_matrix_pred.hpp"
 
 
 /*!
@@ -55,6 +55,8 @@ private:
     WeightMatrixType<INPUT,OUTPUT,stationarity_t> m_weights;
     /*!Distance matrix*/
     distance_matrix<dist_meas> m_distance_matrix;
+    /*!Distance matrix for pred*/
+    distance_matrix_pred<dist_meas> m_distance_matrix_pred;
     /*!Kernel bandwith*/
     double m_kernel_bandwith;
     /*!
@@ -81,6 +83,26 @@ public:
                                   functional_weight_matrix_base<functional_weight_matrix_non_stationary,INPUT,OUTPUT,domain_type,basis_type>(y_recostruction_weights_fd,
                                                                                                                                              number_threads),
                                   m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)},
+                                  m_kernel_bandwith(kernel_bwt) 
+                                {                                       
+                                    static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY   ||
+                                                  stationarity_t == FDAGWR_COVARIATES_TYPES::EVENT            ||
+                                                  stationarity_t == FDAGWR_COVARIATES_TYPES::STATION,
+                                                  "Functional weight matrix for non stationary covariates needs FDAGWR_COVARIATES_TYPES::NON_STATIONARY or FDAGWR_COVARIATES_TYPES::EVENT or FDAGWR_COVARIATES_TYPES::STATION as template parameter");
+                                }
+
+    /*!
+    * @brief Costruttore da utilizzare quando si fa predict
+    */
+    template< typename DIST_MATRIX_OBJ_PRED >
+    functional_weight_matrix_non_stationary(const functional_data<domain_type,basis_type> &y_recostruction_weights_fd,
+                                            DIST_MATRIX_OBJ_PRED&& distance_matrix_pred,
+                                            double kernel_bwt,
+                                            int number_threads)
+                                : 
+                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary,INPUT,OUTPUT,domain_type,basis_type>(y_recostruction_weights_fd,
+                                                                                                                                             number_threads),
+                                  m_distance_matrix_pred{std::forward<DIST_MATRIX_OBJ>(distance_matrix_pred)},
                                   m_kernel_bandwith(kernel_bwt) 
                                 {                                       
                                     static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY   ||
@@ -147,6 +169,48 @@ public:
         //storing the functional non-stationary matrix for unit i-th (corresponding to index unit_index)
         m_weights[i] = weights_unit_i;
       }
+    }
+
+    /*!
+    * @brief Computing the weights while performing prediction
+    */
+    inline 
+    void
+    compute_weights_pred()
+    {
+      std::size_t n_train = m_distance_matrix_pred.n_train();
+      std::size_t n_pred  = m_distance_matrix_pred.n_pred();
+
+      m_weights.resize(n_pred);
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(m_distance_matrix_pred,n_train,n_pred) num_threads(this->number_threads())
+#endif
+      for(std::size_t i_pred = 0; i_pred < n_pred; ++i_pred)
+      {
+        std::vector<double> weights_non_stat_unit_i_pred = m_distance_pred[i_pred];
+
+        //applying the kernel function to correctly smoothing the distances
+        std::transform(weights_non_stat_unit_i_pred.begin(),
+                       weights_non_stat_unit_i_pred.end(),
+                       weights_non_stat_unit_i_pred.begin(),
+                       [this](double dist){return this->kernel_eval(dist,this->m_kernel_bandwith);});
+
+        //preparing the container for the functional non-stationary matrix of pred unit i_pred-th 
+        std::vector< F_OBJ > weights_unit_i_pred;
+        weights_unit_i.reserve(n_train);
+
+        //computing the interaction within kernel application to distances and response reconstruction, unit i-th and all the other ones
+        for (std::size_t j_train = 0; j_train < n_train; ++j_train)
+        {          
+          double alpha_i_j = weights_non_stat_unit_i_pred[j_train];
+          F_OBJ w_i_j = [j_train,alpha_i_j,this](F_OBJ_INPUT loc){ return alpha_i_j * this->y_recostruction_weights_fd().eval(loc,j_train);};
+          weights_unit_i.push_back(w_i_j);
+        }
+        
+        //storing the functional non-stationary matrix for unit i-th (corresponding to index unit_index)
+        m_weights[i] = weights_unit_i;
+      }  
     }
 };
 

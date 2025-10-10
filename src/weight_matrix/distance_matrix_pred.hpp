@@ -65,6 +65,14 @@ private:
 
 
 public:
+    /*!
+    * @brief Default constructor
+    */
+    distance_matrix_pred() = default;
+
+    /*!
+    * @brief Constructor
+    */
     template<typename COORDINATES_OBJ>
     distance_matrix_pred(COORDINATES_OBJ &&coordinates_train,
                          COORDINATES_OBJ &&coordinates_pred)
@@ -76,6 +84,8 @@ public:
                          {
                             assert((m_coordinates_train.cols() == 2) && (m_coordinates_pred.cols() == 2));
                          }
+    
+
 
 
     /*!
@@ -97,6 +107,10 @@ public:
     * @return the private m_distances
     */
     std::vector<std::vector<double>> distances() const {return m_distances;}
+
+    std::size_t n_train() const{ return m_n_train;}
+
+    std::size_t n_pred() const{ return m_n_pred;}
 };
 
 #include "distance_matrix_pred_imp.hpp"
