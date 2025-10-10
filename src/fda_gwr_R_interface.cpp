@@ -1285,16 +1285,17 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                                                                                                    number_threads);
 
     //retrieve partial residuals
-    //fgwr_predictor->computePartialResiduals();
+    fgwr_predictor->computePartialResiduals();
     //compute the new b for the non-stationary covariates
-    //fgwr_predictor->computeBNew(W_new);
+    fgwr_predictor->computeBNew(W_new);
     //compute the beta for stationary covariates
-    //fgwr_predictor->computeStationaryBetas();            
+    fgwr_predictor->computeStationaryBetas();            
     //compute the beta for non-stationary covariates
-    //fgwr_predictor->computeNonStationaryBetas();   
+    fgwr_predictor->computeNonStationaryBetas();   
     //perform prediction
-    //functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fgwr_predictor->predict(X_new);
-
+    Rcout << "Compute prediciton" << std::endl;
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fgwr_predictor->predict(X_new);
+    Rcout << "Pred: rows: " << y_pred.rows() << ", cols: " << y_pred.cols() << std::endl;
 
     
 
