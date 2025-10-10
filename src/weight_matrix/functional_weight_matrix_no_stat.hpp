@@ -200,18 +200,18 @@ public:
 
         //preparing the container for the functional non-stationary matrix of pred unit i_pred-th 
         std::vector< F_OBJ > weights_unit_i_pred;
-        weights_unit_i.reserve(n_train);
+        weights_unit_i_pred.reserve(n_train);
 
         //computing the interaction within kernel application to distances and response reconstruction, unit i-th and all the other ones
         for (std::size_t j_train = 0; j_train < n_train; ++j_train)
         {          
           double alpha_i_j = weights_non_stat_unit_i_pred[j_train];
           F_OBJ w_i_j = [j_train,alpha_i_j,this](F_OBJ_INPUT loc){ return alpha_i_j * this->y_recostruction_weights_fd().eval(loc,j_train);};
-          weights_unit_i.push_back(w_i_j);
+          weights_unit_i_pred.push_back(w_i_j);
         }
         
         //storing the functional non-stationary matrix for unit i-th (corresponding to index unit_index)
-        m_weights[i] = weights_unit_i;
+        m_weights[i] = weights_unit_i_pred;
       }  
     }
 };
