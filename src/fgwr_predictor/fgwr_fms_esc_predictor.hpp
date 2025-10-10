@@ -235,7 +235,7 @@ public:
                 for(std::size_t i = 0; i < m_Bs_fitted.size(); ++i){
                     std::cout << "m_Bs_fitted " << i+1 << "size: " << m_Bs_fitted[i].size()<<std::endl;
                     for(std::size_t j = 0; j < m_Bs_fitted[i].size(); ++j){
-                        std::cout << "m_Bs_fitted " << i+1 << "i and " << j+1" j rows: " << m_Bs_fitted[i][j].rows()<<", cols: "<<m_Bs_fitted[i][j].cols()<<std::endl;
+                        std::cout << "m_Bs_fitted " << i+1 << "i and " << j+1 << " j rows: " << m_Bs_fitted[i][j].rows()<<", cols: "<<m_Bs_fitted[i][j].cols()<<std::endl;
                     }
                 }
 
@@ -396,8 +396,8 @@ public:
         assert(X_new.at(id_c).rows() == X_new.at(id_e).rows());
         assert(X_new.at(id_e).rows() == X_new.at(id_s).rows());
         std::size_t n_pred = X_new.at(id_c).rows();
-        assert((n_pred == m_BetaE.size()) && (n_pred == m_BetaS.size()))
-        assert((X_new.at(id_c).cols() == m_qc) && (X_new.at(id_e).cols() == m_qe) && (X_new.at(id_s).cols() == m_qs))
+        assert((n_pred == m_BetaE.size()) && (n_pred == m_BetaS.size()));
+        assert((X_new.at(id_c).cols() == m_qc) && (X_new.at(id_e).cols() == m_qe) && (X_new.at(id_s).cols() == m_qs));
 
         auto Xc_new = X_new.at(id_c);
         auto Xe_new = X_new.at(id_e);
