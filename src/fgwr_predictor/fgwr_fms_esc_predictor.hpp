@@ -331,7 +331,7 @@ public:
         auto Xs_new = X_new.at(id_s);
 
         //y_new = X_new*beta = Xc_new*beta_c + Xe_new*beta_e + Xs_new*beta_s
-        functional_matrix<INPUT,OUTPUT> y_new_C = fm_prod(Xc_new,m_BetaC,this->num_threads());    //n_pred x 1
+        functional_matrix<INPUT,OUTPUT> y_new_C = fm_prod(Xc_new,m_BetaC,this->number_threads());    //n_pred x 1
         functional_matrix<INPUT,OUTPUT> y_new_E(n_pred,1);
         functional_matrix<INPUT,OUTPUT> y_new_S(n_pred,1);
         
@@ -342,11 +342,11 @@ public:
         {
             std::vector< FUNC_OBJ<INPUT,OUTPUT> > xe_new_i(Xe_new.row(i).cbegin(),Xe_new.row(i).cend()); //1xqe
             functional_matrix<INPUT,OUTPUT> Xe_new_i(xe_new_i,1,m_qe);
-            y_new_E(i,0) = fm_prod(Xe_new_i,m_BetaE[i],this->num_threads())(0,0);
+            y_new_E(i,0) = fm_prod(Xe_new_i,m_BetaE[i],this->number_threads())(0,0);
 
             std::vector< FUNC_OBJ<INPUT,OUTPUT> > xs_new_i(Xs_new.row(i).cbegin(),Xs_new.row(i).cend()); //1xqs
             functional_matrix<INPUT,OUTPUT> Xs_new_i(xs_new_i,1,m_qs);
-            y_new_S(i,0) = fm_prod(Xs_new_i,m_BetaS[i],this->num_threads())(0,0);
+            y_new_S(i,0) = fm_prod(Xs_new_i,m_BetaS[i],this->number_threads())(0,0);
         }
 
         return y_new_C + y_new_E + y_new_S;
