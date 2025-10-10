@@ -248,10 +248,10 @@ public:
     override
     {
         assert(W.size() == 2);
-        std::string id_We = covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>();
-        std::string id_Ws = covariate_type<FDAGWR_COVARIATES_TYPES::STATION>();
-        assert(W.at(id_We).size() == W.at(id_Ws).size());
-        std::size_t n_pred = W.at(id_We).size();
+        std::string id_e = covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>();
+        std::string id_s = covariate_type<FDAGWR_COVARIATES_TYPES::STATION>();
+        assert(W.at(id_e).size() == W.at(id_s).size());
+        std::size_t n_pred = W.at(id_e).size();
 
         //compute the non-stationary betas in the new locations
         //penalties in the new locations
@@ -314,20 +314,20 @@ public:
     */
     inline
     functional_matrix<INPUT,OUTPUT>
-    predict(const std::map<std::string,functional_matrix<INPUT,OUTPUT> &X_new)
+    predict(const std::map<std::string,functional_matrix<INPUT,OUTPUT>> &X_new)
     const
     {
-        assert(W.size() == 3);
-        std::string id_Wc = covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>();
-        std::string id_We = covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>();
-        std::string id_Ws = covariate_type<FDAGWR_COVARIATES_TYPES::STATION>();
-        assert(W.at(id_Wc).size() == W.at(id_We).size());
-        assert(W.at(id_We).size() == W.at(id_Ws).size());
-        std::size_t n_pred = W.at(id_Wc).size();
+        assert(X_new.size() == 3);
+        std::string id_c = covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>();
+        std::string id_e = covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>();
+        std::string id_s = covariate_type<FDAGWR_COVARIATES_TYPES::STATION>();
+        assert(X_new.at(id_c).size() == X_new.at(id_e).size());
+        assert(X_new.at(id_e).size() == X_new.at(id_s).size());
+        std::size_t n_pred = X_new.at(id_c).size();
 
-        auto Xc_new = W.at(id_Wc);
-        auto Xe_new = W.at(id_We);
-        auto Xs_new = W.at(id_Ws);
+        auto Xc_new = X_new.at(id_c);
+        auto Xe_new = X_new.at(id_e);
+        auto Xs_new = X_new.at(id_s);
 
         //y_new = X_new*beta = Xc_new*beta_c + Xe_new*beta_e + Xs_new*beta_s
         functional_matrix<INPUT,OUTPUT> y_new_C = fm_prod(Xc_new,m_BetaC,this->num_threads());    //n_pred x 1
