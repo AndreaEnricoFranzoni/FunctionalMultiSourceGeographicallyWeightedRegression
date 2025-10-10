@@ -25,7 +25,7 @@
 #include "distance_matrix.hpp"
 #include "distance_matrix_pred.hpp"
 
-
+#include <iostream>
 /*!
 * @file functional_weight_matrix_no_stat.hpp
 * @brief Construct the non stationary weight matrix for performing the geographically weighted regression. Weights consist of functional reconstruction weights and spatial weights
@@ -53,12 +53,13 @@ class functional_weight_matrix_non_stationary : public functional_weight_matrix_
 private:
     /*!Vector of diagonal matrices storing the weights*/
     WeightMatrixType<INPUT,OUTPUT,stationarity_t> m_weights;
+    /*!Kernel bandwith*/
+    double m_kernel_bandwith;
     /*!Distance matrix*/
     distance_matrix<dist_meas> m_distance_matrix;
     /*!Distance matrix for pred*/
     distance_matrix_pred<dist_meas> m_distance_matrix_pred;
-    /*!Kernel bandwith*/
-    double m_kernel_bandwith;
+
     /*!
     * @brief Evaluation of the kernel function for the non stationary weights
     * @param distance distance between two locations
@@ -74,44 +75,33 @@ public:
     * @param n number of statistical units
     * @param number_threads number of threads for OMP
     */
-    template< typename DIST_MATRIX_OBJ,
-              typename = std::enable_if_t<std::is_same_v<std::decay_t<DIST_MATRIX_OBJ>,distance_matrix<dist_meas>>>>
+    template< typename DIST_MATRIX_OBJ >
     functional_weight_matrix_non_stationary(const functional_data<domain_type,basis_type> &y_recostruction_weights_fd,
                                             DIST_MATRIX_OBJ&& distance_matrix,
                                             double kernel_bwt,
                                             int number_threads)
                                 : 
                                   functional_weight_matrix_base<functional_weight_matrix_non_stationary,INPUT,OUTPUT,domain_type,basis_type>(y_recostruction_weights_fd,
-                                                                                                                                             number_threads),
-                                  m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)},
-                                  m_kernel_bandwith(kernel_bwt) 
-                                {                                       
-                                    static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY   ||
-                                                  stationarity_t == FDAGWR_COVARIATES_TYPES::EVENT            ||
-                                                  stationarity_t == FDAGWR_COVARIATES_TYPES::STATION,
-                                                  "Functional weight matrix for non stationary covariates needs FDAGWR_COVARIATES_TYPES::NON_STATIONARY or FDAGWR_COVARIATES_TYPES::EVENT or FDAGWR_COVARIATES_TYPES::STATION as template parameter");
+                                  m_kernel_bandwith(kernel_bwt)                                                                                                   number_threads),
+                                {                
+                                  if constexpr(std::is_same_v<std::decay_t<DIST_MATRIX_OBJ>,distance_matrix<dist_meas>>)
+                                  {
+                                    std::cout << "Training" << std::endl;
+                                    m_distance_matrix = std::forward<DIST_MATRIX_OBJ>(distance_matrix);
+                                  }
+                                  else if constexpr(std::is_same_v<std::decay_t<DIST_MATRIX_OBJ>,distance_matrix_pred<dist_meas>>)
+                                  {
+                                    std::cout << "Pred" << std::endl;
+                                    m_distance_matrix_pred = std::forward<DIST_MATRIX_OBJ>(distance_matrix);
+                                  }
+                                  
+                                    
+                                  static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY   ||
+                                                stationarity_t == FDAGWR_COVARIATES_TYPES::EVENT            ||
+                                                stationarity_t == FDAGWR_COVARIATES_TYPES::STATION,
+                                                "Functional weight matrix for non stationary covariates needs FDAGWR_COVARIATES_TYPES::NON_STATIONARY or FDAGWR_COVARIATES_TYPES::EVENT or FDAGWR_COVARIATES_TYPES::STATION as template parameter");
                                 }
 
-    /*!
-    * @brief Costruttore da utilizzare quando si fa predict
-    */
-    template< typename DIST_MATRIX_OBJ,
-              typename = std::enable_if_t<std::is_same_v<std::decay_t<DIST_MATRIX_OBJ>,distance_matrix_pred<dist_meas>>>>
-    functional_weight_matrix_non_stationary(const functional_data<domain_type,basis_type> &y_recostruction_weights_fd,
-                                            DIST_MATRIX_OBJ&& distance_matrix_pred,
-                                            double kernel_bwt,
-                                            int number_threads)
-                                : 
-                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary,INPUT,OUTPUT,domain_type,basis_type>(y_recostruction_weights_fd,
-                                                                                                                                             number_threads),
-                                  m_distance_matrix_pred{std::forward<DIST_MATRIX_OBJ>(distance_matrix_pred)},
-                                  m_kernel_bandwith(kernel_bwt) 
-                                {                                       
-                                    static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY   ||
-                                                  stationarity_t == FDAGWR_COVARIATES_TYPES::EVENT            ||
-                                                  stationarity_t == FDAGWR_COVARIATES_TYPES::STATION,
-                                                  "Functional weight matrix for non stationary covariates needs FDAGWR_COVARIATES_TYPES::NON_STATIONARY or FDAGWR_COVARIATES_TYPES::EVENT or FDAGWR_COVARIATES_TYPES::STATION as template parameter");
-                                }
 
     /*!
     * @brief Getter for the functional non-stationary weight matrix
