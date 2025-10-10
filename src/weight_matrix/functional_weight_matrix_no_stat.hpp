@@ -99,7 +99,7 @@ public:
                                             DIST_MATRIX_OBJ&& distance_matrix_pred,
                                             double kernel_bwt,
                                             int number_threads,
-                                            bool pred = true)
+                                            bool pred)
                                 : 
                                   functional_weight_matrix_base<functional_weight_matrix_non_stationary,INPUT,OUTPUT,domain_type,basis_type>(y_recostruction_weights_fd,number_threads),
                                   m_kernel_bandwith(kernel_bwt),
