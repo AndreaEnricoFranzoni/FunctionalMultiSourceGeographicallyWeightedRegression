@@ -190,7 +190,7 @@ public:
 #endif
       for(std::size_t i_pred = 0; i_pred < n_pred; ++i_pred)
       {
-        std::vector<double> weights_non_stat_unit_i_pred = m_distance_pred[i_pred];
+        std::vector<double> weights_non_stat_unit_i_pred = m_distance_matrix_pred[i_pred];
 
         //applying the kernel function to correctly smoothing the distances
         std::transform(weights_non_stat_unit_i_pred.begin(),
@@ -211,7 +211,7 @@ public:
         }
         
         //storing the functional non-stationary matrix for unit i-th (corresponding to index unit_index)
-        m_weights[i] = weights_unit_i_pred;
+        m_weights[i_pred] = weights_unit_i_pred;
       }  
     }
 };
