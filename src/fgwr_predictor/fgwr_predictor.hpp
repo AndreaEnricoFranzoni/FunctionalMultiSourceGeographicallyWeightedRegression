@@ -200,7 +200,7 @@ public:
     /*!
     * @brief Compute prediction
     */
-    inline functional_matrix<INPUT,OUTPUT> predict(const std::map<std::string,functional_matrix<INPUT,OUTPUT>>& X_new) = 0;
+    inline functional_matrix<INPUT,OUTPUT> predict(const std::map<std::string,functional_matrix<INPUT,OUTPUT>>& X_new) const = 0;
 };
 
 #include "fgwr_predictor_imp.hpp"

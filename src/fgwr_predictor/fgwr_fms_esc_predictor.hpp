@@ -300,7 +300,7 @@ public:
         m_BetaS.resize(n_pred);
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(m_BetaE,m_BetaS,m_theta,m_psi,m_be_pred,m_bs_pred,n_pred) num_threads(this->num_threads())
+#pragma omp parallel for shared(m_BetaE,m_BetaS,m_theta,m_psi,m_be_pred,m_bs_pred,n_pred) num_threads(this->number_threads())
 #endif
         for(std::size_t i = 0; i < n_pred; ++i)
         {
@@ -316,6 +316,7 @@ public:
     functional_matrix<INPUT,OUTPUT>
     predict(const std::map<std::string,functional_matrix<INPUT,OUTPUT>> &X_new)
     const
+    override
     {
         assert(X_new.size() == 3);
         std::string id_c = covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>();
@@ -335,7 +336,7 @@ public:
         functional_matrix<INPUT,OUTPUT> y_new_S(n_pred,1);
         
 #ifdef _OPENMP
-#pragma omp parallel for shared(Xe_new,m_BetaE,y_new_E,Xs_new,m_BetaS,y_new_S,n_pred,m_qe,m_qs) num_threads(this->num_threads())
+#pragma omp parallel for shared(Xe_new,m_BetaE,y_new_E,Xs_new,m_BetaS,y_new_S,n_pred,m_qe,m_qs) num_threads(this->number_threads())
 #endif
         for(std::size_t i = 0; i < n_pred; ++i)
         {
