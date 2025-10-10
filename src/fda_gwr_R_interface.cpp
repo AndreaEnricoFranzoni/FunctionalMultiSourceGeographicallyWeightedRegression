@@ -1244,7 +1244,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     //Ws_pred: n_pred diagonal functional matrices of dimension n_trainxn_train
     std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Ws_pred = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_>(W_S_pred,number_threads);
     //map containing the W
-    std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT>>> W_new = {
+    std::map<std::string,std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>>> W_new = {
         {covariate_type<_EVENT_>(),We_pred},
         {covariate_type<_STATION_>(),Ws_pred}};
 
