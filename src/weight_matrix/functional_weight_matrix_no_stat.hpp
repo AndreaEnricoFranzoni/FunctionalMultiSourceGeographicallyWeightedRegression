@@ -82,19 +82,29 @@ public:
                                             int number_threads)
                                 : 
                                   functional_weight_matrix_base<functional_weight_matrix_non_stationary,INPUT,OUTPUT,domain_type,basis_type>(y_recostruction_weights_fd,number_threads),
-                                  m_kernel_bandwith(kernel_bwt)                                                                                                   
-                                {                
-                                  if constexpr(std::is_same_v<std::decay_t<DIST_MATRIX_OBJ>,distance_matrix<dist_meas>>)
-                                  {
-                                    std::cout << "Training" << std::endl;
-                                    m_distance_matrix = std::forward<DIST_MATRIX_OBJ>(distance_matrix);
-                                  }
-                                  else if constexpr(std::is_same_v<std::decay_t<DIST_MATRIX_OBJ>,distance_matrix_pred<dist_meas>>)
-                                  {
-                                    std::cout << "Pred" << std::endl;
-                                    m_distance_matrix_pred = std::forward<DIST_MATRIX_OBJ>(distance_matrix);
-                                  }
-                                  
+                                  m_kernel_bandwith(kernel_bwt),
+                                  m_distance_matrix{std::forward<DIST_MATRIX_OBJ>(distance_matrix)}                                                                                          
+                                {                                                  
+                                  static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY   ||
+                                                stationarity_t == FDAGWR_COVARIATES_TYPES::EVENT            ||
+                                                stationarity_t == FDAGWR_COVARIATES_TYPES::STATION,
+                                                "Functional weight matrix for non stationary covariates needs FDAGWR_COVARIATES_TYPES::NON_STATIONARY or FDAGWR_COVARIATES_TYPES::EVENT or FDAGWR_COVARIATES_TYPES::STATION as template parameter");
+                                }
+
+    /*!
+    * @brief Constructor 
+    */
+    template< typename DIST_MATRIX_OBJ >
+    functional_weight_matrix_non_stationary(const functional_data<domain_type,basis_type> &y_recostruction_weights_fd,
+                                            DIST_MATRIX_OBJ&& distance_matrix_pred,
+                                            double kernel_bwt,
+                                            int number_threads,
+                                            bool pred = true)
+                                : 
+                                  functional_weight_matrix_base<functional_weight_matrix_non_stationary,INPUT,OUTPUT,domain_type,basis_type>(y_recostruction_weights_fd,number_threads),
+                                  m_kernel_bandwith(kernel_bwt),
+                                  m_distance_matrix_pred{std::forward<DIST_MATRIX_OBJ>(distance_matrix_pred)}                                                                                          
+                                {                                                  
                                   static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY   ||
                                                 stationarity_t == FDAGWR_COVARIATES_TYPES::EVENT            ||
                                                 stationarity_t == FDAGWR_COVARIATES_TYPES::STATION,
