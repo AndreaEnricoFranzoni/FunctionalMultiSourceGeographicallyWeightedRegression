@@ -41,6 +41,10 @@ template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class fgwr_predictor
 {
+    //type of the function stored and its input
+    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
+
 private:
     /*!Object to perform the integration using trapezoidal quadrature rule*/
     fd_integration m_integrating;
@@ -183,7 +187,22 @@ public:
     /*!
     * @brief Updating the non-stationary betas
     */                            
-    virtual inline void computeBetaNew(const std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >> &W) = 0;
+    virtual inline void computeBNew(const std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >> &W) = 0;
+
+    /*!
+    * @brief Compute stationary beta
+    */
+    virtual inline void computeStationaryBetas() = 0;
+
+    /*!
+    * @brief Compute non-stationary betas
+    */
+    virtual inline void computeNonStationaryBetas() = 0;
+
+    /*!
+    * @brief Compute prediction
+    */
+    inline functional_matrix<INPUT,OUTPUT> predict(const std::map<std::string,functional_matrix<INPUT,OUTPUT>>& X_new) = 0;
 };
 
 #include "fgwr_predictor_imp.hpp"

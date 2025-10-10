@@ -118,7 +118,13 @@ private:
     functional_matrix<INPUT,OUTPUT> m_y_tilde_tilde_hat;
 
 
-
+    //Betas
+    //stationary: qc x 1
+    functional_matrix<INPUT,OUTPUT> m_BetaC;
+    //events-dependent: n_pred matrices of qe x 1
+    std::vector< functional_matrix<INPUT,OUTPUT>> m_BetaE;
+    //stations-dependent: n_pred matrices of qs x 1
+    std::vector< functional_matrix<INPUT,OUTPUT>> m_BetaS;
 
 public:
     /*!
@@ -207,7 +213,7 @@ public:
                 m_Xe_train_t = m_Xe_train.transpose();
                 m_Xs_train_t = m_Xs_train.transpose();
 
-                //dewrappare i b_train
+                //dewrappare i b_train (li incolonna)
                 m_bc_fitted = this->dewrap_b(m_Bc_fitted,m_Lc_j);
                 //bs_fitted
                 m_bs_fitted = this->dewrap_b(m_Bs_fitted,m_Ls_j,this->n_train());
@@ -238,7 +244,7 @@ public:
 
     inline
     void
-    computeBetaNew(const std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >> &W)
+    computeBNew(const std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >> &W)
     override
     {
         assert(W.size() == 2);
@@ -258,9 +264,8 @@ public:
         //COMPUTING all the m_bs in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
         m_be_pred = this->compute_operator(m_theta_t,m_Xe_train_t,W.at(id_We),m_y_tilde_tilde_hat,j_double_tilde_Re_inv);
 
-
         //
-        //wrapping the b from the shape useful for the computation into a more useful format: TENERE
+        //wrapping the b from the shape useful for the computation into a more useful format for reporting the results: TENERE
         //
         //event-dependent covariates
         m_Be_pred = this->wrap_b(m_be_pred,m_Le_j,m_qe,n_pred);
@@ -269,6 +274,81 @@ public:
 
 
         //crearli come una std::function
+    }
+
+    /*!
+    * @brief Compute stationary betas
+    */
+    inline
+    void 
+    computeStationaryBetas()
+    override
+    {
+        m_BetaC = fm_prod(m_omega,m_bc_fitted);
+    }
+
+    /*!
+    * @brief Compute non-stationary betas
+    */
+    inline
+    void 
+    computeNonStationaryBetas()
+    override
+    {
+        std::size_t n_pred = m_be_pred.size();
+        m_BetaE.resize(n_pred);
+        m_BetaS.resize(n_pred);
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(m_BetaE,m_BetaS,m_theta,m_psi,m_be_pred,m_bs_pred,n_pred) num_threads(this->num_threads())
+#endif
+        for(std::size_t i = 0; i < n_pred; ++i)
+        {
+            m_BetaE[i] = fm_prod(m_theta,m_be_pred[i]);
+            m_BetaS[i] = fm_prod(m_psi,m_bs_pred[i]);
+        }
+    }
+
+    /*!
+    * @brief Compute prediction
+    */
+    inline
+    functional_matrix<INPUT,OUTPUT>
+    predict(const std::map<std::string,functional_matrix<INPUT,OUTPUT> &X_new)
+    const
+    {
+        assert(W.size() == 3);
+        std::string id_Wc = covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>();
+        std::string id_We = covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>();
+        std::string id_Ws = covariate_type<FDAGWR_COVARIATES_TYPES::STATION>();
+        assert(W.at(id_Wc).size() == W.at(id_We).size());
+        assert(W.at(id_We).size() == W.at(id_Ws).size());
+        std::size_t n_pred = W.at(id_Wc).size();
+
+        auto Xc_new = W.at(id_Wc);
+        auto Xe_new = W.at(id_We);
+        auto Xs_new = W.at(id_Ws);
+
+        //y_new = X_new*beta = Xc_new*beta_c + Xe_new*beta_e + Xs_new*beta_s
+        functional_matrix<INPUT,OUTPUT> y_new_C = fm_prod(Xc_new,m_BetaC,this->num_threads());    //n_pred x 1
+        functional_matrix<INPUT,OUTPUT> y_new_E(n_pred,1);
+        functional_matrix<INPUT,OUTPUT> y_new_S(n_pred,1);
+        
+#ifdef _OPENMP
+#pragma omp parallel for shared(Xe_new,m_BetaE,y_new_E,Xs_new,m_BetaS,y_new_S,n_pred,m_qe,m_qs) num_threads(this->num_threads())
+#endif
+        for(std::size_t i = 0; i < n_pred; ++i)
+        {
+            std::vector< F_OBJ > xe_new_i(Xe_new.row(i).cbegin(),Xe_new.row(i).cend()); //1xqe
+            functional_matrix<INPUT,OUTPUT> Xe_new_i(xe_new_i,1,m_qe);
+            y_new_E(i,0) = fm_prod(Xe_new_i,m_BetaE[i],this->num_threads())(0,0);
+
+            std::vector< F_OBJ > xs_new_i(Xs_new.row(i).cbegin(),Xs_new.row(i).cend()); //1xqs
+            functional_matrix<INPUT,OUTPUT> Xs_new_i(xs_new_i,1,m_qs);
+            y_new_S(i,0) = fm_prod(Xs_new_i,m_BetaS[i],this->num_threads())(0,0);
+        }
+
+        return y_new_C + y_new_E + y_new_S;
     }
 };
 

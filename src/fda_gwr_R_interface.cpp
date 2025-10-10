@@ -632,46 +632,6 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
 
-        double loc = 0.3;
-
-
-                Rcout << "Wc: rows: " << Wc.rows() << ", cols: " << Wc.cols() << std::endl;
-
-        for(std::size_t j = 0; j < Wc.rows(); ++j){
-            for(std::size_t k = 0; k < Wc.cols(); ++k){
-                Rcout << "Wc ( "<< j << "," << k << "in " << loc << ": " << Wc(j,k)(loc) << std::endl;
-            }
-        }
-
-
-
-    Rcout << "We: sono " << We.size() << std::endl;
-    for(std::size_t i = 0; i < We.size(); ++i){
-        Rcout <<"We unit " << i+1 << "-th: rows: " << We[i].rows() << ", cols: " << We[i].cols() << std::endl;
-
-        for(std::size_t j = 0; j < We[i].rows(); ++j){
-            for(std::size_t k = 0; k < We[i].cols(); ++k){
-                Rcout << "We[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << We[i](j,k)(loc) << std::endl;
-            }
-        }
-    }
-
-    Rcout << "Ws: sono " << Ws.size() << std::endl;
-    for(std::size_t i = 0; i < Ws.size(); ++i){
-        Rcout <<"Ws unit " << i+1 << "-th: rows: " << Ws[i].rows() << ", cols: " << Ws[i].cols() << std::endl;
-
-        for(std::size_t j = 0; j < Ws[i].rows(); ++j){
-            for(std::size_t k = 0; k < Ws[i].cols(); ++k){
-                Rcout << "Ws[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << Ws[i](j,k)(loc) << std::endl;
-            }
-        }
-    }
-
-
-
-
-
-
     //fgwr algorithm
     auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),
@@ -1233,15 +1193,17 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                                                                       number_basis_stations_cov_,
                                                                       knots_stations_cov_eigen_w_,
                                                                       basis_fac);
-
     //Xc_new: a functional matrix of dimension n_newxqc
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xc_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATIONARY_>(x_C_fd_to_be_pred_,number_threads);                                                               
     //Xe_new: a functional matrix of dimension n_newxqe
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xe_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_EVENT_>(x_E_fd_to_be_pred_,number_threads);
     //Xs_new: a functional matrix of dimension n_newxqs
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xs_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_to_be_pred_,number_threads);
-
-
+    //map containing the X
+    std::map<std::string,functional_matrix<INPUT,OUTPUT>> X_new = {
+        {covariate_type<_STATIONARY_>(),Xc_new},
+        {covariate_type<_EVENT_>(),Xe_new},
+        {covariate_type<_STATION_>(),Xs_new}};
 
     ////////////////////////////////////////
     /////////        CONSTRUCTING W   //////
@@ -1281,32 +1243,10 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > We_pred = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_EVENT_>(W_E_pred,number_threads);
     //Ws_pred: n_pred diagonal functional matrices of dimension n_trainxn_train
     std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Ws_pred = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_>(W_S_pred,number_threads);
-
-
-    double loc = 0.3;
-    Rcout << "We_pred: sono " << We_pred.size() << std::endl;
-    for(std::size_t i = 0; i < We_pred.size(); ++i){
-        Rcout <<"We_pred pred unit " << i+1 << "-th: rows: " << We_pred[i].rows() << ", cols: " << We_pred[i].cols() << std::endl;
-
-        for(std::size_t j = 0; j < We_pred[i].rows(); ++j){
-            for(std::size_t k = 0; k < We_pred[i].cols(); ++k){
-                Rcout << "We_pred[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << We_pred[i](j,k)(loc) << std::endl;
-            }
-        }
-    }
-
-    Rcout << "Ws_pred: sono " << Ws_pred.size() << std::endl;
-    for(std::size_t i = 0; i < Ws_pred.size(); ++i){
-        Rcout <<"Ws_pred pred unit " << i+1 << "-th: rows: " << Ws_pred[i].rows() << ", cols: " << Ws_pred[i].cols() << std::endl;
-
-        for(std::size_t j = 0; j < Ws_pred[i].rows(); ++j){
-            for(std::size_t k = 0; k < Ws_pred[i].cols(); ++k){
-                Rcout << "Ws_pred[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << Ws_pred[i](j,k)(loc) << std::endl;
-            }
-        }
-    }
-
-
+    //map containing the W
+    std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT>>> W_new = {
+        {covariate_type<_EVENT_>(),We_pred},
+        {covariate_type<_STATION_>(),Ws_pred}};
 
 
 
@@ -1346,10 +1286,14 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
     //retrieve partial residuals
     //fgwr_predictor->computePartialResiduals();
-    //compute the new betas for non-stationary covariates
-    //fgwr_predictor->computeBetaNew()            
-
-
+    //compute the new b for the non-stationary covariates
+    //fgwr_predictor->computeBNew(W_new);
+    //compute the beta for stationary covariates
+    //fgwr_predictor->computeStationaryBetas();            
+    //compute the beta for non-stationary covariates
+    //fgwr_predictor->computeNonStationaryBetas();   
+    //perform prediction
+    //functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fgwr_predictor->predict(X_new);
 
 
     
