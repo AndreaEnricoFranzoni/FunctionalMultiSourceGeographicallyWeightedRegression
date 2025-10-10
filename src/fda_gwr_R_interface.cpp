@@ -639,7 +639,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
 
         for(std::size_t j = 0; j < Wc.rows(); ++j){
             for(std::size_t k = 0; k < Wc.cols(); ++k){
-                Rcout << "Wc[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << Wc(j,k) << std::endl;
+                Rcout << "Wc[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << Wc(j,k)(loc) << std::endl;
             }
         }
 
@@ -651,7 +651,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
 
         for(std::size_t j = 0; j < We[i].rows(); ++j){
             for(std::size_t k = 0; k < We[i].cols(); ++k){
-                Rcout << "We[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << We[i](j,k) << std::endl;
+                Rcout << "We[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << We[i](j,k)(loc) << std::endl;
             }
         }
     }
@@ -662,7 +662,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
 
         for(std::size_t j = 0; j < Ws[i].rows(); ++j){
             for(std::size_t k = 0; k < Ws[i].cols(); ++k){
-                Rcout << "Ws[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << Ws[i](j,k) << std::endl;
+                Rcout << "Ws[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << Ws[i](j,k)(loc) << std::endl;
             }
         }
     }
@@ -1290,7 +1290,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
         for(std::size_t j = 0; j < We_pred[i].rows(); ++j){
             for(std::size_t k = 0; k < We_pred[i].cols(); ++k){
-                Rcout << "We_pred[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << We_pred[i](j,k) << std::endl;
+                Rcout << "We_pred[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << We_pred[i](j,k)(loc) << std::endl;
             }
         }
     }
@@ -1301,7 +1301,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
         for(std::size_t j = 0; j < Ws_pred[i].rows(); ++j){
             for(std::size_t k = 0; k < Ws_pred[i].cols(); ++k){
-                Rcout << "Ws_pred[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << Ws_pred[i](j,k) << std::endl;
+                Rcout << "Ws_pred[" << i+1 << "] ( "<< j << "," << k << "in " << loc << ": " << Ws_pred[i](j,k)(loc) << std::endl;
             }
         }
     }
