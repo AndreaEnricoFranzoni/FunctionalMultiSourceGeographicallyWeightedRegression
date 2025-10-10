@@ -1200,7 +1200,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     //Xs_new: a functional matrix of dimension n_newxqs
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xs_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_to_be_pred_,number_threads);
     //map containing the X
-    std::map<std::string,functional_matrix<INPUT,OUTPUT>> X_new = {
+    std::map<std::string,functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>> X_new = {
         {covariate_type<_STATIONARY_>(),Xc_new},
         {covariate_type<_EVENT_>(),Xe_new},
         {covariate_type<_STATION_>(),Xs_new}};

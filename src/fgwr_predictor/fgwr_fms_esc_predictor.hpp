@@ -256,13 +256,13 @@ public:
         //compute the non-stationary betas in the new locations
         //penalties in the new locations
         //(j_tilde_tilde + Re)^-1
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta_t,m_Xe_train_t,W.at(id_We),m_Xe_train,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta_t,m_Xe_train_t,W.at(id_e),m_Xe_train,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
         //(j_tilde + Rs)^-1
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv        = this->compute_penalty(m_X_s_train_crossed_t,W.at(id_Ws),m_X_s_train_crossed,m_Rs);
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv        = this->compute_penalty(m_X_s_train_crossed_t,W.at(id_s),m_X_s_train_crossed,m_Rs);
         //COMPUTING all the m_bs in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
-        m_bs_pred = this->compute_operator(m_X_s_train_crossed_t,W.at(id_Ws),m_y_tilde_new,j_tilde_Rs_inv);
+        m_bs_pred = this->compute_operator(m_X_s_train_crossed_t,W.at(id_s),m_y_tilde_new,j_tilde_Rs_inv);
         //COMPUTING all the m_bs in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
-        m_be_pred = this->compute_operator(m_theta_t,m_Xe_train_t,W.at(id_We),m_y_tilde_tilde_hat,j_double_tilde_Re_inv);
+        m_be_pred = this->compute_operator(m_theta_t,m_Xe_train_t,W.at(id_e),m_y_tilde_tilde_hat,j_double_tilde_Re_inv);
 
         //
         //wrapping the b from the shape useful for the computation into a more useful format for reporting the results: TENERE
@@ -339,11 +339,11 @@ public:
 #endif
         for(std::size_t i = 0; i < n_pred; ++i)
         {
-            std::vector< F_OBJ > xe_new_i(Xe_new.row(i).cbegin(),Xe_new.row(i).cend()); //1xqe
+            std::vector< FUNC_OBJ<INPUT,OUTPUT> > xe_new_i(Xe_new.row(i).cbegin(),Xe_new.row(i).cend()); //1xqe
             functional_matrix<INPUT,OUTPUT> Xe_new_i(xe_new_i,1,m_qe);
             y_new_E(i,0) = fm_prod(Xe_new_i,m_BetaE[i],this->num_threads())(0,0);
 
-            std::vector< F_OBJ > xs_new_i(Xs_new.row(i).cbegin(),Xs_new.row(i).cend()); //1xqs
+            std::vector< FUNC_OBJ<INPUT,OUTPUT> > xs_new_i(Xs_new.row(i).cbegin(),Xs_new.row(i).cend()); //1xqs
             functional_matrix<INPUT,OUTPUT> Xs_new_i(xs_new_i,1,m_qs);
             y_new_S(i,0) = fm_prod(Xs_new_i,m_BetaS[i],this->num_threads())(0,0);
         }
