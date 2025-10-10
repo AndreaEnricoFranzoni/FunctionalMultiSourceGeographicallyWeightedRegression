@@ -1299,6 +1299,8 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     
 
     Rcpp::List l;
+
+    l["FGWR_predictor"] = "predictor" + algo_type<_FGWR_ALGO_>();
     return l;
 }
 
