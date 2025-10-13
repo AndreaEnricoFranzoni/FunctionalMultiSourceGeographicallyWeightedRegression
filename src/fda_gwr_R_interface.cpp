@@ -70,7 +70,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr2 has been installed"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr has been installed"<< std::endl;}
 
 
 /*!
@@ -1293,15 +1293,14 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     //compute the beta for non-stationary covariates
     fgwr_predictor->computeNonStationaryBetas();   
     //perform prediction
-    Rcout << "Compute prediciton" << std::endl;
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fgwr_predictor->predict(X_new);
-    Rcout << "Pred: rows: " << y_pred.rows() << ", cols: " << y_pred.cols() << std::endl;
+
 
     
 
     Rcpp::List l;
 
-    l["FGWR_predictor"] = "predictor" + algo_type<_FGWR_ALGO_>();
+    l["FGWR_predictor"] = "predictor_" + algo_type<_FGWR_ALGO_>();
     return l;
 }
 

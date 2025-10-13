@@ -219,29 +219,11 @@ public:
                 m_bc_fitted = this->dewrap_b(m_Bc_fitted,m_Lc_j);
                 //bs_fitted
                 m_bs_fitted = this->dewrap_b(m_Bs_fitted,m_Ls_j,this->n_train());
-
-
-
-
-                //
-                std::cout << "m_bc_fitted: rows: " << m_bc_fitted.rows() << ", cols: " << m_bc_fitted.cols() << std::endl;
-                std::cout << "m_Bc_fitted: size: " << m_Bc_fitted.size() << std::endl;
-                for(std::size_t i = 0; i < m_Bc_fitted.size(); ++i){std::cout << "m_Bc_fitted " << i+1 << "-th: rows: " << m_Bc_fitted[i].rows()<< ", cols: " << m_Bc_fitted[i].cols()<<std::endl;}
-
-                std::cout << "m_bs_fitted: size: " << m_bs_fitted.size() << std::endl;
-                for(std::size_t i = 0; i < m_bs_fitted.size(); ++i){std::cout << "m_bs_fitted " << i+1 << "size: " << m_bs_fitted[i].size()<<std::endl;}
-
-                std::cout << "m_Bs_fitted: size: " << m_Bs_fitted.size() << std::endl;
-                for(std::size_t i = 0; i < m_Bs_fitted.size(); ++i){
-                    std::cout << "m_Bs_fitted " << i+1 << "size: " << m_Bs_fitted[i].size()<<std::endl;
-                    for(std::size_t j = 0; j < m_Bs_fitted[i].size(); ++j){
-                        std::cout << "m_Bs_fitted " << i+1 << "i and " << j+1 << " j rows: " << m_Bs_fitted[i][j].rows()<<", cols: "<<m_Bs_fitted[i][j].cols()<<std::endl;
-                    }
-                }
-
             }
 
-    
+    /*!
+    * @brief Function to reconstruct the functional partial residuals
+    */
     inline 
     void
     computePartialResiduals()
@@ -249,30 +231,18 @@ public:
     {
         //retrieve the partial residuals from the fitted model
         //K_e_s(t) n_train x Ls
-        std::cout << "Compute m_K_e_s" << std::endl;
         m_K_e_s = this->compute_functional_operator(m_Xe_train,m_theta,m_B_e_for_K_e_s);
-        std::cout << "m_K_e_s rows: " << m_K_e_s.rows() << ", cols: " << m_K_e_s.cols() << std::endl;
         //X_s_crossed(t) n_train x Ls
-        std::cout << "Compute m_X_s_train_crossed" << std::endl;
         m_X_s_train_crossed = fm_prod(m_Xs_train,m_psi) - m_K_e_s;
         m_X_s_train_crossed_t = m_X_s_train_crossed.transpose();
-        std::cout << "m_X_s_train_crossed rows: " << m_X_s_train_crossed.rows() << ", cols: " << m_X_s_train_crossed.cols() << std::endl;
         //y_tilde_hat(t) n_trainx1
-        std::cout << "Compute m_y_tilde_hat" << std::endl;
         m_y_tilde_hat = fm_prod(m_phi,m_c_tilde_hat);
-        std::cout << "m_y_tilde_hat rows: " << m_y_tilde_hat.rows() << ", cols: " << m_y_tilde_hat.cols() << std::endl;
         //He(t) n_trainx(n_train*Ly)
-        std::cout << "Compute m_H_e" << std::endl;
         m_H_e = this->compute_functional_operator(m_Xe_train,m_theta,m_A_e);
-        std::cout << "m_H_e rows: " << m_H_e.rows() << ", cols: " << m_H_e.cols() << std::endl;
         //y_tilde_new(t) n_trainx1
-        std::cout << "Compute m_y_tilde_new" << std::endl;
         m_y_tilde_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - m_H_e),m_c_tilde_hat,this->number_threads());
-        std::cout << "m_y_tilde_new rows: " << m_y_tilde_new.rows() << ", cols: " << m_y_tilde_new.cols() << std::endl;
         //y_tilde_tilde_hat(t) n_trainx1
-        std::cout << "Compute m_y_tilde_tilde_hat" << std::endl;
         m_y_tilde_tilde_hat = m_y_tilde_hat - this->compute_functional_operator(m_Xs_train,m_psi,m_bs_fitted);
-        std::cout << "m_y_tilde_tilde_hat rows: " << m_y_tilde_tilde_hat.rows() << ", cols: " << m_y_tilde_tilde_hat.cols() << std::endl;
     }
 
 
@@ -285,11 +255,13 @@ public:
         std::string id_e = covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>();
         std::string id_s = covariate_type<FDAGWR_COVARIATES_TYPES::STATION>();
         assert(W.at(id_e).size() == W.at(id_s).size());
-        std::size_t n_pred = W.at(id_e).size();
         for(std::size_t i = 0; i < n_pred; ++i){
             assert((W.at(id_e)[i].rows() == this->n_train()) && (W.at(id_e)[i].cols() == this->n_train()));
             assert((W.at(id_s)[i].rows() == this->n_train()) && (W.at(id_s)[i].cols() == this->n_train()));}
+        //number of units to be predicted
+        std::size_t n_pred = W.at(id_e).size();
 
+/*
         //compute the non-stationary betas in the new locations
         //penalties in the new locations
         //(j_tilde_tilde + Re)^-1
@@ -297,44 +269,27 @@ public:
         //(j_tilde + Rs)^-1
         std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv        = this->compute_penalty(m_X_s_train_crossed_t,W.at(id_s),m_X_s_train_crossed,m_Rs);
         //COMPUTING all the m_bs in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
-        std::cout << "Compute m_bs_pred" << std::endl;
         m_bs_pred = this->compute_operator(m_X_s_train_crossed_t,W.at(id_s),m_y_tilde_new,j_tilde_Rs_inv);
-        std::cout << "m_bs_pred size: " << m_bs_pred.size() << std::endl;
-        for(std::size_t i = 0; i < m_bs_pred.size(); ++i){
-            std::cout << "m_bs_pred " << i+1 << "-th rows: " << m_bs_pred[i].rows() << ", cols: " << m_bs_pred[i].cols() << std::endl;
-        }
-        //COMPUTING all the m_bs in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
-        std::cout << "Compute m_be_pred" << std::endl;
+        //COMPUTING all the m_be in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
         m_be_pred = this->compute_operator(m_theta_t,m_Xe_train_t,W.at(id_e),m_y_tilde_tilde_hat,j_double_tilde_Re_inv);
-        std::cout << "m_be_pred size: " << m_be_pred.size() << std::endl;
-                for(std::size_t i = 0; i < m_be_pred.size(); ++i){
-            std::cout << "m_be_pred " << i+1 << "-th rows: " << m_be_pred[i].rows() << ", cols: " << m_be_pred[i].cols() << std::endl;
+*/
+        m_bs_pred.resize(n_pred);
+        m_be_pred.resize(n_pred);
+
+        for(std::size_t i = 0; i < n_pred; ++i){
+            m_be_pred[i] = Eigen::MatrixXd::Random(m_Le,1);
+            m_bs_pred[i] = Eigen::MatrixXd::Random(m_Ls,1);
         }
+        
+
         //
         //wrapping the b from the shape useful for the computation into a more useful format for reporting the results: TENERE
         //
         //event-dependent covariates
-        std::cout << "Compute m_Be_pred" << std::endl;
         m_Be_pred = this->wrap_b(m_be_pred,m_Le_j,m_qe,n_pred);
-        std::cout << "m_Be_pred size: " << m_Be_pred.size() << std::endl;
-        for(std::size_t i = 0; i < m_Be_pred.size(); ++i){
-            std::cout << "m_Be_pred " <<i+1<< " size: " << m_Be_pred[i].size() << std::endl;
-            for(std::size_t j = 0; j < m_Be_pred[i].size(); ++j){
-                std::cout << "m_Be_pred " <<i+1<< "i and " << j+1<<" j rows: " << m_Be_pred[i][j].rows() << ", cols: " << m_Be_pred[i][j].cols() << std::endl;
-            }
-        }
         //station-dependent covariates
-        std::cout << "Compute m_Bs_pred" << std::endl;
         m_Bs_pred = this->wrap_b(m_bs_pred,m_Ls_j,m_qs,n_pred);
-        std::cout << "m_Bs_pred size: " << m_Bs_pred.size() << std::endl;
-        for(std::size_t i = 0; i < m_Bs_pred.size(); ++i){
-            std::cout << "m_Bs_pred " <<i+1<< " size: " << m_Bs_pred[i].size() << std::endl;
-            for(std::size_t j = 0; j < m_Bs_pred[i].size(); ++j){
-                std::cout << "m_Bs_pred " <<i+1<< "i and " << j+1<<" j rows: " << m_Bs_pred[i][j].rows() << ", cols: " << m_Bs_pred[i][j].cols() << std::endl;
-            }
-        }
 
-        //crearli come una std::function
     }
 
     /*!
@@ -345,9 +300,7 @@ public:
     computeStationaryBetas()
     override
     {
-        std::cout << "Compute m_BetaC" << std::endl;
         m_BetaC = fm_prod(m_omega,m_bc_fitted);
-        std::cout << "m_BetaC rows: " << m_BetaC.rows() << ", cols: " << m_BetaC.cols() << std::endl;
     }
 
     /*!
@@ -362,8 +315,6 @@ public:
         m_BetaE.resize(n_pred);
         m_BetaS.resize(n_pred);
 
-
-        std::cout << "Compute m_BetaE e m_BetaS" << std::endl;
 #ifdef _OPENMP
 #pragma omp parallel for shared(m_BetaE,m_BetaS,m_theta,m_psi,m_be_pred,m_bs_pred,n_pred) num_threads(this->number_threads())
 #endif
@@ -371,11 +322,6 @@ public:
         {
             m_BetaE[i] = fm_prod(m_theta,m_be_pred[i]);
             m_BetaS[i] = fm_prod(m_psi,m_bs_pred[i]);
-        }
-
-        for(std::size_t i = 0; i < n_pred; ++i){
-            std::cout << "m_BetaE " << i+1 << "-th: rows: " << m_BetaE[i].rows() << ", cols: " << m_BetaE[i].cols() << std::endl;
-            std::cout << "m_BetaS " << i+1 << "-th: rows: " << m_BetaS[i].rows() << ", cols: " << m_BetaS[i].cols() << std::endl;
         }
     }
 
