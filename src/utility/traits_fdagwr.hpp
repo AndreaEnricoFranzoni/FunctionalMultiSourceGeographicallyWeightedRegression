@@ -182,6 +182,8 @@ struct FDAGWR_HELPERS_for_PRED_NAMES
 
   static constexpr std::string abscissa = "abscissa";
 
+  static constexpr std::string pred = "prediction";
+
   static constexpr std::string a = "a";
 
   static constexpr std::string b = "b";

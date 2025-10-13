@@ -1298,6 +1298,8 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fgwr_predictor->predict(X_new);
     //evaluating the betas   
     fgwr_predictor->evalBetas(abscissa_points_ev_);
+    //evaluating the prediction
+    std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fgwr_predictor->evalPred(y_pred,abscissa_points_ev_);
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -1325,23 +1327,27 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                                            {},
                                            names_events_cov_,
                                            names_stations_cov_);
+    //predictions evaluations
+    Rcpp::List y_pred_ev_R = wrap_prediction_to_R_list<_FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_>(y_pred_ev,abscissa_points_ev_);
 
     //returning element                                       
     Rcpp::List l;
     //predictor
     l["FGWR_predictor"] = "predictor_" + algo_type<_FGWR_ALGO_>();
+    //predictions
+    l["Prediction"] = y_pred_ev_R;
     //stationary covariate basis expansion coefficients for beta_c
-    l[FDAGWR_B_NAMES::bc]  = b_coefficients[FDAGWR_B_NAMES::bc];
+    l[FDAGWR_B_NAMES::bc + "_pred"]  = b_coefficients[FDAGWR_B_NAMES::bc];
     //beta_c
-    l[FDAGWR_BETAS_NAMES::beta_c] = betas[FDAGWR_BETAS_NAMES::beta_c];
+    l[FDAGWR_BETAS_NAMES::beta_c + "_pred"] = betas[FDAGWR_BETAS_NAMES::beta_c];
     //event-dependent covariate basis expansion coefficients for beta_e
-    l[FDAGWR_B_NAMES::be]  = b_coefficients[FDAGWR_B_NAMES::be];
+    l[FDAGWR_B_NAMES::be + "_pred"]  = b_coefficients[FDAGWR_B_NAMES::be];
     //beta_e
-    l[FDAGWR_BETAS_NAMES::beta_e] = betas[FDAGWR_BETAS_NAMES::beta_e];
+    l[FDAGWR_BETAS_NAMES::beta_e + "_pred"] = betas[FDAGWR_BETAS_NAMES::beta_e];
     //station-dependent covariate basis expansion coefficients for beta_s
-    l[FDAGWR_B_NAMES::bs]  = b_coefficients[FDAGWR_B_NAMES::bs];
+    l[FDAGWR_B_NAMES::bs + "_pred"]  = b_coefficients[FDAGWR_B_NAMES::bs];
     //beta_s
-    l[FDAGWR_BETAS_NAMES::beta_s] = betas[FDAGWR_BETAS_NAMES::beta_s];
+    l[FDAGWR_BETAS_NAMES::beta_s + "_pred"] = betas[FDAGWR_BETAS_NAMES::beta_s];
 
     return l;
 }
