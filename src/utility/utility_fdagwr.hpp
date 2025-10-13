@@ -478,7 +478,7 @@ wrap_prediction_to_R_list(const std::vector< std::vector<OUTPUT>> & pred,
 
     for(std::size_t i = 0; i < number_pred; ++i){
         predictions[i] = Rcpp::wrap(pred[i]);
-        names[i] = std::string("unit_pred_") + std::string(i+1);
+        names[i] = std::string("unit_pred_") + std::to_string(i+1);
     }
 
     predictions.names() = names;
