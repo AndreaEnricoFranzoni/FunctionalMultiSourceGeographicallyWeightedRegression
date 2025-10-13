@@ -122,11 +122,17 @@ private:
 
     //Betas
     //stationary: qc x 1
-    functional_matrix<INPUT,OUTPUT> m_BetaC;
+    functional_matrix<INPUT,OUTPUT> m_BetaC;                        //elemento funzionale
+    /*!Discrete evaluation of all the beta_c: a vector of dimension qc, containing, for all the stationary covariates, the discrete ev of the respective beta*/
+    std::vector< std::vector< OUTPUT >> m_BetaC_ev;
     //events-dependent: n_pred matrices of qe x 1
     std::vector< functional_matrix<INPUT,OUTPUT>> m_BetaE;
+    /*!Discrete evaluation of all the beta_e: a vector of dimension qe, containing, for all the event-dependent covariates, the discrete ev of the respective beta, for each statistical unit*/
+    std::vector< std::vector< std::vector< OUTPUT >>> m_BetaE_ev;
     //stations-dependent: n_pred matrices of qs x 1
     std::vector< functional_matrix<INPUT,OUTPUT>> m_BetaS;
+    /*!Discrete evaluation of all the beta_s: a vector of dimension qs, containing, for all the station-dependent covariates, the discrete ev of the respective beta, for each statistical unit*/
+    std::vector< std::vector< std::vector< OUTPUT >>> m_BetaS_ev;
 
 public:
     /*!
@@ -370,6 +376,45 @@ public:
 
         return y_new_C + y_new_E + y_new_S;
     }
+
+    /*!
+    * @brief Virtual method to obtain a discrete version of the betas
+    */
+    inline 
+    void 
+    evalBetas(const std::vector<INPUT> &abscissa)
+    override
+    {
+        m_BetaC_ev = this->eval_betas(m_BetaC,m_qc,abscissa);
+        m_BetaE_ev = this->eval_betas(m_BetaE,m_qe,abscissa);
+        m_BetaS_ev = this->eval_betas(m_BetaS,m_qs,abscissa);
+    }
+
+    /*!
+    * @brief Getter for the coefficient of the basis expansion of the stationary regressors coefficients
+    */
+    inline 
+    BTuple 
+    bCoefficients()
+    const 
+    override
+    {
+        return std::tuple{m_Bc_fitted,m_Be_pred,m_Bs_pred};
+    }
+
+    /*!
+    * @brief Getter for the. etas evaluated along the abscissas
+    */
+    inline 
+    BetasTuple 
+    betas() 
+    const
+    override
+    {
+        return std::tuple{m_BetaC_ev,m_BetaE_ev,m_BetaS_ev};
+    }
+
+
 };
 
 #endif  /*FGWR_FMS_ESC_PREDICT_HPP*/

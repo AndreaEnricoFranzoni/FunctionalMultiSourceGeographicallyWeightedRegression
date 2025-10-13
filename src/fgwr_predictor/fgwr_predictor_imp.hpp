@@ -286,3 +286,90 @@ const
 
     return b_dewrapped;
 }
+
+
+// EVAL BETAS
+//stationary
+template< typename INPUT, typename OUTPUT >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+std::vector< std::vector<OUTPUT> >
+fgwr_predictor<INPUT,OUTPUT>::eval_betas(const functional_matrix<INPUT,OUTPUT> &beta,
+                                         std::size_t q,
+                                         std::vector<INPUT> abscissa) 
+const
+{
+    //input coherency
+    assert((beta.rows() == q) && (beta.cols() == 1));
+    //number of evaluations
+    std::size_t n_abs = abscissa.size();
+
+    //reserving
+    std::vector< std::vector<OUTPUT>> beta_ev;    
+    beta_ev.reserve(q);        
+
+    for (std::size_t j = 0; j < q; ++j)
+    {
+        std::vector<OUTPUT> beta_j_ev;
+        beta_j_ev.resize(n_abs);
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(beta_j_ev,j,abscissa,n_abs) num_threads(this->number_threads())
+#endif
+        for(std::size_t i = 0; i < n_abs; ++i)
+        {
+            beta_j_ev[i] = beta(j,0)(abscissa[i]);
+        }
+
+        beta_ev.push_back(beta_j_ev);
+    }
+
+    return beta_ev;
+}
+
+
+
+//non-stationary: risultato: un vettore di len q, che contiene, per ogni n_pred, le valutazioni dei beta
+template< typename INPUT, typename OUTPUT >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+std::vector< std::vector< std::vector<OUTPUT>>>
+fgwr_predictor<INPUT,OUTPUT>::eval_betas(const std::vector< functional_matrix<INPUT,OUTPUT>> &beta,
+                                         std::size_t q,
+                                         std::vector<INPUT> abscissa)
+const
+{
+    std::size_t n_pred = beta.size();
+    std::size_t n_abs  = abscissa.size();
+    //input coherency
+    for(std::size_t i = 0; i < n_pred; ++i){    assert((beta[i].rows() == q) && (beta[i].cols() == 1));}
+    
+
+    //reserving
+    std::vector< std::vector< std::vector<OUTPUT>> > beta_ev;    
+    beta_ev.reserve(q);  
+    
+    for(std::size_t j = 0; j < q; ++j)
+    {
+        std::vector< std::vector<OUTPUT>> beta_j_ev;
+        beta_j_ev.reserve(n_pred);
+
+        for(std::size_t i = 0; i < n_pred; ++i)
+        {
+            std::vector<OUTPUT> beta_j_i_ev;
+            beta_j_i_ev.resize(n_abs);
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(beta_j_i_ev,j,i,abscissa,n_abs) num_threads(this->number_threads())
+#endif
+            for(std::size_t i_ev = 0; i_ev < n_abs; ++i_ev)
+            {
+                beta_j_i_ev[i_ev] = beta[i](j,0)(abscissa[i_ev]);
+            }
+
+            beta_j_ev.push_back(beta_j_i_ev);
+        }
+
+        beta_ev.push_back(beta_j_ev);
+    }
+
+    return beta_ev;
+}

@@ -70,7 +70,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr has been installed"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr3 has been installed"<< std::endl;}
 
 
 /*!
@@ -906,6 +906,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                               Rcpp::List coeff_stations_cov_to_pred,
                               Rcpp::NumericMatrix coordinates_stations_to_pred,
                               int units_to_be_predicted,
+                              Rcpp::NumericVector abscissa_ev,
                               Rcpp::List model_fitted,
                               int n_intervals_trapezoidal_quadrature = 100,
                               double target_error_trapezoidal_quadrature = 1e-3,
@@ -984,6 +985,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::size_t n_train = training_input[FDAGWR_HELPERS_for_PRED_NAMES::n];
     _FD_INPUT_TYPE_ a   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::a];
     _FD_INPUT_TYPE_ b   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::b];
+    std::vector<_FD_INPUT_TYPE_> abscissa_points_ev_ = wrap_abscissas(abscissa_ev,a,b);                         //abscissa points for which the evaluation of the prediction is required
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ = training_input[FDAGWR_HELPERS_for_PRED_NAMES::abscissa];    //abscissa point for which the training data are discretized
     //RESPONSE
     std::size_t number_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
@@ -1294,9 +1296,35 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     fgwr_predictor->computeNonStationaryBetas();   
     //perform prediction
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fgwr_predictor->predict(X_new);
+    //evaluating the betas   
+    fgwr_predictor->evalBetas(abscissa_points_ev_);
 
-
-    
+    //retrieving the results, wrapping them in order to be returned into R
+    //b                                                                        
+    Rcpp::List b_coefficients = wrap_b_to_R_list(fgwr_predictor->bCoefficients(),
+                                                 names_stationary_cov_,
+                                                 basis_types_beta_stationary_cov_,
+                                                 number_basis_beta_stationary_cov_,
+                                                 knots_beta_stationary_cov_,
+                                                 {},
+                                                 {},
+                                                 {},
+                                                 {},
+                                                 names_events_cov_,
+                                                 basis_types_beta_events_cov_,
+                                                 number_basis_beta_events_cov_,
+                                                 knots_beta_events_cov_,
+                                                 names_stations_cov_,
+                                                 basis_types_beta_stations_cov_,
+                                                 number_basis_beta_stations_cov_,
+                                                 knots_beta_stations_cov_);
+    //betas
+    Rcpp::List betas = wrap_beta_to_R_list(fgwr_predictor->betas(),
+                                           abscissa_points_ev_,
+                                           names_stationary_cov_,
+                                           {},
+                                           names_events_cov_,
+                                           names_stations_cov_);
 
     Rcpp::List l;
 

@@ -36,6 +36,7 @@
 #include "../basis/basis_include.hpp"
 #include "../utility/parameters_wrapper_fdagwr.hpp"
 
+#include <cassert>
 
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -178,6 +179,22 @@ public:
              std::size_t n) const;
 
     /*!
+    * @brief Eval the stationary betas on a grid
+    */
+    std::vector< std::vector<OUTPUT> >
+    eval_betas(const functional_matrix<INPUT,OUTPUT> &beta,
+               std::size_t q,
+               std::vector<INPUT> abscissa) const;
+
+    /*!
+    * @brief Eval the non-stationary betas on a grid
+    */
+    std::vector< std::vector< std::vector<OUTPUT>>>
+    eval_betas(const std::vector< functional_matrix<INPUT,OUTPUT>> &beta,
+               std::size_t q,
+               std::vector<INPUT> abscissa) const;
+
+    /*!
     * @brief Compute partial residuals
     */
     virtual inline void computePartialResiduals() = 0;
@@ -201,6 +218,56 @@ public:
     * @brief Compute prediction
     */
     virtual inline functional_matrix<INPUT,OUTPUT> predict(const std::map<std::string,functional_matrix<INPUT,OUTPUT>>& X_new) const = 0;
+
+    /*!
+    * @brief Virtual method to compute the betas
+    */
+    virtual inline void evalBetas(const std::vector<INPUT> &abscissa) = 0;
+
+    /*!
+    * Function to evaluate the prediction
+    */
+    inline
+    std::vector< std::vector<OUTPUT>>
+    evalPred(const functional_matrix<INPUT,OUTPUT> &pred,
+             const std::vector<INPUT> &abscissa)
+    const
+    {
+        assert(pred.cols() == 1);
+        std::size_t n_pred = pred.rows();
+        std::size_t n_abs  = abscissa.size();
+
+        std::vector< std::vector<OUTPUT>> evaluations_pred;
+        evaluations_pred.resize(n_pred);
+
+#ifdef _OPENMP
+#pragma omp parallel for shared(pred,n_pred,abscissa,n_abs) num_threads(this->number_threads())
+#endif
+        for(std::size_t i = 0; i < n_pred; ++i)
+        {
+            std::vector<OUTPUT> evaluations_pred_i;
+            evaluations_pred_i.resize(n_abs);
+
+            std::transform(abscissa.cbegin(),
+                           abscissa.cend(),
+                           evaluations_pred_i.begin(),
+                           [&pred,i](fm_utils::input_param_t<FUNC_OBJ<INPUT,OUTPUT>> x){return pred(i,0)(x);});
+
+            evaluations_pred[i] = evaluations_pred_i;
+        }
+
+        return evaluations_pred;
+    }
+
+    /*!
+    * @brief Function to return the coefficients of the betas basis expansion, tuple of different dimension depending on the algo used
+    */
+    virtual inline BTuple bCoefficients() const = 0;
+
+    /*!
+    * @brief Function to return the the betas evaluated, tuple of different dimension depending on the algo used
+    */
+    virtual inline BetasTuple betas() const = 0;
 };
 
 #include "fgwr_predictor_imp.hpp"
