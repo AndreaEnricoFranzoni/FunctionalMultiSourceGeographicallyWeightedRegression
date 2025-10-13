@@ -1326,9 +1326,23 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                                            names_events_cov_,
                                            names_stations_cov_);
 
+    //returning element                                       
     Rcpp::List l;
-
+    //predictor
     l["FGWR_predictor"] = "predictor_" + algo_type<_FGWR_ALGO_>();
+    //stationary covariate basis expansion coefficients for beta_c
+    l[FDAGWR_B_NAMES::bc]  = b_coefficients[FDAGWR_B_NAMES::bc];
+    //beta_c
+    l[FDAGWR_BETAS_NAMES::beta_c] = betas[FDAGWR_BETAS_NAMES::beta_c];
+    //event-dependent covariate basis expansion coefficients for beta_e
+    l[FDAGWR_B_NAMES::be]  = b_coefficients[FDAGWR_B_NAMES::be];
+    //beta_e
+    l[FDAGWR_BETAS_NAMES::beta_e] = betas[FDAGWR_BETAS_NAMES::beta_e];
+    //station-dependent covariate basis expansion coefficients for beta_s
+    l[FDAGWR_B_NAMES::bs]  = b_coefficients[FDAGWR_B_NAMES::bs];
+    //beta_s
+    l[FDAGWR_BETAS_NAMES::beta_s] = betas[FDAGWR_BETAS_NAMES::beta_s];
+
     return l;
 }
 
