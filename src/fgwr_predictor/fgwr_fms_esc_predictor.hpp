@@ -255,7 +255,7 @@ public:
         std::string id_e = covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>();
         std::string id_s = covariate_type<FDAGWR_COVARIATES_TYPES::STATION>();
         assert(W.at(id_e).size() == W.at(id_s).size());
-        for(std::size_t i = 0; i < n_pred; ++i){
+        for(std::size_t i = 0; i < W.at(id_e).size(); ++i){
             assert((W.at(id_e)[i].rows() == this->n_train()) && (W.at(id_e)[i].cols() == this->n_train()));
             assert((W.at(id_s)[i].rows() == this->n_train()) && (W.at(id_s)[i].cols() == this->n_train()));}
         //number of units to be predicted
