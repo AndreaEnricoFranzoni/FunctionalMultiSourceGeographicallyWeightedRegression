@@ -88,6 +88,9 @@ enum FDAGWR_ALGO
 };
 
 
+
+
+
 template < FDAGWR_ALGO fdagwr_algo >
 constexpr
 std::string
@@ -213,16 +216,32 @@ enum FDAGWR_COVARIATES_TYPES
 };
 
 
+struct COVARIATES_NAMES
+{
+  static constexpr std::string Stationary                      = "Stationary";
+
+  static constexpr std::string Nonstationary                   = "Nonstationary";
+
+  static constexpr std::string Event                           = "Event";
+
+  static constexpr std::string Station                         = "Station";
+
+  static constexpr std::string Response                        = "Response";
+
+  static constexpr std::string Response_reconstruction_weights = "Response reconstruction weights";
+}; 
+
+
 template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
 std::string
 covariate_type()
 {
-  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::STATIONARY )    {   return "Stationary";}
-  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY ){   return "Nonstationary";}
-  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::EVENT )         {   return "Event";}
-  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::STATION )       {   return "Station";}
-  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::RESPONSE )      {   return "Response";}
-  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::REC_WEIGHTS )   {   return "Response reconstruction weights";}
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::STATIONARY )    {   return COVARIATES_NAMES::Stationary;}
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::NON_STATIONARY ){   return COVARIATES_NAMES::Nonstationary;}
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::EVENT )         {   return COVARIATES_NAMES::Event;}
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::STATION )       {   return COVARIATES_NAMES::Station;}
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::RESPONSE )      {   return COVARIATES_NAMES::Response;}
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::REC_WEIGHTS )   {   return COVARIATES_NAMES::Response_reconstruction_weights;}
 };
 
 

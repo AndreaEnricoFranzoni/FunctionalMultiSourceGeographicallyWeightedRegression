@@ -80,7 +80,7 @@ public:
     /*!
     * @brief Id
     */
-    static constexpr std::string id_C = covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>();
+    static constexpr std::string id_C = COVARIATES_NAMES::Stationary;
 
     /*!
     * @brief Integrating element-wise a functional matrix
