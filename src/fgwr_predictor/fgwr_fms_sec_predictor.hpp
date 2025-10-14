@@ -144,7 +144,7 @@ public:
              typename SCALAR_MATRIX_OBJ_VEC,
              typename SCALAR_MATRIX_OBJ_VEC_VEC,
              typename SCALAR_SPARSE_MATRIX_OBJ>
-    fgwr_fms_esc_predictor(SCALAR_MATRIX_OBJ_VEC &&Bc_fitted,
+    fgwr_fms_sec_predictor(SCALAR_MATRIX_OBJ_VEC &&Bc_fitted,
                            SCALAR_MATRIX_OBJ_VEC_VEC &&Bs_fitted,
                            FUNC_SPARSE_MATRIX_OBJ &&omega,
                            std::size_t qc,

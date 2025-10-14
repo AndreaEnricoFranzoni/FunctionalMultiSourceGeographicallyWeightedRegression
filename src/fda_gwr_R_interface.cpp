@@ -2721,7 +2721,7 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
 Rcpp::List FSGWR(double input_el = 1,
                  Rcpp::Nullable<int> num_threads = R_NilValue)
 {
-    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::GWR_FOS;                          //fgwr type (estimating stationary -> non-stationary)
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::FGWR_FS;                          //fgwr type (estimating stationary -> non-stationary)
     
     
     //returning element
@@ -2741,7 +2741,7 @@ Rcpp::List FGWR(double input_el=1,
                 Rcpp::Nullable<int> num_threads = R_NilValue)
 {
 
-    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::GWR_FST;                          //fgwr type (estimating stationary)
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::FGWR;                          //fgwr type (estimating stationary)
 
     
     //returning element
