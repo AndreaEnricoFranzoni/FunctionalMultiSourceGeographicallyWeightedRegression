@@ -118,6 +118,28 @@ const
 }
 
 
+/*!
+* @brief Compute [J + Rc]^(-1)
+*/
+template< typename INPUT, typename OUTPUT >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
+fgwr<INPUT,OUTPUT>::compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
+                                    const functional_matrix<INPUT,OUTPUT> &X_t,
+                                    const functional_matrix_diagonal<INPUT,OUTPUT> &W,
+                                    const functional_matrix<INPUT,OUTPUT> &X,
+                                    const functional_matrix_sparse<INPUT,OUTPUT> &base,
+                                    const FDAGWR_TRAITS::Sparse_Matrix &R)
+const
+{   
+    FDAGWR_TRAITS::Dense_Matrix _R_ = FDAGWR_TRAITS::Dense_Matrix(R);
+    functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(fm_prod(base_t,X_t),W,m_number_threads),X,m_number_threads),base,m_number_threads);
+
+    //performing integration and factorization
+    return Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >( this->fm_integration(integrand) + _R_ ); 
+}
+
+
 
 /////////////////////
 ///// OPERATORS /////
@@ -318,6 +340,24 @@ const
 {
     //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
     functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(X_lhs,W,m_number_threads),X_rhs,m_number_threads);
+
+    //performing integration and multiplication with the penalty (inverse factorized)
+    return penalty.solve(this->fm_integration(integrand)); 
+}
+
+
+template< typename INPUT, typename OUTPUT >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+FDAGWR_TRAITS::Dense_Matrix
+fgwr<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
+                                     const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                                     const functional_matrix_diagonal<INPUT,OUTPUT> &W,
+                                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                                     const Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > &penalty) 
+const
+{
+    //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
+    functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(base_lhs,X_lhs),W,m_number_threads),X_rhs,m_number_threads);
 
     //performing integration and multiplication with the penalty (inverse factorized)
     return penalty.solve(this->fm_integration(integrand)); 

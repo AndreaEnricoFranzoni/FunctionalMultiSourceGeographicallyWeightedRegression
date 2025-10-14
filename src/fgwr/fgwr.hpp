@@ -141,6 +141,18 @@ public:
                     const FDAGWR_TRAITS::Sparse_Matrix &R) const;
 
     /*!
+    * @brief Compute [J + Rc]^(-1)
+    * @note FATTO
+    */
+    Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
+    compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
+                    const functional_matrix<INPUT,OUTPUT> &X_t,
+                    const functional_matrix_diagonal<INPUT,OUTPUT> &W,
+                    const functional_matrix<INPUT,OUTPUT> &X,
+                    const functional_matrix_sparse<INPUT,OUTPUT> &base,
+                    const FDAGWR_TRAITS::Sparse_Matrix &R) const;
+
+    /*!
     * @brief Compute an operator
     * @note FATTO
     */
@@ -211,6 +223,17 @@ public:
     */
     FDAGWR_TRAITS::Dense_Matrix
     compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                     const functional_matrix_diagonal<INPUT,OUTPUT> &W,
+                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                     const Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > &penalty) const;
+
+    /*!
+    * @brief Compute the operator for stationary coefficients
+    * @note FATTO
+    */
+    FDAGWR_TRAITS::Dense_Matrix
+    compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
+                     const functional_matrix<INPUT,OUTPUT> &X_lhs,
                      const functional_matrix_diagonal<INPUT,OUTPUT> &W,
                      const functional_matrix<INPUT,OUTPUT> &X_rhs,
                      const Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > &penalty) const;
