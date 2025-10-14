@@ -228,7 +228,7 @@ struct COVARIATES_NAMES
 
   static constexpr std::string Response                        = "Response";
 
-  static constexpr std::string Response_reconstruction_weights = "ResponseReconstructionWeights";
+  //static constexpr std::string Response_reconstruction_weights = "ResponseReconstructionWeights";
 }; 
 
 
@@ -242,7 +242,7 @@ covariate_type()
   if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::EVENT )         {   return COVARIATES_NAMES::Event;}
   if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::STATION )       {   return COVARIATES_NAMES::Station;}
   if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::RESPONSE )      {   return COVARIATES_NAMES::Response;}
-  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::REC_WEIGHTS )   {   return COVARIATES_NAMES::Response_reconstruction_weights;}
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::REC_WEIGHTS )   {   return "ResponseReconstructionWeights";}
 };
 
 
