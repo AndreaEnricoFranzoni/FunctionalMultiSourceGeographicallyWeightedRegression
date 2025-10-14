@@ -70,7 +70,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr3 has been installed"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr4 has been installed"<< std::endl;}
 
 
 /*!
@@ -2413,24 +2413,24 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector<std::size_t> degree_basis_beta_events_cov_ = beta_events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_events_cov_ = beta_events_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_beta_events_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_events_cov_.data(),knots_beta_events_cov_.size()); 
+    //saving the betas basis expansion coefficients for events-dependent covariates
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix>> Be; //vettore esterno: per ogni covariata E. Interno: per ogni unità di training
+    Be.reserve(q_E);
+    Rcpp::List Be_list = model_fitted[FDAGWR_B_NAMES::be];
+    for(std::size_t i = 0; i < q_E; ++i){
+        Rcpp::List Be_i_list = Be_list[i];
+        auto Be_i = wrap_covariates_coefficients<_EVENT_>(Be_i_list[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
+        Be.push_back(Be_i);}
     //STATIONS BETAS    
     std::vector<std::size_t> number_basis_beta_stations_cov_ = beta_stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
     std::vector<std::string> basis_types_beta_stations_cov_  = beta_stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
     std::vector<std::size_t> degree_basis_beta_stations_cov_ = beta_stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stations_cov_ = beta_stations_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_beta_stations_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stations_cov_.data(),knots_beta_stations_cov_.size());
-    //saving the betas basis expansion coefficients for station-dependent covariates
-    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix>> Bs; //vettore esterno: per ogni covariata S. Interno: per ogni unità di training
-    Bs.reserve(q_S);
-    Rcpp::List Bs_list = model_fitted[FDAGWR_B_NAMES::bs];
-    for(std::size_t i = 0; i < q_S; ++i){
-        Rcpp::List Bs_i_list = Bs_list[i];
-        auto Bs_i = wrap_covariates_coefficients<_STATION_>(Bs_i_list[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);
-        Bs.push_back(Bs_i);}
     //PARTIAL RESIDUALS
     auto c_tilde_hat = reader_data<_DATA_TYPE_,_NAN_REM_>(partial_residuals[FDAGWR_HELPERS_for_PRED_NAMES::p_res_c_tilde_hat]);
-    std::vector<FDAGWR_TRAITS::Dense_Matrix> A_E_i = wrap_covariates_coefficients<_RESPONSE_>(partial_residuals[FDAGWR_HELPERS_for_PRED_NAMES::p_res_A__]);
-    std::vector<FDAGWR_TRAITS::Dense_Matrix> B_E_for_K_i = wrap_covariates_coefficients<_RESPONSE_>(partial_residuals[FDAGWR_HELPERS_for_PRED_NAMES::p_res_B__for_K]);
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> A_S_i = wrap_covariates_coefficients<_RESPONSE_>(partial_residuals[FDAGWR_HELPERS_for_PRED_NAMES::p_res_A__]);
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> B_S_for_K_i = wrap_covariates_coefficients<_RESPONSE_>(partial_residuals[FDAGWR_HELPERS_for_PRED_NAMES::p_res_B__for_K]);
 
 
     ////////////////////////////////////////
@@ -2537,12 +2537,12 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
     //TO BE PREDICTED COVARIATES  
     //stationary covariates
     functional_data_covariates<_DOMAIN_,_STATIONARY_> x_C_fd_to_be_pred_(coefficients_stationary_cov_to_be_pred_,
-                                                                      q_C,
-                                                                      basis_types_stationary_cov_,
-                                                                      degree_basis_stationary_cov_,
-                                                                      number_basis_stationary_cov_,
-                                                                      knots_stationary_cov_eigen_w_,
-                                                                      basis_fac);
+                                                                         q_C,
+                                                                         basis_types_stationary_cov_,
+                                                                         degree_basis_stationary_cov_,
+                                                                         number_basis_stationary_cov_,
+                                                                         knots_stationary_cov_eigen_w_,
+                                                                         basis_fac);
     //events covariates
     functional_data_covariates<_DOMAIN_,_EVENT_>   x_E_fd_to_be_pred_(coefficients_events_cov_to_be_pred_,
                                                                       q_E,
@@ -2617,7 +2617,7 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
 
     //fgwr predictor
     auto fgwr_predictor = fgwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
-                                                                                                   std::move(Bs),
+                                                                                                   std::move(Be),
                                                                                                    std::move(omega),
                                                                                                    q_C,
                                                                                                    Lc,
@@ -2633,8 +2633,8 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
                                                                                                    std::move(phi),
                                                                                                    number_basis_response_,
                                                                                                    std::move(c_tilde_hat),
-                                                                                                   std::move(A_E_i),
-                                                                                                   std::move(B_E_for_K_i),
+                                                                                                   std::move(A_S_i),
+                                                                                                   std::move(B_S_for_K_i),
                                                                                                    std::move(Xe_train),
                                                                                                    std::move(R_E.PenalizationMatrix()),
                                                                                                    std::move(Xs_train),

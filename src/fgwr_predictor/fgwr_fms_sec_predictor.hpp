@@ -360,18 +360,18 @@ public:
     override
     {
         assert(X_new.size() == 3);
-        //std::string id_c = covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>();
+        std::string id_c = covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>();
         std::string id_e = covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>();
         std::string id_s = covariate_type<FDAGWR_COVARIATES_TYPES::STATION>();
         
         //controllo le unità statistiche
-        assert(X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_C).rows() == X_new.at(id_e).rows());
+        assert(X_new.at(id_c).rows() == X_new.at(id_e).rows());
         assert(X_new.at(id_e).rows() == X_new.at(id_s).rows());
-        std::size_t n_pred = X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_C).rows();
+        std::size_t n_pred = X_new.at(id_c).rows();
         assert((n_pred == m_BetaE.size()) && (n_pred == m_BetaS.size()));
-        assert((X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_C).cols() == m_qc) && (X_new.at(id_e).cols() == m_qe) && (X_new.at(id_s).cols() == m_qs));
+        assert((X_new.at(id_c).cols() == m_qc) && (X_new.at(id_e).cols() == m_qe) && (X_new.at(id_s).cols() == m_qs));
 
-        auto Xc_new = X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_C);
+        auto Xc_new = X_new.at(id_c);   //fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_C
         auto Xe_new = X_new.at(id_e);
         auto Xs_new = X_new.at(id_s);
 

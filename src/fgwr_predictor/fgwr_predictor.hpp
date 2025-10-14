@@ -80,7 +80,7 @@ public:
     /*!
     * @brief Id
     */
-    static constexpr std::string id_C = COVARIATES_NAMES::Stationary;
+    //static constexpr std::string id_C = COVARIATES_NAMES::Stationary;
 
     /*!
     * @brief Integrating element-wise a functional matrix
