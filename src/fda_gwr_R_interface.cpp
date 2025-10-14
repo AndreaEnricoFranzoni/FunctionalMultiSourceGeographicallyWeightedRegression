@@ -2844,8 +2844,6 @@ Rcpp::List FGWR(Rcpp::NumericMatrix y_points,
     constexpr auto _REC_WEIGHTS_ = FDAGWR_COVARIATES_TYPES::REC_WEIGHTS;            //enum for the response reconstruction weights
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;              //enum for stationary covariates
     constexpr auto _DERVIATIVE_PENALIZED_ = PENALIZED_DERIVATIVE::SECOND;           //enum for the penalization order
-    constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;                        //enum for euclidean distance within statistical units locations
-    constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                                //kernel function to smooth the distances within statistcal units locations
     constexpr auto _NAN_REM_ = REM_NAN::MR;                                         //how to remove nan (with mean of non-nans)
     
     //instance of the factory for the basis

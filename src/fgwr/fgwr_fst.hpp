@@ -32,7 +32,6 @@ private:
     /*!Functional response (nx1)*/
     functional_matrix<INPUT,OUTPUT> m_y;
 
-
     /*!Functional stationary covariates (n x qc)*/
     functional_matrix<INPUT,OUTPUT> m_Xc;
     /*!Their transpost (qc x n)*/
@@ -67,8 +66,6 @@ public:
     template<typename FUNC_MATRIX_OBJ, 
              typename FUNC_SPARSE_MATRIX_OBJ,
              typename FUNC_DIAG_MATRIX_OBJ, 
-             typename FUNC_DIAG_MATRIX_VEC_OBJ, 
-             typename SCALAR_MATRIX_OBJ, 
              typename SCALAR_SPARSE_MATRIX_OBJ> 
     fgwr_fst(FUNC_MATRIX_OBJ &&y,
              FUNC_MATRIX_OBJ &&Xc,
