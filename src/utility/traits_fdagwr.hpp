@@ -220,7 +220,7 @@ struct COVARIATES_NAMES
 {
   static constexpr std::string Stationary                      = "Stationary";
 
-  static constexpr std::string Nonstationary                   = "Nonstationary";
+  static constexpr std::string Nonstationary                   = "NonStationary";
 
   static constexpr std::string Event                           = "Event";
 
@@ -228,11 +228,12 @@ struct COVARIATES_NAMES
 
   static constexpr std::string Response                        = "Response";
 
-  static constexpr std::string Response_reconstruction_weights = "Response reconstruction weights";
+  static constexpr std::string Response_reconstruction_weights = "ResponseReconstructionWeights";
 }; 
 
 
 template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
+constexpr
 std::string
 covariate_type()
 {
