@@ -49,8 +49,8 @@ fgwr_predictor_factory(Args &&... args)
         return std::make_unique<fgwr_fms_esc_predictor<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
     //FMS_SEC: multi-source: estimating: stationay -> event-dependent -> station-dependent
-    //if constexpr (fdagwrType == FDAGWR_ALGO::_FGWR_FMS_SEC_)
-    //    return std::make_unique<fgwr_fms_sec<INPUT,OUTPUT>>(std::forward<Args>(args)...);
+    if constexpr (fdagwrType == FDAGWR_ALGO::_FGWR_FMS_SEC_)
+        return std::make_unique<fgwr_fms_sec_predictor<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
     //GWR_FS: one-source: estimating: stationary -> geographically dependent
     //if constexpr (fdagwrType == FDAGWR_ALGO::_FGWR_FS_)
