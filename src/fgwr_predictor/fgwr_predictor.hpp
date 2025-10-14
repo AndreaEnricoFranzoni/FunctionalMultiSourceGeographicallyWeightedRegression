@@ -78,6 +78,11 @@ public:
     inline int number_threads() const {return m_number_threads;}
 
     /*!
+    * @brief Id
+    */
+    static constexpr std::string id_C = covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>();
+
+    /*!
     * @brief Integrating element-wise a functional matrix
     */
     inline
