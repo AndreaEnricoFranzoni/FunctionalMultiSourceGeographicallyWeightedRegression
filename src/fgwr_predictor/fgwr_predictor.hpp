@@ -78,9 +78,24 @@ public:
     inline int number_threads() const {return m_number_threads;}
 
     /*!
-    * @brief Id
+    * @brief Id for C covariates
     */
-    //static constexpr std::string id_C = COVARIATES_NAMES::Stationary;
+    static constexpr std::string id_C = COVARIATES_NAMES::Stationary;
+
+    /*!
+    * @brief Id for NC covariates
+    */
+    static constexpr std::string id_NC = COVARIATES_NAMES::Nonstationary;
+
+    /*!
+    * @brief Id for E covariates
+    */
+    static constexpr std::string id_E = COVARIATES_NAMES::Event;
+
+    /*!
+    * @brief Id for S covariates
+    */
+    static constexpr std::string id_S = COVARIATES_NAMES::Station;
 
     /*!
     * @brief Integrating element-wise a functional matrix

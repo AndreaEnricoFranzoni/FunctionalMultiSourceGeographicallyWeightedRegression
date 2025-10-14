@@ -227,8 +227,6 @@ struct COVARIATES_NAMES
   static constexpr std::string Station                         = "Station";
 
   static constexpr std::string Response                        = "Response";
-
-  //static constexpr std::string Response_reconstruction_weights = "ResponseReconstructionWeights";
 }; 
 
 
