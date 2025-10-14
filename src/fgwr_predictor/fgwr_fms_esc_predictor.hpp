@@ -258,24 +258,24 @@ public:
     override
     {
         assert(W.size() == 2);
-        assert(W.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_E).size() == W.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_S).size());
-        for(std::size_t i = 0; i < W.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_E).size(); ++i){
-            assert((W.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_E)[i].rows() == this->n_train()) && (W.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_E)[i].cols() == this->n_train()));
-            assert((W.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_S)[i].rows() == this->n_train()) && (W.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_S)[i].cols() == this->n_train()));}
+        assert(W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E).size() == W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_S).size());
+        for(std::size_t i = 0; i < W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E).size(); ++i){
+            assert((W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E)[i].rows() == this->n_train()) && (W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E)[i].cols() == this->n_train()));
+            assert((W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_S)[i].rows() == this->n_train()) && (W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_S)[i].cols() == this->n_train()));}
         //number of units to be predicted
-        std::size_t n_pred = W.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_E).size();
+        std::size_t n_pred = W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E).size();
 
 
         //compute the non-stationary betas in the new locations
         //penalties in the new locations
         //(j_tilde_tilde + Re)^-1
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta_t,m_Xe_train_t,W.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_E),m_Xe_train,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta_t,m_Xe_train_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E),m_Xe_train,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
         //(j_tilde + Rs)^-1
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv        = this->compute_penalty(m_X_s_train_crossed_t,W.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_S),m_X_s_train_crossed,m_Rs);
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv        = this->compute_penalty(m_X_s_train_crossed_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_S),m_X_s_train_crossed,m_Rs);
         //COMPUTING all the m_bs in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
-        m_bs_pred = this->compute_operator(m_X_s_train_crossed_t,W.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_S),m_y_tilde_new,j_tilde_Rs_inv);
+        m_bs_pred = this->compute_operator(m_X_s_train_crossed_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_S),m_y_tilde_new,j_tilde_Rs_inv);
         //COMPUTING all the m_be in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
-        m_be_pred = this->compute_operator(m_theta_t,m_Xe_train_t,W.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_E),m_y_tilde_tilde_hat,j_double_tilde_Re_inv);
+        m_be_pred = this->compute_operator(m_theta_t,m_Xe_train_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E),m_y_tilde_tilde_hat,j_double_tilde_Re_inv);
 
 
 /*
@@ -342,15 +342,15 @@ public:
     {
         assert(X_new.size() == 3);
         //controllo le unità statistiche
-        assert(X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_C).rows() == X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_E).rows());
-        assert(X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_E).rows() == X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_S).rows());
-        std::size_t n_pred = X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_C).rows();
+        assert(X_new.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_C).rows() == X_new.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E).rows());
+        assert(X_new.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E).rows() == X_new.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_S).rows());
+        std::size_t n_pred = X_new.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_C).rows();
         assert((n_pred == m_BetaE.size()) && (n_pred == m_BetaS.size()));
-        assert((X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_C).cols() == m_qc) && (X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_E).cols() == m_qe) && (X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_S).cols() == m_qs));
+        assert((X_new.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_C).cols() == m_qc) && (X_new.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E).cols() == m_qe) && (X_new.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_S).cols() == m_qs));
 
-        auto Xc_new = X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_C);
-        auto Xe_new = X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_E);
-        auto Xs_new = X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_S);
+        auto Xc_new = X_new.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_C);
+        auto Xe_new = X_new.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E);
+        auto Xs_new = X_new.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_S);
 
         //y_new = X_new*beta = Xc_new*beta_c + Xe_new*beta_e + Xs_new*beta_s
         functional_matrix<INPUT,OUTPUT> y_new_C = fm_prod(Xc_new,m_BetaC,this->number_threads());    //n_pred x 1
