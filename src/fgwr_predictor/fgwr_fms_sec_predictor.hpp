@@ -273,7 +273,7 @@ public:
         //(j_tilde_tilde + Rs)^-1
         std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Rs_inv = this->compute_penalty(m_psi_t,m_Xs_train_t,W.at(id_s),m_Xs_train,m_psi,m_Rs);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
         //(j_tilde + Re)^-1
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Re_inv        = this->compute_penalty(m_Xe_train_crossed_t,W.at(id_e),m_X_e_train_crossed,m_Re);
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Re_inv        = this->compute_penalty(m_Xe_train_crossed_t,W.at(id_e),m_Xe_train_crossed,m_Re);
         //COMPUTING all the m_bs in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
         m_be_pred = this->compute_operator(m_Xe_train_crossed_t,W.at(id_e),m_y_tilde_new,j_tilde_Re_inv);
         //COMPUTING all the m_be in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
