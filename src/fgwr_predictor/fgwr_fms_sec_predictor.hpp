@@ -39,9 +39,9 @@ private:
     /*!Coefficients of the basis expansion for stationary regressors coefficients: every element is Lc_jx1*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_Bc_fitted;
     /*!Coefficients of the basis expansion for station-dependent covariates regressors: Lsx1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_bs_fitted;
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_be_fitted;
     /*!Coefficients of the basis expansion for station-dependent regressors coefficients: every of the qe elements are n 1xLs_j matrices, one for each statistical unit*/
-    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> m_Bs_fitted;
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> m_Be_fitted;
     //
     //Computing the betas in the new stance
     //
@@ -93,10 +93,10 @@ private:
     std::size_t m_Ly;
     /*!c_tilde_hat ((n_trainxLy)x1)*/
     FDAGWR_TRAITS::Dense_Matrix m_c_tilde_hat;
-    /*!A_E_i n_train matrices n_trainx(n_train*Ly)*/
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_A_e;
-    /*!B_E_i while computing K_E_S(t)*/
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_B_e_for_K_e_s;
+    /*!A_S_i n_train matrices n_trainx(n_train*Ly)*/
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_A_s;
+    /*!B_S_i while computing K_S_E(t)*/
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_B_s_for_K_s_e;
     /*!Functional event-dependent covariates (n_train x qe)*/
     functional_matrix<INPUT,OUTPUT> m_Xe_train;
     /*!Their transpost (qe x n_train)*/
@@ -111,11 +111,11 @@ private:
     FDAGWR_TRAITS::Sparse_Matrix m_Rs;
 
     //Part to be computed
-    functional_matrix<INPUT,OUTPUT> m_K_e_s;
-    functional_matrix<INPUT,OUTPUT> m_X_s_train_crossed;
-    functional_matrix<INPUT,OUTPUT> m_X_s_train_crossed_t;
+    functional_matrix<INPUT,OUTPUT> m_K_s_e;
+    functional_matrix<INPUT,OUTPUT> m_Xe_train_crossed;
+    functional_matrix<INPUT,OUTPUT> m_Xe_train_crossed_t;
     functional_matrix<INPUT,OUTPUT> m_y_tilde_hat;
-    functional_matrix<INPUT,OUTPUT> m_H_e;
+    functional_matrix<INPUT,OUTPUT> m_H_s;
     functional_matrix<INPUT,OUTPUT> m_y_tilde_new;
     functional_matrix<INPUT,OUTPUT> m_y_tilde_tilde_hat;
 
@@ -145,7 +145,7 @@ public:
              typename SCALAR_MATRIX_OBJ_VEC_VEC,
              typename SCALAR_SPARSE_MATRIX_OBJ>
     fgwr_fms_sec_predictor(SCALAR_MATRIX_OBJ_VEC &&Bc_fitted,
-                           SCALAR_MATRIX_OBJ_VEC_VEC &&Bs_fitted,
+                           SCALAR_MATRIX_OBJ_VEC_VEC &&Be_fitted,
                            FUNC_SPARSE_MATRIX_OBJ &&omega,
                            std::size_t qc,
                            std::size_t Lc,
@@ -161,8 +161,8 @@ public:
                            FUNC_SPARSE_MATRIX_OBJ &&phi,
                            std::size_t Ly,
                            SCALAR_MATRIX_OBJ &&c_tilde_hat,
-                           SCALAR_MATRIX_OBJ_VEC &&A_e,
-                           SCALAR_MATRIX_OBJ_VEC &&B_e_for_K_e_s,
+                           SCALAR_MATRIX_OBJ_VEC &&A_s,
+                           SCALAR_MATRIX_OBJ_VEC &&B_s_for_K_s_e,
                            FUNC_MATRIX_OBJ &&Xe_train,
                            SCALAR_SPARSE_MATRIX_OBJ &&Re,
                            FUNC_MATRIX_OBJ &&Xs_train,
@@ -177,7 +177,7 @@ public:
             :   
                     fgwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,n_train,number_threads),
                     m_Bc_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC>(Bc_fitted)},
-                    m_Bs_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC_VEC>(Bs_fitted)},
+                    m_Be_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC_VEC>(Be_fitted)},
                     m_omega{std::forward<FUNC_SPARSE_MATRIX_OBJ>(omega)},
                     m_qc(qc),
                     m_Lc(Lc),
@@ -193,8 +193,8 @@ public:
                     m_phi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(phi)},
                     m_Ly(Ly),
                     m_c_tilde_hat{std::forward<SCALAR_MATRIX_OBJ>(c_tilde_hat)},
-                    m_A_e{std::forward<SCALAR_MATRIX_OBJ_VEC>(A_e)},
-                    m_B_e_for_K_e_s{std::forward<SCALAR_MATRIX_OBJ_VEC>(B_e_for_K_e_s)},
+                    m_A_s{std::forward<SCALAR_MATRIX_OBJ_VEC>(A_s)},
+                    m_B_s_for_K_s_e{std::forward<SCALAR_MATRIX_OBJ_VEC>(B_s_for_K_s_e)},
                     m_Xe_train{std::forward<FUNC_MATRIX_OBJ>(Xe_train)},
                     m_Re{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Re)},
                     m_Xs_train{std::forward<FUNC_MATRIX_OBJ>(Xs_train)},
@@ -202,17 +202,17 @@ public:
             {
                 //input coherency
                 assert(m_Bc_fitted.size() == m_qc);
-                assert(m_Bs_fitted.size() == m_qs);
-                for(std::size_t j = 0; j < m_qs; ++j){  assert(m_Bs_fitted[j].size() == this->n_train());}
+                assert(m_Be_fitted.size() == m_qe);
+                for(std::size_t j = 0; j < m_qe; ++j){  assert(m_Be_fitted[j].size() == this->n_train());}
                 assert((m_omega.rows() == m_qc) && (m_omega.cols() == Lc));
                 assert((m_theta.rows() == m_qe) && (m_theta.cols() == Le));
                 assert((m_psi.rows() == m_qs) && (m_psi.cols() == Ls));
                 assert((m_phi.rows() == this->n_train()) && (m_phi.cols() == (this->n_train()*m_Ly)));
                 assert((m_c_tilde_hat.rows() == (this->n_train()*m_Ly)) && (m_c_tilde_hat.cols() == 1));
-                assert(m_A_e.size() == this->n_train());
-                for(std::size_t i = 0; i < this->n_train(); ++i){   assert((m_A_e[i].rows() == m_Le) && (m_A_e[i].cols() == (this->n_train()*m_Ly)));}
+                assert(m_A_s.size() == this->n_train());
+                for(std::size_t i = 0; i < this->n_train(); ++i){   assert((m_A_s[i].rows() == m_Le) && (m_A_s[i].cols() == (this->n_train()*m_Ly)));}
                 assert(m_B_e_for_K_e_s.size() == this->n_train());
-                for(std::size_t i = 0; i < this->n_train(); ++i){   assert((m_B_e_for_K_e_s[i].rows() == m_Le) && (m_B_e_for_K_e_s[i].cols() == m_Ls));}
+                for(std::size_t i = 0; i < this->n_train(); ++i){   assert((m_B_s_for_K_s_e[i].rows() == m_Le) && (m_B_s_for_K_s_e[i].cols() == m_Ls));}
 
                 //compute the transpost
                 m_omega_t = m_omega.transpose();
@@ -224,7 +224,7 @@ public:
                 //dewrappare i b_train (li incolonna)
                 m_bc_fitted = this->dewrap_b(m_Bc_fitted,m_Lc_j);
                 //bs_fitted
-                m_bs_fitted = this->dewrap_b(m_Bs_fitted,m_Ls_j,this->n_train());
+                m_be_fitted = this->dewrap_b(m_Be_fitted,m_Le_j,this->n_train());
             }
 
     /*!
@@ -236,19 +236,19 @@ public:
     override
     {
         //retrieve the partial residuals from the fitted model
-        //K_e_s(t) n_train x Ls
-        m_K_e_s = this->compute_functional_operator(m_Xe_train,m_theta,m_B_e_for_K_e_s);
-        //X_s_crossed(t) n_train x Ls
-        m_X_s_train_crossed = fm_prod(m_Xs_train,m_psi) - m_K_e_s;
-        m_X_s_train_crossed_t = m_X_s_train_crossed.transpose();
+        //K_s_e(t) n_train x Le
+        m_K_s_e = this->compute_functional_operator(m_Xs_train,m_psi,m_B_s_for_K_s_e);
+        //X_e_crossed(t) n_train x Le
+        m_Xe_train_crossed = fm_prod(m_Xe_train,m_theta) - m_K_s_e;
+        m_Xe_train_crossed_t = m_Xe_train_crossed.transpose();
         //y_tilde_hat(t) n_trainx1
         m_y_tilde_hat = fm_prod(m_phi,m_c_tilde_hat);
-        //He(t) n_trainx(n_train*Ly)
-        m_H_e = this->compute_functional_operator(m_Xe_train,m_theta,m_A_e);
+        //Hs(t) n_trainx(n_train*Ly)
+        m_H_s = this->compute_functional_operator(m_Xs_train,m_psi,m_A_s);
         //y_tilde_new(t) n_trainx1
-        m_y_tilde_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - m_H_e),m_c_tilde_hat,this->number_threads());
+        m_y_tilde_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - m_H_s),m_c_tilde_hat,this->number_threads());
         //y_tilde_tilde_hat(t) n_trainx1
-        m_y_tilde_tilde_hat = m_y_tilde_hat - this->compute_functional_operator(m_Xs_train,m_psi,m_bs_fitted);
+        m_y_tilde_tilde_hat = m_y_tilde_hat - this->compute_functional_operator(m_Xe_train,m_theta,m_be_fitted);
     }
 
 
@@ -267,18 +267,26 @@ public:
         //number of units to be predicted
         std::size_t n_pred = W.at(id_e).size();
 
-/*
+
         //compute the non-stationary betas in the new locations
         //penalties in the new locations
-        //(j_tilde_tilde + Re)^-1
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta_t,m_Xe_train_t,W.at(id_e),m_Xe_train,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
-        //(j_tilde + Rs)^-1
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv        = this->compute_penalty(m_X_s_train_crossed_t,W.at(id_s),m_X_s_train_crossed,m_Rs);
+        //(j_tilde_tilde + Rs)^-1
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Rs_inv = this->compute_penalty(m_psi_t,m_Xs_train_t,W.at(id_s),m_Xs_train,m_psi,m_Rs);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
+        //(j_tilde + Re)^-1
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Re_inv        = this->compute_penalty(m_Xe_train_crossed_t,W.at(id_e),m_X_e_train_crossed,m_Re);
         //COMPUTING all the m_bs in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
-        m_bs_pred = this->compute_operator(m_X_s_train_crossed_t,W.at(id_s),m_y_tilde_new,j_tilde_Rs_inv);
+        m_be_pred = this->compute_operator(m_Xe_train_crossed_t,W.at(id_e),m_y_tilde_new,j_tilde_Re_inv);
         //COMPUTING all the m_be in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
-        m_be_pred = this->compute_operator(m_theta_t,m_Xe_train_t,W.at(id_e),m_y_tilde_tilde_hat,j_double_tilde_Re_inv);
-*/
+        m_bs_pred = this->compute_operator(m_psi_t,m_Xs_train_t,W.at(id_s),m_y_tilde_tilde_hat,j_double_tilde_Rs_inv);
+
+
+
+
+
+
+
+/*
+        //DEFAULT AI B: PARTE DA TOGLIERE
         m_bs_pred.resize(n_pred);
         m_be_pred.resize(n_pred);
 
@@ -286,6 +294,15 @@ public:
             m_be_pred[i] = Eigen::MatrixXd::Random(m_Le,1);
             m_bs_pred[i] = Eigen::MatrixXd::Random(m_Ls,1);
         }
+        //FINE PARTE DA TOGLIERE
+*/
+
+
+
+
+
+
+
         
 
         //
