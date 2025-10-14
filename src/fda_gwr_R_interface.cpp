@@ -297,7 +297,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
     using _FD_OUTPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_y_type;                          //data type for the image of fdata (double)
     using _DOMAIN_ = FDAGWR_TRAITS::basis_geometry;                                 //domain geometry
-    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::FGWR_FMS_ESC;                         //fgwr type (estimating stationary -> station-dependent -> event-dependent)
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::_FGWR_FMS_ESC_;                       //fgwr type (estimating stationary -> station-dependent -> event-dependent)
     constexpr auto _RESPONSE_ = FDAGWR_COVARIATES_TYPES::RESPONSE;                  //enum for the response
     constexpr auto _REC_WEIGHTS_ = FDAGWR_COVARIATES_TYPES::REC_WEIGHTS;            //enum for the response reconstruction weights
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;              //enum for stationary covariates
@@ -806,6 +806,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     return l;
 }
 
+
 /*!
 * @brief
 * @param coeff_stationary_cov_to_pred
@@ -963,7 +964,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
     using _FD_OUTPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_y_type;                          //data type for the image of fdata (double)
     using _DOMAIN_ = FDAGWR_TRAITS::basis_geometry;                                 //domain geometry
-    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::FGWR_FMS_ESC;                         //fgwr type (estimating stationary -> station-dependent -> event-dependent)
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::_FGWR_FMS_ESC_;                       //fgwr type (estimating stationary -> station-dependent -> event-dependent)
     constexpr auto _RESPONSE_ = FDAGWR_COVARIATES_TYPES::RESPONSE;                  //enum for the response
     constexpr auto _REC_WEIGHTS_ = FDAGWR_COVARIATES_TYPES::REC_WEIGHTS;            //enum for the response reconstruction weights
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;              //enum for stationary covariates
@@ -1615,7 +1616,7 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
     using _FD_OUTPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_y_type;                          //data type for the image of fdata (double)
     using _DOMAIN_ = FDAGWR_TRAITS::basis_geometry;                                 //domain geometry
-    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::FGWR_FMS_SEC;                         //fgwr type (estimating stationary -> event-dependent -> station-dependent)
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::_FGWR_FMS_SEC_;                       //fgwr type (estimating stationary -> event-dependent -> station-dependent)
     constexpr auto _RESPONSE_ = FDAGWR_COVARIATES_TYPES::RESPONSE;                  //enum for the response
     constexpr auto _REC_WEIGHTS_ = FDAGWR_COVARIATES_TYPES::REC_WEIGHTS;            //enum for the response reconstruction weights
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;              //enum for stationary covariates
@@ -2286,7 +2287,7 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
     using _FD_OUTPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_y_type;                          //data type for the image of fdata (double)
     using _DOMAIN_ = FDAGWR_TRAITS::basis_geometry;                                 //domain geometry
-    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::FGWR_FMS_SEC;                         //fgwr type (estimating stationary -> station-dependent -> event-dependent)
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::_FGWR_FMS_SEC_;                       //fgwr type (estimating stationary -> station-dependent -> event-dependent)
     constexpr auto _RESPONSE_ = FDAGWR_COVARIATES_TYPES::RESPONSE;                  //enum for the response
     constexpr auto _REC_WEIGHTS_ = FDAGWR_COVARIATES_TYPES::REC_WEIGHTS;            //enum for the response reconstruction weights
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;              //enum for stationary covariates
@@ -2721,7 +2722,7 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
 Rcpp::List FSGWR(double input_el = 1,
                  Rcpp::Nullable<int> num_threads = R_NilValue)
 {
-    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::FGWR_FS;                          //fgwr type (estimating stationary -> non-stationary)
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::_FGWR_FS_;                          //fgwr type (estimating stationary -> non-stationary)
     
     
     //returning element
@@ -2741,7 +2742,7 @@ Rcpp::List FGWR(double input_el=1,
                 Rcpp::Nullable<int> num_threads = R_NilValue)
 {
 
-    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::FGWR;                          //fgwr type (estimating stationary)
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::_FGWR_;                          //fgwr type (estimating stationary)
 
     
     //returning element

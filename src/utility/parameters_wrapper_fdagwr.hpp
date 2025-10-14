@@ -750,7 +750,7 @@ void
 wrap_predict_input(Rcpp::List pred_input)
 {
   //fmsgwr esc
-  if constexpr( fdagwr_algo == FDAGWR_ALGO::FGWR_FMS_ESC)
+  if constexpr( fdagwr_algo == FDAGWR_ALGO::_FGWR_FMS_ESC_)
   {
     //check input list
     if (pred_input.size() != 8){ throw std::invalid_argument("Lenght of input list has to be 8");}
@@ -759,7 +759,7 @@ wrap_predict_input(Rcpp::List pred_input)
     if( as<std::string>(pred_input["FGWR"]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FMS_GWR_ESC");}
   }
   //fmsgwr sec
-  if constexpr( fdagwr_algo == FDAGWR_ALGO::FGWR_FMS_SEC)
+  if constexpr( fdagwr_algo == FDAGWR_ALGO::_FGWR_FMS_SEC_)
   {
     //check input list
     if (pred_input.size() != 8){ throw std::invalid_argument("Lenght of input list has to be 8");}
