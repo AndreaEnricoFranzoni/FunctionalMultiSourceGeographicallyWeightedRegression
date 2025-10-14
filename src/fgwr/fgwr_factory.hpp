@@ -38,26 +38,26 @@ template< FDAGWR_ALGO fdagwrType, typename INPUT = double, typename OUTPUT = dou
 std::unique_ptr< fgwr<INPUT,OUTPUT> >
 fgwr_factory(Args &&... args)
 {
-    static_assert(fdagwrType == FDAGWR_ALGO::GWR_FMS_ESC ||
-                  fdagwrType == FDAGWR_ALGO::GWR_FMS_SEC ||
-                  fdagwrType == FDAGWR_ALGO::GWR_FOS     ||
-                  fdagwrType == FDAGWR_ALGO::GWR_FST,
+    static_assert(fdagwrType == FDAGWR_ALGO::FGWR_FMS_ESC ||
+                  fdagwrType == FDAGWR_ALGO::FGWR_FMS_SEC ||
+                  fdagwrType == FDAGWR_ALGO::FGWR_FS      ||
+                  fdagwrType == FDAGWR_ALGO::FGWR,
                   "Error in fdagwrType: wrong type specified.");
 
     //FMS_ESC: multi-source: estimating: stationay -> station-dependent -> event-dependent
-    if constexpr (fdagwrType == FDAGWR_ALGO::GWR_FMS_ESC)
+    if constexpr (fdagwrType == FDAGWR_ALGO::FGWR_FMS_ESC)
         return std::make_unique<fgwr_fms_esc<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
     //FMS_SEC: multi-source: estimating: stationay -> event-dependent -> station-dependent
-    if constexpr (fdagwrType == FDAGWR_ALGO::GWR_FMS_SEC)
+    if constexpr (fdagwrType == FDAGWR_ALGO::FGWR_FMS_SEC)
         return std::make_unique<fgwr_fms_sec<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
     //GWR_FOS: one-source: estimating: stationary -> geographically dependent
-    if constexpr (fdagwrType == FDAGWR_ALGO::GWR_FOS)
+    if constexpr (fdagwrType == FDAGWR_ALGO::FGWR_FS)
         return std::make_unique<fgwr_fos<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
     //GWR_FST: stationary: estimating: stationary
-    if constexpr (fdagwrType == FDAGWR_ALGO::GWR_FST)
+    if constexpr (fdagwrType == FDAGWR_ALGO::FGWR)
         return std::make_unique<fgwr_fst<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 }
 

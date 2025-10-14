@@ -484,7 +484,7 @@ wrap_prediction_to_R_list(const std::vector< std::vector<OUTPUT>> & pred,
     predictions.names() = names;
 
     //returning it
-    pred_w[FDAGWR_HELPERS_for_PRED_NAMES::pred] = predictions;
+    pred_w[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_ev"] = predictions;
     //adding also the abscissa
     pred_w[FDAGWR_HELPERS_for_PRED_NAMES::abscissa] = abscissa;
     return pred_w;
