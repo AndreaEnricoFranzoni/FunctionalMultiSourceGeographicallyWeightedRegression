@@ -268,6 +268,7 @@ public:
         std::size_t n_pred = W.at(id_e).size();
 
 
+/*
         //compute the non-stationary betas in the new locations
         //penalties in the new locations
         //(j_tilde_tilde + Rs)^-1
@@ -280,12 +281,13 @@ public:
         m_bs_pred = this->compute_operator(m_psi_t,m_Xs_train_t,W.at(id_s),m_y_tilde_tilde_hat,j_double_tilde_Rs_inv);
 
 
+*/
 
 
 
 
 
-/*
+
         //DEFAULT AI B: PARTE DA TOGLIERE
         m_bs_pred.resize(n_pred);
         m_be_pred.resize(n_pred);
@@ -295,7 +297,7 @@ public:
             m_bs_pred[i] = Eigen::MatrixXd::Random(m_Ls,1);
         }
         //FINE PARTE DA TOGLIERE
-*/
+
 
 
 

@@ -89,6 +89,7 @@ enum FDAGWR_ALGO
 
 
 template < FDAGWR_ALGO fdagwr_algo >
+constexpr
 std::string
 algo_type()
 {
