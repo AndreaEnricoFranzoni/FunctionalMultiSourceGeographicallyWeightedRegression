@@ -89,7 +89,7 @@ public:
                  //compute the transpost
                 m_omega_t = m_omega.transpose();
                 //dewrappare i b_train (li incolonna)
-                m_bc_fitted = this->dewrap_b(m_Bc_fitted,m_Lc_j);
+                m_bc_fitted = this->operator_comp().dewrap_operator(m_Bc_fitted,m_Lc_j);
             }
 
     /*!
