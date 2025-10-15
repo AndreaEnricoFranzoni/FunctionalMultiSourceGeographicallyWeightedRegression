@@ -67,7 +67,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr4 has been installed"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr has been installed"<< std::endl;}
 
 
 /*!
@@ -1372,7 +1372,13 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                                            names_events_cov_,
                                            names_stations_cov_);
     //predictions evaluations
-    Rcpp::List y_pred_ev_R = wrap_prediction_to_R_list<_FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_>(y_pred_ev,abscissa_points_ev_);
+    Rcpp::List y_pred_ev_R = wrap_prediction_to_R_list<_FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_>(y_pred_ev,
+                                                                                          abscissa_points_ev_,
+                                                                                          y_pred_smooth_coeff,
+                                                                                          basis_type_response_,
+                                                                                          number_basis_response_,
+                                                                                          degree_basis_response_,
+                                                                                          knots_smoothing_pred);
 
     //returning element                                       
     Rcpp::List l;
@@ -2702,7 +2708,13 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
                                            names_events_cov_,
                                            names_stations_cov_);
     //predictions evaluations
-    Rcpp::List y_pred_ev_R = wrap_prediction_to_R_list<_FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_>(y_pred_ev,abscissa_points_ev_);
+    Rcpp::List y_pred_ev_R = wrap_prediction_to_R_list<_FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_>(y_pred_ev,
+                                                                                          abscissa_points_ev_,
+                                                                                          y_pred_smooth_coeff,
+                                                                                          basis_type_response_,
+                                                                                          number_basis_response_,
+                                                                                          degree_basis_response_,
+                                                                                          knots_smoothing_pred);
 
     //returning element                                       
     Rcpp::List l;

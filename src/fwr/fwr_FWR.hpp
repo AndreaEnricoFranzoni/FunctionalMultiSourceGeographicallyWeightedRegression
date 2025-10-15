@@ -119,12 +119,6 @@ public:
     override
     {
 /*
-        //DEFAULT AI B: PARTE DA TOGLIERE
-        m_bc = Eigen::MatrixXd::Random(m_Lc,1);
-        //FINE PARTE DA TOGLIERE
-*/      
-
-
         //[J + Rc]^-1
         std::cout << "Computing [J + Rc]^-1" << std::endl;
         Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> j_Rc_inv = this->operator_comp().compute_penalty(m_omega_t,m_Xc_t,m_Wc,m_Xc,m_omega,m_Rc);
@@ -133,11 +127,17 @@ public:
         std::cout << "Computing m_bc" << std::endl;
         m_bc = this->operator_comp().compute_operator(m_omega_t,m_Xc_t,m_Wc,m_y,j_Rc_inv);
         std::cout << "m_bc rows: " << m_bc.rows() << ", m_bc cols: " << m_bc.cols() << std::endl;
+*/      
 
 
 
 
 
+
+
+        //DEFAULT AI B: PARTE DA TOGLIERE
+        m_bc = Eigen::MatrixXd::Random(m_Lc,1);
+        //FINE PARTE DA TOGLIERE
 
 
 

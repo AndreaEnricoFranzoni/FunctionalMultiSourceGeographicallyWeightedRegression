@@ -265,7 +265,7 @@ public:
         //number of units to be predicted
         std::size_t n_pred = W.at(fwr_FMSGWR_ESC_predictor<INPUT,OUTPUT>::id_E).size();
 
-
+/*
         //compute the non-stationary betas in the new locations
         //penalties in the new locations
         //(j_tilde_tilde + Re)^-1
@@ -276,9 +276,9 @@ public:
         m_bs_pred = this->operator_comp().compute_operator(m_X_s_train_crossed_t,W.at(fwr_FMSGWR_ESC_predictor<INPUT,OUTPUT>::id_S),m_y_tilde_new,j_tilde_Rs_inv);
         //COMPUTING all the m_be in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
         m_be_pred = this->operator_comp().compute_operator(m_theta_t,m_Xe_train_t,W.at(fwr_FMSGWR_ESC_predictor<INPUT,OUTPUT>::id_E),m_y_tilde_tilde_hat,j_double_tilde_Re_inv);
+*/ 
 
 
-/*
         //INIZIO PARTE DA TOGLIERE
         m_bs_pred.resize(n_pred);
         m_be_pred.resize(n_pred);
@@ -288,7 +288,7 @@ public:
             m_bs_pred[i] = Eigen::MatrixXd::Random(m_Ls,1);
         }
         //FINE PARTE DA TOGLIERE
-*/ 
+
 
 
 

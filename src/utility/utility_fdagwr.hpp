@@ -465,6 +465,7 @@ wrap_PRes_to_R_list(const PartialResidualTuple& p_res)
 /*!
 * @brief Wrapping the prediction
 */
+/*
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 Rcpp::List
@@ -489,6 +490,7 @@ wrap_prediction_to_R_list(const std::vector< std::vector<OUTPUT>> & pred,
     pred_w[FDAGWR_HELPERS_for_PRED_NAMES::abscissa] = abscissa;
     return pred_w;
 }
+*/
 
 /*!
 * @brief Wrapping the prediction
