@@ -461,37 +461,6 @@ wrap_PRes_to_R_list(const PartialResidualTuple& p_res)
 
 
 
-
-/*!
-* @brief Wrapping the prediction
-*/
-/*
-template< typename INPUT, typename OUTPUT >
-    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-Rcpp::List
-wrap_prediction_to_R_list(const std::vector< std::vector<OUTPUT>> & pred,
-                          const std::vector< INPUT> &abscissa)
-{
-    Rcpp::List pred_w;
-    std::size_t number_pred = pred.size();
-    Rcpp::List predictions(number_pred);
-    Rcpp::CharacterVector names(number_pred);
-
-    for(std::size_t i = 0; i < number_pred; ++i){
-        predictions[i] = Rcpp::wrap(pred[i]);
-        names[i] = std::string("unit_pred_") + std::to_string(i+1);
-    }
-
-    predictions.names() = names;
-
-    //returning it
-    pred_w[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_ev"] = predictions;
-    //adding also the abscissa
-    pred_w[FDAGWR_HELPERS_for_PRED_NAMES::abscissa] = abscissa;
-    return pred_w;
-}
-*/
-
 /*!
 * @brief Wrapping the prediction
 */
