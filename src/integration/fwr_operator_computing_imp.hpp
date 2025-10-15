@@ -582,7 +582,7 @@ const
         functional_matrix<INPUT,OUTPUT> basis_j(basis_j_v,1,B[j].rows());
 
         //compute the beta
-        FUNC_OBJ<INPUT,OUTPUT> beta_j = fm_prod<INPUT,OUTPUT>(basis_j,B[j],this->number_threads())(0,0);
+        FUNC_OBJ<INPUT,OUTPUT> beta_j = fm_prod<INPUT,OUTPUT>(basis_j,B[j],m_number_threads)(0,0);
         //eval the beta
         std::vector< OUTPUT > beta_j_ev; 
         beta_j_ev.resize(abscissas.size());
@@ -636,7 +636,7 @@ const
         for(std::size_t i = 0; i < B[j].size(); ++i)
         {
             //compute the beta j-th for unit i-th
-            FUNC_OBJ<INPUT,OUTPUT> beta_j_i = fm_prod<INPUT,OUTPUT>(basis_j,B[j][i],this->number_threads())(0,0);
+            FUNC_OBJ<INPUT,OUTPUT> beta_j_i = fm_prod<INPUT,OUTPUT>(basis_j,B[j][i],m_number_threads)(0,0);
             //eval the beta
             std::vector< OUTPUT > beta_j_i_ev; 
             beta_j_i_ev.resize(abscissas.size());
