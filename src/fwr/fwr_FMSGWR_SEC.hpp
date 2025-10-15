@@ -460,11 +460,11 @@ public:
     override
     {
         //BETA_C
-        m_beta_c = this->eval_betas(m_Bc,m_omega,m_Lc_j,m_qc,this->abscissa_points());        
+        m_beta_c = this->operator_comp().eval_func_betas(m_Bc,m_omega,m_Lc_j,m_qc,this->abscissa_points());        
         //BETA_E
-        m_beta_e = this->eval_betas(m_Be,m_theta,m_Le_j,m_qe,this->abscissa_points());
+        m_beta_e = this->operator_comp().eval_func_betas(m_Be,m_theta,m_Le_j,m_qe,this->n(),this->abscissa_points());
         //BETA_S
-        m_beta_s = this->eval_betas(m_Bs,m_psi,m_Ls_j,m_qs,this->abscissa_points());
+        m_beta_s = tthis->operator_comp().eval_func_betas(m_Bs,m_psi,m_Ls_j,m_qs,this->n(),this->abscissa_points());
     }
 
     /*!

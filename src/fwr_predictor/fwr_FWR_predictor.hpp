@@ -157,7 +157,7 @@ public:
     evalBetas(const std::vector<INPUT> &abscissa)
     override
     {
-        m_BetaC_ev = this->eval_betas(m_BetaC,m_qc,abscissa);
+        m_BetaC_ev = this->operator_comp().eval_func_betas(m_BetaC,m_qc,abscissa);
     }
 
     /*!

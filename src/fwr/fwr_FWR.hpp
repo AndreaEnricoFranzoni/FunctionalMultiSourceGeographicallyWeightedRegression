@@ -168,7 +168,7 @@ public:
     override
     {
         //BETA_C
-        m_beta_c = this->eval_betas(m_Bc,m_omega,m_Lc_j,m_qc,this->abscissa_points());        
+        m_beta_c = this->operator_comp().eval_func_betas(m_Bc,m_omega,m_Lc_j,m_qc,this->abscissa_points());         
     }
 
     /*!

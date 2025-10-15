@@ -84,52 +84,22 @@ public:
     */
     inline int number_threads() const {return m_number_threads;}
 
-    /*!
-    * @brief Eval the stationary betas on a grid
-    */
+
+/*
+    //@brief Eval the stationary betas on a grid
+    
     std::vector< std::vector<OUTPUT> >
     eval_betas(const functional_matrix<INPUT,OUTPUT> &beta,
                std::size_t q,
                std::vector<INPUT> abscissa) const;
 
-    /*!
-    * @brief Eval the non-stationary betas on a grid
-    */
+    //brief Eval the non-stationary betas on a grid
+    
     std::vector< std::vector< std::vector<OUTPUT>>>
     eval_betas(const std::vector< functional_matrix<INPUT,OUTPUT>> &beta,
                std::size_t q,
                std::vector<INPUT> abscissa) const;
-
-    /*!
-    * @brief Compute partial residuals
-    */
-    virtual inline void computePartialResiduals() = 0;
-
-    /*!
-    * @brief Updating the non-stationary betas
-    */                            
-    virtual inline void computeBNew(const std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >> &W) = 0;
-
-    /*!
-    * @brief Compute stationary beta
-    */
-    virtual inline void computeStationaryBetas() = 0;
-
-    /*!
-    * @brief Compute non-stationary betas
-    */
-    virtual inline void computeNonStationaryBetas() = 0;
-
-    /*!
-    * @brief Compute prediction
-    */
-    virtual inline functional_matrix<INPUT,OUTPUT> predict(const std::map<std::string,functional_matrix<INPUT,OUTPUT>>& X_new) const = 0;
-
-    /*!
-    * @brief Virtual method to compute the betas
-    */
-    virtual inline void evalBetas(const std::vector<INPUT> &abscissa) = 0;
-
+*/
     /*!
     * Function to evaluate the prediction
     */
@@ -166,6 +136,36 @@ public:
     }
 
     /*!
+    * @brief Compute partial residuals
+    */
+    virtual inline void computePartialResiduals() = 0;
+
+    /*!
+    * @brief Updating the non-stationary betas
+    */                            
+    virtual inline void computeBNew(const std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >> &W) = 0;
+
+    /*!
+    * @brief Compute stationary beta
+    */
+    virtual inline void computeStationaryBetas() = 0;
+
+    /*!
+    * @brief Compute non-stationary betas
+    */
+    virtual inline void computeNonStationaryBetas() = 0;
+
+    /*!
+    * @brief Compute prediction
+    */
+    virtual inline functional_matrix<INPUT,OUTPUT> predict(const std::map<std::string,functional_matrix<INPUT,OUTPUT>>& X_new) const = 0;
+
+    /*!
+    * @brief Virtual method to compute the betas
+    */
+    virtual inline void evalBetas(const std::vector<INPUT> &abscissa) = 0;
+
+    /*!
     * @brief Function to return the coefficients of the betas basis expansion, tuple of different dimension depending on the algo used
     */
     virtual inline BTuple bCoefficients() const = 0;
@@ -175,7 +175,5 @@ public:
     */
     virtual inline BetasTuple betas() const = 0;
 };
-
-#include "fwr_predictor_imp.hpp"
 
 #endif  /*FWR_PREDICTOR_HPP*/

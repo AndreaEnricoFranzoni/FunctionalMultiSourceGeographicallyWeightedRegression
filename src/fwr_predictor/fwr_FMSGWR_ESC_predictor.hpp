@@ -391,9 +391,9 @@ public:
     evalBetas(const std::vector<INPUT> &abscissa)
     override
     {
-        m_BetaC_ev = this->eval_betas(m_BetaC,m_qc,abscissa);
-        m_BetaE_ev = this->eval_betas(m_BetaE,m_qe,abscissa);
-        m_BetaS_ev = this->eval_betas(m_BetaS,m_qs,abscissa);
+        m_BetaC_ev = this->operator_comp().eval_func_betas(m_BetaC,m_qc,abscissa);
+        m_BetaE_ev = this->operator_comp().eval_func_betas(m_BetaE,m_qe,abscissa);
+        m_BetaS_ev = this->operator_comp().eval_func_betas(m_BetaS,m_qs,abscissa);
     }
 
     /*!

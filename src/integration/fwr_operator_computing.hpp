@@ -248,6 +248,43 @@ public:
                     const std::vector<std::size_t>& L_j,
                     std::size_t n) const;
 
+    /*!
+    * @brief Evaluation of the betas, for stationary covariates, from coefficients (incolonnati) + basi
+    */
+    std::vector< std::vector< OUTPUT >>
+    eval_func_betas(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& B,
+                    const functional_matrix_sparse<INPUT,OUTPUT>& basis_B,
+                    const std::vector<std::size_t>& L_j,   
+                    std::size_t q,
+                    const std::vector< INPUT >& abscissas) const;
+
+    /*!
+    * @brief Evaluation of the betas, for non-stationary covariates, from coefficients (incolonnati (ogni elemento: sta per una covariata, con i coeff per ogni unità (n))) + basi
+    */
+    std::vector< std::vector< std::vector< OUTPUT >>>
+    eval_func_betas(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& B,
+                    const functional_matrix_sparse<INPUT,OUTPUT>& basis_B,
+                    const std::vector<std::size_t>& L_j,
+                    std::size_t q,
+                    std::size_t n,
+                    const std::vector< INPUT >& abscissas) const;
+    
+    /*!
+    * @brief Eval the stationary betas on a grid, as func matrices
+    */
+    std::vector< std::vector<OUTPUT> >
+    eval_func_betas(const functional_matrix<INPUT,OUTPUT> &beta,
+                    std::size_t q,
+                    const std::vector<INPUT> &abscissa) const;
+
+    /*!
+    * @brief Eval the non-stationary betas on a grid
+    */
+    std::vector< std::vector< std::vector<OUTPUT>>>
+    eval_func_betas(const std::vector< functional_matrix<INPUT,OUTPUT>> &beta,
+                    std::size_t q,
+                    const std::vector<INPUT> &abscissa) const;
+
 };
 
 #include "fwr_operator_computing_imp.hpp"
