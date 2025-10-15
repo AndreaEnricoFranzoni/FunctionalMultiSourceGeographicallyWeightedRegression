@@ -3154,8 +3154,6 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_stationary_cov_to_pred,
     ////////////////////////////////////////////////////////////
     //list with the fitted model
     Rcpp::List fitted_model      = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred];
-    //list with partial residuals
-    Rcpp::List partial_residuals = fitted_model[FDAGWR_HELPERS_for_PRED_NAMES::p_res];
     //lists with the input of the training
     Rcpp::List training_input    = fitted_model[FDAGWR_HELPERS_for_PRED_NAMES::inputs_info];
     //list with elements of the response
@@ -3174,15 +3172,15 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ev_ = wrap_abscissas(abscissa_ev,a,b);                         //abscissa points for which the evaluation of the prediction is required
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ = training_input[FDAGWR_HELPERS_for_PRED_NAMES::abscissa];    //abscissa point for which the training data are discretized
     //RESPONSE
-    std::size_t number_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
+    //std::size_t number_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
     std::string basis_type_response_   = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
-    std::size_t degree_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
+    //std::size_t degree_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_response_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_.data(),knots_response_.size());
     //RESPONDE RECONSTRUCTION WEIGHTS   
-    std::size_t number_basis_rec_weights_response_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
+    //std::size_t number_basis_rec_weights_response_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
     std::string basis_type_rec_weights_response_   = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
-    std::size_t degree_basis_rec_weights_response_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
+    //std::size_t degree_basis_rec_weights_response_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_rec_w_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_response_rec_w_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_rec_w_.data(),knots_response_rec_w_.size());
     auto coefficients_rec_weights_response_                         = reader_data<_DATA_TYPE_,_NAN_REM_>(response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);  
