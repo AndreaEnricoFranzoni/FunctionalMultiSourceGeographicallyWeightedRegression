@@ -26,7 +26,7 @@
 #include "fgwr_fms_esc_predictor.hpp"
 #include "fgwr_fms_sec_predictor.hpp"
 //#include "fgwr_fos_predictor.hpp"
-//#include "fgwr_fst_predictor.hpp"
+#include "fgwr_fst_predictor.hpp"
 
 
 /*!
@@ -57,8 +57,8 @@ fgwr_predictor_factory(Args &&... args)
     //    return std::make_unique<fgwr_fos<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
     //GWR_FST: stationary: estimating: stationary
-    //if constexpr (fdagwrType == FDAGWR_ALGO::_FGWR_)
-    //    return std::make_unique<fgwr_fst<INPUT,OUTPUT>>(std::forward<Args>(args)...);
+    if constexpr (fdagwrType == FDAGWR_ALGO::_FGWR_)
+        return std::make_unique<fgwr_fst_predictor<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 }
 
 #endif /*FGWR_PREDICTOR_FACTORY_HPP*/

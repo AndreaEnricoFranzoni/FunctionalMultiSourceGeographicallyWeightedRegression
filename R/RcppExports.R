@@ -33,7 +33,7 @@ FGWR <- function(y_points, t_points, left_extreme_domain, right_extreme_domain, 
     .Call(`_fdagwr_FGWR`, y_points, t_points, left_extreme_domain, right_extreme_domain, coeff_y_points, knots_y_points, degree_basis_y_points, n_basis_y_points, coeff_rec_weights_y_points, degree_basis_rec_weights_y_points, n_basis_rec_weights_y_points, coeff_stationary_cov, basis_types_stationary_cov, knots_stationary_cov, degrees_basis_stationary_cov, n_basis_stationary_cov, penalization_stationary_cov, knots_beta_stationary_cov, degrees_basis_beta_stationary_cov, n_basis_beta_stationary_cov, n_intervals_trapezoidal_quadrature, target_error_trapezoidal_quadrature, max_iterations_trapezoidal_quadrature, num_threads, basis_type_y_points, basis_type_rec_weights_y_points, basis_types_beta_stationary_cov)
 }
 
-predict_FGWR <- function(coeff_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_trapezoidal_quadrature = 100L, target_error_trapezoidal_quadrature = 1e-3, max_iterations_trapezoidal_quadrature = 100L, num_threads = NULL) {
-    .Call(`_fdagwr_predict_FGWR`, coeff_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_trapezoidal_quadrature, target_error_trapezoidal_quadrature, max_iterations_trapezoidal_quadrature, num_threads)
+predict_FGWR <- function(coeff_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, num_threads = NULL) {
+    .Call(`_fdagwr_predict_FGWR`, coeff_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, num_threads)
 }
 

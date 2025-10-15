@@ -296,8 +296,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // predict_FGWR
-Rcpp::List predict_FGWR(Rcpp::List coeff_stationary_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_trapezoidal_quadrature, double target_error_trapezoidal_quadrature, int max_iterations_trapezoidal_quadrature, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_predict_FGWR(SEXP coeff_stationary_cov_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP model_fittedSEXP, SEXP n_intervals_trapezoidal_quadratureSEXP, SEXP target_error_trapezoidal_quadratureSEXP, SEXP max_iterations_trapezoidal_quadratureSEXP, SEXP num_threadsSEXP) {
+Rcpp::List predict_FGWR(Rcpp::List coeff_stationary_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_predict_FGWR(SEXP coeff_stationary_cov_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP model_fittedSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -305,11 +305,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
-    Rcpp::traits::input_parameter< int >::type n_intervals_trapezoidal_quadrature(n_intervals_trapezoidal_quadratureSEXP);
-    Rcpp::traits::input_parameter< double >::type target_error_trapezoidal_quadrature(target_error_trapezoidal_quadratureSEXP);
-    Rcpp::traits::input_parameter< int >::type max_iterations_trapezoidal_quadrature(max_iterations_trapezoidal_quadratureSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(predict_FGWR(coeff_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_trapezoidal_quadrature, target_error_trapezoidal_quadrature, max_iterations_trapezoidal_quadrature, num_threads));
+    rcpp_result_gen = Rcpp::wrap(predict_FGWR(coeff_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -323,7 +320,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_FSGWR", (DL_FUNC) &_fdagwr_FSGWR, 40},
     {"_fdagwr_predict_FSGWR", (DL_FUNC) &_fdagwr_predict_FSGWR, 10},
     {"_fdagwr_FGWR", (DL_FUNC) &_fdagwr_FGWR, 27},
-    {"_fdagwr_predict_FGWR", (DL_FUNC) &_fdagwr_predict_FGWR, 8},
+    {"_fdagwr_predict_FGWR", (DL_FUNC) &_fdagwr_predict_FGWR, 5},
     {NULL, NULL, 0}
 };
 

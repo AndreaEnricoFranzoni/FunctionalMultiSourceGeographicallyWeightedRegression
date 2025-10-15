@@ -767,6 +767,15 @@ wrap_predict_input(Rcpp::List pred_input)
     //check that derives from the right algorithm
     if( as<std::string>(pred_input["FGWR"]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FMS_GWR_SEC");}
   }
+  //fgwr 
+  if constexpr( fdagwr_algo == FDAGWR_ALGO::_FGWR_)
+  {
+    //check input list
+    if (pred_input.size() != 4){ throw std::invalid_argument("Lenght of input list has to be 4");}
+
+    //check that derives from the right algorithm
+    if( as<std::string>(pred_input["FGWR"]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FGWR");}
+  }
 }
 
 
