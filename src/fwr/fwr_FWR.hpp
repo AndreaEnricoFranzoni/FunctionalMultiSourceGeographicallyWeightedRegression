@@ -18,15 +18,15 @@
 // fdagwr.
 
 
-#ifndef FGWR_FST_ALGO_HPP
-#define FGWR_FST_ALGO_HPP
+#ifndef FWR_FWR_ALGO_HPP
+#define FWR_FWR_ALGO_HPP
 
-#include "fgwr.hpp"
+#include "fwr.hpp"
 
 
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-class fgwr_fst final : public fgwr<INPUT,OUTPUT>
+class fwr_FWR final : public fwr<INPUT,OUTPUT>
 {
 private:
     /*!Functional response (nx1)*/
@@ -67,24 +67,24 @@ public:
              typename FUNC_SPARSE_MATRIX_OBJ,
              typename FUNC_DIAG_MATRIX_OBJ, 
              typename SCALAR_SPARSE_MATRIX_OBJ> 
-    fgwr_fst(FUNC_MATRIX_OBJ &&y,
-             FUNC_MATRIX_OBJ &&Xc,
-             FUNC_DIAG_MATRIX_OBJ &&Wc,
-             SCALAR_SPARSE_MATRIX_OBJ &&Rc,
-             FUNC_SPARSE_MATRIX_OBJ &&omega,
-             std::size_t qc,
-             std::size_t Lc,
-             const std::vector<std::size_t> & Lc_j,
-             INPUT a,
-             INPUT b,
-             int n_intervals_integration,
-             double target_error_integration,
-             int max_iterations_integration,
-             const std::vector<INPUT> & abscissa_points,
-             std::size_t n,
-             int number_threads)
+    fwr_FWR(FUNC_MATRIX_OBJ &&y,
+            FUNC_MATRIX_OBJ &&Xc,
+            FUNC_DIAG_MATRIX_OBJ &&Wc,
+            SCALAR_SPARSE_MATRIX_OBJ &&Rc,
+            FUNC_SPARSE_MATRIX_OBJ &&omega,
+            std::size_t qc,
+            std::size_t Lc,
+            const std::vector<std::size_t> & Lc_j,
+            INPUT a,
+            INPUT b,
+            int n_intervals_integration,
+            double target_error_integration,
+            int max_iterations_integration,
+            const std::vector<INPUT> & abscissa_points,
+            std::size_t n,
+            int number_threads)
         :
-            fgwr<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error_integration,max_iterations_integration,abscissa_points,n,number_threads),
+            fwr<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error_integration,max_iterations_integration,abscissa_points,n,number_threads),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_Xc{std::forward<FUNC_MATRIX_OBJ>(Xc)},
             m_Wc{std::forward<FUNC_DIAG_MATRIX_OBJ>(Wc)},
@@ -208,4 +208,4 @@ public:
     }
 };
 
-#endif  /*FGWR_FST_ALGO_HPP*/
+#endif  /*FWR_FWR_ALGO_HPP*/

@@ -18,7 +18,7 @@
 // fdagwr.
 
 
-#include "fgwr_operator_computing.hpp"
+#include "fwr_operator_computing.hpp"
 
 
 
@@ -33,7 +33,7 @@
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> >
-fgwr_operator_computing<INPUT,OUTPUT>::compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
+fwr_operator_computing<INPUT,OUTPUT>::compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
                                                        const functional_matrix<INPUT,OUTPUT> &X_t,
                                                        const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
                                                        const functional_matrix<INPUT,OUTPUT> &X,
@@ -70,7 +70,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
-fgwr_operator_computing<INPUT,OUTPUT>::compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
+fwr_operator_computing<INPUT,OUTPUT>::compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
                                                        const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
                                                        const functional_matrix<INPUT,OUTPUT> &X_crossed,
                                                        const FDAGWR_TRAITS::Sparse_Matrix &R) 
@@ -105,7 +105,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
-fgwr_operator_computing<INPUT,OUTPUT>::compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
+fwr_operator_computing<INPUT,OUTPUT>::compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
                                                        const functional_matrix_diagonal<INPUT,OUTPUT> &W,
                                                        const functional_matrix<INPUT,OUTPUT> &X_crossed,
                                                        const FDAGWR_TRAITS::Sparse_Matrix &R) 
@@ -125,7 +125,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
-fgwr_operator_computing<INPUT,OUTPUT>::compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
+fwr_operator_computing<INPUT,OUTPUT>::compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
                                                        const functional_matrix<INPUT,OUTPUT> &X_t,
                                                        const functional_matrix_diagonal<INPUT,OUTPUT> &W,
                                                        const functional_matrix<INPUT,OUTPUT> &X,
@@ -150,7 +150,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
-fgwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
+fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
                                                         const functional_matrix<INPUT,OUTPUT> &X_lhs,
                                                         const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
                                                         const functional_matrix<INPUT,OUTPUT> &X_rhs,
@@ -181,7 +181,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
-fgwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
+fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
                                                         const functional_matrix<INPUT,OUTPUT> &X_lhs,
                                                         const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
                                                         const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
@@ -211,7 +211,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
-fgwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
+fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
                                                         const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
                                                         const functional_matrix<INPUT,OUTPUT> &X_rhs,
                                                         const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
@@ -241,7 +241,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
-fgwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
+fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
                                                         const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
                                                         const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
                                                         const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
@@ -270,7 +270,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
-fgwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
+fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
                                                         const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
                                                         const functional_matrix<INPUT,OUTPUT> &X_rhs,
                                                         const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
@@ -299,7 +299,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
-fgwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
+fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
                                                         const functional_matrix<INPUT,OUTPUT> &X_lhs,
                                                         const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
                                                         const functional_matrix<INPUT,OUTPUT> &X_rhs,
@@ -329,7 +329,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 FDAGWR_TRAITS::Dense_Matrix
-fgwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
+fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
                                                         const functional_matrix_diagonal<INPUT,OUTPUT> &W,
                                                         const functional_matrix<INPUT,OUTPUT> &X_rhs,
                                                         const Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > &penalty) 
@@ -346,7 +346,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 FDAGWR_TRAITS::Dense_Matrix
-fgwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
+fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
                                                         const functional_matrix<INPUT,OUTPUT> &X_lhs,
                                                         const functional_matrix_diagonal<INPUT,OUTPUT> &W,
                                                         const functional_matrix<INPUT,OUTPUT> &X_rhs,
@@ -372,7 +372,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 functional_matrix<INPUT,OUTPUT> 
-fgwr_operator_computing<INPUT,OUTPUT>::compute_functional_operator(const functional_matrix<INPUT,OUTPUT> &X,
+fwr_operator_computing<INPUT,OUTPUT>::compute_functional_operator(const functional_matrix<INPUT,OUTPUT> &X,
                                                                    const functional_matrix_sparse<INPUT,OUTPUT> &base,
                                                                    const std::vector< FDAGWR_TRAITS::Dense_Matrix > &_operator_) 
 const
@@ -416,7 +416,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
-fgwr_operator_computing<INPUT,OUTPUT>::wrap_operator(const FDAGWR_TRAITS::Dense_Matrix& b,
+fwr_operator_computing<INPUT,OUTPUT>::wrap_operator(const FDAGWR_TRAITS::Dense_Matrix& b,
                                                      const std::vector<std::size_t>& L_j,
                                                      std::size_t q)
 const
@@ -443,7 +443,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > >
-fgwr_operator_computing<INPUT,OUTPUT>::wrap_operator(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
+fwr_operator_computing<INPUT,OUTPUT>::wrap_operator(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
                                                      const std::vector<std::size_t>& L_j,
                                                      std::size_t q,
                                                      std::size_t n) 
@@ -488,7 +488,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 FDAGWR_TRAITS::Dense_Matrix 
-fgwr_operator_computing<INPUT,OUTPUT>::dewrap_operator(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
+fwr_operator_computing<INPUT,OUTPUT>::dewrap_operator(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
                                                        const std::vector<std::size_t>& L_j) 
 const
 {
@@ -518,7 +518,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
-fgwr_operator_computing<INPUT,OUTPUT>::dewrap_operator(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& b,
+fwr_operator_computing<INPUT,OUTPUT>::dewrap_operator(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& b,
                                                        const std::vector<std::size_t>& L_j,
                                                        std::size_t n) 
 const

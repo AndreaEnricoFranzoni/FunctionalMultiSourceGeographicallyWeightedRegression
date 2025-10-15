@@ -44,9 +44,9 @@
 
 #include "integration/functional_data_integration.hpp"
 
-#include "fgwr/fgwr_factory.hpp"
+#include "fwr/fwr_factory.hpp"
 
-#include "fgwr_predictor/fgwr_predictor_factory.hpp"
+#include "fwr_predictor/fwr_predictor_factory.hpp"
 
 #include "functional_matrix/functional_matrix.hpp"
 #include "functional_matrix/functional_matrix_sparse.hpp"
@@ -70,7 +70,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr1 has been installed"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr2 has been installed"<< std::endl;}
 
 
 /*!
@@ -633,7 +633,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
 
 
     //fgwr algorithm
-    auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
+    auto fgwr_algo = fwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),
                                                                                     std::move(c),
                                                                                     number_basis_response_,
@@ -1293,7 +1293,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
 
     //fgwr predictor
-    auto fgwr_predictor = fgwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
+    auto fgwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
                                                                                                    std::move(Bs),
                                                                                                    std::move(omega),
                                                                                                    q_C,
@@ -1954,7 +1954,7 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
 
 
     //fgwr algorithm
-    auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
+    auto fgwr_algo = fwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                     std::move(phi),
                                                                                     std::move(c),
                                                                                     number_basis_response_,
@@ -2614,7 +2614,7 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
 
 
     //fgwr predictor
-    auto fgwr_predictor = fgwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
+    auto fgwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
                                                                                                    std::move(Be),
                                                                                                    std::move(omega),
                                                                                                    q_C,
@@ -3092,7 +3092,7 @@ Rcpp::List FWR(Rcpp::NumericMatrix y_points,
 
 
     //fgwr algorithm
-    auto fgwr_algo = fgwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),                                                                       
+    auto fgwr_algo = fwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),                                                                       
                                                                                     std::move(Xc),
                                                                                     std::move(Wc),
                                                                                     std::move(R_C.PenalizationMatrix()),
@@ -3324,7 +3324,7 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
 
 
     //fgwr predictor
-    auto fgwr_predictor = fgwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
+    auto fgwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
                                                                                                    std::move(omega),
                                                                                                    q_C,
                                                                                                    Lc,

@@ -18,14 +18,14 @@
 // fdagwr.
 
 
-#ifndef FGWR_PREDICTOR_HPP
-#define FGWR_PREDICTOR_HPP
+#ifndef FWR_PREDICTOR_HPP
+#define FWR_PREDICTOR_HPP
 
 
 #include "../utility/include_fdagwr.hpp"
 #include "../utility/traits_fdagwr.hpp"
 
-#include "../integration/fgwr_operator_computing.hpp"
+#include "../integration/fwr_operator_computing.hpp"
 #include "../functional_matrix/functional_matrix_smoothing.hpp"
 #include "../basis/basis_include.hpp"
 #include "../utility/parameters_wrapper_fdagwr.hpp"
@@ -34,13 +34,13 @@
 
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-class fgwr_predictor
+class fwr_predictor
 {
 
 
 private:
     /*!Object to perform the integration using trapezoidal quadrature rule*/
-    fgwr_operator_computing<INPUT,OUTPUT> m_operator_comp;
+    fwr_operator_computing<INPUT,OUTPUT> m_operator_comp;
     /*!Number of statistical units used to train the model*/
     std::size_t m_n_train;
     /*!Number of threads for OMP*/
@@ -51,13 +51,13 @@ public:
     * @brief Constructor
     * @param number_threads number of threads for OMP
     */
-    fgwr_predictor(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, std::size_t n_train, int number_threads)
+    fwr_predictor(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, std::size_t n_train, int number_threads)
                    : m_operator_comp(a,b,n_intervals_integration,target_error,max_iterations,number_threads), m_n_train(n_train), m_number_threads(number_threads) {}
 
     /*!
     * @brief Virtual destructor
     */
-    virtual ~fgwr_predictor() = default;
+    virtual ~fwr_predictor() = default;
 
     /*!
     * @brief IDs for the input maps
@@ -70,7 +70,7 @@ public:
     /*!
     * @brief Getter for the compute operator
     */
-    const fgwr_operator_computing<INPUT,OUTPUT>& operator_comp() const {return m_operator_comp;}
+    const fwr_operator_computing<INPUT,OUTPUT>& operator_comp() const {return m_operator_comp;}
 
     /*!
     * @brief Getter for the number of statistical units
@@ -176,6 +176,6 @@ public:
     virtual inline BetasTuple betas() const = 0;
 };
 
-#include "fgwr_predictor_imp.hpp"
+#include "fwr_predictor_imp.hpp"
 
-#endif  /*FGWR_PREDICTOR_HPP*/
+#endif  /*FWR_PREDICTOR_HPP*/

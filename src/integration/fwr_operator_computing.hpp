@@ -18,8 +18,8 @@
 // fdagwr.
 
 
-#ifndef FGWR_OPERATOR_COMPUTING_HPP
-#define FGWR_OPERATOR_COMPUTING_HPP
+#ifndef FWR_OPERATOR_COMPUTING_HPP
+#define FWR_OPERATOR_COMPUTING_HPP
 
 
 #include "../utility/include_fdagwr.hpp"
@@ -37,7 +37,7 @@
 
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-class fgwr_operator_computing
+class fwr_operator_computing
 {
 private:
     /*!Object to perform the integration using trapezoidal quadrature rule*/
@@ -250,6 +250,6 @@ public:
 
 };
 
-#include "fgwr_operator_computing_imp.hpp"
+#include "fwr_operator_computing_imp.hpp"
 
-#endif  /*FGWR_OPERATOR_COMPUTING_HPP*/
+#endif  /*FWR_OPERATOR_COMPUTING_HPP*/

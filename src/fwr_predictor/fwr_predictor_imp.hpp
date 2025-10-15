@@ -18,7 +18,7 @@
 // fdagwr.
 
 
-#include "fgwr_predictor.hpp"
+#include "fwr_predictor.hpp"
 
 
 
@@ -33,9 +33,9 @@
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector<OUTPUT> >
-fgwr_predictor<INPUT,OUTPUT>::eval_betas(const functional_matrix<INPUT,OUTPUT> &beta,
-                                         std::size_t q,
-                                         std::vector<INPUT> abscissa) 
+fwr_predictor<INPUT,OUTPUT>::eval_betas(const functional_matrix<INPUT,OUTPUT> &beta,
+                                        std::size_t q,
+                                        std::vector<INPUT> abscissa) 
 const
 {
     //input coherency
@@ -72,9 +72,9 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector< std::vector<OUTPUT>>>
-fgwr_predictor<INPUT,OUTPUT>::eval_betas(const std::vector< functional_matrix<INPUT,OUTPUT>> &beta,
-                                         std::size_t q,
-                                         std::vector<INPUT> abscissa)
+fwr_predictor<INPUT,OUTPUT>::eval_betas(const std::vector< functional_matrix<INPUT,OUTPUT>> &beta,
+                                        std::size_t q,
+                                        std::vector<INPUT> abscissa)
 const
 {
     std::size_t n_pred = beta.size();

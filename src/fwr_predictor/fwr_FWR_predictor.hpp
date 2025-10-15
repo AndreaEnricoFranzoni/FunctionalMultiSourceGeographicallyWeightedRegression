@@ -18,16 +18,16 @@
 // fdagwr.
 
 
-#ifndef FGWR_FST_PREDICT_HPP
-#define FGWR_FST_PREDICT_HPP
+#ifndef FWR_FWR_PREDICT_HPP
+#define FWR_FWR_PREDICT_HPP
 
-#include "fgwr_predictor.hpp"
+#include "fwr_predictor.hpp"
 
 #include <iostream>
 
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-class fgwr_fst_predictor final : public fgwr_predictor<INPUT,OUTPUT>
+class fwr_FWR_predictor final : public fwr_predictor<INPUT,OUTPUT>
 {
 private:
     //
@@ -63,7 +63,7 @@ public:
     */
     template<typename FUNC_SPARSE_MATRIX_OBJ,
              typename SCALAR_MATRIX_OBJ_VEC>
-    fgwr_fst_predictor(SCALAR_MATRIX_OBJ_VEC &&Bc_fitted,
+    fwr_FWR_predictor(SCALAR_MATRIX_OBJ_VEC &&Bc_fitted,
                        FUNC_SPARSE_MATRIX_OBJ &&omega,
                        std::size_t qc,
                        std::size_t Lc,
@@ -76,7 +76,7 @@ public:
                        std::size_t n_train, 
                        int number_threads)
             :   
-                fgwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,n_train,number_threads),
+                fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,n_train,number_threads),
                 m_Bc_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC>(Bc_fitted)},
                 m_omega{std::forward<FUNC_SPARSE_MATRIX_OBJ>(omega)},
                 m_qc(qc),
@@ -139,9 +139,9 @@ public:
     override
     {
         assert(X_new.size() == 1);
-        assert(X_new.at(fgwr_fst_predictor<INPUT,OUTPUT>::id_C).cols() == m_qc);
+        assert(X_new.at(fwr_FWR_predictor<INPUT,OUTPUT>::id_C).cols() == m_qc);
         //new covsariates
-        auto Xc_new = X_new.at(fgwr_fst_predictor<INPUT,OUTPUT>::id_C);
+        auto Xc_new = X_new.at(fwr_FWR_predictor<INPUT,OUTPUT>::id_C);
 
         //y_new = X_new*beta = Xc_new*beta_c
         functional_matrix<INPUT,OUTPUT> y_new_C = fm_prod(Xc_new,m_BetaC,this->number_threads());    //n_pred x 1
@@ -186,4 +186,4 @@ public:
 
 };
 
-#endif  /*FGWR_FST_PREDICT_HPP*/
+#endif  /*FWR_FWR_PREDICT_HPP*/

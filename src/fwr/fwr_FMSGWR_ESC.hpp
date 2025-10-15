@@ -18,14 +18,14 @@
 // fdagwr.
 
 
-#ifndef FGWR_FMS_ESC_ALGO_HPP
-#define FGWR_FMS_ESC_ALGO_HPP
+#ifndef FWR_FMSGWR_ESC_ALGO_HPP
+#define FWR_FMSGWR_ESC_ALGO_HPP
 
-#include "fgwr.hpp"
+#include "fwr.hpp"
 
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-class fgwr_fms_esc final : public fgwr<INPUT,OUTPUT>
+class fwr_FMSGWR_ESC final : public fwr<INPUT,OUTPUT>
 {
 private:
     /*!Functional response (nx1)*/
@@ -157,43 +157,43 @@ public:
              typename FUNC_DIAG_MATRIX_VEC_OBJ, 
              typename SCALAR_MATRIX_OBJ, 
              typename SCALAR_SPARSE_MATRIX_OBJ> 
-    fgwr_fms_esc(FUNC_MATRIX_OBJ &&y,
-                 FUNC_SPARSE_MATRIX_OBJ &&phi,
-                 SCALAR_MATRIX_OBJ &&c,
-                 std::size_t Ly,
-                 std::unique_ptr<basis_base_class<FDAGWR_TRAITS::basis_geometry>> basis_y,
-                 SCALAR_MATRIX_OBJ &&knots_smoothing,
-                 FUNC_MATRIX_OBJ &&Xc,
-                 FUNC_DIAG_MATRIX_OBJ &&Wc,
-                 SCALAR_SPARSE_MATRIX_OBJ &&Rc,
-                 FUNC_SPARSE_MATRIX_OBJ &&omega,
-                 std::size_t qc,
-                 std::size_t Lc,
-                 const std::vector<std::size_t> & Lc_j,
-                 FUNC_MATRIX_OBJ &&Xe,
-                 FUNC_DIAG_MATRIX_VEC_OBJ &&We,
-                 SCALAR_SPARSE_MATRIX_OBJ &&Re,
-                 FUNC_SPARSE_MATRIX_OBJ &&theta,
-                 std::size_t qe,
-                 std::size_t Le,
-                 const std::vector<std::size_t> & Le_j,
-                 FUNC_MATRIX_OBJ &&Xs,
-                 FUNC_DIAG_MATRIX_VEC_OBJ &&Ws,
-                 SCALAR_SPARSE_MATRIX_OBJ &&Rs,
-                 FUNC_SPARSE_MATRIX_OBJ &&psi,
-                 std::size_t qs,
-                 std::size_t Ls,
-                 const std::vector<std::size_t> & Ls_j,
-                 INPUT a,
-                 INPUT b,
-                 int n_intervals_integration,
-                 double target_error_integration,
-                 int max_iterations_integration,
-                 const std::vector<INPUT> & abscissa_points,
-                 std::size_t n,
-                 int number_threads)
+    fwr_FMSGWR_ESC(FUNC_MATRIX_OBJ &&y,
+                   FUNC_SPARSE_MATRIX_OBJ &&phi,
+                   SCALAR_MATRIX_OBJ &&c,
+                   std::size_t Ly,
+                   std::unique_ptr<basis_base_class<FDAGWR_TRAITS::basis_geometry>> basis_y,
+                   SCALAR_MATRIX_OBJ &&knots_smoothing,
+                   FUNC_MATRIX_OBJ &&Xc,
+                   FUNC_DIAG_MATRIX_OBJ &&Wc,
+                   SCALAR_SPARSE_MATRIX_OBJ &&Rc,
+                   FUNC_SPARSE_MATRIX_OBJ &&omega,
+                   std::size_t qc,
+                   std::size_t Lc,
+                   const std::vector<std::size_t> & Lc_j,
+                   FUNC_MATRIX_OBJ &&Xe,
+                   FUNC_DIAG_MATRIX_VEC_OBJ &&We,
+                   SCALAR_SPARSE_MATRIX_OBJ &&Re,
+                   FUNC_SPARSE_MATRIX_OBJ &&theta,
+                   std::size_t qe,
+                   std::size_t Le,
+                   const std::vector<std::size_t> & Le_j,
+                   FUNC_MATRIX_OBJ &&Xs,
+                   FUNC_DIAG_MATRIX_VEC_OBJ &&Ws,
+                   SCALAR_SPARSE_MATRIX_OBJ &&Rs,
+                   FUNC_SPARSE_MATRIX_OBJ &&psi,
+                   std::size_t qs,
+                   std::size_t Ls,
+                   const std::vector<std::size_t> & Ls_j,
+                   INPUT a,
+                   INPUT b,
+                   int n_intervals_integration,
+                   double target_error_integration,
+                   int max_iterations_integration,
+                   const std::vector<INPUT> & abscissa_points,
+                   std::size_t n,
+                   int number_threads)
         :
-            fgwr<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error_integration,max_iterations_integration,abscissa_points,n,number_threads),
+            fwr<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error_integration,max_iterations_integration,abscissa_points,n,number_threads),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_phi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(phi)},
             m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
@@ -528,4 +528,4 @@ public:
     }
 };
 
-#endif  /*FGWR_FMS_ESC_ALGO_HPP*/
+#endif  /*FWR_FMSGWR_ESC_ALGO_HPP*/

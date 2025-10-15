@@ -23,10 +23,11 @@
 
 
 #include "../utility/traits_fdagwr.hpp"
-#include "fgwr_fms_esc.hpp"
-#include "fgwr_fms_sec.hpp"
-#include "fgwr_fs.hpp"
-#include "fgwr_fst.hpp"
+#include "fwr_FMSGWR_ESC.hpp"
+#include "fwr_FMSGWR_SEC.hpp"
+#include "fwr_FMGWR.hpp"
+#include "fwr_FGWR.hpp"
+#include "fwr_FWR.hpp"
 
 
 /*!
@@ -36,7 +37,7 @@
 template< FDAGWR_ALGO fdagwrType, typename INPUT = double, typename OUTPUT = double, class... Args >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::unique_ptr< fgwr<INPUT,OUTPUT> >
-fgwr_factory(Args &&... args)
+fwr_factory(Args &&... args)
 {
     static_assert(fdagwrType == FDAGWR_ALGO::_FMSGWR_ESC_ ||
                   fdagwrType == FDAGWR_ALGO::_FMSGWR_SEC_ ||
@@ -45,21 +46,25 @@ fgwr_factory(Args &&... args)
                   fdagwrType == FDAGWR_ALGO::_FWR_,
                   "Error in fdagwrType: wrong type specified.");
 
-    //FMS_ESC: multi-source: estimating: stationay -> station-dependent -> event-dependent
+    //FMSGWR_ESC: multi-source: estimating: stationay -> station-dependent -> event-dependent
     if constexpr (fdagwrType == FDAGWR_ALGO::_FMSGWR_ESC_)
-        return std::make_unique<fgwr_fms_esc<INPUT,OUTPUT>>(std::forward<Args>(args)...);
+        return std::make_unique<fwr_FMSGWR_ESC<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
-    //FMS_SEC: multi-source: estimating: stationay -> event-dependent -> station-dependent
+    //FMSGWR_SEC: multi-source: estimating: stationay -> event-dependent -> station-dependent
     if constexpr (fdagwrType == FDAGWR_ALGO::_FMSGWR_SEC_)
-        return std::make_unique<fgwr_fms_sec<INPUT,OUTPUT>>(std::forward<Args>(args)...);
+        return std::make_unique<fwr_FMSGWR_SEC<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
-    //GWR_FOS: one-source: estimating: stationary -> geographically dependent
+    //FMGWR: one-source: estimating: stationary -> geographically dependent
     if constexpr (fdagwrType == FDAGWR_ALGO::_FMGWR_)
-        return std::make_unique<fgwr_fs<INPUT,OUTPUT>>(std::forward<Args>(args)...);
+        return std::make_unique<fwr_FMGWR<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
-    //GWR_FST: stationary: estimating: stationary
+    //FGWR: only non-stationary
+    if constexpr (fdagwrType == FDAGWR_ALGO::_FGWR_)
+        return std::make_unique<fwr_FGWR<INPUT,OUTPUT>>(std::forward<Args>(args)...);
+
+    //FWR: only stationary: estimating: stationary
     if constexpr (fdagwrType == FDAGWR_ALGO::_FWR_)
-        return std::make_unique<fgwr_fst<INPUT,OUTPUT>>(std::forward<Args>(args)...);
+        return std::make_unique<fwr_FWR<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 }
 
 #endif /*FGWR_FACTORY_HPP*/

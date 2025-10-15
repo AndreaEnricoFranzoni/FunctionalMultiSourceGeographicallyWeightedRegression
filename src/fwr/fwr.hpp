@@ -18,13 +18,13 @@
 // fdagwr.
 
 
-#ifndef FGWR_ALGO_HPP
-#define FGWR_ALGO_HPP
+#ifndef FWR_ALGO_HPP
+#define FWR_ALGO_HPP
 
 #include "../utility/include_fdagwr.hpp"
 #include "../utility/traits_fdagwr.hpp"
 
-#include "../integration/fgwr_operator_computing.hpp"
+#include "../integration/fwr_operator_computing.hpp"
 #include "../functional_matrix/functional_matrix_smoothing.hpp"
 #include "../basis/basis_include.hpp"
 #include "../utility/parameters_wrapper_fdagwr.hpp"
@@ -37,11 +37,11 @@
 */
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-class fgwr
+class fwr
 {
 private:
     /*!Object to perform the integration using trapezoidal quadrature rule*/
-    fgwr_operator_computing<INPUT,OUTPUT> m_operator_comp;
+    fwr_operator_computing<INPUT,OUTPUT> m_operator_comp;
     /*!Abscissa points over which there are the evaluations of the raw fd*/
     std::vector<INPUT> m_abscissa_points;
     /*!Number of statistical units used to fit the model*/
@@ -54,18 +54,18 @@ public:
     * @brief Constructor
     * @param number_threads number of threads for OMP
     */
-    fgwr(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, const std::vector<INPUT> & abscissa_points, std::size_t n, int number_threads)
+    fwr(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, const std::vector<INPUT> & abscissa_points, std::size_t n, int number_threads)
         : m_operator_comp(a,b,n_intervals_integration,target_error,max_iterations,number_threads), m_abscissa_points(abscissa_points), m_n(n), m_number_threads(number_threads) {}
 
     /*!
     * @brief Virtual destructor
     */
-    virtual ~fgwr() = default;
+    virtual ~fwr() = default;
 
     /*!
     * @brief Getter for the compute operator
     */
-    const fgwr_operator_computing<INPUT,OUTPUT>& operator_comp() const {return m_operator_comp;}
+    const fwr_operator_computing<INPUT,OUTPUT>& operator_comp() const {return m_operator_comp;}
 
     /*!
     * @brief Getter for the abscissa points for which the evaluation of the fd is available
@@ -84,21 +84,6 @@ public:
     * @return the private m_number_threads
     */
     inline int number_threads() const {return m_number_threads;}
-
-/*
-    //brief Wrap b, for stationary covariates
-    
-    std::vector< FDAGWR_TRAITS::Dense_Matrix >
-    wrap_b(const FDAGWR_TRAITS::Dense_Matrix& b,
-           const std::vector<std::size_t>& L_j,
-           std::size_t q) const;
-
-    //@brief Wrap b, for non-stationary covariates
-    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>
-    wrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
-           const std::vector<std::size_t>& L_j,
-           std::size_t q) const;
-*/
 
     /*!
     * @brief Evaluation of the betas, for stationary covariates
@@ -147,6 +132,6 @@ public:
 };
 
 
-#include "fgwr_imp.hpp"
+#include "fwr_imp.hpp"
 
-#endif  /*FGWR_ALGO_HPP*/
+#endif  /*FWR_ALGO_HPP*/

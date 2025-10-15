@@ -18,15 +18,16 @@
 // fdagwr.
 
 
-#ifndef FGWR_PREDICTOR_FACTORY_HPP
-#define FGWR_PREDICTOR_FACTORY_HPP
+#ifndef FWR_PREDICTOR_FACTORY_HPP
+#define FWR_PREDICTOR_FACTORY_HPP
 
 
 #include "../utility/traits_fdagwr.hpp"
-#include "fgwr_fms_esc_predictor.hpp"
-#include "fgwr_fms_sec_predictor.hpp"
-//#include "fgwr_fs_predictor.hpp"
-#include "fgwr_fst_predictor.hpp"
+#include "fwr_FMSGWR_ESC_predictor.hpp"
+#include "fwr_FMSGWR_SEC_predictor.hpp"
+#include "fwr_FMGWR_predictor.hpp"
+#include "fwr_FGWR_predictor.hpp"
+#include "fwr_FWR_predictor.hpp"
 
 
 /*!
@@ -36,7 +37,7 @@
 template< FDAGWR_ALGO fdagwrType, typename INPUT = double, typename OUTPUT = double, class... Args >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::unique_ptr< fgwr_predictor<INPUT,OUTPUT> >
-fgwr_predictor_factory(Args &&... args)
+fwr_predictor_factory(Args &&... args)
 {
     static_assert(fdagwrType == FDAGWR_ALGO::_FMSGWR_ESC_ ||
                   fdagwrType == FDAGWR_ALGO::_FMSGWR_SEC_ ||
@@ -45,21 +46,23 @@ fgwr_predictor_factory(Args &&... args)
                   fdagwrType == FDAGWR_ALGO::_FWR_,
                   "Error in fdagwrType: wrong type specified.");
 
-    //FMS_ESC: multi-source: estimating: stationay -> station-dependent -> event-dependent
+    //predictor of FMSGWR_ESC
     if constexpr (fdagwrType == FDAGWR_ALGO::_FMSGWR_ESC_)
-        return std::make_unique<fgwr_fms_esc_predictor<INPUT,OUTPUT>>(std::forward<Args>(args)...);
+        return std::make_unique<fwr_FMSGWR_ESC_predictor<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
-    //FMS_SEC: multi-source: estimating: stationay -> event-dependent -> station-dependent
+    //predictor of FMSGWR_SEC
     if constexpr (fdagwrType == FDAGWR_ALGO::_FMSGWR_SEC_)
-        return std::make_unique<fgwr_fms_sec_predictor<INPUT,OUTPUT>>(std::forward<Args>(args)...);
+        return std::make_unique<fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
-    //GWR_FS: one-source: estimating: stationary -> geographically dependent
+    //predictor of FMGWR
     //if constexpr (fdagwrType == FDAGWR_ALGO::_FGWR_FS_)
     //    return std::make_unique<fgwr_fos<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
-    //GWR_FST: stationary: estimating: stationary
+    //predictor of FGWR
+
+    //predictor of FWR
     if constexpr (fdagwrType == FDAGWR_ALGO::_FWR_)
-        return std::make_unique<fgwr_fst_predictor<INPUT,OUTPUT>>(std::forward<Args>(args)...);
+        return std::make_unique<fwr_FWR_predictor<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 }
 
-#endif /*FGWR_PREDICTOR_FACTORY_HPP*/
+#endif /*FWR_PREDICTOR_FACTORY_HPP*/

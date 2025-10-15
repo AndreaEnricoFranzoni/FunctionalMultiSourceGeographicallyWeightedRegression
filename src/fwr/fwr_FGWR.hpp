@@ -18,15 +18,15 @@
 // fdagwr.
 
 
-#ifndef FGWR_FS_ALGO_HPP
-#define FGWR_FS_ALGO_HPP
+#ifndef FWR_FGWR_ALGO_HPP
+#define FWR_FGWR_ALGO_HPP
 
-#include "fgwr.hpp"
+#include "fwr.hpp"
 
 
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-class fgwr_fs final : public fgwr<INPUT,OUTPUT>
+class fwr_FGWR final : public fwr<INPUT,OUTPUT>
 {
 private:
 
@@ -34,12 +34,12 @@ public:
     /*!
     * @brief Constructor
     */ 
-    fgwr_fs(INPUT a,
+    fwr_FGWR(INPUT a,
             INPUT b,
             int n_intervals,
             int number_threads)
         :
-            fgwr<INPUT,OUTPUT>(a,b,n_intervals,number_threads)
+            fwr<INPUT,OUTPUT>(a,b,n_intervals,number_threads)
             {}
 
     /*!
@@ -53,4 +53,4 @@ public:
 
 };
 
-#endif  /*FGWR_FS_ALGO_HPP*/
+#endif  /*FWR_FGWR_ALGO_HPP*/

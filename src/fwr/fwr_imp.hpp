@@ -18,7 +18,7 @@
 // fdagwr.
 
 
-#include "fgwr.hpp"
+#include "fwr.hpp"
 
 
 /*
@@ -467,7 +467,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector< OUTPUT >>
-fgwr<INPUT,OUTPUT>::eval_betas(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& B,
+fwr<INPUT,OUTPUT>::eval_betas(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& B,
                                const functional_matrix_sparse<INPUT,OUTPUT>& basis_B,
                                const std::vector<std::size_t>& L_j,
                                std::size_t q,
@@ -512,7 +512,7 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector< std::vector< OUTPUT >>>
-fgwr<INPUT,OUTPUT>::eval_betas(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& B,
+fwr<INPUT,OUTPUT>::eval_betas(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& B,
                                const functional_matrix_sparse<INPUT,OUTPUT>& basis_B,
                                const std::vector<std::size_t>& L_j,
                                std::size_t q,
