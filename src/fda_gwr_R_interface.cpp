@@ -42,7 +42,7 @@
 
 #include "penalization_matrix/penalization_matrix.hpp"
 
-#include "integration/functional_data_integration.hpp"
+//#include "integration/functional_data_integration.hpp"
 
 #include "fwr/fwr_factory.hpp"
 
@@ -70,7 +70,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr2 has been installed"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr has been installed"<< std::endl;}
 
 
 /*!
