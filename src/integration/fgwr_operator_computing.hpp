@@ -230,7 +230,8 @@ public:
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>
     wrap_operator(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
                   const std::vector<std::size_t>& L_j,
-                  std::size_t q) const;
+                  std::size_t q
+                  std::size_t n) const;
 
 };
 
