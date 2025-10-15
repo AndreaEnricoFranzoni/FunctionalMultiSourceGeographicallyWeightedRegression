@@ -464,7 +464,7 @@ public:
         //BETA_E
         m_beta_e = this->operator_comp().eval_func_betas(m_Be,m_theta,m_Le_j,m_qe,this->n(),this->abscissa_points());
         //BETA_S
-        m_beta_s = tthis->operator_comp().eval_func_betas(m_Bs,m_psi,m_Ls_j,m_qs,this->n(),this->abscissa_points());
+        m_beta_s = this->operator_comp().eval_func_betas(m_Bs,m_psi,m_Ls_j,m_qs,this->n(),this->abscissa_points());
     }
 
     /*!
