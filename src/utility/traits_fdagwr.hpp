@@ -81,10 +81,11 @@ struct FDAGWR_FEATS
 */
 enum FDAGWR_ALGO
 {
-  _FGWR_FMS_ESC_ = 0,  ///< Multi-source: stationary coefficients -> station-dependent coefficients -> event-dependent coefficients
-  _FGWR_FMS_SEC_ = 1,  ///< Multi-source: stationary coefficients -> event-dependent coefficients -> station-dependent coefficients
-  _FGWR_FS_ = 2,       ///< One-source: stationary coefficients -> geographically-dependent coefficients 
-  _FGWR_ = 3,          ///< Stationary: stationary coefficients
+  _FMSGWR_ESC_ = 0,  ///< Multi-source: stationary coefficients -> station-dependent coefficients -> event-dependent coefficients
+  _FMSGWR_SEC_ = 1,  ///< Multi-source: stationary coefficients -> event-dependent coefficients -> station-dependent coefficients
+  _FMGWR_      = 2,  ///< One-source: stationary coefficients -> geographically-dependent coefficients 
+  _FGWR_       = 3,  ///< Non-stationary: only non-stationary coefficients
+  _FWR_        = 4,  ///< Stationary: only stationary coefficients
 };
 
 
@@ -96,10 +97,11 @@ constexpr
 std::string
 algo_type()
 {
-  if constexpr ( fdagwr_algo == FDAGWR_ALGO::_FGWR_FMS_ESC_ )    {   return "FGWR_FMS_ESC";}
-  if constexpr ( fdagwr_algo == FDAGWR_ALGO::_FGWR_FMS_SEC_ )    {   return "FGWR_FMS_SEC";}
-  if constexpr ( fdagwr_algo == FDAGWR_ALGO::_FGWR_FS_ )         {   return "FGWR_FS";}
-  if constexpr ( fdagwr_algo == FDAGWR_ALGO::_FGWR_ )            {   return "FGWR";}
+  if constexpr ( fdagwr_algo == FDAGWR_ALGO::_FMSGWR_ESC_ )    {   return "FMSGWR_ESC";}
+  if constexpr ( fdagwr_algo == FDAGWR_ALGO::_FMSGWR_SEC_ )    {   return "FGWR_FMS_SEC";}
+  if constexpr ( fdagwr_algo == FDAGWR_ALGO::_FMGWR_ )         {   return "FMGWR";}
+  if constexpr ( fdagwr_algo == FDAGWR_ALGO::_FGWR_ )          {   return "FGWR";}
+  if constexpr ( fdagwr_algo == FDAGWR_ALGO::_FWR_ )           {   return "FWR";}
 };
 
 

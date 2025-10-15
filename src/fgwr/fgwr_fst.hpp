@@ -156,7 +156,7 @@ public:
         //wrapping the b from the shape useful for the computation into a more useful format: TENERE
         //
         //stationary covariates
-        m_Bc = this->wrap_b(m_bc,m_Lc_j,m_qc);
+        m_Bc = this->operator_comp().wrap_operator(m_bc,m_Lc_j,m_qc);
     }
 
     /*!

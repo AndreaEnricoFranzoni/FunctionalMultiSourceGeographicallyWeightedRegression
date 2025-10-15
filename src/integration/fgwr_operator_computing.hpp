@@ -216,6 +216,22 @@ public:
                                 const functional_matrix_sparse<INPUT,OUTPUT> &base,
                                 const std::vector< FDAGWR_TRAITS::Dense_Matrix > &_operator_) const;
 
+    /*!
+    * @brief Wrap b, for stationary covariates
+    */
+    std::vector< FDAGWR_TRAITS::Dense_Matrix >
+    wrap_operator(const FDAGWR_TRAITS::Dense_Matrix& b,
+                  const std::vector<std::size_t>& L_j,
+                  std::size_t q) const;
+
+    /*!
+    * @brief Wrap b, for non-stationary covariates
+    */
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>
+    wrap_operator(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
+                  const std::vector<std::size_t>& L_j,
+                  std::size_t q) const;
+
 };
 
 #include "fgwr_operator_computing_imp.hpp"

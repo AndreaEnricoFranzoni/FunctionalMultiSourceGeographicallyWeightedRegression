@@ -85,143 +85,20 @@ public:
     */
     inline int number_threads() const {return m_number_threads;}
 
-
 /*
-    inline
-    FDAGWR_TRAITS::Dense_Matrix
-    fm_integration(const functional_matrix<INPUT,OUTPUT> &integrand)
-    const
-    {
-        std::vector<OUTPUT> result_integrand;
-        result_integrand.resize(integrand.size());
-
-#ifdef _OPENMP
-#pragma omp parallel for shared(integrand,m_integrating,result_integrand) num_threads(m_number_threads)
-#endif
-        for(std::size_t i = 0; i < integrand.size(); ++i){
-            result_integrand[i] = m_integrating.integrate(integrand.as_vector()[i]);}
-
-        FDAGWR_TRAITS::Dense_Matrix result_integration = Eigen::Map< FDAGWR_TRAITS::Dense_Matrix >(result_integrand.data(), integrand.rows(), integrand.cols());
-
-        return result_integration;
-    }
-
-
-    std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
-    compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
-                    const functional_matrix<INPUT,OUTPUT> &X_t,
-                    const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                    const functional_matrix<INPUT,OUTPUT> &X,
-                    const functional_matrix_sparse<INPUT,OUTPUT> &base,
-                    const FDAGWR_TRAITS::Sparse_Matrix &R) const;
-
-
-    std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
-    compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
-                    const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                    const functional_matrix<INPUT,OUTPUT> &X_crossed,
-                    const FDAGWR_TRAITS::Sparse_Matrix &R) const;
-
-
-    Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
-    compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
-                    const functional_matrix_diagonal<INPUT,OUTPUT> &W,
-                    const functional_matrix<INPUT,OUTPUT> &X_crossed,
-                    const FDAGWR_TRAITS::Sparse_Matrix &R) const;
-
-
-    Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
-    compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
-                    const functional_matrix<INPUT,OUTPUT> &X_t,
-                    const functional_matrix_diagonal<INPUT,OUTPUT> &W,
-                    const functional_matrix<INPUT,OUTPUT> &X,
-                    const functional_matrix_sparse<INPUT,OUTPUT> &base,
-                    const FDAGWR_TRAITS::Sparse_Matrix &R) const;
-
-
-    std::vector< FDAGWR_TRAITS::Dense_Matrix >
-    compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
-                     const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
-                     const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
-                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
-
-
-    std::vector< FDAGWR_TRAITS::Dense_Matrix >
-    compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
-                     const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                     const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
-                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
-
-
-    std::vector< FDAGWR_TRAITS::Dense_Matrix >
-    compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
-                     const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
-                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
-
-
-    std::vector< FDAGWR_TRAITS::Dense_Matrix >
-    compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                     const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
-                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
+    //brief Wrap b, for stationary covariates
     
-
-    std::vector< FDAGWR_TRAITS::Dense_Matrix >
-    compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
-                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
-
-
-    std::vector< FDAGWR_TRAITS::Dense_Matrix >
-    compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
-                     const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                     const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
-                     const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
-
-
-    FDAGWR_TRAITS::Dense_Matrix
-    compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                     const functional_matrix_diagonal<INPUT,OUTPUT> &W,
-                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
-                     const Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > &penalty) const;
-
-
-    FDAGWR_TRAITS::Dense_Matrix
-    compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
-                     const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                     const functional_matrix_diagonal<INPUT,OUTPUT> &W,
-                     const functional_matrix<INPUT,OUTPUT> &X_rhs,
-                     const Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > &penalty) const;
-
-
-    functional_matrix<INPUT,OUTPUT> 
-    compute_functional_operator(const functional_matrix<INPUT,OUTPUT> &X,
-                                const functional_matrix_sparse<INPUT,OUTPUT> &base,
-                                const std::vector< FDAGWR_TRAITS::Dense_Matrix > &operator_) const;
-*/
-
-    /*!
-    * @brief Wrap b, for stationary covariates
-    */
     std::vector< FDAGWR_TRAITS::Dense_Matrix >
     wrap_b(const FDAGWR_TRAITS::Dense_Matrix& b,
            const std::vector<std::size_t>& L_j,
            std::size_t q) const;
 
-    /*!
-    * @brief Wrap b, for non-stationary covariates
-    */
+    //@brief Wrap b, for non-stationary covariates
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>
     wrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
            const std::vector<std::size_t>& L_j,
            std::size_t q) const;
+*/
 
     /*!
     * @brief Evaluation of the betas, for stationary covariates

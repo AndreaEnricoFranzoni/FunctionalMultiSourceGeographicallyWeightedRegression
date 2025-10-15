@@ -444,11 +444,11 @@ public:
         //wrapping the b from the shape useful for the computation into a more useful format: TENERE
         //
         //stationary covariates
-        m_Bc = this->wrap_b(m_bc,m_Lc_j,m_qc);
+        m_Bc = this->operator_comp().wrap_operator(m_bc,m_Lc_j,m_qc);
         //event-dependent covariates
-        m_Be = this->wrap_b(m_be,m_Le_j,m_qe);
+        m_Be = this->operator_comp().wrap_operator(m_be,m_Le_j,m_qe,this->n());
         //station-dependent covariates
-        m_Bs = this->wrap_b(m_be,m_Ls_j,m_qs);
+        m_Bs = this->operator_comp().wrap_operator(m_be,m_Ls_j,m_qs,this->n());
     }
 
     /*!
