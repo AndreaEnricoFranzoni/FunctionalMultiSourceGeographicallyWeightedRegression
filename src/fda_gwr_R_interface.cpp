@@ -42,12 +42,6 @@
 
 #include "penalization_matrix/penalization_matrix.hpp"
 
-//#include "integration/functional_data_integration.hpp"
-
-#include "fwr/fwr_factory.hpp"
-
-#include "fwr_predictor/fwr_predictor_factory.hpp"
-
 #include "functional_matrix/functional_matrix.hpp"
 #include "functional_matrix/functional_matrix_sparse.hpp"
 #include "functional_matrix/functional_matrix_diagonal.hpp"
@@ -55,6 +49,9 @@
 #include "functional_matrix/functional_matrix_product.hpp"
 #include "functional_matrix/functional_matrix_into_wrapper.hpp"
 
+
+#include "fwr/fwr_factory.hpp"
+#include "fwr_predictor/fwr_predictor_factory.hpp"
 
 
 
@@ -949,6 +946,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                               int units_to_be_predicted,
                               Rcpp::NumericVector abscissa_ev,
                               Rcpp::List model_fitted,
+                              int n_knots_smoothing_pred = 100,
                               int n_intervals_trapezoidal_quadrature = 100,
                               double target_error_trapezoidal_quadrature = 1e-3,
                               int max_iterations_trapezoidal_quadrature = 100,
@@ -988,6 +986,8 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
     //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
+    // NUMBER OF KNOTS TO PERFORM SMOOTHING ON THE RESPONSE WITHOUT THE NON-STATIONARY COMPONENTS
+    int n_knots_smoothing_y_new = wrap_and_check_n_knots_smoothing(n_knots_smoothing_pred);
     // NUMBER OF INTERVALS FOR INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
     int n_intervals = wrap_and_check_n_intervals_trapezoidal_quadrature(n_intervals_trapezoidal_quadrature);
     // TARGET ERROR WHILE INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
@@ -1028,12 +1028,16 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     _FD_INPUT_TYPE_ b   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::b];
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ev_ = wrap_abscissas(abscissa_ev,a,b);                         //abscissa points for which the evaluation of the prediction is required
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ = training_input[FDAGWR_HELPERS_for_PRED_NAMES::abscissa];    //abscissa point for which the training data are discretized
+    //knots for performing smoothing of the prediction(n_knots_smoothing_y_new knots equally spaced in (a,b))
+    FDAGWR_TRAITS::Dense_Matrix knots_smoothing_pred = FDAGWR_TRAITS::Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
     //RESPONSE
     std::size_t number_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
     std::string basis_type_response_   = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
     std::size_t degree_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_response_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_.data(),knots_response_.size());
+    //basis used for doing prediction basis expansion are the same used to smooth the response of the training data
+    std::unique_ptr<basis_base_class<_DOMAIN_>> basis_pred = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     //RESPONDE RECONSTRUCTION WEIGHTS   
     std::size_t number_basis_rec_weights_response_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
     std::string basis_type_rec_weights_response_   = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
@@ -1293,7 +1297,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
 
     //fgwr predictor
-    auto fgwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
+    auto fwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
                                                                                                    std::move(Bs),
                                                                                                    std::move(omega),
                                                                                                    q_C,
@@ -1325,23 +1329,25 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                                                                                                    number_threads);
 
     //retrieve partial residuals
-    fgwr_predictor->computePartialResiduals();
+    fwr_predictor->computePartialResiduals();
     //compute the new b for the non-stationary covariates
-    fgwr_predictor->computeBNew(W_new);
+    fwr_predictor->computeBNew(W_new);
     //compute the beta for stationary covariates
-    fgwr_predictor->computeStationaryBetas();            
+    fwr_predictor->computeStationaryBetas();            
     //compute the beta for non-stationary covariates
-    fgwr_predictor->computeNonStationaryBetas();   
+    fwr_predictor->computeNonStationaryBetas();   
     //perform prediction
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fgwr_predictor->predict(X_new);
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fwr_predictor->predict(X_new);
     //evaluating the betas   
-    fgwr_predictor->evalBetas(abscissa_points_ev_);
+    fwr_predictor->evalBetas(abscissa_points_ev_);
     //evaluating the prediction
-    std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fgwr_predictor->evalPred(y_pred,abscissa_points_ev_);
+    std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fwr_predictor->evalPred(y_pred,abscissa_points_ev_);
+    //smoothing of the prediction
+    auto y_pred_smooth_coeff = fwr_predictor->smoothPred<_DOMAIN_>(y_pred,*basis_pred,knots_smoothing_pred);
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
-    Rcpp::List b_coefficients = wrap_b_to_R_list(fgwr_predictor->bCoefficients(),
+    Rcpp::List b_coefficients = wrap_b_to_R_list(fwr_predictor->bCoefficients(),
                                                  names_stationary_cov_,
                                                  basis_types_beta_stationary_cov_,
                                                  number_basis_beta_stationary_cov_,
@@ -1359,7 +1365,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                                                  number_basis_beta_stations_cov_,
                                                  knots_beta_stations_cov_);
     //betas
-    Rcpp::List betas = wrap_beta_to_R_list(fgwr_predictor->betas(),
+    Rcpp::List betas = wrap_beta_to_R_list(fwr_predictor->betas(),
                                            abscissa_points_ev_,
                                            names_stationary_cov_,
                                            {},
@@ -2270,6 +2276,7 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
                               int units_to_be_predicted,
                               Rcpp::NumericVector abscissa_ev,
                               Rcpp::List model_fitted,
+                              int n_knots_smoothing_pred = 100,                              
                               int n_intervals_trapezoidal_quadrature = 100,
                               double target_error_trapezoidal_quadrature = 1e-3,
                               int max_iterations_trapezoidal_quadrature = 100,
@@ -2309,6 +2316,8 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
 
     //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
+    // NUMBER OF KNOTS TO PERFORM SMOOTHING ON THE RESPONSE WITHOUT THE NON-STATIONARY COMPONENTS
+    int n_knots_smoothing_y_new = wrap_and_check_n_knots_smoothing(n_knots_smoothing_pred);
     // NUMBER OF INTERVALS FOR INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
     int n_intervals = wrap_and_check_n_intervals_trapezoidal_quadrature(n_intervals_trapezoidal_quadrature);
     // TARGET ERROR WHILE INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
@@ -2349,12 +2358,16 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
     _FD_INPUT_TYPE_ b   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::b];
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ev_ = wrap_abscissas(abscissa_ev,a,b);                         //abscissa points for which the evaluation of the prediction is required
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ = training_input[FDAGWR_HELPERS_for_PRED_NAMES::abscissa];    //abscissa point for which the training data are discretized
+    //knots for performing smoothing of the prediction(n_knots_smoothing_y_new knots equally spaced in (a,b))
+    FDAGWR_TRAITS::Dense_Matrix knots_smoothing_pred = FDAGWR_TRAITS::Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
     //RESPONSE
     std::size_t number_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
     std::string basis_type_response_   = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
     std::size_t degree_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_response_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_.data(),knots_response_.size());
+    //basis used for doing prediction basis expansion are the same used to smooth the response of the training data
+    std::unique_ptr<basis_base_class<_DOMAIN_>> basis_pred = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     //RESPONDE RECONSTRUCTION WEIGHTS   
     std::size_t number_basis_rec_weights_response_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
     std::string basis_type_rec_weights_response_   = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
@@ -2614,7 +2627,7 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
 
 
     //fgwr predictor
-    auto fgwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
+    auto fwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
                                                                                                    std::move(Be),
                                                                                                    std::move(omega),
                                                                                                    q_C,
@@ -2646,23 +2659,25 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
                                                                                                    number_threads);
 
     //retrieve partial residuals
-    fgwr_predictor->computePartialResiduals();
+    fwr_predictor->computePartialResiduals();
     //compute the new b for the non-stationary covariates
-    fgwr_predictor->computeBNew(W_new);
+    fwr_predictor->computeBNew(W_new);
     //compute the beta for stationary covariates
-    fgwr_predictor->computeStationaryBetas();            
+    fwr_predictor->computeStationaryBetas();            
     //compute the beta for non-stationary covariates
-    fgwr_predictor->computeNonStationaryBetas();   
+    fwr_predictor->computeNonStationaryBetas();   
     //perform prediction
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fgwr_predictor->predict(X_new);
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fwr_predictor->predict(X_new);
     //evaluating the betas   
-    fgwr_predictor->evalBetas(abscissa_points_ev_);
+    fwr_predictor->evalBetas(abscissa_points_ev_);
     //evaluating the prediction
-    std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fgwr_predictor->evalPred(y_pred,abscissa_points_ev_);
+    std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fwr_predictor->evalPred(y_pred,abscissa_points_ev_);
+    //smoothing of the prediction
+    auto y_pred_smooth_coeff = fwr_predictor->smoothPred(y_pred,*basis_pred,knots_smoothing_pred);
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
-    Rcpp::List b_coefficients = wrap_b_to_R_list(fgwr_predictor->bCoefficients(),
+    Rcpp::List b_coefficients = wrap_b_to_R_list(fwr_predictor->bCoefficients(),
                                                  names_stationary_cov_,
                                                  basis_types_beta_stationary_cov_,
                                                  number_basis_beta_stationary_cov_,
@@ -2680,7 +2695,7 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
                                                  number_basis_beta_stations_cov_,
                                                  knots_beta_stations_cov_);
     //betas
-    Rcpp::List betas = wrap_beta_to_R_list(fgwr_predictor->betas(),
+    Rcpp::List betas = wrap_beta_to_R_list(fwr_predictor->betas(),
                                            abscissa_points_ev_,
                                            names_stationary_cov_,
                                            {},
@@ -2778,6 +2793,7 @@ Rcpp::List predict_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
                          int units_to_be_predicted,
                          Rcpp::NumericVector abscissa_ev,
                          Rcpp::List model_fitted,
+                         int n_knots_smoothing_pred = 100,
                          int n_intervals_trapezoidal_quadrature = 100,
                          double target_error_trapezoidal_quadrature = 1e-3,
                          int max_iterations_trapezoidal_quadrature = 100,
@@ -2851,6 +2867,7 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
                         int units_to_be_predicted,
                         Rcpp::NumericVector abscissa_ev,
                         Rcpp::List model_fitted,
+                        int n_knots_smoothing_pred = 100,
                         int n_intervals_trapezoidal_quadrature = 100,
                         double target_error_trapezoidal_quadrature = 1e-3,
                         int max_iterations_trapezoidal_quadrature = 100,
@@ -3195,6 +3212,7 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
                         int units_to_be_predicted,
                         Rcpp::NumericVector abscissa_ev,
                         Rcpp::List model_fitted,
+                        int n_knots_smoothing_pred = 100,    
                         Rcpp::Nullable<int> num_threads = R_NilValue)
 {
     //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
@@ -3225,6 +3243,8 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
 
     //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
+    // NUMBER OF KNOTS TO PERFORM SMOOTHING ON THE RESPONSE WITHOUT THE NON-STATIONARY COMPONENTS
+    int n_knots_smoothing_y_new = wrap_and_check_n_knots_smoothing(n_knots_smoothing_pred);
 
 
     ////////////////////////////////////////////////////////////
@@ -3247,12 +3267,16 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
     _FD_INPUT_TYPE_ b   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::b];
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ev_ = wrap_abscissas(abscissa_ev,a,b);                         //abscissa points for which the evaluation of the prediction is required
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ = training_input[FDAGWR_HELPERS_for_PRED_NAMES::abscissa];    //abscissa point for which the training data are discretized
+    //knots for performing smoothing of the prediction(n_knots_smoothing_y_new knots equally spaced in (a,b))
+    FDAGWR_TRAITS::Dense_Matrix knots_smoothing_pred = FDAGWR_TRAITS::Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
     //RESPONSE
-    //std::size_t number_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
+    std::size_t number_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
     std::string basis_type_response_   = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
-    //std::size_t degree_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
+    std::size_t degree_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_response_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_.data(),knots_response_.size());
+    //basis used for doing prediction basis expansion are the same used to smooth the response of the training data
+    std::unique_ptr<basis_base_class<_DOMAIN_>> basis_pred = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_);
     //STATIONARY COV        
     std::size_t q_C                                       = stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::q];
     std::vector<std::size_t> number_basis_stationary_cov_ = stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
@@ -3324,7 +3348,7 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
 
 
     //fgwr predictor
-    auto fgwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
+    auto fwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
                                                                                                    std::move(omega),
                                                                                                    q_C,
                                                                                                    Lc,
@@ -3338,17 +3362,19 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
                                                                                                    number_threads);
 
     //compute the beta for stationary covariates
-    fgwr_predictor->computeStationaryBetas();            
+    fwr_predictor->computeStationaryBetas();            
     //perform prediction
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fgwr_predictor->predict(X_new);
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fwr_predictor->predict(X_new);
     //evaluating the betas   
-    fgwr_predictor->evalBetas(abscissa_points_ev_);
+    fwr_predictor->evalBetas(abscissa_points_ev_);
     //evaluating the prediction
-    std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fgwr_predictor->evalPred(y_pred,abscissa_points_ev_);
+    std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fwr_predictor->evalPred(y_pred,abscissa_points_ev_);
+    //smoothing of the prediction
+    auto y_pred_smooth_coeff = fwr_predictor->smoothPred<_DOMAIN_>(y_pred,*basis_pred,knots_smoothing_pred);
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
-    Rcpp::List b_coefficients = wrap_b_to_R_list(fgwr_predictor->bCoefficients(),
+    Rcpp::List b_coefficients = wrap_b_to_R_list(fwr_predictor->bCoefficients(),
                                                  names_stationary_cov_,
                                                  basis_types_beta_stationary_cov_,
                                                  number_basis_beta_stationary_cov_,
@@ -3366,14 +3392,20 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
                                                  {},
                                                  {});
     //betas
-    Rcpp::List betas = wrap_beta_to_R_list(fgwr_predictor->betas(),
+    Rcpp::List betas = wrap_beta_to_R_list(fwr_predictor->betas(),
                                            abscissa_points_ev_,
                                            names_stationary_cov_,
                                            {},
                                            {},
                                            {});
     //predictions evaluations
-    Rcpp::List y_pred_ev_R = wrap_prediction_to_R_list<_FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_>(y_pred_ev,abscissa_points_ev_);
+    Rcpp::List y_pred_ev_R = wrap_prediction_to_R_list<_FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_>(y_pred_ev,
+                                                                                          abscissa_points_ev_,
+                                                                                          y_pred_smooth_coeff,
+                                                                                          basis_type_response_,
+                                                                                          number_basis_response_,
+                                                                                          degree_basis_response_
+                                                                                          knots_smoothing_pred);
 
     //returning element                                       
     Rcpp::List l;

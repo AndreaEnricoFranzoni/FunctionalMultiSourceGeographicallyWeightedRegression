@@ -490,4 +490,51 @@ wrap_prediction_to_R_list(const std::vector< std::vector<OUTPUT>> & pred,
     return pred_w;
 }
 
+/*!
+* @brief Wrapping the prediction
+*/
+template< typename INPUT, typename OUTPUT >
+    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
+Rcpp::List
+wrap_prediction_to_R_list(const std::vector< std::vector<OUTPUT>> & pred,
+                          const std::vector< INPUT> &abscissa,
+                          const FDAGWR_TRAITS::Dense_Matrix & pred_coeff,
+                          std::string basis_t,
+                          std::size_t n_basis,
+                          std::size_t basis_deg,
+                          const FDAGWR_TRAITS::Dense_Matrix & basis_knots)
+{
+    Rcpp::List pred_w;
+
+    //evaluation part
+    std::size_t number_pred = pred.size();
+    Rcpp::List predictions(number_pred);
+    Rcpp::CharacterVector names(number_pred);
+
+    for(std::size_t i = 0; i < number_pred; ++i){
+        predictions[i] = Rcpp::wrap(pred[i]);
+        names[i] = std::string("unit_pred_") + std::to_string(i+1);
+    }
+
+    predictions.names() = names;
+
+    //pred evaluation
+    Rcpp::List pred_ev;
+    pred_ev[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_ev"] = predictions;
+    pred_ev[FDAGWR_HELPERS_for_PRED_NAMES::abscissa + "_ev"] = abscissa;
+    //pred fd
+    Rcpp::List pred_fd;
+    pred_fd[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_" + FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = Rcpp::wrap(pred_coeff);
+    pred_fd[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_" + FDAGWR_HELPERS_for_PRED_NAMES::basis_t]     = basis_t;
+    pred_fd[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_" + FDAGWR_HELPERS_for_PRED_NAMES::n_basis]     = n_basis;
+    pred_fd[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_" + FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]   = basis_deg;
+    pred_fd[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_" + FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = Rcpp::wrap(basis_knots);
+
+    //returning everything
+    pred_w["evaluation"] = pred_ev;
+    pred_w["fd"]         = pred_fd;
+
+    return pred_w;
+}
+
 #endif  /*FDAGWR_UTILITIES_HPP*/

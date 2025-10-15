@@ -85,29 +85,6 @@ public:
     */
     inline int number_threads() const {return m_number_threads;}
 
-
-
-/*
-    //@brief Evaluation of the betas, for stationary covariates
-    
-    std::vector< std::vector< OUTPUT >>
-    eval_betas(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& B,
-               const functional_matrix_sparse<INPUT,OUTPUT>& basis_B,
-               const std::vector<std::size_t>& L_j,   
-               std::size_t q,
-               const std::vector< INPUT >& abscissas) const;
-
-    //@brief Evaluation of the betas, for non-stationary covariates
-    
-    std::vector< std::vector< std::vector< OUTPUT >>>
-    eval_betas(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& B,
-               const functional_matrix_sparse<INPUT,OUTPUT>& basis_B,
-               const std::vector<std::size_t>& L_j,
-               std::size_t q,
-               const std::vector< INPUT >& abscissas) const;
-*/
-
-
     /*!
     * @brief Virtual method to compute the Functional Geographically Weighted Regression
     */
@@ -133,8 +110,5 @@ public:
     */
     virtual inline PartialResidualTuple PRes() const = 0;
 };
-
-
-#include "fwr_imp.hpp"
 
 #endif  /*FWR_ALGO_HPP*/
