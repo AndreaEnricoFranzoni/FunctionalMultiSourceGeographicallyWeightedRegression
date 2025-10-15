@@ -3404,7 +3404,7 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
                                                                                           y_pred_smooth_coeff,
                                                                                           basis_type_response_,
                                                                                           number_basis_response_,
-                                                                                          degree_basis_response_
+                                                                                          degree_basis_response_,
                                                                                           knots_smoothing_pred);
 
     //returning element                                       
