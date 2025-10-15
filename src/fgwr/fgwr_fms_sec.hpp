@@ -275,7 +275,7 @@ public:
         //B_S_i_for_K_s_e
         std::cout << "Computing m_B_s_for_K_s_e" << std::endl;
         m_B_s_for_K_s_e = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,m_Xe,m_theta,j_double_tilde_Rs_inv);
-        for(std::size_t i = 0; i < m_B_e_for_K_e_s.size(); ++i){std::cout << "Be_for_K_e_s " << i+1 << "-th rows: " << m_B_e_for_K_e_s[i].rows() << ", cols: " << m_B_e_for_K_e_s[i].cols() << std::endl;}
+        for(std::size_t i = 0; i < m_B_s_for_K_s_e.size(); ++i){std::cout << "m_B_s_for_K_s_e " << i+1 << "-th rows: " << m_B_s_for_K_s_e[i].rows() << ", cols: " << m_B_s_for_K_s_e[i].cols() << std::endl;}
         //K_s_e(t)
         std::cout << "Computing K_s_e" << std::endl;
         functional_matrix<INPUT,OUTPUT> K_s_e = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_B_s_for_K_s_e);

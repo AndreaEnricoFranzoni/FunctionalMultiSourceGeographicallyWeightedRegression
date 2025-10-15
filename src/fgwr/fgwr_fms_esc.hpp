@@ -294,7 +294,7 @@ public:
         std::cout << "X_s_crossed rows: " << X_s_crossed.rows() << ", X_s_crossed cols: " << X_s_crossed.cols() << std::endl;
         //(j_tilde + Rs)^-1
         std::cout << "Computing (j_tilde + Rs)^-1" << std::endl;
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv = this->compute_penalty(X_s_crossed_t,m_Ws,X_s_crossed,m_Rs);
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv = this->operator_comp().compute_penalty(X_s_crossed_t,m_Ws,X_s_crossed,m_Rs);
         
         //A_S_i
         std::cout << "Computing m_A_s" << std::endl;
