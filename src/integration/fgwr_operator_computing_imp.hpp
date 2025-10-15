@@ -536,7 +536,7 @@ const
         std::vector< FDAGWR_TRAITS::Dense_Matrix > b_i;
         b_i.reserve(q);
         for(std::size_t j = 0; j < q; ++j){     b_i.push_back(b[j][i]);}
-        b_dewrapped.push_back(this->dewrap_b(b_i,L_j));
+        b_dewrapped.push_back(this->dewrap_operator(b_i,L_j));
     }
 
     return b_dewrapped;
