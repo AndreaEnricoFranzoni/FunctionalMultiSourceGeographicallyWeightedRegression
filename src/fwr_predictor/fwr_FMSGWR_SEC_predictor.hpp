@@ -27,7 +27,7 @@
 
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-class fwr_FMSGWR_SEC_predictor final : public fgwr_predictor<INPUT,OUTPUT>
+class fwr_FMSGWR_SEC_predictor final : public fwr_predictor<INPUT,OUTPUT>
 {
 private:
     //
