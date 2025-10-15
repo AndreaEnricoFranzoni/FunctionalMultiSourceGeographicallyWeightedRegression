@@ -3158,8 +3158,6 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_stationary_cov_to_pred,
     Rcpp::List training_input    = fitted_model[FDAGWR_HELPERS_for_PRED_NAMES::inputs_info];
     //list with elements of the response
     Rcpp::List response_input            = training_input[covariate_type<_RESPONSE_>()];
-    //list with elements of response reconstruction weights
-    Rcpp::List response_rec_w_input      = training_input[covariate_type<_REC_WEIGHTS_>()];
     //list with elements of stationary covariates
     Rcpp::List stationary_cov_input      = training_input[FDAGWR_HELPERS_for_PRED_NAMES::cov + covariate_type<_STATIONARY_>()];
     //list with elements of the beta of stationary covariates
@@ -3177,13 +3175,6 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_stationary_cov_to_pred,
     //std::size_t degree_basis_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_ = response_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
     FDAGWR_TRAITS::Dense_Vector knots_response_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_.data(),knots_response_.size());
-    //RESPONDE RECONSTRUCTION WEIGHTS   
-    //std::size_t number_basis_rec_weights_response_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
-    std::string basis_type_rec_weights_response_   = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_t];
-    //std::size_t degree_basis_rec_weights_response_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_deg];
-    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_rec_w_ = response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::basis_knots];
-    FDAGWR_TRAITS::Dense_Vector knots_response_rec_w_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_rec_w_.data(),knots_response_rec_w_.size());
-    auto coefficients_rec_weights_response_                         = reader_data<_DATA_TYPE_,_NAN_REM_>(response_rec_w_input[FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis]);  
     //STATIONARY COV        
     std::size_t q_C                                       = stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::q];
     std::vector<std::size_t> number_basis_stationary_cov_ = stationary_cov_input[FDAGWR_HELPERS_for_PRED_NAMES::n_basis];
