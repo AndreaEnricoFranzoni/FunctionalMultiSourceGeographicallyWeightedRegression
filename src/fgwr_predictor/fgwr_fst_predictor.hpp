@@ -54,7 +54,8 @@ private:
     //Betas
     //stationary: qc x 1
     functional_matrix<INPUT,OUTPUT> m_BetaC;                        //elemento funzionale
-
+    /*!Discrete evaluation of all the beta_c: a vector of dimension qc, containing, for all the stationary covariates, the discrete ev of the respective beta*/
+    std::vector< std::vector< OUTPUT >> m_BetaC_ev;
 
 public:
     /*!

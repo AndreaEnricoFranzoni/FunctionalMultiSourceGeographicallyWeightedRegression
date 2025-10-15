@@ -3264,9 +3264,9 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_stationary_cov_to_pred,
                                                                                                    Lc_j,
                                                                                                    a,
                                                                                                    b,
-                                                                                                   n_intervals,
-                                                                                                   target_error,
-                                                                                                   max_iterations,
+                                                                                                   1,
+                                                                                                   1.0,
+                                                                                                   1,
                                                                                                    n_train,
                                                                                                    number_threads);
 
