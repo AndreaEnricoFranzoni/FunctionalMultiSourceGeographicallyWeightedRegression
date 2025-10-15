@@ -222,9 +222,9 @@ public:
                 m_Xs_train_t = m_Xs_train.transpose();
 
                 //dewrappare i b_train (li incolonna)
-                m_bc_fitted = this->dewrap_b(m_Bc_fitted,m_Lc_j);
+                m_bc_fitted = this->operator_comp().dewrap_operator(m_Bc_fitted,m_Lc_j);
                 //bs_fitted
-                m_be_fitted = this->dewrap_b(m_Be_fitted,m_Le_j,this->n_train());
+                m_be_fitted = this->operator_comp().dewrap_operator(m_Be_fitted,m_Le_j,this->n_train());
             }
 
     /*!

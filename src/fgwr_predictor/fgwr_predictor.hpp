@@ -85,21 +85,6 @@ public:
     inline int number_threads() const {return m_number_threads;}
 
     /*!
-    * @brief Dewrap b, for stationary covariates: me li incolonna tutti 
-    */
-    FDAGWR_TRAITS::Dense_Matrix 
-    dewrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
-             const std::vector<std::size_t>& L_j) const;
-
-    /*!
-    * @brief Dewrap b, for non-stationary covariates: me li incolonna tutti
-    */
-    std::vector< FDAGWR_TRAITS::Dense_Matrix >
-    dewrap_b(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& b,
-             const std::vector<std::size_t>& L_j,
-             std::size_t n) const;
-
-    /*!
     * @brief Eval the stationary betas on a grid
     */
     std::vector< std::vector<OUTPUT> >

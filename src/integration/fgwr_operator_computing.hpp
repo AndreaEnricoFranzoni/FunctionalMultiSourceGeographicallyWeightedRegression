@@ -217,7 +217,7 @@ public:
                                 const std::vector< FDAGWR_TRAITS::Dense_Matrix > &_operator_) const;
 
     /*!
-    * @brief Wrap b, for stationary covariates
+    * @brief Wrap b, for stationary covariates (da colonna, li mette in un vettore, coefficienti per ogni covariate)
     */
     std::vector< FDAGWR_TRAITS::Dense_Matrix >
     wrap_operator(const FDAGWR_TRAITS::Dense_Matrix& b,
@@ -225,13 +225,28 @@ public:
                   std::size_t q) const;
 
     /*!
-    * @brief Wrap b, for non-stationary covariates
+    * @brief Wrap b, for non-stationary covariates (da colonna, li mette in un vettore, coefficienti per ogni covariate, che sono vettori, coefficienti per ogni unità)
     */
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>
     wrap_operator(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
                   const std::vector<std::size_t>& L_j,
                   std::size_t q,
                   std::size_t n) const;
+
+    /*!
+    * @brief Dewrap b, for stationary covariates: me li incolonna tutti 
+    */
+    FDAGWR_TRAITS::Dense_Matrix 
+    dewrap_operator(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
+                    const std::vector<std::size_t>& L_j) const;
+
+    /*!
+    * @brief Dewrap b, for non-stationary covariates: me li incolonna tutti
+    */
+    std::vector< FDAGWR_TRAITS::Dense_Matrix >
+    dewrap_operator(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& b,
+                    const std::vector<std::size_t>& L_j,
+                    std::size_t n) const;
 
 };
 
