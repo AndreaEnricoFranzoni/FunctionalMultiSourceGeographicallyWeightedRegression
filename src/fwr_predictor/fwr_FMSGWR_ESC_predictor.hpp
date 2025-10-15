@@ -269,9 +269,9 @@ public:
         //compute the non-stationary betas in the new locations
         //penalties in the new locations
         //(j_tilde_tilde + Re)^-1
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_train_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E),m_Xe_train,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_train_t,W.at(fwr_FMSGWR_ESC_predictor<INPUT,OUTPUT>::id_E),m_Xe_train,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
         //(j_tilde + Rs)^-1
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv        = this->operator_comp().compute_penalty(m_X_s_train_crossed_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_S),m_X_s_train_crossed,m_Rs);
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv        = this->operator_comp().compute_penalty(m_X_s_train_crossed_t,W.at(fwr_FMSGWR_ESC_predictor<INPUT,OUTPUT>::id_S),m_X_s_train_crossed,m_Rs);
         //COMPUTING all the m_bs in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
         m_bs_pred = this->operator_comp().compute_operator(m_X_s_train_crossed_t,W.at(fwr_FMSGWR_ESC_predictor<INPUT,OUTPUT>::id_S),m_y_tilde_new,j_tilde_Rs_inv);
         //COMPUTING all the m_be in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS

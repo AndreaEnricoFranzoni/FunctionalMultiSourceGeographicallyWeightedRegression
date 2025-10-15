@@ -36,7 +36,7 @@
 */
 template< FDAGWR_ALGO fdagwrType, typename INPUT = double, typename OUTPUT = double, class... Args >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-std::unique_ptr< fgwr<INPUT,OUTPUT> >
+std::unique_ptr< fwr<INPUT,OUTPUT> >
 fwr_factory(Args &&... args)
 {
     static_assert(fdagwrType == FDAGWR_ALGO::_FMSGWR_ESC_ ||
