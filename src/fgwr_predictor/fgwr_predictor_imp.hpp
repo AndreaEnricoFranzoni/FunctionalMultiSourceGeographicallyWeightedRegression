@@ -21,9 +21,8 @@
 #include "fgwr_predictor.hpp"
 
 
-/*!
-* @brief Compute all the [J_2_tilde_i + R]^(-1): 
-*/
+
+/*
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
@@ -59,10 +58,7 @@ const
 
 
 
-/*!
-* @brief Compute [J_tilde_i + R]^(-1)
-* @note FATTO
-*/
+
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
@@ -158,10 +154,6 @@ const
 
 
 
-/*!
-* @brief Compute a functional operator
-* @note FATTO
-*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 functional_matrix<INPUT,OUTPUT> 
@@ -189,6 +181,7 @@ const
 
     return func_oper;
 }
+*/
 
 
 

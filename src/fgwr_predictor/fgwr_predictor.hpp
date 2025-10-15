@@ -25,14 +25,8 @@
 #include "../utility/include_fdagwr.hpp"
 #include "../utility/traits_fdagwr.hpp"
 
-#include "../functional_matrix/functional_matrix.hpp"
-#include "../functional_matrix/functional_matrix_sparse.hpp"
-#include "../functional_matrix/functional_matrix_diagonal.hpp"
-#include "../functional_matrix/functional_matrix_product.hpp"
-#include "../functional_matrix/functional_matrix_operators.hpp"
+#include "../integration/fgwr_operator_computing.hpp"
 #include "../functional_matrix/functional_matrix_smoothing.hpp"
-
-#include "../integration/functional_data_integration.hpp"
 #include "../basis/basis_include.hpp"
 #include "../utility/parameters_wrapper_fdagwr.hpp"
 
@@ -46,7 +40,7 @@ class fgwr_predictor
 
 private:
     /*!Object to perform the integration using trapezoidal quadrature rule*/
-    fd_integration m_integrating;
+    fgwr_operator_computing<INPUT,OUTPUT> m_operator_comp;
     /*!Number of statistical units used to train the model*/
     std::size_t m_n_train;
     /*!Number of threads for OMP*/
@@ -58,12 +52,17 @@ public:
     * @param number_threads number of threads for OMP
     */
     fgwr_predictor(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, std::size_t n_train, int number_threads)
-                   : m_integrating(a,b,n_intervals_integration,target_error,max_iterations), m_n_train(n_train), m_number_threads(number_threads) {}
+                   : m_operator_comp(a,b,n_intervals_integration,target_error,max_iterations,number_threads), m_n_train(n_train), m_number_threads(number_threads) {}
 
     /*!
     * @brief Virtual destructor
     */
     virtual ~fgwr_predictor() = default;
+
+    /*!
+    * @brief Getter for the compute operator
+    */
+    const fgwr_operator_computing<INPUT,OUTPUT>& operator_comp() const {return m_operator_comp;}
 
     /*!
     * @brief Getter for the number of statistical units
@@ -80,7 +79,7 @@ public:
     /*!
     * @brief Id for C covariates
     */
-    static constexpr std::string id_C = COVARIATES_NAMES::Stationary;
+    static constexpr std::string id_C  = COVARIATES_NAMES::Stationary;
 
     /*!
     * @brief Id for NC covariates
@@ -90,16 +89,15 @@ public:
     /*!
     * @brief Id for E covariates
     */
-    static constexpr std::string id_E = COVARIATES_NAMES::Event;
+    static constexpr std::string id_E  = COVARIATES_NAMES::Event;
 
     /*!
     * @brief Id for S covariates
     */
-    static constexpr std::string id_S = COVARIATES_NAMES::Station;
+    static constexpr std::string id_S  = COVARIATES_NAMES::Station;
 
-    /*!
-    * @brief Integrating element-wise a functional matrix
-    */
+
+/*
     inline
     FDAGWR_TRAITS::Dense_Matrix
     fm_integration(const functional_matrix<INPUT,OUTPUT> &integrand)
@@ -119,10 +117,7 @@ public:
         return result_integration;
     }
 
-    /*!
-    * @brief Compute all the [J_2_tilde_i + R]^(-1): 
-    * @note FATTO
-    */
+
     std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
     compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
                     const functional_matrix<INPUT,OUTPUT> &X_t,
@@ -131,10 +126,7 @@ public:
                     const functional_matrix_sparse<INPUT,OUTPUT> &base,
                     const FDAGWR_TRAITS::Sparse_Matrix &R) const;
 
-    /*!
-    * @brief Compute [J_tilde_i + R]^(-1)
-    * @note FATTO
-    */
+
     inline
     std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
     compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
@@ -143,20 +135,14 @@ public:
                     const FDAGWR_TRAITS::Sparse_Matrix &R) const;
 
 
-    /*!
-    * @brief Compute an operator
-    * @note FATTO
-    */
+
     std::vector< FDAGWR_TRAITS::Dense_Matrix >
     compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
                      const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
                      const functional_matrix<INPUT,OUTPUT> &X_rhs,
                      const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
 
-    /*!
-    * @brief Compute an operator
-    * @note FATTO
-    */
+
     std::vector< FDAGWR_TRAITS::Dense_Matrix >
     compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
                      const functional_matrix<INPUT,OUTPUT> &X_lhs,
@@ -165,14 +151,12 @@ public:
                      const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) const;
 
 
-    /*!
-    * @brief Compute a functional operator
-    * @note FATTO
-    */
+
     functional_matrix<INPUT,OUTPUT> 
     compute_functional_operator(const functional_matrix<INPUT,OUTPUT> &X,
                                 const functional_matrix_sparse<INPUT,OUTPUT> &base,
                                 const std::vector< FDAGWR_TRAITS::Dense_Matrix > &operator_) const;
+*/
 
     /*!
     * @brief Wrap b, for non-stationary covariates: me li sistema tutti non in colonna, uno per covariata 

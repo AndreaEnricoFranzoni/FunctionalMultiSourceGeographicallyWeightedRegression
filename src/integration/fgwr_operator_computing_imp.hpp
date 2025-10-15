@@ -18,15 +18,18 @@
 // fdagwr.
 
 
-#include "fgwr.hpp"
+#include "fgwr_operator_computing.hpp"
 
 
-/*
-////////////////////////
-/////  PENALTY    /////
-////////////////////////
+
+///////////////////////////////////
+/////  PENALTY COMPUTATION    /////
+///////////////////////////////////
 
 
+/*!
+* @brief Compute all the [J_2_tilde_i + R]^(-1): 
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> >
@@ -53,7 +56,7 @@ const
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(fm_prod(base_t,X_t),W[i],m_number_threads),X,m_number_threads),base);
 
         //performing integration and factorization
-        penalty[i] = Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >( this->fm_integration(integrand) + _R_ );    
+        penalty[i] = Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >( fm_integration(integrand) + _R_ );    
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
     
@@ -61,8 +64,9 @@ const
 }
 
 
-
-
+/*!
+* @brief Compute [J_tilde_i + R]^(-1)
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
@@ -87,7 +91,7 @@ const
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(X_crossed_t,W[i],m_number_threads),X_crossed,m_number_threads);
 
         //performing integration and factorization
-        penalty[i] = Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >( this->fm_integration(integrand) + _R_ );    
+        penalty[i] = Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >( fm_integration(integrand) + _R_ );    
         // penalty[i].solve(M) equivale a fare elemento penalty[i], che è una matrice inversa, times M
     }
     
@@ -95,7 +99,9 @@ const
 }
 
 
-
+/*!
+* @brief Compute [J + Rc]^(-1)
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
@@ -109,11 +115,13 @@ const
     functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(X_crossed_t,W,m_number_threads),X_crossed,m_number_threads);
 
     //performing integration and factorization
-    return Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >( this->fm_integration(integrand) + _R_ ); 
+    return Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >( fm_integration(integrand) + _R_ ); 
 }
 
 
-
+/*!
+* @brief Compute [J + Rc]^(-1)
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
@@ -134,9 +142,10 @@ const
 
 
 
-/////////////////////
-///// OPERATORS /////
-/////////////////////
+/////////////////////////////
+///// COMPUTE OPERATORS /////
+/////////////////////////////
+
 
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -150,11 +159,11 @@ fgwr<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT
 const
 {
     //the vector contains factorization of the matrix
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > operator_;
-    operator_.resize(W.size());
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > _operator_;
+    _operator_.resize(W.size());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(operator_,penalty,base_lhs,X_lhs,X_rhs,base_rhs,W,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(_operator_,penalty,base_lhs,X_lhs,X_rhs,base_rhs,W,m_number_threads) num_threads(m_number_threads)
 #endif
     for(std::size_t i = 0; i < W.size(); ++i)
     {       
@@ -162,12 +171,11 @@ const
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(fm_prod(base_lhs,X_lhs),W[i],m_number_threads),X_rhs,m_number_threads),base_rhs);
 
         //performing integration and multiplication with the penalty (inverse factorized)
-        operator_[i] = penalty[i].solve(this->fm_integration(integrand)); 
+        _operator_[i] = penalty[i].solve( fm_integration(integrand) ); 
     }
 
-    return operator_;
+    return _operator_;
 }
-
 
 
 template< typename INPUT, typename OUTPUT >
@@ -181,11 +189,11 @@ fgwr<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT
 const
 {
     //the vector contains factorization of the matrix
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > operator_;
-    operator_.resize(W.size());
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > _operator_;
+    _operator_.resize(W.size());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(operator_,penalty,base_lhs,X_lhs,base_rhs,W,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(_operator_,penalty,base_lhs,X_lhs,base_rhs,W,m_number_threads) num_threads(m_number_threads)
 #endif
     for(std::size_t i = 0; i < W.size(); ++i)
     {       
@@ -193,12 +201,11 @@ const
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(base_lhs,X_lhs),W[i],m_number_threads),base_rhs);
 
         //performing integration and multiplication with the penalty (inverse factorized)
-        operator_[i] = penalty[i].solve(this->fm_integration(integrand)); 
+        _operator_[i] = penalty[i].solve( fm_integration(integrand) ); 
     }
 
-    return operator_;
+    return _operator_;
 }
-
 
 
 template< typename INPUT, typename OUTPUT >
@@ -212,11 +219,11 @@ fgwr<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lh
 const
 {
     //the vector contains factorization of the matrix
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > operator_;
-    operator_.resize(W.size());
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > _operator_;
+    _operator_.resize(W.size());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(operator_,penalty,X_lhs,X_rhs,base_rhs,W,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(_operator_,penalty,X_lhs,X_rhs,base_rhs,W,m_number_threads) num_threads(m_number_threads)
 #endif
     for(std::size_t i = 0; i < W.size(); ++i)
     {       
@@ -224,13 +231,11 @@ const
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(X_lhs,W[i],m_number_threads),X_rhs,m_number_threads),base_rhs);
 
         //performing integration and multiplication with the penalty (inverse factorized)
-        operator_[i] = penalty[i].solve(this->fm_integration(integrand)); 
+        _operator_[i] = penalty[i].solve( fm_integration(integrand) ); 
     }
 
-    return operator_;
+    return _operator_;
 }
-
-
 
 
 template< typename INPUT, typename OUTPUT >
@@ -243,11 +248,11 @@ fgwr<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lh
 const
 {
     //the vector contains factorization of the matrix
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > operator_;
-    operator_.resize(W.size());
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > _operator_;
+    _operator_.resize(W.size());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(operator_,penalty,X_lhs,base_rhs,W,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(_operator_,penalty,X_lhs,base_rhs,W,m_number_threads) num_threads(m_number_threads)
 #endif
     for(std::size_t i = 0; i < W.size(); ++i)
     {       
@@ -255,12 +260,11 @@ const
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(X_lhs,W[i],m_number_threads),base_rhs);
 
         //performing integration and multiplication with the penalty (inverse factorized)
-        operator_[i] = penalty[i].solve(this->fm_integration(integrand)); 
+        _operator_[i] = penalty[i].solve( fm_integration(integrand) ); 
     }
 
-    return operator_;
+    return _operator_;
 }
-
 
 
 template< typename INPUT, typename OUTPUT >
@@ -273,11 +277,11 @@ fgwr<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lh
 const
 {
     //the vector contains factorization of the matrix
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > operator_;
-    operator_.resize(W.size());
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > _operator_;
+    _operator_.resize(W.size());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(operator_,penalty,X_lhs,X_rhs,W,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(_operator_,penalty,X_lhs,X_rhs,W,m_number_threads) num_threads(m_number_threads)
 #endif
     for(std::size_t i = 0; i < W.size(); ++i)
     {       
@@ -285,10 +289,10 @@ const
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(X_lhs,W[i],m_number_threads),X_rhs,m_number_threads);
 
         //performing integration and multiplication with the penalty (inverse factorized)
-        operator_[i] = penalty[i].solve(this->fm_integration(integrand)); 
+        _operator_[i] = penalty[i].solve( fm_integration(integrand) ); 
     }
 
-    return operator_;
+    return _operator_;
 }
 
 
@@ -303,11 +307,11 @@ fgwr<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT
 const
 {
     //the vector contains factorization of the matrix
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > operator_;
-    operator_.resize(W.size());
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > _operator_;
+    _operator_.resize(W.size());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(operator_,penalty,base_lhs,X_lhs,X_rhs,W,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(_operator_,penalty,base_lhs,X_lhs,X_rhs,W,m_number_threads) num_threads(m_number_threads)
 #endif
     for(std::size_t i = 0; i < W.size(); ++i)
     {       
@@ -315,10 +319,10 @@ const
         functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(base_lhs,X_lhs),W[i],m_number_threads),X_rhs,m_number_threads);
 
         //performing integration and multiplication with the penalty (inverse factorized)
-        operator_[i] = penalty[i].solve(this->fm_integration(integrand)); 
+        _operator_[i] = penalty[i].solve( fm_integration(integrand) ); 
     }
 
-    return operator_;
+    return _operator_;
 }
 
 
@@ -335,7 +339,7 @@ const
     functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(X_lhs,W,m_number_threads),X_rhs,m_number_threads);
 
     //performing integration and multiplication with the penalty (inverse factorized)
-    return penalty.solve(this->fm_integration(integrand)); 
+    return penalty.solve( fm_integration(integrand) ); 
 }
 
 
@@ -353,210 +357,45 @@ const
     functional_matrix<INPUT,OUTPUT> integrand = fm_prod(fm_prod(fm_prod(base_lhs,X_lhs),W,m_number_threads),X_rhs,m_number_threads);
 
     //performing integration and multiplication with the penalty (inverse factorized)
-    return penalty.solve(this->fm_integration(integrand)); 
+    return penalty.solve( fm_integration(integrand) ); 
 }
 
 
-/////////////////////////////
-//// FUNCTIONAL OPERATOR ////
-/////////////////////////////
+
+
+
+/////////////////////////////////////
+//// COMPUTE FUNCTIONAL OPERATOR ////
+/////////////////////////////////////
+
 
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 functional_matrix<INPUT,OUTPUT> 
 fgwr<INPUT,OUTPUT>::compute_functional_operator(const functional_matrix<INPUT,OUTPUT> &X,
                                                 const functional_matrix_sparse<INPUT,OUTPUT> &base,
-                                                const std::vector< FDAGWR_TRAITS::Dense_Matrix > &operator_) 
+                                                const std::vector< FDAGWR_TRAITS::Dense_Matrix > &_operator_) 
 const
 {
+    //number of rows of the functional operator
+    std::size_t m = X.rows();
+    //number of cols of the functional operator
+    std::size_t n = _operator_[0].cols();
     //result
-    functional_matrix<INPUT,OUTPUT> func_oper(m_n,operator_[0].cols());
+    functional_matrix<INPUT,OUTPUT> func_operator(m,n);
 
     functional_matrix<INPUT,OUTPUT> x_times_base = fm_prod(X,base);
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(func_oper,x_times_base,operator_,m_n,m_number_threads) num_threads(m_number_threads)
+#pragma omp parallel for shared(func_operator,x_times_base,_operator_,m,m_number_threads) num_threads(m_number_threads)
 #endif
-    for(std::size_t i = 0; i < m_n; ++i){
+    for(std::size_t i = 0; i < m; ++i){
         //trnasforming the scalar matrix into a functional one, with constant functions
         std::vector< FUNC_OBJ<INPUT,OUTPUT> > row_i_v(x_times_base.row(i).cbegin(),x_times_base.row(i).cend());
         functional_matrix<INPUT,OUTPUT> row_i(row_i_v,1,base.cols());
-        functional_matrix<INPUT,OUTPUT> row_i_prod = fm_prod(row_i,operator_[i],m_number_threads);
-        func_oper.row_sub(row_i_prod.as_vector(),i);
+        functional_matrix<INPUT,OUTPUT> row_i_prod = fm_prod(row_i,_operator_[i],m_number_threads);
+        func_operator.row_sub(row_i_prod.as_vector(),i);
     }
 
-    return func_oper;
-}
-*/
-
-
-
-//////////////////////
-/////// WRAP B ///////
-//////////////////////
-
-//for stationary covariate
-template< typename INPUT, typename OUTPUT >
-    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-std::vector< FDAGWR_TRAITS::Dense_Matrix >
-fgwr<INPUT,OUTPUT>::wrap_b(const FDAGWR_TRAITS::Dense_Matrix& b,
-                           const std::vector<std::size_t>& L_j,
-                           std::size_t q)
-const
-{
-    //input coherency
-    assert((L_j.size() == q) && (b.cols() == 1) && (b.rows() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));
-    //container
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > B;
-    B.reserve(q);
-    for(std::size_t j = 0; j < q; ++j)
-    {
-        //for each stationary covariates
-        std::size_t start_idx = std::reduce(L_j.cbegin(),std::next(L_j.cbegin(),j),static_cast<std::size_t>(0));
-        //taking the right coefficients of the basis expansion
-        FDAGWR_TRAITS::Dense_Matrix B_j = b.block(start_idx,0,L_j[j],1);
-        B.push_back(B_j);
-    }
-
-    return B;
-}
-
-
-//for non stationary covariates
-template< typename INPUT, typename OUTPUT >
-    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > >
-fgwr<INPUT,OUTPUT>::wrap_b(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
-                           const std::vector<std::size_t>& L_j,
-                           std::size_t q) 
-const
-{
-    //input coherency
-    assert((b.size() == this->n()) && (L_j.size() == q));
-    for(std::size_t i = 0; i < this->n(); ++i){     assert((b[i].cols() == 1) && (b[i].rows() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));}
-    //container
-    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> B;    
-    B.reserve(q);
-    for(std::size_t j = 0; j < q; ++j)
-    {
-        //for each event-dependent covariates
-        std::size_t start_idx = std::reduce(L_j.cbegin(),std::next(L_j.cbegin(),j),static_cast<std::size_t>(0));
-        std::vector< FDAGWR_TRAITS::Dense_Matrix > B_j;
-        B_j.reserve(this->n());
-        //for all the units
-        for(std::size_t i = 0; i < this->n(); ++i){
-            //taking the right coefficients of the basis expansion
-            FDAGWR_TRAITS::Dense_Matrix B_j_i = b[i].block(start_idx,0,L_j[j],1);
-            B_j.push_back(B_j_i);}
-        B.push_back(B_j);
-    }
-
-    return B;
-}
-
-
-
-
-//////////////////////
-///// EVAL BETAS /////
-//////////////////////
-
-//stationary betas
-template< typename INPUT, typename OUTPUT >
-    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-std::vector< std::vector< OUTPUT >>
-fgwr<INPUT,OUTPUT>::eval_betas(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& B,
-                               const functional_matrix_sparse<INPUT,OUTPUT>& basis_B,
-                               const std::vector<std::size_t>& L_j,
-                               std::size_t q,
-                               const std::vector< INPUT >& abscissas) 
-const
-{
-    
-    //input coherency
-    assert((B.size() == q) && (L_j.size() == q) && (basis_B.rows() == q) && (basis_B.cols() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));
-    for(std::size_t j = 0; j < q; ++j){     assert((B[j].rows() == L_j[j]) && (B[j].cols() == 1));}
-    //container
-    std::vector< std::vector< OUTPUT >> beta;
-    beta.reserve(q);
-    //aliases
-    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
-    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
-
-    for(std::size_t j = 0; j < q; ++j)
-    {
-        //retrieving the basis
-        std::vector< F_OBJ > basis_j_v;
-        basis_j_v.reserve(B[j].rows());
-        std::size_t start_idx = std::reduce(L_j.cbegin(),std::next(L_j.cbegin(),j),static_cast<std::size_t>(0));
-        std::size_t end_idx = start_idx + L_j[j];
-        for(std::size_t k = start_idx; k < end_idx; ++k){   basis_j_v.push_back(basis_B(j,k));}
-        functional_matrix<INPUT,OUTPUT> basis_j(basis_j_v,1,B[j].rows());
-
-        //compute the beta
-        FUNC_OBJ<INPUT,OUTPUT> beta_j = fm_prod<INPUT,OUTPUT>(basis_j,B[j],this->number_threads())(0,0);
-        //eval the beta
-        std::vector< OUTPUT > beta_j_ev; 
-        beta_j_ev.resize(abscissas.size());
-        std::transform(abscissas.cbegin(),abscissas.cend(),beta_j_ev.begin(),[&beta_j](F_OBJ_INPUT x){return beta_j(x);});
-        beta.push_back(beta_j_ev);
-    }
-
-    return beta;
-}
-
-
-//non-stationary betas
-template< typename INPUT, typename OUTPUT >
-    requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
-std::vector< std::vector< std::vector< OUTPUT >>>
-fgwr<INPUT,OUTPUT>::eval_betas(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& B,
-                               const functional_matrix_sparse<INPUT,OUTPUT>& basis_B,
-                               const std::vector<std::size_t>& L_j,
-                               std::size_t q,
-                               const std::vector< INPUT >& abscissas)
-const
-{
-    //input coherency
-    assert((B.size() == q) && (L_j.size() == q) && (basis_B.rows() == q) && (basis_B.cols() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));
-    for(std::size_t j = 0; j < q; ++j){  
-        assert(B[j].size() == this->n());   
-        for(std::size_t i = 0; i < this->n(); ++i){     assert((B[j][i].rows() == L_j[j]) && (B[j][i].cols() == 1));}}
-        
-    //container
-    std::vector< std::vector< std::vector< OUTPUT >>> beta;
-    beta.reserve(q);
-    //aliases
-    using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
-    using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
-    
-
-    for(std::size_t j = 0; j < q; ++j)
-    {
-        //retrieving the basis
-        std::vector< F_OBJ > basis_j_v;
-        basis_j_v.reserve(L_j[j]);
-        std::size_t start_idx = std::reduce(L_j.cbegin(),std::next(L_j.cbegin(),j),static_cast<std::size_t>(0));
-        std::size_t end_idx = start_idx + L_j[j];
-        for(std::size_t k = start_idx; k < end_idx; ++k){   basis_j_v.push_back(basis_B(j,k));}
-        functional_matrix<INPUT,OUTPUT> basis_j(basis_j_v,1,L_j[j]);
-
-        //evaluating the betas in every unit
-        std::vector< std::vector<OUTPUT> > beta_j_ev;
-        beta_j_ev.reserve(this->n());
-        for(std::size_t i = 0; i < this->n(); ++i)
-        {
-            //compute the beta j-th for unit i-th
-            FUNC_OBJ<INPUT,OUTPUT> beta_j_i = fm_prod<INPUT,OUTPUT>(basis_j,B[j][i],this->number_threads())(0,0);
-            //eval the beta
-            std::vector< OUTPUT > beta_j_i_ev; 
-            beta_j_i_ev.resize(abscissas.size());
-            std::transform(abscissas.cbegin(),abscissas.cend(),beta_j_i_ev.begin(),[&beta_j_i](F_OBJ_INPUT x){return beta_j_i(x);});
-            beta_j_ev.push_back(beta_j_i_ev);
-        }
-
-        beta.push_back(beta_j_ev);
-    }
-
-    return beta;
+    return func_operator;
 }

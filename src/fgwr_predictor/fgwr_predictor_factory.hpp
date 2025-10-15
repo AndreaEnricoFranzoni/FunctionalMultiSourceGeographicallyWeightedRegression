@@ -25,7 +25,7 @@
 #include "../utility/traits_fdagwr.hpp"
 #include "fgwr_fms_esc_predictor.hpp"
 #include "fgwr_fms_sec_predictor.hpp"
-//#include "fgwr_fos_predictor.hpp"
+//#include "fgwr_fs_predictor.hpp"
 #include "fgwr_fst_predictor.hpp"
 
 

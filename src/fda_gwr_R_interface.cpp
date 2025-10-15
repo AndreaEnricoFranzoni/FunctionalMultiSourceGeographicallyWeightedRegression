@@ -3130,7 +3130,6 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_stationary_cov_to_pred,
     using _DOMAIN_ = FDAGWR_TRAITS::basis_geometry;                                 //domain geometry
     constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::_FGWR_;                               //fgwr type (estimating stationary -> station-dependent -> event-dependent)
     constexpr auto _RESPONSE_ = FDAGWR_COVARIATES_TYPES::RESPONSE;                  //enum for the response
-    constexpr auto _REC_WEIGHTS_ = FDAGWR_COVARIATES_TYPES::REC_WEIGHTS;            //enum for the response reconstruction weights
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;              //enum for stationary covariates
     constexpr auto _NAN_REM_ = REM_NAN::MR;                                         //how to remove nan (with mean of non-nans)
     

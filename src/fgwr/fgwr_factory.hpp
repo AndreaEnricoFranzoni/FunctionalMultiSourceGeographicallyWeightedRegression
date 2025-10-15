@@ -25,7 +25,7 @@
 #include "../utility/traits_fdagwr.hpp"
 #include "fgwr_fms_esc.hpp"
 #include "fgwr_fms_sec.hpp"
-#include "fgwr_fos.hpp"
+#include "fgwr_fs.hpp"
 #include "fgwr_fst.hpp"
 
 
@@ -54,7 +54,7 @@ fgwr_factory(Args &&... args)
 
     //GWR_FOS: one-source: estimating: stationary -> geographically dependent
     if constexpr (fdagwrType == FDAGWR_ALGO::_FGWR_FS_)
-        return std::make_unique<fgwr_fos<INPUT,OUTPUT>>(std::forward<Args>(args)...);
+        return std::make_unique<fgwr_fs<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
     //GWR_FST: stationary: estimating: stationary
     if constexpr (fdagwrType == FDAGWR_ALGO::_FGWR_)

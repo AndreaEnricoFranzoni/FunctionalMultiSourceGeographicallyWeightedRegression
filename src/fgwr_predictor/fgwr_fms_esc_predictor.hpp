@@ -237,18 +237,18 @@ public:
     {
         //retrieve the partial residuals from the fitted model
         //K_e_s(t) n_train x Ls
-        m_K_e_s = this->compute_functional_operator(m_Xe_train,m_theta,m_B_e_for_K_e_s);
+        m_K_e_s = this->operator_comp().compute_functional_operator(m_Xe_train,m_theta,m_B_e_for_K_e_s);
         //X_s_crossed(t) n_train x Ls
         m_X_s_train_crossed = fm_prod(m_Xs_train,m_psi) - m_K_e_s;
         m_X_s_train_crossed_t = m_X_s_train_crossed.transpose();
         //y_tilde_hat(t) n_trainx1
         m_y_tilde_hat = fm_prod(m_phi,m_c_tilde_hat);
         //He(t) n_trainx(n_train*Ly)
-        m_H_e = this->compute_functional_operator(m_Xe_train,m_theta,m_A_e);
+        m_H_e = this->operator_comp().compute_functional_operator(m_Xe_train,m_theta,m_A_e);
         //y_tilde_new(t) n_trainx1
         m_y_tilde_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - m_H_e),m_c_tilde_hat,this->number_threads());
         //y_tilde_tilde_hat(t) n_trainx1
-        m_y_tilde_tilde_hat = m_y_tilde_hat - this->compute_functional_operator(m_Xs_train,m_psi,m_bs_fitted);
+        m_y_tilde_tilde_hat = m_y_tilde_hat - this->operator_comp().compute_functional_operator(m_Xs_train,m_psi,m_bs_fitted);
     }
 
 
@@ -265,23 +265,19 @@ public:
         //number of units to be predicted
         std::size_t n_pred = W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E).size();
 
-
-/*
         //compute the non-stationary betas in the new locations
         //penalties in the new locations
         //(j_tilde_tilde + Re)^-1
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->compute_penalty(m_theta_t,m_Xe_train_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E),m_Xe_train,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_train_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E),m_Xe_train,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
         //(j_tilde + Rs)^-1
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv        = this->compute_penalty(m_X_s_train_crossed_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_S),m_X_s_train_crossed,m_Rs);
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv        = this->operator_comp().compute_penalty(m_X_s_train_crossed_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_S),m_X_s_train_crossed,m_Rs);
         //COMPUTING all the m_bs in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
-        m_bs_pred = this->compute_operator(m_X_s_train_crossed_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_S),m_y_tilde_new,j_tilde_Rs_inv);
+        m_bs_pred = this->operator_comp().compute_operator(m_X_s_train_crossed_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_S),m_y_tilde_new,j_tilde_Rs_inv);
         //COMPUTING all the m_be in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
-        m_be_pred = this->compute_operator(m_theta_t,m_Xe_train_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E),m_y_tilde_tilde_hat,j_double_tilde_Re_inv);
-*/ 
+        m_be_pred = this->operator_comp().compute_operator(m_theta_t,m_Xe_train_t,W.at(fgwr_fms_esc_predictor<INPUT,OUTPUT>::id_E),m_y_tilde_tilde_hat,j_double_tilde_Re_inv);
 
 
-
-
+/*
         //INIZIO PARTE DA TOGLIERE
         m_bs_pred.resize(n_pred);
         m_be_pred.resize(n_pred);
@@ -291,6 +287,12 @@ public:
             m_bs_pred[i] = Eigen::MatrixXd::Random(m_Ls,1);
         }
         //FINE PARTE DA TOGLIERE
+*/ 
+
+
+
+
+
      
 
 
