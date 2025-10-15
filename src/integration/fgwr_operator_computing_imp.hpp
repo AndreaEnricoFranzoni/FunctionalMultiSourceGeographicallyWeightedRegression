@@ -518,9 +518,9 @@ const
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
-fgwr_predictor<INPUT,OUTPUT>::dewrap_b(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& b,
-                                       const std::vector<std::size_t>& L_j,
-                                       std::size_t n) 
+fgwr_operator_computing<INPUT,OUTPUT>::dewrap_b(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& b,
+                                                const std::vector<std::size_t>& L_j,
+                                                std::size_t n) 
 const
 {
     //input coherency
