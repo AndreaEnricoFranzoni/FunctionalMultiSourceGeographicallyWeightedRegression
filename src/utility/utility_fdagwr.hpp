@@ -324,19 +324,34 @@ wrap_b_to_R_list(const BTuple& b,
     return std::visit([&](auto&& tup) -> Rcpp::List {
         using T = std::decay_t<decltype(tup)>;
 
+        //FWR
         if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>>>) {
+            //stationary b
             Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,knots_bc);
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
 
             return Rcpp::List::create(Rcpp::Named(FDAGWR_B_NAMES::bc) = bc);
         }
+
+        //FGWR
+        if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>>>) {
+            //non stationary b
+            Rcpp::List bnc = toRList(std::get<0>(tup),basis_type_bnc,basis_number_bnc,knots_bnc);
+            if(!names_bnc.empty())
+                bnc.names() = Rcpp::CharacterVector(names_bnc.cbegin(), names_bnc.cend());
+
+            return Rcpp::List::create(Rcpp::Named(FDAGWR_B_NAMES::bnc) = bnc); 
+        }
+
+        //FMGWR
         else if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>> >>) {
+            //stationary b
             Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,knots_bc);
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
-
+            //non-stationary b                                            
             Rcpp::List bnc = toRList(std::get<1>(tup),basis_type_bnc,basis_number_bnc,knots_bnc);
             if (!names_bnc.empty())
                 bnc.names() = Rcpp::CharacterVector(names_bnc.cbegin(), names_bnc.cend());
@@ -344,18 +359,20 @@ wrap_b_to_R_list(const BTuple& b,
             return Rcpp::List::create(Rcpp::Named(FDAGWR_B_NAMES::bc)  = bc,
                                       Rcpp::Named(FDAGWR_B_NAMES::bnc) = bnc);
         }
+
+        //FMSGWR
         else if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>>,
                                                        std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>> >>) {
-
+            //stationary b                                            
             Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,knots_bc);
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
-
+            //event b                                            
             Rcpp::List be = toRList(std::get<1>(tup),basis_type_be,basis_number_be,knots_be);
             if (!names_be.empty())
                 be.names() = Rcpp::CharacterVector(names_be.cbegin(), names_be.cend());
-
+            //station b                                            
             Rcpp::List bs = toRList(std::get<2>(tup),basis_type_bs,basis_number_bs,knots_bs);
             if (!names_bs.empty())
                 bs.names() = Rcpp::CharacterVector(names_bs.cbegin(), names_bs.cend());
@@ -384,21 +401,34 @@ wrap_beta_to_R_list(const BetasTuple& betas,
     return std::visit([&](auto&& tup) -> Rcpp::List {
         using T = std::decay_t<decltype(tup)>;
 
+        //FWR
         if constexpr (std::is_same_v< T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> >) {
-
+            //stationary beta
             Rcpp::List beta_c = toRList(std::get<0>(tup),abscissas);
             if (!names_beta_c.empty())
                 beta_c.names() = Rcpp::CharacterVector(names_beta_c.cbegin(), names_beta_c.cend());
 
             return Rcpp::List::create(Rcpp::Named(FDAGWR_BETAS_NAMES::beta_c) = beta_c);
         }
+
+        //FGWR
+        if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > > > >>) {
+            //non-stationary beta
+            Rcpp::List beta_nc = toRList(std::get<0>(tup),abscissas);
+            if(!names_beta_nc.empty())
+                beta_nc.names() = Rcpp::CharacterVector(names_beta_nc.cbegin(), names_beta_nc.cend());
+
+            return Rcpp::List::create(Rcpp::Named(FDAGWR_BETAS_NAMES::beta_nc) = beta_nc);
+        }
+
+        //FMGWR
         else if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>,
                                                          std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> > >) {
-
+            //stationary beta
             Rcpp::List beta_c = toRList(std::get<0>(tup),abscissas);
             if (!names_beta_c.empty())
                 beta_c.names() = Rcpp::CharacterVector(names_beta_c.cbegin(), names_beta_c.cend());
-
+            //non-stationary beta
             Rcpp::List beta_nc = toRList(std::get<1>(tup),abscissas);
             if (!names_beta_nc.empty())
                 beta_nc.names() = Rcpp::CharacterVector(names_beta_nc.cbegin(), names_beta_nc.cend());
@@ -406,18 +436,20 @@ wrap_beta_to_R_list(const BetasTuple& betas,
             return Rcpp::List::create(Rcpp::Named(FDAGWR_BETAS_NAMES::beta_c)  = beta_c,
                                       Rcpp::Named(FDAGWR_BETAS_NAMES::beta_nc) = beta_nc);
         }
+
+        //FMSGWR
         else if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>,
                                                          std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>>,
                                                          std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> >>) {
-
+            //stationary beta
             Rcpp::List beta_c = toRList(std::get<0>(tup),abscissas);
             if (!names_beta_c.empty())
                 beta_c.names() = Rcpp::CharacterVector(names_beta_c.cbegin(), names_beta_c.cend());
-
+            //event beta
             Rcpp::List beta_e = toRList(std::get<1>(tup),abscissas);
             if (!names_beta_e.empty())
                 beta_e.names() = Rcpp::CharacterVector(names_beta_e.cbegin(), names_beta_e.cend());
-
+            //station beta
             Rcpp::List beta_s = toRList(std::get<2>(tup),abscissas);
             if (!names_beta_s.empty())
                 beta_s.names() = Rcpp::CharacterVector(names_beta_s.cbegin(), names_beta_s.cend());
@@ -441,19 +473,19 @@ wrap_PRes_to_R_list(const PartialResidualTuple& p_res)
   return std::visit([&](auto&& tup) -> Rcpp::List {
     using T = std::decay_t<decltype(tup)>;
 
-    //two sources
+    //FMSGWR
     if constexpr (std::is_same_v<T, std::tuple< FDAGWR_TRAITS::Dense_Matrix, std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< FDAGWR_TRAITS::Dense_Matrix >>>) {
       return Rcpp::List::create(Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_c_tilde_hat) = Rcpp::wrap(std::get<0>(tup)),
                                 Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_A__)         = toRList(std::get<1>(tup),false),
                                 Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_B__for_K)    = toRList(std::get<2>(tup),false));
     } 
-    //one source
+    //FMGWR
     else if constexpr (std::is_same_v<T, std::tuple< FDAGWR_TRAITS::Dense_Matrix >>) {
       return Rcpp::List::create(Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_c_tilde_hat) = Rcpp::wrap(std::get<0>(tup)));
     } 
-    //stationary
+    //FGWR and FWR
     else {
-      return Rcpp::List::create(); // lista vuota
+      return Rcpp::List::create(); // empty list
     }
   }, p_res);
 }

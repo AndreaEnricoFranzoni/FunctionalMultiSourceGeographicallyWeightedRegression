@@ -127,6 +127,7 @@ struct FDAGWR_B_NAMES
 
 using BetasTuple = std::variant<
     std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > > >, 
+    std::tuple< std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > > > >,
     std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > >, std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > > > >, 
     std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > >, std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > > >, std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > > > > 
 >;
