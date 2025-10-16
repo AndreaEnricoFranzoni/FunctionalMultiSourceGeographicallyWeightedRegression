@@ -23,6 +23,7 @@
 
 #include "functional_matrix_storing_type.hpp"
 #include "functional_matrix.hpp"
+#include "functional_matrix_sparse.hpp"
 #include "functional_matrix_diagonal.hpp"
 #include "../utility/traits_fdagwr.hpp"
 
@@ -177,7 +178,7 @@ wrap_into_fm(const basis_systems<domain_type,basis_type> &bs)
     for (std::size_t cov_i = 0; cov_i < bs.q(); ++cov_i){
         for(std::size_t base_j = 0; base_j < bs.numbers_of_basis()[cov_i]; ++base_j){
             //row cov_i-th contains a number of elements equal to the number of basis for the covariate cov_i-th
-            row_idx.emplace_back(cov_i);
+            row_idx.push_back(cov_i);
             //storing the basis accordingly to the type
             f.emplace_back([cov_i,base_j,&bs](F_OBJ_INPUT x){return bs.systems_of_basis()[cov_i].eval_base(x)(0,base_j);});}}
     

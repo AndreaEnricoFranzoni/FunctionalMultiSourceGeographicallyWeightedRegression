@@ -250,7 +250,7 @@ public:
                 m_psi_t = m_psi.transpose();
 
 
-                double loc = -1;
+                double loc = -2;
 
 /*
                 std::cout << "omega" << std::endl;
