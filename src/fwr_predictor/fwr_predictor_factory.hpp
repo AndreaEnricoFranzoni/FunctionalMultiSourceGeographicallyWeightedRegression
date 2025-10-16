@@ -55,8 +55,8 @@ fwr_predictor_factory(Args &&... args)
         return std::make_unique<fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
     //predictor of FMGWR
-    //if constexpr (fdagwrType == FDAGWR_ALGO::_FMGWR_)
-    //    return std::make_unique<fwr_FMGWR_predictor<INPUT,OUTPUT>>(std::forward<Args>(args)...);
+    if constexpr (fdagwrType == FDAGWR_ALGO::_FMGWR_)
+        return std::make_unique<fwr_FMGWR_predictor<INPUT,OUTPUT>>(std::forward<Args>(args)...);
 
     //predictor of FGWR
     //if constexpr (fdagwrType == FDAGWR_ALGO::_FGWR_)

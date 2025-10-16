@@ -202,7 +202,7 @@ public:
     compute()  
     override
     {
-
+/* 
         std::cout << "Computing (j_tilde + Rnc)^-1" << std::endl;
         //(j_tilde_tilde + Re)^-1
         std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rnc_inv = this->operator_comp().compute_penalty(m_eta_t,m_Xnc_t,m_Wnc,m_Xnc,m_eta,m_Rnc);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
@@ -260,10 +260,10 @@ public:
         std::cout << "Computing m_bnc" << std::endl;
         m_bnc = this->operator_comp().compute_operator(m_eta_t,m_Xnc_t,m_Wnc,y_tilde_new,j_tilde_Rnc_inv);
         for (std::size_t i = 0; i < m_bnc.size(); ++i){std::cout << "m_bnc unit " << i+1 << "-th rows: " << m_bnc[i].rows() << ", m_bnc cols: " << m_bnc[i].cols() << std::endl;}
+*/
 
 
-
-/*        
+   
         //DEFAULT AI B: PARTE DA TOGLIERE
         m_bc = Eigen::MatrixXd::Random(m_Lc,1);
         m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
@@ -277,7 +277,7 @@ public:
             m_bnc.push_back(Eigen::MatrixXd::Random(m_Lnc,1));
         }
         //FINE PARTE DA TOGLIERE
-*/
+
 
 
 
@@ -353,7 +353,7 @@ public:
     const
     override
     {
-        return std::tuple{m_c_tilde_hat,m_A_nc};
+        return std::tuple{m_c_tilde_hat};
     }
 };
 

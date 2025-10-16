@@ -750,31 +750,40 @@ void
 wrap_predict_input(Rcpp::List pred_input)
 {
   //FMSGWR_ESC
-  if constexpr( fdagwr_algo == FDAGWR_ALGO::_FMSGWR_ESC_)
+  if constexpr( fdagwr_algo == FDAGWR_ALGO::_FMSGWR_ESC_ )
   {
     //check input list
-    if (pred_input.size() != 8){ throw std::invalid_argument("Lenght of input list has to be 8");}
+    if (pred_input.size() != 8){ throw std::invalid_argument("Lenght of input list model_fitted has to be 8");}
 
     //check that derives from the right algorithm
-    if( as<std::string>(pred_input["FGWR"]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FMS_GWR_ESC");}
+    if( as<std::string>(pred_input["FGWR"]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FMSGWR_ESC");}
   }
   //FGWR_FMS_SEC
-  if constexpr( fdagwr_algo == FDAGWR_ALGO::_FMSGWR_SEC_)
+  if constexpr( fdagwr_algo == FDAGWR_ALGO::_FMSGWR_SEC_ )
   {
     //check input list
-    if (pred_input.size() != 8){ throw std::invalid_argument("Lenght of input list has to be 8");}
+    if (pred_input.size() != 8){ throw std::invalid_argument("Lenght of input list model_fitted has to be 8");}
 
     //check that derives from the right algorithm
-    if( as<std::string>(pred_input["FGWR"]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FMS_GWR_SEC");}
+    if( as<std::string>(pred_input["FGWR"]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FMSGWR_SEC");}
+  }
+  //FMGWR
+  if constexpr( fdagwr_algo == FDAGWR_ALGO::_FMGWR_  )
+  {
+    //check input list
+    if (pred_input.size() != 6){ throw std::invalid_argument("Lenght of input list model_fitted has to be 6");}
+
+    //check that derives from the right algorithm
+    if( as<std::string>(pred_input["FGWR"]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FMGWR");}
   }
   //FWR 
-  if constexpr( fdagwr_algo == FDAGWR_ALGO::_FWR_)
+  if constexpr( fdagwr_algo == FDAGWR_ALGO::_FWR_ )
   {
     //check input list
-    if (pred_input.size() != 4){ throw std::invalid_argument("Lenght of input list has to be 4");}
+    if (pred_input.size() != 4){ throw std::invalid_argument("Lenght of input list model_fitted has to be 4");}
 
     //check that derives from the right algorithm
-    if( as<std::string>(pred_input["FGWR"]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FGWR");}
+    if( as<std::string>(pred_input["FGWR"]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FWR");}
   }
 }
 
