@@ -300,7 +300,8 @@ public:
 
         //A_E_i
         std::cout << "Computing A_e_i" << std::endl;
-        m_A_e = this->operator_comp().compute_operator(X_e_crossed_t,m_We,m_phi - H_s,j_tilde_Re_inv);
+        functional_matrix<INPUT,OUTPUT> rhs_Ae = m_phi - H_s;
+        m_A_e = this->operator_comp().compute_operator(X_e_crossed_t,m_We,rhs_Ae,j_tilde_Re_inv);
         for(std::size_t i = 0; i < m_A_e.size(); ++i){std::cout << "A_e_i " << i+1 << "-th rows: " << m_A_e[i].rows() << ", cols: " << m_A_e[i].cols() << std::endl;}
         //H_e(t)
         std::cout << "Computing H_e" << std::endl;
@@ -318,7 +319,8 @@ public:
 
         //B_E_i
         std::cout << "Computing B_e_i" << std::endl;
-        m_B_e = this->operator_comp().compute_operator(X_e_crossed_t,m_We,fm_prod(m_Xc,m_omega) - K_s_c,j_tilde_Re_inv);
+        functional_matrix<INPUT,OUTPUT> rhs_Be = fm_prod(m_Xc,m_omega) - K_s_c;
+        m_B_e = this->operator_comp().compute_operator(X_e_crossed_t,m_We,rhs_Be,j_tilde_Re_inv);
         for(std::size_t i = 0; i < m_B_e.size(); ++i){std::cout << "B_e_i " << i+1 << "-th rows: " << m_B_e[i].rows() << ", cols: " << m_B_e[i].cols() << std::endl;}
         //K_e_c(t)
         std::cout << "Computing K_e_c" << std::endl;
