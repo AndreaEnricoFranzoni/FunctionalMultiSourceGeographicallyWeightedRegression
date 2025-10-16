@@ -260,7 +260,7 @@ public:
     override
     { 
 
-/*
+
         //(j_tilde_tilde + Rs)^-1
         std::cout << "Computing (j_tilde_tilde + Rs)^-1" << std::endl;
         std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Rs_inv = this->operator_comp().compute_penalty(m_psi_t,m_Xs_t,m_Ws,m_Xs,m_psi,m_Rs);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
@@ -268,10 +268,18 @@ public:
         std::cout << "Computing m_A_s" << std::endl;
         m_A_s = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,m_phi,j_double_tilde_Rs_inv);
         for(std::size_t i = 0; i < m_A_s.size(); ++i){std::cout << "m_A_s " << i+1 << "-th rows: " << m_A_s[i].rows() << ", cols: " << m_A_s[i].cols() << std::endl;}
+        //H_s(t)
+        std::cout << "Computing H_s" << std::endl;
+        functional_matrix<INPUT,OUTPUT> H_s = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_A_s);
+        std::cout << "H_s rows: " << H_s.rows() << ", H_s cols: " << H_s.cols() << std::endl;
         //B_S_i
         std::cout << "Computing m_B_s" << std::endl;
         m_B_s = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,m_Xc,m_omega,j_double_tilde_Rs_inv);
         for(std::size_t i = 0; i < m_B_s.size(); ++i){std::cout << "m_B_s " << i+1 << "-th rows: " << m_B_s[i].rows() << ", cols: " << m_B_s[i].cols() << std::endl;}
+        //K_s_c(t)
+        std::cout << "Computing K_s_c" << std::endl;
+        functional_matrix<INPUT,OUTPUT> K_s_c = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_B_s);
+        std::cout << "K_s_c rows: " << K_s_c.rows() << ", K_s_c cols: " << K_s_c.cols() << std::endl;
         //B_S_i_for_K_s_e
         std::cout << "Computing m_B_s_for_K_s_e" << std::endl;
         m_B_s_for_K_s_e = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,m_Xe,m_theta,j_double_tilde_Rs_inv);
@@ -292,12 +300,8 @@ public:
 
         //A_E_i
         std::cout << "Computing A_e_i" << std::endl;
-        m_A_e = this->operator_comp().compute_operator(X_e_crossed_t,m_We,m_phi,j_tilde_Re_inv);
+        m_A_e = this->operator_comp().compute_operator(X_e_crossed_t,m_We,m_phi - H_s,j_tilde_Re_inv);
         for(std::size_t i = 0; i < m_A_e.size(); ++i){std::cout << "A_e_i " << i+1 << "-th rows: " << m_A_e[i].rows() << ", cols: " << m_A_e[i].cols() << std::endl;}
-        //H_s(t)
-        std::cout << "Computing H_s" << std::endl;
-        functional_matrix<INPUT,OUTPUT> H_s = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_A_s);
-        std::cout << "H_s rows: " << H_s.rows() << ", H_s cols: " << H_s.cols() << std::endl;
         //H_e(t)
         std::cout << "Computing H_e" << std::endl;
         functional_matrix<INPUT,OUTPUT> H_e = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_A_e);
@@ -314,12 +318,8 @@ public:
 
         //B_E_i
         std::cout << "Computing B_e_i" << std::endl;
-        m_B_e = this->operator_comp().compute_operator(X_e_crossed_t,m_We,m_Xc,m_omega,j_tilde_Re_inv);
+        m_B_e = this->operator_comp().compute_operator(X_e_crossed_t,m_We,fm_prod(m_Xc,m_omega) - K_s_c,j_tilde_Re_inv);
         for(std::size_t i = 0; i < m_B_e.size(); ++i){std::cout << "B_e_i " << i+1 << "-th rows: " << m_B_e[i].rows() << ", cols: " << m_B_e[i].cols() << std::endl;}
-        //K_s_c(t)
-        std::cout << "Computing K_s_c" << std::endl;
-        functional_matrix<INPUT,OUTPUT> K_s_c = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_B_s);
-        std::cout << "K_s_c rows: " << K_s_c.rows() << ", K_s_c cols: " << K_s_c.cols() << std::endl;
         //K_e_c(t)
         std::cout << "Computing K_e_c" << std::endl;
         functional_matrix<INPUT,OUTPUT> K_e_c = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_B_e);
@@ -383,9 +383,9 @@ public:
         std::cout << "Computing m_bs" << std::endl;
         m_bs = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,y_tilde_tilde_hat,j_double_tilde_Rs_inv);
         for (std::size_t i = 0; i < m_bs.size(); ++i){std::cout << "m_bs unit " << i+1 << "-th rows: " << m_bs[i].rows() << ", m_bs cols: " << m_bs[i].cols() << std::endl;}
-*/
 
 
+/*
         //DEFAULT AI B: PARTE DA TOGLIERE
         m_bc = Eigen::MatrixXd::Random(m_Lc,1);
         m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
@@ -403,7 +403,7 @@ public:
             m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1));
         }
         //FINE PARTE DA TOGLIERE
-
+*/
 
 
 

@@ -268,10 +268,18 @@ public:
         std::cout << "Computing A_e_i" << std::endl;
         m_A_e = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,m_phi,j_double_tilde_Re_inv);
         for(std::size_t i = 0; i < m_A_e.size(); ++i){std::cout << "A_e_i " << i+1 << "-th rows: " << m_A_e[i].rows() << ", cols: " << m_A_e[i].cols() << std::endl;}
+        //H_e(t)
+        std::cout << "Computing H_e" << std::endl;
+        functional_matrix<INPUT,OUTPUT> H_e = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_A_e);
+        std::cout << "H_e rows: " << H_e.rows() << ", H_e cols: " << H_e.cols() << std::endl;
         //B_E_i
         std::cout << "Computing B_e_i" << std::endl;
         m_B_e = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,m_Xc,m_omega,j_double_tilde_Re_inv);
         for(std::size_t i = 0; i < m_B_e.size(); ++i){std::cout << "B_e_i " << i+1 << "-th rows: " << m_B_e[i].rows() << ", cols: " << m_B_e[i].cols() << std::endl;}
+        //K_e_c(t)
+        std::cout << "Computing K_e_c" << std::endl;
+        functional_matrix<INPUT,OUTPUT> K_e_c = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_B_e);
+        std::cout << "K_e_c rows: " << K_e_c.rows() << ", K_e_c cols: " << K_e_c.cols() << std::endl;
         //B_E_i_for_K_e_s
         std::cout << "Computing Be_for_K_e_s" << std::endl;
         m_B_e_for_K_e_s = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,m_Xs,m_psi,j_double_tilde_Re_inv);
@@ -291,12 +299,8 @@ public:
         
         //A_S_i
         std::cout << "Computing m_A_s" << std::endl;
-        m_A_s = this->operator_comp().compute_operator(X_s_crossed_t,m_Ws,m_phi,j_tilde_Rs_inv);
+        m_A_s = this->operator_comp().compute_operator(X_s_crossed_t,m_Ws,m_phi - H_e,j_tilde_Rs_inv);
         for(std::size_t i = 0; i < m_A_s.size(); ++i){std::cout << "m_A_s " << i+1 << "-th rows: " << m_A_s[i].rows() << ", cols: " << m_A_s[i].cols() << std::endl;}
-        //H_e(t)
-        std::cout << "Computing H_e" << std::endl;
-        functional_matrix<INPUT,OUTPUT> H_e = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_A_e);
-        std::cout << "H_e rows: " << H_e.rows() << ", H_e cols: " << H_e.cols() << std::endl;
         //H_s(t)
         std::cout << "Computing H_s" << std::endl;
         functional_matrix<INPUT,OUTPUT> H_s = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_A_s);
@@ -312,12 +316,8 @@ public:
 
         //B_S_i
         std::cout << "Computing m_B_s" << std::endl;
-        m_B_s = this->operator_comp().compute_operator(X_s_crossed_t,m_Ws,m_Xc,m_omega,j_tilde_Rs_inv);
+        m_B_s = this->operator_comp().compute_operator(X_s_crossed_t,m_Ws,fm_prod(m_Xc,m_omega) - K_e_c,j_tilde_Rs_inv);
         for(std::size_t i = 0; i < m_B_s.size(); ++i){std::cout << "m_B_s " << i+1 << "-th rows: " << m_B_s[i].rows() << ", cols: " << m_B_s[i].cols() << std::endl;}
-        //K_e_c(t)
-        std::cout << "Computing K_e_c" << std::endl;
-        functional_matrix<INPUT,OUTPUT> K_e_c = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_B_e);
-        std::cout << "K_e_c rows: " << K_e_c.rows() << ", K_e_c cols: " << K_e_c.cols() << std::endl;
         //K_s_c(t)
         std::cout << "Computing K_s_c" << std::endl;
         functional_matrix<INPUT,OUTPUT> K_s_c = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_B_s);
