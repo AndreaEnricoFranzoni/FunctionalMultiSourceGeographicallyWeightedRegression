@@ -3483,7 +3483,7 @@ Rcpp::List predict_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Wnc_pred = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_NON_STATIONARY_>(W_NC_pred,number_threads);
     //map containing the W
     std::map<std::string,std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>>> W_new = {
-        {covariate_type<_EVENT_>(),Wnc_pred}};
+        {covariate_type<_NON_STATIONARY_>(),Wnc_pred}};
 
 
     //fgwr predictor
