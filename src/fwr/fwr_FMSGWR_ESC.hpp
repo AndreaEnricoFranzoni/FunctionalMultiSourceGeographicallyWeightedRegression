@@ -248,40 +248,6 @@ public:
                 m_theta_t = m_theta.transpose();
                 m_Xs_t = m_Xs.transpose();
                 m_psi_t = m_psi.transpose();
-
-
-                double loc = -2;
-
-
-/*
-                std::cout << "omega" << std::endl;
-                for (std::size_t i = 0; i < m_omega.rows(); ++i){
-                    for(std::size_t j = 0; j < m_omega.cols(); ++j){std::cout<<"omega("<<i<<","<<j<<"): " << m_omega(i,j)(loc) << std::endl;}}
-
-                std::cout << "omega_t" << std::endl;
-                for (std::size_t i = 0; i < m_omega_t.rows(); ++i){
-                    for(std::size_t j = 0; j < m_omega_t.cols(); ++j){std::cout<<"omega_t("<<i<<","<<j<<"): " << m_omega_t(i,j)(loc) << std::endl;}}
-
-*/
-
-                std::cout << "psi size:" << m_psi.size() << std::endl;
-                for (std::size_t i = 0; i < m_psi.rows(); ++i){
-                    for(std::size_t j = 0; j < m_psi.cols(); ++j){std::cout<<"psi("<<i<<","<<j<<") in " << loc << ": "<< m_psi(i,j)(loc) << std::endl;}}
-
-                std::cout << "m_psi_t" << std::endl;
-                for (std::size_t i = 0; i < m_psi_t.rows(); ++i){
-                    for(std::size_t j = 0; j < m_psi_t.cols(); ++j){std::cout<<"m_psi_t("<<i<<","<<j<<"): " << m_psi_t(i,j)(loc) << std::endl;}}
-
-                double loc1 = 0.8;
-
-                            std::cout << "psi size:" << m_psi.size() << std::endl;
-                for (std::size_t i = 0; i < m_psi.rows(); ++i){
-                    for(std::size_t j = 0; j < m_psi.cols(); ++j){std::cout<<"psi("<<i<<","<<j<<") in " << loc1 << ": "<< m_psi(i,j)(loc1) << std::endl;}}
-
-                std::cout << "m_psi_t" << std::endl;
-                for (std::size_t i = 0; i < m_psi_t.rows(); ++i){
-                    for(std::size_t j = 0; j < m_psi_t.cols(); ++j){std::cout<<"m_psi_t("<<i<<","<<j<<"): " << m_psi_t(i,j)(loc1) << std::endl;}}
-
             }
     
 
@@ -294,7 +260,7 @@ public:
     override
     {
 
-/*
+
         std::cout << "Computing (j_tilde_tilde + Re)^-1" << std::endl;
         //(j_tilde_tilde + Re)^-1
         std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
@@ -369,7 +335,7 @@ public:
         //y_new(t)
         std::cout << "Computing y_new" << std::endl;
         functional_matrix<INPUT,OUTPUT> y_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_e - H_s + H_es),m_c,this->number_threads());
-        std::cout << "y_new rows: " << y_new.rows() << ", y_new cols: " << y_new.cols() << std::endl;
+        std::cout << "y_new rows: " << y_new.rows() << ", y_new cols: " << y_new.cols() << ", size(): " << y_new.size() << std::endl;
         std::cout << "Computing X_c_crossed" << std::endl;
         functional_matrix<INPUT,OUTPUT> X_c_crossed = fm_prod(m_Xc,m_omega) - K_e_c - K_s_c + K_es_c;
         functional_matrix<INPUT,OUTPUT> X_c_crossed_t = X_c_crossed.transpose();
@@ -418,9 +384,9 @@ public:
         m_be = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde_tilde_hat,j_double_tilde_Re_inv);
         for (std::size_t i = 0; i < m_be.size(); ++i){std::cout << "m_be unit " << i+1 << "-th rows: " << m_be[i].rows() << ", m_bs cols: " << m_be[i].cols() << std::endl;}
 
-*/
 
-        
+
+/*        
         //DEFAULT AI B: PARTE DA TOGLIERE
         m_bc = Eigen::MatrixXd::Random(m_Lc,1);
         m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
@@ -438,7 +404,7 @@ public:
             m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1));
         }
         //FINE PARTE DA TOGLIERE
-
+*/
 
 
 
