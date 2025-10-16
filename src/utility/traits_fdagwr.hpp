@@ -158,6 +158,8 @@ using PartialResidualTuple = std::variant<
 
 struct FDAGWR_HELPERS_for_PRED_NAMES
 {
+  static constexpr std::string model_name = "FWR";
+
   static constexpr std::string elem_for_pred = "predictor_info";
 
   static constexpr std::string p_res = "partial_res";
