@@ -264,9 +264,11 @@ public:
                 std::cout << "omega" << std::endl;
                 for (std::size_t i = 0; i < m_omega.rows(); ++i){
                     for(std::size_t j = 0; j < m_omega.cols(); ++j){std::cout<<"omega("<<i<<","<<j<<"): " << m_omega(i,j)(loc) << std::endl;}}
+/*
                 std::cout << "omega_t" << std::endl;
                 for (std::size_t i = 0; i < m_omega_t.rows(); ++i){
                     for(std::size_t j = 0; j < m_omega_t.cols(); ++j){std::cout<<"omega_t("<<i<<","<<j<<"): " << m_omega_t(i,j)(loc) << std::endl;}}
+*/
                 
 /*
                 std::cout << "Wc" << std::endl;
