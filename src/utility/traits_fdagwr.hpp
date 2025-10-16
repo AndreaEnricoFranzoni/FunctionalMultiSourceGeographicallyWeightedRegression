@@ -108,6 +108,7 @@ algo_type()
 
 using BTuple = std::variant<
     std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix > >, 
+    std::tuple< std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > > >,
     std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > > >, 
     std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > >, std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > > > 
 >;
