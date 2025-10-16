@@ -262,7 +262,7 @@ public:
                     for(std::size_t j = 0; j < m_omega_t.cols(); ++j){std::cout<<"omega_t("<<i<<","<<j<<"): " << m_omega_t(i,j)(loc) << std::endl;}}
 */
 
-                std::cout << "theta" << std::endl;
+                std::cout << "theta size:" << m_theta.size() << std::endl;
                 for (std::size_t i = 0; i < m_theta.rows(); ++i){
                     for(std::size_t j = 0; j < m_theta.cols(); ++j){std::cout<<"theta("<<i<<","<<j<<"): " << m_theta(i,j)(loc) << std::endl;}}
 /*
