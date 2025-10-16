@@ -252,6 +252,7 @@ public:
 
                 double loc = -2;
 
+
 /*
                 std::cout << "omega" << std::endl;
                 for (std::size_t i = 0; i < m_omega.rows(); ++i){
@@ -260,16 +261,27 @@ public:
                 std::cout << "omega_t" << std::endl;
                 for (std::size_t i = 0; i < m_omega_t.rows(); ++i){
                     for(std::size_t j = 0; j < m_omega_t.cols(); ++j){std::cout<<"omega_t("<<i<<","<<j<<"): " << m_omega_t(i,j)(loc) << std::endl;}}
+
 */
 
-                std::cout << "theta size:" << m_theta.size() << std::endl;
-                for (std::size_t i = 0; i < m_theta.rows(); ++i){
-                    for(std::size_t j = 0; j < m_theta.cols(); ++j){std::cout<<"theta("<<i<<","<<j<<"): " << m_theta(i,j)(loc) << std::endl;}}
-/*
-                std::cout << "theta_t" << std::endl;
-                for (std::size_t i = 0; i < m_theta_t.rows(); ++i){
-                    for(std::size_t j = 0; j < m_theta_t.cols(); ++j){std::cout<<"m_theta_t("<<i<<","<<j<<"): " << m_theta_t(i,j)(loc) << std::endl;}}
-*/
+                std::cout << "psi size:" << m_psi.size() << std::endl;
+                for (std::size_t i = 0; i < m_psi.rows(); ++i){
+                    for(std::size_t j = 0; j < m_psi.cols(); ++j){std::cout<<"psi("<<i<<","<<j<<") in " << loc << ": "<< m_psi(i,j)(loc) << std::endl;}}
+
+                std::cout << "m_psi_t" << std::endl;
+                for (std::size_t i = 0; i < m_psi_t.rows(); ++i){
+                    for(std::size_t j = 0; j < m_psi_t.cols(); ++j){std::cout<<"m_psi_t("<<i<<","<<j<<"): " << m_psi_t(i,j)(loc) << std::endl;}}
+
+                double loc1 = 0.8;
+
+                            std::cout << "psi size:" << m_psi.size() << std::endl;
+                for (std::size_t i = 0; i < m_psi.rows(); ++i){
+                    for(std::size_t j = 0; j < m_psi.cols(); ++j){std::cout<<"psi("<<i<<","<<j<<") in " << loc1 << ": "<< m_psi(i,j)(loc1) << std::endl;}}
+
+                std::cout << "m_psi_t" << std::endl;
+                for (std::size_t i = 0; i < m_psi_t.rows(); ++i){
+                    for(std::size_t j = 0; j < m_psi_t.cols(); ++j){std::cout<<"m_psi_t("<<i<<","<<j<<"): " << m_psi_t(i,j)(loc1) << std::endl;}}
+
             }
     
 
