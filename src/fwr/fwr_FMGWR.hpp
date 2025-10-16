@@ -259,7 +259,7 @@ public:
         //COMPUTING all the m_bnc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
         std::cout << "Computing m_bnc" << std::endl;
         m_bnc = this->operator_comp().compute_operator(m_eta_t,m_Xnc_t,m_Wnc,y_tilde_new,j_tilde_Rnc_inv);
-        for (std::size_t i = 0; i < m_bs.size(); ++i){std::cout << "m_bnc unit " << i+1 << "-th rows: " << m_bnc[i].rows() << ", m_bnc cols: " << m_bnc[i].cols() << std::endl;}
+        for (std::size_t i = 0; i < m_bnc.size(); ++i){std::cout << "m_bnc unit " << i+1 << "-th rows: " << m_bnc[i].rows() << ", m_bnc cols: " << m_bnc[i].cols() << std::endl;}
 
 
 
