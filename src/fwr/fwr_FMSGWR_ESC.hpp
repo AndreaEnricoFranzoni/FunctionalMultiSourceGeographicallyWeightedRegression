@@ -268,12 +268,14 @@ public:
                 for (std::size_t i = 0; i < m_omega_t.rows(); ++i){
                     for(std::size_t j = 0; j < m_omega_t.cols(); ++j){std::cout<<"omega_t("<<i<<","<<j<<"): " << m_omega_t(i,j)(loc) << std::endl;}}
                 
+/*
                 std::cout << "Wc" << std::endl;
                 for(std::size_t i = 0; i < m_Wc.rows(); ++i){
                     for(std::size_t j = 0; j < m_Wc.cols(); ++j){std::cout<<"Wc("<<i<<","<<j<<"): " << m_Wc(i,j)(loc) << std::endl;}}
 
                 std::cout << "Rc" << std::endl;
                 std::cout << m_Rc << std::endl;
+*/
             }
     
 
