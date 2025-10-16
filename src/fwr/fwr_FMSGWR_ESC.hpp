@@ -251,32 +251,24 @@ public:
 
 
                 double loc = -1;
-                std::cout << "qc: " << m_qc << ", Lc: " << m_Lc << std::endl;
-                std::cout << "LC_j" << std::endl;
-                for(std::size_t i = 0; i < m_Lc_j.size(); ++i){ std::cout << "Lc_j("<<i+1<<"): " << m_Lc_j[i] << std::endl;}
-                std::cout << "Xc" << std::endl;
-                for (std::size_t i = 0; i < m_Xc.rows(); ++i){
-                    for(std::size_t j = 0; j < m_Xc.cols(); ++j){std::cout<<"Xc("<<i<<","<<j<<"): " << m_Xc(i,j)(loc) << std::endl;}}
-                std::cout << "Xc_t" << std::endl;
-                for (std::size_t i = 0; i < m_Xc_t.rows(); ++i){
-                    for(std::size_t j = 0; j < m_Xc_t.cols(); ++j){std::cout<<"Xc_t("<<i<<","<<j<<"): " << m_Xc_t(i,j)(loc) << std::endl;}}
 
+/*
                 std::cout << "omega" << std::endl;
                 for (std::size_t i = 0; i < m_omega.rows(); ++i){
                     for(std::size_t j = 0; j < m_omega.cols(); ++j){std::cout<<"omega("<<i<<","<<j<<"): " << m_omega(i,j)(loc) << std::endl;}}
-/*
+
                 std::cout << "omega_t" << std::endl;
                 for (std::size_t i = 0; i < m_omega_t.rows(); ++i){
                     for(std::size_t j = 0; j < m_omega_t.cols(); ++j){std::cout<<"omega_t("<<i<<","<<j<<"): " << m_omega_t(i,j)(loc) << std::endl;}}
 */
-                
-/*
-                std::cout << "Wc" << std::endl;
-                for(std::size_t i = 0; i < m_Wc.rows(); ++i){
-                    for(std::size_t j = 0; j < m_Wc.cols(); ++j){std::cout<<"Wc("<<i<<","<<j<<"): " << m_Wc(i,j)(loc) << std::endl;}}
 
-                std::cout << "Rc" << std::endl;
-                std::cout << m_Rc << std::endl;
+                std::cout << "theta" << std::endl;
+                for (std::size_t i = 0; i < m_theta.rows(); ++i){
+                    for(std::size_t j = 0; j < m_theta.cols(); ++j){std::cout<<"theta("<<i<<","<<j<<"): " << m_theta(i,j)(loc) << std::endl;}}
+/*
+                std::cout << "theta_t" << std::endl;
+                for (std::size_t i = 0; i < m_theta_t.rows(); ++i){
+                    for(std::size_t j = 0; j < m_theta_t.cols(); ++j){std::cout<<"m_theta_t("<<i<<","<<j<<"): " << m_theta_t(i,j)(loc) << std::endl;}}
 */
             }
     
