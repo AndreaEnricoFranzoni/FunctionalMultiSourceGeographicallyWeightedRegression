@@ -250,7 +250,7 @@ public:
                 m_psi_t = m_psi.transpose();
 
 
-                double loc = 0.3;
+                double loc = -1;
                 std::cout << "qc: " << m_qc << ", Lc: " << m_Lc << std::endl;
                 std::cout << "LC_j" << std::endl;
                 for(std::size_t i = 0; i < m_Lc_j.size(); ++i){ std::cout << "Lc_j("<<i+1<<"): " << m_Lc_j[i] << std::endl;}
