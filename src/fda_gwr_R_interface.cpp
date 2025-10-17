@@ -1167,7 +1167,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     using response_basis_tmp_t = extract_template_t< decltype(basis_y_train_)::element_type >;   
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_train_(std::move(coefficients_response_),std::move(basis_y_train_));
     //sttaionary covariates
-    functional_data_covariates<_DOMAIN_,_EVENT_> x_C_fd_train_(coefficients_stationary_cov_,
+    functional_data_covariates<_DOMAIN_,_STATIONARY_> x_C_fd_train_(coefficients_stationary_cov_,
                                                                q_C,
                                                                basis_types_stationary_cov_,
                                                                degree_basis_stationary_cov_,
@@ -2534,7 +2534,7 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
     using response_basis_tmp_t = extract_template_t< decltype(basis_y_train_)::element_type >;   
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_train_(std::move(coefficients_response_),std::move(basis_y_train_));
     //sttaionary covariates
-    functional_data_covariates<_DOMAIN_,_EVENT_> x_C_fd_train_(coefficients_stationary_cov_,
+    functional_data_covariates<_DOMAIN_,_STATIONARY_> x_C_fd_train_(coefficients_stationary_cov_,
                                                                q_C,
                                                                basis_types_stationary_cov_,
                                                                degree_basis_stationary_cov_,
@@ -3465,7 +3465,7 @@ Rcpp::List predict_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
     using response_basis_tmp_t = extract_template_t< decltype(basis_y_train_)::element_type >;   
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_train_(std::move(coefficients_response_),std::move(basis_y_train_));
     //sttaionary covariates
-    functional_data_covariates<_DOMAIN_,_EVENT_> x_C_fd_train_(coefficients_stationary_cov_,
+    functional_data_covariates<_DOMAIN_,_STATIONARY_> x_C_fd_train_(coefficients_stationary_cov_,
                                                                q_C,
                                                                basis_types_stationary_cov_,
                                                                degree_basis_stationary_cov_,

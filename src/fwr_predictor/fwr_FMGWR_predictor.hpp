@@ -178,7 +178,7 @@ public:
     computePartialResiduals()
     override
     {
-        if (!this->bf_estimation)
+        if (!this->bf_estimation())
         {
             //y_tilde_new(t) n_trainx1
             m_y_tilde_new = fm_prod(m_phi,m_c_tilde_hat);
