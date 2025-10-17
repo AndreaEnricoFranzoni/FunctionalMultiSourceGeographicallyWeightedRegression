@@ -333,23 +333,6 @@ public:
 
             //COMPUTING all the m_bs, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
             m_bs = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,y_tilde_tilde_hat,j_double_tilde_Rs_inv);
-
-
-/*
-        //DEFAULT AI B: PARTE DA TOGLIERE
-        m_bc = Eigen::MatrixXd::Random(m_Lc,1);
-        m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
-        m_A_s.reserve(this->n());
-        m_B_s_for_K_s_e.reserve(this->n());
-        m_be.reserve(this->n());
-        m_bs.reserve(this->n());
-        for(std::size_t i = 0; i < this->n(); ++i){
-            m_A_s.push_back(Eigen::MatrixXd::Random(m_Ls,m_Ly*this->n()));
-            m_B_s_for_K_s_e.push_back(Eigen::MatrixXd::Random(m_Ls,m_Le));
-            m_be.push_back(Eigen::MatrixXd::Random(m_Le,1));
-            m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1));}
-        //FINE PARTE DA TOGLIERE
-*/
         }
         //brute force estimation
         else
@@ -394,26 +377,8 @@ public:
             m_bs = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,y_tilde_tilde,j_i_Rs_inv);
             //default values of 0 for returning elements
             m_c_tilde_hat = FDAGWR_TRAITS::Dense_Matrix::Zero(m_Ly*this->n(),1);
-
-/*        
-        //DEFAULT AI B: PARTE DA TOGLIERE
-        m_bc = Eigen::MatrixXd::Random(m_Lc,1);
-        m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
-        m_A_s.reserve(this->n());
-        m_B_s_for_K_s_e.reserve(this->n());
-        m_be.reserve(this->n());
-        m_bs.reserve(this->n());
-        for(std::size_t i = 0; i < this->n(); ++i){
-            m_A_s.push_back(Eigen::MatrixXd::Random(m_Ls,m_Ly*this->n()));
-            m_B_s_for_K_s_e.push_back(Eigen::MatrixXd::Random(m_Ls,m_Le));
-            m_be.push_back(Eigen::MatrixXd::Random(m_Le,1));
-            m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1));}
-        //FINE PARTE DA TOGLIERE
-*/
         }
         
-
-
         //
         //wrapping the b from the shape useful for the computation into a more useful format: TENERE
         //
@@ -477,5 +442,22 @@ public:
         return std::tuple{m_c_tilde_hat,m_A_s,m_B_s_for_K_s_e};
     }
 };
+
+
+/*        
+        //DEFAULT AI B: PARTE DA TOGLIERE
+        m_bc = Eigen::MatrixXd::Random(m_Lc,1);
+        m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
+        m_A_s.reserve(this->n());
+        m_B_s_for_K_s_e.reserve(this->n());
+        m_be.reserve(this->n());
+        m_bs.reserve(this->n());
+        for(std::size_t i = 0; i < this->n(); ++i){
+            m_A_s.push_back(Eigen::MatrixXd::Random(m_Ls,m_Ly*this->n()));
+            m_B_s_for_K_s_e.push_back(Eigen::MatrixXd::Random(m_Ls,m_Le));
+            m_be.push_back(Eigen::MatrixXd::Random(m_Le,1));
+            m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1));}
+        //FINE PARTE DA TOGLIERE
+*/
 
 #endif  /*FWR_FMSGWR_SEC_ALGO_HPP*/

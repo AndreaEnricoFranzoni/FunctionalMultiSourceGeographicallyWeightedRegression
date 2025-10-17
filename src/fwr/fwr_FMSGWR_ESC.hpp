@@ -337,24 +337,6 @@ public:
 
             //COMPUTING all the m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE EVENT-DEPENDENT BETAS
             m_be = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde_tilde_hat,j_double_tilde_Re_inv);
-
-
-
-/*        
-        //DEFAULT AI B: PARTE DA TOGLIERE
-        m_bc = Eigen::MatrixXd::Random(m_Lc,1);
-        m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
-        m_A_e.reserve(this->n());
-        m_B_e_for_K_e_s.reserve(this->n());
-        m_be.reserve(this->n());
-        m_bs.reserve(this->n());
-        for(std::size_t i = 0; i < this->n(); ++i){
-            m_A_e.push_back(Eigen::MatrixXd::Random(m_Le,m_Ly*this->n()));
-            m_B_e_for_K_e_s.push_back(Eigen::MatrixXd::Random(m_Le,m_Ls));
-            m_be.push_back(Eigen::MatrixXd::Random(m_Le,1));
-            m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1));}
-        //FINE PARTE DA TOGLIERE
-*/
         }
 
         else
@@ -404,22 +386,6 @@ public:
 
             //default values of 0 for returning elements
             m_c_tilde_hat = FDAGWR_TRAITS::Dense_Matrix::Zero(m_Ly*this->n(),1);
-
-/*        
-        //DEFAULT AI B: PARTE DA TOGLIERE
-        m_bc = Eigen::MatrixXd::Random(m_Lc,1);
-        m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
-        m_A_e.reserve(this->n());
-        m_B_e_for_K_e_s.reserve(this->n());
-        m_be.reserve(this->n());
-        m_bs.reserve(this->n());
-        for(std::size_t i = 0; i < this->n(); ++i){
-            m_A_e.push_back(Eigen::MatrixXd::Random(m_Le,m_Ly*this->n()));
-            m_B_e_for_K_e_s.push_back(Eigen::MatrixXd::Random(m_Le,m_Ls));
-            m_be.push_back(Eigen::MatrixXd::Random(m_Le,1));
-            m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1));}
-        //FINE PARTE DA TOGLIERE
-*/
         }
 
 
@@ -486,5 +452,22 @@ public:
         return std::tuple{m_c_tilde_hat,m_A_e,m_B_e_for_K_e_s};
     }
 };
+
+
+/*        
+        //DEFAULT AI B: PARTE DA TOGLIERE
+        m_bc = Eigen::MatrixXd::Random(m_Lc,1);
+        m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
+        m_A_e.reserve(this->n());
+        m_B_e_for_K_e_s.reserve(this->n());
+        m_be.reserve(this->n());
+        m_bs.reserve(this->n());
+        for(std::size_t i = 0; i < this->n(); ++i){
+            m_A_e.push_back(Eigen::MatrixXd::Random(m_Le,m_Ly*this->n()));
+            m_B_e_for_K_e_s.push_back(Eigen::MatrixXd::Random(m_Le,m_Ls));
+            m_be.push_back(Eigen::MatrixXd::Random(m_Le,1));
+            m_bs.push_back(Eigen::MatrixXd::Random(m_Ls,1));}
+        //FINE PARTE DA TOGLIERE
+*/
 
 #endif  /*FWR_FMSGWR_ESC_ALGO_HPP*/

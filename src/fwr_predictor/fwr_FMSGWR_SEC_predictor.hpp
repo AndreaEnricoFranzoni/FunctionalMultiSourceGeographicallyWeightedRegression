@@ -309,16 +309,6 @@ public:
             m_be_pred = this->operator_comp().compute_operator(m_Xe_train_crossed_t,W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E),m_y_tilde_new,j_tilde_Re_inv);
             //COMPUTING all the m_be in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
             m_bs_pred = this->operator_comp().compute_operator(m_psi_t,m_Xs_train_t,W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S),m_y_tilde_tilde_hat,j_double_tilde_Rs_inv);
-        
-/*
-            //DEFAULT AI B: PARTE DA TOGLIERE
-            m_bs_pred.resize(n_pred);
-            m_be_pred.resize(n_pred);
-            for(std::size_t i = 0; i < n_pred; ++i){
-                m_be_pred[i] = Eigen::MatrixXd::Random(m_Le,1);
-                m_bs_pred[i] = Eigen::MatrixXd::Random(m_Ls,1);}
-            //FINE PARTE DA TOGLIERE
-*/
         }
         else
         {
@@ -327,18 +317,6 @@ public:
 
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_i_Rs_inv = this->operator_comp().compute_penalty(m_psi_t,m_Xs_train_t,W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S),m_Xs_train,m_psi,m_Rs);
             m_bs_pred = this->operator_comp().compute_operator(m_psi_t,m_Xs_train_t,W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S),m_y_tilde_tilde_hat,j_i_Rs_inv);
-
-
-
-/*
-        //INIZIO PARTE DA TOGLIERE
-        m_bs_pred.resize(n_pred);
-        m_be_pred.resize(n_pred);
-        for(std::size_t i = 0; i < n_pred; ++i){
-            m_be_pred[i] = Eigen::MatrixXd::Random(m_Le,1);
-            m_bs_pred[i] = Eigen::MatrixXd::Random(m_Ls,1);}
-        //FINE PARTE DA TOGLIERE
-*/ 
         }
 
 
@@ -466,5 +444,19 @@ public:
     }
 
 };
+
+
+
+
+
+/*
+        //INIZIO PARTE DA TOGLIERE
+        m_bs_pred.resize(n_pred);
+        m_be_pred.resize(n_pred);
+        for(std::size_t i = 0; i < n_pred; ++i){
+            m_be_pred[i] = Eigen::MatrixXd::Random(m_Le,1);
+            m_bs_pred[i] = Eigen::MatrixXd::Random(m_Ls,1);}
+        //FINE PARTE DA TOGLIERE
+*/ 
 
 #endif  /*FWR_FMSGWR_SEC_PREDICT_HPP*/

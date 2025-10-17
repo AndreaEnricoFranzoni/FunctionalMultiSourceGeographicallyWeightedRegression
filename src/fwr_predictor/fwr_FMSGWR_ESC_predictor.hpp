@@ -307,16 +307,6 @@ public:
             m_bs_pred = this->operator_comp().compute_operator(m_X_s_train_crossed_t,W.at(fwr_FMSGWR_ESC_predictor<INPUT,OUTPUT>::id_S),m_y_tilde_new,j_tilde_Rs_inv);
             //COMPUTING all the m_be in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
             m_be_pred = this->operator_comp().compute_operator(m_theta_t,m_Xe_train_t,W.at(fwr_FMSGWR_ESC_predictor<INPUT,OUTPUT>::id_E),m_y_tilde_tilde_hat,j_double_tilde_Re_inv);
-
-/*
-        //INIZIO PARTE DA TOGLIERE
-        m_bs_pred.resize(n_pred);
-        m_be_pred.resize(n_pred);
-        for(std::size_t i = 0; i < n_pred; ++i){
-            m_be_pred[i] = Eigen::MatrixXd::Random(m_Le,1);
-            m_bs_pred[i] = Eigen::MatrixXd::Random(m_Ls,1);}
-        //FINE PARTE DA TOGLIERE
-*/ 
         }
         //brute force estimation
         else
@@ -326,26 +316,7 @@ public:
 
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_i_Re_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_train_t,W.at(fwr_FMSGWR_ESC_predictor<INPUT,OUTPUT>::id_E),m_Xe_train,m_theta,m_Re);
             m_be_pred = this->operator_comp().compute_operator(m_theta_t,m_Xe_train_t,W.at(fwr_FMSGWR_ESC_predictor<INPUT,OUTPUT>::id_E),m_y_tilde_tilde_hat,j_i_Re_inv);
-
-/*
-        //INIZIO PARTE DA TOGLIERE
-        m_bs_pred.resize(n_pred);
-        m_be_pred.resize(n_pred);
-        for(std::size_t i = 0; i < n_pred; ++i){
-            m_be_pred[i] = Eigen::MatrixXd::Random(m_Le,1);
-            m_bs_pred[i] = Eigen::MatrixXd::Random(m_Ls,1);}
-        //FINE PARTE DA TOGLIERE
-*/ 
         }
-
-
-
-
-
-
-
-     
-
 
         //
         //wrapping the b from the shape useful for the computation into a more useful format for reporting the results: TENERE
@@ -470,7 +441,18 @@ public:
         return std::tuple{m_BetaC_ev,m_BetaE_ev,m_BetaS_ev};
     }
 
-
 };
+
+
+
+/*
+        //INIZIO PARTE DA TOGLIERE
+        m_bs_pred.resize(n_pred);
+        m_be_pred.resize(n_pred);
+        for(std::size_t i = 0; i < n_pred; ++i){
+            m_be_pred[i] = Eigen::MatrixXd::Random(m_Le,1);
+            m_bs_pred[i] = Eigen::MatrixXd::Random(m_Ls,1);}
+        //FINE PARTE DA TOGLIERE
+*/ 
 
 #endif  /*FWR_FMSGWR_ESC_PREDICT_HPP*/

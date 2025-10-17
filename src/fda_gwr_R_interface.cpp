@@ -1001,8 +1001,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     double target_error = wrap_and_check_target_error_trapezoidal_quadrature(target_error_trapezoidal_quadrature);
     // MAXIMUM NUMBER OF ITERATIONS WHILE INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
     int max_iterations = wrap_and_check_max_iterations_trapezoidal_quadrature(max_iterations_trapezoidal_quadrature);
-    //ESTIMATION TECHNIQUE
-    bool bf_estimation = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::bf_estimate];
+
 
     ////////////////////////////////////////////////////////////
     /////// RETRIEVING INFORMATION FROM THE MODEL FITTED ///////
@@ -1030,6 +1029,8 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     //list with elements of the beta of stations-dependent covariates
     Rcpp::List beta_stations_cov_input   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::beta + covariate_type<_STATION_>()];
 
+    //ESTIMATION TECHNIQUE
+    bool bf_estimation = training_input[FDAGWR_HELPERS_for_PRED_NAMES::bf_estimate];
     //DOMAIN INFORMATION
     std::size_t n_train = training_input[FDAGWR_HELPERS_for_PRED_NAMES::n];
     _FD_INPUT_TYPE_ a   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::a];
@@ -2368,8 +2369,7 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
     double target_error = wrap_and_check_target_error_trapezoidal_quadrature(target_error_trapezoidal_quadrature);
     // MAXIMUM NUMBER OF ITERATIONS WHILE INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
     int max_iterations = wrap_and_check_max_iterations_trapezoidal_quadrature(max_iterations_trapezoidal_quadrature);
-    //ESTIMATION TECHNIQUE
-    bool bf_estimation = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::bf_estimate];
+
 
     ////////////////////////////////////////////////////////////
     /////// RETRIEVING INFORMATION FROM THE MODEL FITTED ///////
@@ -2397,6 +2397,8 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
     //list with elements of the beta of stations-dependent covariates
     Rcpp::List beta_stations_cov_input   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::beta + covariate_type<_STATION_>()];
 
+    //ESTIMATION TECHNIQUE
+    bool bf_estimation = training_input[FDAGWR_HELPERS_for_PRED_NAMES::bf_estimate];
     //DOMAIN INFORMATION
     std::size_t n_train = training_input[FDAGWR_HELPERS_for_PRED_NAMES::n];
     _FD_INPUT_TYPE_ a   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::a];
@@ -3339,8 +3341,7 @@ Rcpp::List predict_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
     double target_error = wrap_and_check_target_error_trapezoidal_quadrature(target_error_trapezoidal_quadrature);
     // MAXIMUM NUMBER OF ITERATIONS WHILE INTEGRATING VIA TRAPEZOIDAL QUADRATURE RULE
     int max_iterations = wrap_and_check_max_iterations_trapezoidal_quadrature(max_iterations_trapezoidal_quadrature);
-    //ESTIMATION TECHNIQUE
-    bool bf_estimation = model_fitted[FDAGWR_HELPERS_for_PRED_NAMES::bf_estimate];
+
 
 
     ////////////////////////////////////////////////////////////
@@ -3365,7 +3366,8 @@ Rcpp::List predict_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
     //list with elements of the beta of events-dependent covariates
     Rcpp::List beta_non_stationary_cov_input     = training_input[FDAGWR_HELPERS_for_PRED_NAMES::beta + covariate_type<_NON_STATIONARY_>()];
 
-
+    //ESTIMATION TECHNIQUE
+    bool bf_estimation = training_input[FDAGWR_HELPERS_for_PRED_NAMES::bf_estimate];
     //DOMAIN INFORMATION
     std::size_t n_train = training_input[FDAGWR_HELPERS_for_PRED_NAMES::n];
     _FD_INPUT_TYPE_ a   = training_input[FDAGWR_HELPERS_for_PRED_NAMES::a];
