@@ -203,7 +203,7 @@ public:
                     m_A_s{std::forward<SCALAR_MATRIX_OBJ_VEC>(A_s)},
                     m_B_s_for_K_s_e{std::forward<SCALAR_MATRIX_OBJ_VEC>(B_s_for_K_s_e)},
                     m_y_train{std::forward<FUNC_MATRIX_OBJ>(y_train)},
-                    m_Xc_train{std::forward<FUNC_MATRIX_OBJ(Xc_train)},
+                    m_Xc_train{std::forward<FUNC_MATRIX_OBJ>(Xc_train)},
                     m_Xe_train{std::forward<FUNC_MATRIX_OBJ>(Xe_train)},
                     m_Re{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Re)},
                     m_Xs_train{std::forward<FUNC_MATRIX_OBJ>(Xs_train)},

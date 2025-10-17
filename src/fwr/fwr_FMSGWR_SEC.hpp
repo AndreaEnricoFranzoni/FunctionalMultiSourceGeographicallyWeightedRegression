@@ -363,7 +363,7 @@ public:
             //y_tilde
             functional_matrix<INPUT,OUTPUT> y_tilde = m_y - fm_prod(fm_prod(m_Xc,m_omega),m_bc,this->number_threads());
             //[J_i + Re]^-1
-            std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_i_Rs_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);
+            std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_i_Re_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);
             //COMPUTING m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
             m_be = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde,j_i_Re_inv);
             //y_tilde_tilde
@@ -374,7 +374,7 @@ public:
             m_B_s_for_K_s_e.resize(this->n());
 
 #ifdef _OPENMP
-#pragma omp parallel for shared(y_tilde_tilde,m_Xe_train,m_theta,y_tilde) num_threads(this->number_threads())
+#pragma omp parallel for shared(y_tilde_tilde,m_Xe,m_theta,y_tilde) num_threads(this->number_threads())
 #endif
             for(std::size_t i = 0; i < this->n(); ++i)
             {
