@@ -45,14 +45,16 @@ private:
     std::size_t m_n_train;
     /*!Number of threads for OMP*/
     int m_number_threads;
+    /*!BF*/
+    bool m_bf_estimation;
 
 public:
     /*!
     * @brief Constructor
     * @param number_threads number of threads for OMP
     */
-    fwr_predictor(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, std::size_t n_train, int number_threads)
-                   : m_operator_comp(a,b,n_intervals_integration,target_error,max_iterations,number_threads), m_n_train(n_train), m_number_threads(number_threads) {}
+    fwr_predictor(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, std::size_t n_train, int number_threads, bool bf_estimation)
+                   : m_operator_comp(a,b,n_intervals_integration,target_error,max_iterations,number_threads), m_n_train(n_train), m_number_threads(number_threads), m_bf_estimation(bf_estimation) {}
 
     /*!
     * @brief Virtual destructor
@@ -83,6 +85,11 @@ public:
     * @return the private m_number_threads
     */
     inline int number_threads() const {return m_number_threads;}
+
+    /*!
+    * @brief Getter for m_bf_estimation
+    */
+    inline bool bf_estimation() const {return m_bf_estimation;}
 
     /*!
     * @brief Function to evaluate the prediction

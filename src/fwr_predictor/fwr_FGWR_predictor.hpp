@@ -93,7 +93,7 @@ public:
                        std::size_t n_train, 
                        int number_threads)
             :   
-                fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,n_train,number_threads),
+                fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,n_train,number_threads,false),
                 m_eta{std::forward<FUNC_SPARSE_MATRIX_OBJ>(eta)},
                 m_qnc(qnc),
                 m_Lnc(Lnc),

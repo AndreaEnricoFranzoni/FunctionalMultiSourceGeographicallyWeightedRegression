@@ -71,6 +71,11 @@ int main() {
 
 
 
+std::string
+estimation_iter(bool bf_estimation)
+{
+    return bf_estimation ? "BruteForceEstimation" : "ExactEstimation";
+}
 
 
 

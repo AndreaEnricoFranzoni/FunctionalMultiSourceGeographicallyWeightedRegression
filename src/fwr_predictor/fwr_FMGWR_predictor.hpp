@@ -77,6 +77,10 @@ private:
     /*!c_tilde_hat ((n_trainxLy)x1)*/
     FDAGWR_TRAITS::Dense_Matrix m_c_tilde_hat;
     /*!Functional event-dependent covariates (n_train x qnc)*/
+    functional_matrix<INPUT,OUTPUT> m_y_train;
+    /*!Functional event-dependent covariates (n_train x qnc)*/
+    functional_matrix<INPUT,OUTPUT> m_Xc_train;
+    /*!Functional event-dependent covariates (n_train x qnc)*/
     functional_matrix<INPUT,OUTPUT> m_Xnc_train;
     /*!Their transpost (qnc x n_train)*/
     functional_matrix<INPUT,OUTPUT> m_Xnc_train_t;
@@ -119,6 +123,8 @@ public:
                         FUNC_SPARSE_MATRIX_OBJ &&phi,
                         std::size_t Ly,
                         SCALAR_MATRIX_OBJ &&c_tilde_hat,
+                        FUNC_MATRIX_OBJ &&y_train,
+                        FUNC_MATRIX_OBJ &&Xc_train,
                         FUNC_MATRIX_OBJ &&Xnc_train,
                         SCALAR_SPARSE_MATRIX_OBJ &&Rnc,
                         INPUT a, 
@@ -127,9 +133,10 @@ public:
                         double target_error, 
                         int max_iterations, 
                         std::size_t n_train, 
-                        int number_threads)
+                        int number_threads,
+                        bool bf_estimation)
             :   
-                fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,n_train,number_threads),
+                fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,n_train,number_threads,bf_estimation),
                 m_Bc_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC>(Bc_fitted)},
                 m_omega{std::forward<FUNC_SPARSE_MATRIX_OBJ>(omega)},
                 m_qc(qc),
@@ -142,6 +149,8 @@ public:
                 m_phi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(phi)},
                 m_Ly(Ly),
                 m_c_tilde_hat{std::forward<SCALAR_MATRIX_OBJ>(c_tilde_hat)},
+                m_y_train{std::forward<FUNC_MATRIX_OBJ>(y_train)},
+                m_Xc_train{std::forward<FUNC_MATRIX_OBJ>(Xc_train)},
                 m_Xnc_train{std::forward<FUNC_MATRIX_OBJ>(Xnc_train)},
                 m_Rnc{std::forward<SCALAR_SPARSE_MATRIX_OBJ>(Rnc)}
             {
@@ -169,8 +178,16 @@ public:
     computePartialResiduals()
     override
     {
-        //y_tilde_new(t) n_trainx1
-        m_y_tilde_new = fm_prod(m_phi,m_c_tilde_hat);
+        if (!this->bf_estimation)
+        {
+            //y_tilde_new(t) n_trainx1
+            m_y_tilde_new = fm_prod(m_phi,m_c_tilde_hat);
+        }
+        else
+        {
+            m_y_tilde_new = m_y_train - fm_prod(fm_prod(m_Xc_train,m_omega),m_bc_fitted,this->number_threads());
+        }
+        
     }
 
 

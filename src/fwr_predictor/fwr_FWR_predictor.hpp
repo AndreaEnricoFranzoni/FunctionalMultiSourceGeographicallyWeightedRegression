@@ -76,7 +76,7 @@ public:
                        std::size_t n_train, 
                        int number_threads)
             :   
-                fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,n_train,number_threads),
+                fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,n_train,number_threads,false),
                 m_Bc_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC>(Bc_fitted)},
                 m_omega{std::forward<FUNC_SPARSE_MATRIX_OBJ>(omega)},
                 m_qc(qc),

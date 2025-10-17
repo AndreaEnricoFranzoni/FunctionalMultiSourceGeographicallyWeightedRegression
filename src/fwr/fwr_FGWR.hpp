@@ -83,7 +83,7 @@ public:
              std::size_t n,
              int number_threads)
         :
-            fwr<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error_integration,max_iterations_integration,abscissa_points,n,number_threads),
+            fwr<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error_integration,max_iterations_integration,abscissa_points,n,number_threads,false),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_Xnc{std::forward<FUNC_MATRIX_OBJ>(Xnc)},
             m_Wnc{std::forward<FUNC_DIAG_MATRIX_VEC_OBJ>(Wnc)},

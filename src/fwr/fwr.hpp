@@ -48,14 +48,16 @@ private:
     std::size_t m_n;
     /*!Number of threads for OMP*/
     int m_number_threads;
+    /*!Brute force estimation*/
+    bool m_brute_force_estimation;
 
 public:
     /*!
     * @brief Constructor
     * @param number_threads number of threads for OMP
     */
-    fwr(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, const std::vector<INPUT> & abscissa_points, std::size_t n, int number_threads)
-        : m_operator_comp(a,b,n_intervals_integration,target_error,max_iterations,number_threads), m_abscissa_points(abscissa_points), m_n(n), m_number_threads(number_threads) {}
+    fwr(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, const std::vector<INPUT> & abscissa_points, std::size_t n, int number_threads, bool brute_force_estimation)
+        : m_operator_comp(a,b,n_intervals_integration,target_error,max_iterations,number_threads), m_abscissa_points(abscissa_points), m_n(n), m_number_threads(number_threads), m_brute_force_estimation(brute_force_estimation) {}
 
     /*!
     * @brief Virtual destructor
@@ -84,6 +86,11 @@ public:
     * @return the private m_number_threads
     */
     inline int number_threads() const {return m_number_threads;}
+
+    /*!
+    * @brief Getter for m_brute_force_estimation
+    */
+    inline bool bf_estimation() const {return m_brute_force_estimation;}
 
     /*!
     * @brief Virtual method to compute the Functional Geographically Weighted Regression

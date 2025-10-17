@@ -753,7 +753,7 @@ wrap_predict_input(Rcpp::List pred_input)
   if constexpr( fdagwr_algo == FDAGWR_ALGO::_FMSGWR_ESC_ )
   {
     //check input list
-    if (pred_input.size() != 8){ throw std::invalid_argument("Lenght of input list model_fitted has to be 8");}
+    if (pred_input.size() != 9){ throw std::invalid_argument("Lenght of input list model_fitted has to be 8");}
 
     //check that derives from the right algorithm
     if( as<std::string>(pred_input[FDAGWR_HELPERS_for_PRED_NAMES::model_name]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FMSGWR_ESC");}
@@ -763,7 +763,7 @@ wrap_predict_input(Rcpp::List pred_input)
   if constexpr( fdagwr_algo == FDAGWR_ALGO::_FMSGWR_SEC_ )
   {
     //check input list
-    if (pred_input.size() != 8){ throw std::invalid_argument("Lenght of input list model_fitted has to be 8");}
+    if (pred_input.size() != 9){ throw std::invalid_argument("Lenght of input list model_fitted has to be 8");}
 
     //check that derives from the right algorithm
     if( as<std::string>(pred_input[FDAGWR_HELPERS_for_PRED_NAMES::model_name]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FMSGWR_SEC");}
@@ -773,7 +773,7 @@ wrap_predict_input(Rcpp::List pred_input)
   if constexpr( fdagwr_algo == FDAGWR_ALGO::_FMGWR_  )
   {
     //check input list
-    if (pred_input.size() != 6){ throw std::invalid_argument("Lenght of input list model_fitted has to be 6");}
+    if (pred_input.size() != 7){ throw std::invalid_argument("Lenght of input list model_fitted has to be 6");}
 
     //check that derives from the right algorithm
     if( as<std::string>(pred_input[FDAGWR_HELPERS_for_PRED_NAMES::model_name]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FMGWR");}
