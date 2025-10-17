@@ -380,7 +380,8 @@ public:
             {
                 std::vector< FUNC_OBJ<INPUT,OUTPUT> > xe_i(m_Xe.row(i).cbegin(),m_Xe.row(i).cend()); //1xqe
                 functional_matrix<INPUT,OUTPUT> Xe_i(xe_i,1,m_qe);
-                y_tilde_tilde(i,0) = y_tilde(i,0) - fm_prod(fm_prod(Xe_i,m_theta),m_be[i],this->number_threads())(0,0);
+                functional_matrix<INPUT,OUTPUT> y_tilde_i(1,1,y_tilde(i,0));
+                y_tilde_tilde(i,0) = (y_tilde_i - fm_prod(fm_prod(Xe_i,m_theta),m_be[i],this->number_threads()))(0,0);
 
                 //default values of 0 for returning elements
                 m_A_s[i] = FDAGWR_TRAITS::Dense_Matrix::Zero(m_Ls,m_Ly*this->n());

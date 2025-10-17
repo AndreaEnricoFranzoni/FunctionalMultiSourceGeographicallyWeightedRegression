@@ -274,7 +274,8 @@ public:
             {
                 std::vector< FUNC_OBJ<INPUT,OUTPUT> > xe_i(m_Xe_train.row(i).cbegin(),m_Xe_train.row(i).cend()); //1xqe
                 functional_matrix<INPUT,OUTPUT> Xe_i(xe_i,1,m_qe);
-                m_y_tilde_tilde_hat(i,0) = m_y_tilde_hat(i,0) - fm_prod(fm_prod(Xe_i,m_theta),m_be_fitted[i],this->number_threads())(0,0);
+                functional_matrix<INPUT,OUTPUT> y_tilde_hat_i(1,1,m_y_tilde_hat(i,0));
+                m_y_tilde_tilde_hat(i,0) = (y_tilde_hat_i - fm_prod(fm_prod(Xe_i,m_theta),m_be_fitted[i],this->number_threads()))(0,0);
             }
         }
         

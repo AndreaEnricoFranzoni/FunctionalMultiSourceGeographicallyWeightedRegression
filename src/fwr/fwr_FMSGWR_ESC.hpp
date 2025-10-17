@@ -389,8 +389,8 @@ public:
             {
                 std::vector< FUNC_OBJ<INPUT,OUTPUT> > xs_i(m_Xs.row(i).cbegin(),m_Xs.row(i).cend()); //1xqs
                 functional_matrix<INPUT,OUTPUT> Xs_i(xs_i,1,m_qs);
-                functional_matrix<INPUT,OUTPUT> y_tilde_i(1,1,y_tilde_hat(i,0));
-                y_tilde_tilde_hat(i,0) = (y_tilde_i - fm_prod(fm_prod(Xs_i,m_psi),m_bs[i],this->number_threads()))(0,0);
+                functional_matrix<INPUT,OUTPUT> y_tilde_hat_i(1,1,y_tilde_hat(i,0));
+                y_tilde_tilde_hat(i,0) = (y_tilde_hat_i - fm_prod(fm_prod(Xs_i,m_psi),m_bs[i],this->number_threads()))(0,0);
 
                 //default values of 0 for returning elements
                 m_A_e[i] = FDAGWR_TRAITS::Dense_Matrix::Zero(m_Le,m_Ly*this->n());
