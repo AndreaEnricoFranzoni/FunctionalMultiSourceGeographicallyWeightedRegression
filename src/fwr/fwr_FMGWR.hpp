@@ -206,8 +206,6 @@ public:
 
         if(!this->bf_estimation())
         {
-            std::cout << "Exact estimation" << std::endl;
-
             //(j_tilde_tilde + Re)^-1
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rnc_inv = this->operator_comp().compute_penalty(m_eta_t,m_Xnc_t,m_Wnc,m_Xnc,m_eta,m_Rnc);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
             //A_NC_i
@@ -241,22 +239,9 @@ public:
 
             //COMPUTING all the m_bnc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
             m_bnc = this->operator_comp().compute_operator(m_eta_t,m_Xnc_t,m_Wnc,y_tilde_new,j_tilde_Rnc_inv);
-
-
-
-/*    
-        //DEFAULT AI B: PARTE DA TOGLIERE
-        m_bc = Eigen::MatrixXd::Random(m_Lc,1);
-        m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
-        m_bnc.reserve(this->n());
-        for(std::size_t i = 0; i < this->n(); ++i){     m_bnc.push_back(Eigen::MatrixXd::Random(m_Lnc,1));}
-        //FINE PARTE DA TOGLIERE
-*/
         }
         else
         {
-            std::cout << "Brute force estimation" << std::endl;
-
             //[J + Rc]^-1
             Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> j_Rc_inv = this->operator_comp().compute_penalty(m_omega_t,m_Xc_t,m_Wc,m_Xc,m_omega,m_Rc);
             //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
@@ -269,16 +254,6 @@ public:
             m_bnc = this->operator_comp().compute_operator(m_eta_t,m_Xnc_t,m_Wnc,y_tilde,j_i_Rnc_inv);
             //extra
             m_c_tilde_hat = Eigen::MatrixXd::Zero(m_Ly*this->n(),1);
-
-
-/*    
-        //DEFAULT AI B: PARTE DA TOGLIERE
-        m_bc = Eigen::MatrixXd::Random(m_Lc,1);
-        m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
-        m_bnc.reserve(this->n());
-        for(std::size_t i = 0; i < this->n(); ++i){     m_bnc.push_back(Eigen::MatrixXd::Random(m_Lnc,1));}
-        //FINE PARTE DA TOGLIERE
-*/
         }
 
 
@@ -341,5 +316,15 @@ public:
         return std::tuple{m_c_tilde_hat};
     }
 };
+
+
+/*    
+        //DEFAULT AI B: PARTE DA TOGLIERE
+        m_bc = Eigen::MatrixXd::Random(m_Lc,1);
+        m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
+        m_bnc.reserve(this->n());
+        for(std::size_t i = 0; i < this->n(); ++i){     m_bnc.push_back(Eigen::MatrixXd::Random(m_Lnc,1));}
+        //FINE PARTE DA TOGLIERE
+*/
 
 #endif  /*FWR_FMGWR_ALGO_HPP*/

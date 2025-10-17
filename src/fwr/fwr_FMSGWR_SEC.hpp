@@ -263,8 +263,6 @@ public:
         //exact estimation
         if (!this->bf_estimation())
         {
-            std::cout << "Exact estimation" << std::endl;
-
             //(j_tilde_tilde + Rs)^-1
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Rs_inv = this->operator_comp().compute_penalty(m_psi_t,m_Xs_t,m_Ws,m_Xs,m_psi,m_Rs);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
             //A_S_i
@@ -337,8 +335,6 @@ public:
         //brute force estimation
         else
         {
-            std::cout << "Brute force estimation" << std::endl;
-
             //[J + Rc]^-1
             Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> j_Rc_inv = this->operator_comp().compute_penalty(m_omega_t,m_Xc_t,m_Wc,m_Xc,m_omega,m_Rc);
             //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS

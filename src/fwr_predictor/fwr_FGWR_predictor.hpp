@@ -140,24 +140,6 @@ public:
         //COMPUTING all the m_bnc in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE NON-STATIONARY BETAS
         m_bnc_pred = this->operator_comp().compute_operator(m_eta_t,m_Xnc_train_t,W.at(fwr_FMGWR_predictor<INPUT,OUTPUT>::id_NC),m_y_train,j_Rnc_inv);
 
-
-/*
-        //INIZIO PARTE DA TOGLIERE
-        m_bnc_pred.resize(n_pred);
-
-        for(std::size_t i = 0; i < n_pred; ++i){
-            m_bnc_pred[i] = Eigen::MatrixXd::Random(m_Lnc,1);
-        }
-        //FINE PARTE DA TOGLIERE
-*/ 
-
-
-
-
-
-     
-
-
         //
         //wrapping the b from the shape useful for the computation into a more useful format for reporting the results: TENERE
         //
@@ -265,5 +247,15 @@ public:
     }
 
 };
+
+/*
+        //INIZIO PARTE DA TOGLIERE
+        m_bnc_pred.resize(n_pred);
+
+        for(std::size_t i = 0; i < n_pred; ++i){
+            m_bnc_pred[i] = Eigen::MatrixXd::Random(m_Lnc,1);
+        }
+        //FINE PARTE DA TOGLIERE
+*/ 
 
 #endif  /*FWR_FGWR_PREDICT_HPP*/

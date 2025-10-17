@@ -118,33 +118,11 @@ public:
     compute()  
     override
     {
- 
-        std::cout << "Computing (j + Rnc)^-1" << std::endl;
+
         //(j + Rnc)^-1
         std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_Rnc_inv = this->operator_comp().compute_penalty(m_eta_t,m_Xnc_t,m_Wnc,m_Xnc,m_eta,m_Rnc);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
-
         //COMPUTING all the m_bnc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
-        std::cout << "Computing m_bnc" << std::endl;
         m_bnc = this->operator_comp().compute_operator(m_eta_t,m_Xnc_t,m_Wnc,m_y,j_Rnc_inv);
-        for (std::size_t i = 0; i < m_bnc.size(); ++i){std::cout << "m_bnc unit " << i+1 << "-th rows: " << m_bnc[i].rows() << ", m_bnc cols: " << m_bnc[i].cols() << std::endl;}
-
-
-
-/*  
-        //DEFAULT AI B: PARTE DA TOGLIERE
-        m_bnc.reserve(this->n());
-
-        for(std::size_t i = 0; i < this->n(); ++i)
-        {
-            m_bnc.push_back(Eigen::MatrixXd::Random(m_Lnc,1));
-        }
-        //FINE PARTE DA TOGLIERE
-*/
-
-
-
-
-
 
         //
         //wrapping the b from the shape useful for the computation into a more useful format: TENERE
@@ -201,5 +179,17 @@ public:
         return std::monostate{};
     }
 };
+
+
+/*  
+        //DEFAULT AI B: PARTE DA TOGLIERE
+        m_bnc.reserve(this->n());
+
+        for(std::size_t i = 0; i < this->n(); ++i)
+        {
+            m_bnc.push_back(Eigen::MatrixXd::Random(m_Lnc,1));
+        }
+        //FINE PARTE DA TOGLIERE
+*/
 
 #endif  /*FWR_FGWR_ALGO_HPP*/

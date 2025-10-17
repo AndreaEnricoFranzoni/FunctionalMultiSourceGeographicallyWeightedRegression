@@ -264,8 +264,6 @@ public:
         //exact estimation
         if(!this->bf_estimation())
         {
-            std::cout << "Exact estimation" << std::endl;
-
             //(j_tilde_tilde + Re)^-1
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
             //A_E_i
@@ -341,8 +339,6 @@ public:
 
         else
         {
-            std::cout << "Brute force estimation" << std::endl;
-
             //[J + Rc]^-1
             Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> j_Rc_inv = this->operator_comp().compute_penalty(m_omega_t,m_Xc_t,m_Wc,m_Xc,m_omega,m_Rc);
 
