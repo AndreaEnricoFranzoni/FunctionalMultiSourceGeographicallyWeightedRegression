@@ -27,7 +27,7 @@
 #include "../utility/concepts_fdagwr.hpp"
 
 #include "mesh.hpp"
-//#include "numerical_integration.hpp"
+#include "numerical_integration.hpp"
 #include "Adams_rule.hpp"
 
 using namespace Geometry;
