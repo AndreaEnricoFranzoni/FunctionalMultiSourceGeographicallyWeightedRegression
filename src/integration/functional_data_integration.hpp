@@ -27,7 +27,7 @@
 #include "../utility/concepts_fdagwr.hpp"
 
 #include "mesh.hpp"
-#include "numerical_integration.hpp"
+//#include "numerical_integration.hpp"
 #include "Adams_rule.hpp"
 
 using namespace Geometry;
@@ -53,7 +53,8 @@ public:
     fd_integration(double a, double b, int intervals, double target_error, int max_iterations):
         m_integration_domain(a,b), 
         m_integration_mesh(m_integration_domain,intervals),
-        m_integration_quadrature(Trapezoidal{},m_integration_mesh)
+        //m_integration_quadrature(Trapezoidal{},m_integration_mesh)
+        m_integration_quadrature(MidPoint{},m_integration_mesh)
         {}
 
     /*!Function to perform the integration*/
