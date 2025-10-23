@@ -515,7 +515,7 @@ wrap_beta_to_R_list(const BetasTuple& betas,
 
         //FMGWR
         else if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type >>,
-                                                         std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type >>>> ) 
+                                                         std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type >>>>> ) 
         {
             //stationary beta
             Rcpp::List beta_c = toRList(std::get<0>(tup),abscissas);
