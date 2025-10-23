@@ -29,7 +29,7 @@
 #include "mesh.hpp"
 #include "numerical_integration.hpp"
 #include "Adams_rule.hpp"
-#include "QuadratureRuleAdaptive.hpp"
+
 using namespace Geometry;
 using namespace apsc::NumericalIntegration;
 
@@ -53,8 +53,7 @@ public:
     fd_integration(double a, double b, int intervals, double target_error, int max_iterations):
         m_integration_domain(a,b), 
         m_integration_mesh(m_integration_domain,intervals),
-        m_integration_quadrature(QuadratureRuleAdaptive<Trapezoidal>(target_error, max_iterations), m_integration_mesh)
-        //m_integration_quadrature(Trapezoidal{},m_integration_mesh)
+        m_integration_quadrature(Trapezoidal{},m_integration_mesh)
         {}
 
     /*!Function to perform the integration*/
