@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -33,24 +33,39 @@
 
 
 
-//! A class for matrices of functions: STORING COLUMN WISE
 /*!
-  It is build around std::vector<double> and indeed
-  std::vector:double> is the only variable member of the class.
- */
+* @file functional_matrix.hpp
+* @brief Contains the definition of a dense matrix containing univariate 1D domain std::function objects
+* @author Andrea Enrico Franzoni
+*/
+
+
+
+
+/*!
+* @class functional_matrix
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @brief Class for dense matrices storing, column-wise, univariate 1D domain std::function objects
+* @details Static polymorphism: deriving from a expression for expression templates
+* @note Functions are stored column-wise
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class functional_matrix : public Expr< functional_matrix<INPUT,OUTPUT>, INPUT, OUTPUT >
 {
-    //type of the function stored and its input
+    /*!std::function object stored*/
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    /*!std::function input type*/
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
-    //aliases for row expression
-    typedef RowView<F_OBJ> RowXpr;               //non-const         
-    typedef RowView<const F_OBJ> ConstRowXpr;    //const
-    //aliases for col expression
-    typedef ColView<F_OBJ> ColXpr;               //non-const 
-    typedef ColView<const F_OBJ> ConstColXpr;    //const
+    /*!Alias for row expression, non-const*/
+    typedef RowView<F_OBJ> RowXpr;              
+    /*!Alias for row expression, const*/    
+    typedef RowView<const F_OBJ> ConstRowXpr; 
+    /*!Alias for column expression, non-const*/
+    typedef ColView<F_OBJ> ColXpr;       
+    /*!Alias for column expression, const*/
+    typedef ColView<const F_OBJ> ConstColXpr;   
 
 
 private:
@@ -58,13 +73,21 @@ private:
     std::size_t m_rows;
     /*!Number of cols*/
     std::size_t m_cols;
-    /*!Matrix of functions*/
+    /*!Container for the std::function. The storage order is column-wise*/
     std::vector< F_OBJ > m_data;
 
 public:
-    //! default constructor
+    /*!
+    * @brief Default constructor
+    */
     functional_matrix() = default;
-    //! A vector may be converted to a Vector
+
+    /*!
+    * @brief Constructor
+    * @param fm vector of std::function objects
+    * @param n_rows number of rows
+    * @param n_cols number of columns
+    */
     functional_matrix(std::vector< F_OBJ > const &fm,
                       std::size_t n_rows,
                       std::size_t n_cols)
@@ -73,7 +96,13 @@ public:
                     //cheack input consistency
                     assert((void("Number of rows times number of cols has to be equal to the number of stored functions"), m_rows * m_cols == m_data.size()));
                 }
-    //! A vector may also be moved in a Vector
+
+    /*!
+    * @brief Constructor with move semantic
+    * @param fm vector of std::function objects
+    * @param n_rows number of rows
+    * @param n_cols number of columns
+    */
     functional_matrix(std::vector< F_OBJ > &&fm,
                       std::size_t n_rows,
                       std::size_t n_cols) 
@@ -82,43 +111,72 @@ public:
                     //cheack input consistency
                     assert((void("Number of rows times number of cols has to be equal to the number of stored functions"), m_rows * m_cols == m_data.size()));
                 }
-    //! Construct a Vector of n elements initialised by value   //DA METTERE IL DEFAULT f=[](const INPUT &){return static_cast<OUTPUT>(1.0);} 
+
+    /*!
+    * @brief Constructor that initializes all the matrix elements with the same std::function object
+    * @param n_rows number of rows
+    * @param n_cols number of columns
+    * @param f value used to initialize all the matrices elements (default is unit function)
+    */
     functional_matrix(std::size_t n_rows, std::size_t n_cols, F_OBJ f = [](F_OBJ_INPUT){return static_cast<OUTPUT>(1);}) : m_rows(n_rows), m_cols(n_cols), m_data(m_rows*m_cols,f)   {};
-    //! Copy constructor
+
+    /*!
+    * @brief Copy constructor
+    */
     functional_matrix(functional_matrix const &) = default;
-    //! Move constructor
+
+    /*!
+    * @brief Move constructor
+    */
     functional_matrix(functional_matrix &&) = default;
-    //! Copy assign
+
+    /*!
+    * @brief Copy assignment
+    */
     functional_matrix &operator=(functional_matrix const &) = default;
-    //! Move assign
+
+    /*!
+    * @brief Move assignment
+    */
     functional_matrix &operator=(functional_matrix &&) = default;
 
-    //! I may build a Vector from an expression!
+    /*!
+    * @brief Constructor that builds a functional_matrix from an Expr 
+    * @tparam T template param indicating the derived type from expression from which the cast is done
+    * @param e expression from which constructing a functional_matrix
+    * @details necessary for ETs design
+    */
     template <class T> 
     functional_matrix(const Expr<T,INPUT,OUTPUT> &e)
         :   m_data()
     {
-        const T &et(e); // casting!
+        //casting
+        const T &et(e);                                     
         m_rows = et.rows(); 
         m_cols = et.cols(); 
         m_data.reserve(et.size());
-        for (std::size_t j = 0; j < et.cols(); ++j){        //looping in this order to store objects column-wise
+        //storing column-wise
+        for (std::size_t j = 0; j < et.cols(); ++j){       
             for(std::size_t i = 0; i < et.rows(); ++i){
                 m_data.emplace_back(et(i,j));}}
     }
 
-    //! Assigning an expression
     /*!
-        This method is fundamental for expression template technique.
+    * @brief Copy assignment from an Expr
+    * @tparam T template param indicating the derived type from expression from which the cast is done
+    * @param e expression from which constructing a functional_matrix
+    * @details necessary for ETs design
     */
     template <class T>
     functional_matrix &
     operator=(const Expr<T,INPUT,OUTPUT> &e)
     {
-        const T &et(e); // casting!
+        //casting
+        const T &et(e); 
         m_rows = et.rows(); 
         m_cols = et.cols();
         m_data.resize(et.size());
+        //copying column-wise
         for(std::size_t i = 0; i < et.rows(); ++i){   
             for (std::size_t j = 0; j < et.cols(); ++j){
                 m_data[j * et.rows() + i] = et(i,j);}}
@@ -126,7 +184,10 @@ public:
     }
 
     /*!
-    * @brief Returns element (i,j)
+    * @brief Returns element (i,j) of the matrix, non-const version
+    * @param i row index
+    * @param j column index
+    * @return a refence to std::function in position (i,j)
     */
     F_OBJ &
     operator()
@@ -136,7 +197,10 @@ public:
     }
 
     /*!
-    * @brief Returns element (i,j) (const version)
+    * @brief Returns element (i,j) of the matrix, const version
+    * @param i row index
+    * @param j column index
+    * @return the std::function in position (i,j), read-only
     */
     F_OBJ
     operator()
@@ -148,6 +212,7 @@ public:
 
     /*!
     * @brief Rows size
+    * @return the number of rows
     */
     std::size_t
     rows() 
@@ -157,7 +222,8 @@ public:
     }
 
     /*!
-    * @brief Cols size
+    * @brief Columns size
+    * @return the number of columns
     */
     std::size_t
     cols() 
@@ -168,6 +234,7 @@ public:
 
     /*!
     * @brief Number of elements
+    * @return the total number of stored elements
     */
     std::size_t
     size() 
@@ -177,7 +244,9 @@ public:
     }
 
     /*!
-    * @brief Getting row idx-th, view
+    * @brief View of the idx-th row, non-const
+    * @param idx the row index
+    * @return a view to the idx-th row
     */
     RowXpr
     row(std::size_t idx)
@@ -186,7 +255,9 @@ public:
     }
 
     /*!
-    * @brief Getting row idx-th, view, const
+    * @brief View of the idx-th row, const
+    * @param idx the row index
+    * @return a view to the idx-th row, read-only
     */
     ConstRowXpr
     row(std::size_t idx)
@@ -196,7 +267,9 @@ public:
     }
 
     /*!
-    * @brief Getting col idx-th, view
+    * @brief View of the idx-th column, non-const
+    * @param idx the column index
+    * @return a view to the idx-th column
     */
     ColXpr
     col(std::size_t idx)
@@ -205,7 +278,9 @@ public:
     }
 
     /*!
-    * @brief Getting col idx-th, view, const
+    * @brief View of the idx-th column, const
+    * @param idx the column index
+    * @return a view to the idx-th column, read-only
     */
     ConstColXpr
     col(std::size_t idx)
@@ -215,7 +290,9 @@ public:
     }
 
     /*!
-    * @brief Change all the elements in row idx-th
+    * @brief Substituting the idx-th row
+    * @param new_row a vector of std::function, containing the row
+    * @param idx index of the row to be substituted
     */
     void
     row_sub(const std::vector< F_OBJ > &new_row, std::size_t idx)
@@ -231,7 +308,9 @@ public:
     }
 
     /*!
-    * @brief Change all the elements in col idx-th
+    * @brief Substituting the idx-th column
+    * @param new_col a vector of std::function, containing the column 
+    * @param idx index of the column to be substituted
     */
     void
     col_sub(const std::vector< F_OBJ > &new_col, std::size_t idx)
@@ -276,7 +355,9 @@ public:
     }
 
     /*!
-    * @brief Tranpost of the functional matrix (copy of it)
+    * @brief Tranpost of the functional matrix 
+    * @return a copy of the transpost 
+    * @note does not transpose the original object
     */
     functional_matrix<INPUT,OUTPUT>
     transpose()
@@ -290,6 +371,7 @@ public:
 
     /*!
     * @brief Reducing all the elements of the matrix by summation
+    * @return the sum function of all the elements in the matrix
     */
     F_OBJ
     reduce()
@@ -303,29 +385,33 @@ public:
         return std::reduce(this->m_data.cbegin(),this->m_data.cend(),f_null,f_sum);
     }
     
-
-    //! May be cast to a std::vector &
     /*!
-    This way I can use all the methods of a std::vector!
-    @code
-    Vector a;
-    std::vector<double> & av(a); // you cannot use {a} here!
-    av.emplace_back(10.0);
-    @endcode
+    * @brief Casting operator to a std::vector &, const version
+    * @return a const reference to a std::vector of std::function, containing the function stored into the matrix
+    * @code
+    * functional_matrix<INPUT,OUTPUT>  fm;
+    * std::vector< FUNC_OBJ<INPUT,OUTPUT> > & fm_v(fm); 
+    * FUNC_OBJ<INPUT,OUTPUT> f = [](fm_utils::input_param_t<FUNC_OBJ<INPUT,OUTPUT>> x){return static_cast<OUTPUT>(10.0);};
+    * fm_v.emplace_back(f);
+    * @endcode
     */
     operator std::vector< F_OBJ > const &() const { return m_data; }
-    //! Non const version of casting operator
+
+    /*!
+    * @brief Casting operator to a std::vector &, non-const version
+    * @return a reference to a std::vector of std::function, containing the function stored into the matrix
+    */
     operator std::vector< F_OBJ > &() { return m_data; }
   
-    //! This does the same as casting but with a method
     /*!
-    Only to show that you do not need casting operators, if you find them
-    confusing (or if the compiler gets confused!)
-    @code
-    Vector a;
-    std::vector<double> & av{a.as_vector()}; // Here you may use {}! (but ()
-    works as well!) av.emplace_back(10.0);
-    @endcode
+    * @brief Casting to a std::vector &, const version
+    * @return a const reference to a std::vector of std::function, containing the function stored into the matrix
+    * @code
+    * functional_matrix<INPUT,OUTPUT>  fm;
+    * std::vector< FUNC_OBJ<INPUT,OUTPUT> > & fm_v{fm.sa_vector()}; 
+    * FUNC_OBJ<INPUT,OUTPUT> f = [](fm_utils::input_param_t<FUNC_OBJ<INPUT,OUTPUT>> x){return static_cast<OUTPUT>(10.0);};
+    * fm_v.emplace_back(f);
+    * @endcode
     */
     std::vector< F_OBJ > const &
     as_vector() 
@@ -333,7 +419,11 @@ public:
     {
         return m_data;
     }
-    //! Non const version of casting operator
+
+    /*!
+    * @brief Casting to a std::vector &, non-const version
+    * @return a const reference to a std::vector of std::function, containing the function stored into the matrix
+    */
     std::vector< F_OBJ > &
     as_vector()
     {
@@ -341,11 +431,15 @@ public:
     }
 };
 
-//! I want to use range for loops with Vector objects.
+
 /*!
-  Note the use of declval. I do not need to istantiate a vector to interrogate
-  the type returned by begin!
- */
+* @brief Function to use range for loops over the stored functions, begin iterator
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param fm a reference to a functional_matrix object
+* @return an iterator to the begin of the container storing the std::function object
+* @note use of declval in order to avoid to istantiate a vector to interrogate the type returned by begin
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline 
@@ -353,12 +447,18 @@ auto
 begin(functional_matrix<INPUT,OUTPUT> &fm) 
     -> decltype(std::declval< std::vector<FUNC_OBJ<INPUT,OUTPUT>> >().begin())
 {
-  // I exploit the fact tha I have a casting operator to std::vector<double>&
+  //exploiting the casting operator to std::vector<FUNC_OBJ<INPUT,OUTPUT>>&
   return static_cast<std::vector<FUNC_OBJ<INPUT,OUTPUT>> &>(fm).begin();
-  // If you prefer
-  // return fm.as_vector().begin();
 }
 
+/*!
+* @brief Function to use range for loops over the stored functions, end iterator
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param fm a reference to a functional_matrix object
+* @return an iterator to the end of the container storing the std::function object
+* @note use of declval in order to avoid to istantiate a vector to interrogate the type returned by begin
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline 
@@ -366,10 +466,18 @@ auto
 end(functional_matrix<INPUT,OUTPUT> &fm) 
     -> decltype(std::declval< std::vector<FUNC_OBJ<INPUT,OUTPUT>> >().end())
 {
-  // I exploit the fact tha I have a casting operator to std::vector<double>&
+  //exploiting the casting operator to std::vector<FUNC_OBJ<INPUT,OUTPUT>>&
   return static_cast<std::vector<FUNC_OBJ<INPUT,OUTPUT>> &>(fm).end();
 }
 
+/*!
+* @brief Function to use range for loops over the stored functions, const begin iterator
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param fm a const reference to a functional_matrix object
+* @return a constant iterator to the begin of the container storing the std::function object
+* @note use of declval in order to avoid to istantiate a vector to interrogate the type returned by begin
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline 
@@ -377,11 +485,18 @@ auto
 cbegin(functional_matrix<INPUT,OUTPUT> const &fm)
   -> decltype(std::declval< std::vector<FUNC_OBJ<INPUT,OUTPUT>> >().cbegin())
 {
-  // I exploit the fact tha I have a casting operator to std::vector<double>
-  // const &
+  //exploiting the casting operator to std::vector<FUNC_OBJ<INPUT,OUTPUT>>const &
   return static_cast<std::vector<FUNC_OBJ<INPUT,OUTPUT>> const &>(fm).cbegin();
 }
 
+/*!
+* @brief Function to use range for loops over the stored functions, const end iterator
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param fm a const reference to a functional_matrix object
+* @return a constant iterator to the end of the container storing the std::function object
+* @note use of declval in order to avoid to istantiate a vector to interrogate the type returned by begin
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline 
@@ -389,12 +504,17 @@ auto
 cend(functional_matrix<INPUT,OUTPUT> const &fm) 
     -> decltype(std::declval< std::vector<FUNC_OBJ<INPUT,OUTPUT>> >().cend())
 {
-  // I exploit the fact tha I have a casting operator to std::vector<double>
-  // const &
+  //exploiting the casting operator to std::vector<FUNC_OBJ<INPUT,OUTPUT>>const &
   return static_cast<std::vector<FUNC_OBJ<INPUT,OUTPUT>> const &>(fm).cend();
 }
 
-
+/*!
+* @brief Function to convert a matrix of scalar into a functional_matrix containing constant functions
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param Ms const reference to an Eigen::Matrix< OUTPUT, Eigen::Dynamic, Eigen::Dynamic >
+* @return a functional_matrix containing constant functions with the values in Ms
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline  

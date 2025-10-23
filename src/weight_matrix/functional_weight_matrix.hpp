@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -32,30 +32,36 @@
 
 /*!
 * @file functional_weight_matrix.hpp
-* @brief Construct the weight matrix for performing the geographically weighted regression
+* @brief Construct the functional weight matrix for performing functional weighted regression
 * @author Andrea Enrico Franzoni
 */
 
 
 
 /*!
-* @brief Indicating the container to storing the functional weight matrix
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @tparam stationarity_t covariate type
+* @brief std::conditional to indicate the container used to storie the functional weight matrix. Vector of functional matrices for stationary covariates, containing the weights. Vector, one element for each statistical unit, of vector of functional matrices for non-stationary covariates
 */
 template <typename INPUT = double, typename OUTPUT = double, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY>
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 using WeightMatrixType = std::conditional<stationarity_t == FDAGWR_COVARIATES_TYPES::STATIONARY,
-                                          std::vector< FUNC_OBJ< INPUT,OUTPUT > >,        //se stazionario, ogni elemento del vettore corrisponde ad un valore dell'ascissa, e di conseguenza vi è la giusta matrice peso
+                                          std::vector< FUNC_OBJ< INPUT,OUTPUT > >,        
                                           std::vector< std::vector< FUNC_OBJ< INPUT,OUTPUT > >>>::type;
 
 
 
 /*!
-* @class weight_matrix_base
-* @brief Template class for constructing the weight matrix: a squared matrix containing the weight for each unit
+* @class functional_weight_matrix_base
 * @tparam D type of the derived class (for static polymorphism thorugh CRTP):
-*         - stationary: 'weight_matrix_stat'
-*         - non stationary: 'weight_matrix_no_stat'
-* @tparam kernel_func kernel function for the evaluation of the weights (enumerator)
+*         - stationary: 'functional_weight_matrix_stationary'
+*         - non stationary: 'functional_weight_matrix_non_stationary'
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @tparam domain_type geometry of the basis domain
+* @tparam basis_type type of basis used to construct the functional weights
+* @brief Base class for constructing the functional weight matrix
 * @details It is the base class. Polymorphism is known at compile time thanks to Curiously Recursive Template Pattern (CRTP) 
 */
 template< class D, typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis >
@@ -64,7 +70,7 @@ class functional_weight_matrix_base
 {
 
 private:
-    /*!Matrix containing the stationary weights: abscissa x units*/
+    /*!Functional response reconstruction weights*/
     functional_data<domain_type,basis_type> m_y_recostruction_weights_fd;
     /*!Number of statistical units*/
     std::size_t m_n;
@@ -72,9 +78,10 @@ private:
     int m_number_threads;
 
 public:
+
     /*!
-    * @brief Constructor for the weight matrix (diagonal matrix containing the weight for each unit)
-    * @param n number of statistical units
+    * @brief Constructor
+    * @param y_recostruction_weights_fd functional response reconstruction weights
     * @param number_threads number of threads for OMP
     */
     functional_weight_matrix_base(const functional_data<domain_type,basis_type> &y_recostruction_weights_fd,
@@ -86,14 +93,14 @@ public:
         {}
 
     /*!
-    * @brief Getter for the coefficient-stationary-weights matrix
-    * @return the private m_coeff_stat_weights
+    * @brief Getter for the functional response reconstruction weights
+    * @return the private m_y_recostruction_weights_fd
     */
     const functional_data<domain_type,basis_type>& y_recostruction_weights_fd() const {return m_y_recostruction_weights_fd;}
 
     /*!
-    * @brief Getter for the number of available evaluations of the stationary weights
-    * @return the private m_number_abscissa_evaluations
+    * @brief Getter for the number of statistical units
+    * @return the private m_n
     */
     std::size_t n() const {return m_n;}
 
@@ -104,7 +111,7 @@ public:
     inline int number_threads() const {return m_number_threads;}
 
     /*!
-    * @brief Computing weights accordingly if they are only stationary or not
+    * @brief Computing functional weights accordingly if they are only stationary or not
     * @details Entails downcasting of base class with a static cast of pointer to the derived-known-at-compile-time class, CRTP fashion
     */
     inline
@@ -114,6 +121,9 @@ public:
         static_cast<D*>(this)->computing_weights();   //solving depends on child class: downcasting with CRTP of base to derived
     }
 
+    /*!
+    * @brief Computing functional weights (non-stationary) within the training set and the prediction set
+    */
     inline
     void 
     compute_weights_pred() 

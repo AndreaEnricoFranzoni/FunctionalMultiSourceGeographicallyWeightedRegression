@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -25,12 +25,28 @@
 #include "../basis/basis_bspline_systems.hpp"
 #include "penalization_matrix_penalties_policies.hpp"
 
+/*!
+* @file penalization_matrix_penalties_comps.hpp
+* @brief Contains the functor to use the correct policy to compute penalizations
+* @author Andrea Enrico Franzoni
+*/
 
+
+/*!
+* @class penalty_computation
+* @tparam PENALTY_ORDER_policy the struct containing the policy to compute the penalties
+* @brief The functor to compute the penalties accordingly to the policy
+*/
 template <class PENALTY_ORDER_policy> 
 class penalty_computation
 {
 public:
   
+  /*!
+  * @brief Computing the penalties accordingly to the policy
+  * @param bs a basis_systems of bsplines
+  * @param system_number the number of the basis system
+  */
   FDAGWR_TRAITS::Sparse_Matrix 
   operator()
   (const basis_systems< FDAGWR_TRAITS::basis_geometry, bsplines_basis > &bs, std::size_t system_number) 
@@ -39,7 +55,7 @@ public:
     return penalty_computing(bs, system_number);}
   
 private:
-  /*!Policy to correctly compute the penalization*/
+  /*!Policy to compute the penalization*/
   PENALTY_ORDER_policy penalty_computing;
 };
 

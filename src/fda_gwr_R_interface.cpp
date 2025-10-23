@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -54,6 +54,15 @@
 #include "fwr_predictor/fwr_predictor_factory.hpp"
 
 
+/*!
+* @file fda_gwr_R_interface.cpp
+* @brief Contains the R-interfaced functions of the package 'fdagwr', which implement Functional Geographical Weighted Regression
+*        coefficients estimation, for different (multi-source (FMSGWR), mixed (FMGWR), geographically weighted (FGWR) and 
+*        weighted (FWR)) functional regression models.
+* @author Andrea Enrico Franzoni
+*/
+
+
 
 
 using namespace Rcpp;
@@ -63,7 +72,7 @@ using namespace Rcpp;
 
 
 /*!
-* @brief Function to check package installation
+* @brief Function to check fdagwr package installation
 */
 //
 // [[Rcpp::export]]
@@ -71,17 +80,19 @@ void installation_fdagwr(){   Rcout << "fdagwr has been installed"<< std::endl;}
 
 
 /*!
-* @brief Function to perform Functional Multi-Source Geographically Weighted Regression.
-* @param y_points matrix of double containing the raw response: each row represents a specific abscissa for which the response evaluation is available, each column a statistical unit. Response isa already reconstructed.
-* @param t_points vector of double with the abscissa points with respect which the raw evaluations of y_points are available (length of t_points is equal to the number of rows of y_points).
-* @param left_extreme_domain double indicating the left extreme of the functional data (not necessarily the smaller element in t_points).
-* @param right_extreme_domain double indicating the right extreme of the functional data (not necessarily the biggest element in t_points).
+* @brief Fitting a Functional Multi-Source Geographically Weighted Regression ESC model. The covariates are functional objects, divided into
+*        three categories: stationary covariates (C), constant over space, event-dependent covariates (E), that vary depending on the spatial coordinates of the event, 
+*        station-dependent covariates (S), that vary depending on the spatial coordinates of the stations that measure the event. Regression coefficients are estimated 
+*        in the following order: C, S, E. The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024) (link below)
+* @param y_points matrix of double containing the raw response: each row represents a specific abscissa for which the response evaluation is available, each column a statistical unit. Response is a already reconstructed.
+* @param t_points vector of double with the abscissa points with respect of the raw evaluations of y_points are available (length of t_points is equal to the number of rows of y_points).
+* @param left_extreme_domain double indicating the left extreme of the functional data domain (not necessarily the smaller element in t_points).
+* @param right_extreme_domain double indicating the right extreme of the functional data domain (not necessarily the biggest element in t_points).
 * @param coeff_y_points matrix of double containing the coefficient of response's basis expansion: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
 * @param knots_y_points vector of double with the abscissa points with respect which the basis expansions of the response and response reconstruction weights are performed (all elements contained in [a,b]). 
 * @param degree_basis_y_points non-negative integer: the degree of the basis used for the basis expansion of the (functional) response. Default explained below (can be NULL).
 * @param n_basis_y_points positive integer: number of basis for the basis expansion of the (functional) response. It must match number of rows of coeff_y_points. Default explained below (can be NULL).
 * @param coeff_rec_weights_y_points matrix of double containing the coefficients of the weights to reconstruct the (functional) response: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
-*                                   More about response reconstruction weights meaning can be found in the link below.
 * @param degree_basis_rec_weights_y_points non-negative integer: the degree of the basis used for response reconstruction weights. Default explained below (can be NULL).
 * @param n_basis_rec_weights_y_points positive integer: number of basis for the basis expansion of response reconstruction weights. It must match number of rows of coeff_rec_weights_y_points. Default explained below (can be NULL).
 * @param coeff_stationary_cov list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.

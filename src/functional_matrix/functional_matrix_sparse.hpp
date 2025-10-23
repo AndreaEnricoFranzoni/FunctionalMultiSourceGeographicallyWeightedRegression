@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -31,18 +31,36 @@
 #include <iostream>
 
 
-//! A class for sparse matrices of functions, in compress format: STORING COLUMN WISE (CSC)
+/*!
+* @file functional_matrix_sparse.hpp
+* @brief Contains the definition of a sparse matrix containing univariate 1D domain std::function objects
+* @author Andrea Enrico Franzoni
+*/
+
+
+
+
+/*!
+* @class functional_matrix_sparse
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @brief Class for sparse matrices storing, column-wise, in compress format (CSC), univariate 1D domain std::function objects
+* @details Static polymorphism: deriving from a expression for expression templates
+* @note Functions are stored column-wise, compress format (CSC)
+* @todo PROBLEM IN CONVERTING FROM DENSE TO SPARSE
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class functional_matrix_sparse : public Expr< functional_matrix_sparse<INPUT,OUTPUT>, INPUT, OUTPUT >
 {
-    //type of the function stored
+    /*!std::function object stored*/
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    /*!std::function input type*/
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
-    //null function (const version)
+    /*!null function (const version)*/
     inline static const F_OBJ m_null_function = [](F_OBJ_INPUT x){ return static_cast<OUTPUT>(0);};
-    //null function (non-const verion)
+    /*!null function (non-const verion)*/
     inline static F_OBJ m_null_function_non_const = [](F_OBJ_INPUT x){ return static_cast<OUTPUT>(0);};
 
 private:
@@ -59,13 +77,24 @@ private:
     * @example element 0-th of m_cols_idx indicates how many elements are present, in total before the first column. Element 1st indicates how many elements are present, in total before the second column
     */  
     std::vector<std::size_t> m_cols_idx;
-    /*!Vector that contains the non-null functions. Size is nnz.*/
+    /*!Container for the std::function. The storage order is column-wise (CSC)*/
     std::vector< F_OBJ > m_data;    
 
 public:
-    //! default constructor
+
+    /*!
+    * @brief Default constructor
+    */
     functional_matrix_sparse() = default;
-    //! A vector may be converted to a Vector
+
+    /*!
+    * @brief Constructor
+    * @param fm vector of std::function objects
+    * @param n_rows number of rows
+    * @param n_cols number of columns
+    * @param rows_idx vector of integers containing, for each element in fm, in which row it is (size if size of fm)
+    * @param cols_idx vector of integers containing, for each column, the cumulative number of elements up to that column (size if n_cols + 1)
+    */
     functional_matrix_sparse(std::vector< F_OBJ > const &fm,
                              std::size_t n_rows,
                              std::size_t n_cols,
@@ -80,7 +109,15 @@ public:
                     assert(m_cols_idx.front() == 0);
                     assert(m_cols_idx.back() == m_nnz);
                 }
-    //! Move constructor
+
+    /*!
+    * @brief Constructor with move semantic
+    * @param fm vector of std::function objects
+    * @param n_rows number of rows
+    * @param n_cols number of columns
+    * @param rows_idx vector of integers containing, for each element in fm, in which row it is (size if size of fm)
+    * @param cols_idx vector of integers containing, for each column, the cumulative number of elements up to that column (size if n_cols + 1)
+    */
     functional_matrix_sparse(std::vector< F_OBJ > &&fm,
                              std::size_t n_rows,
                              std::size_t n_cols,
@@ -95,22 +132,41 @@ public:
                     assert(m_cols_idx.front() == 0);
                     assert(m_cols_idx.back() == m_nnz);
                 }
-    //! Copy constructor
+
+    /*!
+    * @brief Copy constructor
+    */
     functional_matrix_sparse(functional_matrix_sparse const &) = default;
-    //! Move constructor
+
+    /*!
+    * @brief Move constructor
+    */    
     functional_matrix_sparse(functional_matrix_sparse &&) = default;
-    //! Copy assign
+
+    /*!
+    * @brief Copy assignment
+    */    
     functional_matrix_sparse &operator=(functional_matrix_sparse const &) = default;
-    //! Move assign
+
+    /*!
+    * @brief Move assignment
+    */    
     functional_matrix_sparse &operator=(functional_matrix_sparse &&) = default;
 
 
-    //! I may build a Vector from an expression!    TODO
+    /*!
+    * @brief Constructor that builds a functional_matrix_sparse from an Expr 
+    * @tparam T template param indicating the derived type from expression from which the cast is done
+    * @param e expression from which constructing a functional_matrix_sparse
+    * @details necessary for ETs design
+    * @todo IT LACKS A WAY TO CHOOSE IF INSERTING A FUNCTION ONLY IF IT IS NON_null_f: RETURNS A SPARSE WITH THE 0s SAVES
+    */
     template <class T> 
     functional_matrix_sparse(const Expr<T,INPUT,OUTPUT> &e)
         :   m_data()
     {
-        const T &et(e); // casting!
+        //casting
+        const T &et(e); 
         m_rows = et.rows(); 
         m_cols = et.cols();
         m_nnz = et.size(); 
@@ -126,9 +182,7 @@ public:
         //looping as this for column-wise storage
         for(std::size_t j = 0; j < et.cols(); ++j){
             for(std::size_t i = 0; i < et.rows(); ++i){
-                //il confronto con funzioni è un casino. Siccome non posso confrontare l'indirizzo direttamente (&et(i,j))
-                //(non prende una non-const ref da un temporaneo o da un const)
-                //inserisco, confronto, e poi tolgo: NON FUNZIONA
+                //inserting only if non-null: IT LACKS THIS IF CONDITION (NOW IT COMPARE THE ADDRESS OF THE NON CONST NULL FUNCTION)
                 m_data.emplace_back(et(i,j));
                 if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)
                 {
@@ -144,15 +198,19 @@ public:
         }
     }
 
-    //! Assigning an expression                     TODO
     /*!
-        This method is fundamental for expression template technique.
+    * @brief Copy assignment from an Expr
+    * @tparam T template param indicating the derived type from expression from which the cast is done
+    * @param e expression from which constructing a functional_matrix_sparse
+    * @details necessary for ETs design
+    * @todo IT LACKS A WAY TO CHOOSE IF INSERTING A FUNCTION ONLY IF IT IS NON_null_f: RETURNS A SPARSE WITH THE 0s SAVES
     */
     template <class T>
     functional_matrix_sparse &
     operator=(const Expr<T,INPUT,OUTPUT> &e)
     {
-        const T &et(e); // casting!
+        //casting
+        const T &et(e); 
         m_rows = et.rows(); 
         m_cols = et.cols();
         m_nnz = et.size();
@@ -171,7 +229,8 @@ public:
             for(std::size_t i = 0; i < et.rows(); ++i)
             {
                 m_data.emplace_back(et(i,j));
-                if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)    // NON FUNZIONA: RITORNA UNA SPARSA CON GLI 0 PERO' SALVATI
+                //inserting only if non-null: IT LACKS THIS IF CONDITION (NOW IT COMPARE THE ADDRESS OF THE NON CONST NULL FUNCTION)
+                if(&m_data.back() == &functional_matrix_sparse<INPUT,OUTPUT>::m_null_function_non_const)    
                 {
                     m_data.pop_back();
                 }
@@ -187,11 +246,10 @@ public:
         return *this;
     }
 
-
-
-    //AUXILIARY FUNCTIONS FOR CHECKING THE PRESENCES
     /*!
     * @brief Checking presence of row idx-th: at least a nnz element in that row.
+    * @param idx index of the row whom presence is checked
+    * @return true if at least a non-zero element is in that row, false otherwise
     */
     bool
     check_row_presence(std::size_t idx) 
@@ -204,7 +262,9 @@ public:
     }
 
     /*!
-    * @brief Checking presence of col idx-th: at least a nnz element in that col.
+    * @brief Checking presence of column idx-th: at least a nnz element in that column.
+    * @param idx index of the column whom presence is checked
+    * @return true if at least a non-zero element is in that column, false otherwise
     */
     bool
     check_col_presence(std::size_t idx) 
@@ -217,7 +277,10 @@ public:
     }
 
     /*!
-    * @brief Checking for the presence of the element in position (i,j).
+    * @brief Checking presence of element (i,j)
+    * @param i index of the row of the element whom presence is checked
+    * @param j index of the column of the element whom presence is checked
+    * @return true if the element is present, false otherwise
     */
     bool
     check_elem_presence(std::size_t i, std::size_t j) 
@@ -232,7 +295,11 @@ public:
     }
 
     /*!
-    * @brief Returns element (i,j) (being the sparse matrix compressed, it is possible to modify only element already there)
+    * @brief Returns a reference to the element (i,j), non-const reference
+    * @param i index of the element row
+    * @param j index of the element column
+    * @return a reference to the element (i,j)
+    * @note being the sparse matrix compressed, it is possible to modify only element already there
     */
     F_OBJ &
     operator()
@@ -251,7 +318,10 @@ public:
     }
 
     /*!
-    * @brief Returns element (i,j) (const version) 
+    * @brief Returns a reference to the element (i,j), const reference
+    * @param i index of the element row
+    * @param j index of the element column
+    * @return a const reference to the element (i,j)
     */
     F_OBJ
     operator()
@@ -272,6 +342,7 @@ public:
 
     /*!
     * @brief Rows size
+    * @return the number of rows
     */
     std::size_t
     rows() 
@@ -282,6 +353,7 @@ public:
 
     /*!
     * @brief Cols size
+    * @return the number of columns
     */
     std::size_t
     cols() 
@@ -291,7 +363,8 @@ public:
     }
 
     /*!
-    * @brief Number of elements
+    * @brief Number of elements stored
+    * @return the number of non-zero elements, elements actually stored
     */
     std::size_t
     size() 
@@ -302,6 +375,7 @@ public:
 
     /*!
     * @brief Row indices of the non-zero elements
+    * @return a std::vector with the row indeces of the stored elements
     */
     std::vector<std::size_t>
     rows_idx()
@@ -311,7 +385,8 @@ public:
     }
 
     /*!
-    * @brief Cumulative number of elements up to col i-th
+    * @brief Cumulative number of elements up to column i-th
+    * @return a std::vector with the cumulative number of elements stored up to column i-th
     */
     std::vector<std::size_t>
     cols_idx()
@@ -321,7 +396,7 @@ public:
     }
 
     /*!
-    * @brief Transposing the functional matrix
+    * @brief Transposing the functional sparse matrix
     */
     void
     transposing()
@@ -423,7 +498,9 @@ public:
     }
 
     /*!
-    * @brief Tranpost of the functional matrix (copy of it)
+    * @brief Tranpost of the functional sparse matrix 
+    * @return a copy of the transpost 
+    * @note does not transpose the original object
     */
     functional_matrix_sparse<INPUT,OUTPUT>
     transpose()
@@ -435,28 +512,33 @@ public:
         return transpost_fm;
     }
 
-    //! May be cast to a std::vector &
     /*!
-    This way I can use all the methods of a std::vector!
-    @code
-    Vector a;
-    std::vector<double> & av(a); // you cannot use {a} here!
-    av.emplace_back(10.0);
-    @endcode
+    * @brief Casting operator to a std::vector &, const version
+    * @return a const reference to a std::vector of std::function, containing the function stored into the matrix
+    * @code
+    * functional_matrix_sparse<INPUT,OUTPUT>  fm;
+    * std::vector< FUNC_OBJ<INPUT,OUTPUT> > & fm_v(fm); 
+    * FUNC_OBJ<INPUT,OUTPUT> f = [](fm_utils::input_param_t<FUNC_OBJ<INPUT,OUTPUT>> x){return static_cast<OUTPUT>(10.0);};
+    * fm_v.emplace_back(f);
+    * @endcode
     */
     operator std::vector< F_OBJ > const &() const { return m_data; }
-    //! Non const version of casting operator
+
+    /*!
+    * @brief Casting operator to a std::vector &, non-const version
+    * @return a reference to a std::vector of std::function, containing the function stored into the matrix
+    */
     operator std::vector< F_OBJ > &() { return m_data; }
   
-    //! This does the same as casting but with a method
     /*!
-    Only to show that you do not need casting operators, if you find them
-    confusing (or if the compiler gets confused!)
-    @code
-    Vector a;
-    std::vector<double> & av{a.as_vector()}; // Here you may use {}! (but ()
-    works as well!) av.emplace_back(10.0);
-    @endcode
+    * @brief Casting to a std::vector &, const version
+    * @return a const reference to a std::vector of std::function, containing the function stored into the matrix
+    * @code
+    * functional_matrix_sparse<INPUT,OUTPUT>  fm;
+    * std::vector< FUNC_OBJ<INPUT,OUTPUT> > & fm_v{fm.sa_vector()}; 
+    * FUNC_OBJ<INPUT,OUTPUT> f = [](fm_utils::input_param_t<FUNC_OBJ<INPUT,OUTPUT>> x){return static_cast<OUTPUT>(10.0);};
+    * fm_v.emplace_back(f);
+    * @endcode
     */
     std::vector< F_OBJ > const &
     as_vector() 
@@ -464,7 +546,11 @@ public:
     {
         return m_data;
     }
-    //! Non const version of casting operator
+
+    /*!
+    * @brief Casting to a std::vector &, non-const version
+    * @return a const reference to a std::vector of std::function, containing the function stored into the matrix
+    */
     std::vector< F_OBJ > &
     as_vector()
     {
@@ -473,11 +559,14 @@ public:
 };
 
 
-//! I want to use range for loops with Vector objects.
 /*!
-  Note the use of declval. I do not need to istantiate a vector to interrogate
-  the type returned by begin!
- */
+* @brief Function to use range for loops over the stored functions, begin iterator
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param fm a reference to a functional_matrix_sparse object
+* @return an iterator to the begin of the container storing the std::function object
+* @note use of declval in order to avoid to istantiate a vector to interrogate the type returned by begin
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline 
@@ -485,12 +574,18 @@ auto
 begin(functional_matrix_sparse<INPUT,OUTPUT> &fm) 
     -> decltype(std::declval< std::vector<FUNC_OBJ<INPUT,OUTPUT>> >().begin())
 {
-  // I exploit the fact tha I have a casting operator to std::vector<double>&
+  //exploiting the casting operator to std::vector<FUNC_OBJ<INPUT,OUTPUT>>&
   return static_cast<std::vector<FUNC_OBJ<INPUT,OUTPUT>> &>(fm).begin();
-  // If you prefer
-  // return fm.as_vector().begin();
 }
 
+/*!
+* @brief Function to use range for loops over the stored functions, end iterator
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param fm a reference to a functional_matrix_sparse object
+* @return an iterator to the end of the container storing the std::function object
+* @note use of declval in order to avoid to istantiate a vector to interrogate the type returned by begin
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline 
@@ -498,10 +593,18 @@ auto
 end(functional_matrix_sparse<INPUT,OUTPUT> &fm) 
     -> decltype(std::declval< std::vector<FUNC_OBJ<INPUT,OUTPUT>> >().end())
 {
-  // I exploit the fact tha I have a casting operator to std::vector<double>&
+  //exploiting the casting operator to std::vector<FUNC_OBJ<INPUT,OUTPUT>>&
   return static_cast<std::vector<FUNC_OBJ<INPUT,OUTPUT>> &>(fm).end();
 }
 
+/*!
+* @brief Function to use range for loops over the stored functions, const begin iterator
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param fm a const reference to a functional_matrix_sparse object
+* @return a constant iterator to the begin of the container storing the std::function object
+* @note use of declval in order to avoid to istantiate a vector to interrogate the type returned by begin
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline 
@@ -509,11 +612,18 @@ auto
 cbegin(functional_matrix_sparse<INPUT,OUTPUT> const &fm)
   -> decltype(std::declval< std::vector<FUNC_OBJ<INPUT,OUTPUT>> >().cbegin())
 {
-  // I exploit the fact tha I have a casting operator to std::vector<double>
-  // const &
+  //exploiting the casting operator to std::vector<FUNC_OBJ<INPUT,OUTPUT>>& const
   return static_cast<std::vector<FUNC_OBJ<INPUT,OUTPUT>> const &>(fm).cbegin();
 }
 
+/*!
+* @brief Function to use range for loops over the stored functions, const end iterator
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param fm a const reference to a functional_matrix_sparse object
+* @return a constant iterator to the end of the container storing the std::function object
+* @note use of declval in order to avoid to istantiate a vector to interrogate the type returned by begin
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 inline 
@@ -521,8 +631,7 @@ auto
 cend(functional_matrix_sparse<INPUT,OUTPUT> const &fm) 
     -> decltype(std::declval< std::vector<FUNC_OBJ<INPUT,OUTPUT>> >().cend())
 {
-  // I exploit the fact tha I have a casting operator to std::vector<double>
-  // const &
+  //exploiting the casting operator to std::vector<FUNC_OBJ<INPUT,OUTPUT>>& const
   return static_cast<std::vector<FUNC_OBJ<INPUT,OUTPUT>> const &>(fm).cend();
 }
 

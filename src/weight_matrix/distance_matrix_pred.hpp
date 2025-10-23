@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 #ifndef FDAGWR_DISTANCE_MATRIX_PRED_HPP
@@ -26,43 +26,52 @@
 #include <cassert>
 
 
+/*!
+* @file distance_matrix_pred.hpp
+* @brief Class for computing the distances within the statistical units of the fitted model and the one to be predicted
+* @author Andrea Enrico Franzoni
+*/
+
+
 
 /*!
-* Doing tag dispatching for the distance measure
-* @tparam err_eval: template parameter for the error evaluation strategy
+* @brief Tag dispatching for how to compute the distance measure
+* @tparam distance_measure: template parameter for the distance measure employed
 */
 template <DISTANCE_MEASURE distance_measure>
 using DISTANCE_MEASURE_T = std::integral_constant<DISTANCE_MEASURE, distance_measure>;
 
 
 
-
+/*!
+* @class distance_matrix_pred
+* @tparam distance_measure how to compute the distances within different units
+* @brief Class for constructing the distance matrix within statistical units used in the training stage (n_train) and the one to be predicted (n_pred): n_pred distance matrices of dim n_train x n_train
+*/
 template< DISTANCE_MEASURE distance_measure >
 class distance_matrix_pred
 {
 private:
 
-    //ogni vettore esterno rappresenta un'unità su cui fare pred: ogni elemento dell'interno sono distanze tra train e pred
+    /*!Every element of the outer vector represents a units to be predicted: every inner vector represent the distance matrix within that unit to be predicted and all the one in the training set*/
     std::vector< std::vector< double >> m_distances;
-
-    FDAGWR_TRAITS::Dense_Matrix m_coordinates_train;        //matrice numero unità nel train set x 2
-
+    /*!Matrix containing the trainig units coordinates, m_n_train x 2*/
+    FDAGWR_TRAITS::Dense_Matrix m_coordinates_train;        
+    /*!Number of units in the training set*/
     std::size_t m_n_train;
-
-    FDAGWR_TRAITS::Dense_Matrix m_coordinates_pred;         //matrice numero unità nel pred set x 2
-
+    /*!Matrix containing the to be predicted units coordinates, m_n_pred x 2*/
+    FDAGWR_TRAITS::Dense_Matrix m_coordinates_pred;        
+    /*!Number of units in the prediction set*/
     std::size_t m_n_pred;
 
     /*!
-    * @brief Evaluation of the Euclidean distance between two statistical units
-    * @param loc_i the first location (row of coordinates matrix)
-    * @param loc_j the second location (row of coordinates matrix)
+    * @brief Evaluation of the Euclidean distance between two units
+    * @param loc_i_pred the location in the prediction set (row of coordinates matrix of the to be predicted units)
+    * @param loc_j_train the location in the training set (row of coordinates matrix of the training units)
     * @return the pointwise distance within two locations
     * @details a tag dispatcher for the Euclidean distance is used
     */
     double pointwise_distance(std::size_t loc_i_pred, std::size_t loc_j_train, DISTANCE_MEASURE_T<DISTANCE_MEASURE::EUCLIDEAN>) const;
-
-
 
 public:
     /*!
@@ -72,6 +81,8 @@ public:
 
     /*!
     * @brief Constructor
+    * @param coordinates_train the coordinates of the training set units, n_train x 2
+    * @param coordinates_pred the coordinates of the prediction set units, n_pred x 2
     */
     template<typename COORDINATES_OBJ>
     distance_matrix_pred(COORDINATES_OBJ &&coordinates_train,
@@ -85,20 +96,17 @@ public:
                             assert((m_coordinates_train.cols() == 2) && (m_coordinates_pred.cols() == 2));
                          }
     
-
-
-
     /*!
     * @brief Evaluation of the distance between two statistical units
-    * @param loc_i the index of the first location
-    * @param loc_j the index of the second location
+    * @param loc_i_pred the location in the prediction set (row of coordinates matrix of the to be predicted units)
+    * @param loc_j_train the location in the training set (row of coordinates matrix of the training units)
     * @return the pointwise distance within two locations
     * @details a tag dispatcher for the desired distance computation is used
     */
     double pointwise_distance(std::size_t loc_i_pred, std::size_t loc_j_train) const { return pointwise_distance(loc_i_pred,loc_j_train,DISTANCE_MEASURE_T<distance_measure>{});};
 
     /*!
-    * Function that computes the distances within each pair of statistical units
+    * @brief Function that computes the distances within the prediction set units and all the one in the training set
     */
     void compute_distances();
 
@@ -108,8 +116,16 @@ public:
     */
     std::vector<std::vector<double>> distances() const {return m_distances;}
 
+    /*!
+    * @brief Getter for the number of statistical units in the training set
+    * @return the private m_n_train
+    */
     std::size_t n_train() const{ return m_n_train;}
 
+    /*!
+    * @brief Getter for the number of statistical units in the prediction set
+    * @return the private m_n_pred
+    */
     std::size_t n_pred() const{ return m_n_pred;}
 };
 

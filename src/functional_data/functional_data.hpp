@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -28,9 +28,19 @@
 #include "../basis/basis_include.hpp"
 
 
+/*!
+* @file functional_data.hpp
+* @brief Contains the class for representing a functional data 
+* @author Andrea Enrico Franzoni
+*/
+
+
 
 /*!
-* @brief The class describes n-statistical units referring to the same population: the basis system is the same for each one of them 
+* @class functional_data
+* @tparam domain_type the geometry of the basis of the functional datum
+* @tparam basis_type template template param describing the type of basis
+* @brief The class represents an univariate functional datum
 */
 template< class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis > 
     requires fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
@@ -45,12 +55,15 @@ private:
     std::size_t m_n;
     /*!Coefficients of basis expansion: each column a statistical unit, each row a coefficient for a specific base*/
     FDAGWR_TRAITS::Dense_Matrix m_fdata_coeff;
-    /*!Pointer to the basis: shared_ptr is chosen over unique_ptr since is easir to copy*/
+    /*!Pointer to the basis: shared_ptr is chosen over unique_ptr since is easier to copy*/
     std::shared_ptr<basis_type<domain_type>> m_fdata_basis;
 
 public:
     /*!
     * @brief Constructor
+    * @param fdata_coeff matrix containing the basis expansion coefficients: each column a statistical unit, each row a coefficient for a specific base*
+    * @param fdata_basis unique pointer pointing to the basis used for the functional datum
+    * @details universal constructor
     */
     template< typename _COEFF_OBJ_ >
     functional_data(_COEFF_OBJ_ && fdata_coeff,
@@ -68,31 +81,39 @@ public:
 
     /*!
     * @brief Getter for the basis domain left extreme
+    * @return the private m_a
     */
     double a() const {return m_a;}
 
     /*!
     * @brief Getter for the basis domain right extreme
+    * @return the private m_b
     */
     double b() const {return m_b;}
 
     /*!
     * @brief Getter for the number of statistical units
+    * @return the private m_n
     */
     std::size_t n() const {return m_n;}
 
     /*!
     * @brief Getter for the basis expansion coefficients
+    * @return the private m_fdata_coeff
     */
     const FDAGWR_TRAITS::Dense_Matrix & fdata_coeff() const {return m_fdata_coeff;}
 
     /*!
     * @brief Getter for the basis
+    * @return the private m_fdata_basis pointed object
     */
     const basis_type<domain_type> & fdata_basis() const {return *m_fdata_basis;}
 
     /*!
-    * @brief Evaluating the correct statistical unit
+    * @brief Evaluating a specific unit in a given location
+    * @param loc abscissa over which evaluating the fd
+    * @param unit_i unit evaluated
+    * @return the double with the evaluation
     */
     double
     eval(const double &loc, std::size_t unit_i)

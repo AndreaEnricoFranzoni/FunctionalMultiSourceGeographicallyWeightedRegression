@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 #ifndef FDAGWR_BASIS_FACTORY_PROXY_HPP
@@ -22,11 +22,18 @@
 
 #include "basis_factory.hpp"
 
+
+/*!
+* @file basis_factory_proxy.hpp
+* @brief Contains the proxy for the factory for the basis
+* @author Andrea Enrico Franzoni
+*/
+
 namespace {
   using basis_factory::basisProxy;
 
-  basisProxy<bsplines_basis<FDAGWR_TRAITS::basis_geometry>> basisBSPLINES(FDAGWR_BASIS_TYPES::_bsplines_);
-  basisProxy<constant_basis<FDAGWR_TRAITS::basis_geometry>> basisCONSTANT(FDAGWR_BASIS_TYPES::_constant_);
+  basisProxy<bsplines_basis<FDAGWR_TRAITS::basis_geometry>> basisBSPLINES(FDAGWR_BASIS_TYPES::_bsplines_);  ///< Registration of bspline basis
+  basisProxy<constant_basis<FDAGWR_TRAITS::basis_geometry>> basisCONSTANT(FDAGWR_BASIS_TYPES::_constant_);  ///< Registration of constant basis
 
 }
 

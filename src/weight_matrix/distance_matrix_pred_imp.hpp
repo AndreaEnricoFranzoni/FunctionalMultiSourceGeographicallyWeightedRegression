@@ -14,16 +14,27 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
 #include "distance_matrix_pred.hpp"
 
 
+
 /*!
-* @brief Euaclidean distance within two statistical units
-* @details 'DISTANCE_MEASURE::EUCLIDEAN' dispatch
+* @file distance_matrix_pred_imp.hpp
+* @brief Implementation of the class for computing the distances within the statistical units of the fitted model and the one to be predicted
+* @author Andrea Enrico Franzoni
+*/
+
+
+/*!
+* @brief Evaluation of the Euclidean distance between two units
+* @param loc_i_pred the location in the prediction set (row of coordinates matrix of the to be predicted units)
+* @param loc_j_train the location in the training set (row of coordinates matrix of the training units)
+* @return the pointwise distance within two locations
+* @details a tag dispatcher for the Euclidean distance is used
 */
 template< DISTANCE_MEASURE distance_measure >
 double
@@ -38,8 +49,9 @@ const
 }
 
 
-
-
+/*!
+* @brief Function that computes the distances within the prediction set units and all the one in the training set
+*/
 template< DISTANCE_MEASURE distance_measure >
 void
 distance_matrix_pred<distance_measure>::compute_distances()

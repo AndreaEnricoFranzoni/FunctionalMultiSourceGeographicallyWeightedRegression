@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -26,19 +26,58 @@
 #include <RcppEigen.h>
 
 
+
+
+/*!
+* @file utility_fdagwr.hpp
+* @brief Contains utilities for fdagwr, especially for wrapping the output
+* @author Andrea Enrico Franzoni
+*/
+
+
+/*!
+* @struct extract_template
+* @tparam T template template parameter
+* @brief utility to extract a template template parameter as a template parameter
+*/
 // Primaria: vuota
 template <typename T>
 struct extract_template;
 
-// Specializzazione generica per template con soli parametri di tipo
+/*!
+* @struct extract_template
+* @tparam TT template template parameter
+* @tparam Args variadic template parameters
+* @brief Specialization for template with only parameters
+*/
 template <template <typename...> class TT, typename... Args>
 struct extract_template<TT<Args...>> {
-    // Alias template che ricrea il template di partenza
+    // Alias to reproduce the starting template param
     template <typename... Ts>
     using template_type = TT<Ts...>;
 };
 
 // Helper per normalizzare il tipo (toglie const/ref)
+/*!
+* @tparam T template template parameter
+* @brief Specialization for template with only parameters, removing const ref
+* @example template <typename Domain>
+           struct basis {};
+
+           template <template <typename> class BasisTemplate>
+           struct wrapper {};
+
+           int main() 
+           {
+                std::unique_ptr<basis<int>> ptr;
+
+                using PointeeType   = typename decltype(ptr)::element_type; // basis<int>
+                using Extracted     = extract_template_t<PointeeType>;
+                using BasisTemplate = Extracted::template_type;             // alias template for a template template param
+
+                wrapper<BasisTemplate> w;                                   // using the alias as a template template param
+            }
+*/
 template <typename T>
 using extract_template_t = extract_template<
     std::remove_cv_t<std::remove_reference_t<T>>
@@ -46,31 +85,11 @@ using extract_template_t = extract_template<
 
 
 
-
-
-
-/*
-template <typename Domain>
-struct basis {};
-
-template <template <typename> class BasisTemplate>
-struct wrapper {};
-
-int main() {
-    std::unique_ptr<basis<int>> ptr;
-
-    using PointeeType   = typename decltype(ptr)::element_type; // basis<int>
-    using Extracted     = extract_template_t<PointeeType>;
-    using BasisTemplate = Extracted::template_type; // <— qui è un alias template
-
-    wrapper<BasisTemplate> w; // funziona
-}
-
+/*!
+* @brief Function to return the name of the estimation techinque (brute force or exact)
+* @param bf_estimation bool: if true, brute force estimation is used. If not, exact
+* @return a string with the estimation technique name
 */
-
-
-
-
 std::string
 estimation_iter(bool bf_estimation)
 {
@@ -79,23 +98,21 @@ estimation_iter(bool bf_estimation)
 
 
 
-
-
-
-/////////////////////////
-/// WRAP B STATIONARY ///
-/////////////////////////
 /*!
-* @brief Converte un vettore di Eigen::MatrixXd in una R list con matrici di double (b stazionari)
+* @brief Converts an std::vector of Eigen::MatrixXd to an R list with matrices of double, representing the stationary b (basis expansion coefficient of the betas)
+* @param b std::vector (one element for each stationary covariate) of Eigen::MatrixXd with all the bC (for covariate j-th: Lc_jx1)
+* @param add_unit_number if true, every elements of the list is named "unit_" + the number of the element. If false, not
+* @return a list with the matrices representing the bC (for covariate j-th: Lc_jx1)
 */
 Rcpp::List 
 toRList(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
         bool add_unit_number = false) 
 {
+    //WRAP B STATIONARY
     Rcpp::List out(b.size());
     Rcpp::CharacterVector names(b.size());
     for (std::size_t i = 0; i < b.size(); i++) {
-        out[i] = Rcpp::wrap(b[i]); // RcppEigen converte Eigen::MatrixXd
+        out[i] = Rcpp::wrap(b[i]);  // RcppEigen converts Eigen::MatrixXd
         names[i] = std::string("unit_") + std::to_string(i+1);
     }
 
@@ -104,8 +121,15 @@ toRList(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
     return out;
 }
 
+
+
 /*!
-* @brief Helper per aggiungere extra info ai b stazionari
+* @brief Helper for adding extra infos to the Rcpp::List that wraps stationary b (basis expansion coefficient of the betas)
+* @param b Eigen::MatrixXd with the bC (for covariate j-th: Lc_jx1)
+* @param basis_type type of basis of the betas
+* @param basis_number number of basis for the betas
+* @param basis_knots vector containing the knots for the betas basis expansion
+* @return a list with the matrices representing the bC (Lc_jx1) and additional information
 */
 Rcpp::List 
 enrichB(const FDAGWR_TRAITS::Dense_Matrix& b,
@@ -113,14 +137,22 @@ enrichB(const FDAGWR_TRAITS::Dense_Matrix& b,
         std::size_t basis_number,
         const std::vector<FDAGWR_TRAITS::fd_obj_x_type>& basis_knots) 
 {
+    //WRAP B STATIONARY
     return Rcpp::List::create(Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis) = Rcpp::wrap(b),
                               Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::basis_t)     = basis_type,
                               Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::n_basis)     = basis_number,
                               Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::basis_knots) = Rcpp::NumericVector(basis_knots.cbegin(), basis_knots.cend()));
 }
 
+
+
 /*!
-* @brief Converte un vettore di Eigen::MatrixXd in una R list con matrici di double (b stazionari), con extra infos
+* @brief Converts all the stationary b (basis expansion coefficient of the betas) into an Rcpp::List with additional information
+* @param b std::vector (one element for each stationary covariate) of Eigen::MatrixXd with all the bC (for covariate j-th: Lc_jx1)
+* @param basis_type std::vector of string with the basis names for the betaC
+* @param basis_number std::vector of integer with the basis numbers for the betaC
+* @param basis_knots std::vector with std::vector of doubles with the knots for the betaC
+* @return an Rcpp::List containing the information of all betaC basis expansions (the coefficients, for covariate j-th: Lc_jx1)
 */
 Rcpp::List 
 toRList(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
@@ -128,6 +160,7 @@ toRList(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
         const std::vector<std::size_t>& basis_number,
         const std::vector<FDAGWR_TRAITS::fd_obj_x_type>& basis_knots) 
 {
+    //WRAP B STATIONARY
     Rcpp::List out(b.size());
     for (size_t j = 0; j < b.size(); ++j) {
         out[j] = enrichB(b[j],
@@ -140,22 +173,22 @@ toRList(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
 
 
 
-
-/////////////////////////////
-/// WRAP B NON-STATIONARY ///
-/////////////////////////////
 /*!
-* @brief Converte un vettore di vettori di Eigen::MatrixXd in una R list con liste di matrici di double (b non stazionari)
+* @brief Converts all the non-stationary b into an R list of matrices
+* @param b vector (one element for each covariate) of vector (one element for each statistical unit) of Eigen::MatrixXd that represent non-stationary covariates regression coefficients basis expansion coefficients (for covariate j-th: L_jx1)
+* @return an Rcpp::List (one for each non-stationary covariates) containing the Rcpp::List of the basis expansion coefficients for each unit
 */
 Rcpp::List
 toRList(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& b)
 {
+    // WRAP B NON-STATIONARY
+    //for each non-stationary covariate
     Rcpp::List outerList(b.size());
 
     for(std::size_t i = 0; i < b.size(); ++i){
         Rcpp::List innerList(b[i].size());
         Rcpp::CharacterVector innerNames(b[i].size());
-
+        //for each unit
         for(std::size_t j = 0; j < b[i].size(); ++j){
             innerList[j] = Rcpp::wrap(b[i][j]);
             innerNames[j] = std::string("unit_") + std::to_string(j+1);
@@ -167,8 +200,15 @@ toRList(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& b)
     return outerList;
 }
 
+
+
 /*!
-* @brief Helper per aggiungere extra info ai b non stazionari
+* @brief Converts a the non-stationary b into an Rcpp::List with additional information of the basis expansion
+* @param b vector (one element for each statistical unit) of Eigen::MatrixXd that represent non-stationary covariates regression coefficients basis expansion coefficients (for covariate j-th: L_jx1)
+* @param basis_type string with the basis type
+* @param basis_number integer with the basis number
+* @param basis_knots vector of double containing the knots over which the basis expansion is performed
+* @return an Rcpp::List containing the basis expansion coefficients for each unit, the basis type, the basis number and the knots over which the basis expansion is performed
 */
 Rcpp::List 
 enrichB(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
@@ -176,6 +216,7 @@ enrichB(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
         std::size_t basis_number,
         const std::vector<FDAGWR_TRAITS::fd_obj_x_type>& basis_knots) 
 {
+    // WRAP B NON-STATIONARY
     return Rcpp::List::create(Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis) = toRList(b,true),
                               Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::basis_t)     = basis_type,
                               Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::n_basis)     = basis_number,
@@ -183,8 +224,14 @@ enrichB(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
 }
 
 
+
 /*!
-* @brief Converte un vettore di vettori di Eigen::MatrixXd in una R list con liste di matrici di double (b non stazionari), con extra info
+* @brief Converts all the non-stationary b (basis expansion coefficient of the betas) into an Rcpp::List with additional information
+* @param b std::vector (one element for each stationary covariate) of std::vector (one element for each unit) of Eigen::MatrixXd with all the bNC (for covariate j-th: Lnc_jx1)
+* @param basis_type std::vector of string with the basis names for the betaNC
+* @param basis_number std::vector of integer with the basis numbers for the betaNC
+* @param basis_knots std::vector with std::vector of doubles with the knots for the betaNC
+* @return an Rcpp::List containing the information of all betaNC basis expansions (the coefficients, for covariate j-th: Lnc_jx1, for each unit)
 */
 Rcpp::List 
 toRList(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& b,
@@ -192,6 +239,7 @@ toRList(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& b,
         const std::vector<std::size_t>& basis_number,
         const std::vector<FDAGWR_TRAITS::fd_obj_x_type>& basis_knots) 
 {
+    // WRAP B NON-STATIONARY
     Rcpp::List out(b.size());
     for (size_t j = 0; j < b.size(); ++j) {
         out[j] = enrichB(b[j],
@@ -204,18 +252,15 @@ toRList(const std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>& b,
 
 
 
-
-
-
-/////////////////////////////
-/// WRAP BETAS STATIONARY ///
-/////////////////////////////
 /*!
-* @brief Converte un vettore di vettore di double in una R list di vettori di double (betas stazionari)
+* @brief Wrap the discretized evaluated stationary betas into an Rcpp::List
+* @param betas a vector (one for each stationary covariate) of vector (evaluations of beta for each given abscissa) with the betas evaluation
+* @return an Rcpp::List with the evaluations of each stationary beta
 */
 Rcpp::List 
 toRList(const std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>& betas) 
 {
+    // WRAP BETAS STATIONARY 
     Rcpp::List out(betas.size());
     for (size_t i = 0; i < betas.size(); ++i) {
         out[i] = Rcpp::NumericVector(betas[i].cbegin(), betas[i].cend());
@@ -223,13 +268,18 @@ toRList(const std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>& betas)
     return out;
 }
 
+
+
 /*!
-* @brief Converte un std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>> in una R list con vettori di double (betas stazionari), con extra infos
+* @brief Wrap the discretized evaluated stationary betas into an Rcpp::List, adding the abscissas
+* @param betas vector (one element for each stationary covariate) with the vector with betas evaluation (dimension equal to the number of abscissa over which the evaluation is performed)
+* @param abscissas vector with the abscissa over which the beta is evalauted
 */
 Rcpp::List 
 toRList(const std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>& betas,
         const std::vector< FDAGWR_TRAITS::fd_obj_x_type>& abscissas) 
 {
+    // WRAP BETAS STATIONARY 
     Rcpp::List out(betas.size());
     for (size_t j = 0; j < betas.size(); ++j) {
         Rcpp::List elem = Rcpp::List::create(Rcpp::Named("Beta_eval") = Rcpp::NumericVector(betas[j].cbegin(), betas[j].cend()),
@@ -242,15 +292,15 @@ toRList(const std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>& betas,
 
 
 
-/////////////////////////////////
-/// WRAP BETAS NON-STATIONARY ///
-/////////////////////////////////
 /*!
-* @brief Converte un vettore di vettori di double in una R list con liste di vettori di double (betas non stazionari)
+* @brief Wrap the discretized evaluated non-stationary betas into an Rcpp::List
+* @param betas vector (one for each non-stationary covariate) of vector (one element for each unit) of the non-stationary betas
+* @return an Rcpp::List, one element for each non-statinary covariate, of Rcpp::List, one for each unit, of the betas evalautions
 */
 Rcpp::List
 toRList(const std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>>& betas)
 {
+    // WRAP BETAS NON-STATIONARY
     Rcpp::List outerList(betas.size());
 
     for(std::size_t i = 0; i < betas.size(); ++i){
@@ -269,14 +319,19 @@ toRList(const std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_typ
     return outerList;
 }
 
+
+
 /*!
-* @brief Converte un std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> in una R list con vettori di double (betas non stazionari), con extra infos
+* @brief Wrap the discretized evaluated non-stationary betas into an Rcpp::List
+* @param betas vector (one for each non-stationary covariate) of vector (one element for each unit) of the non-stationary betas (dimension equal to the number of abscissas)
+* @param abscissas vector with the abscissa over which the betas are evaluated
+* @return an Rcpp::List, one element for each non-statinary covariate, of Rcpp::List, one for each unit, of the betas evalautions
 */
 Rcpp::List 
 toRList(const std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>>& betas,
         const std::vector< FDAGWR_TRAITS::fd_obj_x_type>& abscissas) 
 {
-
+    // WRAP BETAS NON-STATIONARY
     Rcpp::List outerList(betas.size());
 
     for(std::size_t i = 0; i < betas.size(); ++i){
@@ -305,7 +360,25 @@ toRList(const std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_typ
 
 
 /*!
-* @brief Wrapping the b
+* @brief Wrapping the b (regression coefficients basis expansion coefficients) coming from a fwr fitted model
+* @param b a variant, coming from fwr, containing a tuple with the different b
+* @param names_bc vector of string with the names of stationary covariates
+* @param basis_type_bc vector of string with the types of stationary betas basis
+* @param basis_number_bc vector of integers with number of stationary betas basis
+* @param knots_bc vector of vector of doubles with the knots of the basis expansion for stationary betas
+* @param names_bnc vector of string with the names of non-stationary covariates
+* @param basis_type_bnc vector of string with the types of non-stationary betas basis
+* @param basis_number_bnc vector of integers with number of non-stationary betas basis
+* @param knots_bnc vector of vector of doubles with the knots of the basis expansion for non-stationary betas
+* @param names_be vector of string with the names of event-dependent covariates
+* @param basis_type_be vector of string with the types of event-dependent betas basis
+* @param basis_number_be vector of integers with number of event-dependent betas basis
+* @param knots_be vector of vector of doubles with the knots of the basis expansion for event-dependent betas
+* @param names_bs vector of string with the names of station-dependent covariates
+* @param basis_type_bs vector of string with the types of station-dependent betas basis
+* @param basis_number_bs vector of integers with number of station-dependent betas basis
+* @param knots_bs vector of vector of doubles with the knots of the basis expansion for station-dependent betas
+* @return an Rcpp::List containing the information of each beta basis expansion
 */
 Rcpp::List 
 wrap_b_to_R_list(const BTuple& b,
@@ -326,11 +399,13 @@ wrap_b_to_R_list(const BTuple& b,
                  const std::vector<std::size_t>& basis_number_bs             = {},
                  const std::vector<FDAGWR_TRAITS::fd_obj_x_type> & knots_bs  = {}) 
 {
+    //using std::visit to wrap the betas basis expansion depending on the type of model fitted
     return std::visit([&](auto&& tup) -> Rcpp::List {
         using T = std::decay_t<decltype(tup)>;
 
         //FWR
-        if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>>>) {
+        if constexpr (std::is_same_v<T, std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix >>>) 
+        {
             //stationary b
             Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,knots_bc);
             if (!names_bc.empty())
@@ -340,7 +415,8 @@ wrap_b_to_R_list(const BTuple& b,
         }
 
         //FGWR
-        if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>>>) {
+        if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>>>) 
+        {
             //non stationary b
             Rcpp::List bnc = toRList(std::get<0>(tup),basis_type_bnc,basis_number_bnc,knots_bnc);
             if(!names_bnc.empty())
@@ -350,8 +426,9 @@ wrap_b_to_R_list(const BTuple& b,
         }
 
         //FMGWR
-        else if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>,
-                                                       std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>> >>) {
+        else if constexpr (std::is_same_v<T, std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix >,
+                                                         std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>>>) 
+        {
             //stationary b
             Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,knots_bc);
             if (!names_bc.empty())
@@ -366,9 +443,10 @@ wrap_b_to_R_list(const BTuple& b,
         }
 
         //FMSGWR
-        else if constexpr (std::is_same_v<T, std::tuple<std::vector<FDAGWR_TRAITS::Dense_Matrix>,
-                                                       std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>>,
-                                                       std::vector<std::vector<FDAGWR_TRAITS::Dense_Matrix>> >>) {
+        else if constexpr (std::is_same_v<T, std::tuple< std::vector< FDAGWR_TRAITS::Dense_Matrix >,
+                                                         std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>,
+                                                         std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >>>>) 
+        {
             //stationary b                                            
             Rcpp::List bc = toRList(std::get<0>(tup),basis_type_bc,basis_number_bc,knots_bc);
             if (!names_bc.empty())
@@ -391,9 +469,15 @@ wrap_b_to_R_list(const BTuple& b,
 
 
 
-
 /*!
-* @brief Wrapping the betas
+* @brief Wrapping the betas (regression coefficients) discrete evaluations coming from a fwr fitted model
+* @param betas a variant, coming from fwr, containing a tuple with the different betas evaluations
+* @param abscissas vector with the abscissa over which the betas are evaluated
+* @param names_beta_c vector of string with the names of stationary covariates
+* @param names_beta_nc vector of string with the names of non-stationary covariates
+* @param names_beta_e vector of string with the names of event-dependent covariates
+* @param names_beta_s vector of string with the names of station-dependent covariates
+* @return an Rcpp::List containing the information of each beta evaluation
 */
 Rcpp::List 
 wrap_beta_to_R_list(const BetasTuple& betas,
@@ -403,11 +487,13 @@ wrap_beta_to_R_list(const BetasTuple& betas,
                     const std::vector<std::string>& names_beta_e  = {},
                     const std::vector<std::string>& names_beta_s  = {}) 
 {
+    //using std::visit to wrap the betas discrete evaluation depending on the type of model fitted
     return std::visit([&](auto&& tup) -> Rcpp::List {
         using T = std::decay_t<decltype(tup)>;
 
         //FWR
-        if constexpr (std::is_same_v< T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> >) {
+        if constexpr (std::is_same_v< T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type >>> >) 
+        {
             //stationary beta
             Rcpp::List beta_c = toRList(std::get<0>(tup),abscissas);
             if (!names_beta_c.empty())
@@ -417,7 +503,8 @@ wrap_beta_to_R_list(const BetasTuple& betas,
         }
 
         //FGWR
-        if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type > > > >>) {
+        if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type >>>>>) 
+        {
             //non-stationary beta
             Rcpp::List beta_nc = toRList(std::get<0>(tup),abscissas);
             if(!names_beta_nc.empty())
@@ -427,8 +514,9 @@ wrap_beta_to_R_list(const BetasTuple& betas,
         }
 
         //FMGWR
-        else if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>,
-                                                         std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> > >) {
+        else if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type >>,
+                                                         std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type >>>> ) 
+        {
             //stationary beta
             Rcpp::List beta_c = toRList(std::get<0>(tup),abscissas);
             if (!names_beta_c.empty())
@@ -443,9 +531,10 @@ wrap_beta_to_R_list(const BetasTuple& betas,
         }
 
         //FMSGWR
-        else if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>,
-                                                         std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>>,
-                                                         std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type>>> >>) {
+        else if constexpr (std::is_same_v<T, std::tuple< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type >>,
+                                                         std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type >>>,
+                                                         std::vector< std::vector< std::vector< FDAGWR_TRAITS::fd_obj_y_type >>>>>) 
+        {
             //stationary beta
             Rcpp::List beta_c = toRList(std::get<0>(tup),abscissas);
             if (!names_beta_c.empty())
@@ -468,48 +557,63 @@ wrap_beta_to_R_list(const BetasTuple& betas,
 
 
 
-
 /*!
-* @brief Wrapping the objects needed for reconstructing the partial residuals
+* @brief Wrapping the elements needed to reconstruct the partial residuals of a fwr fitted model
+* @param p_res a variant, coming from fwr, containing a tuple with the different elements needed to reconstruct the element needed to reconstruct the partial residuals
+* @return an Rcpp::List containing the information for reconstructing the partial residuals
 */
 Rcpp::List 
 wrap_PRes_to_R_list(const PartialResidualTuple& p_res)
 {
-  return std::visit([&](auto&& tup) -> Rcpp::List {
-    using T = std::decay_t<decltype(tup)>;
+    //using std::visit to wrap the element needed to reconstruct the partial residuals of a specific fwr model
+    return std::visit([&](auto&& tup) -> Rcpp::List {
+        using T = std::decay_t<decltype(tup)>;
 
-    //FMSGWR
-    if constexpr (std::is_same_v<T, std::tuple< FDAGWR_TRAITS::Dense_Matrix, std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< FDAGWR_TRAITS::Dense_Matrix >>>) {
-      return Rcpp::List::create(Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_c_tilde_hat) = Rcpp::wrap(std::get<0>(tup)),
-                                Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_A__)         = toRList(std::get<1>(tup),false),
-                                Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_B__for_K)    = toRList(std::get<2>(tup),false));
-    } 
-    //FMGWR
-    else if constexpr (std::is_same_v<T, std::tuple< FDAGWR_TRAITS::Dense_Matrix >>) {
-      return Rcpp::List::create(Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_c_tilde_hat) = Rcpp::wrap(std::get<0>(tup)));
-    } 
-    //FGWR and FWR
-    else {
-      return Rcpp::List::create(); // empty list
-    }
-  }, p_res);
+        //FMSGWR
+        if constexpr (std::is_same_v<T, std::tuple< FDAGWR_TRAITS::Dense_Matrix, std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< FDAGWR_TRAITS::Dense_Matrix >>>) 
+        {
+            return Rcpp::List::create(Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_c_tilde_hat) = Rcpp::wrap(std::get<0>(tup)),
+                                      Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_A__)         = toRList(std::get<1>(tup),false),
+                                      Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_B__for_K)    = toRList(std::get<2>(tup),false));
+        } 
+
+        //FMGWR
+        else if constexpr (std::is_same_v<T, std::tuple< FDAGWR_TRAITS::Dense_Matrix >>) 
+        {
+            return Rcpp::List::create(Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_c_tilde_hat) = Rcpp::wrap(std::get<0>(tup)));
+        } 
+
+        //FGWR and FWR
+        else 
+        {
+            return Rcpp::List::create();    // no partial residuals here
+        }
+    }, p_res);
 }
 
 
 
 /*!
-* @brief Wrapping the prediction
+* @brief Wrapping the elements needed to wrap the discretized prediction of a fwr into an Rcpp::List
+* @param pred vector (one element for each prediction) of vector (one element for each abscissa) with the discretized prediction
+* @param abscissa containing the abscissa over which the prediction are evalauted
+* @param pred_coeff the basis expansion coefficients for each prediction (num basis x number prediction)
+* @param basis_t string with the basis type of the prediction
+* @param n_basis integer with the number of basis of the prediction
+* @param basis_deg integer with the degree of the basis of the prediction basis expansion
+* @param basis_knots knots for the basis expansion of the prediction
+* @return an Rcpp::List containing the wrapped prediction
 */
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 Rcpp::List
-wrap_prediction_to_R_list(const std::vector< std::vector<OUTPUT>> & pred,
+wrap_prediction_to_R_list(const std::vector< std::vector<OUTPUT>> &pred,
                           const std::vector< INPUT> &abscissa,
-                          const FDAGWR_TRAITS::Dense_Matrix & pred_coeff,
+                          const FDAGWR_TRAITS::Dense_Matrix &pred_coeff,
                           std::string basis_t,
                           std::size_t n_basis,
                           std::size_t basis_deg,
-                          const FDAGWR_TRAITS::Dense_Matrix & basis_knots)
+                          const FDAGWR_TRAITS::Dense_Matrix &basis_knots)
 {
     Rcpp::List pred_w;
 

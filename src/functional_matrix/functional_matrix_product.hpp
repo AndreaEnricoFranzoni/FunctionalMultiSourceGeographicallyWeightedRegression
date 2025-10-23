@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -38,8 +38,23 @@
 #endif
 
 
+
 /*!
-* @brief Row-by-col product within two functional matrices M1*M2
+* @file functional_matrix_product.hpp
+* @brief Contains the overloaded functions to perform the matrix product within matrices of std::function
+* @author Andrea Enrico Franzoni
+*/
+
+
+/*!
+* @brief Matrix product within two functional matrices M1*M2
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param M1 functional matrix, m1xn1
+* @param M2 functional matrix, m2xn2
+* @param number_threads number of threads for going in parallel with OMP
+* @return the functional matrix product, m1xn2
+* @note n1 has to be equal to m2, otherwise an exception is thrown
 */
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -53,9 +68,9 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
     if (M1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
-    //type stored by the functional matrix
+    //std::function object stored
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
-    //input type of the elements of the functional matrix
+    //std::function input type
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
     //initial point for f_sum
     F_OBJ f_null = [](F_OBJ_INPUT x){return static_cast<OUTPUT>(0);};
@@ -86,7 +101,13 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
 
 
 /*!
-* @brief Row-by-col product within a functional matrices M1 and a sparse functional matrix M2
+* @brief Matrix product within two functional matrices M1*SM2, M1 dense and SM2 sparse
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param M1 functional matrix, m1xn1
+* @param SM2 sparse functional matrix, m2xn2
+* @return the functional matrix product, m1xn2
+* @note n1 has to be equal to m2, otherwise an exception is thrown
 */
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -99,9 +120,9 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
     if (M1.cols() != SM2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
-    //type stored by the functional matrix
+    //std::function object stored
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
-    //input type of the elements of the functional matrix
+    //std::function input type
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
     //initial point for f_sum
@@ -133,7 +154,13 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
 
 
 /*!
-* @brief Row-by-col product within a functional matrices M1 and a sparse functional matrix SM2
+* @brief Matrix product within two functional matrices SM1*M2, SM1 sparse and M2 dense
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param SM1 sparse functional matrix, m1xn1
+* @param M2 functional matrix, m2xn2
+* @return the functional matrix product, m1xn2
+* @note n1 has to be equal to m2, otherwise an exception is thrown
 */
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -146,9 +173,9 @@ fm_prod(const functional_matrix_sparse<INPUT,OUTPUT> &SM1,
     if (SM1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
-    //type stored by the functional matrix
+    //std::function object stored
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
-    //input type of the elements of the functional matrix
+    //std::function input type
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
     //initial point for f_sum
@@ -178,7 +205,14 @@ fm_prod(const functional_matrix_sparse<INPUT,OUTPUT> &SM1,
 
 
 /*!
-* @brief Row-by-col product within a functional matrix M1 and a diagoanl functional matrix M2
+* @brief Matrix product within two functional matrices M1*D2, M1 dense and D2 diagonal
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param M1 functional matrix, m1xn1
+* @param D2 diagonal functional matrix, nxn
+* @param number_threads number of threads for going in parallel with OMP
+* @return the functional matrix product, m1xn
+* @note n1 has to be equal to n, otherwise an exception is thrown
 */
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -192,9 +226,9 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
     if (M1.cols() != D2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
-    //type stored by the functional matrix
+    //std::function object stored
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
-    //input type of the elements of the functional matrix
+    //std::function input type
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
     //function that operates the product within two functions
     std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
@@ -215,7 +249,14 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
 
 
 /*!
-* @brief Row-by-col product within a diagonal functional matrix M1 and a functional matrix M2
+* @brief Matrix product within two functional matrices D1*M2, D1 diagonal and M2 dense
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param D1 diagonal functional matrix, nxn
+* @param M2 functional matrix, m2xn2
+* @param number_threads number of threads for going in parallel with OMP
+* @return the functional matrix product, nxn2
+* @note n has to be equal to m2, otherwise an exception is thrown
 */
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -229,9 +270,9 @@ fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &D1,
     if (D1.cols() != M2.rows())
 		throw std::invalid_argument("Incompatible matrix dimensions for functional matrix product");
 
-    //type stored by the functional matrix
+    //std::function object stored
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
-    //input type of the elements of the functional matrix
+    //std::function input type
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
     //function that operates summation within two functions
     std::function<F_OBJ(F_OBJ,F_OBJ)> f_prod = [](F_OBJ f1, F_OBJ f2){return [f1,f2](F_OBJ_INPUT x){return f1(x)*f2(x);};};
@@ -252,7 +293,13 @@ fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &D1,
 
 
 /*!
-* @brief Row-by-col product within two diagonal functional matrices D1*D2
+* @brief Matrix product within two functional matrices D1*D2, D1 diagonal and D2 diagonal
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param D1 diagonal functional matrix, n1xn1
+* @param D2 diagonal functional matrix, n2xn2
+* @return the functional matrix product, n1xn2
+* @note n1 has to be equal to n2, otherwise an exception is thrown
 */
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -272,7 +319,14 @@ fm_prod(const functional_matrix_diagonal<INPUT,OUTPUT> &D1,
 
 
 /*!
-* @brief Row-by-col product within a functional matrix M1 and a scalar matrix M2
+* @brief Matrix product within two functional matrices M1*S2, M1 dense and S2 scalar
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param M1 functional matrix, m1xn1
+* @param S2 scalar matrix, m2xn2
+* @param number_threads number of threads for going in parallel with OMP
+* @return the functional matrix product, m1xn2
+* @note n1 has to be equal to m2, otherwise an exception is thrown
 */
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -292,7 +346,14 @@ fm_prod(const functional_matrix<INPUT,OUTPUT> &M1,
 
 
 /*!
-* @brief Row-by-col product within a scalar matrix M1 and a functional matrix M2
+* @brief Matrix product within two functional matrices S1*M2, S1 scalar and M2 dense
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param S1 scalar matrix, m1xn1
+* @param M2 functional matrix, m2xn2
+* @param number_threads number of threads for going in parallel with OMP
+* @return the functional matrix product, m1xn2
+* @note n1 has to be equal to m2, otherwise an exception is thrown
 */
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -312,7 +373,13 @@ fm_prod(const Eigen::Matrix<OUTPUT,Eigen::Dynamic,Eigen::Dynamic> &S1,
 
 
 /*!
-* @brief Row-by-col product within a sparse functional matrix SM1 and a scalar matrix M2
+* @brief Matrix product within two functional matrices SM1*S2, SM1 sparse and S2 scalar
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param SM1 sparse function matrix, m1xn1
+* @param S2 scalar matrix, m2xn2
+* @return the functional matrix product, m1xn2
+* @note n1 has to be equal to m2, otherwise an exception is thrown
 */
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -331,7 +398,13 @@ fm_prod(const functional_matrix_sparse<INPUT,OUTPUT> &SM1,
 
 
 /*!
-* @brief Row-by-col product within a scalar matrix S1 and a sparse functional matrix SM2
+* @brief Matrix product within two functional matrices S1*SM2, S1 scalar and SM2 sparse
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @param S1 scalar function matrix, m1xn1
+* @param SM2 sparse functional matrix, m2xn2
+* @return the functional matrix product, m1xn2
+* @note n1 has to be equal to m2, otherwise an exception is thrown
 */
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)

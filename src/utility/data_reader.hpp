@@ -31,7 +31,7 @@
 
 /*!
 * @file data_reader.hpp
-* @brief Contains the method to read data
+* @brief Contains the functions to read data from R containers
 * @author Andrea Enrico Franzoni
 */
 

@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -28,8 +28,25 @@
 #include "../utility/traits_fdagwr.hpp"
 
 
+
+/*!
+* @file functional_matrix_into_wrapper.hpp
+* @brief Contains functions to wrap different functional objects into matrices of std::function
+* @author Andrea Enrico Franzoni
+*/
+
+
+
 /*!
 * @brief Function to wrap a functional data object functional_data into a column (row) vector intended as a functional matrix object functional_matrix
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @tparam domain_type geometry of basis domain
+* @tparam basis_type basis type used for projecting the fdatum
+* @param fd functional datum, with n statistical units
+* @param number_threads number of threads for going in parallel with OMP
+* @param as_column if true, the fdatum is represented in a functional_matrix nx1. Otherwise in a 1xn
+* @return a functional matrix storing the fdatum as std::function, nx1 or 1xn
 */
 template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
@@ -39,7 +56,9 @@ wrap_into_fm(const functional_data<domain_type,basis_type> &fd,
              int number_threads,
              bool as_column = true)
 {
+    //std::function object stored
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    //std::function input type
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
     std::vector< F_OBJ > f;
@@ -69,7 +88,14 @@ wrap_into_fm(const functional_data<domain_type,basis_type> &fd,
 
 /*!
 * @brief Function to wrap a functional data covariates object functional_data_covariates into a functional matrix object functional_matrix
-* @note It stores the functions objects column wise, as an n x q matrix, where n is the number of statistical units, q the number of covariates
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @tparam domain_type geometry of basis domain
+* @tparam basis_type basis type used for projecting the fdatum
+* @param X functional data covariates, n statistical units and q covariates
+* @param number_threads number of threads for going in parallel with OMP
+* @return a matrix of functions, nxq
+* @note It stores the functions objects column wise
 */
 template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type>
@@ -78,7 +104,9 @@ functional_matrix<INPUT,OUTPUT>
 wrap_into_fm(const functional_data_covariates<domain_type,stationarity_t> &X,
              int number_threads)
 {
+    //std::function object stored
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    //std::function input type
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
     std::vector< F_OBJ > f;
@@ -102,9 +130,18 @@ wrap_into_fm(const functional_data_covariates<domain_type,stationarity_t> &X,
 
 
 /*!
-* @brief Function to wrap a basis into a sparse functional matrix functional_matrix_sparse
-* @note It stores the matrix as a block matrix n x n*L, where n is the number of statistical units, L is the the number of basis used
-* @details It is used for the specific mapping of the basis of the response for this model
+* @brief Function to wrap a basis system into a sparse functional matrix functional_matrix_sparse of dimension n x (n*L)
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @tparam domain_type geometry of basis domain
+* @tparam basis_type basis type used for projecting the fdatum
+* @param bs the basis system
+* @param n the number of statistical units
+* @param L the total number of basis
+* @return a functional_matrix_sparse object, diagonal block matrix, each block of dimension 1xL, containing the basis of the of the basis system, that are constantly repeated
+* @note the same basis system is repeated n times (n rows), each time as a single block. The first row contains the L basis, and then (n-1)*L 0s.
+*       The second row starts at column L+1 (the first L containing 0s), contains the same L basis, and the 0s. And so on.
+*       It is used for the representation of phi in the fwr algorithm.
 */
 template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
@@ -114,7 +151,9 @@ wrap_into_fm(const basis_type<domain_type> &bs,
              std::size_t n,
              std::size_t L)
 {
+    //std::function object stored
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    //std::function input type
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
     //one row for each unit
@@ -140,14 +179,20 @@ wrap_into_fm(const basis_type<domain_type> &bs,
             f.emplace_back([l_i,&bs](F_OBJ_INPUT x){return bs.eval_base(x)(0,l_i);});}}
 
     functional_matrix_sparse<INPUT,OUTPUT> fm(f,rows,cols,row_idx,col_idx);
-    return fm;
+    return fm;  
 }
 
 
 
 /*!
-* @brief Function to wrap a system of basis into a sparse functional matrix functional_matrix_sparse
-* @note It stores the matrix as a block matrix q x L, where q is the number of covariates, L is the sum of the number of basis used for all the covariates
+* @brief Function to wrap a collection of systems of basis into a sparse functional matrix functional_matrix_sparse
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @tparam domain_type geometry of basis domain
+* @tparam basis_type basis type used for projecting the fdatum
+* @param bs a collection of basis systems
+* @return a functional sparse matrix, block diagonal, q x L. q is the number of basis systems, L the total number of basis. 
+*         Each block has dimension 1xLj, where Lj is the number of basis of basis system j-th.
 */
 template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry, template <typename> class basis_type = bsplines_basis >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
@@ -155,7 +200,9 @@ inline
 functional_matrix_sparse<INPUT,OUTPUT>
 wrap_into_fm(const basis_systems<domain_type,basis_type> &bs)
 {
+    //std::function object stored
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
+    //std::function input type
     using F_OBJ_INPUT = fm_utils::input_param_t<F_OBJ>;
 
     //one row for each covariate
@@ -190,7 +237,12 @@ wrap_into_fm(const basis_systems<domain_type,basis_type> &bs)
 
 /*!
 * @brief Function to wrap a functional stationary weight matrix object functional_weight_matrix_stationary into a functional diagonal matrix object functional_matrix_diagonal
-* @note It stores the functions objects diagonally, as an n x n matrix, where n is the number of statistical units
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @tparam domain_type geometry of basis domain
+* @tparam basis_type basis type used for projecting the fdatum
+* @tparam stationarity_t if the weights are stationary
+* @return a functional diagonal matrix, containing the n weights. n is the number of statistical units
 */
 template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry,  template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::STATIONARY >
     requires (std::integral<INPUT> || std::floating_point<INPUT>) && (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
@@ -202,6 +254,7 @@ wrap_into_fm(const functional_weight_matrix_stationary<INPUT,OUTPUT,domain_type,
     static_assert(stationarity_t == FDAGWR_COVARIATES_TYPES::STATIONARY,
                   "Functional weight matrix for stationary covariates needs FDAGWR_COVARIATES_TYPES::STATIONARY as template parameter");
 
+    //std::function object stored
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
 
     std::vector< F_OBJ > f;
@@ -227,6 +280,15 @@ wrap_into_fm(const functional_weight_matrix_stationary<INPUT,OUTPUT,domain_type,
 * @note It stores the functions objects diagonally, as an n x n matrix, where n is the number of statistical units
 * @todo WRITE IT
 */
+/*!
+* @brief Function to wrap a functional non-stationary weight matrix object into a vector of diagonal functional matrices
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
+* @tparam domain_type geometry of basis domain
+* @tparam basis_type basis type used for projecting the fdatum
+* @tparam stationarity_t if the weights are stationary
+* @return an std::vector of size n of functional diagonal matrix, containing the n weights in the diagonal, in the position i-th, for unit i-th. n is the number of statistical units
+*/
 template< typename INPUT = double, typename OUTPUT = double, class domain_type = FDAGWR_TRAITS::basis_geometry,  template <typename> class basis_type = bsplines_basis, FDAGWR_COVARIATES_TYPES stationarity_t = FDAGWR_COVARIATES_TYPES::NON_STATIONARY >
     requires (std::integral<INPUT> || std::floating_point<INPUT>) && (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>
 inline
@@ -239,6 +301,7 @@ wrap_into_fm(const functional_weight_matrix_non_stationary<INPUT,OUTPUT,domain_t
                   stationarity_t == FDAGWR_COVARIATES_TYPES::STATION,
                   "Functional weight matrix for non stationary covariates needs FDAGWR_COVARIATES_TYPES::NON_STATIONARY or FDAGWR_COVARIATES_TYPES::EVENT or FDAGWR_COVARIATES_TYPES::STATION as template parameter");
 
+    //std::function object stored
     using F_OBJ = FUNC_OBJ<INPUT,OUTPUT>;
 
     std::size_t n_matrices = W.weights().size();

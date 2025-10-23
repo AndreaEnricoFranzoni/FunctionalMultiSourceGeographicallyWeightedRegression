@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -29,44 +29,57 @@
 
 /*!
 * @file penalization_matrix.hpp
-* @brief Contains the class to define the penalization matrix used in the fmsgwr algoroithm
+* @brief Contains the class to define the penalization matrix for fitting a fwr model
 * @author Andrea Enrico Franzoni
 */
 
+/*!
+* @brief alias for the policy to compute the penalty
+* @tparam der_pen which derivative has to be compute in the penalty computation
+*/
 template <PENALIZED_DERIVATIVE der_pen>
 using PenaltyOrderDerivativeType = std::conditional<der_pen == PENALIZED_DERIVATIVE::SECOND,
                                                     SecondDerivativePenalty,        
                                                     typename std::conditional<der_pen == PENALIZED_DERIVATIVE::FIRST,
-                                                                     FirstDerivativePenalty,
-                                                                     ZeroDerivativePenalty>::type>::type;
+                                                                              FirstDerivativePenalty,
+                                                                              ZeroDerivativePenalty>::type>::type;
 
+
+/*!
+* @class penalization_matrix
+* @tparam der_pen the order of the basis derivative used to compute the penalty
+* @brief Computing the penalization matrix intended as the scalar product within a given order of derivative of a basis system
+*        The penalization matrix is intended as a block matrix, in which each block present the above pattern for a given system of basis, if multiple basis systems are present
+*/
 template< PENALIZED_DERIVATIVE der_pen = PENALIZED_DERIVATIVE::SECOND >
 class penalization_matrix
 {
 
-//order of the penalization for the policy to compute the penalization itself
+/*!
+* @brief Order of the derivatives for the penalization, for using the right policy
+*/
 using PenaltyPolicy = PenaltyOrderDerivativeType<der_pen>;
 
 private:
     /*!Penalization matrix*/
     FDAGWR_TRAITS::Sparse_Matrix m_PenalizationMatrix;
 
-    /*!Number of functional covariates described by a basis expansion (total number of blocks in the penalization matrix)*/
+    /*!Number of basis systems (total number of blocks in the penalization matrix)*/
     std::size_t m_q;
 
-    /*!Number of basis for each covariate*/
+    /*!Number of basis for each basis system*/
     std::vector<std::size_t> m_Lj;
 
-    /*!Number of total basis (penalization matrix is a m_L x m_L)*/;
+    /*!Number of total basis (sum of the number of basis of all basis systems) (penalization matrix is a m_L x m_L)*/;
     std::size_t m_L;
 
 
 public:
     /*!
-    * @brief Constructor: PER AVERE LE PENALIZZAZIONI CON LA DERIVATA SECONDA SERVE UN ORDINE DELLE BASI >= 2
-    * @param bs is an object storing systems of basis
-    * @param lambdas is an std::vector<double> storing the penalization for each regressor
-    * @note  PENALIZATION COMPUTATION IS IMPLEMENTED ONLY FOR 1D DOMAINS AND BSPLINES BASIS
+    * @brief Constructor
+    * @param bs is an object storing systems of basis (basis_systems<> object)
+    * @param lambdas is an std::vector<double> storing the penalization for each basis system
+    * @note penalization computation is implemented only for 1D domains and bsplines
     */
     template< typename BASIS_SPACE >
     penalization_matrix(BASIS_SPACE&& bs,
@@ -76,7 +89,7 @@ public:
         m_Lj(bs.numbers_of_basis()),
         m_L(std::reduce(bs.numbers_of_basis().cbegin(),bs.numbers_of_basis().cend(),static_cast<std::size_t>(0)))
             {   
-                //storing the penalty for each covariate in an Eigen::Triplet
+                //storing the penalty for each basis system in an Eigen::Triplet
                 std::vector<Eigen::Triplet<double>> penalty_matrices_triplets;
                 //the unlikely scenario in which all the L2 scalar products are not-null
                 penalty_matrices_triplets.reserve(std::transform_reduce(m_Lj.cbegin(),
@@ -114,16 +127,19 @@ public:
     
     /*!
     * @brief Getter for the penalization matrix
+    * @return the private m_PenalizationMatrix
     */
     const FDAGWR_TRAITS::Sparse_Matrix& PenalizationMatrix() const {return m_PenalizationMatrix;}
 
     /*! 
-    * @brief Getter for the number of basis for each covariate
+    * @brief Getter for the number of basis for each basis system
+    * @return the private m_Lj
     */
     std::vector<std::size_t> Lj() const {return m_Lj;}
 
     /*!
     * @brief Getter for the dimension of the penalization matrix
+    * @return the private m_L
     */
     std::size_t L() const {return m_L;}
 };

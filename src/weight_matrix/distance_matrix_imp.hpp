@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -28,7 +28,10 @@
 
 
 /*!
-* @brief Euaclidean distance within two statistical units
+* @brief Euclidean distance within two statistical units
+* @param loc_i the first location (row of coordinates matrix)
+* @param loc_j the second location (row of coordinates matrix)
+* @return the pointwise distance within two locations
 * @details 'DISTANCE_MEASURE::EUCLIDEAN' dispatch
 */
 template< DISTANCE_MEASURE distance_measure >

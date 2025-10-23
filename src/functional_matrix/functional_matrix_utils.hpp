@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -27,53 +27,119 @@
 #include <concepts>
 
 
+
+/*!
+* @file functional_matrix_utils.hpp
+* @brief Contains some utilities for using functional matrices: aliases for the type of the stored functions and their input, concepts to avoid overloading for functional matrices operators
+* @author Andrea Enrico Franzoni
+*/
+
+
+
+/*!
+* @namespace fm_utils
+* @brief Namespace containing aliases for the type of the stored functions and their input, and concepts to avoid overloading for functional matrices operators
+*/
 namespace fm_utils
 {
 
-// Traits for extracting the function type
+
+/*!
+* @struct function_traits
+* @tparam T
+* @brief traits for extracting a function type from a callable object definition
+*/
 template <typename T>
 struct function_traits;
 
-// Specialization for function "R(Arg)"
+/*!
+* @struct function_traits
+* @tparam R output type
+* @tparam Arg input type
+* @brief Specialization of function_traits for calla object<R(Arg)>
+*/
 template <typename R, typename Arg>
 struct function_traits<R(Arg)> {
+
+    /*!Alias for output type*/
     using output_type = R;
+    /*!Alias for input type, considering eventually the references*/
     using input_param_type = Arg;
+    /*!Alias for input type, without const reference*/
     using input_type = std::remove_cv_t<std::remove_reference_t<Arg>>;
 };
 
-// Specialization for pointer to function
+/*!
+* @tparam R output type
+* @tparam Arg input type
+* @brief specialization for pointer to function
+*/
 template <typename R, typename Arg>
 struct function_traits<R(*)(Arg)> : function_traits<R(Arg)> {};
-//Specialization for std::function
+
+/*!
+* @tparam R output type
+* @tparam Arg input type
+* @brief specialization for std::function
+*/
 template <typename R, typename Arg>
 struct function_traits<std::function<R(Arg)>> : function_traits<R(Arg)> {};
-// Specialization for member function
+
+/*!
+* @tparam C class
+* @tparam R output type
+* @tparam Arg input type
+* @brief specialization for member function of C (non-const version) 
+*/
 template <typename C, typename R, typename Arg>
 struct function_traits<R(C::*)(Arg)> : function_traits<R(Arg)> {};
-// Specialization for member function (const version)
+
+/*!
+* @tparam C class
+* @tparam R output type
+* @tparam Arg input type
+* @brief specialization for member function of C (const version)
+*/
 template <typename C, typename R, typename Arg>
 struct function_traits<R(C::*)(Arg) const> : function_traits<R(Arg)> {};
-// Specialization for lambda/functor
+
+/*!
+* @tparam R output type
+* @tparam Arg input type
+* @brief specialization for lambda/functor
+*/
 template<typename T>
 struct function_traits : function_traits<decltype(&T::operator())> {};
 
 
-// ---------- Helpers ----------
+/*!
+* @tparam F callable object
+* @brief extracting the type of the input in the callable object F, not considering const references
+*/
 template <typename F>
 using input_t = typename function_traits<F>::input_type;
 
+/*!
+* @tparam F callable object
+* @brief extracting the type of the input in the callable object F, considering eventual const references
+*/
 template <typename F>
 using input_param_t = typename function_traits<F>::input_param_type;
 
+/*!
+* @tparam F callable object
+* @brief extracting the type of the output in the callable object F
+*/
 template <typename F>
 using output_t = typename function_traits<F>::output_type;
 
 
 
-
-
-//CONCEPT TO AVOID EIGEN OVERLOADING (sennò gli operatori di Eigen vedono sta roba, e non funzione)
+/*!
+* @brief Concept to avoid the overloading with the Eigen overloading if calling within functional matrices operators
+* @tparam T the type of the object to be checked that does not derive from an Eigen matrix object
+* @note the concept check that an object does not derive from an Eigen matrix
+*/
 template <typename T>
 concept not_eigen = !std::is_base_of_v<Eigen::MatrixBase<T>,T>;
 

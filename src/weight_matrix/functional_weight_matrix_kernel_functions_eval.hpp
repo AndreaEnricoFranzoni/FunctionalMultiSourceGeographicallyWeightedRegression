@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -29,10 +29,10 @@
 
 
 /*!
-* @brief Kernel Gaussian function evaluation, given a bandwith, of a given distance
-* @param distance distance for which is needed the kernel function evaluation
-* @param bandwith bandwith of the gaussian kernel function
-* @details 'KERNEL_FUNC::GAUSSIAN' dispatch via std::integral_constant.
+* @brief Evaluation of the gaussian kernel function for the non stationary weights
+* @param distance distance between two locations
+* @param bandwith kernel bandwith
+* @return the evaluation of the kernel function
 */
 template< typename INPUT, typename OUTPUT, class domain_type, template <typename> class basis_type, FDAGWR_COVARIATES_TYPES stationarity_t, KERNEL_FUNC kernel_func, DISTANCE_MEASURE dist_meas >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>) && fdagwr_concepts::as_interval<domain_type> && fdagwr_concepts::as_basis<basis_type<domain_type>>

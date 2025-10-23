@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -27,18 +27,27 @@
 
 
 /*!
-* @brief struct to decipt which are the basis types implemented, matching the includes above
+* @file basis_include.hpp
+* @brief Contains the includes for the basis
+* @author Andrea Enrico Franzoni
+*/
+
+
+/*!
+* @struct FDAGWR_BASIS_TYPES
+* @brief Struct to decipt which are the basis types implemented
+* @note It matches the includes above
 */
 struct FDAGWR_BASIS_TYPES
 {
-  static constexpr std::size_t _number_implemented_basis_types_ = static_cast<std::size_t>(2);
+  static constexpr std::size_t _number_implemented_basis_types_ = static_cast<std::size_t>(2);      ///< Number of concrete basis objects implemented
 
-  static constexpr std::string _bsplines_ = "bsplines";
+  static constexpr std::string _bsplines_ = "bsplines";                                             ///< Name of bspline basis
 
-  static constexpr std::string _constant_ = "constant";
+  static constexpr std::string _constant_ = "constant";                                             ///< Name of constant basis
 
   static constexpr std::array<std::string,FDAGWR_BASIS_TYPES::_number_implemented_basis_types_> _implemented_basis_{FDAGWR_BASIS_TYPES::_bsplines_,
-                                                                                                                    FDAGWR_BASIS_TYPES::_constant_};
+                                                                                                                    FDAGWR_BASIS_TYPES::_constant_};  ///< Array with the concrete basis implemented
 };
 
 #endif  /*FDAGWR_BASIS_INCLUDE_HPP*/

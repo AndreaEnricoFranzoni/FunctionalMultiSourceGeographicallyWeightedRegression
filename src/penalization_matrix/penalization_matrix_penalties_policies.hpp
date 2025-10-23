@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 #ifndef FDAGWR_PENALTIES_POLICIES_HPP
@@ -25,17 +25,23 @@
 
 
 /*!
-* @file penalization_matrix_penalties.hpp
+* @file penalization_matrix_penalties_policies.hpp
+* @brief Contains the different types of penalization computations, penalizing different covariates
 * @author Andrea Enrico Franzoni
 */
 
 
 /*!
-* @struct Case
-* @brief Functor returning the values for which computing ratio for computing ADF-test statistic. No lag orders bigger than one considered.
+* @struct SecondDerivativePenalty
+* @brief Functor computing the scalar product within second order derivatives of the basis
 */
 struct SecondDerivativePenalty
 { 
+  /*!
+  * @brief Compute the scalar product of the second order derivative within the basis
+  * @param bs a basis_systems of bsplines
+  * @param system_number the number of the basis system
+  */
   Eigen::SparseMatrix<double> 
   operator()(const basis_systems< FDAGWR_TRAITS::basis_geometry, bsplines_basis > &bs, std::size_t system_number) 
   const
@@ -54,11 +60,16 @@ struct SecondDerivativePenalty
 
 
 /*!
-* @struct Case
-* @brief Functor returning the values for which computing ratio for computing ADF-test statistic. No lag orders bigger than one considered.
+* @struct FirstDerivativePenalty
+* @brief Functor computing the scalar product within first order derivatives of the basis
 */
 struct FirstDerivativePenalty
 { 
+  /*!
+  * @brief Compute the scalar product of the first order derivative within the basis
+  * @param bs a basis_systems of bsplines
+  * @param system_number the number of the basis system
+  */
   Eigen::SparseMatrix<double> 
   operator()(const basis_systems< FDAGWR_TRAITS::basis_geometry, bsplines_basis > &bs, std::size_t system_number) 
   const
@@ -77,11 +88,16 @@ struct FirstDerivativePenalty
 
 
 /*!
-* @struct Case
-* @brief Functor returning the values for which computing ratio for computing ADF-test statistic. No lag orders bigger than one considered.
+* @struct ZeroDerivativePenalty
+* @brief Functor computing the scalar product within zero order derivatives of the basis
 */
 struct ZeroDerivativePenalty
 { 
+  /*!
+  * @brief Compute the scalar product of the zero order derivative within the basis
+  * @param bs a basis_systems of bsplines
+  * @param system_number the number of the basis system
+  */
   Eigen::SparseMatrix<double> 
   operator()(const basis_systems< FDAGWR_TRAITS::basis_geometry, bsplines_basis > &bs, std::size_t system_number) 
   const

@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -799,8 +799,5 @@ wrap_predict_input(Rcpp::List pred_input)
     if( as<std::string>(pred_input[FDAGWR_HELPERS_for_PRED_NAMES::model_name]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FWR");}
   }
 }
-
-
-
 
 #endif  /*FDAGWR_WRAP_PARAMS_HPP*/

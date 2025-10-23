@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 #ifndef FDAGWR_DISTANCE_MATRIX_HPP
@@ -32,13 +32,13 @@
 
 /*!
 * @file distance_matrix.hpp
-* @brief Class for computing the distances within the points of interest of GWR model
+* @brief Class for computing the distances within the statistical units
 * @author Andrea Enrico Franzoni
 */
 
 /*!
-* Doing tag dispatching for the distance measure
-* @tparam err_eval: template parameter for the error evaluation strategy
+* @brief Tag dispatching for how to compute the distance measure
+* @tparam distance_measure: template parameter for the distance measure employed
 */
 template <DISTANCE_MEASURE distance_measure>
 using DISTANCE_MEASURE_T = std::integral_constant<DISTANCE_MEASURE, distance_measure>;
@@ -46,44 +46,25 @@ using DISTANCE_MEASURE_T = std::integral_constant<DISTANCE_MEASURE, distance_mea
 
 /*!
 * @class distance_matrix
-* @brief Template class for constructing the distance matrix: a squared symmetric matrix containing the distance within each pair of units
-* @tparam distance_measure how to compute the distances within different units (enumerator)
+* @tparam distance_measure how to compute the distances within different units
+* @brief Class for constructing the distance matrix: a squared symmetric matrix containing the distance within each pair of statistical units
 */
 template< DISTANCE_MEASURE distance_measure >
 class distance_matrix
 {
 private:
 
-    /*!
-    * The distance matrix is, for efficiency reasons, stored in vector, 
-    * column-wise (first col, second col, third col, ... of the original distance matrix)
-    */
+    /*!Distance matrix that, for efficiency reasons, is stored in vector, column-wise (first col, second col, third col, ... of the original distance matrix)*/
     std::vector<double> m_distances;
-
-    /*!
-    * The number of statistical units. For each stastical unit, there is a location
-    */
+    /*!The number of statistical units. For each stastical unit, there is a location*/
     std::size_t m_number_locations;
-
-    /*!
-    * The number of distances to be computed (m*(m+1)/2, where m is the number of statistical units)
-    */
+    /*!The number of distances to be computed (m*(m+1)/2, where m is the number of statistical units)*/
     std::size_t m_number_dist_comp;
-
-    /*!
-    * A number of statistical units x 2 matrix with the (UTM) coordinates of each statistical unit. The class supports only
-    * locations on a two dimensional mainfold
-    */
+    /*! Matrix of dimension statistical units x 2 matrix with the (UTM) coordinates of each statistical unit. The class supports only locations on a two dimensional mainfold*/
     FDAGWR_TRAITS::Dense_Matrix m_coordinates;
-
-    /*!
-    * Flag that tracks if at least two statistical units are passed
-    */
+    /*!Flag that tracks if at least two statistical units are passed in the constructor*/
     bool m_flag_comp_dist;
-
-    /*!
-    * Number of threads for parallelization
-    */
+    /*!Number of threads for parallelization via OMP*/
     int m_num_threads;
 
     /*!
@@ -115,11 +96,13 @@ public:
 
     /*!
     * @brief Constructor for the distance matrix (square symmetric matrix containing the distances within each pair of units).
-    *        Locations are intended over a two dimensional domain. Dimensionality check into the constructor
+    *        Locations are intended over a two dimensional domain. 
     * @param coordinates coordinates of each statistical unit. It is an Eigen dynamic matrix within as much rows as the number of statistical
     *                    units, and two columns (for each column, one coordinate). The coordinates are intended as UTM coordinates.
     *                    The distance matrix will be a number of statistical units x number of statistical units
+    * @param number_threads number of threads using via OMP
     * @details Universal constructor: move semantic used to optimazing handling big size objects
+    * @note Dimensionality check into the constructor
     */
     template<typename COORDINATES_OBJ>
     distance_matrix(COORDINATES_OBJ&& coordinates,
@@ -147,7 +130,7 @@ public:
     double pointwise_distance(std::size_t loc_i, std::size_t loc_j) const { return pointwise_distance(loc_i,loc_j,DISTANCE_MEASURE_T<distance_measure>{});};
 
     /*!
-    * Function that computes the distances within each pair of statistical units
+    * @brief Function that computes the distances within each pair of statistical units
     */
     void compute_distances();
 
@@ -163,7 +146,10 @@ public:
     * @param j: number of col
     * @return the value in position (i,j) 
     */
-    inline double operator()(std::size_t i, std::size_t j) const
+    inline 
+    double 
+    operator()(std::size_t i, std::size_t j) 
+    const
     {    
         if (i < j) std::swap(i, j);
         return m_distances[i*(i+1)/2 + j];
@@ -175,7 +161,10 @@ public:
     * @return column col_i-th (the distances with respect to unit i-th), in an Eigen::VectorXd
     * @note Elements are stored column-wise
     */
-   inline FDAGWR_TRAITS::Dense_Vector operator[](std::size_t col_i) const
+   inline 
+   FDAGWR_TRAITS::Dense_Vector 
+   operator[](std::size_t col_i) 
+   const
    {    
         //cheack the correct dimension of the coordinates matrix
         assert((void("The column index has to be in {0,1,...,number-of-statistical-units - 1}"), 

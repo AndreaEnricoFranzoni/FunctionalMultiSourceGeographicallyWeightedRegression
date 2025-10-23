@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -25,24 +25,45 @@
 #include "include_fdagwr.hpp"
 #include "traits_fdagwr.hpp"
 
+
+
+/*!
+* @file concepts_fdagwr.hpp
+* @brief Contains customized concepts for basis and basis domain
+* @author Andrea Enrico Franzoni
+*/
+
+
+
+/*!
+* @namespace fdagwr_concepts
+* @brief Contains concepts for basis and basis domain
+*/
 namespace fdagwr_concepts
 {
 
-//concept for saying that the interval used to define the basis derives from the triangulation geometry in fdapde
-//it is necessary to remove the const ref since, for fdaPDE workflow, knots are returned as const ref
+/*!
+* @brief Concept to ensure that the basis domain derives from the triangulation geometry in fdaPDE
+* @tparam T a type of fdapde::Triangulation<1,1> for removing the const ref
+* @note the const ref has to be removed since in fdaPDE knots are returned as const ref  
+*/
 template <typename T>
 concept as_interval = std::derived_from<std::remove_cvref_t<T>, fdapde::TriangulationBase<1,1,fdapde::Triangulation<1,1>>>;
 
 
 
 //concept for the basis type
+/*!
+* @brief Concept to ensure that the type passed describes a basis system for a fd
+* @tparam T a type of basys
+*/
 template<typename T>
 concept as_basis = requires(T x) 
 {  
-  {x.knots()} -> as_interval;                                        //knots of the basis have to be as the class described in fdaPDE
-  {x.eval_base(0.0)} -> std::same_as<FDAGWR_TRAITS::Dense_Matrix>;   //function to perform the evaluation
+  {x.knots()} -> as_interval;                                        //knots of the basis have to be as the class described in fdaPDE (using the previous concept)
+  {x.eval_base(0.0)} -> std::same_as<FDAGWR_TRAITS::Dense_Matrix>;   //function to perform the evaluation returns an Eigen::MatrixXd
 };
-}
 
+}   //end namespace fdagwr_concepts
 
 #endif  /*FDAGWR_BASIS_CONCEPTS_HPP*/

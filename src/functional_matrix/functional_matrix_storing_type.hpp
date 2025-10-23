@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -27,8 +27,19 @@
 #include <utility>
 #include <concepts>
 
+
+
 /*!
-* @brief type of the function stored
+* @file functional_matrix_storing_type.hpp
+* @brief Contains the specific univariate 1D domain std::function object contained in a functional matrix declaration
+* @author Andrea Enrico Franzoni
+*/
+
+
+/*!
+* @brief univariate 1D domain  std::function object stored in a functional_matrix
+* @tparam INPUT type of abscissa
+* @tparam OUTPUT type of image
 */
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
