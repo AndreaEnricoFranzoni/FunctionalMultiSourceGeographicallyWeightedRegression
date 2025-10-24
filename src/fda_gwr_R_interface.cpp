@@ -79,6 +79,45 @@ using namespace Rcpp;
 void installation_fdagwr(){   Rcout << "fdagwr4 has been installed"<< std::endl;}
 
 
+
+//
+// [[Rcpp::export]]
+void fdagwr_testing()
+{
+  //creation of a collection of systems of bsplines: in this case, there are two basis systems.
+  // Both of them are constructed over 13 knots equally spaced. In the first system, there are 15 bsplines of grade 3,
+  // while in the second system there are 14 bsplines of grade 2
+  
+  //basis domain geometry (from fdaPDE)
+  using _DOMAIN_ = FDAGWR_TRAITS::basis_geometry; 
+  //domain
+  double a = -2.5;
+  double b = 1;
+  //number of basis systems
+  std::size_t q = 2;
+  //knots
+  FDAGWR_TRAITS::Dense_Vector knots_basis = FDAGWR_TRAITS::Dense_Vector::LinSpaced(13, a, b);
+  //basis degree
+  std::vector<std::size_t> degree_basis{3,2};
+  //basis number
+  std::vector<std::size_t> number_basis{15,14};
+
+  //creation of the collection of the basis system: the problem is in this constructor
+  basis_systems< _DOMAIN_, bsplines_basis > bs(knots_basis, 
+                                               degree_basis, 
+                                               number_basis, 
+                                               q);
+  //evaluating the two basis systems in 0.3
+  double loc = 0.3;   //abscissa of evaluation
+  auto evaluation_basis_system_1 = bs.eval_base(loc,0);
+  Rcout << "Evaluation of the first basis system in " << loc << std::endl;
+  Rcout << evaluation_basis_system_1 << std::endl;
+  auto evaluation_basis_system_2 = bs.eval_base(loc,1);
+  Rcout << "Evaluation of the second basis system in " << loc << std::endl;
+  Rcout << evaluation_basis_system_2 << std::endl;
+}
+
+
 /*!
 * @brief Fitting a Functional Multi-Source Geographically Weighted Regression ESC model. The covariates are functional objects, divided into
 *        three categories: stationary covariates (C), constant over space, event-dependent covariates (E), that vary depending on the spatial coordinates of the event, 
