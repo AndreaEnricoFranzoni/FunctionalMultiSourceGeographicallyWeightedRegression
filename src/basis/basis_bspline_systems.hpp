@@ -128,7 +128,7 @@ public:
     eval_base(const double &location, std::size_t basis_i) 
     const
     {
-        return m_systems_of_basis[basis_i].eval(location);
+        return m_systems_of_basis[basis_i].eval_base(location);
     }
 };
 
