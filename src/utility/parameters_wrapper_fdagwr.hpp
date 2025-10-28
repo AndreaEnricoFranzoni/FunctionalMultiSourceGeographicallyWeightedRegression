@@ -418,7 +418,7 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
 
     //check the correct dimension of the input (number of covariates, indeed), if not throwing an exception
     if (basis_degrees_w.size() != number_of_covariates){
-      std::string covariates_type = covariate_type<fdagwr_cov_t>();
+      std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
       std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
       std::string error_message1 = "It is necessary to pass a vector with " + std::to_string(number_of_covariates) + " basis degrees for the " + covariates_type + " covariates";
       throw std::invalid_argument(error_message1);}
@@ -426,7 +426,7 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
     //checking that the input is consistent (basis degrees non-negative for all the covariates), if not throwing an exception
     auto min_basis_degree = std::min_element(basis_degrees_w.cbegin(),basis_degrees_w.cend());
     if (*min_basis_degree < 0){
-      std::string covariates_type = covariate_type<fdagwr_cov_t>();
+      std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
       std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
       std::string error_message2 = "Basis degrees for all the " + covariates_type + " covariates have to be non-negative";
       throw std::invalid_argument(error_message2);}
@@ -459,7 +459,7 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
 
     //check the correct dimension of the input (number of covariates, indeed), if not throwing an exception
     if (basis_numbers_w.size() != number_of_covariates){
-      std::string covariates_type = covariate_type<fdagwr_cov_t>();
+      std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
       std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
       std::string error_message3 = "It is necessary to pass a vector with " + std::to_string(number_of_covariates) + " number of basis for the " + covariates_type + " covariates";
       throw std::invalid_argument(error_message3);}
@@ -467,7 +467,7 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
     //checking that the input is consistent (basis number at least the number of knots - 1 for all the covariates for bsplines), if not throwing an exception
     for(std::size_t i = 0; i < number_of_covariates; ++i){
           if ((basis_numbers_w[i] < (knots_size - static_cast<std::size_t>(1))) && basis_types[i] == FDAGWR_BASIS_TYPES::_bsplines_){ //checking B-splines relationship for each covariate, where basis are bsplines
-              std::string covariates_type = covariate_type<fdagwr_cov_t>();
+              std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
               std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
               std::string error_message4 = "The number of basis, bspline basis, for all the " + covariates_type + " covariates has to be at least the number of knots (" + std::to_string(knots_size) + ") - 1";
               throw std::invalid_argument(error_message4);}}
@@ -501,12 +501,12 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
 
     //check the correct dimension of the inputs (number of covariates, indeed), if not throwing an exception
     if (basis_degrees_w.size() != number_of_covariates){
-      std::string covariates_type = covariate_type<fdagwr_cov_t>();
+      std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
       std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
       std::string error_message5 = "It is necessary to pass a vector with " + std::to_string(number_of_covariates) + " basis degrees for the " + covariates_type + " covariates";
       throw std::invalid_argument(error_message5);}
     if (basis_numbers_w.size() != number_of_covariates){
-      std::string covariates_type = covariate_type<fdagwr_cov_t>();
+      std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
       std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
       std::string error_message6 = "It is necessary to pass a vector with " + std::to_string(number_of_covariates) + " number of basis for the " + covariates_type + " covariates";
       throw std::invalid_argument(error_message6);}
@@ -514,7 +514,7 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
     //checking that the degrees of basis input are consistent (basis order non-negative for all the covariates), if not throwing an exception
     auto min_basis_degree = std::min_element(basis_degrees_w.cbegin(),basis_degrees_w.cend());
     if (*min_basis_degree < 0){
-        std::string covariates_type = covariate_type<fdagwr_cov_t>();
+        std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
         std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
         std::string error_message7 = "Basis degrees for all the " + covariates_type + " covariates have to be non-negative";
         throw std::invalid_argument(error_message7);}
@@ -539,7 +539,7 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
     for(std::size_t i = 0; i < number_of_covariates; ++i){
           //checking B-splines relationship for each covariate, where basis are bsplines
           if ((ns_basis[i] - (degrees[i] + knots_size - static_cast<std::size_t>(1)) != 0) && basis_types[i] == FDAGWR_BASIS_TYPES::_bsplines_){  
-            std::string covariates_type = covariate_type<fdagwr_cov_t>();
+            std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
             std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
             std::string error_message8 = "The number of basis, bspline basis, for the " + covariates_type + " covariates has to be the degree of the basis + the number of knots - 1";
             throw std::invalid_argument(error_message8);}}
@@ -589,7 +589,7 @@ wrap_and_check_penalizations(Rcpp::NumericVector lambdas,
   //throwing an exception if not
   if (*min_lambda < 0){
     // type of the covariates for which the penalization is used
-    std::string covariates_type = covariate_type<fdagwr_cov_t>();
+    std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
     std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
     std::string error_message = "Penalization terms for " + covariates_type + " covariates have to be non-negative";
     throw std::invalid_argument(error_message);}
@@ -614,7 +614,7 @@ wrap_and_check_kernel_bandwith(double bandwith)
   //checking that the bandwith is positive, throwing an exception if not
   if (bandwith <= 0){
     // type of the covariates for which the kernel bandwith is used
-    std::string covariates_type = covariate_type<fdagwr_cov_t>();
+    std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
     std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
     std::string error_message = "Kernel bandwith for " + covariates_type + " covariates has to be positive";
     throw std::invalid_argument(error_message);}
@@ -715,7 +715,7 @@ wrap_predict_input(Rcpp::List pred_input)
   if constexpr( fdagwr_algo == FDAGWR_ALGO::_FMSGWR_ESC_ )
   {
     //check input list
-    if (pred_input.size() != 9){ throw std::invalid_argument("Lenght of input list model_fitted has to be 8");}
+    if (pred_input.size() != 9){ throw std::invalid_argument("Lenght of input list model_fitted has to be 9");}
 
     //check that derives from the right algorithm
     if( as<std::string>(pred_input[std::string{FDAGWR_HELPERS_for_PRED_NAMES::model_name}]) != std::string{algo_type<fdagwr_algo>()}){ throw std::invalid_argument("It is not a fitted FMSGWR_ESC");}
@@ -725,7 +725,7 @@ wrap_predict_input(Rcpp::List pred_input)
   if constexpr( fdagwr_algo == FDAGWR_ALGO::_FMSGWR_SEC_ )
   {
     //check input list
-    if (pred_input.size() != 9){ throw std::invalid_argument("Lenght of input list model_fitted has to be 8");}
+    if (pred_input.size() != 9){ throw std::invalid_argument("Lenght of input list model_fitted has to be 9");}
 
     //check that derives from the right algorithm
     if( as<std::string>(pred_input[std::string{FDAGWR_HELPERS_for_PRED_NAMES::model_name}]) != std::string{algo_type<fdagwr_algo>()}){ throw std::invalid_argument("It is not a fitted FMSGWR_SEC");}
@@ -735,7 +735,7 @@ wrap_predict_input(Rcpp::List pred_input)
   if constexpr( fdagwr_algo == FDAGWR_ALGO::_FMGWR_  )
   {
     //check input list
-    if (pred_input.size() != 7){ throw std::invalid_argument("Lenght of input list model_fitted has to be 6");}
+    if (pred_input.size() != 7){ throw std::invalid_argument("Lenght of input list model_fitted has to be 7");}
 
     //check that derives from the right algorithm
     if( as<std::string>(pred_input[std::string{FDAGWR_HELPERS_for_PRED_NAMES::model_name}]) != std::string{algo_type<fdagwr_algo>()}){ throw std::invalid_argument("It is not a fitted FMGWR");}
