@@ -180,14 +180,12 @@ public:
                    INPUT a,
                    INPUT b,
                    int n_intervals_integration,
-                   double target_error_integration,
-                   int max_iterations_integration,
                    const std::vector<INPUT> & abscissa_points,
                    std::size_t n,
                    int number_threads,
-                   bool brute_force_estimation)
+                   bool in_cascade_estimation)
         :
-            fwr<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error_integration,max_iterations_integration,abscissa_points,n,number_threads,brute_force_estimation),
+            fwr<INPUT,OUTPUT>(a,b,n_intervals_integration,abscissa_points,n,number_threads,in_cascade_estimation),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_phi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(phi)},
             m_c{std::forward<SCALAR_MATRIX_OBJ>(c)},
@@ -262,7 +260,7 @@ public:
     {
         
         //exact estimation
-        if(!this->bf_estimation())
+        if(!this->in_cascade_estimation())
         {
             //(j_tilde_tilde + Re)^-1
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M

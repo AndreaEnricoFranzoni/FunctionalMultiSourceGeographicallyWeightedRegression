@@ -77,13 +77,11 @@ public:
              INPUT a,
              INPUT b,
              int n_intervals_integration,
-             double target_error_integration,
-             int max_iterations_integration,
              const std::vector<INPUT> & abscissa_points,
              std::size_t n,
              int number_threads)
         :
-            fwr<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error_integration,max_iterations_integration,abscissa_points,n,number_threads,false),
+            fwr<INPUT,OUTPUT>(a,b,n_intervals_integration,abscissa_points,n,number_threads,false),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_Xnc{std::forward<FUNC_MATRIX_OBJ>(Xnc)},
             m_Wnc{std::forward<FUNC_DIAG_MATRIX_VEC_OBJ>(Wnc)},
@@ -179,17 +177,5 @@ public:
         return std::monostate{};
     }
 };
-
-
-/*  
-        //DEFAULT AI B: PARTE DA TOGLIERE
-        m_bnc.reserve(this->n());
-
-        for(std::size_t i = 0; i < this->n(); ++i)
-        {
-            m_bnc.push_back(Eigen::MatrixXd::Random(m_Lnc,1));
-        }
-        //FINE PARTE DA TOGLIERE
-*/
 
 #endif  /*FWR_FGWR_ALGO_HPP*/

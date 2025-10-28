@@ -297,11 +297,11 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<int> basis_number,
 
 
   //"constant" basis type case
-  if(basis_type == FDAGWR_BASIS_TYPES::_constant_)
+  if(basis_type == std::string{FDAGWR_BASIS_TYPES::_constant_})
   {
     //default (and only possible) case
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,constant_basis<FDAGWR_TRAITS::basis_geometry>::number_of_basis_constant_basis));    //one base
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,constant_basis<FDAGWR_TRAITS::basis_geometry>::degree_constant_basis));        //degree zero
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::n_basis_string},constant_basis<FDAGWR_TRAITS::basis_geometry>::number_of_basis_constant_basis));    //one base
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::degree_basis_string},constant_basis<FDAGWR_TRAITS::basis_geometry>::degree_constant_basis));        //degree zero
 
     return returning_element;
   }
@@ -315,8 +315,8 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<int> basis_number,
     std::size_t degree = bsplines_basis<FDAGWR_TRAITS::basis_geometry>::bsplines_degree_default;       //default is a cubic B-spline (degree 3)
     std::size_t n_basis = degree + knots_size - static_cast<std::size_t>(1);                           //B-splines constraint for basis number
 
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,n_basis));
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,degree));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::n_basis_string},n_basis));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::degree_basis_string},degree));
   }
 
   //basis number unknown, degree known
@@ -330,8 +330,8 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<int> basis_number,
     //computing the basis number
     std::size_t n_basis = static_cast<std::size_t>(Rcpp::as<int>(basis_degree)) + knots_size - static_cast<std::size_t>(1);
 
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,n_basis));
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,static_cast<std::size_t>(Rcpp::as<int>(basis_degree))));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::n_basis_string},n_basis));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::degree_basis_string},static_cast<std::size_t>(Rcpp::as<int>(basis_degree))));
   }
 
   //basis number known, degree unknown
@@ -345,8 +345,8 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<int> basis_number,
     //computing the degree
     std::size_t degree = static_cast<std::size_t>(Rcpp::as<int>(basis_number)) - knots_size + static_cast<std::size_t>(1);
 
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,static_cast<std::size_t>(Rcpp::as<int>(basis_number))));
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,degree));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::n_basis_string},static_cast<std::size_t>(Rcpp::as<int>(basis_number))));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::degree_basis_string},degree));
   }
 
   //both basis number and order known
@@ -365,8 +365,8 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<int> basis_number,
       std::string error_message5 = "The number of basis for the response has to be the order of the basis (" + std::to_string(static_cast<std::size_t>(Rcpp::as<int>(basis_degree))) + ") + the number of knots (" + std::to_string(knots_size) + ") - 1";
       throw std::invalid_argument(error_message5);}
 
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,static_cast<std::size_t>(static_cast<std::size_t>(Rcpp::as<int>(basis_number)))));
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,static_cast<std::size_t>(static_cast<std::size_t>(Rcpp::as<int>(basis_degree)))));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::n_basis_string},static_cast<std::size_t>(static_cast<std::size_t>(Rcpp::as<int>(basis_number)))));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::degree_basis_string},static_cast<std::size_t>(static_cast<std::size_t>(Rcpp::as<int>(basis_degree)))));
   }
   
   return returning_element;
@@ -406,8 +406,8 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
     std::vector<std::size_t> degrees(number_of_covariates,bsplines_basis<FDAGWR_TRAITS::basis_geometry>::bsplines_degree_default);    //default is a cubic B-spline (degree 3) for all the covariates
     std::vector<std::size_t> ns_basis(number_of_covariates,bsplines_basis<FDAGWR_TRAITS::basis_geometry>::bsplines_degree_default + knots_size - static_cast<std::size_t>(1));
 
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,ns_basis));
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,degrees));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::n_basis_string},ns_basis));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::degree_basis_string},degrees));
   }
 
   //basis number unknown, order known
@@ -447,8 +447,8 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
                    ns_basis.begin(),
                    [knots_size](std::size_t const &el){ return (el + knots_size - static_cast<std::size_t>(1));});
 
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,ns_basis));
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,degrees));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::n_basis_string},ns_basis));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::degree_basis_string},degrees));
   }
 
   //basis number known, order unknown
@@ -488,8 +488,8 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
                    degrees.begin(),
                    [knots_size](std::size_t const &el){return (el - knots_size + static_cast<std::size_t>(1));});
 
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,ns_basis));
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,degrees));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::n_basis_string},ns_basis));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::degree_basis_string},degrees));
   }
   
   //both basis number and order known
@@ -544,8 +544,8 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
             std::string error_message8 = "The number of basis, bspline basis, for the " + covariates_type + " covariates has to be the degree of the basis + the number of knots - 1";
             throw std::invalid_argument(error_message8);}}
 
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::n_basis_string,ns_basis));
-    returning_element.insert(std::make_pair(FDAGWR_FEATS::degree_basis_string,degrees));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::n_basis_string},ns_basis));
+    returning_element.insert(std::make_pair(std::string{FDAGWR_FEATS::degree_basis_string},degrees));
   }
 
 
@@ -554,8 +554,8 @@ wrap_and_check_basis_number_and_degree(Rcpp::Nullable<Rcpp::IntegerVector> basis
   {
     if (basis_types[i] == FDAGWR_BASIS_TYPES::_constant_)
     {
-      returning_element[FDAGWR_FEATS::n_basis_string][i] = constant_basis<FDAGWR_TRAITS::basis_geometry>::number_of_basis_constant_basis;
-      returning_element[FDAGWR_FEATS::degree_basis_string][i] = constant_basis<FDAGWR_TRAITS::basis_geometry>::degree_constant_basis;
+      returning_element[std::string{FDAGWR_FEATS::n_basis_string}][i] = constant_basis<FDAGWR_TRAITS::basis_geometry>::number_of_basis_constant_basis;
+      returning_element[std::string{FDAGWR_FEATS::degree_basis_string}][i] = constant_basis<FDAGWR_TRAITS::basis_geometry>::degree_constant_basis;
     }
   }
 
@@ -647,62 +647,24 @@ wrap_and_check_n_knots_smoothing(int n_knots)
 
 
 /*!
-* @brief Wrapping the number of intervals for the integration via trapezoidal quadrature rule
-* @param n_intervals number of intervals used for integrating via trapezoidal quadrature rule
-* @return return the number of intervals used for integrating via trapezoidal quadrature rule
-* @note checking that the number of intervals used for integrating via trapezoidal quadrature rule is a positive number, throwing an exception if not
+* @brief Wrapping the number of intervals for the integration via midpoint quadrature rule
+* @param n_intervals number of intervals used for integrating via midpoint quadrature rule
+* @return return the number of intervals used for integrating via midpoint quadrature rule
+* @note checking that the number of intervals used for integrating via midpoint quadrature rule is a positive number, throwing an exception if not
 */
 inline
 int
-wrap_and_check_n_intervals_trapezoidal_quadrature(int n_intervals)
+wrap_and_check_n_intervals_quadrature(int n_intervals)
 {
   //checking that the number of intervals is positive, throwing an exception if not
   if (n_intervals <= 0){
-    std::string error_message = "The number of intervals used for integrating via trapezoidal quadrature rule has to be positive";
+    std::string error_message = "The number of intervals used for integrating via midpoint quadrature rule has to be positive";
     throw std::invalid_argument(error_message);}
 
   return n_intervals;  
 }
 
 
-
-/*!
-* @brief Wrapping the target error for the integration via trapezoidal quadrature rule
-* @param target_error target error while integrating via trapezoidal quadrature rule
-* @return return the target error for integrating via trapezoidal quadrature rule
-* @note checking that the target error while integrating via trapezoidal quadrature rule is a positive number, throwing an exception if not
-*/
-inline
-double
-wrap_and_check_target_error_trapezoidal_quadrature(double target_error)
-{
-  //checking that the number of intervals is positive, throwing an exception if not
-  if (target_error <= 0){
-    std::string error_message = "The target error while integrating via trapezoidal quadrature rule has to be positive";
-    throw std::invalid_argument(error_message);}
-
-  return target_error;  
-}
-
-
-
-/*!
-* @brief Wrapping the max number of iterations for the integration via trapezoidal quadrature rule
-* @param n_intervals the max number of iterations used for integrating via trapezoidal quadrature rule
-* @return return the max number of iterations used for integrating via trapezoidal quadrature rule
-* @note checking that the max number of iterations used for integrating via trapezoidal quadrature rule is a positive number, throwing an exception if not
-*/
-inline
-int
-wrap_and_check_max_iterations_trapezoidal_quadrature(int max_iterations)
-{
-  //checking that the number of intervals is positive, throwing an exception if not
-  if (max_iterations <= 0){
-    std::string error_message = "The maximum number of iterations for integrating via trapezoidal quadrature rule has to be positive";
-    throw std::invalid_argument(error_message);}
-
-  return max_iterations;  
-}
 
 
 
@@ -756,7 +718,7 @@ wrap_predict_input(Rcpp::List pred_input)
     if (pred_input.size() != 9){ throw std::invalid_argument("Lenght of input list model_fitted has to be 8");}
 
     //check that derives from the right algorithm
-    if( as<std::string>(pred_input[FDAGWR_HELPERS_for_PRED_NAMES::model_name]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FMSGWR_ESC");}
+    if( as<std::string>(pred_input[std::string{FDAGWR_HELPERS_for_PRED_NAMES::model_name}]) != std::string{algo_type<fdagwr_algo>()}){ throw std::invalid_argument("It is not a fitted FMSGWR_ESC");}
   }
 
   //FGWR_FMS_SEC
@@ -766,7 +728,7 @@ wrap_predict_input(Rcpp::List pred_input)
     if (pred_input.size() != 9){ throw std::invalid_argument("Lenght of input list model_fitted has to be 8");}
 
     //check that derives from the right algorithm
-    if( as<std::string>(pred_input[FDAGWR_HELPERS_for_PRED_NAMES::model_name]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FMSGWR_SEC");}
+    if( as<std::string>(pred_input[std::string{FDAGWR_HELPERS_for_PRED_NAMES::model_name}]) != std::string{algo_type<fdagwr_algo>()}){ throw std::invalid_argument("It is not a fitted FMSGWR_SEC");}
   }
 
   //FMGWR
@@ -776,7 +738,7 @@ wrap_predict_input(Rcpp::List pred_input)
     if (pred_input.size() != 7){ throw std::invalid_argument("Lenght of input list model_fitted has to be 6");}
 
     //check that derives from the right algorithm
-    if( as<std::string>(pred_input[FDAGWR_HELPERS_for_PRED_NAMES::model_name]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FMGWR");}
+    if( as<std::string>(pred_input[std::string{FDAGWR_HELPERS_for_PRED_NAMES::model_name}]) != std::string{algo_type<fdagwr_algo>()}){ throw std::invalid_argument("It is not a fitted FMGWR");}
   }
 
   //FGWR
@@ -786,7 +748,7 @@ wrap_predict_input(Rcpp::List pred_input)
     if (pred_input.size() != 4){ throw std::invalid_argument("Lenght of input list model_fitted has to be 4");}
 
     //check that derives from the right algorithm
-    if( as<std::string>(pred_input[FDAGWR_HELPERS_for_PRED_NAMES::model_name]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FGWR");}
+    if( as<std::string>(pred_input[std::string{FDAGWR_HELPERS_for_PRED_NAMES::model_name}]) != std::string{algo_type<fdagwr_algo>()}){ throw std::invalid_argument("It is not a fitted FGWR");}
   }
 
   //FWR 
@@ -796,7 +758,7 @@ wrap_predict_input(Rcpp::List pred_input)
     if (pred_input.size() != 4){ throw std::invalid_argument("Lenght of input list model_fitted has to be 4");}
 
     //check that derives from the right algorithm
-    if( as<std::string>(pred_input[FDAGWR_HELPERS_for_PRED_NAMES::model_name]) != algo_type<fdagwr_algo>()){ throw std::invalid_argument("It is not a fitted FWR");}
+    if( as<std::string>(pred_input[std::string{FDAGWR_HELPERS_for_PRED_NAMES::model_name}]) != std::string{algo_type<fdagwr_algo>()}){ throw std::invalid_argument("It is not a fitted FWR");}
   }
 }
 

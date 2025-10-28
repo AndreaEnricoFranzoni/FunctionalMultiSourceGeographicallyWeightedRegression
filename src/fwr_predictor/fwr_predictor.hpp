@@ -39,22 +39,22 @@ class fwr_predictor
 
 
 private:
-    /*!Object to perform the integration using trapezoidal quadrature rule*/
+    /*!Object to perform the integration using midpoint quadrature rule*/
     fwr_operator_computing<INPUT,OUTPUT> m_operator_comp;
     /*!Number of statistical units used to train the model*/
     std::size_t m_n_train;
     /*!Number of threads for OMP*/
     int m_number_threads;
     /*!BF*/
-    bool m_bf_estimation;
+    bool m_in_cascade_estimation;
 
 public:
     /*!
     * @brief Constructor
     * @param number_threads number of threads for OMP
     */
-    fwr_predictor(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, std::size_t n_train, int number_threads, bool bf_estimation)
-                   : m_operator_comp(a,b,n_intervals_integration,target_error,max_iterations,number_threads), m_n_train(n_train), m_number_threads(number_threads), m_bf_estimation(bf_estimation) {}
+    fwr_predictor(INPUT a, INPUT b, int n_intervals_integration, std::size_t n_train, int number_threads, bool in_cascade_estimation)
+                   : m_operator_comp(a,b,n_intervals_integration,number_threads), m_n_train(n_train), m_number_threads(number_threads), m_in_cascade_estimation(in_cascade_estimation) {}
 
     /*!
     * @brief Virtual destructor
@@ -64,10 +64,10 @@ public:
     /*!
     * @brief IDs for the input maps
     */
-    static constexpr std::string id_C  = COVARIATES_NAMES::Stationary;
-    static constexpr std::string id_NC = COVARIATES_NAMES::Nonstationary;
-    static constexpr std::string id_E  = COVARIATES_NAMES::Event;
-    static constexpr std::string id_S  = COVARIATES_NAMES::Station;
+    inline static constexpr std::string_view id_C  = COVARIATES_NAMES::Stationary;
+    inline static constexpr std::string_view id_NC = COVARIATES_NAMES::Nonstationary;
+    inline static constexpr std::string_view id_E  = COVARIATES_NAMES::Event;
+    inline static constexpr std::string_view id_S  = COVARIATES_NAMES::Station;
 
     /*!
     * @brief Getter for the compute operator
@@ -87,9 +87,9 @@ public:
     inline int number_threads() const {return m_number_threads;}
 
     /*!
-    * @brief Getter for m_bf_estimation
+    * @brief Getter for m_in_cascade_estimation
     */
-    inline bool bf_estimation() const {return m_bf_estimation;}
+    inline bool in_cascade_estimation() const {return m_in_cascade_estimation;}
 
     /*!
     * @brief Function to evaluate the prediction

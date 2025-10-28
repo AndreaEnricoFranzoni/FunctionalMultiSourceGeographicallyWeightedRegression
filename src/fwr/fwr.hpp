@@ -40,7 +40,7 @@ template< typename INPUT = double, typename OUTPUT = double >
 class fwr
 {
 private:
-    /*!Object to perform the integration using trapezoidal quadrature rule*/
+    /*!Object to perform the integration using midpoint quadrature rule*/
     fwr_operator_computing<INPUT,OUTPUT> m_operator_comp;
     /*!Abscissa points over which there are the evaluations of the raw fd*/
     std::vector<INPUT> m_abscissa_points;
@@ -49,15 +49,15 @@ private:
     /*!Number of threads for OMP*/
     int m_number_threads;
     /*!Brute force estimation*/
-    bool m_brute_force_estimation;
+    bool m_in_cascade_estimation;
 
 public:
     /*!
     * @brief Constructor
     * @param number_threads number of threads for OMP
     */
-    fwr(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, const std::vector<INPUT> & abscissa_points, std::size_t n, int number_threads, bool brute_force_estimation)
-        : m_operator_comp(a,b,n_intervals_integration,target_error,max_iterations,number_threads), m_abscissa_points(abscissa_points), m_n(n), m_number_threads(number_threads), m_brute_force_estimation(brute_force_estimation) {}
+    fwr(INPUT a, INPUT b, int n_intervals_integration, const std::vector<INPUT> & abscissa_points, std::size_t n, int number_threads, bool in_cascade_estimation)
+        : m_operator_comp(a,b,n_intervals_integration,number_threads), m_abscissa_points(abscissa_points), m_n(n), m_number_threads(number_threads), m_in_cascade_estimation(in_cascade_estimation) {}
 
     /*!
     * @brief Virtual destructor
@@ -88,9 +88,9 @@ public:
     inline int number_threads() const {return m_number_threads;}
 
     /*!
-    * @brief Getter for m_brute_force_estimation
+    * @brief Getter for m_in_cascade_estimation
     */
-    inline bool bf_estimation() const {return m_brute_force_estimation;}
+    inline bool in_cascade_estimation() const {return m_in_cascade_estimation;}
 
     /*!
     * @brief Virtual method to compute the Functional Geographically Weighted Regression

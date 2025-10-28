@@ -70,13 +70,10 @@ public:
                        const std::vector<std::size_t> &Lc_j,
                        INPUT a, 
                        INPUT b, 
-                       int n_intervals_integration, 
-                       double target_error, 
-                       int max_iterations, 
                        std::size_t n_train, 
                        int number_threads)
             :   
-                fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,n_train,number_threads,false),
+                fwr_predictor<INPUT,OUTPUT>(a,b,1,n_train,number_threads,false),
                 m_Bc_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC>(Bc_fitted)},
                 m_omega{std::forward<FUNC_SPARSE_MATRIX_OBJ>(omega)},
                 m_qc(qc),
@@ -139,9 +136,9 @@ public:
     override
     {
         assert(X_new.size() == 1);
-        assert(X_new.at(fwr_FWR_predictor<INPUT,OUTPUT>::id_C).cols() == m_qc);
-        //new covsariates
-        auto Xc_new = X_new.at(fwr_FWR_predictor<INPUT,OUTPUT>::id_C);
+
+        auto Xc_new = X_new.at(std::string{fwr_FWR_predictor<INPUT,OUTPUT>::id_C});
+        assert(Xc_new.cols() == m_qc);
 
         //y_new = X_new*beta = Xc_new*beta_c
         functional_matrix<INPUT,OUTPUT> y_new_C = fm_prod(Xc_new,m_BetaC,this->number_threads());    //n_pred x 1

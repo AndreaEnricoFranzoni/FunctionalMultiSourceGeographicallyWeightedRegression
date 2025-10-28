@@ -276,11 +276,6 @@ wrap_into_fm(const functional_weight_matrix_stationary<INPUT,OUTPUT,domain_type,
 
 
 /*!
-* @brief Function to wrap a functional non-stationary weight matrix object functional_weight_matrix_stationary into a functional diagonal matrix object functional_matrix_diagonal
-* @note It stores the functions objects diagonally, as an n x n matrix, where n is the number of statistical units
-* @todo WRITE IT
-*/
-/*!
 * @brief Function to wrap a functional non-stationary weight matrix object into a vector of diagonal functional matrices
 * @tparam INPUT type of abscissa
 * @tparam OUTPUT type of image

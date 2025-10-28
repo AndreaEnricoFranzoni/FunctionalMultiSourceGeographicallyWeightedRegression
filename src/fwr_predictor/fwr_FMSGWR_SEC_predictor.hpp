@@ -176,13 +176,11 @@ public:
                            INPUT a, 
                            INPUT b, 
                            int n_intervals_integration, 
-                           double target_error, 
-                           int max_iterations, 
                            std::size_t n_train, 
                            int number_threads,
                            bool bf_estimation)
             :   
-                    fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,n_train,number_threads,bf_estimation),
+                    fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,n_train,number_threads,bf_estimation),
                     m_Bc_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC>(Bc_fitted)},
                     m_Be_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC_VEC>(Be_fitted)},
                     m_omega{std::forward<FUNC_SPARSE_MATRIX_OBJ>(omega)},
@@ -244,7 +242,7 @@ public:
     computePartialResiduals()
     override
     {
-        if (!this->bf_estimation())
+        if (!this->in_cascade_estimation())
         {
             //retrieve the partial residuals from the fitted model
             //K_s_e(t) n_train x Le
@@ -289,34 +287,37 @@ public:
     override
     {
         assert(W.size() == 2);
-        assert(W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E).size() == W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S).size());
-        for(std::size_t i = 0; i < W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E).size(); ++i){
-            assert((W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E)[i].rows() == this->n_train()) && (W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E)[i].cols() == this->n_train()));
-            assert((W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S)[i].rows() == this->n_train()) && (W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S)[i].cols() == this->n_train()));}
+        auto We_new = W.at(std::string{fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E});
+        auto Ws_new = W.at(std::string{fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S});
+        //input coherency
+        assert(We_new.size() == Ws_new.size());
+        for(std::size_t i = 0; i < We_new.size(); ++i){
+            assert((We_new[i].rows() == this->n_train()) && (We_new[i].cols() == this->n_train()));
+            assert((Ws_new[i].rows() == this->n_train()) && (Ws_new[i].cols() == this->n_train()));}
         //number of units to be predicted
-        std::size_t n_pred = W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E).size();
+        std::size_t n_pred = We_new.size();
 
 
-        if(!this->bf_estimation())
+        if(!this->in_cascade_estimation())
         {
             //compute the non-stationary betas in the new locations
             //penalties in the new locations
             //(j_tilde_tilde + Rs)^-1
-            std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Rs_inv = this->operator_comp().compute_penalty(m_psi_t,m_Xs_train_t,W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S),m_Xs_train,m_psi,m_Rs);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
+            std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Rs_inv = this->operator_comp().compute_penalty(m_psi_t,m_Xs_train_t,Ws_new,m_Xs_train,m_psi,m_Rs);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
             //(j_tilde + Re)^-1
-            std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Re_inv        = this->operator_comp().compute_penalty(m_Xe_train_crossed_t,W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E),m_Xe_train_crossed,m_Re);
+            std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Re_inv        = this->operator_comp().compute_penalty(m_Xe_train_crossed_t,We_new,m_Xe_train_crossed,m_Re);
             //COMPUTING all the m_bs in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
-            m_be_pred = this->operator_comp().compute_operator(m_Xe_train_crossed_t,W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E),m_y_tilde_new,j_tilde_Re_inv);
+            m_be_pred = this->operator_comp().compute_operator(m_Xe_train_crossed_t,We_new,m_y_tilde_new,j_tilde_Re_inv);
             //COMPUTING all the m_be in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
-            m_bs_pred = this->operator_comp().compute_operator(m_psi_t,m_Xs_train_t,W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S),m_y_tilde_tilde_hat,j_double_tilde_Rs_inv);
+            m_bs_pred = this->operator_comp().compute_operator(m_psi_t,m_Xs_train_t,Ws_new,m_y_tilde_tilde_hat,j_double_tilde_Rs_inv);
         }
         else
         {
-            std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_i_Re_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_train_t,W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E),m_Xe_train,m_theta,m_Re);
-            m_be_pred = this->operator_comp().compute_operator(m_theta_t,m_Xe_train_t,W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E),m_y_tilde_hat,j_i_Re_inv);
+            std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_i_Re_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_train_t,We_new,m_Xe_train,m_theta,m_Re);
+            m_be_pred = this->operator_comp().compute_operator(m_theta_t,m_Xe_train_t,We_new,m_y_tilde_hat,j_i_Re_inv);
 
-            std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_i_Rs_inv = this->operator_comp().compute_penalty(m_psi_t,m_Xs_train_t,W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S),m_Xs_train,m_psi,m_Rs);
-            m_bs_pred = this->operator_comp().compute_operator(m_psi_t,m_Xs_train_t,W.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S),m_y_tilde_tilde_hat,j_i_Rs_inv);
+            std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_i_Rs_inv = this->operator_comp().compute_penalty(m_psi_t,m_Xs_train_t,Ws_new,m_Xs_train,m_psi,m_Rs);
+            m_bs_pred = this->operator_comp().compute_operator(m_psi_t,m_Xs_train_t,Ws_new,m_y_tilde_tilde_hat,j_i_Rs_inv);
         }
 
 
@@ -373,16 +374,19 @@ public:
     override
     {
         assert(X_new.size() == 3);        
-        //controllo le unità statistiche
-        assert(X_new.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_C).rows() == X_new.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E).rows());
-        assert(X_new.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E).rows() == X_new.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S).rows());
-        std::size_t n_pred = X_new.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_C).rows();
-        assert((n_pred == m_BetaE.size()) && (n_pred == m_BetaS.size()));
-        assert((X_new.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_C).cols() == m_qc) && (X_new.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E).cols() == m_qe) && (X_new.at(fgwr_fms_sec_predictor<INPUT,OUTPUT>::id_S).cols() == m_qs));
 
-        auto Xc_new = X_new.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_C);   
-        auto Xe_new = X_new.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E);
-        auto Xs_new = X_new.at(fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S);
+        auto Xc_new = X_new.at(std::string{fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_C});   
+        auto Xe_new = X_new.at(std::string{fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_E});
+        auto Xs_new = X_new.at(std::string{fwr_FMSGWR_SEC_predictor<INPUT,OUTPUT>::id_S});
+
+        //controllo le unità statistiche
+        assert(Xc_new.rows() == Xe_new.rows());
+        assert(Xe_new.rows() == Xs_new.rows());
+        std::size_t n_pred = Xc_new.rows();
+        assert((n_pred == m_BetaE.size()) && (n_pred == m_BetaS.size()));
+        assert((Xc_new.cols() == m_qc) && (Xe_new.cols() == m_qe) && (Xs_new.cols() == m_qs));
+
+
 
         //y_new = X_new*beta = Xc_new*beta_c + Xe_new*beta_e + Xs_new*beta_s
         functional_matrix<INPUT,OUTPUT> y_new_C = fm_prod(Xc_new,m_BetaC,this->number_threads());    //n_pred x 1
@@ -444,19 +448,5 @@ public:
     }
 
 };
-
-
-
-
-
-/*
-        //INIZIO PARTE DA TOGLIERE
-        m_bs_pred.resize(n_pred);
-        m_be_pred.resize(n_pred);
-        for(std::size_t i = 0; i < n_pred; ++i){
-            m_be_pred[i] = Eigen::MatrixXd::Random(m_Le,1);
-            m_bs_pred[i] = Eigen::MatrixXd::Random(m_Ls,1);}
-        //FINE PARTE DA TOGLIERE
-*/ 
 
 #endif  /*FWR_FMSGWR_SEC_PREDICT_HPP*/

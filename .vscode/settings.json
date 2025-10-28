@@ -67,6 +67,7 @@
         "functional": "cpp",
         "utility": "cpp",
         "span": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "type_traits": "cpp"
     }
 }

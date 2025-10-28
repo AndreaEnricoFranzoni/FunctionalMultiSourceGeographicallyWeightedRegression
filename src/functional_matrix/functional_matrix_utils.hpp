@@ -25,6 +25,7 @@
 #include <functional>
 #include <type_traits>
 #include <concepts>
+#include <cstddef>
 
 
 
@@ -142,6 +143,20 @@ using output_t = typename function_traits<F>::output_type;
 */
 template <typename T>
 concept not_eigen = !std::is_base_of_v<Eigen::MatrixBase<T>,T>;
+
+/*!
+* @brief Concept to detect objects that behave like functional matrices expressions used in this library
+*        (i.e., provide rows(), cols(), size(), and element access via operator()(i,j)).
+* @tparam T the type of the object to be checked that is a functional_matrix object
+* @note  Tightening operator overload participation to these types avoids hijacking STL iterator arithmetic
+*/
+template <typename T>
+concept functional_matrix_like = requires(const T& t) {
+    { t.rows() } -> std::convertible_to<std::size_t>;
+    { t.cols() } -> std::convertible_to<std::size_t>;
+    { t.size() } -> std::convertible_to<std::size_t>;
+    { t(std::size_t{}, std::size_t{}) };
+} && not_eigen<T>;
 
 }   //end namespace fm_utils
 

@@ -88,12 +88,10 @@ public:
                        INPUT a, 
                        INPUT b, 
                        int n_intervals_integration, 
-                       double target_error, 
-                       int max_iterations, 
                        std::size_t n_train, 
                        int number_threads)
             :   
-                fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error,max_iterations,n_train,number_threads,false),
+                fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,n_train,number_threads,false),
                 m_eta{std::forward<FUNC_SPARSE_MATRIX_OBJ>(eta)},
                 m_qnc(qnc),
                 m_Lnc(Lnc),
@@ -127,18 +125,19 @@ public:
     override
     {
         assert(W.size() == 1);
-        for(std::size_t i = 0; i < W.at(fwr_FGWR_predictor<INPUT,OUTPUT>::id_NC).size(); ++i){
-            assert((W.at(fwr_FGWR_predictor<INPUT,OUTPUT>::id_NC)[i].rows() == this->n_train()) && (W.at(fwr_FGWR_predictor<INPUT,OUTPUT>::id_NC)[i].cols() == this->n_train()));}
+        auto Wnc_new = W.at(std::string{fwr_FGWR_predictor<INPUT,OUTPUT>::id_NC});
+        for(std::size_t i = 0; i < Wnc_new.size(); ++i){
+            assert((Wnc_new[i].rows() == this->n_train()) && (Wnc_new[i].cols() == this->n_train()));}
         //number of units to be predicted
-        std::size_t n_pred = W.at(fwr_FGWR_predictor<INPUT,OUTPUT>::id_NC).size();
+        std::size_t n_pred = Wnc_new.size();
 
 
         //compute the non-stationary betas in the new locations
         //penalties in the new locations
         //(j_tilde + Rnc)^-1
-        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_Rnc_inv = this->operator_comp().compute_penalty(m_eta_t,m_Xnc_train_t,W.at(fwr_FGWR_predictor<INPUT,OUTPUT>::id_NC),m_Xnc_train,m_eta,m_Rnc);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
+        std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_Rnc_inv = this->operator_comp().compute_penalty(m_eta_t,m_Xnc_train_t,Wnc_new,m_Xnc_train,m_eta,m_Rnc);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
         //COMPUTING all the m_bnc in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE NON-STATIONARY BETAS
-        m_bnc_pred = this->operator_comp().compute_operator(m_eta_t,m_Xnc_train_t,W.at(fwr_FMGWR_predictor<INPUT,OUTPUT>::id_NC),m_y_train,j_Rnc_inv);
+        m_bnc_pred = this->operator_comp().compute_operator(m_eta_t,m_Xnc_train_t,Wnc_new,m_y_train,j_Rnc_inv);
 
         //
         //wrapping the b from the shape useful for the computation into a more useful format for reporting the results: TENERE
@@ -187,12 +186,14 @@ public:
     override
     {
         assert(X_new.size() == 1);
-        //controllo le unità statistiche
-        std::size_t n_pred = X_new.at(fwr_FGWR_predictor<INPUT,OUTPUT>::id_NC).rows();
-        assert((n_pred == m_BetaE.size()) && (n_pred == m_BetaS.size()));
-        assert(X_new.at(fwr_FGWR_predictor<INPUT,OUTPUT>::id_NC).cols() == m_qnc);
 
-        auto Xnc_new = X_new.at(fwr_FGWR_predictor<INPUT,OUTPUT>::id_NC);
+        auto Xnc_new = X_new.at(std::string{fwr_FGWR_predictor<INPUT,OUTPUT>::id_NC});
+
+        //controllo le unità statistiche
+        std::size_t n_pred = Xnc_new.rows();
+        assert((n_pred == m_BetaE.size()) && (n_pred == m_BetaS.size()));
+        assert(Xnc_new.cols() == m_qnc);
+
 
         //y_new = X_new*beta = Xnc_new*beta_nc
         functional_matrix<INPUT,OUTPUT> y_new_NC(n_pred,1);
@@ -247,15 +248,5 @@ public:
     }
 
 };
-
-/*
-        //INIZIO PARTE DA TOGLIERE
-        m_bnc_pred.resize(n_pred);
-
-        for(std::size_t i = 0; i < n_pred; ++i){
-            m_bnc_pred[i] = Eigen::MatrixXd::Random(m_Lnc,1);
-        }
-        //FINE PARTE DA TOGLIERE
-*/ 
 
 #endif  /*FWR_FGWR_PREDICT_HPP*/

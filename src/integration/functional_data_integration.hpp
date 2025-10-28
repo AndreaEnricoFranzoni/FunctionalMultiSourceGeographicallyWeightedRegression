@@ -50,7 +50,7 @@ private:
 
 public:
     /*!Constructor*/
-    fd_integration(double a, double b, int intervals, double target_error, int max_iterations):
+    fd_integration(double a, double b, int intervals):
         m_integration_domain(a,b), 
         m_integration_mesh(m_integration_domain,intervals),
         //m_integration_quadrature(Trapezoidal{},m_integration_mesh)

@@ -87,13 +87,13 @@ using extract_template_t = extract_template<
 
 /*!
 * @brief Function to return the name of the estimation techinque (brute force or exact)
-* @param bf_estimation bool: if true, brute force estimation is used. If not, exact
+* @param in_cascade_estimation bool: if true, brute force estimation is used. If not, exact
 * @return a string with the estimation technique name
 */
 std::string
-estimation_iter(bool bf_estimation)
+estimation_iter(bool in_cascade_estimation)
 {
-    return bf_estimation ? "BruteForceEstimation" : "ExactEstimation";
+    return in_cascade_estimation ? "Cascade" : "Exact";
 }
 
 
@@ -138,10 +138,10 @@ enrichB(const FDAGWR_TRAITS::Dense_Matrix& b,
         const std::vector<FDAGWR_TRAITS::fd_obj_x_type>& basis_knots) 
 {
     //WRAP B STATIONARY
-    return Rcpp::List::create(Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis) = Rcpp::wrap(b),
-                              Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::basis_t)     = basis_type,
-                              Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::n_basis)     = basis_number,
-                              Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::basis_knots) = Rcpp::NumericVector(basis_knots.cbegin(), basis_knots.cend()));
+    return Rcpp::List::create(Rcpp::Named(std::string{FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis}) = Rcpp::wrap(b),
+                              Rcpp::Named(std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_t})     = basis_type,
+                              Rcpp::Named(std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis})     = basis_number,
+                              Rcpp::Named(std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_knots}) = Rcpp::NumericVector(basis_knots.cbegin(), basis_knots.cend()));
 }
 
 
@@ -217,10 +217,10 @@ enrichB(const std::vector< FDAGWR_TRAITS::Dense_Matrix >& b,
         const std::vector<FDAGWR_TRAITS::fd_obj_x_type>& basis_knots) 
 {
     // WRAP B NON-STATIONARY
-    return Rcpp::List::create(Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis) = toRList(b,true),
-                              Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::basis_t)     = basis_type,
-                              Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::n_basis)     = basis_number,
-                              Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::basis_knots) = Rcpp::NumericVector(basis_knots.cbegin(), basis_knots.cend()));
+    return Rcpp::List::create(Rcpp::Named(std::string{FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis}) = toRList(b,true),
+                              Rcpp::Named(std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_t})     = basis_type,
+                              Rcpp::Named(std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis})     = basis_number,
+                              Rcpp::Named(std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_knots}) = Rcpp::NumericVector(basis_knots.cbegin(), basis_knots.cend()));
 }
 
 
@@ -411,7 +411,7 @@ wrap_b_to_R_list(const BTuple& b,
             if (!names_bc.empty())
                 bc.names() = Rcpp::CharacterVector(names_bc.cbegin(), names_bc.cend());
 
-            return Rcpp::List::create(Rcpp::Named(FDAGWR_B_NAMES::bc) = bc);
+            return Rcpp::List::create(Rcpp::Named(std::string{FDAGWR_B_NAMES::bc}) = bc);
         }
 
         //FGWR
@@ -422,7 +422,7 @@ wrap_b_to_R_list(const BTuple& b,
             if(!names_bnc.empty())
                 bnc.names() = Rcpp::CharacterVector(names_bnc.cbegin(), names_bnc.cend());
 
-            return Rcpp::List::create(Rcpp::Named(FDAGWR_B_NAMES::bnc) = bnc); 
+            return Rcpp::List::create(Rcpp::Named(std::string{FDAGWR_B_NAMES::bnc}) = bnc); 
         }
 
         //FMGWR
@@ -438,8 +438,8 @@ wrap_b_to_R_list(const BTuple& b,
             if (!names_bnc.empty())
                 bnc.names() = Rcpp::CharacterVector(names_bnc.cbegin(), names_bnc.cend());
 
-            return Rcpp::List::create(Rcpp::Named(FDAGWR_B_NAMES::bc)  = bc,
-                                      Rcpp::Named(FDAGWR_B_NAMES::bnc) = bnc);
+            return Rcpp::List::create(Rcpp::Named(std::string{FDAGWR_B_NAMES::bc})  = bc,
+                                      Rcpp::Named(std::string{FDAGWR_B_NAMES::bnc}) = bnc);
         }
 
         //FMSGWR
@@ -460,9 +460,9 @@ wrap_b_to_R_list(const BTuple& b,
             if (!names_bs.empty())
                 bs.names() = Rcpp::CharacterVector(names_bs.cbegin(), names_bs.cend());
 
-            return Rcpp::List::create(Rcpp::Named(FDAGWR_B_NAMES::bc) = bc,
-                                      Rcpp::Named(FDAGWR_B_NAMES::be) = be,
-                                      Rcpp::Named(FDAGWR_B_NAMES::bs) = bs);
+            return Rcpp::List::create(Rcpp::Named(std::string{FDAGWR_B_NAMES::bc}) = bc,
+                                      Rcpp::Named(std::string{FDAGWR_B_NAMES::be}) = be,
+                                      Rcpp::Named(std::string{FDAGWR_B_NAMES::bs}) = bs);
         }
     }, b);
 }
@@ -499,7 +499,7 @@ wrap_beta_to_R_list(const BetasTuple& betas,
             if (!names_beta_c.empty())
                 beta_c.names() = Rcpp::CharacterVector(names_beta_c.cbegin(), names_beta_c.cend());
 
-            return Rcpp::List::create(Rcpp::Named(FDAGWR_BETAS_NAMES::beta_c) = beta_c);
+            return Rcpp::List::create(Rcpp::Named(std::string{FDAGWR_BETAS_NAMES::beta_c}) = beta_c);
         }
 
         //FGWR
@@ -510,7 +510,7 @@ wrap_beta_to_R_list(const BetasTuple& betas,
             if(!names_beta_nc.empty())
                 beta_nc.names() = Rcpp::CharacterVector(names_beta_nc.cbegin(), names_beta_nc.cend());
 
-            return Rcpp::List::create(Rcpp::Named(FDAGWR_BETAS_NAMES::beta_nc) = beta_nc);
+            return Rcpp::List::create(Rcpp::Named(std::string{FDAGWR_BETAS_NAMES::beta_nc}) = beta_nc);
         }
 
         //FMGWR
@@ -526,8 +526,8 @@ wrap_beta_to_R_list(const BetasTuple& betas,
             if (!names_beta_nc.empty())
                 beta_nc.names() = Rcpp::CharacterVector(names_beta_nc.cbegin(), names_beta_nc.cend());
 
-            return Rcpp::List::create(Rcpp::Named(FDAGWR_BETAS_NAMES::beta_c)  = beta_c,
-                                      Rcpp::Named(FDAGWR_BETAS_NAMES::beta_nc) = beta_nc);
+            return Rcpp::List::create(Rcpp::Named(std::string{FDAGWR_BETAS_NAMES::beta_c})  = beta_c,
+                                      Rcpp::Named(std::string{FDAGWR_BETAS_NAMES::beta_nc}) = beta_nc);
         }
 
         //FMSGWR
@@ -548,9 +548,9 @@ wrap_beta_to_R_list(const BetasTuple& betas,
             if (!names_beta_s.empty())
                 beta_s.names() = Rcpp::CharacterVector(names_beta_s.cbegin(), names_beta_s.cend());
 
-            return Rcpp::List::create(Rcpp::Named(FDAGWR_BETAS_NAMES::beta_c) = beta_c,
-                                      Rcpp::Named(FDAGWR_BETAS_NAMES::beta_e) = beta_e,
-                                      Rcpp::Named(FDAGWR_BETAS_NAMES::beta_s) = beta_s);
+            return Rcpp::List::create(Rcpp::Named(std::string{FDAGWR_BETAS_NAMES::beta_c}) = beta_c,
+                                      Rcpp::Named(std::string{FDAGWR_BETAS_NAMES::beta_e}) = beta_e,
+                                      Rcpp::Named(std::string{FDAGWR_BETAS_NAMES::beta_s}) = beta_s);
         }
     }, betas);
 }
@@ -572,15 +572,15 @@ wrap_PRes_to_R_list(const PartialResidualTuple& p_res)
         //FMSGWR
         if constexpr (std::is_same_v<T, std::tuple< FDAGWR_TRAITS::Dense_Matrix, std::vector< FDAGWR_TRAITS::Dense_Matrix >, std::vector< FDAGWR_TRAITS::Dense_Matrix >>>) 
         {
-            return Rcpp::List::create(Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_c_tilde_hat) = Rcpp::wrap(std::get<0>(tup)),
-                                      Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_A__)         = toRList(std::get<1>(tup),false),
-                                      Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_B__for_K)    = toRList(std::get<2>(tup),false));
+            return Rcpp::List::create(Rcpp::Named(std::string{FDAGWR_HELPERS_for_PRED_NAMES::p_res_c_tilde_hat}) = Rcpp::wrap(std::get<0>(tup)),
+                                      Rcpp::Named(std::string{FDAGWR_HELPERS_for_PRED_NAMES::p_res_A__})         = toRList(std::get<1>(tup),false),
+                                      Rcpp::Named(std::string{FDAGWR_HELPERS_for_PRED_NAMES::p_res_B__for_K})    = toRList(std::get<2>(tup),false));
         } 
 
         //FMGWR
         else if constexpr (std::is_same_v<T, std::tuple< FDAGWR_TRAITS::Dense_Matrix >>) 
         {
-            return Rcpp::List::create(Rcpp::Named(FDAGWR_HELPERS_for_PRED_NAMES::p_res_c_tilde_hat) = Rcpp::wrap(std::get<0>(tup)));
+            return Rcpp::List::create(Rcpp::Named(std::string{FDAGWR_HELPERS_for_PRED_NAMES::p_res_c_tilde_hat}) = Rcpp::wrap(std::get<0>(tup)));
         } 
 
         //FGWR and FWR
@@ -631,15 +631,15 @@ wrap_prediction_to_R_list(const std::vector< std::vector<OUTPUT>> &pred,
 
     //pred evaluation
     Rcpp::List pred_ev;
-    pred_ev[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_ev"] = predictions;
-    pred_ev[FDAGWR_HELPERS_for_PRED_NAMES::abscissa + "_ev"] = abscissa;
+    pred_ev[std::string{FDAGWR_HELPERS_for_PRED_NAMES::pred} + "_ev"] = predictions;
+    pred_ev[std::string{FDAGWR_HELPERS_for_PRED_NAMES::abscissa} + "_ev"] = abscissa;
     //pred fd
     Rcpp::List pred_fd;
-    pred_fd[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_" + FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis] = Rcpp::wrap(pred_coeff);
-    pred_fd[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_" + FDAGWR_HELPERS_for_PRED_NAMES::basis_t]     = basis_t;
-    pred_fd[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_" + FDAGWR_HELPERS_for_PRED_NAMES::n_basis]     = n_basis;
-    pred_fd[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_" + FDAGWR_HELPERS_for_PRED_NAMES::basis_deg]   = basis_deg;
-    pred_fd[FDAGWR_HELPERS_for_PRED_NAMES::pred + "_" + FDAGWR_HELPERS_for_PRED_NAMES::basis_knots] = Rcpp::wrap(basis_knots);
+    pred_fd[std::string{FDAGWR_HELPERS_for_PRED_NAMES::pred} + "_" + std::string{FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis}] = Rcpp::wrap(pred_coeff);
+    pred_fd[std::string{FDAGWR_HELPERS_for_PRED_NAMES::pred} + "_" + std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_t}]     = basis_t;
+    pred_fd[std::string{FDAGWR_HELPERS_for_PRED_NAMES::pred} + "_" + std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis}]     = n_basis;
+    pred_fd[std::string{FDAGWR_HELPERS_for_PRED_NAMES::pred} + "_" + std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_deg}]   = basis_deg;
+    pred_fd[std::string{FDAGWR_HELPERS_for_PRED_NAMES::pred} + "_" + std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_knots}] = Rcpp::wrap(basis_knots);
 
     //returning everything
     pred_w["evaluation"] = pred_ev;

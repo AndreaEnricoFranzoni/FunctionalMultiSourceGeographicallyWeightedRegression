@@ -71,9 +71,9 @@ struct FDAGWR_FEATS
 {
   static constexpr std::size_t number_of_geographical_coordinates = static_cast<std::size_t>(2);    ///< Dimension of the space (geographical UTM coordinates) over which the non-stationary covariates vary 
  
-  static constexpr std::string n_basis_string = "Basis number";                                     ///< Key for the map to store the input basis number
+  inline static constexpr std::string_view n_basis_string = "Basis number";                         ///< Key for the map to store the input basis number
 
-  static constexpr std::string degree_basis_string = "Basis degree";                                ///< Key for the map to store the input basis degree
+  inline static constexpr std::string_view degree_basis_string = "Basis degree";                    ///< Key for the map to store the input basis degree
 };
 
 
@@ -99,7 +99,7 @@ enum FDAGWR_ALGO
 */
 template < FDAGWR_ALGO fdagwr_algo >
 constexpr
-std::string
+std::string_view
 algo_type()
 {
   if constexpr ( fdagwr_algo == FDAGWR_ALGO::_FMSGWR_ESC_ )    {   return "FMSGWR_ESC";}
@@ -133,13 +133,13 @@ using BTuple = std::variant<
 */
 struct FDAGWR_B_NAMES
 {
-  static constexpr std::string bc  = "Bc";        //Constant covariates basis expansion coefficients for regression coefficients
+  inline static constexpr std::string_view bc  = "Bc";        //Constant covariates basis expansion coefficients for regression coefficients
 
-  static constexpr std::string bnc = "Bnc";       //Non constant covariates basis expansion coefficients for regression coefficients
+  inline static constexpr std::string_view bnc = "Bnc";       //Non constant covariates basis expansion coefficients for regression coefficients
 
-  static constexpr std::string be  = "Be";        //Event-dependent covariates basis expansion coefficients for regression coefficients
+  inline static constexpr std::string_view be  = "Be";        //Event-dependent covariates basis expansion coefficients for regression coefficients
 
-  static constexpr std::string bs  = "Bs";        //Station-dependent covariates basis expansion coefficients for regression coefficients
+  inline static constexpr std::string_view bs  = "Bs";        //Station-dependent covariates basis expansion coefficients for regression coefficients
 };
 
 
@@ -166,13 +166,13 @@ using BetasTuple = std::variant<
 */
 struct FDAGWR_BETAS_NAMES
 {
-  static constexpr std::string beta_c  = "Beta_c";      //Constant covariates regression coefficients
+  inline static constexpr std::string_view beta_c  = "Beta_c";      //Constant covariates regression coefficients
 
-  static constexpr std::string beta_nc = "Beta_nc";     //Non constant covariates regression coefficients
+  inline static constexpr std::string_view beta_nc = "Beta_nc";     //Non constant covariates regression coefficients
 
-  static constexpr std::string beta_e  = "Beta_e";      //Event-dependent covariates regression coefficients
+  inline static constexpr std::string_view beta_e  = "Beta_e";      //Event-dependent covariates regression coefficients
 
-  static constexpr std::string beta_s  = "Beta_s";      //Station-dependent covariates regression coefficients
+  inline static constexpr std::string_view beta_s  = "Beta_s";      //Station-dependent covariates regression coefficients
 };
 
 
@@ -197,55 +197,55 @@ using PartialResidualTuple = std::variant<
 */
 struct FDAGWR_HELPERS_for_PRED_NAMES
 {
-  static constexpr std::string model_name = "FWR";                          //Model 
+  inline static constexpr std::string_view model_name = "FWR";                          //Model 
 
-  static constexpr std::string estimation_iter = "EstimationTechnique";     //If brute force or exact estimation
+  inline static constexpr std::string_view estimation_iter = "EstimationTechnique";     //If brute force or exact estimation
 
-  static constexpr std::string bf_estimate = "BruteForceEstimation";        //Brute force estimation
+  inline static constexpr std::string_view cascade_estimate = "InCascadeEstimation";        //In cascade estimation
 
-  static constexpr std::string elem_for_pred = "predictor_info";            //For predict function
+  inline static constexpr std::string_view elem_for_pred = "predictor_info";            //For predict function
 
-  static constexpr std::string p_res = "partial_res";                       //Partial residuals
+  inline static constexpr std::string_view p_res = "partial_res";                       //Partial residuals
 
-  static constexpr std::string inputs_info = "inputs_info";                 //Elements of the fitted model
+  inline static constexpr std::string_view inputs_info = "inputs_info";                 //Elements of the fitted model
 
-  static constexpr std::string q = "number_covariates";                     //Number of covariates
+  inline static constexpr std::string_view q = "number_covariates";                     //Number of covariates
 
-  static constexpr std::string coeff_basis = "basis_coeff";                 //Basis coefficients
+  inline static constexpr std::string_view coeff_basis = "basis_coeff";                 //Basis coefficients
 
-  static constexpr std::string n_basis = "basis_num";                       //Basis number
+  inline static constexpr std::string_view n_basis = "basis_num";                       //Basis number
 
-  static constexpr std::string basis_t = "basis_type";                      //Basis type
+  inline static constexpr std::string_view basis_t = "basis_type";                      //Basis type
 
-  static constexpr std::string basis_deg = "basis_deg";                     //Basis degree
+  inline static constexpr std::string_view basis_deg = "basis_deg";                     //Basis degree
 
-  static constexpr std::string basis_knots = "knots";                       //Basis system knots
+  inline static constexpr std::string_view basis_knots = "knots";                       //Basis system knots
 
-  static constexpr std::string penalties = "penalizations";                 //Lambdas for penalization
+  inline static constexpr std::string_view penalties = "penalizations";                 //Lambdas for penalization
 
-  static constexpr std::string coords = "coordinates";                      //UTM coordinates
+  inline static constexpr std::string_view coords = "coordinates";                      //UTM coordinates
 
-  static constexpr std::string bdw_ker = "kernel_bwd_";                     //Kernel bandwith for computing weights
+  inline static constexpr std::string_view bdw_ker = "kernel_bwd_";                     //Kernel bandwith for computing weights
 
-  static constexpr std::string cov = "cov_";                                //Stands for covariates
+  inline static constexpr std::string_view cov = "cov_";                                //Stands for covariates
 
-  static constexpr std::string beta = "beta_";                              //Stands for betas
+  inline static constexpr std::string_view beta = "beta_";                              //Stands for betas
 
-  static constexpr std::string n = "n";                                     //Number of statistical units
+  inline static constexpr std::string_view n = "n";                                     //Number of statistical units
 
-  static constexpr std::string abscissa = "abscissa";                       //Abscissa points
+  inline static constexpr std::string_view abscissa = "abscissa";                       //Abscissa points
 
-  static constexpr std::string pred = "prediction";                         //Prediction
+  inline static constexpr std::string_view pred = "prediction";                         //Prediction
 
-  static constexpr std::string a = "a";                                     //Left functional data extreme domain
+  inline static constexpr std::string_view a = "a";                                     //Left functional data extreme domain
 
-  static constexpr std::string b = "b";                                     //Right functional data extreme domain
+  inline static constexpr std::string_view b = "b";                                     //Right functional data extreme domain
 
-  static constexpr std::string p_res_c_tilde_hat = "c_tilde_hat";           //Element for reconstructing the first partial residuals (FMGWR and FMSGWR)
+  inline static constexpr std::string_view p_res_c_tilde_hat = "c_tilde_hat";           //Element for reconstructing the first partial residuals (FMGWR and FMSGWR)
 
-  static constexpr std::string p_res_A__ = "A__";                           //Elements for reconstructing the second partial residuals (FMSGWR)
+  inline static constexpr std::string_view p_res_A__ = "A__";                           //Elements for reconstructing the second partial residuals (FMSGWR)
 
-  static constexpr std::string p_res_B__for_K = "B__for_K";                 //Elements for reconstructing the second partial residuals (FMSGWR)
+  inline static constexpr std::string_view p_res_B__for_K = "B__for_K";                 //Elements for reconstructing the second partial residuals (FMSGWR)
 };
 
 
@@ -272,15 +272,17 @@ enum FDAGWR_COVARIATES_TYPES
 */
 struct COVARIATES_NAMES
 {
-  static constexpr std::string Stationary                      = "Stationary";
+  inline static constexpr std::string_view Stationary         = "Stationary";
 
-  static constexpr std::string Nonstationary                   = "NonStationary";
+  inline static constexpr std::string_view Nonstationary      = "NonStationary";
 
-  static constexpr std::string Event                           = "Event";
+  inline static constexpr std::string_view Event              = "Event";
 
-  static constexpr std::string Station                         = "Station";
+  inline static constexpr std::string_view Station            = "Station";
 
-  static constexpr std::string Response                        = "Response";
+  inline static constexpr std::string_view Response           = "Response";
+
+  inline static constexpr std::string_view ResponseRecWeights = "ResponseReconstructionWeights";
 }; 
 
 
@@ -292,7 +294,7 @@ struct COVARIATES_NAMES
 */
 template < FDAGWR_COVARIATES_TYPES fdagwr_cov_t >
 constexpr
-std::string
+std::string_view
 covariate_type()
 {
   if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::STATIONARY )    {   return COVARIATES_NAMES::Stationary;}
@@ -300,7 +302,7 @@ covariate_type()
   if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::EVENT )         {   return COVARIATES_NAMES::Event;}
   if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::STATION )       {   return COVARIATES_NAMES::Station;}
   if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::RESPONSE )      {   return COVARIATES_NAMES::Response;}
-  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::REC_WEIGHTS )   {   return "ResponseReconstructionWeights";}
+  if constexpr ( fdagwr_cov_t == FDAGWR_COVARIATES_TYPES::REC_WEIGHTS )   {   return COVARIATES_NAMES::ResponseRecWeights;}
 };
 
 

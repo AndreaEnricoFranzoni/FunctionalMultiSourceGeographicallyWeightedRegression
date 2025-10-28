@@ -40,14 +40,14 @@
 */
 struct FDAGWR_BASIS_TYPES
 {
-  static constexpr std::size_t _number_implemented_basis_types_ = static_cast<std::size_t>(2);      ///< Number of concrete basis objects implemented
+  inline static constexpr std::size_t _number_implemented_basis_types_ = static_cast<std::size_t>(2);      ///< Number of concrete basis objects implemented
 
-  static constexpr std::string _bsplines_ = "bsplines";                                             ///< Name of bspline basis
+  inline static constexpr std::string_view _bsplines_ = "bsplines";                                             ///< Name of bspline basis
 
-  static constexpr std::string _constant_ = "constant";                                             ///< Name of constant basis
+  inline static constexpr std::string_view _constant_ = "constant";                                             ///< Name of constant basis
 
-  static constexpr std::array<std::string,FDAGWR_BASIS_TYPES::_number_implemented_basis_types_> _implemented_basis_{FDAGWR_BASIS_TYPES::_bsplines_,
-                                                                                                                    FDAGWR_BASIS_TYPES::_constant_};  ///< Array with the concrete basis implemented
+  inline static constexpr std::array<std::string_view,FDAGWR_BASIS_TYPES::_number_implemented_basis_types_> _implemented_basis_{FDAGWR_BASIS_TYPES::_bsplines_,
+                                                                                                                                FDAGWR_BASIS_TYPES::_constant_};  ///< Array with the concrete basis implemented
 };
 
 #endif  /*FDAGWR_BASIS_INCLUDE_HPP*/

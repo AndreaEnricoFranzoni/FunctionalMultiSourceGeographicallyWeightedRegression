@@ -73,8 +73,8 @@ public:
     * @brief Constructor
     * @param number_threads number of threads for OMP
     */
-    fwr_operator_computing(INPUT a, INPUT b, int n_intervals_integration, double target_error, int max_iterations, int number_threads)
-        : m_integrating(a,b,n_intervals_integration,target_error,max_iterations), m_number_threads(number_threads) {}
+    fwr_operator_computing(INPUT a, INPUT b, int n_intervals_integration, int number_threads)
+        : m_integrating(a,b,n_intervals_integration), m_number_threads(number_threads) {}
 
 
     /*!

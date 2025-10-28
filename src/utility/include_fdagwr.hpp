@@ -44,6 +44,7 @@
 #include <variant>
 #include <utility>
 #include <numbers>
+#include <string_view>
 
 #ifdef _OPENMP
 #include <omp.h>
