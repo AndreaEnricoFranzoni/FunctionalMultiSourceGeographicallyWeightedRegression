@@ -78,13 +78,11 @@ public:
             INPUT a,
             INPUT b,
             int n_intervals_integration,
-            double target_error_integration,
-            int max_iterations_integration,
             const std::vector<INPUT> & abscissa_points,
             std::size_t n,
             int number_threads)
         :
-            fwr<INPUT,OUTPUT>(a,b,n_intervals_integration,target_error_integration,max_iterations_integration,abscissa_points,n,number_threads,false),
+            fwr<INPUT,OUTPUT>(a,b,n_intervals_integration,abscissa_points,n,number_threads,false),
             m_y{std::forward<FUNC_MATRIX_OBJ>(y)},
             m_Xc{std::forward<FUNC_MATRIX_OBJ>(Xc)},
             m_Wc{std::forward<FUNC_DIAG_MATRIX_OBJ>(Wc)},

@@ -4803,19 +4803,19 @@ Rcpp::List FWR(Rcpp::NumericMatrix y_points,
 
     //fgwr algorithm
     auto fgwr_algo = fwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),                                                                       
-                                                                                    std::move(Xc),
-                                                                                    std::move(Wc),
-                                                                                    std::move(R_C.PenalizationMatrix()),
-                                                                                    std::move(omega),
-                                                                                    q_C,
-                                                                                    Lc,
-                                                                                    Lc_j,
-                                                                                    a,
-                                                                                    b,
-                                                                                    n_intervals,
-                                                                                    abscissa_points_,
-                                                                                    number_of_statistical_units_,
-                                                                                    number_threads);
+                                                                                   std::move(Xc),
+                                                                                   std::move(Wc),
+                                                                                   std::move(R_C.PenalizationMatrix()),
+                                                                                   std::move(omega),
+                                                                                   q_C,
+                                                                                   Lc,
+                                                                                   Lc_j,
+                                                                                   a,
+                                                                                   b,
+                                                                                   n_intervals,
+                                                                                   abscissa_points_,
+                                                                                   number_of_statistical_units_,
+                                                                                   number_threads);
 
     //computing the b
     fgwr_algo->compute();
