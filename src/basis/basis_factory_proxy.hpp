@@ -32,8 +32,8 @@
 namespace {
   using basis_factory::basisProxy;
 
-  basisProxy<bsplines_basis<FDAGWR_TRAITS::basis_geometry>> basisBSPLINES(FDAGWR_BASIS_TYPES::_bsplines_);  ///< Registration of bspline basis
-  basisProxy<constant_basis<FDAGWR_TRAITS::basis_geometry>> basisCONSTANT(FDAGWR_BASIS_TYPES::_constant_);  ///< Registration of constant basis
+  basisProxy<bsplines_basis<FDAGWR_TRAITS::basis_geometry>> basisBSPLINES(std::string{FDAGWR_BASIS_TYPES::_bsplines_});  ///< Registration of bspline basis
+  basisProxy<constant_basis<FDAGWR_TRAITS::basis_geometry>> basisCONSTANT(std::string{FDAGWR_BASIS_TYPES::_constant_});  ///< Registration of constant basis
 
 }
 

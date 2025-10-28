@@ -191,7 +191,7 @@ wrap_and_check_basis_type(Rcpp::Nullable<Rcpp::CharacterVector> basis_types_name
   //default if a NULL is passed 
   if (basis_types_names.isNull()){
     //returning all "bsplines"
-    std::vector<std::string> basis_types_names_wrapped(number_of_covariates,FDAGWR_BASIS_TYPES::_bsplines_);
+    std::vector<std::string> basis_types_names_wrapped(number_of_covariates,std::string{FDAGWR_BASIS_TYPES::_bsplines_});
     return basis_types_names_wrapped;}
 
   //wrapper

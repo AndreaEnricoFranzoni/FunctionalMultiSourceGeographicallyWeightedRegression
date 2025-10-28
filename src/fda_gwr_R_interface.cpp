@@ -716,9 +716,9 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     std::string _bc_                = std::string{FDAGWR_B_NAMES::bc};                                 //bc
     std::string _beta_c_            = std::string{FDAGWR_BETAS_NAMES::beta_c};                         //beta_c
     std::string _be_                = std::string{FDAGWR_B_NAMES::be};                                 //be
-    std::string _beta_e_            = std::string{FDAGWR_B_NAMES::beta_e};                             //beta_e
+    std::string _beta_e_            = std::string{FDAGWR_BETAS_NAMES::beta_e};                         //beta_e
     std::string _bs_                = std::string{FDAGWR_B_NAMES::bs};                                 //bs
-    std::string _beta_s_            = std::string{FDAGWR_B_NAMES::beta_s};                             //beta_s
+    std::string _beta_s_            = std::string{FDAGWR_BETAS_NAMES::beta_s};                         //beta_s
     std::string _elem_for_pred_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred};       //elements used to predict (reconstructing training data and partial residuals)
     std::string _partial_residuals_ = std::string{FDAGWR_HELPERS_for_PRED_NAMES::p_res};               //partial residuals 
     std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
@@ -793,7 +793,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     C_input[_n_basis_]      = number_basis_stationary_cov_;
     C_input[_t_basis_]      = basis_types_stationary_cov_;
     C_input[_deg_basis_]    = degree_basis_stationary_cov_;
-    C_input[F_knots_basis_] = knots_stationary_cov_;
+    C_input[_knots_basis_]  = knots_stationary_cov_;
     C_input[_coeff_basis_]  = toRList(coefficients_stationary_cov_,false);
     inputs_info[_cov_stat_] = C_input;
     //input of Beta C   
@@ -1038,7 +1038,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     // NUMBER OF KNOTS TO PERFORM SMOOTHING ON THE RESPONSE WITHOUT THE NON-STATIONARY COMPONENTS
     int n_knots_smoothing_y_new = wrap_and_check_n_knots_smoothing(n_knots_smoothing_pred);
     // NUMBER OF INTERVALS FOR INTEGRATING VIA MIDPOINT QUADRATURE RULE
-    int n_intervals = wrap_and_check_n_intervals_quadrature(n_intervals_trapezoidal_quadrature);
+    int n_intervals = wrap_and_check_n_intervals_quadrature(n_intervals_quadrature);
 
 
 
@@ -1052,9 +1052,9 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::string _bc_                = std::string{FDAGWR_B_NAMES::bc};                                 //bc
     std::string _beta_c_            = std::string{FDAGWR_BETAS_NAMES::beta_c};                         //beta_c
     std::string _be_                = std::string{FDAGWR_B_NAMES::be};                                 //be
-    std::string _beta_e_            = std::string{FDAGWR_B_NAMES::beta_e};                             //beta_e
+    std::string _beta_e_            = std::string{FDAGWR_BETAS_NAMES::beta_e};                         //beta_e
     std::string _bs_                = std::string{FDAGWR_B_NAMES::bs};                                 //bs
-    std::string _beta_s_            = std::string{FDAGWR_B_NAMES::beta_s};                             //beta_s
+    std::string _beta_s_            = std::string{FDAGWR_BETAS_NAMES::beta_s};                         //beta_s
     std::string _elem_for_pred_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred};       //elements used to predict (reconstructing training data and partial residuals)
     std::string _partial_residuals_ = std::string{FDAGWR_HELPERS_for_PRED_NAMES::p_res};               //partial residuals 
     std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
@@ -1492,7 +1492,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     //returning element                                       
     Rcpp::List l;
     //predictor
-    l[_model_name_ + "_predictor"] = "predictor_" + std::string{algo_type<_FGWR_ALGO_>();}
+    l[_model_name_ + "_predictor"] = "predictor_" + std::string{algo_type<_FGWR_ALGO_>()};
     l[_estimation_iter_]           = estimation_iter(in_cascade_estimation);
     //predictions
     l[std::string{FDAGWR_HELPERS_for_PRED_NAMES::pred}] = y_pred_ev_R;
@@ -2151,9 +2151,9 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
     std::string _bc_                = std::string{FDAGWR_B_NAMES::bc};                                 //bc
     std::string _beta_c_            = std::string{FDAGWR_BETAS_NAMES::beta_c};                         //beta_c
     std::string _be_                = std::string{FDAGWR_B_NAMES::be};                                 //be
-    std::string _beta_e_            = std::string{FDAGWR_B_NAMES::beta_e};                             //beta_e
+    std::string _beta_e_            = std::string{FDAGWR_BETAS_NAMES::beta_e};                         //beta_e
     std::string _bs_                = std::string{FDAGWR_B_NAMES::bs};                                 //bs
-    std::string _beta_s_            = std::string{FDAGWR_B_NAMES::beta_s};                             //beta_s
+    std::string _beta_s_            = std::string{FDAGWR_BETAS_NAMES::beta_s};                         //beta_s
     std::string _elem_for_pred_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred};       //elements used to predict (reconstructing training data and partial residuals)
     std::string _partial_residuals_ = std::string{FDAGWR_HELPERS_for_PRED_NAMES::p_res};               //partial residuals 
     std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
@@ -2228,7 +2228,7 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
     C_input[_n_basis_]      = number_basis_stationary_cov_;
     C_input[_t_basis_]      = basis_types_stationary_cov_;
     C_input[_deg_basis_]    = degree_basis_stationary_cov_;
-    C_input[F_knots_basis_] = knots_stationary_cov_;
+    C_input[_knots_basis_]  = knots_stationary_cov_;
     C_input[_coeff_basis_]  = toRList(coefficients_stationary_cov_,false);
     inputs_info[_cov_stat_] = C_input;
     //input of Beta C   
@@ -2486,9 +2486,9 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
     std::string _bc_                = std::string{FDAGWR_B_NAMES::bc};                                 //bc
     std::string _beta_c_            = std::string{FDAGWR_BETAS_NAMES::beta_c};                         //beta_c
     std::string _be_                = std::string{FDAGWR_B_NAMES::be};                                 //be
-    std::string _beta_e_            = std::string{FDAGWR_B_NAMES::beta_e};                             //beta_e
+    std::string _beta_e_            = std::string{FDAGWR_BETAS_NAMES::beta_e};                         //beta_e
     std::string _bs_                = std::string{FDAGWR_B_NAMES::bs};                                 //bs
-    std::string _beta_s_            = std::string{FDAGWR_B_NAMES::beta_s};                             //beta_s
+    std::string _beta_s_            = std::string{FDAGWR_BETAS_NAMES::beta_s};                         //beta_s
     std::string _elem_for_pred_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred};       //elements used to predict (reconstructing training data and partial residuals)
     std::string _partial_residuals_ = std::string{FDAGWR_HELPERS_for_PRED_NAMES::p_res};               //partial residuals 
     std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
