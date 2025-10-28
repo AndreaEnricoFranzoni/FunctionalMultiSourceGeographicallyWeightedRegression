@@ -724,14 +724,14 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
     //names secondary outputs, contained in the main ones
     //the different covariates
-    std::string _response_       = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::RESPONSE>()};                                                        //response
-    std::string _response_rec_w_ = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::REC_WEIGHTS>()};                                                     //response reconstruction weights
-    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};   //stationary training covariates
-    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};   //stationary betas
-    std::string _cov_event_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()};         //event-dependent training covariates
-    std::string _beta_event_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()};        //event-dependent betas
-    std::string _cov_station_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()};       //station-dependent training covariates
-    std::string _beta_station_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()};      //station-dependent training covariates    
+    std::string _response_       = std::string{covariate_type<_RESPONSE_>()};                                                        //response
+    std::string _response_rec_w_ = std::string{covariate_type<_REC_WEIGHTS_>()};                                                     //response reconstruction weights
+    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATIONARY_>()};   //stationary training covariates
+    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATIONARY_>()};   //stationary betas
+    std::string _cov_event_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_EVENT_>()};        //event-dependent training covariates
+    std::string _beta_event_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_EVENT_>()};        //event-dependent betas
+    std::string _cov_station_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATION_>()};      //station-dependent training covariates
+    std::string _beta_station_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATION_>()};      //station-dependent training covariates    
     //training data features
     std::string _q_              = std::string{FDAGWR_HELPERS_for_PRED_NAMES::q};                   //number of covariate
     std::string _n_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis};             //number of basis
@@ -1060,14 +1060,14 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
     //names secondary outputs, contained in the main ones
     //the different covariates
-    std::string _response_       = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::RESPONSE>()};                                                        //response
-    std::string _response_rec_w_ = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::REC_WEIGHTS>()};                                                     //response reconstruction weights
-    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};   //stationary training covariates
-    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};   //stationary betas
-    std::string _cov_event_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()};         //event-dependent training covariates
-    std::string _beta_event_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()};        //event-dependent betas
-    std::string _cov_station_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()};       //station-dependent training covariates
-    std::string _beta_station_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()};      //station-dependent training covariates    
+    std::string _response_       = std::string{covariate_type<_RESPONSE_>()};                                                        //response
+    std::string _response_rec_w_ = std::string{covariate_type<_REC_WEIGHTS_>()};                                                     //response reconstruction weights
+    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATIONARY_>()};   //stationary training covariates
+    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATIONARY_>()};   //stationary betas
+    std::string _cov_event_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_EVENT_>()};        //event-dependent training covariates
+    std::string _beta_event_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_EVENT_>()};        //event-dependent betas
+    std::string _cov_station_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATION_>()};      //station-dependent training covariates
+    std::string _beta_station_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATION_>()};      //station-dependent training covariates    
     //training data features
     std::string _q_              = std::string{FDAGWR_HELPERS_for_PRED_NAMES::q};                   //number of covariate
     std::string _n_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis};             //number of basis
@@ -2159,14 +2159,14 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
     std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
     //names secondary outputs, contained in the main ones
     //the different covariates
-    std::string _response_       = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::RESPONSE>()};                                                        //response
-    std::string _response_rec_w_ = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::REC_WEIGHTS>()};                                                     //response reconstruction weights
-    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};   //stationary training covariates
-    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};   //stationary betas
-    std::string _cov_event_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()};         //event-dependent training covariates
-    std::string _beta_event_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()};        //event-dependent betas
-    std::string _cov_station_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()};       //station-dependent training covariates
-    std::string _beta_station_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()};      //station-dependent training covariates    
+    std::string _response_       = std::string{covariate_type<_RESPONSE_>()};                                                        //response
+    std::string _response_rec_w_ = std::string{covariate_type<_REC_WEIGHTS_>()};                                                     //response reconstruction weights
+    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATIONARY_>()};   //stationary training covariates
+    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATIONARY_>()};   //stationary betas
+    std::string _cov_event_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_EVENT_>()};        //event-dependent training covariates
+    std::string _beta_event_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_EVENT_>()};        //event-dependent betas
+    std::string _cov_station_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATION_>()};      //station-dependent training covariates
+    std::string _beta_station_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATION_>()};      //station-dependent training covariates    
     //training data features
     std::string _q_              = std::string{FDAGWR_HELPERS_for_PRED_NAMES::q};                   //number of covariate
     std::string _n_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis};             //number of basis
@@ -2494,14 +2494,14 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
     std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
     //names secondary outputs, contained in the main ones
     //the different covariates
-    std::string _response_       = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::RESPONSE>()};                                                        //response
-    std::string _response_rec_w_ = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::REC_WEIGHTS>()};                                                     //response reconstruction weights
-    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};   //stationary training covariates
-    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};   //stationary betas
-    std::string _cov_event_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()};         //event-dependent training covariates
-    std::string _beta_event_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::EVENT>()};        //event-dependent betas
-    std::string _cov_station_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()};       //station-dependent training covariates
-    std::string _beta_station_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATION>()};      //station-dependent training covariates    
+    std::string _response_       = std::string{covariate_type<_RESPONSE_>()};                                                        //response
+    std::string _response_rec_w_ = std::string{covariate_type<_REC_WEIGHTS_>()};                                                     //response reconstruction weights
+    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATIONARY_>()};   //stationary training covariates
+    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATIONARY_>()};   //stationary betas
+    std::string _cov_event_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_EVENT_>()};        //event-dependent training covariates
+    std::string _beta_event_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_EVENT_>()};        //event-dependent betas
+    std::string _cov_station_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATION_>()};      //station-dependent training covariates
+    std::string _beta_station_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATION_>()};      //station-dependent training covariates    
     //training data features
     std::string _q_              = std::string{FDAGWR_HELPERS_for_PRED_NAMES::q};                   //number of covariate
     std::string _n_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis};             //number of basis
@@ -2791,9 +2791,9 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xs_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_to_be_pred_,number_threads);
     //map containing the X
     std::map<std::string,functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>> X_new = {
-        {covariate_type<_STATIONARY_>(),Xc_new},
-        {covariate_type<_EVENT_>(),Xe_new},
-        {covariate_type<_STATION_>(),Xs_new}};
+        {std::string{covariate_type<_STATIONARY_>()},Xc_new},
+        {std::string{covariate_type<_EVENT_>()},Xe_new},
+        {std::string{covariate_type<_STATION_>()},Xs_new}};
 
     ////////////////////////////////////////
     /////////        CONSTRUCTING W   //////
@@ -2835,8 +2835,8 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Ws_pred = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_STATION_>(W_S_pred,number_threads);
     //map containing the W
     std::map<std::string,std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>>> W_new = {
-        {covariate_type<_EVENT_>(),We_pred},
-        {covariate_type<_STATION_>(),Ws_pred}};
+        {std::string{covariate_type<_EVENT_>()},We_pred},
+        {std::string{covariate_type<_STATION_>()},Ws_pred}};
 
 
     //fgwr predictor
@@ -3346,18 +3346,18 @@ Rcpp::List FMGWR(Rcpp::NumericMatrix y_points,
     std::string _bc_                = std::string{FDAGWR_B_NAMES::bc};                                 //bc
     std::string _beta_c_            = std::string{FDAGWR_BETAS_NAMES::beta_c};                         //beta_c
     std::string _bnc_               = std::string{FDAGWR_B_NAMES::bnc};                                //bnc
-    std::string _beta_nc_           = std::string{FDAGWR_B_NAMES::beta_nc};                            //beta_nc
+    std::string _beta_nc_           = std::string{FDAGWR_BETAS_NAMES::beta_nc};                        //beta_nc
     std::string _elem_for_pred_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred};       //elements used to predict (reconstructing training data and partial residuals)
     std::string _partial_residuals_ = std::string{FDAGWR_HELPERS_for_PRED_NAMES::p_res};               //partial residuals 
     std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
     //names secondary outputs, contained in the main ones
     //the different covariates
-    std::string _response_       = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::RESPONSE>()};                                                          //response
-    std::string _response_rec_w_ = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::REC_WEIGHTS>()};                                                       //response reconstruction weights
-    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};     //stationary training covariates
-    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};     //stationary betas
-    std::string _cov_no_stat_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::NON_STATIONARY>()};  //event-dependent training covariates
-    std::string _beta_no_stat_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::NON_STATIONARY>()}; //event-dependent betas
+    std::string _response_       = std::string{covariate_type<_RESPONSE_>()};                                                          //response
+    std::string _response_rec_w_ = std::string{covariate_type<_REC_WEIGHTS_>()};                                                       //response reconstruction weights
+    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATIONARY_>()};     //stationary training covariates
+    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATIONARY_>()};     //stationary betas
+    std::string _cov_no_stat_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_NON_STATIONARY_>()}; //event-dependent training covariates
+    std::string _beta_no_stat_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_NON_STATIONARY_>()}; //event-dependent betas
     //training data features
     std::string _q_              = std::string{FDAGWR_HELPERS_for_PRED_NAMES::q};                   //number of covariate
     std::string _n_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis};             //number of basis
@@ -3519,18 +3519,18 @@ Rcpp::List predict_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
     std::string _bc_                = std::string{FDAGWR_B_NAMES::bc};                                 //bc
     std::string _beta_c_            = std::string{FDAGWR_BETAS_NAMES::beta_c};                         //beta_c
     std::string _bnc_               = std::string{FDAGWR_B_NAMES::bnc};                                //bnc
-    std::string _beta_nc_           = std::string{FDAGWR_B_NAMES::beta_nc};                            //beta_nc
+    std::string _beta_nc_           = std::string{FDAGWR_BETAS_NAMES::beta_nc};                        //beta_nc
     std::string _elem_for_pred_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred};       //elements used to predict (reconstructing training data and partial residuals)
     std::string _partial_residuals_ = std::string{FDAGWR_HELPERS_for_PRED_NAMES::p_res};               //partial residuals 
     std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
     //names secondary outputs, contained in the main ones
     //the different covariates
-    std::string _response_       = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::RESPONSE>()};                                                          //response
-    std::string _response_rec_w_ = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::REC_WEIGHTS>()};                                                       //response reconstruction weights
-    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};     //stationary training covariates
-    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};     //stationary betas
-    std::string _cov_no_stat_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::NON_STATIONARY>()};  //event-dependent training covariates
-    std::string _beta_no_stat_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::NON_STATIONARY>()}; //event-dependent betas
+    std::string _response_       = std::string{covariate_type<_RESPONSE_>()};                                                          //response
+    std::string _response_rec_w_ = std::string{covariate_type<_REC_WEIGHTS_>()};                                                       //response reconstruction weights
+    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATIONARY_>()};     //stationary training covariates
+    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATIONARY_>()};     //stationary betas
+    std::string _cov_no_stat_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_NON_STATIONARY_>()}; //event-dependent training covariates
+    std::string _beta_no_stat_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_NON_STATIONARY_>()}; //event-dependent betas
     //training data features
     std::string _q_              = std::string{FDAGWR_HELPERS_for_PRED_NAMES::q};                   //number of covariate
     std::string _n_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis};             //number of basis
@@ -4136,8 +4136,6 @@ Rcpp::List FGWR(Rcpp::NumericMatrix y_points,
                                                                                    a,
                                                                                    b,
                                                                                    n_intervals,
-                                                                                   target_error,
-                                                                                   max_iterations,
                                                                                    abscissa_points_,
                                                                                    number_of_statistical_units_,
                                                                                    number_threads);
@@ -4185,10 +4183,10 @@ Rcpp::List FGWR(Rcpp::NumericMatrix y_points,
     std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
     //names secondary outputs, contained in the main ones
     //the different covariates
-    std::string _response_       = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::RESPONSE>()};                                                            //response
-    std::string _response_rec_w_ = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::REC_WEIGHTS>()};                                                         //response reconstruction weights
-    std::string _cov_no_stat_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::NON_STATIONARY>()};   //stationary training covariates
-    std::string _beta_no_stat_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::NON_STATIONARY>()};   //stationary betas  
+    std::string _response_       = std::string{covariate_type<_RESPONSE_>()};                                                            //response
+    std::string _response_rec_w_ = std::string{covariate_type<_REC_WEIGHTS_>()};                                                         //response reconstruction weights
+    std::string _cov_no_stat_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_NON_STATIONARY_>()};   //stationary training covariates
+    std::string _beta_no_stat_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_NON_STATIONARY_>()};   //stationary betas  
     //training data features
     std::string _q_              = std::string{FDAGWR_HELPERS_for_PRED_NAMES::q};                   //number of covariate
     std::string _n_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis};             //number of basis
@@ -4327,10 +4325,10 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
     std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
     //names secondary outputs, contained in the main ones
     //the different covariates
-    std::string _response_       = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::RESPONSE>()};                                                            //response
-    std::string _response_rec_w_ = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::REC_WEIGHTS>()};                                                         //response reconstruction weights
-    std::string _cov_no_stat_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::NON_STATIONARY>()};   //stationary training covariates
-    std::string _beta_no_stat_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::NON_STATIONARY>()};   //stationary betas  
+    std::string _response_       = std::string{covariate_type<_RESPONSE_>()};                                                            //response
+    std::string _response_rec_w_ = std::string{covariate_type<_REC_WEIGHTS_>()};                                                         //response reconstruction weights
+    std::string _cov_no_stat_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_NON_STATIONARY_>()};   //stationary training covariates
+    std::string _beta_no_stat_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_NON_STATIONARY_>()};   //stationary betas  
     //training data features
     std::string _q_              = std::string{FDAGWR_HELPERS_for_PRED_NAMES::q};                   //number of covariate
     std::string _n_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis};             //number of basis
@@ -4478,7 +4476,7 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xnc_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_NON_STATIONARY_>(x_NC_fd_to_be_pred_,number_threads);
     //map containing the X
     std::map<std::string,functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>> X_new = {
-        {covariate_type<_NON_STATIONARY_>(),Xnc_new}};
+        {std::string{covariate_type<_NON_STATIONARY_>()},Xnc_new}};
 
     ////////////////////////////////////////
     /////////        CONSTRUCTING W   //////
@@ -4506,7 +4504,7 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
     std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> > Wnc_pred = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,rec_weights_response_basis_tmp_t::template_type,_NON_STATIONARY_>(W_NC_pred,number_threads);
     //map containing the W
     std::map<std::string,std::vector< functional_matrix_diagonal<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>>> W_new = {
-        {covariate_type<_NON_STATIONARY_>(),Wnc_pred}};
+        {std::string{covariate_type<_NON_STATIONARY_>()},Wnc_pred}};
 
 
     //fgwr predictor
@@ -4815,8 +4813,6 @@ Rcpp::List FWR(Rcpp::NumericMatrix y_points,
                                                                                     a,
                                                                                     b,
                                                                                     n_intervals,
-                                                                                    target_error,
-                                                                                    max_iterations,
                                                                                     abscissa_points_,
                                                                                     number_of_statistical_units_,
                                                                                     number_threads);
@@ -4864,9 +4860,9 @@ Rcpp::List FWR(Rcpp::NumericMatrix y_points,
     std::string _input_info_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
     //names secondary outputs, contained in the main ones
     //the different covariates
-    std::string _response_       = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::RESPONSE>()};                                                        //response
-    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};   //stationary training covariates
-    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};   //stationary betas  
+    std::string _response_       = std::string{covariate_type<_RESPONSE_>()};                                                        //response
+    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATIONARY_>()};   //stationary training covariates
+    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATIONARY_>()};   //stationary betas  
     //training data features
     std::string _q_              = std::string{FDAGWR_HELPERS_for_PRED_NAMES::q};                   //number of covariate
     std::string _n_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis};             //number of basis
@@ -4981,9 +4977,9 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
     std::string _input_info_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
     //names secondary outputs, contained in the main ones
     //the different covariates
-    std::string _response_       = std::string{covariate_type<FDAGWR_COVARIATES_TYPES::RESPONSE>()};                                                        //response
-    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};   //stationary training covariates
-    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<FDAGWR_COVARIATES_TYPES::STATIONARY>()};   //stationary betas  
+    std::string _response_       = std::string{covariate_type<_RESPONSE_>()};                                                        //response
+    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATIONARY_>()};   //stationary training covariates
+    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATIONARY_>()};   //stationary betas  
     //training data features
     std::string _q_              = std::string{FDAGWR_HELPERS_for_PRED_NAMES::q};                   //number of covariate
     std::string _n_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis};             //number of basis

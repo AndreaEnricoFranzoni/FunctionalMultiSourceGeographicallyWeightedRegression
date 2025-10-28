@@ -55,7 +55,7 @@ check_dim_input(std::size_t sz_q,
 {
   // throwing an exception if dimensions not coinciding
   if(sz_q!=sz_input){
-    std::string covariates_type = covariate_type<fdagwr_cov_t>();
+    std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
     std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
     std::string error_message = "For " + covariates_type + " covariates, " + quantity + " size has to be " + std::to_string(sz_q);
     throw std::invalid_argument(error_message);}
@@ -81,7 +81,7 @@ wrap_covariates_names(Rcpp::List cov_coeff_list)
   // number of covariates 
   std::size_t number_cov = cov_coeff_list.size();
   // type of the covariates
-  std::string covariates_type = covariate_type<fdagwr_cov_t>();
+  std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
 
   //if all the covariates do not own a name: put default names for all of them
   if (cov_names_input_list.isNull()){
@@ -158,7 +158,7 @@ wrap_and_check_basis_type(const std::string &basis_types_name)
   //checking if the requested basis type is implemented
   if (std::find(FDAGWR_BASIS_TYPES::_implemented_basis_.cbegin(),FDAGWR_BASIS_TYPES::_implemented_basis_.cend(),basis_types_name) == FDAGWR_BASIS_TYPES::_implemented_basis_.cend()){
       //throwing an exception if not
-      std::string covariates_type = covariate_type<fdagwr_cov_t>();
+      std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
       std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
       std::string error_message = "For " + covariates_type + ", basis type " + basis_types_name + " is not acceptable: basis types accepted: ";
       for(auto it = FDAGWR_BASIS_TYPES::_implemented_basis_.cbegin(); it != FDAGWR_BASIS_TYPES::_implemented_basis_.cend(); ++it){
@@ -205,7 +205,7 @@ wrap_and_check_basis_type(Rcpp::Nullable<Rcpp::CharacterVector> basis_types_name
   for(std::size_t i = 0; i < q; ++i){
     //throwing an exception if not
     if (std::find(FDAGWR_BASIS_TYPES::_implemented_basis_.cbegin(),FDAGWR_BASIS_TYPES::_implemented_basis_.cend(),basis_types_names_wrapped[i]) == FDAGWR_BASIS_TYPES::_implemented_basis_.cend()){
-      std::string covariates_type = covariate_type<fdagwr_cov_t>();
+      std::string covariates_type = std::string{covariate_type<fdagwr_cov_t>()};
       std::transform(covariates_type.begin(),covariates_type.end(),covariates_type.begin(),[](unsigned char c) { return std::tolower(c);});
       std::string error_message = "For " + covariates_type + " covariates, basis type " + basis_types_names_wrapped[i] + " is not acceptable: basis types accepted: ";
       for(auto it = FDAGWR_BASIS_TYPES::_implemented_basis_.cbegin(); it != FDAGWR_BASIS_TYPES::_implemented_basis_.cend(); ++it){
