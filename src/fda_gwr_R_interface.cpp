@@ -76,7 +76,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr1 has been installed"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr2 has been installed"<< std::endl;}
 
 
 
@@ -673,10 +673,14 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
                                                                                     number_threads,
                                                                                     in_cascade_estimation);
 
+    Rcout << "Model fitting" << std::endl;    
+    
     //computing the b
     fgwr_algo->compute();
     //evaluating the betas   
     fgwr_algo->evalBetas();
+
+    Rcout << "Model fitting done" << std::endl; 
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -1001,6 +1005,8 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                               int n_intervals_quadrature = 100,
                               Rcpp::Nullable<int> num_threads = R_NilValue)
 {
+    Rcout << "Functional Multi-Source Geographically Weighted Regression ESC predictor" << std::endl;
+
     //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
@@ -1437,6 +1443,8 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                                                                                                  number_threads,
                                                                                                  in_cascade_estimation);
 
+    Rcout << "Prediction" << std::endl;
+
     //retrieve partial residuals
     fwr_predictor->computePartialResiduals();
     //compute the new b for the non-stationary covariates
@@ -1453,6 +1461,9 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fwr_predictor->evalPred(y_pred,abscissa_points_ev_);
     //smoothing of the prediction
     auto y_pred_smooth_coeff = fwr_predictor->smoothPred<_DOMAIN_>(y_pred,*basis_pred,knots_smoothing_pred);
+
+    Rcout << "Prediction done" << std::endl;
+
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -2107,10 +2118,14 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
                                                                                     number_threads,
                                                                                     in_cascade_estimation);
 
+    Rcout << "Model fitting" << std::endl;                                                                                    
+
     //computing the b
     fgwr_algo->compute();
     //evaluating the betas   
     fgwr_algo->evalBetas();
+
+    Rcout << "Model fitting done" << std::endl; 
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -2436,6 +2451,8 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
                               int n_intervals_quadrature = 100,
                               Rcpp::Nullable<int> num_threads = R_NilValue)
 {
+    Rcout << "Functional Multi-Source Geographically Weighted Regression SEC predictor" << std::endl;
+
     //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
@@ -2872,6 +2889,8 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
                                                                                                  number_threads,
                                                                                                  in_cascade_estimation);
 
+    Rcout << "Prediction" << std::endl;                                                                                             
+
     //retrieve partial residuals
     fwr_predictor->computePartialResiduals();
     //compute the new b for the non-stationary covariates
@@ -2888,6 +2907,8 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fwr_predictor->evalPred(y_pred,abscissa_points_ev_);
     //smoothing of the prediction
     auto y_pred_smooth_coeff = fwr_predictor->smoothPred(y_pred,*basis_pred,knots_smoothing_pred);
+
+    Rcout << "Prediction done" << std::endl;
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -3304,10 +3325,14 @@ Rcpp::List FMGWR(Rcpp::NumericMatrix y_points,
                                                                                    number_threads,
                                                                                    in_cascade_estimation);
 
+    Rcout << "Model fitting" << std::endl;                                                                                    
+                                                                                   
     //computing the b
     fgwr_algo->compute();
     //evaluating the betas   
     fgwr_algo->evalBetas();
+
+    Rcout << "Model fitting done" << std::endl; 
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -3471,6 +3496,8 @@ Rcpp::List predict_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
                          int n_intervals_quadrature = 100,
                          Rcpp::Nullable<int> num_threads = R_NilValue)
 {
+    Rcout << "Functional Mixed Geographically Weighted Regression predictor" << std::endl;
+
     //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
@@ -3804,6 +3831,8 @@ Rcpp::List predict_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
                                                                                                  number_threads,
                                                                                                  in_cascade_estimation);
 
+    Rcout << "Prediction" << std::endl;                                                                                             
+
     //retrieve partial residuals
     fwr_predictor->computePartialResiduals();
     //compute the new b for the non-stationary covariates
@@ -3820,6 +3849,8 @@ Rcpp::List predict_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fwr_predictor->evalPred(y_pred,abscissa_points_ev_);
     //smoothing of the prediction
     auto y_pred_smooth_coeff = fwr_predictor->smoothPred(y_pred,*basis_pred,knots_smoothing_pred);
+
+    Rcout << "Prediction done" << std::endl;  
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -4140,10 +4171,14 @@ Rcpp::List FGWR(Rcpp::NumericMatrix y_points,
                                                                                    number_of_statistical_units_,
                                                                                    number_threads);
 
+    Rcout << "Model fitting" << std::endl;                                                                                     
+   
     //computing the b
     fgwr_algo->compute();
     //evaluating the betas   
     fgwr_algo->evalBetas();
+
+    Rcout << "Model fitting done" << std::endl;    
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -4276,6 +4311,8 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
                         int n_intervals_quadrature = 100,
                         Rcpp::Nullable<int> num_threads = R_NilValue)
 {
+    Rcout << "Functional Geographically Weighted Regression predictor" << std::endl;
+
     //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
@@ -4521,6 +4558,8 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
                                                                                                  n_train,
                                                                                                  number_threads);
 
+    Rcout << "Prediction" << std::endl;
+                                                                                                 
     //compute the new b for the non-stationary covariates
     fwr_predictor->computeBNew(W_new);          
     //compute the beta for non-stationary covariates
@@ -4533,6 +4572,8 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
     std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fwr_predictor->evalPred(y_pred,abscissa_points_ev_);
     //smoothing of the prediction
     auto y_pred_smooth_coeff = fwr_predictor->smoothPred(y_pred,*basis_pred,knots_smoothing_pred);
+
+    Rcout << "Prediction done" << std::endl;
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -4817,10 +4858,14 @@ Rcpp::List FWR(Rcpp::NumericMatrix y_points,
                                                                                    number_of_statistical_units_,
                                                                                    number_threads);
 
+    Rcout << "Model fitting" << std::endl;                                                                                     
+                                                                                 
     //computing the b
     fgwr_algo->compute();
     //evaluating the betas   
     fgwr_algo->evalBetas();
+
+    Rcout << "Model fitting done" << std::endl; 
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -4934,6 +4979,8 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
                         int n_knots_smoothing_pred = 100,    
                         Rcpp::Nullable<int> num_threads = R_NilValue)
 {
+    Rcout << "Functional Weighted Regression predictor" << std::endl;
+
     //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
     //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
 
@@ -5101,6 +5148,8 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
                                                                                                  n_train,
                                                                                                  number_threads);
 
+    Rcout << "Prediction" << std::endl;                                                                                             
+
     //compute the beta for stationary covariates
     fwr_predictor->computeStationaryBetas();            
     //perform prediction
@@ -5111,6 +5160,8 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fwr_predictor->evalPred(y_pred,abscissa_points_ev_);
     //smoothing of the prediction
     auto y_pred_smooth_coeff = fwr_predictor->smoothPred<_DOMAIN_>(y_pred,*basis_pred,knots_smoothing_pred);
+
+    Rcout << "Prediction done" << std::endl;  
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
