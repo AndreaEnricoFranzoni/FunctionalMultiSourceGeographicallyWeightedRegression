@@ -377,7 +377,7 @@ public:
                 }
             }
             std::cout << "Number of elements y_tilde_hat: " << y_tilde_hat.as_vector().size() << std::endl;
-            auto basis_y_ev = *m_basis_y.eval_base(loc);
+            auto basis_y_ev = m_basis_y->eval_base(loc);
             std::cout << basis_y_ev << std::endl;
             //c_tilde_hat: smoothing on y_tilde_hat(t) with respect of the basis of y
             std::cout << "Computing c_tilde_hat" << std::endl;
