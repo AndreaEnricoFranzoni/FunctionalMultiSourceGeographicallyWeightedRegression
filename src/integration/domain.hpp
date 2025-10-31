@@ -32,13 +32,14 @@
 
 /*!
 * @namespace Geometry
+* @brief Contains domain geometry definition
 */
 namespace Geometry
 {
 
 /*!
 * @class Domain1D
-* @brief Conat Defines a 1D domain.
+* @brief Defines a 1D domain.
 */
 class Domain1D
 {
@@ -108,4 +109,5 @@ private:
 };
 
 } //end namespace Geometry
-#endif
+
+#endif  /*HH_DOMAIN_HH*/

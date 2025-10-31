@@ -14,9 +14,8 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
-
 
 #ifndef FDAGWR_FUNCTIONAL_DATA_INTEGRATION_HPP
 #define FDAGWR_FUNCTIONAL_DATA_INTEGRATION_HPP
@@ -30,11 +29,28 @@
 #include "numerical_integration.hpp"
 #include "Adams_rule.hpp"
 
+/*!
+* @file functional_data_integration.hpp
+* @brief Contains the class for performing integration of std::function elements. 
+* @author Andrea Enrico Franzoni
+*/
+
+/*!
+* @brief Upload namespace Geometry
+*/
 using namespace Geometry;
+
+/*!
+* @brief Upload namespace apsc::NumericalIntegration
+*/
 using namespace apsc::NumericalIntegration;
 
 
-
+/*!
+* @class fd_integration
+* @brief Class for performing integration of std::function elements
+* @note integration is performed using rectagle quadrature rule, over equally spaced nodes
+*/
 class fd_integration
 {
 /*!Integrand function signature*/
@@ -45,11 +61,16 @@ private:
     Domain1D m_integration_domain;
     /*!Integration mesh*/
     Mesh1D m_integration_mesh;
-    /*!Quadrature rule*/
+    /*!Rectangle quadrature rule*/
     Quadrature m_integration_quadrature;
 
 public:
-    /*!Constructor*/
+    /*!
+    * @brief Constructor
+    * @param a left integration domain extreme
+    * @param b right integration domain extreme
+    * @param intervals number of intervals, of equal lenght, over the integration domain
+    */
     fd_integration(double a, double b, int intervals):
         m_integration_domain(a,b), 
         m_integration_mesh(m_integration_domain,intervals),
@@ -57,7 +78,10 @@ public:
         m_integration_quadrature(MidPoint{},m_integration_mesh)
         {}
 
-    /*!Function to perform the integration*/
+    /*!
+    * @brief Function to perform the integration
+    * @param f integrand
+    */
     inline
     double 
     integrate(const integrand_type &f)

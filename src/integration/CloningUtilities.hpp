@@ -1,38 +1,90 @@
+// Copyright (c) 2025 Andrea Enrico Franzoni (andreaenrico.franzoni@gmail.com)
+//
+// This file is part of fdagwr
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of fdagwr and associated documentation files (the fdagwr software), to deal
+// fdagwr without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of fdagwr, and to permit persons to whom fdagwr is
+// furnished to do so, subject to the following conditions:
+//
+// fdagwr IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
+// fdagwr.
+
 #ifndef CLONINGANDPOINTERWRAPPER_H
 #define CLONINGANDPOINTERWRAPPER_H
+
+
 #include <functional>
 #include <memory>
 #include <type_traits>
+
+/*!
+* @file CloningUtilities.hpp
+* @brief Contains traits, functions and classes for making a class clonable
+* @author Luca Formaggia
+* @note Taken from pacs-examples, folder of repository PACS Course (https://github.com/pacs-course), Advanced Programming for Scientific Computing, Politecnico di Milano
+*/
+
+
+/*
+*
+* Copyright (c) 2020
+* Luca Formaggia
+*
+* Permission to use, copy, modify, distribute and sell this software for
+* any purpose is hereby granted without fee, provided that the above
+* copyright notice appear in all copies and that both that copyright
+* notice and this permission notice appear in supporting documentation.
+* The authors make no representations about
+* the suitability of this
+* software for any purpose. It is provided "as is" without express or
+* implied warranty.
+*/
+
+
+/*!
+* @namespace apsc
+* @brief General namespace for utilitites
+*/
 namespace apsc
 {
-/*
- * @note To use this utilities you need apsc::TypeTraits,
- */
+
+/*!
+* @namespace TypeTraits
+* @note To use this utilities you need apsc::TypeTraits,
+*/
 namespace TypeTraits
 {
   /*!
-   * A type trait than checks if your class contains a method called clone()
-   * the template parameter. I use it to implement clonable classes which enable
-   * the prototype design pattern on a polymorphic family of classes. This is
-   * the primary template, which maps to false
-   * @tparam T
-   * @tparam Sfinae
-   */
+  * @struct has_clone
+  * @brief A type trait than checks if your class contains a method called clone()
+  *        the template parameter. I use it to implement clonable classes which enable
+  *        the prototype design pattern on a polymorphic family of classes. This is
+  *        the primary template, which maps to false
+  * @tparam T class to check if it is clonable
+  * @tparam Sfinae
+  */
   template <typename T, typename Sfinae = void>
   struct has_clone : public std::false_type
   {};
 
-  /*!  Specialised version that is activated if T is clonable.
-
-Indeed, if T is not clonable the second template parameter cannot
-be substituted with a valid type. So SFINAE applies and this
-version is discarded. Note that it inherits from std::true_type.
-
-declval<T&>() allows to test the return type of clone() with no need of
-creating an object of type T.
-
-@tparam T the base class of the hierarchy of clonable classes
-   */
+  /*! 
+  * @struct has_clone
+  * @brief Specialised version that is activated if T is clonable.
+  *        Indeed, if T is not clonable the second template parameter cannot
+  *        be substituted with a valid type. So SFINAE applies and this
+  *        version is discarded. declval<T&>() allows to test the return type of clone() 
+  *        with no need of creating an object of type T.
+  * @tparam T the base class of the hierarchy of clonable classes
+  * @note it inherits from std::true_type.
+  */
   template <typename T>
   struct has_clone<
     T, typename std::enable_if_t<std::is_convertible_v<
@@ -40,11 +92,11 @@ creating an object of type T.
     : std::true_type
   {};
 
-  //! A helper function
   /*!
-   *  It returns true if the class is clonable
-   *  \tparam T T the base class of the hierarchy of clonable classes
-   */
+  * @brief Helper function to understand if a class is clonable
+  *  @tparam T the base class of the hierarchy of clonable classes
+  * @return true if the class is clonable
+  */
   template <class T>
   constexpr bool
   isClonable()
@@ -53,194 +105,95 @@ creating an object of type T.
   }
 
   /*!
-   * C++17 style for extracting the value of type trait. It is true if T is
-   * clonable.
-   * @tparam T the base class of the hierarchy of clonable classes
-   */
+  * @brief C++17 style for extracting the value of type trait
+  * @tparam T the base class of the hierarchy of clonable classes
+  * @return true if T is clonable
+  */
   template <typename T> constexpr bool has_clone_v = isClonable<T>();
 
   /*!
-   * Concept expressing the traits
-   */
+  * @brief Concept expressing the traits
+  * @tparam T the class that could be clonable
+  */
   template <class T>
   concept Clonable = has_clone_v<T>;
 
 } // end namespace TypeTraits
 
-/*! A smart pointer that handles cloning for compusing with polymorphic objects
 
-This class implements a generic wrapper around a unique pointer
-useful to support the bridge pattern. Its role is to ease the memory
-management of object which are composed polymorphically in a class
-in order to implement a rule.  It is a extensive modification of the
-class presented by Mark Joshi in his book "c++ design patterns and
-derivative pricing", Cambridge Press. This version makes use of
-std::unique_ptr to ease the handling of memory.
-
-It handles memory as a unique_ptr, but implements copy operations by
-cloning the resource.
-
-We make an example to illustrate the problem. Let's consider first a
-solution with aggregation
-
-\code
-
-//A hierarchy of classes which implements a certain rule
-
-class B;
-
-class D1: public B ......
-
-A class that uses an object of the B hierarchy by aggregation:
-
-class UseB{
-public:
-UseB(B *); The constructor takes a pointer (or a reference)
-to B
-....
-//methods that use B* polymorphically
-....
-private:
-B * Impl;  //A pointer (or reference) to B
-\endcode
-
-The problem here is that the scope of an object of type UseB and
-that of the object of the base class B (or possibly reference)
-passed to the constructor are linked. For instance the statements
-
-\code
-B* a = new D1;
-UseB foo(a)
-delete a;
-\endcode
-
-would be invalid because the copy of a stored in foo is now
-dangling. A similar situation happens with references.  Moreover,
-the state of UseB depends on the state of a! And that is not what
-we want here, we want the object pointed by Impl to be part of
-class UseB: we want composition not aggregation!
-
-But how to compose a polymorphic object? A possibility is to add
-to B and to D1 the method clone()
-
-\code
-virtual std::unique_ptr<B> clone() const {return std::make_unique<D>(*this);}
-\endcode
-
-Then, if useB::Impl is now a unique_ptr<B>, the constructor of useB may do
-\code
-useB(const B&):Impl(B.clone()){}
-\endcode
-
-But now we have to delegate to the class B the handling of the
-"cloning", by writing also specific copy constructors etc.
-
-Is it possible to have a "supersmart" pointer to which delegate
-all the cloning business, so that the class UseB just needs to
-store one of those "supersmart" pointers? What I want is something
-that acts as a unique_ptr with respect to memory management (it is
-an owning pointer: pointer destruction implies destruction of the
-pointed resource). But I want to introduce  COPY SEMANTIC (which
-is deleted in std::unique_ptr) that does a DEEP COPY of the resource
-exploiting the clone() method.
-
-To this purpose, we design a wrapper around a unique_ptr. The
-wrapper behaves as a pointer and takes care of memory management,
-like a unique_ptr, but it exploit clonable classes to implement
-polymorphic composition.
-
-Here a generic wrapper is implemented as a template class. The templete
-parameter T should be set to the BASE class of the hierarchy.
-The interesting bit is that by use of implicit conversion and
-overloading of the dereferencing operators * and -> makes the use
-of the wrapper transparent!.
-
-In the previous example the situation would change in
-
-\code
-class UseB{
-public:
-UseB(const B &):Impl(B); The constructor takes a reference to B
-....
-methods that use B* polymorphically
-....
-private:
-// I use the wrapper that behaves like a pointer!
-PointerWrapper<B> Impl;
-\endcode
-
-
-\pre The parameter class T must have a virtual and constant
-clone() method with the indicated signature.
-
-@tparam T the base class
-  */
+/*!
+* @class PointerWrapper
+* @brief A smart pointer that handles cloning for compusing with polymorphic objects.
+*        This class implements a generic wrapper around a unique pointer
+*        useful to support the bridge pattern. Its role is to ease the memory
+*        management of object which are composed polymorphically in a class
+*        in order to implement a rule.  It is a extensive modification of the
+*        class presented by Mark Joshi in his book "c++ design patterns and
+*        derivative pricing", Cambridge Press. This version makes use of
+*        std::unique_ptr to ease the handling of memory. It handles memory as a unique_ptr, 
+*        but implements copy operations by cloning the resource.
+* @tparam T the base class
+*/
 template <TypeTraits::Clonable T> class PointerWrapper
 {
 public:
-  // Check if clone is present
-  // Here I prefer not using concepts to have a more extensive error message
-  // I am using concepts now
-  /*static_assert(
-    TypeTraits::isClonable<T>(),
-    "template parameter of Wrapper must be a clonable class. "
-    "You must have a virtual clone()const method that returns a unique_ptr<T>");
-    */
-  // The type of the stored unique pointer
+
+  /*! 
+  * @brief type of the stored unique pointer
+  */
   using Ptr_t = std::unique_ptr<T>;
-  /*! This class imitates that of the unique pointer so it exposes the same
-   * member types*/
+  /*! @brief This class imitates that of the unique pointer so it exposes the same member types*/
   using pointer = typename Ptr_t::pointer;
   using element_type = typename Ptr_t::element_type;
   using deleter_type = typename Ptr_t::deleter_type;
-  //! The default constructor
-  /*
-   * The synthetic one is ok since the default constructor of a unique_ptr
-   * sets it to the null pointer.
-   */
+
+  /*!
+  * @brief Default constructo 
+  * @note The synthetic one is ok since the default constructor of a unique_ptr sets it to the null pointer.
+  */
   PointerWrapper() = default;
 
   /*!
-   * This constructor takes a reference to an object of type T or derived  from
-   * T. It defines the conversion T& -> Wrapper<T> and thus the conversion
-   * from any reference to a class derived from T.
-   * It uses clone() to clone the resource.
-   * @note it implements the Prototype Pattern
-   * @param resource The resource to be cloned into
-   */
+  * @brief Constructor
+  * @param resource The resource to be cloned into
+  * @note This constructor takes a reference to an object of type T or derived  from
+  * T. It defines the conversion T& -> Wrapper<T> and thus the conversion
+  * from any reference to a class derived from T.
+  * It uses clone() to clone the resource.
+  * It implements the Prototype Pattern
+  * 
+  */
   PointerWrapper(const T &resource) : DataPtr(resource.clone()) {}
 
-  //!
   /*!
-   * A unique pointer to T is moved into the wrapper
-   *
-   * @param p The unique pointer to be moved into this class
-   */
+  * @brief Constructor
+  * @param p The unique pointer to be moved into this class
+  * @note A unique pointer to T is moved into the wrapper
+  */
   PointerWrapper(Ptr_t &&p) noexcept : DataPtr(std::move(p)) {}
 
   /*!
-   * Taking a pointer. Equivalent to  what unique_ptr does
-   * @param p The pointer of type T*
-   * @note Now the Wrapper has the ownership of the resource!
-   */
+  * @brief Constructor
+  * @param p The pointer of type T*
+  * @note Now the Wrapper has the ownership of the resource! Taking a pointer. Equivalent to  what unique_ptr does
+  */
   explicit PointerWrapper(T *p) noexcept : DataPtr(p) {}
 
   /*!
-   * Copy constructor. Uses clone to clone the resource
-   * @param original
-   */
+  * @brief Copy constructor. Uses clone to clone the resource
+  * @param original object to be copied
+  */
   PointerWrapper(const PointerWrapper<T> &original)
     : DataPtr{original.get() ? original.DataPtr->clone() : Ptr_t{}}
   {}
 
-  //! Copy conversion
   /*!
-   * This constructor takes any PointerWrapper<U> with U equal to T or a type
-   * derived from T. It allows the conversion from Wrapper<Derived> to
-   * Wrapper<Base>.
-   * @tparam U the type of the origin Wrapper, must be T or derived from T
-   * @param original The original wrapper
-   */
+  * @brief Copy conversion constructor
+  * @tparam U the type of the origin Wrapper, must be T or derived from T
+  * @param original The original wrapper
+  * @note This constructor takes any PointerWrapper<U> with U equal to T or a type
+  *       derived from T. It allows the conversion from Wrapper<Derived> to Wrapper<Base>.
+  */
   template <class U> PointerWrapper(const PointerWrapper<U> &original)
   {
     if(original.get())
@@ -250,10 +203,11 @@ public:
       }
   }
 
-  //! copy-assignement operator
   /*!
-   * It resets current resource and clone that of the other wrapper
-   */
+  * @brief Copy-assignment operator. It resets current resource and clone that of the other wrapper
+  * @param original the object to be copied
+  * @return the copied object, non-const reference
+  */
   PointerWrapper &
   operator=(const PointerWrapper<T> &original)
   {
@@ -261,15 +215,13 @@ public:
       DataPtr = original.DataPtr ? original.DataPtr->clone() : Ptr_t{};
     return *this;
   }
+
   /*!
-   * @brief copying assignement allowing for conversions
-   *
-   * This assignemt allow to convere PointerWrapper<Derived> in a
-   * PointeWrapper<Base>
-   * @tparam U The derived type
-   * @param original The Wrapper to convert-copy
-   * @return a reference to myself
-   */
+  * @brief copying assignement allowing for conversions. This assignemt allow to convere PointerWrapper<Derived> in a PointeWrapper<Base>
+  * @tparam U The derived type
+  * @param original The Wrapper to convert-copy
+  * @return a reference to myself
+  */
   template <class U>
   PointerWrapper &
   operator=(const PointerWrapper<U> &original)
@@ -282,20 +234,25 @@ public:
     return *this;
   }
 
-  //! Maybe I want to move-assign a unique pointer
   /*!
-   * If argument is an rvalue unique_ptr it can be moved.
-   */
+  * @brief To move-assign a unique pointer
+  * @param p object to be move-assigned
+  * @return a reference to the move-assigned object, non-const reference
+  * @note If argument is an rvalue unique_ptr it can be moved.
+  */
   PointerWrapper &
   operator=(Ptr_t &&p) noexcept
   {
     DataPtr = std::move(p);
     return *this;
   }
-  //! Copy-Assignment of a unique pointer by cloning
+
   /*!
-   *  If argument is an lvalue I need clone()
-   */
+  * @brief Copy-Assignment of a unique pointer by cloning
+  * @param p object to be copy-assigned
+  * @return a reference to the copied-assigned object, non-const reference
+  * @note If argument is an lvalue I need clone()
+  */
   PointerWrapper &
   operator=(const Ptr_t &p)
   {
@@ -303,32 +260,38 @@ public:
     return *this;
   }
 
-  //! The move constructor
   /*!
-   * @param rhs the wrapper to be moved
-   * @note unique_ptr can be moved
-   */
+  * @brief Move constructor
+  * @param rhs the wrapper to be moved
+  * @note unique_ptr can be moved
+  */
   PointerWrapper(PointerWrapper<T> &&rhs) = default;
+
   /*!
-   *  To allow conversion in move constructor
-   * @param rhs the wrapper to be moved
-   */
+  * @brief To allow conversion in move constructor
+  * @tparam U Type of the object to be converted
+  * @param rhs the wrapper to be moved
+  */
   template <class U>
   PointerWrapper(PointerWrapper<U> &&rhs) noexcept
     : DataPtr{static_cast<T *>(rhs.release())}
   {}
 
-  //! Move assignement
   /*!
-   * @param rhs the wrapper to be moved
-   */
+  * @brief Move assignement
+  * @param rhs the wrapper to be moved
+  * @return a wrapped pointed
+  */
   PointerWrapper &operator=(PointerWrapper<T> &&rhs) = default;
+  
   /*!
-   * To allow for conversion Derived -> Base
-   * @param rhs the wrapper to be moved, may be a wrapper to a derived type
-   * @note maybe not required since I have conversion in the move constructor.
-   * After the assignment the rhs is null.
-   */
+  * @brief To allow for conversion Derived -> Base
+  * @tparam U Type of the object to be converted
+  * @param rhs the wrapper to be moved, may be a wrapper to a derived type
+  * @return the wrapped pointed
+  * @note maybe not required since I have conversion in the move constructor.
+  *       After the assignment the rhs is null.
+  */
   template <class U>
   PointerWrapper &
   operator=(PointerWrapper<U> &&rhs) noexcept
@@ -343,78 +306,114 @@ public:
     return *this;
   };
 
-  /*! Dereferencing operator. The PointerWrapper works like a pointer to T*/
+  /*! 
+  * @brief Dereferencing operator, const version
+  * @return the deferenced object
+  * @note The PointerWrapper works like a pointer to T
+  */
   const T &
   operator*() const noexcept
   {
     return *DataPtr;
   }
-  /*! Dereferencing operator. The PointerWrapper works like a pointer to T*/
+
+  /*! 
+  * @brief Dereferencing operator, non-const version
+  * @return the deferenced object
+  * @note The PointerWrapper works like a pointer to T
+  */
   T &
   operator*() noexcept
   {
     return *DataPtr;
   }
 
-  /*! Dereferencing operator. The PointerWrapper works like a pointer to T*/
+  /*! 
+  * @brief Dereferencing operator, const version
+  * @return the deferenced object pointer
+  * @note The PointerWrapper works like a pointer to T
+  */
   const T *
   operator->() const noexcept
   {
     return DataPtr.get();
   }
-  /*! Dereferencing operator. The PointerWrapper works like a pointer to T*/
+
+  /*! 
+  * @brief Dereferencing operator, non-const version
+  * @return the deferenced object pointer
+  * @note The PointerWrapper works like a pointer to T
+  */
   T *
   operator->() noexcept
   {
     return DataPtr.get();
   }
-  //! It releases the resource returning a pointer
+
+  /*!
+  * @brief It releases the resource 
+  * @return pointer
+  */
   auto
   release() noexcept
   {
     return DataPtr.release();
   }
-  /*! Deletes the resource
-   *  You can pass the pointer of a new resource to hold
-   *  @param ptr the pointer to the new resource, defaulted to nullprt
-   */
+
+  /*! 
+  * @brief Deletes the resource. You can pass the pointer of a new resource to hold
+  * @param ptr the pointer to the new resource, defaulted to nullprt
+  */
   void
   reset(pointer ptr = nullptr) noexcept
   {
     DataPtr.reset(ptr);
   }
-  /*! swap wrappers */
+
+  /*! 
+  * @brief Swap wrappers 
+  * @param other wrapper to be swapped
+  */
   void
   swap(PointerWrapper<T> &other) noexcept
   {
     DataPtr.swap(other.DataPtr);
   }
-  /*! get the pointer */
+
+  /*! 
+  * @brief Get to the pointer 
+  * @return the pointer
+  */
   pointer
   get() const noexcept
   {
     return DataPtr.get();
   }
+
   /*!
-   * @return The deleter object which would be used for destruction of the
-   * managed object.
-   */
+  * @brief Getter for the deleter, non-const version
+  * @return The deleter object which would be used for destruction of the managed object.
+  */
   auto &
   get_deleter() noexcept
   {
     return DataPtr.get_deleter();
   }
+
   /*!
-   * @return The deleter object which would be used for destruction of the
-   * managed object.
-   */
+  * @brief Getter for the deleter, const version
+  * @return The deleter object which would be used for destruction of the managed object.
+  */
   auto const &
   get_deleter() const noexcept
   {
     return DataPtr.get_deleter();
   }
 
-  /*! conversion to bool */
+  /*! 
+  * @brief conversion to bool 
+  * @return a conversion of ptr to bool
+  */
   explicit
   operator bool() const noexcept
   {
@@ -422,6 +421,7 @@ public:
   }
 
 private:
+  /*!Pointer*/
   Ptr_t DataPtr;
 };
 //! Utility to make a PointerWrapper
@@ -569,18 +569,4 @@ template <class T> struct std::hash<class apsc::PointerWrapper<T> >
   }
 };
 
-#endif
-/*
- *
- * Copyright (c) 2020
- * Luca Formaggia
- *
- * Permission to use, copy, modify, distribute and sell this software for
- * any purpose is hereby granted without fee, provided that the above
- * copyright notice appear in all copies and that both that copyright
- * notice and this permission notice appear in supporting documentation.
- * The authors make no representations about
- * the suitability of this
- * software for any purpose. It is provided "as is" without express or
- * implied warranty.
- */
+#endif  /*CLONINGANDPOINTERWRAPPER_H*/

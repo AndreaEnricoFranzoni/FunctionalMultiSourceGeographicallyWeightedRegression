@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -22,23 +22,34 @@
 
 
 
-///////////////////////////////////
-/////  PENALTY COMPUTATION    /////
-///////////////////////////////////
+/*!
+* @file fwr_operator_computing_imp.hpp
+* @brief Contains the implementation of the class for computing operators needed in FWR, wrapping and dewrapping the basis expansion coefficients of the functional regression coefficients, evaluating the latters 
+* @author Andrea Enrico Franzoni
+*/
+
 
 
 /*!
-* @brief Compute all the [J_2_tilde_i + R]^(-1): 
+* @brief Compute [J_i + R]^(-1), where, for each unit i-th:
+*        - J_i = int_a_b(base_t * X_t * W_i * X * base), where W_i is the functional weight of the i-th units. The integral of the matrix is element-wise
+*        - R the penalization matrix, diagonal block-matrix, such that each block contains the inner product within a given derivative of basis systems, one block for each basis system
+* @param base_t containing basis systems, one system for each row, one basis for each column, transpost
+* @param X_t functional covariates, transpost
+* @param W vector of functional diagonal matrices, containing, for each unit, functional weights
+* @param X functioal covaraites
+* @param base containing basis systems, one system for each row, one basis for each column
+* @return vector with the partial PivLU of each J_i + R
 */
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> >
 fwr_operator_computing<INPUT,OUTPUT>::compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
-                                                       const functional_matrix<INPUT,OUTPUT> &X_t,
-                                                       const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                                                       const functional_matrix<INPUT,OUTPUT> &X,
-                                                       const functional_matrix_sparse<INPUT,OUTPUT> &base,
-                                                       const FDAGWR_TRAITS::Sparse_Matrix &R)
+                                                      const functional_matrix<INPUT,OUTPUT> &X_t,
+                                                      const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                                                      const functional_matrix<INPUT,OUTPUT> &X,
+                                                      const functional_matrix_sparse<INPUT,OUTPUT> &base,
+                                                      const FDAGWR_TRAITS::Sparse_Matrix &R)
 const
 {
     //the vector contains factorization of the matrix
@@ -63,17 +74,23 @@ const
     return penalty;
 }
 
-
 /*!
-* @brief Compute [J_tilde_i + R]^(-1)
+* @brief Compute [J_i + R]^(-1), where, for each unit i-th:
+*        - J_i = int_a_b(X_crossed_t* W_i * X_crossed), where W_i is the functional weight of the i-th units. The integral of the matrix is element-wise
+*        - R the penalization matrix, diagonal block-matrix, such that each block contains the inner product within a given derivative of basis systems, one block for each basis system
+* @param X_crossed_t containing functional covariates from which the project of the previous part of the model estimation is taken out, transpost
+* @param W vector of functional diagonal matrices, containing, for each unit, functional weights
+* @param X_crossed containing functional covariates from which the project of the previous part of the model estimation is taken out
+* @param R penalization matrix
+* @return vector with the partial PivLU of each J_i + R
 */
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > >
 fwr_operator_computing<INPUT,OUTPUT>::compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
-                                                       const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                                                       const functional_matrix<INPUT,OUTPUT> &X_crossed,
-                                                       const FDAGWR_TRAITS::Sparse_Matrix &R) 
+                                                      const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                                                      const functional_matrix<INPUT,OUTPUT> &X_crossed,
+                                                      const FDAGWR_TRAITS::Sparse_Matrix &R) 
 const
 {
     //the vector contains factorization of the matrix
@@ -98,17 +115,23 @@ const
     return penalty;
 }
 
-
 /*!
-* @brief Compute [J + Rc]^(-1)
+* @brief Compute [J + R]^(-1), where:
+*        - J = int_a_b(X_crossed_t* W * X_crossed), where W is the functional weight. The integral of the matrix is element-wise
+*        - R the penalization matrix, diagonal block-matrix, such that each block contains the inner product within a given derivative of basis systems, one block for each basis system
+* @param X_crossed_t containing functional covariates from which the project of the previous part of the model estimation is taken out, transpost
+* @param W functional diagonal matrix, containing functional weights
+* @param X_crossed containing functional covariates from which the project of the previous part of the model estimation is taken out
+* @param R penalization matrix
+* @return partial PivLU of J + R
 */
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
 fwr_operator_computing<INPUT,OUTPUT>::compute_penalty(const functional_matrix<INPUT,OUTPUT> &X_crossed_t,
-                                                       const functional_matrix_diagonal<INPUT,OUTPUT> &W,
-                                                       const functional_matrix<INPUT,OUTPUT> &X_crossed,
-                                                       const FDAGWR_TRAITS::Sparse_Matrix &R) 
+                                                      const functional_matrix_diagonal<INPUT,OUTPUT> &W,
+                                                      const functional_matrix<INPUT,OUTPUT> &X_crossed,
+                                                      const FDAGWR_TRAITS::Sparse_Matrix &R) 
 const
 {
     FDAGWR_TRAITS::Dense_Matrix _R_ = FDAGWR_TRAITS::Dense_Matrix(R);
@@ -118,19 +141,28 @@ const
     return Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >( fm_integration(integrand) + _R_ ); 
 }
 
-
 /*!
-* @brief Compute [J + Rc]^(-1)
+* @brief Compute [J + R]^(-1), where:
+*        - J = int_a_b(base_t * X_t* W * X * base), where W is the functional weight. The integral of the matrix is element-wise
+*        - R the penalization matrix, diagonal block-matrix, such that each block contains the inner product within a given derivative of basis systems, one block for each basis system
+* @param base_t containing basis systems, one system for each row, one basis for each column, transpost
+* @param X_t functional covariates, transpost
+* @param W functional diagonal matrix, containing functional weights
+* @param X functioal covaraites
+* @param base containing basis systems, one system for each row, one basis for each column
+* @param R penalization matrix
+* @return partial PivLU of J + R
+* @note is used when having only stationary covariates
 */
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >
 fwr_operator_computing<INPUT,OUTPUT>::compute_penalty(const functional_matrix_sparse<INPUT,OUTPUT> &base_t,
-                                                       const functional_matrix<INPUT,OUTPUT> &X_t,
-                                                       const functional_matrix_diagonal<INPUT,OUTPUT> &W,
-                                                       const functional_matrix<INPUT,OUTPUT> &X,
-                                                       const functional_matrix_sparse<INPUT,OUTPUT> &base,
-                                                       const FDAGWR_TRAITS::Sparse_Matrix &R)
+                                                      const functional_matrix<INPUT,OUTPUT> &X_t,
+                                                      const functional_matrix_diagonal<INPUT,OUTPUT> &W,
+                                                      const functional_matrix<INPUT,OUTPUT> &X,
+                                                      const functional_matrix_sparse<INPUT,OUTPUT> &base,
+                                                      const FDAGWR_TRAITS::Sparse_Matrix &R)
 const
 {   
     FDAGWR_TRAITS::Dense_Matrix _R_ = FDAGWR_TRAITS::Dense_Matrix(R);
@@ -140,22 +172,26 @@ const
     return Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix >( this->fm_integration(integrand) + _R_ ); 
 }
 
-
-
-/////////////////////////////
-///// COMPUTE OPERATORS /////
-/////////////////////////////
-
-
+/*!
+* @brief Compute a scalar (matrix) operator as, for each unit
+*        int_a_b(base_lhs * X_lhs * W_i * X_rhs * base_rhs), where W_i is the functional weight of the i-th units. The integral of the matrix is element-wise
+* @param base_lhs containing basis systems, one system for each row, one basis for each column
+* @param X_lhs functional data matrix
+* @param W vector of functional diagonal matrices, containing, for each unit, functional weights
+* @param X_rhs functional data matrix
+* @param base_rhs containing basis systems, one system for each row, one basis for each column
+* @param penalty vector of partial PivLU decomposition, containing the penalties [J_i + R]^(-1) as computed by the functions above
+* @return a matrix containing the element-wise integration
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
 fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
-                                                        const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                                                        const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                                                        const functional_matrix<INPUT,OUTPUT> &X_rhs,
-                                                        const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
-                                                        const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
+                                                       const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                                                       const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                                                       const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                                                       const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
+                                                       const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
 const
 {
     //the vector contains factorization of the matrix
@@ -177,15 +213,24 @@ const
     return _operator_;
 }
 
-
+/*!
+* @brief Compute a scalar (matrix) operator as, for each unit
+*        [J_i + R]^(-1) * int_a_b(base_lhs * X_lhs * W_i * base_rhs), where W_i is the functional weight of the i-th units. The integral of the matrix is element-wise
+* @param base_lhs containing basis systems, one system for each row, one basis for each column
+* @param X_lhs functional data matrix
+* @param W vector of functional diagonal matrices, containing, for each unit, functional weights
+* @param base_rhs containing basis systems, one system for each row, one basis for each column
+* @param penalty vector of partial PivLU decomposition, containing the penalties [J_i + R]^(-1) as computed by the functions above
+* @return a matrix containing the element-wise integration
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
 fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
-                                                        const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                                                        const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                                                        const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
-                                                        const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
+                                                       const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                                                       const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                                                       const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
+                                                       const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
 const
 {
     //the vector contains factorization of the matrix
@@ -207,15 +252,24 @@ const
     return _operator_;
 }
 
-
+/*!
+* @brief Compute a scalar (matrix) operator as, for each unit
+*        [J_i + R]^(-1) * int_a_b(X_lhs * W_i * X_rhs * base_rhs), where W_i is the functional weight of the i-th units. The integral of the matrix is element-wise
+* @param X_lhs functional data matrix
+* @param W vector of functional diagonal matrices, containing, for each unit, functional weights
+* @param X_rhs functional data matrix
+* @param base_rhs containing basis systems, one system for each row, one basis for each column
+* @param penalty vector of partial PivLU decomposition, containing the penalties [J_i + R]^(-1) as computed by the functions above
+* @return a matrix containing the element-wise integration
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
 fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                                                        const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                                                        const functional_matrix<INPUT,OUTPUT> &X_rhs,
-                                                        const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
-                                                        const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
+                                                       const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                                                       const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                                                       const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
+                                                       const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
 const
 {
     //the vector contains factorization of the matrix
@@ -237,14 +291,22 @@ const
     return _operator_;
 }
 
-
+/*!
+* @brief Compute a scalar (matrix) operator as, for each unit
+*        [J_i + R]^(-1) * int_a_b(X_lhs * W_i * base_rhs), where W_i is the functional weight of the i-th units. The integral of the matrix is element-wise
+* @param X_lhs functional data matrix
+* @param W vector of functional diagonal matrices, containing, for each unit, functional weights
+* @param base_rhs containing basis systems, one system for each row, one basis for each column
+* @param penalty vector of partial PivLU decomposition, containing the penalties [J_i + R]^(-1) as computed by the functions above
+* @return a matrix containing the element-wise integration
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
 fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                                                        const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                                                        const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
-                                                        const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
+                                                       const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                                                       const functional_matrix_sparse<INPUT,OUTPUT> &base_rhs,
+                                                       const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
 const
 {
     //the vector contains factorization of the matrix
@@ -266,14 +328,22 @@ const
     return _operator_;
 }
 
-
+/*!
+* @brief Compute a scalar (matrix) operator as, for each unit
+*        [J_i + R]^(-1) * int_a_b(X_lhs * W_i * X_rhs), where W_i is the functional weight of the i-th units. The integral of the matrix is element-wise
+* @param X_lhs functional data matrix
+* @param W vector of functional diagonal matrices, containing, for each unit, functional weights
+* @param X_rhs functional data matrix
+* @param penalty vector of partial PivLU decomposition, containing the penalties [J_i + R]^(-1) as computed by the functions above
+* @return a matrix containing the element-wise integration
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
 fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                                                        const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                                                        const functional_matrix<INPUT,OUTPUT> &X_rhs,
-                                                        const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
+                                                       const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                                                       const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                                                       const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
 const
 {
     //the vector contains factorization of the matrix
@@ -295,15 +365,24 @@ const
     return _operator_;
 }
 
-
+/*!
+* @brief Compute a scalar (matrix) operator as, for each unit
+*        [J_i + R]^(-1) * int_a_b(base_lhs * X_lhs * W_i * X_rhs), where W_i is the functional weight of the i-th units. The integral of the matrix is element-wise
+* @param base_lhs containing basis systems, one system for each row, one basis for each column
+* @param X_lhs functional data matrix
+* @param W vector of functional diagonal matrices, containing, for each unit, functional weights
+* @param X_rhs functional data matrix
+* @param penalty vector of partial PivLU decomposition, containing the penalties [J_i + R]^(-1) as computed by the functions above
+* @return a matrix containing the element-wise integration
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< FDAGWR_TRAITS::Dense_Matrix >
 fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix_sparse<INPUT,OUTPUT> &base_lhs,
-                                                        const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                                                        const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
-                                                        const functional_matrix<INPUT,OUTPUT> &X_rhs,
-                                                        const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
+                                                       const functional_matrix<INPUT,OUTPUT> &X_lhs,
+                                                       const std::vector< functional_matrix_diagonal<INPUT,OUTPUT> > &W,
+                                                       const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                                                       const std::vector< Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > > &penalty) 
 const
 {
     //the vector contains factorization of the matrix
@@ -325,14 +404,21 @@ const
     return _operator_;
 }
 
-
+/*!
+* @brief Compute a scalar (matrix) operator as [J + R]^(-1) * int_a_b(X_lhs * W_i * X_rhs), where W is the functional weight. The integral of the matrix is element-wise
+* @param X_lhs functional data matrix
+* @param W functional diagonal matrix, containing functional weights
+* @param X_rhs functional data matrix
+* @param penalty partial PivLU decomposition, containing the penalty [J + R]^(-1) as computed by the functions above
+* @return a matrix containing the element-wise integration
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 FDAGWR_TRAITS::Dense_Matrix
 fwr_operator_computing<INPUT,OUTPUT>::compute_operator(const functional_matrix<INPUT,OUTPUT> &X_lhs,
-                                                        const functional_matrix_diagonal<INPUT,OUTPUT> &W,
-                                                        const functional_matrix<INPUT,OUTPUT> &X_rhs,
-                                                        const Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > &penalty) 
+                                                       const functional_matrix_diagonal<INPUT,OUTPUT> &W,
+                                                       const functional_matrix<INPUT,OUTPUT> &X_rhs,
+                                                       const Eigen::PartialPivLU< FDAGWR_TRAITS::Dense_Matrix > &penalty) 
 const
 {
     //dimension: L_lhs x L_rhs, where L is the number of basis (the left basis is transpost)
@@ -342,7 +428,16 @@ const
     return penalty.solve( fm_integration(integrand) ); 
 }
 
-
+/*!
+* @brief Compute a scalar (matrix) operator as [J + R]^(-1) * int_a_b(base_lhs * X_lhs * W_i * X_rhs), where W_i is the functional weight. The integral of the matrix is element-wise
+* @param base_lhs containing basis systems, one system for each row, one basis for each column
+* @param X_lhs functional data matrix
+* @param W functional diagonal matrix, containing functional weights
+* @param X_rhs functional data matrix
+* @param penalty partial PivLU decomposition, containing the penalty [J + R]^(-1) as computed by the functions above
+* @return a matrix containing the element-wise integration
+* @note for FWR when having only stationary covariates
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 FDAGWR_TRAITS::Dense_Matrix
@@ -360,15 +455,14 @@ const
     return penalty.solve( fm_integration(integrand) ); 
 }
 
-
-
-
-
-/////////////////////////////////////
-//// COMPUTE FUNCTIONAL OPERATOR ////
-/////////////////////////////////////
-
-
+/*!
+* @brief Compute a functional operator, intended as a matrix where:
+*        each row is the respective row of the functional covaraite, multiplied by the base system, and then by the operator computed
+* @param X functional data covariates
+* @param base basis system
+* @param _operator_ an operator computed as above
+* @return the functional operator, as functional matrix       
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 functional_matrix<INPUT,OUTPUT> 

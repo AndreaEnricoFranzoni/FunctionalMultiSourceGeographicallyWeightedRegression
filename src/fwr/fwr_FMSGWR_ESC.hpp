@@ -263,92 +263,120 @@ public:
         if(!this->in_cascade_estimation())
         {
             //(j_tilde_tilde + Re)^-1
+            std::cout << "Computing (j_tilde_tilde + Re)^-1" << std::endl;
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Re_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
             //A_E_i
+            std::cout << "Computing A_e_i" << std::endl;
             m_A_e = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,m_phi,j_double_tilde_Re_inv);
             //H_e(t)
+            std::cout << "Computing H_e(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> H_e = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_A_e);
             //B_E_i
+            std::cout << "Computing B_e_i" << std::endl;
             m_B_e = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,m_Xc,m_omega,j_double_tilde_Re_inv);
             //K_e_c(t)
+            std::cout << "Computing K_e_c(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> K_e_c = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_B_e);
             //B_E_i_for_K_e_s
+            std::cout << "Computing B_e_i_for_K_e_S" << std::endl;
             m_B_e_for_K_e_s = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,m_Xs,m_psi,j_double_tilde_Re_inv);
             //K_e_s(t)
+            std::cout << "Computing K_e_s(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> K_e_s = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_B_e_for_K_e_s);
             //X_s_crossed(t)
             functional_matrix<INPUT,OUTPUT> X_s_crossed = fm_prod(m_Xs,m_psi) - K_e_s;
             functional_matrix<INPUT,OUTPUT> X_s_crossed_t = X_s_crossed.transpose();
             //(j_tilde + Rs)^-1
+            std::cout << "Computing (j_tilde + Rs)^-1" << std::endl;
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv = this->operator_comp().compute_penalty(X_s_crossed_t,m_Ws,X_s_crossed,m_Rs);
         
             //A_S_i
             functional_matrix<INPUT,OUTPUT> rhs_As = m_phi - H_e;
+            std::cout << "Computing A_s_i" << std::endl;
             m_A_s = this->operator_comp().compute_operator(X_s_crossed_t,m_Ws,rhs_As,j_tilde_Rs_inv);
             //H_s(t)
+            std::cout << "Computing H_s(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> H_s = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_A_s);
             //A_ES_i
+            std::cout << "Computing A_es_i" << std::endl;
             m_A_es = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,H_s,j_double_tilde_Re_inv);
             //H_es(t)
+            std::cout << "Computing H_es(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> H_es = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_A_es);
 
             //B_S_i
             functional_matrix<INPUT,OUTPUT> rhs_Bs = fm_prod(m_Xc,m_omega) - K_e_c;
+            std::cout << "Computing B_s_i" << std::endl;
             m_B_s = this->operator_comp().compute_operator(X_s_crossed_t,m_Ws,rhs_Bs,j_tilde_Rs_inv);
             //K_s_c(t)
+            std::cout << "Computing K_s_c(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> K_s_c = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_B_s);
             //B_ES_i
+            std::cout << "Computing B_es_i" << std::endl;
             m_B_es = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,K_s_c,j_double_tilde_Re_inv);
             //K_es_c(t)
+            std::cout << "Computing K_es_c(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> K_es_c = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_B_es);
 
 
             //y_new(t)
+            std::cout << "Computing y_new(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> y_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_e - H_s + H_es),m_c,this->number_threads());
             functional_matrix<INPUT,OUTPUT> X_c_crossed = fm_prod(m_Xc,m_omega) - K_e_c - K_s_c + K_es_c;
             functional_matrix<INPUT,OUTPUT> X_c_crossed_t = X_c_crossed.transpose();
             //[J + Rc]^-1
+            std::cout << "Computing (j + Rc)^-1" << std::endl;
             Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> j_Rc_inv = this->operator_comp().compute_penalty(X_c_crossed_t,m_Wc,X_c_crossed,m_Rc);
         
 
             //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
+            std::cout << "Computing bc" << std::endl;
             m_bc = this->operator_comp().compute_operator(X_c_crossed_t,m_Wc,y_new,j_Rc_inv);
 
 
             //y_tilde_hat(t)
+            std::cout << "Computing y_tilde_hat(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> y_tilde_hat = m_y - fm_prod(fm_prod(m_Xc,m_omega),m_bc,this->number_threads());
             //c_tilde_hat: smoothing on y_tilde_hat(t) with respect of the basis of y
             m_c_tilde_hat = columnize_coeff_resp(fm_smoothing<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_smoothing));
             //y_tilde_new(t)
+            std::cout << "Computing y_tilde_new(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> y_tilde_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_e),m_c_tilde_hat,this->number_threads());
 
 
             //COMPUTING all the m_bs, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
+            std::cout << "Computing bs" << std::endl;
             m_bs = this->operator_comp().compute_operator(X_s_crossed_t,m_Ws,y_tilde_new,j_tilde_Rs_inv);
         
         
             //y_tilde_tilde_hat(t)
+            std::cout << "Computing y_tilde_tilde_hat(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> y_tilde_tilde_hat = y_tilde_hat - this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_bs);
 
 
             //COMPUTING all the m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE EVENT-DEPENDENT BETAS
+            std::cout << "Computing be" << std::endl;
             m_be = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde_tilde_hat,j_double_tilde_Re_inv);
         }
 
         else
         {
             //[J + Rc]^-1
+            std::cout << "Computing (j + Rc)^-1" << std::endl;
             Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> j_Rc_inv = this->operator_comp().compute_penalty(m_omega_t,m_Xc_t,m_Wc,m_Xc,m_omega,m_Rc);
 
             //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
+            std::cout << "Computing bc" << std::endl;
             m_bc = this->operator_comp().compute_operator(m_omega_t,m_Xc_t,m_Wc,m_y,j_Rc_inv);
 
             //y_tilde_hat
             functional_matrix<INPUT,OUTPUT> y_tilde_hat = m_y - fm_prod(fm_prod(m_Xc,m_omega),m_bc,this->number_threads());
             
             //[J_i + Rs]^-1
+            std::cout << "Computing (j + Rs)^-1" << std::endl;
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_i_Rs_inv = this->operator_comp().compute_penalty(m_psi_t,m_Xs_t,m_Ws,m_Xs,m_psi,m_Rs);
             //COMPUTING m_bs, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
+            std::cout << "Computing bs" << std::endl;
             m_bs = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,y_tilde_hat,j_i_Rs_inv);
 
             //y_tilde_tilde_hat
@@ -374,8 +402,10 @@ public:
             }
 
             //[J_i + Re]^-1
+            std::cout << "Computing (j + Re)^-1" << std::endl;
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_i_Re_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);
             //COMPUTING m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
+            std::cout << "Computing be" << std::endl;
             m_be = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde_tilde_hat,j_i_Re_inv);
 
             //default values of 0 for returning elements
