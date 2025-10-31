@@ -349,10 +349,11 @@ public:
             //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
             std::cout << "Computing bc" << std::endl;
             m_bc = this->operator_comp().compute_operator(X_c_crossed_t,m_Wc,y_new,j_Rc_inv);
+            std::cout << m_b << std::endl;
             X_c_crossed.clear_all();
             X_c_crossed_t.clear_all();
             y_new.clear_all();
-
+            std::cout << m_b << std::endl;
 
             //y_tilde_hat(t)
             std::cout << "Computing y_tilde_hat(t)" << std::endl;
