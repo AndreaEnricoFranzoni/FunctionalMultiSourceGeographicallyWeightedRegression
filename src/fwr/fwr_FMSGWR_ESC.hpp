@@ -361,6 +361,7 @@ public:
             //y_tilde_hat(t)
             std::cout << "Computing y_tilde_hat(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> y_tilde_hat = m_y - fm_prod(fm_prod(m_Xc,m_omega),m_bc,this->number_threads());
+            std::cout << "Number of elements y_tilde_hat: " << y_tilde_hat.as_vector().size() << std::endl;
             //c_tilde_hat: smoothing on y_tilde_hat(t) with respect of the basis of y
             std::cout << "Computing c_tilde_hat" << std::endl;
             m_c_tilde_hat = columnize_coeff_resp(fm_smoothing<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_smoothing));
