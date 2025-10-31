@@ -277,8 +277,11 @@ public:
             //K_e_c(t)
             std::cout << "Computing K_e_c(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> K_e_c = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_B_e);
+            
+            
+            
             std::cout << "Before clearing" << std::endl;
-            double loc = 0.3:
+            double loc = 0.3;
             for(std::size_t i = 0; i < K_e_c.rows(); ++i){
                 for(std::size_t j = 0; j < K_e_c.cols(); ++j){
                     std::cout << "K_e_c(" << i <<","<<j<<") in " << loc << ": " << K_e_c(i,j)(loc) <<std::endl;
@@ -292,6 +295,9 @@ public:
                     std::cout << "K_e_c(" << i <<","<<j<<") in " << loc << ": " << K_e_c(i,j)(loc) <<std::endl;
                 }
             }
+
+
+
 
             //B_E_i_for_K_e_s
             std::cout << "Computing B_e_i_for_K_e_S" << std::endl;
