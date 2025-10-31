@@ -349,16 +349,20 @@ public:
             //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
             std::cout << "Computing bc" << std::endl;
             m_bc = this->operator_comp().compute_operator(X_c_crossed_t,m_Wc,y_new,j_Rc_inv);
-            std::cout << m_bc << std::endl;
+            
             X_c_crossed.clear_all();
             X_c_crossed_t.clear_all();
             y_new.clear_all();
-            std::cout << m_bc << std::endl;
+            std::cout << "Number of elements Xc: " << m_Xc.as_vector().size() << std::endl;
+            std::cout << "Number of elements Omega: " << m_omega.as_vector().size() << std::endl;
+            std::cout << "Number of elements m_y: " << m_y.as_vector().size() << std::endl;
+            std::cout << "Bc rows: " << m_bc.rows() << ", cols: " << m_bc.cols() << std::endl;
 
             //y_tilde_hat(t)
             std::cout << "Computing y_tilde_hat(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> y_tilde_hat = m_y - fm_prod(fm_prod(m_Xc,m_omega),m_bc,this->number_threads());
             //c_tilde_hat: smoothing on y_tilde_hat(t) with respect of the basis of y
+            std::cout << "Computing c_tilde_hat" << std::endl;
             m_c_tilde_hat = columnize_coeff_resp(fm_smoothing<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_smoothing));
             //y_tilde_new(t)
             std::cout << "Computing y_tilde_new(t)" << std::endl;
