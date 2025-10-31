@@ -381,7 +381,8 @@ public:
             std::cout << basis_y_ev << std::endl;
             //c_tilde_hat: smoothing on y_tilde_hat(t) with respect of the basis of y
             std::cout << "Computing c_tilde_hat" << std::endl;
-            m_c_tilde_hat = columnize_coeff_resp(fm_smoothing<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_smoothing));
+            //m_c_tilde_hat = columnize_coeff_resp(fm_smoothing<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_smoothing));
+            m_c_tilde_hat = Eigen::MatrixXd::Random(m_Ly*this->n(),1);
             //y_tilde_new(t)
             std::cout << "Computing y_tilde_new(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> y_tilde_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_e),m_c_tilde_hat,this->number_threads());
