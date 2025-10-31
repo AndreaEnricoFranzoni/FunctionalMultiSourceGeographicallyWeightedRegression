@@ -354,13 +354,28 @@ public:
             X_c_crossed_t.clear_all();
             y_new.clear_all();
             std::cout << "Number of elements Xc: " << m_Xc.as_vector().size() << std::endl;
+            for(std::size_t i = 0; i < m_Xc.rows(); ++i){
+                for(std::size_t j = 0; j < m_Xc.cols(); ++j){
+                    std::cout << "Xc(" << i <<","<<j<<"): " << m_Xc(i,j)(loc) << std::endl;
+                }
+            }
             std::cout << "Number of elements Omega: " << m_omega.as_vector().size() << std::endl;
             std::cout << "Number of elements m_y: " << m_y.as_vector().size() << std::endl;
+            for(std::size_t i = 0; i < m_y.rows(); ++i){
+                for(std::size_t j = 0; j < m_y.cols(); ++j){
+                    std::cout << "m_y(" << i <<","<<j<<"): " << m_y(i,j)(loc) << std::endl;
+                }
+            }
             std::cout << "Bc rows: " << m_bc.rows() << ", cols: " << m_bc.cols() << std::endl;
 
             //y_tilde_hat(t)
             std::cout << "Computing y_tilde_hat(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> y_tilde_hat = m_y - fm_prod(fm_prod(m_Xc,m_omega),m_bc,this->number_threads());
+            for(std::size_t i = 0; i < y_tilde_hat.rows(); ++i){
+                for(std::size_t j = 0; j < y_tilde_hat.cols(); ++j){
+                    std::cout << "y_tilde_hat(" << i <<","<<j<<"): " << y_tilde_hat(i,j)(loc) << std::endl;
+                }
+            }
             std::cout << "Number of elements y_tilde_hat: " << y_tilde_hat.as_vector().size() << std::endl;
             //c_tilde_hat: smoothing on y_tilde_hat(t) with respect of the basis of y
             std::cout << "Computing c_tilde_hat" << std::endl;
