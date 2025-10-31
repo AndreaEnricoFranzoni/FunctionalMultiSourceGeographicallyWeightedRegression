@@ -221,6 +221,16 @@ public:
     }
 
     /*!
+    * @brief Clear the buffer
+    */
+    void
+    clear_all()
+    {
+        m_data.clear();
+        m_data.shrink_to_fit();
+    }
+
+    /*!
     * @brief Casting operator to a std::vector &, const version
     * @return a const reference to a std::vector of std::function, containing the function stored into the matrix
     * @code

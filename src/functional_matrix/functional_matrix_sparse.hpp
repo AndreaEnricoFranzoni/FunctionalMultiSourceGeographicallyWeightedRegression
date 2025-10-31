@@ -374,6 +374,16 @@ public:
     }
 
     /*!
+    * @brief Clear the buffer
+    */
+    void
+    clear_all()
+    {
+        m_data.clear();
+        m_data.shrink_to_fit();
+    }
+
+    /*!
     * @brief Row indices of the non-zero elements
     * @return a std::vector with the row indeces of the stored elements
     */

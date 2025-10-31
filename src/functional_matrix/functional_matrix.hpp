@@ -244,6 +244,16 @@ public:
     }
 
     /*!
+    * @brief Clear the buffer
+    */
+    void
+    clear_all()
+    {
+        m_data.clear();
+        m_data.shrink_to_fit();
+    }
+
+    /*!
     * @brief View of the idx-th row, non-const
     * @param idx the row index
     * @return a view to the idx-th row

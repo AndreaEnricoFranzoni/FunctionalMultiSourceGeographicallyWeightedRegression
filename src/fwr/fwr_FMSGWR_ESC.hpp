@@ -258,6 +258,7 @@ public:
     compute()  
     override
     {
+        double loc = 0.3;
         
         //exact estimation
         if(!this->in_cascade_estimation())
@@ -277,28 +278,8 @@ public:
             //K_e_c(t)
             std::cout << "Computing K_e_c(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> K_e_c = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_B_e);
-            
-            
-            
-            std::cout << "Before clearing" << std::endl;
-            double loc = 0.3;
-            for(std::size_t i = 0; i < K_e_c.rows(); ++i){
-                for(std::size_t j = 0; j < K_e_c.cols(); ++j){
-                    std::cout << "K_e_c(" << i <<","<<j<<") in " << loc << ": " << K_e_c(i,j)(loc) <<std::endl;
-                }
-            }
             m_B_e.clear();
             m_B_e.shrink_to_fit();
-            std::cout << "After clearing" << std::endl;
-            for(std::size_t i = 0; i < K_e_c.rows(); ++i){
-                for(std::size_t j = 0; j < K_e_c.cols(); ++j){
-                    std::cout << "K_e_c(" << i <<","<<j<<") in " << loc << ": " << K_e_c(i,j)(loc) <<std::endl;
-                }
-            }
-
-
-
-
             //B_E_i_for_K_e_s
             std::cout << "Computing B_e_i_for_K_e_S" << std::endl;
             m_B_e_for_K_e_s = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,m_Xs,m_psi,j_double_tilde_Re_inv);
@@ -308,6 +289,7 @@ public:
             //X_s_crossed(t)
             functional_matrix<INPUT,OUTPUT> X_s_crossed = fm_prod(m_Xs,m_psi) - K_e_s;
             functional_matrix<INPUT,OUTPUT> X_s_crossed_t = X_s_crossed.transpose();
+            K_e_s.clear_all();
             //(j_tilde + Rs)^-1
             std::cout << "Computing (j_tilde + Rs)^-1" << std::endl;
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Rs_inv = this->operator_comp().compute_penalty(X_s_crossed_t,m_Ws,X_s_crossed,m_Rs);
@@ -319,12 +301,16 @@ public:
             //H_s(t)
             std::cout << "Computing H_s(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> H_s = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_A_s);
+            m_A_s.clear();
+            m_A_s.shrink_to_fit();
             //A_ES_i
             std::cout << "Computing A_es_i" << std::endl;
             m_A_es = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,H_s,j_double_tilde_Re_inv);
             //H_es(t)
             std::cout << "Computing H_es(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> H_es = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_A_es);
+            m_A_es.clear();
+            m_A_es.shrink_to_fit();
 
             //B_S_i
             functional_matrix<INPUT,OUTPUT> rhs_Bs = fm_prod(m_Xc,m_omega) - K_e_c;
@@ -333,18 +319,27 @@ public:
             //K_s_c(t)
             std::cout << "Computing K_s_c(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> K_s_c = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_B_s);
+            m_B_s.clear();
+            m_B_s.shrink_to_fit();
             //B_ES_i
             std::cout << "Computing B_es_i" << std::endl;
             m_B_es = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,K_s_c,j_double_tilde_Re_inv);
             //K_es_c(t)
             std::cout << "Computing K_es_c(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> K_es_c = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_B_es);
-
+            m_B_es.clear();
+            m_B_es.shrink_to_fit();
 
             //y_new(t)
             std::cout << "Computing y_new(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> y_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_e - H_s + H_es),m_c,this->number_threads());
+            H_e.clear_all();
+            H_s.clear_all();
+            H_es.clear_all();
             functional_matrix<INPUT,OUTPUT> X_c_crossed = fm_prod(m_Xc,m_omega) - K_e_c - K_s_c + K_es_c;
+            K_e_c.clear_all();
+            K_s_c.clear_all();
+            K_es_c.clear_all();
             functional_matrix<INPUT,OUTPUT> X_c_crossed_t = X_c_crossed.transpose();
             //[J + Rc]^-1
             std::cout << "Computing (j + Rc)^-1" << std::endl;
@@ -354,6 +349,11 @@ public:
             //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
             std::cout << "Computing bc" << std::endl;
             m_bc = this->operator_comp().compute_operator(X_c_crossed_t,m_Wc,y_new,j_Rc_inv);
+            j_Rc_inv.clear();
+            j_Rc_inv.shrink_to_fit();
+            X_c_crossed.clear_all();
+            X_c_crossed_t.clear_all();
+            y_new.clear_all();
 
 
             //y_tilde_hat(t)
@@ -369,6 +369,11 @@ public:
             //COMPUTING all the m_bs, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
             std::cout << "Computing bs" << std::endl;
             m_bs = this->operator_comp().compute_operator(X_s_crossed_t,m_Ws,y_tilde_new,j_tilde_Rs_inv);
+            j_tilde_Rs_inv.clear();
+            j_tilde_Rs_inv.shrink_to_fit();
+            X_s_crossed.clear_all();
+            X_s_crossed_t.clear_all();
+            y_tilde_new.clear_all();
         
         
             //y_tilde_tilde_hat(t)
