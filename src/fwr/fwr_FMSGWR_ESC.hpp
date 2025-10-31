@@ -349,8 +349,6 @@ public:
             //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
             std::cout << "Computing bc" << std::endl;
             m_bc = this->operator_comp().compute_operator(X_c_crossed_t,m_Wc,y_new,j_Rc_inv);
-            j_Rc_inv.clear();
-            j_Rc_inv.shrink_to_fit();
             X_c_crossed.clear_all();
             X_c_crossed_t.clear_all();
             y_new.clear_all();
