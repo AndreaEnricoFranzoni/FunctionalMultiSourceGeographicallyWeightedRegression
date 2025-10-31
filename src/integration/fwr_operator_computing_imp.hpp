@@ -494,18 +494,12 @@ const
     return func_operator;
 }
 
-
-
-
-
-
-//////////////////////
-/////// WRAP B ///////
-//////////////////////
-
-
 /*!
-* @brief Wrap b, for stationary covariates (me li splitta accordingly)
+* @brief For stationary covariates, wrap the basis expansion coefficients of the functional regression coefficients, from column vector containing all the the coefficients to a vector containing only the coefficients for the covariate
+* @param b a matrix, column matrix, of dimension Lx1, containing the basis expansion coefficients of the functional regression coefficients, one covariate after the other
+* @param L_j vector containing the number of basis of each regression coefficient. Its sum is L
+* @param q number of covariates
+* @return a vector of matrices, the i-th matrix of dimension L_j[i]x1, with the basis expansion coefficients of the regression coefficient of the i-th stationary covariate
 */
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -532,8 +526,14 @@ const
     return B;
 }
 
-
-//for non stationary covariates (me li splitta accordingly)
+/*!
+* @brief For non-stationary covariates, wrap the basis expansion coefficients of the functional regression coefficients, from column vector containing all the the coefficients to a vector containing only the coefficients for the covariate, for each statistical unit
+* @param b a vector with n matrices, column matrices, of dimension Lx1, containing the basis expansion coefficients of the functional regression coefficients, one covariate after the other, for each of the statistical unit
+* @param L_j vector containing the number of basis of each regression coefficient. Its sum is L
+* @param q number of covariates
+* @param n number of statistical units
+* @return a vector of dimension q. Element i-th is a vector of n matrices, each one of dimension L_j[i]x1, with the basis expansion coefficients of the regression coefficient of the i-th stationary covariate, for each unit
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix > >
@@ -543,7 +543,7 @@ fwr_operator_computing<INPUT,OUTPUT>::wrap_operator(const std::vector< FDAGWR_TR
                                                      std::size_t n) 
 const
 {
-    //n è il numero di unità utilizzare per fare training
+    //n is the number of units for training
     //input coherency
     assert((b.size() == n) && (L_j.size() == q));
     for(std::size_t i = 0; i < b.size(); ++i){     assert((b[i].cols() == 1) && (b[i].rows() == std::reduce(L_j.cbegin(),L_j.cend(),static_cast<std::size_t>(0))));}
@@ -567,17 +567,11 @@ const
     return B;
 }
 
-
-
-
-
-
-/////////////////
-/// DEWRAP B ////
-/////////////////
-
 /*!
-* @brief Dewrap b, for stationary covariates: me li incolonna tutti 
+* @brief For stationary covariates, dewrap the basis expansion coefficients for functional regression coefficients and puts them in a column matrix
+* @param b vector containing, for each covariate, a column matrix containing the basis expansion coefficients  of the functional regression coefficients of that covariate
+* @param L_j vector containing the number of basis for each covariate basis expansion of the functional regression coefficients
+* @return a matrix, of dimension Lx1, L the sum of the element in L_j, containing the basis expansion coefficients of the functional regression coefficients, one after the other
 */
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -601,13 +595,12 @@ const
     return b_dewrapped;
 }
 
-
-
-//per ogni unità
 /*!
-* @brief Per ogni unità, mi fa i b incolonnati
-* @param b vettore esterno: le covariate: ogni elemento è un vettore che contiene, per quella covariate, i b non-stazionari in ogni unità
-* @return un vettore coi b incolonnati per ogni unità
+* @brief For non-stationary covariates, for each statistical unit, dewrap the basis expansion coefficients for functional regression coefficients and puts them in a column matrix
+* @param b vector, of dimension q, containing, in element i-th, a vector of matrices, of dimension L_j[i]x1, for each statistical unit, the basis expansion coefficients of i-th covariate functional regression coefficients
+* @param L_j vector containing the number of basis for each covariate basis expansion of the functional regression coefficients
+* @param n the number of statistical units
+* @return a vector of matrix, containing for each statistical unit, the basis expansion coefficients of functional regression coefficients, as column one after the other, in a Lx1, L sum of elements in L_j
 */
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
@@ -636,14 +629,15 @@ const
     return b_dewrapped;
 }
 
-
-
-
-//////////////////////
-///// EVAL BETAS /////
-//////////////////////
-
-//stationary betas
+/*!
+* @brief Evaluation the stationary betas, as basis expansion coefficients and basis, over a grid of points
+* @param B vector of size q, containing for each covariate, as a column matrix, the basis expansion coefficients for the functional regression coefficient
+* @param basis_B matrix of dimension qxL, where each row, for each covariate contains the basis for that functional regression coefficient. Each row contains only that basis, shifted, form position L_j[i-1] up to L_j[i] 
+* @param L_j vector containing the number of basis for each covariate basis expansion of the functional regression coefficients
+* @param q number of covariates
+* @param abscissas vector of points over which evaluating the betas
+* @return a vector of size q, such that element i-th is a vector containing the evaluations of beta of covariate i-th 
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector< OUTPUT >>
@@ -687,8 +681,16 @@ const
     return beta;
 }
 
-
-//non-stationary betas
+/*!
+* @brief Evaluation the non-stationary betas, as basis expansion coefficients and basis, over a grid of points, for each statistical unit
+* @param B vector of size q, each element is of size n and contains, for each unit, the basis expansion coefficients, as L_j_i x 1 matrix, of the functional regression coefficient for the respective covariate
+* @param basis_B matrix of dimension qxL, where each row, for each covariate contains the basis for that functional regression coefficient. Each row contains only that basis, shifted, form position L_j[i-1] up to L_j[i] 
+* @param L_j vector containing the number of basis for each covariate basis expansion of the functional regression coefficients
+* @param q number of covariates
+* @param n number of statistical units
+* @param abscissas vector of points over which evaluating the betas
+* @return a vector of size q, element i-th is a vector with an element for each unit, containing the evaluation of beta of covariate i-th for that unit over abscissas
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector< std::vector< OUTPUT >>>
@@ -744,12 +746,13 @@ const
     return beta;
 }
 
-
-
-
-
-// EVAL BETAS
-//stationary
+/*!
+* @brief Evaluating the stationary betas, as functional matrix, over a grid of points
+* @param beta a qx1 matrix of functions containing the functional regression coefficients for stationary covariates
+* @param q number of covariates
+* @param abscissa vector of points over which evaluating the betas
+* @return a vector of size q, such that element i-th is a vector containing the evaluations of beta of covariate i-th 
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector<OUTPUT> >
@@ -786,9 +789,13 @@ const
     return beta_ev;
 }
 
-
-
-//non-stationary: risultato: un vettore di len q, che contiene, per ogni n_pred, le valutazioni dei beta
+/*!
+* @brief Evaluating the non-stationary betas, as functional matrix, over a grid of points
+* @param beta vector, one element for each statistical unit, containing a qx1 matrix of functions containing the functional regression coefficients for non-stationary covariates
+* @param q number of covariates
+* @param abscissa vector of points over which evaluating the betas
+* @return a vector of size q, element i-th is a vector with an element for each unit, containing the evaluation of beta of covariate i-th for that unit over abscissa
+*/
 template< typename INPUT, typename OUTPUT >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 std::vector< std::vector< std::vector<OUTPUT>>>
