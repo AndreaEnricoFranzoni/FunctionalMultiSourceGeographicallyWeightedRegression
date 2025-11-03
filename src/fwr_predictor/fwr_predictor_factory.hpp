@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -30,9 +30,22 @@
 #include "fwr_FWR_predictor.hpp"
 
 
+
 /*!
-* @tparam fdagwrType kind The type of Functional Geographical Weighted regression class desired.
-* @param args Arguments to be forwarded to the constructor.
+* @file fwr_predictor_factory.hpp
+* @brief Contains the definition of factory to create the correct functional weighted regression predictor, depending on the model fitted
+* @author Andrea Enrico Franzoni
+*/
+
+
+/*!
+* @brief Factory to create the correct functional weighted regression predictor, depending on the model fitted
+* @tparam fdagwrType the functional weighted regression model to be fitted
+* @tparam INPUT type of functional data abscissa
+* @tparam OUTPUT type of functional data image
+* @tparam Args variadic template
+* @param args Arguments to be forwarded to the constructor of the right functional weighted regression predictor
+* @return a unique pointer to the right functional weighted regression predictor, downcasted to the base class
 */
 template< FDAGWR_ALGO fdagwrType, typename INPUT = double, typename OUTPUT = double, class... Args >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)

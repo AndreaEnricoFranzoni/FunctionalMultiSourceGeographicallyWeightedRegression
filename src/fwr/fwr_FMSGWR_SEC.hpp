@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -23,6 +23,20 @@
 
 #include "fwr.hpp"
 
+
+/*!
+* @file fwr_FMSGWR_SEC.hpp
+* @brief Contains the definition of the Functional Multi-Source Geographically Weighted Regression SEC model
+* @author Andrea Enrico Franzoni
+*/
+
+
+/*!
+* @class fwr_FMSGWR_SEC
+* @brief Concrete class for the Functional Multi-Source Geographically Weighted Regression SEC model, estimating, in order, stationary, event-dependent and station-dependent functional regression coefficients
+* @tparam INPUT type of functional data abscissa
+* @tparam OUTPUT type of functional data image
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class fwr_FMSGWR_SEC final : public fwr<INPUT,OUTPUT>
@@ -30,13 +44,13 @@ class fwr_FMSGWR_SEC final : public fwr<INPUT,OUTPUT>
 private:
     /*!Functional response (nx1)*/
     functional_matrix<INPUT,OUTPUT> m_y;
-    /*!Basis for response (nx(nxLy))*/
+    /*!Basis for response (nx(n*Ly)). Each row contains the basis, every time shifted by (row_i-1)+Ly, always the same basis*/
     functional_matrix_sparse<INPUT,OUTPUT> m_phi;
     /*!Coefficients of the basis expansion for response ((n*Ly)x1): coefficients for each unit are columnized one below the other*/
     FDAGWR_TRAITS::Dense_Matrix m_c;
-    /*!Number of basis used to make basis expansion for y*/
+    /*!Number of basis used to make basis expansion for the response*/
     std::size_t m_Ly;
-    /*!Basis used for y (the functions put in m_phi)*/
+    /*!Basis used for the response (the functions put in m_phi)*/
     std::unique_ptr<basis_base_class<FDAGWR_TRAITS::basis_geometry>> m_basis_y;
     /*!Knots for the response, used at the beginning to obtain y basis expansion coefficients via smoothing*/
     FDAGWR_TRAITS::Dense_Matrix m_knots_smoothing;
@@ -45,7 +59,7 @@ private:
     functional_matrix<INPUT,OUTPUT> m_Xc;
     /*!Their transpost (qc x n)*/
     functional_matrix<INPUT,OUTPUT> m_Xc_t;
-    /*!Functional weights for stationary covariates (n elements of diagonal n x n)*/
+    /*!Functional weights for stationary covariates (diagonal n x n)*/
     functional_matrix_diagonal<INPUT,OUTPUT> m_Wc;
     /*!Scalar matrix with the penalization on the stationary covariates (sparse Lc x Lc, where Lc is the sum of the basis of each C covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Rc;
@@ -55,7 +69,7 @@ private:
     functional_matrix_sparse<INPUT,OUTPUT> m_omega_t;
     /*!Coefficients of the basis expansion for stationary regressors coefficients: Lcx1 (used for the computation): TO BE COMPUTED*/
     FDAGWR_TRAITS::Dense_Matrix m_bc;
-    /*!Coefficients of the basis expansion for stationary regressors coefficients: every element is Lc_jx1*/
+    /*!Coefficients of the basis expansion for stationary regressors coefficients: every element is 1xLc_j*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_Bc;
     /*!Discrete evaluation of all the beta_c: a vector of dimension qc, containing, for all the stationary covariates, the discrete ev of the respective beta*/
     std::vector< std::vector< OUTPUT >> m_beta_c;
@@ -118,7 +132,7 @@ private:
 
     //A operators
     /*!A_S_i*/
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_A_s;   //per fare predict
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_A_s;  
     /*!A_E_i*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_A_e;
     /*!A_SE_i*/
@@ -126,7 +140,7 @@ private:
 
     //B operators
     /*!B_S_i while computing K_E_S(t)*/
-    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_B_s_for_K_s_e; //per fare predict
+    std::vector< FDAGWR_TRAITS::Dense_Matrix > m_B_s_for_K_s_e;
     /*!B_S_i*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_B_s;
     /*!B_E_i*/
@@ -134,8 +148,7 @@ private:
     /*!B_SE_i*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_B_se;
 
-    //c_tilde_hat (necessary to save partial residuals and performing predictions)
-    /*!c_tilde_hat*/
+    /*!c_tilde_hat (necessary to save partial residuals and performing predictions)*/
     FDAGWR_TRAITS::Dense_Matrix m_c_tilde_hat;
 
 
@@ -143,6 +156,41 @@ private:
 public:
     /*!
     * @brief Constructor
+    * @param y functional matrix containing the response (nx1)
+    * @param phi functional sparse matrix containing the basis for the response (nx(n*Ly)). Each row contains the basis, every time shifted by (row_i-1)+Ly, always the same basis
+    * @param c response basis expansion coefficients ((n*Ly)x1)
+    * @param Ly number of basis for the response
+    * @param basis_y basis for the the response, the same basis put in phi
+    * @param knots_smoothing knots used to perform the smoothing for the response without the effect of the stationary part of the model
+    * @param Xc functional matrix containing the stationary covariates (nxqc)
+    * @param Wc functional diagonal matrix containing the functional stationary weights (nxn)
+    * @param Rc penalization matrix of the stationary covariates (diagonal block matrix containing the the scalar product within the second order derivatives of the functional regression coefficients basis. LcxLc)
+    * @param omega functional sparse matrix containing the basis of the functional regression coefficients of the stationary covariates (qcxLc, row i-th contains zeros and the basis of the i-th stationary covariate, their position shifted of sum_i_0_to_i(Lc_i))
+    * @param qc number of stationary covariates
+    * @param Lc total number of basis used for the stationary covariates functional regression coefficients
+    * @param Lc_j vector containing in element i-th the number of basis for the stationary covariate i-th functional regression coefficients
+    * @param Xe functional matrix containing the event-dependent covariates (nxqe)
+    * @param We vector of functional diagonal matrix containing, as element i-th, the functional event-dependent weights (nxn) of unit i-th
+    * @param Re penalization matrix of the event-dependent covariates (diagonal block matrix containing the the scalar product within the second order derivatives of the functional regression coefficients basis. LexLe)
+    * @param theta functional sparse matrix containing the basis of the functional regression coefficients of the event-dependent covariates (qexLe, row i-th contains zeros and the basis of the i-th event-dependent covariate, their position shifted of sum_i_0_to_i(Le_i))
+    * @param qe number of event-dependent covariates
+    * @param Le total number of basis used for the event-dependent covariates functional regression coefficients
+    * @param Le_j vector containing in element i-th the number of basis for the event-dependent covariate i-th functional regression coefficients
+    * @param Xs functional matrix containing the station-dependent covariates (nxqs)
+    * @param Ws vector of functional diagonal matrix containing, as element i-th, the functional station-dependent weights (nxn) of unit i-th
+    * @param Rs penalization matrix of the station-dependent covariates (diagonal block matrix containing the the scalar product within the second order derivatives of the functional regression coefficients basis. LsxLs)
+    * @param psi functional sparse matrix containing the basis of the functional regression coefficients of the station-dependent covariates (qsxLs, row i-th contains zeros and the basis of the i-th station-dependent covariate, their position shifted of sum_i_0_to_i(Ls_i))
+    * @param qs number of station-dependent covariates
+    * @param Ls total number of basis used for the station-dependent covariates functional regression coefficients
+    * @param Ls_j vector containing in element i-th the number of basis for the station-dependent covariate i-th functional regression coefficients
+    * @param a left extreme functional data domain 
+    * @param a right extreme functional data domain 
+    * @param n_intervals_integration number of intervals used by the midpoint quadrature rule
+    * @param abscissa_points abscissa points over which there are the evaluations of the raw functional data
+    * @param n number of training statistical units
+    * @param number_threads number of threads for OMP
+    * @param in_cascade_estimation if true, for more than one source covariates, the estimation is made in cascade. If false, exact
+    * @note input dimensions check and transpose computation
     */
     template<typename FUNC_MATRIX_OBJ, 
              typename FUNC_SPARSE_MATRIX_OBJ,
@@ -251,8 +299,8 @@ public:
     
 
     /*!
-    * @brief Override of the base class method to perform fgwr fms esc algorithm
-    */ 
+    * @brief Method to compute the Functional Weighted Regression basis expansion coefficients of the functional regression coefficients
+    */
     inline 
     void 
     compute()  
@@ -261,92 +309,121 @@ public:
         //exact estimation
         if (!this->in_cascade_estimation())
         {
-            //(j_tilde_tilde + Rs)^-1
+            //(j_tilde_tilde + Rs)^-1 (LsxLs)
+            std::cout << "Computing (j_tilde_tilde + Rs)^-1" << std::endl;
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_double_tilde_Rs_inv = this->operator_comp().compute_penalty(m_psi_t,m_Xs_t,m_Ws,m_Xs,m_psi,m_Rs);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
-            //A_S_i
+            //A_S_i (n elements Lsx(n*Ly))
+            std::cout << "Computing A_s_i" << std::endl;
             m_A_s = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,m_phi,j_double_tilde_Rs_inv);
-            //H_s(t)
+            //H_s(t) (nx(n*Ly))
+            std::cout << "Computing H_s(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> H_s = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_A_s);
-            //B_S_i
+            //B_S_i (n elements LsxLc)
+            std::cout << "Computing B_s_i" << std::endl;
             m_B_s = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,m_Xc,m_omega,j_double_tilde_Rs_inv);
-            //K_s_c(t)
+            //K_s_c(t) (nxLc)
+            std::cout << "Computing K_s_c(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> K_s_c = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_B_s);
-            //B_S_i_for_K_s_e
+            //B_S_i_for_K_s_e (n elements LsxLe)
+            std::cout << "Computing B_S_i_for_K_s_e" << std::endl;
             m_B_s_for_K_s_e = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,m_Xe,m_theta,j_double_tilde_Rs_inv);
-            //K_s_e(t)
+            //K_s_e(t) (nxLe)
+            std::cout << "Computing K_s_e(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> K_s_e = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_B_s_for_K_s_e);
-            //X_e_crossed(t)
+            //X_e_crossed(t) (nxLe)
             functional_matrix<INPUT,OUTPUT> X_e_crossed = fm_prod(m_Xe,m_theta) - K_s_e;
             functional_matrix<INPUT,OUTPUT> X_e_crossed_t = X_e_crossed.transpose();
-            //(j_tilde + Rs)^-1
+            //(j_tilde + Re)^-1 (LexLe)
+            std::cout << "Computing (j_tilde + Re)^-1" << std::endl;
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_tilde_Re_inv = this->operator_comp().compute_penalty(X_e_crossed_t,m_We,X_e_crossed,m_Re);
         
-            //A_E_i
+            //A_E_i (n elements Lex(n*Ly))
             functional_matrix<INPUT,OUTPUT> rhs_Ae = m_phi - H_s;
+            std::cout << "Computing A_e_i" << std::endl;
             m_A_e = this->operator_comp().compute_operator(X_e_crossed_t,m_We,rhs_Ae,j_tilde_Re_inv);
-            //H_e(t)
+            //H_e(t) (nx(n*Ly))
+            std::cout << "Computing H_e(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> H_e = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_A_e);
-            //A_SE_i
+            //A_SE_i (n elements Lsx(n*Ly))
+            std::cout << "Computing A_se_i" << std::endl;
             m_A_se = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,H_e,j_double_tilde_Rs_inv);
-            //H_se(t)
+            //H_se(t) (nx(n*Ly))
+            std::cout << "Computing H_se(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> H_se = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_A_se);
 
-            //B_E_i
+            //B_E_i (n elements LexLc)
             functional_matrix<INPUT,OUTPUT> rhs_Be = fm_prod(m_Xc,m_omega) - K_s_c;
+            std::cout << "Computing B_e_i" << std::endl;
             m_B_e = this->operator_comp().compute_operator(X_e_crossed_t,m_We,rhs_Be,j_tilde_Re_inv);
-            //K_e_c(t)
+            //K_e_c(t) (nXLc)
+            std::cout << "Computing K_e_c(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> K_e_c = this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_B_e);
-            //B_SE_i
+            //B_SE_i (n elements LsxLc)
+            std::cout << "Computing B_se_i" << std::endl;
             m_B_se = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,K_e_c,j_double_tilde_Rs_inv);
-            //K_se_c(t)
+            //K_se_c(t) (nxLc)
+            std::cout << "Computing K_se_c(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> K_se_c = this->operator_comp().compute_functional_operator(m_Xs,m_psi,m_B_se);
 
-            //y_new(t)
+            //y_new(t) (nx1)
+            std::cout << "Computing y_new(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> y_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_s - H_e + H_se),m_c,this->number_threads());
-            //X_c_crossed
+            //X_c_crossed (nxqc)
             functional_matrix<INPUT,OUTPUT> X_c_crossed = fm_prod(m_Xc,m_omega) - K_s_c - K_e_c + K_se_c;
             functional_matrix<INPUT,OUTPUT> X_c_crossed_t = X_c_crossed.transpose();
-            //[J + Rc]^-1
+            //[J + Rc]^-1(LcxLc)
+            std::cout << "Computing (j + Rc)^-1" << std::endl;
             Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> j_Rc_inv = this->operator_comp().compute_penalty(X_c_crossed_t,m_Wc,X_c_crossed,m_Rc);
         
 
-            //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
+            //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS (Lcx1)
+            std::cout << "Computing bc" << std::endl;
             m_bc = this->operator_comp().compute_operator(X_c_crossed_t,m_Wc,y_new,j_Rc_inv);
 
 
-            //y_tilde_hat(t)
+            //y_tilde_hat(t) (nx1)
+            std::cout << "Computing y_tilde_hat(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> y_tilde_hat = m_y - fm_prod(fm_prod(m_Xc,m_omega),m_bc,this->number_threads());
-            //c_tilde_hat: smoothing on y_tilde_hat(t) with respect of the basis of y
+            //c_tilde_hat: smoothing on y_tilde_hat(t) with respect of the basis of y ((n*Ly)x1)
+            std::cout << "Computing c_tilde_hat" << std::endl;
             m_c_tilde_hat = columnize_coeff_resp(fm_smoothing<INPUT,OUTPUT,FDAGWR_TRAITS::basis_geometry>(y_tilde_hat,*m_basis_y,m_knots_smoothing));
-            //y_tilde_new(t)
+            //y_tilde_new(t) (nx1)
+            std::cout << "Computing y_tilde_new(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> y_tilde_new = fm_prod(functional_matrix<INPUT,OUTPUT>(m_phi - H_s),m_c_tilde_hat,this->number_threads());
 
-            //COMPUTING all the m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE EVENT-DEPENDENT BETAS
+            //COMPUTING all the m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE EVENT-DEPENDENT BETAS (n elements Lex1)
+            std::cout << "Computing be" << std::endl;
             m_be = this->operator_comp().compute_operator(X_e_crossed_t,m_We,y_tilde_new,j_tilde_Re_inv);
 
-            //y_tilde_tilde_hat(t)
+            //y_tilde_tilde_hat(t) (nx1)
+            std::cout << "Computing y_tilde_tilde_hat(t)" << std::endl;
             functional_matrix<INPUT,OUTPUT> y_tilde_tilde_hat = y_tilde_hat - this->operator_comp().compute_functional_operator(m_Xe,m_theta,m_be);
 
-            //COMPUTING all the m_bs, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS
+            //COMPUTING all the m_bs, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATION-DEPENDENT BETAS (n elementd Lsx1)
+            std::cout << "Computing bs" << std::endl;
             m_bs = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,y_tilde_tilde_hat,j_double_tilde_Rs_inv);
         }
-        //brute force estimation
+        //in cascade estimation
         else
         {
-            //[J + Rc]^-1
+            //[J + Rc]^-1 (LcxLc)
+            std::cout << "Computing (j + Rc)^-1" << std::endl;
             Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> j_Rc_inv = this->operator_comp().compute_penalty(m_omega_t,m_Xc_t,m_Wc,m_Xc,m_omega,m_Rc);
-            //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
+            //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS (Lcx1)
+            std::cout << "Computing bc" << std::endl;
             m_bc = this->operator_comp().compute_operator(m_omega_t,m_Xc_t,m_Wc,m_y,j_Rc_inv);
-            //y_tilde
+            //y_tilde (nx1)
             functional_matrix<INPUT,OUTPUT> y_tilde = m_y - fm_prod(fm_prod(m_Xc,m_omega),m_bc,this->number_threads());
-            //[J_i + Re]^-1
+            //[J_i + Re]^-1 (LexLe)
+            std::cout << "Computing (j + Re)^-1" << std::endl;
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_i_Re_inv = this->operator_comp().compute_penalty(m_theta_t,m_Xe_t,m_We,m_Xe,m_theta,m_Re);
-            //COMPUTING m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
+            //COMPUTING m_be, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS (n elements Lex1)
+            std::cout << "Computing be" << std::endl;
             m_be = this->operator_comp().compute_operator(m_theta_t,m_Xe_t,m_We,y_tilde,j_i_Re_inv);
-            //y_tilde_tilde
+            //y_tilde_tilde (nx1)
             functional_matrix<INPUT,OUTPUT> y_tilde_tilde(this->n(),1); 
 
-            //extras
+            //extra objects (default values of 0s)
             m_A_s.resize(this->n());
             m_B_s_for_K_s_e.resize(this->n());
 
@@ -365,27 +442,29 @@ public:
                 m_B_s_for_K_s_e[i] = FDAGWR_TRAITS::Dense_Matrix::Zero(m_Ls,m_Le);
             }
 
-            //[J_i + Rs]^-1
+            //[J_i + Rs]^-1 (LsxLs)
+            std::cout << "Computing (j + Rs)^-1" << std::endl;
             std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_i_Rs_inv = this->operator_comp().compute_penalty(m_psi_t,m_Xs_t,m_Ws,m_Xs,m_psi,m_Rs);
-            //COMPUTING m_bs, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
+            //COMPUTING m_bs, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS (n elements Lsx1)
+            std::cout << "Computing bs" << std::endl;
             m_bs = this->operator_comp().compute_operator(m_psi_t,m_Xs_t,m_Ws,y_tilde_tilde,j_i_Rs_inv);
             //default values of 0 for returning elements
             m_c_tilde_hat = FDAGWR_TRAITS::Dense_Matrix::Zero(m_Ly*this->n(),1);
         }
         
         //
-        //wrapping the b from the shape useful for the computation into a more useful format: TENERE
+        //wrapping the b from the shape useful for the computation into a more useful format
         //
-        //stationary covariates
+        //stationary covariates (qc elements 1xLc_i)
         m_Bc = this->operator_comp().wrap_operator(m_bc,m_Lc_j,m_qc);
-        //event-dependent covariates
+        //event-dependent covariates (qe elements of n elements 1xLe_i)
         m_Be = this->operator_comp().wrap_operator(m_be,m_Le_j,m_qe,this->n());
-        //station-dependent covariates
+        //station-dependent covariates (qs elements of n elements 1xLs_i)
         m_Bs = this->operator_comp().wrap_operator(m_be,m_Ls_j,m_qs,this->n());
     }
 
     /*!
-    * @brief Virtual method to obtain a discrete version of the betas
+    * @brief Evaluating the functional regression coefficients over a grid of points (m_abscissa_points)
     */
     inline 
     void 
@@ -401,7 +480,8 @@ public:
     }
 
     /*!
-    * @brief Getter for the coefficient of the basis expansion of the stationary regressors coefficients
+    * @brief Function to return the basis expansion coefficients of the functional regression coefficitens
+    * @return a tuple containing m_Bc,m_Be and m_Bs
     */
     inline 
     BTuple 
@@ -413,7 +493,8 @@ public:
     }
 
     /*!
-    * @brief Getter for the. etas evaluated along the abscissas
+    * @brief Function to return the the functional regression coefficients evaluated
+    * @return a tuple containing m_beta_c,m_beta_e and m_beta_s
     */
     inline 
     BetasTuple 
@@ -425,7 +506,8 @@ public:
     }
 
     /*!
-    * @brief Getter for the objects needed for reconstructing the partial residuals
+    * @brief Function to return objects useful for reconstructing the functional partial residuals
+    * @return a tuple containing m_c_tilde_hat,m_A_s and m_B_s_for_K_s_e
     */
     inline
     PartialResidualTuple

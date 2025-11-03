@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -23,43 +23,55 @@
 
 #include "fwr_predictor.hpp"
 
-#include <iostream>
 
+/*!
+* @file fwr_FGWR_predictor.hpp
+* @brief Contains the definition of the Functional Geographically Weighted Regression predictor
+* @author Andrea Enrico Franzoni
+*/
+
+
+
+/*!
+* @class fwr_FGWR_predictor
+* @brief Concrete class for the Functional Geographically Weighted Regression predictor
+* @tparam INPUT type of functional data abscissa
+* @tparam OUTPUT type of functional data image
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class fwr_FGWR_predictor final : public fwr_predictor<INPUT,OUTPUT>
 {
 private:
-
     //
     //Computing the betas in the new stance
     //
-    /*!Coefficients of the basis expansion for event-dependent regressors: Lex1, every element of the vector is referring to a specific unit TO BE COMPUTED*/
+    /*!Coefficients of the basis expansion for event-dependent regressors: Lncx1, every element of the vector is referring to a specific unit: TO BE COMPUTED*/
     std::vector< FDAGWR_TRAITS::Dense_Matrix > m_bnc_pred;
-    /*!Coefficients of the basis expansion for event-dependent regressors coefficients: every of the qe elements are n 1xLe_j matrices, one for each statistical unit*/
+    /*!Coefficients of the basis expansion for non-stationary regressors coefficients: every of the qnc elements are n 1xLnc_j matrices, one for each statistical unit*/
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix >> m_Bnc_pred;
 
 
     //Basis used for the regression coefficients
-    /*!Basis for event-dependent covariates regressors (sparse qe x Le)*/
+    /*!Basis for non-stationary covariates regressors (sparse qnc x Lnc)*/
     functional_matrix_sparse<INPUT,OUTPUT> m_eta;
-    /*!Their transpost (sparse Le x qE)*/
+    /*!Their transpost (sparse Lnc x qnc)*/
     functional_matrix_sparse<INPUT,OUTPUT> m_eta_t;
-    /*!Number of event-dependent covariates*/
+    /*!Number of non-stationary covariates*/
     std::size_t m_qnc;
-    /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the event-dependent regressors coefficients*/
+    /*!Number of basis, in total, used to perform the basis expansion of the regressors coefficients for the non-stationary regressors coefficients*/
     std::size_t m_Lnc; 
-    /*!Number of basis, for each event-dependent covariate, to perform the basis expansion of the regressors coefficients for the event-dependent regressors coefficients*/
+    /*!Number of basis, for each non-stationary covariate, to perform the basis expansion of the regressors coefficients for the non-stationary regressors coefficients*/
     std::vector<std::size_t> m_Lnc_j;
 
     //Objects to reconstruct the functional partial residuals
-    /*!y train*/
+    /*!y train (n_trainx1)*/
     functional_matrix_sparse<INPUT,OUTPUT> m_y_train;
-    /*!Functional event-dependent covariates (n_train x qnc)*/
+    /*!Functional non-stationary covariates (n_train x qnc)*/
     functional_matrix<INPUT,OUTPUT> m_Xnc_train;
     /*!Their transpost (qnc x n_train)*/
     functional_matrix<INPUT,OUTPUT> m_Xnc_train_t;
-    /*!Scalar matrix with the penalization on the event-dependent covariates (sparse Le x Le, where Le is the sum of the basis of each E covariate)*/
+    /*!Scalar matrix with the penalization on the non-stationary covariates (sparse Lnc x Lnc, where Lnc is the sum of the basis of each non-stationary covariate)*/
     FDAGWR_TRAITS::Sparse_Matrix m_Rnc;
 
 
@@ -74,6 +86,20 @@ private:
 public:
     /*!
     * @brief Constructor
+    * @param eta functional sparse matrix containing the basis of the functional regression coefficients of the non-stationary covariates (qncxLnc, row i-th contains zeros and the basis of the i-th non-stationary covariate, their position shifted of sum_i_0_to_i(Lnc_i))
+    * @param qnc number of non-stationary covariates
+    * @param Lnc total number of basis used for the non-stationary covariates functional regression coefficients
+    * @param Lnc_j vector containing in element i-th the number of basis for the non-stationary covariate i-th functional regression coefficients
+    * @param y_train functional matrix containing the response of the training set (n_train x 1)
+    * @param Xc_train functional matrix containing the stationary covariates of the training set (n_train x qc)
+    * @param Xnc_train functional matrix containing the non-stationary covariates of the training set (n_train x qnc)
+    * @param Rnc penalization matrix of the non-stationary covariates (diagonal block matrix containing the the scalar product within the second order derivatives of the functional regression coefficients basis. LncxLnc)
+    * @param a left extreme functional data domain 
+    * @param b right extreme functional data domain 
+    * @param n_intervals_integration number of intervals used by the midpoint quadrature rule
+    * @param n_train number of training statistical units
+    * @param number_threads number of threads for OMP
+    * @note input dimensions check and transpose computation
     */
     template<typename FUNC_MATRIX_OBJ, 
              typename FUNC_SPARSE_MATRIX_OBJ,
@@ -110,7 +136,8 @@ public:
             }
 
     /*!
-    * @brief Function to reconstruct the functional partial residuals
+    * @brief Function to compute the partial residuals accordingly to the fitted model
+    * @note no partial residuals to be computed
     */
     inline 
     void
@@ -118,7 +145,11 @@ public:
     override
     {}
 
-
+    /*!
+    * @brief Updating the non-stationary betas on the units to be predicted
+    * @param W map containing the non-stationary covariates of the units to be predicted. Each key represents, accordingly to the fitted model, a specific type of covariates
+    * @note keys are the one stored in the base class. Input coherency is checked
+    */ 
     inline
     void
     computeBNew(const std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >> &W)
@@ -131,24 +162,24 @@ public:
         //number of units to be predicted
         std::size_t n_pred = Wnc_new.size();
 
-
         //compute the non-stationary betas in the new locations
         //penalties in the new locations
-        //(j_tilde + Rnc)^-1
+        //(j_tilde + Rnc)^-1 (LncxLnc)
         std::vector< Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> > j_Rnc_inv = this->operator_comp().compute_penalty(m_eta_t,m_Xnc_train_t,Wnc_new,m_Xnc_train,m_eta,m_Rnc);     //per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M
-        //COMPUTING all the m_bnc in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE NON-STATIONARY BETAS
+        //COMPUTING all the m_bnc in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE NON-STATIONARY BETAS (n_pred elements Lncx1)
         m_bnc_pred = this->operator_comp().compute_operator(m_eta_t,m_Xnc_train_t,Wnc_new,m_y_train,j_Rnc_inv);
 
         //
-        //wrapping the b from the shape useful for the computation into a more useful format for reporting the results: TENERE
+        //wrapping the b from the shape useful for the computation into a more useful format for reporting the results
         //
-        //non-stationary covariates
+        //non-stationary covariates (qnc elements of n_pred elements 1xLnc_i)
         m_Bnc_pred = this->operator_comp().wrap_operator(m_bnc_pred,m_Lnc_j,m_qnc,n_pred);
 
     }
 
     /*!
-    * @brief Compute stationary betas
+    * @brief Compute stationary betas as functional matrices
+    * @note no stationary covariates for the FGWR
     */
     inline
     void 
@@ -157,7 +188,7 @@ public:
     {}
 
     /*!
-    * @brief Compute non-stationary betas
+    * @brief Compute non-stationary betas on the to-be-predicted units as functional matrices
     */
     inline
     void 
@@ -178,6 +209,9 @@ public:
 
     /*!
     * @brief Compute prediction
+    * @param X_new map containig, as elements, non-stationary covariates of the units to be predicted. Each key represents, accordingly to the fitted model, a specific type of covariates
+    * @return a functional matrix containing the prediction, n_predx1
+    * @note keys are the one stored in the base class. Input coherency is checked
     */
     inline
     functional_matrix<INPUT,OUTPUT>
@@ -185,11 +219,11 @@ public:
     const
     override
     {
+        //input coherence
         assert(X_new.size() == 1);
 
         auto Xnc_new = X_new.at(std::string{fwr_FGWR_predictor<INPUT,OUTPUT>::id_NC});
 
-        //controllo le unità statistiche
         std::size_t n_pred = Xnc_new.rows();
         assert((n_pred == m_BetaE.size()) && (n_pred == m_BetaS.size()));
         assert(Xnc_new.cols() == m_qnc);
@@ -213,7 +247,8 @@ public:
     }
 
     /*!
-    * @brief Virtual method to obtain a discrete version of the betas
+    * @brief Evaluating the functional betas along a grid
+    * @param abscissa the grid over which evaluating the functional betas
     */
     inline 
     void 
@@ -224,7 +259,8 @@ public:
     }
 
     /*!
-    * @brief Getter for the coefficient of the basis expansion of the stationary regressors coefficients
+    * @brief Function to return the coefficients of the betas basis expansion
+    * @return a tuple containing m_Bnc_pred
     */
     inline 
     BTuple 
@@ -236,7 +272,8 @@ public:
     }
 
     /*!
-    * @brief Getter for the. etas evaluated along the abscissas
+    * @brief Function to return the the betas evaluated, tuple of different dimension depending on the model fitted
+    * @return a tuple containing m_BetaNC_ev
     */
     inline 
     BetasTuple 

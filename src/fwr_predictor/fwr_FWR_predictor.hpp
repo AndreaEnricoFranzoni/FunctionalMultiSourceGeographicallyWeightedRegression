@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -23,9 +23,20 @@
 
 #include "fwr_predictor.hpp"
 
-#include <iostream>
+/*!
+* @file fwr_FWR_predictor.hpp
+* @brief Contains the definition of the Functional Weighted Regression predictor
+* @author Andrea Enrico Franzoni
+*/
 
-template< typename INPUT = double, typename OUTPUT = double >
+
+
+/*!
+* @class fwr_FWR_predictor
+* @brief Concrete class for the Functional Weighted Regression predictor
+* @tparam INPUT type of functional data abscissa
+* @tparam OUTPUT type of functional data image
+*/template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class fwr_FWR_predictor final : public fwr_predictor<INPUT,OUTPUT>
 {
@@ -53,13 +64,23 @@ private:
 
     //Betas
     //stationary: qc x 1
-    functional_matrix<INPUT,OUTPUT> m_BetaC;                        //elemento funzionale
+    functional_matrix<INPUT,OUTPUT> m_BetaC;                        
     /*!Discrete evaluation of all the beta_c: a vector of dimension qc, containing, for all the stationary covariates, the discrete ev of the respective beta*/
     std::vector< std::vector< OUTPUT >> m_BetaC_ev;
 
 public:
     /*!
     * @brief Constructor
+    * @param Bc_fitted coefficients of the basis expansion for stationary regressors coefficients: n_train elements Lc_jx1
+    * @param omega functional sparse matrix containing the basis of the functional regression coefficients of the stationary covariates (qcxLc, row i-th contains zeros and the basis of the i-th stationary covariate, their position shifted of sum_i_0_to_i(Lc_i))
+    * @param qc number of stationary covariates
+    * @param Lc total number of basis used for the stationary covariates functional regression coefficients
+    * @param Lc_j vector containing in element i-th the number of basis for the stationary covariate i-th functional regression coefficients
+    * @param a left extreme functional data domain 
+    * @param b right extreme functional data domain 
+    * @param n_train number of training statistical units
+    * @param number_threads number of threads for OMP
+    * @note input dimensions check and transpose computation
     */
     template<typename FUNC_SPARSE_MATRIX_OBJ,
              typename SCALAR_MATRIX_OBJ_VEC>
@@ -90,7 +111,8 @@ public:
             }
 
     /*!
-    * @brief Function to reconstruct the functional partial residuals
+    * @brief Function to compute the partial residuals accordingly to the fitted model
+    * @note no partial residuals to be computed
     */
     inline 
     void
@@ -98,6 +120,11 @@ public:
     override
     {}
 
+    /*!
+    * @brief Updating the non-stationary betas on the units to be predicted
+    * @param W map containing the non-stationary covariates of the units to be predicted. Each key represents, accordingly to the fitted model, a specific type of covariates
+    * @note keys are the one stored in the base class. Input coherency is checked. No computations to be done since there are only stationary covariates
+    */ 
     inline
     void
     computeBNew(const std::map<std::string,std::vector< functional_matrix_diagonal<INPUT,OUTPUT> >> &W)
@@ -107,7 +134,7 @@ public:
     }
 
     /*!
-    * @brief Compute stationary betas
+    * @brief Compute stationary betas as functional matrices
     */
     inline
     void 
@@ -118,7 +145,8 @@ public:
     }
 
     /*!
-    * @brief Compute non-stationary betas
+    * @brief Compute non-stationary betas on the to-be-predicted units as functional matrices
+    * @note no non-stationary betas for FWR
     */
     inline
     void 
@@ -128,6 +156,9 @@ public:
 
     /*!
     * @brief Compute prediction
+    * @param X_new map containig, as elements, stationary covariates of the units to be predicted. Each key represents, accordingly to the fitted model, a specific type of covariates
+    * @return a functional matrix containing the prediction, n_predx1
+    * @note keys are the one stored in the base class. Input coherency is checked
     */
     inline
     functional_matrix<INPUT,OUTPUT>
@@ -135,6 +166,7 @@ public:
     const
     override
     {
+        //input coherence
         assert(X_new.size() == 1);
 
         auto Xc_new = X_new.at(std::string{fwr_FWR_predictor<INPUT,OUTPUT>::id_C});
@@ -147,7 +179,8 @@ public:
     }
 
     /*!
-    * @brief Virtual method to obtain a discrete version of the betas
+    * @brief Evaluating the functional betas along a grid
+    * @param abscissa the grid over which evaluating the functional betas
     */
     inline 
     void 
@@ -158,7 +191,8 @@ public:
     }
 
     /*!
-    * @brief Getter for the coefficient of the basis expansion of the stationary regressors coefficients
+    * @brief Function to return the coefficients of the betas basis expansion
+    * @return a tuple containing m_Bc_fitted
     */
     inline 
     BTuple 
@@ -170,7 +204,8 @@ public:
     }
 
     /*!
-    * @brief Getter for the. etas evaluated along the abscissas
+    * @brief Function to return the the betas evaluated, tuple of different dimension depending on the model fitted
+    * @return a tuple containing m_BetaC_ev
     */
     inline 
     BetasTuple 

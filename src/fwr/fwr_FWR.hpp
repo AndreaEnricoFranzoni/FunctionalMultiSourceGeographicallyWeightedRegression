@@ -14,7 +14,7 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH PPCKO OR THE USE OR OTHER DEALINGS IN
+// OUT OF OR IN CONNECTION WITH fdagwr OR THE USE OR OTHER DEALINGS IN
 // fdagwr.
 
 
@@ -24,6 +24,20 @@
 #include "fwr.hpp"
 
 
+/*!
+* @file fwr_FWR.hpp
+* @brief Contains the definition of the Functional Weighted Regression model
+* @author Andrea Enrico Franzoni
+*/
+
+
+
+/*!
+* @class fwr_FWR
+* @brief Concrete class for the Functional Weighted Regression model, estimating stationary functional regression coefficients
+* @tparam INPUT type of functional data abscissa
+* @tparam OUTPUT type of functional data image
+*/
 template< typename INPUT = double, typename OUTPUT = double >
     requires (std::integral<INPUT> || std::floating_point<INPUT>)  &&  (std::integral<OUTPUT> || std::floating_point<OUTPUT>)
 class fwr_FWR final : public fwr<INPUT,OUTPUT>
@@ -62,6 +76,21 @@ private:
 public:
     /*!
     * @brief Constructor
+    * @param y functional matrix containing the response (nx1)
+    * @param Xc functional matrix containing the stationary covariates (nxqc)
+    * @param Wc functional diagonal matrix containing the functional stationary weights (nxn)
+    * @param Rc penalization matrix of the stationary covariates (diagonal block matrix containing the the scalar product within the second order derivatives of the functional regression coefficients basis. LcxLc)
+    * @param omega functional sparse matrix containing the basis of the functional regression coefficients of the stationary covariates (qcxLc, row i-th contains zeros and the basis of the i-th stationary covariate, their position shifted of sum_i_0_to_i(Lc_i))
+    * @param qc number of stationary covariates
+    * @param Lc total number of basis used for the stationary covariates functional regression coefficients
+    * @param Lc_j vector containing in element i-th the number of basis for the stationary covariate i-th functional regression coefficients
+    * @param a left extreme functional data domain 
+    * @param a right extreme functional data domain 
+    * @param n_intervals_integration number of intervals used by the midpoint quadrature rule
+    * @param abscissa_points abscissa points over which there are the evaluations of the raw functional data
+    * @param n number of training statistical units
+    * @param number_threads number of threads for OMP
+    * @note input dimensions check and transpose computation
     */
     template<typename FUNC_MATRIX_OBJ, 
              typename FUNC_SPARSE_MATRIX_OBJ,
@@ -109,29 +138,30 @@ public:
     
 
     /*!
-    * @brief Override of the base class method to perform fgwr fms esc algorithm
-    */ 
+    * @brief Method to compute the Functional Weighted Regression basis expansion coefficients of the functional regression coefficients
+    */
     inline 
     void 
     compute()  
     override
     {
-
-        //[J + Rc]^-1
+        //[J + Rc]^-1 (LcxLc)
+        std::cout << "Computing (j + Rc)^-1" << std::endl;
         Eigen::PartialPivLU<FDAGWR_TRAITS::Dense_Matrix> j_Rc_inv = this->operator_comp().compute_penalty(m_omega_t,m_Xc_t,m_Wc,m_Xc,m_omega,m_Rc);
 
-        //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS
+        //COMPUTING m_bc, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE STATIONARY BETAS (Lcx1)
+        std::cout << "Computing bc" << std::endl;
         m_bc = this->operator_comp().compute_operator(m_omega_t,m_Xc_t,m_Wc,m_y,j_Rc_inv);
 
         //
-        //wrapping the b from the shape useful for the computation into a more useful format: TENERE
+        //wrapping the b from the shape useful for the computation into a more useful format
         //
-        //stationary covariates
+        //stationary covariates (qc elements 1xLc_i)
         m_Bc = this->operator_comp().wrap_operator(m_bc,m_Lc_j,m_qc);
     }
 
     /*!
-    * @brief Virtual method to obtain a discrete version of the betas
+    * @brief Evaluating the functional regression coefficients over a grid of points (m_abscissa_points)
     */
     inline 
     void 
@@ -143,7 +173,8 @@ public:
     }
 
     /*!
-    * @brief Getter for the coefficient of the basis expansion of the stationary regressors coefficients
+    * @brief Function to return the basis expansion coefficients of the functional regression coefficitens
+    * @return a tuple containing m_Bc
     */
     inline 
     BTuple 
@@ -155,7 +186,8 @@ public:
     }
 
     /*!
-    * @brief Getter for the. etas evaluated along the abscissas
+    * @brief Function to return the the functional regression coefficients evaluated
+    * @return a tuple containing m_beta_c 
     */
     inline 
     BetasTuple 
@@ -167,7 +199,9 @@ public:
     }
 
     /*!
-    * @brief Getter for the objects needed for reconstructing the partial residuals
+    * @brief Function to return objects useful for reconstructing the functional partial residuals
+    * @return an empty tuple
+    * @note no necessity to reconstruct partial residuals since there is only one type of covariates
     */
     inline
     PartialResidualTuple
@@ -178,12 +212,5 @@ public:
         return std::monostate{};
     }
 };
-
-
-/*
-        //DEFAULT AI B: PARTE DA TOGLIERE
-        m_bc = Eigen::MatrixXd::Random(m_Lc,1);
-        //FINE PARTE DA TOGLIERE
-*/ 
 
 #endif  /*FWR_FWR_ALGO_HPP*/
