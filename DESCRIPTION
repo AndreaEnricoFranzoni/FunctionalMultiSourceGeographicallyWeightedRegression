@@ -3,9 +3,9 @@ Type: Package
 Title: Functional Multi-Source Geographically Weighted Regression
 Version: 1.0
 Date: 2025-06-11
-Author: Andrea Enrico Franzoni [aut, cre], Alessandra Menafoglio [aut], Sara Sgobba [aut], Giovanni Lanzano [aut]
+Author: Andrea Enrico Franzoni [aut, cre], Alessandra Menafoglio [aut]
 Maintainer: Andrea Enrico Franzoni <andreaenrico.franzoni@gmail.com>
-Description: The package aims to fit a regression model where both response and covariates are functional elements deriving with unidimensioanl domain. Regression coefficients could eventually vary in space, and eventually vary in different spaces (events and stations).
+Description: fdagwr fits Functional Weighted Regression (FWR) models, for 1D domains, constructing the respective predictors. Regression coefficients can be stationary and non-stationary, with at most two sources of non-stationarity. 
 License: GPL-3
 Imports: Rcpp (>= 1.0.12), ggplot2, grid, gridExtra, viridis, patchwork, latex2exp
 LinkingTo: Rcpp, RcppEigen

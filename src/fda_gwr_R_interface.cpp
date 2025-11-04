@@ -56,7 +56,7 @@
 
 /*!
 * @file fda_gwr_R_interface.cpp
-* @brief Contains the R-interfaced functions of the package 'fdagwr', which implement Functional Geographical Weighted Regression
+* @brief Contains the R-interfaced main functions of the package 'fdagwr', which implement Functional Geographical Weighted Regression
 *        coefficients estimation, for different (multi-source (FMSGWR), mixed (FMGWR), geographically weighted (FGWR) and 
 *        weighted (FWR)) functional regression models.
 * @author Andrea Enrico Franzoni
@@ -84,7 +84,7 @@ void installation_fdagwr(){   Rcout << "fdagwr15 has been installed"<< std::endl
 
 /*!
 * @brief Fitting a Functional Multi-Source Geographically Weighted Regression ESC model. The covariates are functional objects, divided into
-*        three categories: stationary covariates (C), constant over space, event-dependent covariates (E), that vary depending on the spatial coordinates of the event, 
+*        three categories: stationary covariates (C), constant over geographical space, event-dependent covariates (E), that vary depending on the spatial coordinates of the event, 
 *        station-dependent covariates (S), that vary depending on the spatial coordinates of the stations that measure the event. Regression coefficients are estimated 
 *        in the following order: C, S, E. The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024) (link below)
 * @param y_points matrix of double containing the raw response: each row represents a specific abscissa for which the response evaluation is available, each column a statistical unit. Response is a already reconstructed.
@@ -95,33 +95,33 @@ void installation_fdagwr(){   Rcout << "fdagwr15 has been installed"<< std::endl
 * @param knots_y_points vector of double with the abscissa points with respect which the basis expansions of the response and response reconstruction weights are performed (all elements contained in [a,b]). 
 * @param degree_basis_y_points non-negative integer: the degree of the basis used for the basis expansion of the (functional) response. Default explained below (can be NULL).
 * @param n_basis_y_points positive integer: number of basis for the basis expansion of the (functional) response. It must match number of rows of coeff_y_points. Default explained below (can be NULL).
-* @param coeff_rec_weights_y_points matrix of double containing the coefficients of the weights to reconstruct the (functional) response: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
+* @param coeff_rec_weights_y_points matrix of double containing the coefficients of the basis expansion of the weights to reconstruct the (functional) response: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
 * @param degree_basis_rec_weights_y_points non-negative integer: the degree of the basis used for response reconstruction weights. Default explained below (can be NULL).
 * @param n_basis_rec_weights_y_points positive integer: number of basis for the basis expansion of response reconstruction weights. It must match number of rows of coeff_rec_weights_y_points. Default explained below (can be NULL).
 * @param coeff_stationary_cov list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
-*                             The name of the i-th element is the name of the i-th stationary covariate (default: "reg.Ci").
-* @param basis_types_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariates basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+*                             The name of the i-th element is the name of the i-th stationary covariate (default: "reg.Ci" if no name present).
+* @param basis_types_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariate basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param knots_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the stationary covariates are performed (all elements contained in [a,b]). 
 * @param degrees_basis_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stationary covariate. Default explained below (can be NULL).
 * @param n_basis_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stationary covariate. It must match number of rows of the i-th element of coeff_stationary_cov. Default explained below (can be NULL).
 * @param penalization_stationary_cov vector of non-negative double: element i-th is the penalization used for the i-th stationary covariate.
-* @param knots_beta_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the stationary covariates (functional regression) coefficients are performed (all elements contained in [a,b]). 
-* @param degrees_basis_beta_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stationary covariate (functional regression) coefficient. Default explained below (can be NULL).
-* @param n_basis_beta_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stationary covariate (functional regression) coefficient. Default explained below (can be NULL).
+* @param knots_beta_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the stationary covariates functional regression coefficients are performed (all elements contained in [a,b]). 
+* @param degrees_basis_beta_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stationary covariate functional regression coefficients. Default explained below (can be NULL).
+* @param n_basis_beta_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stationary covariate functional regression coefficients. Default explained below (can be NULL).
 * @param coeff_events_cov list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th events-dependent covariate: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
-*                             The name of the i-th element is the name of the i-th events-dependent covariate (default: "reg.Ei").
-* @param basis_types_events_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariates basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+*                         The name of the i-th element is the name of the i-th events-dependent covariate (default: "reg.Ei" if no name present).
+* @param basis_types_events_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariate basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param knots_events_cov vector of double with the abscissa points with respect which the basis expansions of the events-dependent covariates are performed (all elements contained in [a,b]). 
 * @param degrees_basis_events_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th events-dependent covariate. Default explained below (can be NULL).
 * @param n_basis_events_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th events-dependent covariate. It must match number of rows of the i-th element of coeff_events_cov. Default explained below (can be NULL).
 * @param penalization_events_cov vector of non-negative double: element i-th is the penalization used for the i-th events-dependent covariate.
 * @param coordinates_events matrix of double containing the UTM coordinates of the event of each statistical unit: each row represents a statistical unit, each column a coordinate (2 columns).
 * @param kernel_bandwith_events positive double indicating the bandwith of the gaussian kernel used to smooth the distances within events.
-* @param knots_beta_events_cov vector of double with the abscissa points with respect which the basis expansions of the events-dependent covariates (functional regression) coefficients are performed (all elements contained in [a,b]). 
-* @param degrees_basis_beta_events_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th events-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
-* @param n_basis_beta_events_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th events-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
+* @param knots_beta_events_cov vector of double with the abscissa points with respect which the basis expansions of the events-dependent covariates functional regression coefficients are performed (all elements contained in [a,b]). 
+* @param degrees_basis_beta_events_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th events-dependent covariate functional regression coefficient. Default explained below (can be NULL).
+* @param n_basis_beta_events_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th events-dependent covariate functional regression coefficient. Default explained below (can be NULL).
 * @param coeff_stations_cov list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stations-dependent covariate: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
-*                             The name of the i-th element is the name of the i-th stations-dependent covariate (default: "reg.Si").
+*                           The name of the i-th element is the name of the i-th stations-dependent covariate (default: "reg.Si").
 * @param basis_types_stations_cov vector of strings, element i-th containing the type of basis used for the i-th stations-dependent covariates basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param knots_stations_cov vector of double with the abscissa points with respect which the basis expansions of the stations-dependent covariates are performed (all elements contained in [a,b]). 
 * @param degrees_basis_stations_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stations-dependent covariate. Default explained below (can be NULL).
@@ -129,110 +129,120 @@ void installation_fdagwr(){   Rcout << "fdagwr15 has been installed"<< std::endl
 * @param penalization_stations_cov vector of non-negative double: element i-th is the penalization used for the i-th stations-dependent covariate.
 * @param coordinates_stations matrix of double containing the UTM coordinates of the station of each statistical unit: each row represents a statistical unit, each column a coordinate (2 columns).
 * @param kernel_bandwith_stations positive double indicating the bandwith of the gaussian kernel used to smooth the distances within stations.
-* @param knots_beta_stations_cov vector of double with the abscissa points with respect which the basis expansions of the stations-dependent covariates (functional regression) coefficients are performed (all elements contained in [a,b]). 
-* @param degrees_basis_beta_stations_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stations-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
-* @param n_basis_beta_stations_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stations-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
-* @param n_knots_smoothing number of knots used to perform the smoothing on the response obtained leaving out all the non-stationary components
-* @param n_intervals_quadrature number of intervals used while performing integration via midpoint quadrature rule
-* @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine running fmsgwr.
-* @param basis_type_y_points string containing the type of basis used for the (functional) response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
-* @param basis_type_rec_weights_y_points string containing the type of basis used for the weights to reconstruct the (functional) response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
-* @param basis_types_beta_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariates (functional regression) coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
-* @param basis_types_beta_events_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariates (functional regression) coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
-* @param basis_types_beta_stations_cov vector of strings, element i-th containing the type of basis used for the i-th stations-dependent covariates (functional regression) coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param knots_beta_stations_cov vector of double with the abscissa points with respect which the basis expansions of the stations-dependent covariates functional regression coefficients are performed (all elements contained in [a,b]). 
+* @param degrees_basis_beta_stations_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stations-dependent covariate functional regression coefficient. Default explained below (can be NULL).
+* @param n_basis_beta_stations_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stations-dependent covariate functional regression coefficient. Default explained below (can be NULL).
+* @param in_cascade_estimation bool: if false, an exact algorithm taking account for the interaction within non-stationary covariates is used to fit the model. Otherwise, the model is fitted in cascade. The first option is more precise, but way more computationally intensive.
+* @param n_knots_smoothing number of knots used to perform the smoothing on the response obtained leaving out all the non-stationary components (default: 100).
+* @param n_intervals_quadrature number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100).
+* @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine.
+* @param basis_type_y_points string containing the type of basis used for the functional response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_type_rec_weights_y_points string containing the type of basis used for the weights to reconstruct the functional response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_types_beta_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_types_beta_events_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_types_beta_stations_cov vector of strings, element i-th containing the type of basis used for the i-th stations-dependent covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @return an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FGWR_FMS_ESC")
+*         - "FGWR": string containing the type of fgwr used ("FMSGWR_ESC")
+*         - "EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true 
 *         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
-*                 - "Basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
-*                 - "Basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)
-*                 - "Basis_number": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)
-*                 - "Basis_knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)
+*                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)
 *         - "Beta_c": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
 *                 - "Beta_eval": a vector of double containing the discrete evaluations of the stationary beta
 *                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)
 *         - "Be": a list containing, for each event-dependent covariate regression coefficent (each element is named with the element names in the list coeff_events_cov (default, if not given: "CovE*")) a list with:
-*                 - "Basis_coeff": a list, containg, for each unit, a Le_jx1 vector of double, containing the coefficients of the basis expansion of the beta
-*                 - "Basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_events_cov)
-*                 - "Basis_number": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_events_cov)
-*                 - "Basis_knots": the knots used to create the basis system for the beta (it is the input knots_beta_events_cov)
+*                 - "basis_coeff": a list, containg, for each unit, a Le_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_events_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_events_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_events_cov)
 *         - "Beta_e": a list containing, for each event-dependent covariate regression coefficent (each element is named with the element names in the list coeff_events_cov (default, if not given: "CovE*")) a list with:
 *                 - "Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit
 *                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)  
 *         - "Bs": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:
-*                 - "Basis_coeff": a list, containg, for each unit, a Ls_jx1 vector of double, containing the coefficients of the basis expansion of the beta
-*                 - "Basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_stations_cov)
-*                 - "Basis_number": the number of basis used for performing the beta basis expansion (eespective elements of n_basis_beta_stations_cov)
-*                 - "Basis_knots": the knots used to create the basis system for the beta (it is the input knots_beta_stations_cov)
+*                 - "basis_coeff": a list, containg, for each unit, a Ls_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_stations_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stations_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_stations_cov)
 *         - "Beta_s": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:
 *                 - "Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit
 *                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)
 *         - "predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:
 *                             - "partial_res": a list containing information to compute the partial residuals:
-*                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon
-*                                              - "A__": vector of matrices with the operator A_e for each statistical unit
-*                                              - "B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit
+*                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).
+*                                              - "A__": vector of matrices with the operator A_e for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
+*                                              - "B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
 *                             - "inputs_info": a list containing information about the data used to fit the model:
 *                                              - "Response": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                              - "Response reconstruction weights": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                                            - "basis_coeff":
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).
+*                                              - "ResponseReconstructionWeights": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).
 *                                              - "cov_Stationary": list:
-*                                                            - "number_covariates"
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
+*                                                            - "number_covariates": number of stationary covariates (length of coeff_stationary_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional stationary covariates (respective elements of coeff_stationary_cov).
+*                                              - "beta_Stationary": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov).                                                            
 *                                              - "cov_Event": list:
-*                                                            - "number_covariates"
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                                            - "basis_coeff":
-*                                                            - "penalizations":
-*                                                            - "coordinates":
-*                                                            - "kernel_bwd_Event":
+*                                                            - "number_covariates": number of event-dependent covariates (length of coeff_events_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional event-dependent covariates (respective elements of n_basis_events_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional event-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_events_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional event-dependent covariates (respective elements of degrees_basis_events_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional event-dependent covariates (element knots_events_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional event-dependent covariates (respective elements of coeff_events_cov).
+*                                                            - "penalizations": vector containing the penalizations of the event-dependent covariates (respective elements of penalization_events_cov)
+*                                                            - "coordinates": UTM coordinates of the events of the training data (element coordinates_events).
+*                                                            - "kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the events (element kernel_bandwith_events).
 *                                              - "beta_Event": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element n_basis_beta_events_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_events_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element degrees_basis_beta_events_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element knots_beta_events_cov).
 *                                              - "cov_Station": list:
-*                                                            - "number_covariates"
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                                            - "basis_coeff":
-*                                                            - "penalizatins":
-*                                                            - "coordinates":
-*                                                            - "kernel_bwd_Station":
+*                                                            - "number_covariates": number of station-dependent covariates (length of coeff_stations_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional station-dependent covariates (respective elements of n_basis_stations_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional station-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stations_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional station-dependent covariates (respective elements of degrees_basis_stations_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional station-dependent covariates (element knots_stations_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional station-dependent covariates (respective elements of coeff_stations_cov).
+*                                                            - "penalizations": vector containing the penalizations of the station-dependent covariates (respective elements of penalization_stations_cov)
+*                                                            - "coordinates": UTM coordinates of the stations of the training data (element coordinates_stations).
+*                                                            - "kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the stations (element kernel_bandwith_stations).
 *                                              - "beta_Station": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                              - "a" 
-*                                              - "b"
-*                                              - "abscissa"
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element n_basis_beta_stations_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stations_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element degrees_basis_beta_stations_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element knots_beta_stations_cov).
+*                                              - "a": domain left extreme  (element left_extreme_domain).
+*                                              - "b": domain right extreme (element right_extreme_domain).
+*                                              - "abscissa": abscissa for which the evaluations of the functional data are available (element t_points).
+*                                              - "InCascadeEstimation": element in_cascade_estimation.
 * @details constant basis are used, for a covariate, if it resembles a scalar shape. It consists of a straight line with y-value equal to 1 all over the data domain.
 *          Can be seen as a B-spline basis with degree 0, number of basis 1, using one knot, consequently having only one coefficient for the only basis for each statistical unit.
-*          fmsgwr sets all the feats accordingly if reads constant basis.
+*          fdagwr sets all the feats accordingly if reads constant basis.
 *          However, recall that the response is a functional datum, as the regressors coefficients. Since the package's basis variety could be hopefully enlarged in the future 
 *          (for example, introducing Fourier basis for handling data that present periodical behaviors), the input parameters regarding basis types for response, response reconstruction
 *          weights and regressors coefficients are left at the end of the input list, and defaulted as NULL. Consequently they will use a B-spline basis system, and should NOT use a constant basis,
 *          Recall to perform externally the basis expansion before using the package, and afterwards passing basis types, degree and number and basis expansion coefficients and knots coherently
 * @note a little excursion about degree and number of basis passed as input. For each specific covariate, or the response, if using B-spline basis, remember that number of knots = number of basis - degree + 1. 
-*       By default, if passing NULL, fmsgwr uses a cubic B-spline system of basis, the number of basis is computed coherently from the number of knots (that is the only mandatory input parameter).
+*       By default, if passing NULL, fdagwr uses a cubic B-spline system of basis, the number of basis is computed coherently from the number of knots (that is the only mandatory input parameter).
 *       Passing only the degree of the bsplines, the number of basis used will be set accordingly, and viceversa if passing only the number of basis. 
-*       But, take care that the number of basis used has to match the number of rows of coefficients matrix (for EACH type of basis). If not, an exception is thrown. No problems arise if letting fmsgwr defaulting the number of basis.
+*       But, take care that the number of basis used has to match the number of rows of coefficients matrix (for EACH type of basis). If not, an exception is thrown. No problems arise if letting fdagwr defaulting the number of basis.
 *       For response and response reconstruction weights, degree and number of basis consist of integer, and can be NULL. For all the regressors, and their coefficients, the inputs consist of vector of integers: 
 *       if willing to pass a default parameter, all the vector has to be defaulted (if passing NULL, a vector with all 3 for the degrees is passed, for example)
 * @link https://www.researchgate.net/publication/377251714_Weighted_Functional_Data_Analysis_for_the_Calibration_of_a_Ground_Motion_Model_in_Italy @endlink
@@ -860,16 +870,17 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
 
 
 /*!
-* @brief
-* @param coeff_stationary_cov_to_pred
-* @param coeff_events_cov_to_pred
-* @param coordinates_events_to_pred
-* @param coeff_stations_cov_to_pred
-* @param coordinates_stations_to_pred
+* @brief Function to perform predictions on new statistical units using a fitted Functional Multi-Source Geographically Weighted Regression ESC model. Non-stationary betas have to be recomputed in the new locations.
+* @param coeff_stationary_cov_to_pred list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted.
+* @param coeff_events_cov_to_pred list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th event-dependent covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted.
+* @param coordinates_events_to_pred matrix of double containing the UTM coordinates of the event of new statistical units: each row represents a statistical unit to be predicted, each column a coordinate (2 columns).
+* @param coeff_stations_cov_to_pred list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th station-dependent covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a new statistical unit.
+* @param coordinates_stations_to_pred matrix of double containing the UTM coordinates of the station of new statistical units: each row represents a statistical unit to be predicted, each column a coordinate (2 columns).
 * @param units_to_be_predicted number of units to be predicted
-* @param abscissa_ev abscissa for which then the predicted reponse and betas are made available
-* @param model_fitted: an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FGWR_FMS_ESC")
+* @param abscissa_ev abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed
+* @param model_fitted: output of FMSGWR_ESC: an R list containing:
+*         - "FGWR": string containing the type of fgwr used ("FMSGWR_ESC")
+*         - "EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true 
 *         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
 *                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
 *                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)
@@ -889,107 +900,117 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
 *         - "Bs": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:
 *                 - "basis_coeff": a list, containg, for each unit, a Ls_jx1 vector of double, containing the coefficients of the basis expansion of the beta
 *                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_stations_cov)
-*                 - "basis_num": the number of basis used for performing the beta basis expansion (eespective elements of n_basis_beta_stations_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stations_cov)
 *                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_stations_cov)
 *         - "Beta_s": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:
 *                 - "Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit
 *                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)
-*         - "predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units (derives from the fitting):
+*         - "predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:
 *                             - "partial_res": a list containing information to compute the partial residuals:
-*                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon
-*                                              - "A__": vector of matrices with the operator A_e for each statistical unit
-*                                              - "B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit
+*                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).
+*                                              - "A__": vector of matrices with the operator A_e for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
+*                                              - "B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
 *                             - "inputs_info": a list containing information about the data used to fit the model:
 *                                              - "Response": list:
-*                                                            - "basis_num": 
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                              - "Response reconstruction weights": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                                            - "basis_coeff":
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).
+*                                              - "ResponseReconstructionWeights": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).
 *                                              - "cov_Stationary": list:
-*                                                            - "number_covariates"
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
+*                                                            - "number_covariates": number of stationary covariates (length of coeff_stationary_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional stationary covariates (respective elements of coeff_stationary_cov).
 *                                              - "beta_Stationary": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov).                                                            
 *                                              - "cov_Event": list:
-*                                                            - "number_covariates"
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                                            - "basis_coeff":
-*                                                            - "penalizations":
-*                                                            - "coordinates":
-*                                                            - "kernel_bwd_":
+*                                                            - "number_covariates": number of event-dependent covariates (length of coeff_events_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional event-dependent covariates (respective elements of n_basis_events_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional event-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_events_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional event-dependent covariates (respective elements of degrees_basis_events_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional event-dependent covariates (element knots_events_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional event-dependent covariates (respective elements of coeff_events_cov).
+*                                                            - "penalizations": vector containing the penalizations of the event-dependent covariates (respective elements of penalization_events_cov)
+*                                                            - "coordinates": UTM coordinates of the events of the training data (element coordinates_events).
+*                                                            - "kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the events (element kernel_bandwith_events).
 *                                              - "beta_Event": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element n_basis_beta_events_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_events_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element degrees_basis_beta_events_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element knots_beta_events_cov).
 *                                              - "cov_Station": list:
-*                                                            - "number_covariates"
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                                            - "basis_coeff":
-*                                                            - "penalizatins":
-*                                                            - "coordinates":
-*                                                            - "kernel_bwd_":
+*                                                            - "number_covariates": number of station-dependent covariates (length of coeff_stations_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional station-dependent covariates (respective elements of n_basis_stations_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional station-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stations_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional station-dependent covariates (respective elements of degrees_basis_stations_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional station-dependent covariates (element knots_stations_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional station-dependent covariates (respective elements of coeff_stations_cov).
+*                                                            - "penalizations": vector containing the penalizations of the station-dependent covariates (respective elements of penalization_stations_cov)
+*                                                            - "coordinates": UTM coordinates of the stations of the training data (element coordinates_stations).
+*                                                            - "kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the stations (element kernel_bandwith_stations).
 *                                              - "beta_Station": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                              - "n": number of units used to train
-*                                              - "a"
-*                                              - "b"
-*                                              - "abscissa": abscissa for which we have the training set raw evalautions of response and covariates
-* @param n_intervals_trapezoidal_quadrature
-* @param target_error_trapezoidal_quadrature
-* @param max_iterations_trapezoidal_quadrature
-* @param num_threads
-* @return an R list containing the the response predicted
-*         - "FGWR_predictor": string containing the model 
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element n_basis_beta_stations_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stations_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element degrees_basis_beta_stations_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element knots_beta_stations_cov).
+*                                              - "a": domain left extreme  (element left_extreme_domain).
+*                                              - "b": domain right extreme (element right_extreme_domain).
+*                                              - "abscissa": abscissa for which the evaluations of the functional data are available (element t_points).
+*                                              - "InCascadeEstimation": element in_cascade_estimation.
+* @param n_knots_smoothing_pred number of knots used to smooth predicted response and non-stationary, obtaining basis expansion coefficients with respect to the training basis (default: 100).
+* @param n_intervals_quadrature number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100).
+* @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine.
+* @return an R list containing:
+*         - "FGWR_predictor": string containing the model used to predict ("predictor_FMSGWR_ESC")
+*         - "EstimationTechnique": "Exact" if in_cascade_estimation in the fitted model false, "Cascade" if in_cascade_estimation in the fitted model true 
 *         - "prediction": list containing:
-*                        - "prediction_ev": the raw evaluation of each unit response
-*                        - "abscissa": the abscissa points for which the prediction is available
-*         - "Bc_pred": list containing, for each sttionary covariate
-*                      - "basis_coeff":
-*                      - "basis_num": 
-*                      - "basis_type":
-*                      - "knots":
-*         - "Beta_c_pred": list containing, for each stationary cov
-*                           - "Beta_eval"
-*                           - "Abscissa"
-*         - "Be_pred": list containing, for each sttionary covariate
-*                      - "basis_coeff":
-*                      - "basis_num": 
-*                      - "basis_type":
-*                      - "knots":
-*         - "Beta_e_pred": list containing, for each stationary cov
-*                           - "Beta_eval" (list)
-*                           - "Abscissa"
-*         - "Bs_pred": list containing, for each sttionary covariate
-*                      - "basis_coeff":
-*                      - "basis_num": 
-*                      - "basis_type":
-*                      - "knots":
-*         - "Beta_s_pred": list containing, for each stationary cov
-*                           - "Beta_eval" (list)
-*                           - "Abscissa"
-* @details NB: LE COVARIATE DEVONO ESSERE SAMPLATE IN CORRISPONDENZA DEI SAMPLE POINTS CHE SONO STATI USATI NEL FITTING
+*                         - "evaluation": list containing the evaluation of the prediction:
+*                                          - "prediction_ev": list containing, for each unit to be predicted, the raw evaluations of the predicted response.
+*                                          - "abscissa_ev": the abscissa points for which the prediction evaluation is available (element abscissa_ev).
+*                         - "fd": list containing the prediction functional description:
+*                                          - "prediction_basis_coeff": matrix containing the prediction basis expansion coefficients (each row a basis, each column a new statistical unit)
+*                                          - "prediction_basis_type": basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_basis_num": number of basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_basis_deg": degree of basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_knots": knots used for the predicted response smoothing (n_knots_smoothing_pred equally spaced knots in the functional datum domain)
+*         - "Bc_pred": list containing, for each stationary covariate:
+*                      - "basis_coeff": coefficients of the basis expansion of the beta (from model_fitted).
+*                      - "basis_num": number of basis used for the beta basis epxnasion (from model_fitted).
+*                      - "basis_type": type of basis used for the beta basis expansion (from model_fitted).
+*                      - "knots": knots used for the beta basis expansion (from model_fitted).
+*         - "Beta_c_pred": list containing, for each stationary covariate:
+*                           - "Beta_eval": evaluation of the beta along a grid.
+*                           - "Abscissa": grid (element abscissa_ev).
+*         - "Be_pred": list containing, for each event-dependent covariate:
+*                      - "basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.
+*                      - "basis_num": number of basis used for the beta basis expansion (from model_fitted).
+*                      - "basis_type": type of basis used for the beta basis expansion (from model_fitted).
+*                      - "knots": knots used for the beta basis expansion (from model_fitted).
+*         - "Beta_e_pred": list containing, for each event-dependent covariate:
+*                           - "Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.
+*                           - "Abscissa": grid (element abscissa_ev).
+*         - "Bs_pred": list containing, for each station-dependent covariate:
+*                      - "basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.
+*                      - "basis_num": number of basis used for the beta basis expansion (from model_fitted).
+*                      - "basis_type": type of basis used for the beta basis expansion (from model_fitted).
+*                      - "knots": knots used for the beta basis expansion (from model_fitted).
+*         - "Beta_s_pred": list containing, for each station-dependent covariate:
+*                           - "Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.
+*                           - "Abscissa": grid (element abscissa_ev).
+* @details NB: Covariates of units to be predicted have to be sampled in the same sample points for which the training data have been (t_points).
+*              Covariates basis expansion for the units to be predicted has to be done with respect to the basis used for the covariates in the training set
 */
 //
 // [[Rcpp::export]]
@@ -1528,43 +1549,45 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 
 
 /*!
-* @brief Function to perform Functional Multi-Source Geographically Weighted Regression SEC.
-* @param y_points matrix of double containing the raw response: each row represents a specific abscissa for which the response evaluation is available, each column a statistical unit. Response isa already reconstructed.
-* @param t_points vector of double with the abscissa points with respect which the raw evaluations of y_points are available (length of t_points is equal to the number of rows of y_points).
-* @param left_extreme_domain double indicating the left extreme of the functional data (not necessarily the smaller element in t_points).
-* @param right_extreme_domain double indicating the right extreme of the functional data (not necessarily the biggest element in t_points).
+* @brief Fitting a Functional Multi-Source Geographically Weighted Regression SEC model. The covariates are functional objects, divided into
+*        three categories: stationary covariates (C), constant over geographical space, event-dependent covariates (E), that vary depending on the spatial coordinates of the event, 
+*        station-dependent covariates (S), that vary depending on the spatial coordinates of the stations that measure the event. Regression coefficients are estimated 
+*        in the following order: C, E, S. The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024) (link below)
+* @param y_points matrix of double containing the raw response: each row represents a specific abscissa for which the response evaluation is available, each column a statistical unit. Response is a already reconstructed.
+* @param t_points vector of double with the abscissa points with respect of the raw evaluations of y_points are available (length of t_points is equal to the number of rows of y_points).
+* @param left_extreme_domain double indicating the left extreme of the functional data domain (not necessarily the smaller element in t_points).
+* @param right_extreme_domain double indicating the right extreme of the functional data domain (not necessarily the biggest element in t_points).
 * @param coeff_y_points matrix of double containing the coefficient of response's basis expansion: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
 * @param knots_y_points vector of double with the abscissa points with respect which the basis expansions of the response and response reconstruction weights are performed (all elements contained in [a,b]). 
 * @param degree_basis_y_points non-negative integer: the degree of the basis used for the basis expansion of the (functional) response. Default explained below (can be NULL).
 * @param n_basis_y_points positive integer: number of basis for the basis expansion of the (functional) response. It must match number of rows of coeff_y_points. Default explained below (can be NULL).
-* @param coeff_rec_weights_y_points matrix of double containing the coefficients of the weights to reconstruct the (functional) response: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
-*                                   More about response reconstruction weights meaning can be found in the link below.
+* @param coeff_rec_weights_y_points matrix of double containing the coefficients of the basis expansion of the weights to reconstruct the (functional) response: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
 * @param degree_basis_rec_weights_y_points non-negative integer: the degree of the basis used for response reconstruction weights. Default explained below (can be NULL).
 * @param n_basis_rec_weights_y_points positive integer: number of basis for the basis expansion of response reconstruction weights. It must match number of rows of coeff_rec_weights_y_points. Default explained below (can be NULL).
 * @param coeff_stationary_cov list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
-*                             The name of the i-th element is the name of the i-th stationary covariate (default: "reg.Ci").
-* @param basis_types_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariates basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+*                             The name of the i-th element is the name of the i-th stationary covariate (default: "reg.Ci" if no name present).
+* @param basis_types_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariate basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param knots_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the stationary covariates are performed (all elements contained in [a,b]). 
 * @param degrees_basis_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stationary covariate. Default explained below (can be NULL).
 * @param n_basis_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stationary covariate. It must match number of rows of the i-th element of coeff_stationary_cov. Default explained below (can be NULL).
 * @param penalization_stationary_cov vector of non-negative double: element i-th is the penalization used for the i-th stationary covariate.
-* @param knots_beta_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the stationary covariates (functional regression) coefficients are performed (all elements contained in [a,b]). 
-* @param degrees_basis_beta_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stationary covariate (functional regression) coefficient. Default explained below (can be NULL).
-* @param n_basis_beta_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stationary covariate (functional regression) coefficient. Default explained below (can be NULL).
+* @param knots_beta_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the stationary covariates functional regression coefficients are performed (all elements contained in [a,b]). 
+* @param degrees_basis_beta_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stationary covariate functional regression coefficients. Default explained below (can be NULL).
+* @param n_basis_beta_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stationary covariate functional regression coefficients. Default explained below (can be NULL).
 * @param coeff_events_cov list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th events-dependent covariate: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
-*                             The name of the i-th element is the name of the i-th events-dependent covariate (default: "reg.Ei").
-* @param basis_types_events_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariates basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+*                         The name of the i-th element is the name of the i-th events-dependent covariate (default: "reg.Ei" if no name present).
+* @param basis_types_events_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariate basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param knots_events_cov vector of double with the abscissa points with respect which the basis expansions of the events-dependent covariates are performed (all elements contained in [a,b]). 
 * @param degrees_basis_events_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th events-dependent covariate. Default explained below (can be NULL).
 * @param n_basis_events_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th events-dependent covariate. It must match number of rows of the i-th element of coeff_events_cov. Default explained below (can be NULL).
 * @param penalization_events_cov vector of non-negative double: element i-th is the penalization used for the i-th events-dependent covariate.
 * @param coordinates_events matrix of double containing the UTM coordinates of the event of each statistical unit: each row represents a statistical unit, each column a coordinate (2 columns).
 * @param kernel_bandwith_events positive double indicating the bandwith of the gaussian kernel used to smooth the distances within events.
-* @param knots_beta_events_cov vector of double with the abscissa points with respect which the basis expansions of the events-dependent covariates (functional regression) coefficients are performed (all elements contained in [a,b]). 
-* @param degrees_basis_beta_events_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th events-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
-* @param n_basis_beta_events_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th events-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
+* @param knots_beta_events_cov vector of double with the abscissa points with respect which the basis expansions of the events-dependent covariates functional regression coefficients are performed (all elements contained in [a,b]). 
+* @param degrees_basis_beta_events_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th events-dependent covariate functional regression coefficient. Default explained below (can be NULL).
+* @param n_basis_beta_events_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th events-dependent covariate functional regression coefficient. Default explained below (can be NULL).
 * @param coeff_stations_cov list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stations-dependent covariate: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
-*                             The name of the i-th element is the name of the i-th stations-dependent covariate (default: "reg.Si").
+*                           The name of the i-th element is the name of the i-th stations-dependent covariate (default: "reg.Si").
 * @param basis_types_stations_cov vector of strings, element i-th containing the type of basis used for the i-th stations-dependent covariates basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param knots_stations_cov vector of double with the abscissa points with respect which the basis expansions of the stations-dependent covariates are performed (all elements contained in [a,b]). 
 * @param degrees_basis_stations_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stations-dependent covariate. Default explained below (can be NULL).
@@ -1572,112 +1595,120 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 * @param penalization_stations_cov vector of non-negative double: element i-th is the penalization used for the i-th stations-dependent covariate.
 * @param coordinates_stations matrix of double containing the UTM coordinates of the station of each statistical unit: each row represents a statistical unit, each column a coordinate (2 columns).
 * @param kernel_bandwith_stations positive double indicating the bandwith of the gaussian kernel used to smooth the distances within stations.
-* @param knots_beta_stations_cov vector of double with the abscissa points with respect which the basis expansions of the stations-dependent covariates (functional regression) coefficients are performed (all elements contained in [a,b]). 
-* @param degrees_basis_beta_stations_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stations-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
-* @param n_basis_beta_stations_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stations-dependent covariate (functional regression) coefficient. Default explained below (can be NULL).
-* @param n_knots_smoothing number of knots used to perform the smoothing on the response obtained leaving out all the non-stationary components
-* @param n_intervals_trapezoidal_quadrature number of intervals used while performing integration via adaptive trapezoidal quadrature rule
-* @param target_error_trapezoidal_quadrature target error while integrating via adaptive trapezoidal quadrature rule
-* @param max_iterations_trapezoidal_quadrature max number of iterations for integrating via adaptive trapezoidal quadrature rule
-* @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine running fmsgwr.
-* @param basis_type_y_points string containing the type of basis used for the (functional) response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
-* @param basis_type_rec_weights_y_points string containing the type of basis used for the weights to reconstruct the (functional) response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
-* @param basis_types_beta_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariates (functional regression) coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
-* @param basis_types_beta_events_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariates (functional regression) coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
-* @param basis_types_beta_stations_cov vector of strings, element i-th containing the type of basis used for the i-th stations-dependent covariates (functional regression) coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param knots_beta_stations_cov vector of double with the abscissa points with respect which the basis expansions of the stations-dependent covariates functional regression coefficients are performed (all elements contained in [a,b]). 
+* @param degrees_basis_beta_stations_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stations-dependent covariate functional regression coefficient. Default explained below (can be NULL).
+* @param n_basis_beta_stations_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stations-dependent covariate functional regression coefficient. Default explained below (can be NULL).
+* @param in_cascade_estimation bool: if false, an exact algorithm taking account for the interaction within non-stationary covariates is used to fit the model. Otherwise, the model is fitted in cascade. The first option is more precise, but way more computationally intensive.
+* @param n_knots_smoothing number of knots used to perform the smoothing on the response obtained leaving out all the non-stationary components (default: 100).
+* @param n_intervals_quadrature number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100).
+* @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine.
+* @param basis_type_y_points string containing the type of basis used for the functional response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_type_rec_weights_y_points string containing the type of basis used for the weights to reconstruct the functional response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_types_beta_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_types_beta_events_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_types_beta_stations_cov vector of strings, element i-th containing the type of basis used for the i-th stations-dependent covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @return an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FGWR_FMS_SEC")
+*         - "FGWR": string containing the type of fgwr used ("FMSGWR_SEC")
+*         - "EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true 
 *         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
-*                 - "Basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
-*                 - "Basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)
-*                 - "Basis_number": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)
-*                 - "Basis_knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)
+*                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)
 *         - "Beta_c": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
 *                 - "Beta_eval": a vector of double containing the discrete evaluations of the stationary beta
 *                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)
 *         - "Be": a list containing, for each event-dependent covariate regression coefficent (each element is named with the element names in the list coeff_events_cov (default, if not given: "CovE*")) a list with:
-*                 - "Basis_coeff": a list, containg, for each unit, a Le_jx1 vector of double, containing the coefficients of the basis expansion of the beta
-*                 - "Basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_events_cov)
-*                 - "Basis_number": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_events_cov)
-*                 - "Basis_knots": the knots used to create the basis system for the beta (it is the input knots_beta_events_cov)
+*                 - "basis_coeff": a list, containg, for each unit, a Le_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_events_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_events_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_events_cov)
 *         - "Beta_e": a list containing, for each event-dependent covariate regression coefficent (each element is named with the element names in the list coeff_events_cov (default, if not given: "CovE*")) a list with:
 *                 - "Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit
 *                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)  
 *         - "Bs": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:
-*                 - "Basis_coeff": a list, containg, for each unit, a Ls_jx1 vector of double, containing the coefficients of the basis expansion of the beta
-*                 - "Basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_stations_cov)
-*                 - "Basis_number": the number of basis used for performing the beta basis expansion (eespective elements of n_basis_beta_stations_cov)
-*                 - "Basis_knots": the knots used to create the basis system for the beta (it is the input knots_beta_stations_cov)
+*                 - "basis_coeff": a list, containg, for each unit, a Ls_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_stations_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stations_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_stations_cov)
 *         - "Beta_s": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:
 *                 - "Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit
 *                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)
 *         - "predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:
 *                             - "partial_res": a list containing information to compute the partial residuals:
-*                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon
-*                                              - "A__": vector of matrices with the operator A_e for each statistical unit
-*                                              - "B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit
+*                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).
+*                                              - "A__": vector of matrices with the operator A_e for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
+*                                              - "B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
 *                             - "inputs_info": a list containing information about the data used to fit the model:
 *                                              - "Response": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                              - "Response reconstruction weights": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                                            - "basis_coeff":
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).
+*                                              - "ResponseReconstructionWeights": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).
 *                                              - "cov_Stationary": list:
-*                                                            - "number_covariates"
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
+*                                                            - "number_covariates": number of stationary covariates (length of coeff_stationary_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional stationary covariates (respective elements of coeff_stationary_cov).
+*                                              - "beta_Stationary": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov).                                                            
 *                                              - "cov_Event": list:
-*                                                            - "number_covariates"
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                                            - "basis_coeff":
-*                                                            - "penalizations":
-*                                                            - "coordinates":
-*                                                            - "kernel_bwd_Event":
+*                                                            - "number_covariates": number of event-dependent covariates (length of coeff_events_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional event-dependent covariates (respective elements of n_basis_events_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional event-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_events_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional event-dependent covariates (respective elements of degrees_basis_events_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional event-dependent covariates (element knots_events_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional event-dependent covariates (respective elements of coeff_events_cov).
+*                                                            - "penalizations": vector containing the penalizations of the event-dependent covariates (respective elements of penalization_events_cov)
+*                                                            - "coordinates": UTM coordinates of the events of the training data (element coordinates_events).
+*                                                            - "kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the events (element kernel_bandwith_events).
 *                                              - "beta_Event": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element n_basis_beta_events_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_events_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element degrees_basis_beta_events_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element knots_beta_events_cov).
 *                                              - "cov_Station": list:
-*                                                            - "number_covariates"
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                                            - "basis_coeff":
-*                                                            - "penalizatins":
-*                                                            - "coordinates":
-*                                                            - "kernel_bwd_Station":
+*                                                            - "number_covariates": number of station-dependent covariates (length of coeff_stations_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional station-dependent covariates (respective elements of n_basis_stations_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional station-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stations_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional station-dependent covariates (respective elements of degrees_basis_stations_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional station-dependent covariates (element knots_stations_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional station-dependent covariates (respective elements of coeff_stations_cov).
+*                                                            - "penalizations": vector containing the penalizations of the station-dependent covariates (respective elements of penalization_stations_cov)
+*                                                            - "coordinates": UTM coordinates of the stations of the training data (element coordinates_stations).
+*                                                            - "kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the stations (element kernel_bandwith_stations).
 *                                              - "beta_Station": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                              - "a" 
-*                                              - "b"
-*                                              - "abscissa"
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element n_basis_beta_stations_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stations_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element degrees_basis_beta_stations_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element knots_beta_stations_cov).
+*                                              - "a": domain left extreme  (element left_extreme_domain).
+*                                              - "b": domain right extreme (element right_extreme_domain).
+*                                              - "abscissa": abscissa for which the evaluations of the functional data are available (element t_points).
+*                                              - "InCascadeEstimation": element in_cascade_estimation.
 * @details constant basis are used, for a covariate, if it resembles a scalar shape. It consists of a straight line with y-value equal to 1 all over the data domain.
 *          Can be seen as a B-spline basis with degree 0, number of basis 1, using one knot, consequently having only one coefficient for the only basis for each statistical unit.
-*          fmsgwr sets all the feats accordingly if reads constant basis.
+*          fdagwr sets all the feats accordingly if reads constant basis.
 *          However, recall that the response is a functional datum, as the regressors coefficients. Since the package's basis variety could be hopefully enlarged in the future 
 *          (for example, introducing Fourier basis for handling data that present periodical behaviors), the input parameters regarding basis types for response, response reconstruction
 *          weights and regressors coefficients are left at the end of the input list, and defaulted as NULL. Consequently they will use a B-spline basis system, and should NOT use a constant basis,
 *          Recall to perform externally the basis expansion before using the package, and afterwards passing basis types, degree and number and basis expansion coefficients and knots coherently
 * @note a little excursion about degree and number of basis passed as input. For each specific covariate, or the response, if using B-spline basis, remember that number of knots = number of basis - degree + 1. 
-*       By default, if passing NULL, fmsgwr uses a cubic B-spline system of basis, the number of basis is computed coherently from the number of knots (that is the only mandatory input parameter).
+*       By default, if passing NULL, fdagwr uses a cubic B-spline system of basis, the number of basis is computed coherently from the number of knots (that is the only mandatory input parameter).
 *       Passing only the degree of the bsplines, the number of basis used will be set accordingly, and viceversa if passing only the number of basis. 
-*       But, take care that the number of basis used has to match the number of rows of coefficients matrix (for EACH type of basis). If not, an exception is thrown. No problems arise if letting fmsgwr defaulting the number of basis.
+*       But, take care that the number of basis used has to match the number of rows of coefficients matrix (for EACH type of basis). If not, an exception is thrown. No problems arise if letting fdagwr defaulting the number of basis.
 *       For response and response reconstruction weights, degree and number of basis consist of integer, and can be NULL. For all the regressors, and their coefficients, the inputs consist of vector of integers: 
 *       if willing to pass a default parameter, all the vector has to be defaulted (if passing NULL, a vector with all 3 for the degrees is passed, for example)
 * @link https://www.researchgate.net/publication/377251714_Weighted_Functional_Data_Analysis_for_the_Calibration_of_a_Ground_Motion_Model_in_Italy @endlink
@@ -2306,16 +2337,17 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
 
 
 /*!
-* @brief
-* @param coeff_stationary_cov_to_pred
-* @param coeff_events_cov_to_pred
-* @param coordinates_events_to_pred
-* @param coeff_stations_cov_to_pred
-* @param coordinates_stations_to_pred
+* @brief Function to perform predictions on new statistical units using a fitted Functional Multi-Source Geographically Weighted Regression SEC model. Non-stationary betas have to be recomputed in the new locations.
+* @param coeff_stationary_cov_to_pred list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted.
+* @param coeff_events_cov_to_pred list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th event-dependent covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted.
+* @param coordinates_events_to_pred matrix of double containing the UTM coordinates of the event of new statistical units: each row represents a statistical unit to be predicted, each column a coordinate (2 columns).
+* @param coeff_stations_cov_to_pred list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th station-dependent covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a new statistical unit.
+* @param coordinates_stations_to_pred matrix of double containing the UTM coordinates of the station of new statistical units: each row represents a statistical unit to be predicted, each column a coordinate (2 columns).
 * @param units_to_be_predicted number of units to be predicted
-* @param abscissa_ev abscissa for which then the predicted reponse and betas are made available
-* @param model_fitted: an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FGWR_FMS_SEC")
+* @param abscissa_ev abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed
+* @param model_fitted: output of FMSGWR_SEC: an R list containing:
+*         - "FGWR": string containing the type of fgwr used ("FMSGWR_SEC")
+*         - "EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true 
 *         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
 *                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
 *                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)
@@ -2335,107 +2367,117 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
 *         - "Bs": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:
 *                 - "basis_coeff": a list, containg, for each unit, a Ls_jx1 vector of double, containing the coefficients of the basis expansion of the beta
 *                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_stations_cov)
-*                 - "basis_num": the number of basis used for performing the beta basis expansion (eespective elements of n_basis_beta_stations_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stations_cov)
 *                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_stations_cov)
 *         - "Beta_s": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:
 *                 - "Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit
 *                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)
-*         - "predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units (derives from the fitting):
+*         - "predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:
 *                             - "partial_res": a list containing information to compute the partial residuals:
-*                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon
-*                                              - "A__": vector of matrices with the operator A_e for each statistical unit
-*                                              - "B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit
+*                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).
+*                                              - "A__": vector of matrices with the operator A_e for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
+*                                              - "B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
 *                             - "inputs_info": a list containing information about the data used to fit the model:
 *                                              - "Response": list:
-*                                                            - "basis_num": 
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                              - "Response reconstruction weights": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                                            - "basis_coeff":
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).
+*                                              - "ResponseReconstructionWeights": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).
 *                                              - "cov_Stationary": list:
-*                                                            - "number_covariates"
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
+*                                                            - "number_covariates": number of stationary covariates (length of coeff_stationary_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional stationary covariates (respective elements of coeff_stationary_cov).
 *                                              - "beta_Stationary": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov).                                                            
 *                                              - "cov_Event": list:
-*                                                            - "number_covariates"
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                                            - "basis_coeff":
-*                                                            - "penalizations":
-*                                                            - "coordinates":
-*                                                            - "kernel_bwd_":
+*                                                            - "number_covariates": number of event-dependent covariates (length of coeff_events_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional event-dependent covariates (respective elements of n_basis_events_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional event-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_events_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional event-dependent covariates (respective elements of degrees_basis_events_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional event-dependent covariates (element knots_events_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional event-dependent covariates (respective elements of coeff_events_cov).
+*                                                            - "penalizations": vector containing the penalizations of the event-dependent covariates (respective elements of penalization_events_cov)
+*                                                            - "coordinates": UTM coordinates of the events of the training data (element coordinates_events).
+*                                                            - "kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the events (element kernel_bandwith_events).
 *                                              - "beta_Event": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element n_basis_beta_events_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_events_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element degrees_basis_beta_events_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element knots_beta_events_cov).
 *                                              - "cov_Station": list:
-*                                                            - "number_covariates"
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                                            - "basis_coeff":
-*                                                            - "penalizatins":
-*                                                            - "coordinates":
-*                                                            - "kernel_bwd_":
+*                                                            - "number_covariates": number of station-dependent covariates (length of coeff_stations_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional station-dependent covariates (respective elements of n_basis_stations_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional station-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stations_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional station-dependent covariates (respective elements of degrees_basis_stations_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional station-dependent covariates (element knots_stations_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional station-dependent covariates (respective elements of coeff_stations_cov).
+*                                                            - "penalizations": vector containing the penalizations of the station-dependent covariates (respective elements of penalization_stations_cov)
+*                                                            - "coordinates": UTM coordinates of the stations of the training data (element coordinates_stations).
+*                                                            - "kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the stations (element kernel_bandwith_stations).
 *                                              - "beta_Station": list:
-*                                                            - "basis_num":
-*                                                            - "basis_type":
-*                                                            - "basis_deg":
-*                                                            - "knots":
-*                                              - "n": number of units used to train
-*                                              - "a"
-*                                              - "b"
-*                                              - "abscissa": abscissa for which we have the training set raw evalautions of response and covariates
-* @param n_intervals_trapezoidal_quadrature
-* @param target_error_trapezoidal_quadrature
-* @param max_iterations_trapezoidal_quadrature
-* @param num_threads
-* @return an R list containing the the response predicted
-*         - "FGWR_predictor": string containing the model 
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element n_basis_beta_stations_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stations_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element degrees_basis_beta_stations_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element knots_beta_stations_cov).
+*                                              - "a": domain left extreme  (element left_extreme_domain).
+*                                              - "b": domain right extreme (element right_extreme_domain).
+*                                              - "abscissa": abscissa for which the evaluations of the functional data are available (element t_points).
+*                                              - "InCascadeEstimation": element in_cascade_estimation.
+* @param n_knots_smoothing_pred number of knots used to smooth predicted response and non-stationary, obtaining basis expansion coefficients with respect to the training basis (default: 100).
+* @param n_intervals_quadrature number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100).
+* @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine.
+* @return an R list containing:
+*         - "FGWR_predictor": string containing the model used to predict ("predictor_FMSGWR_ESC")
+*         - "EstimationTechnique": "Exact" if in_cascade_estimation in the fitted model false, "Cascade" if in_cascade_estimation in the fitted model true 
 *         - "prediction": list containing:
-*                        - "prediction_ev": the raw evaluation of each unit response
-*                        - "abscissa": the abscissa points for which the prediction is available
-*         - "Bc_pred": list containing, for each sttionary covariate
-*                      - "basis_coeff":
-*                      - "basis_num": 
-*                      - "basis_type":
-*                      - "knots":
-*         - "Beta_c_pred": list containing, for each stationary cov
-*                           - "Beta_eval"
-*                           - "Abscissa"
-*         - "Be_pred": list containing, for each sttionary covariate
-*                      - "basis_coeff":
-*                      - "basis_num": 
-*                      - "basis_type":
-*                      - "knots":
-*         - "Beta_e_pred": list containing, for each stationary cov
-*                           - "Beta_eval" (list)
-*                           - "Abscissa"
-*         - "Bs_pred": list containing, for each sttionary covariate
-*                      - "basis_coeff":
-*                      - "basis_num": 
-*                      - "basis_type":
-*                      - "knots":
-*         - "Beta_s_pred": list containing, for each stationary cov
-*                           - "Beta_eval" (list)
-*                           - "Abscissa"
-* @details NB: LE COVARIATE DEVONO ESSERE SAMPLATE IN CORRISPONDENZA DEI SAMPLE POINTS CHE SONO STATI USATI NEL FITTING
+*                         - "evaluation": list containing the evaluation of the prediction:
+*                                          - "prediction_ev": list containing, for each unit to be predicted, the raw evaluations of the predicted response.
+*                                          - "abscissa_ev": the abscissa points for which the prediction evaluation is available (element abscissa_ev).
+*                         - "fd": list containing the prediction functional description:
+*                                          - "prediction_basis_coeff": matrix containing the prediction basis expansion coefficients (each row a basis, each column a new statistical unit)
+*                                          - "prediction_basis_type": basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_basis_num": number of basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_basis_deg": degree of basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_knots": knots used for the predicted response smoothing (n_knots_smoothing_pred equally spaced knots in the functional datum domain)
+*         - "Bc_pred": list containing, for each stationary covariate:
+*                      - "basis_coeff": coefficients of the basis expansion of the beta (from model_fitted).
+*                      - "basis_num": number of basis used for the beta basis epxnasion (from model_fitted).
+*                      - "basis_type": type of basis used for the beta basis expansion (from model_fitted).
+*                      - "knots": knots used for the beta basis expansion (from model_fitted).
+*         - "Beta_c_pred": list containing, for each stationary covariate:
+*                           - "Beta_eval": evaluation of the beta along a grid.
+*                           - "Abscissa": grid (element abscissa_ev).
+*         - "Be_pred": list containing, for each event-dependent covariate:
+*                      - "basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.
+*                      - "basis_num": number of basis used for the beta basis expansion (from model_fitted).
+*                      - "basis_type": type of basis used for the beta basis expansion (from model_fitted).
+*                      - "knots": knots used for the beta basis expansion (from model_fitted).
+*         - "Beta_e_pred": list containing, for each event-dependent covariate:
+*                           - "Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.
+*                           - "Abscissa": grid (element abscissa_ev).
+*         - "Bs_pred": list containing, for each station-dependent covariate:
+*                      - "basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.
+*                      - "basis_num": number of basis used for the beta basis expansion (from model_fitted).
+*                      - "basis_type": type of basis used for the beta basis expansion (from model_fitted).
+*                      - "knots": knots used for the beta basis expansion (from model_fitted).
+*         - "Beta_s_pred": list containing, for each station-dependent covariate:
+*                           - "Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.
+*                           - "Abscissa": grid (element abscissa_ev).
+* @details NB: Covariates of units to be predicted have to be sampled in the same sample points for which the training data have been (t_points).
+*              Covariates basis expansion for the units to be predicted has to be done with respect to the basis used for the covariates in the training set
 */
 //
 // [[Rcpp::export]]
@@ -2972,6 +3014,132 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
 
 
 
+/*!
+* @brief Fitting a Functional Mixed Geographically Weighted Regression model. The covariates are functional objects, divided into
+*        two categories: stationary covariates (C), constant over geographical space, and non-stationary covariates (NC), that vary depending on spatial coordinates. Regression coefficients are estimated 
+*        in the following order: C, NC. The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024) (link below)
+* @param y_points matrix of double containing the raw response: each row represents a specific abscissa for which the response evaluation is available, each column a statistical unit. Response is a already reconstructed.
+* @param t_points vector of double with the abscissa points with respect of the raw evaluations of y_points are available (length of t_points is equal to the number of rows of y_points).
+* @param left_extreme_domain double indicating the left extreme of the functional data domain (not necessarily the smaller element in t_points).
+* @param right_extreme_domain double indicating the right extreme of the functional data domain (not necessarily the biggest element in t_points).
+* @param coeff_y_points matrix of double containing the coefficient of response's basis expansion: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
+* @param knots_y_points vector of double with the abscissa points with respect which the basis expansions of the response and response reconstruction weights are performed (all elements contained in [a,b]). 
+* @param degree_basis_y_points non-negative integer: the degree of the basis used for the basis expansion of the (functional) response. Default explained below (can be NULL).
+* @param n_basis_y_points positive integer: number of basis for the basis expansion of the (functional) response. It must match number of rows of coeff_y_points. Default explained below (can be NULL).
+* @param coeff_rec_weights_y_points matrix of double containing the coefficients of the basis expansion of the weights to reconstruct the (functional) response: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
+* @param degree_basis_rec_weights_y_points non-negative integer: the degree of the basis used for response reconstruction weights. Default explained below (can be NULL).
+* @param n_basis_rec_weights_y_points positive integer: number of basis for the basis expansion of response reconstruction weights. It must match number of rows of coeff_rec_weights_y_points. Default explained below (can be NULL).
+* @param coeff_stationary_cov list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
+*                             The name of the i-th element is the name of the i-th stationary covariate (default: "reg.Ci" if no name present).
+* @param basis_types_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariate basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param knots_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the stationary covariates are performed (all elements contained in [a,b]). 
+* @param degrees_basis_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stationary covariate. Default explained below (can be NULL).
+* @param n_basis_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stationary covariate. It must match number of rows of the i-th element of coeff_stationary_cov. Default explained below (can be NULL).
+* @param penalization_stationary_cov vector of non-negative double: element i-th is the penalization used for the i-th stationary covariate.
+* @param knots_beta_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the stationary covariates functional regression coefficients are performed (all elements contained in [a,b]). 
+* @param degrees_basis_beta_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stationary covariate functional regression coefficients. Default explained below (can be NULL).
+* @param n_basis_beta_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stationary covariate functional regression coefficients. Default explained below (can be NULL).
+* @param coeff_non_stationary_cov list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th non-stationary covariate: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
+*                                 The name of the i-th element is the name of the i-th non-stationary covariate (default: "reg.NCi" if no name present).
+* @param basis_types_non_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th non-stationary covariate basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param knots_non_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the non-stationary covariates are performed (all elements contained in [a,b]). 
+* @param degrees_basis_non_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th non-stationary covariate. Default explained below (can be NULL).
+* @param n_basis_non_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th non-stationary covariate. It must match number of rows of the i-th element of coeff_non_stationary_cov. Default explained below (can be NULL).
+* @param penalization_non_stationary_cov vector of non-negative double: element i-th is the penalization used for the i-th non-stationary covariate.
+* @param coordinates_non_stationary matrix of double containing the UTM coordinates of the non-stationary site of each statistical unit: each row represents a statistical unit, each column a coordinate (2 columns).
+* @param kernel_bandwith_non_stationary positive double indicating the bandwith of the gaussian kernel used to smooth the distances within non-stationary sites.
+* @param knots_beta_non_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the non-stationary covariates functional regression coefficients are performed (all elements contained in [a,b]). 
+* @param degrees_basis_beta_non_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th non-stationary covariate functional regression coefficient. Default explained below (can be NULL).
+* @param n_basis_beta_non_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th non-stationary covariate functional regression coefficient. Default explained below (can be NULL).
+* @param in_cascade_estimation bool: if false, an exact algorithm taking account for the interaction within non-stationary covariates is used to fit the model. Otherwise, the model is fitted in cascade. The first option is more precise, but way more computationally intensive.
+* @param n_knots_smoothing number of knots used to perform the smoothing on the response obtained leaving out all the non-stationary components (default: 100).
+* @param n_intervals_quadrature number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100).
+* @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine.
+* @param basis_type_y_points string containing the type of basis used for the functional response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_type_rec_weights_y_points string containing the type of basis used for the weights to reconstruct the functional response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_types_beta_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_types_beta_non_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @return an R list containing:
+*         - "FGWR": string containing the type of fgwr used ("FMGWR")
+*         - "EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true 
+*         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
+*                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)
+*         - "Beta_c": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
+*                 - "Beta_eval": a vector of double containing the discrete evaluations of the stationary beta
+*                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)
+*         - "Bnc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:
+*                 - "basis_coeff": a list, containg, for each unit, a Lnc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_non_stationary_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_non_stationary_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_non_stationary_cov)
+*         - "Beta_nc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:
+*                 - "Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit
+*                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)  
+*         - "predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:
+*                             - "partial_res": a list containing information to compute the partial residuals:
+*                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).
+*                             - "inputs_info": a list containing information about the data used to fit the model:
+*                                              - "Response": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).
+*                                              - "ResponseReconstructionWeights": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).
+*                                              - "cov_Stationary": list:
+*                                                            - "number_covariates": number of stationary covariates (length of coeff_stationary_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional stationary covariates (respective elements of coeff_stationary_cov).
+*                                              - "beta_Stationary": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov).                                                            
+*                                              - "cov_NonStationary": list:
+*                                                            - "number_covariates": number of non-stationary covariates (length of coeff_non_stationary_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional non-stationary covariates (respective elements of n_basis_non_stationary_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional non-stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_non_stationary_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional non-stationary covariates (respective elements of degrees_basis_non_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional non-stationary covariates (element knots_non_stationary_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional non-stationary covariates (respective elements of coeff_non_stationary_cov).
+*                                                            - "penalizations": vector containing the penalizations of the non-stationary covariates (respective elements of penalization_non_stationary_cov)
+*                                                            - "coordinates": UTM coordinates of the non-stationary sites of the training data (element coordinates_non_stationary).
+*                                                            - "kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the non-stationary sites (element kernel_bandwith_non_stationary).
+*                                              - "beta_NonStationary": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element n_basis_beta_non_stationary_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_non_stationary_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element degrees_basis_beta_non_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element knots_beta_non_stationary_cov).
+*                                              - "a": domain left extreme  (element left_extreme_domain).
+*                                              - "b": domain right extreme (element right_extreme_domain).
+*                                              - "abscissa": abscissa for which the evaluations of the functional data are available (element t_points).
+*                                              - "InCascadeEstimation": element in_cascade_estimation.
+* @details constant basis are used, for a covariate, if it resembles a scalar shape. It consists of a straight line with y-value equal to 1 all over the data domain.
+*          Can be seen as a B-spline basis with degree 0, number of basis 1, using one knot, consequently having only one coefficient for the only basis for each statistical unit.
+*          fdagwr sets all the feats accordingly if reads constant basis.
+*          However, recall that the response is a functional datum, as the regressors coefficients. Since the package's basis variety could be hopefully enlarged in the future 
+*          (for example, introducing Fourier basis for handling data that present periodical behaviors), the input parameters regarding basis types for response, response reconstruction
+*          weights and regressors coefficients are left at the end of the input list, and defaulted as NULL. Consequently they will use a B-spline basis system, and should NOT use a constant basis,
+*          Recall to perform externally the basis expansion before using the package, and afterwards passing basis types, degree and number and basis expansion coefficients and knots coherently
+* @note a little excursion about degree and number of basis passed as input. For each specific covariate, or the response, if using B-spline basis, remember that number of knots = number of basis - degree + 1. 
+*       By default, if passing NULL, fdagwr uses a cubic B-spline system of basis, the number of basis is computed coherently from the number of knots (that is the only mandatory input parameter).
+*       Passing only the degree of the bsplines, the number of basis used will be set accordingly, and viceversa if passing only the number of basis. 
+*       But, take care that the number of basis used has to match the number of rows of coefficients matrix (for EACH type of basis). If not, an exception is thrown. No problems arise if letting fdagwr defaulting the number of basis.
+*       For response and response reconstruction weights, degree and number of basis consist of integer, and can be NULL. For all the regressors, and their coefficients, the inputs consist of vector of integers: 
+*       if willing to pass a default parameter, all the vector has to be defaulted (if passing NULL, a vector with all 3 for the degrees is passed, for example)
+* @link https://www.researchgate.net/publication/377251714_Weighted_Functional_Data_Analysis_for_the_Calibration_of_a_Ground_Motion_Model_in_Italy @endlink
+*/
 //
 // [[Rcpp::export]]
 Rcpp::List FMGWR(Rcpp::NumericMatrix y_points,
@@ -3484,6 +3652,114 @@ Rcpp::List FMGWR(Rcpp::NumericMatrix y_points,
 }
 
 
+/*!
+* @brief Function to perform predictions on new statistical units using a fitted Functional Mixed Geographically Weighted Regression model. Non-stationary betas have to be recomputed in the new locations.
+* @param coeff_stationary_cov_to_pred list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted.
+* @param coeff_non_stationary_cov_to_pred list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th non-stationary covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted.
+* @param coordinates_non_stationary_to_pred matrix of double containing the UTM coordinates of the non-stationary site of new statistical units: each row represents a statistical unit to be predicted, each column a coordinate (2 columns).
+* @param units_to_be_predicted number of units to be predicted
+* @param abscissa_ev abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed
+* @param model_fitted: output of FMGWR: an R list containing:
+*         - "FGWR": string containing the type of fgwr used ("FMGWR")
+*         - "EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true 
+*         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
+*                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)
+*         - "Beta_c": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
+*                 - "Beta_eval": a vector of double containing the discrete evaluations of the stationary beta
+*                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)
+*         - "Bnc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:
+*                 - "basis_coeff": a list, containg, for each unit, a Lnc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_non_stationary_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_non_stationary_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_non_stationary_cov)
+*         - "Beta_nc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:
+*                 - "Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit
+*                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)  
+*         - "predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:
+*                             - "partial_res": a list containing information to compute the partial residuals:
+*                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).
+*                             - "inputs_info": a list containing information about the data used to fit the model:
+*                                              - "Response": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).
+*                                              - "ResponseReconstructionWeights": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).
+*                                              - "cov_Stationary": list:
+*                                                            - "number_covariates": number of stationary covariates (length of coeff_stationary_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional stationary covariates (respective elements of coeff_stationary_cov).
+*                                              - "beta_Stationary": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov).                                                            
+*                                              - "cov_NonStationary": list:
+*                                                            - "number_covariates": number of non-stationary covariates (length of coeff_non_stationary_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional non-stationary covariates (respective elements of n_basis_non_stationary_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional non-stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_non_stationary_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional non-stationary covariates (respective elements of degrees_basis_non_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional non-stationary covariates (element knots_non_stationary_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional non-stationary covariates (respective elements of coeff_non_stationary_cov).
+*                                                            - "penalizations": vector containing the penalizations of the non-stationary covariates (respective elements of penalization_non_stationary_cov)
+*                                                            - "coordinates": UTM coordinates of the non-stationary sites of the training data (element coordinates_non_stationary).
+*                                                            - "kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the non-stationary sites (element kernel_bandwith_non_stationary).
+*                                              - "beta_NonStationary": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element n_basis_beta_non_stationary_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_non_stationary_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element degrees_basis_beta_non_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element knots_beta_non_stationary_cov).
+*                                              - "a": domain left extreme  (element left_extreme_domain).
+*                                              - "b": domain right extreme (element right_extreme_domain).
+*                                              - "abscissa": abscissa for which the evaluations of the functional data are available (element t_points).
+*                                              - "InCascadeEstimation": element in_cascade_estimation.
+* @param n_knots_smoothing_pred number of knots used to smooth predicted response and non-stationary, obtaining basis expansion coefficients with respect to the training basis (default: 100).
+* @param n_intervals_quadrature number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100).
+* @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine.
+* @return an R list containing:
+*         - "FGWR_predictor": string containing the model used to predict ("predictor_FMGWR")
+*         - "EstimationTechnique": "Exact" if in_cascade_estimation in the fitted model false, "Cascade" if in_cascade_estimation in the fitted model true 
+*         - "prediction": list containing:
+*                         - "evaluation": list containing the evaluation of the prediction:
+*                                          - "prediction_ev": list containing, for each unit to be predicted, the raw evaluations of the predicted response.
+*                                          - "abscissa_ev": the abscissa points for which the prediction evaluation is available (element abscissa_ev).
+*                         - "fd": list containing the prediction functional description:
+*                                          - "prediction_basis_coeff": matrix containing the prediction basis expansion coefficients (each row a basis, each column a new statistical unit)
+*                                          - "prediction_basis_type": basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_basis_num": number of basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_basis_deg": degree of basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_knots": knots used for the predicted response smoothing (n_knots_smoothing_pred equally spaced knots in the functional datum domain)
+*         - "Bc_pred": list containing, for each stationary covariate:
+*                      - "basis_coeff": coefficients of the basis expansion of the beta (from model_fitted).
+*                      - "basis_num": number of basis used for the beta basis epxnasion (from model_fitted).
+*                      - "basis_type": type of basis used for the beta basis expansion (from model_fitted).
+*                      - "knots": knots used for the beta basis expansion (from model_fitted).
+*         - "Beta_c_pred": list containing, for each stationary covariate:
+*                           - "Beta_eval": evaluation of the beta along a grid.
+*                           - "Abscissa": grid (element abscissa_ev).
+*         - "Bnc_pred": list containing, for each non-stationary covariate:
+*                      - "basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.
+*                      - "basis_num": number of basis used for the beta basis expansion (from model_fitted).
+*                      - "basis_type": type of basis used for the beta basis expansion (from model_fitted).
+*                      - "knots": knots used for the beta basis expansion (from model_fitted).
+*         - "Beta_nc_pred": list containing, for each non-stationary covariate:
+*                           - "Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.
+*                           - "Abscissa": grid (element abscissa_ev).
+* @details NB: Covariates of units to be predicted have to be sampled in the same sample points for which the training data have been (t_points).
+*              Covariates basis expansion for the units to be predicted has to be done with respect to the basis used for the covariates in the training set
+*/
 //
 // [[Rcpp::export]]
 Rcpp::List predict_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
@@ -3910,6 +4186,94 @@ Rcpp::List predict_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
 
 
 
+/*!
+* @brief Fitting a Functional Geographically Weighted Regression model. The covariates are functional objects, non-stationary covariates (NC), that vary depending on spatial coordinates.
+*        The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024) (link below)
+* @param y_points matrix of double containing the raw response: each row represents a specific abscissa for which the response evaluation is available, each column a statistical unit. Response is a already reconstructed.
+* @param t_points vector of double with the abscissa points with respect of the raw evaluations of y_points are available (length of t_points is equal to the number of rows of y_points).
+* @param left_extreme_domain double indicating the left extreme of the functional data domain (not necessarily the smaller element in t_points).
+* @param right_extreme_domain double indicating the right extreme of the functional data domain (not necessarily the biggest element in t_points).
+* @param coeff_y_points matrix of double containing the coefficient of response's basis expansion: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
+* @param knots_y_points vector of double with the abscissa points with respect which the basis expansions of the response and response reconstruction weights are performed (all elements contained in [a,b]). 
+* @param degree_basis_y_points non-negative integer: the degree of the basis used for the basis expansion of the (functional) response. Default explained below (can be NULL).
+* @param n_basis_y_points positive integer: number of basis for the basis expansion of the (functional) response. It must match number of rows of coeff_y_points. Default explained below (can be NULL).
+* @param coeff_rec_weights_y_points matrix of double containing the coefficients of the basis expansion of the weights to reconstruct the (functional) response: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
+* @param degree_basis_rec_weights_y_points non-negative integer: the degree of the basis used for response reconstruction weights. Default explained below (can be NULL).
+* @param n_basis_rec_weights_y_points positive integer: number of basis for the basis expansion of response reconstruction weights. It must match number of rows of coeff_rec_weights_y_points. Default explained below (can be NULL).
+* @param coeff_non_stationary_cov list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th non-stationary covariate: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
+*                                 The name of the i-th element is the name of the i-th non-stationary covariate (default: "reg.NCi" if no name present).
+* @param basis_types_non_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th non-stationary covariate basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param knots_non_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the non-stationary covariates are performed (all elements contained in [a,b]). 
+* @param degrees_basis_non_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th non-stationary covariate. Default explained below (can be NULL).
+* @param n_basis_non_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th non-stationary covariate. It must match number of rows of the i-th element of coeff_non_stationary_cov. Default explained below (can be NULL).
+* @param penalization_non_stationary_cov vector of non-negative double: element i-th is the penalization used for the i-th non-stationary covariate.
+* @param coordinates_non_stationary matrix of double containing the UTM coordinates of the non-stationary site of each statistical unit: each row represents a statistical unit, each column a coordinate (2 columns).
+* @param kernel_bandwith_non_stationary positive double indicating the bandwith of the gaussian kernel used to smooth the distances within non-stationary sites.
+* @param knots_beta_non_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the non-stationary covariates functional regression coefficients are performed (all elements contained in [a,b]). 
+* @param degrees_basis_beta_non_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th non-stationary covariate functional regression coefficient. Default explained below (can be NULL).
+* @param n_basis_beta_non_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th non-stationary covariate functional regression coefficient. Default explained below (can be NULL).
+* @param n_intervals_quadrature number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100).
+* @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine.
+* @param basis_type_y_points string containing the type of basis used for the functional response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_type_rec_weights_y_points string containing the type of basis used for the weights to reconstruct the functional response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_types_beta_non_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @return an R list containing:
+*         - "FGWR": string containing the type of fgwr used ("FGWR")
+*         - "Bnc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:
+*                 - "basis_coeff": a list, containg, for each unit, a Lnc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_non_stationary_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_non_stationary_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_non_stationary_cov)
+*         - "Beta_nc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:
+*                 - "Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit
+*                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)  
+*         - "predictor_info": a list containing information of the fitted model to perform predictions for new statistical units:
+*                             - "inputs_info": a list containing information about the data used to fit the model:
+*                                              - "Response": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).
+*                                              - "ResponseReconstructionWeights": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).                                                           
+*                                              - "cov_NonStationary": list:
+*                                                            - "number_covariates": number of non-stationary covariates (length of coeff_non_stationary_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional non-stationary covariates (respective elements of n_basis_non_stationary_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional non-stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_non_stationary_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional non-stationary covariates (respective elements of degrees_basis_non_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional non-stationary covariates (element knots_non_stationary_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional non-stationary covariates (respective elements of coeff_non_stationary_cov).
+*                                                            - "penalizations": vector containing the penalizations of the non-stationary covariates (respective elements of penalization_non_stationary_cov)
+*                                                            - "coordinates": UTM coordinates of the non-stationary sites of the training data (element coordinates_non_stationary).
+*                                                            - "kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the non-stationary sites (element kernel_bandwith_non_stationary).
+*                                              - "beta_NonStationary": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element n_basis_beta_non_stationary_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_non_stationary_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element degrees_basis_beta_non_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element knots_beta_non_stationary_cov).
+*                                              - "a": domain left extreme  (element left_extreme_domain).
+*                                              - "b": domain right extreme (element right_extreme_domain).
+*                                              - "abscissa": abscissa for which the evaluations of the functional data are available (element t_points).
+* @details constant basis are used, for a covariate, if it resembles a scalar shape. It consists of a straight line with y-value equal to 1 all over the data domain.
+*          Can be seen as a B-spline basis with degree 0, number of basis 1, using one knot, consequently having only one coefficient for the only basis for each statistical unit.
+*          fdagwr sets all the feats accordingly if reads constant basis.
+*          However, recall that the response is a functional datum, as the regressors coefficients. Since the package's basis variety could be hopefully enlarged in the future 
+*          (for example, introducing Fourier basis for handling data that present periodical behaviors), the input parameters regarding basis types for response, response reconstruction
+*          weights and regressors coefficients are left at the end of the input list, and defaulted as NULL. Consequently they will use a B-spline basis system, and should NOT use a constant basis,
+*          Recall to perform externally the basis expansion before using the package, and afterwards passing basis types, degree and number and basis expansion coefficients and knots coherently
+* @note a little excursion about degree and number of basis passed as input. For each specific covariate, or the response, if using B-spline basis, remember that number of knots = number of basis - degree + 1. 
+*       By default, if passing NULL, fdagwr uses a cubic B-spline system of basis, the number of basis is computed coherently from the number of knots (that is the only mandatory input parameter).
+*       Passing only the degree of the bsplines, the number of basis used will be set accordingly, and viceversa if passing only the number of basis. 
+*       But, take care that the number of basis used has to match the number of rows of coefficients matrix (for EACH type of basis). If not, an exception is thrown. No problems arise if letting fdagwr defaulting the number of basis.
+*       For response and response reconstruction weights, degree and number of basis consist of integer, and can be NULL. For all the regressors, and their coefficients, the inputs consist of vector of integers: 
+*       if willing to pass a default parameter, all the vector has to be defaulted (if passing NULL, a vector with all 3 for the degrees is passed, for example)
+* @link https://www.researchgate.net/publication/377251714_Weighted_Functional_Data_Analysis_for_the_Calibration_of_a_Ground_Motion_Model_in_Italy @endlink
+*/
 //
 // [[Rcpp::export]]
 Rcpp::List FGWR(Rcpp::NumericMatrix y_points,
@@ -4298,7 +4662,78 @@ Rcpp::List FGWR(Rcpp::NumericMatrix y_points,
 
 
 /*!
-* @brief predict fgwr
+* @brief Function to perform predictions on new statistical units using a fitted Functional Geographically Weighted Regression model. Non-stationary betas have to be recomputed in the new locations.
+* @param coeff_non_stationary_cov_to_pred list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th non-stationary covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted.
+* @param coordinates_non_stationary_to_pred matrix of double containing the UTM coordinates of the non-stationary site of new statistical units: each row represents a statistical unit to be predicted, each column a coordinate (2 columns).
+* @param units_to_be_predicted number of units to be predicted
+* @param abscissa_ev abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed
+* @param model_fitted: output of FGWR: an R list containing:
+*         - "FGWR": string containing the type of fgwr used ("FGWR")
+*         - "Bnc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:
+*                 - "basis_coeff": a list, containg, for each unit, a Lnc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_non_stationary_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_non_stationary_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_non_stationary_cov)
+*         - "Beta_nc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:
+*                 - "Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit
+*                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)  
+*         - "predictor_info": a list containing information of the fitted model to perform predictions for new statistical units:
+*                             - "inputs_info": a list containing information about the data used to fit the model:
+*                                              - "Response": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).
+*                                              - "ResponseReconstructionWeights": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).
+*                                                            - "basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).                                                           
+*                                              - "cov_NonStationary": list:
+*                                                            - "number_covariates": number of non-stationary covariates (length of coeff_non_stationary_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional non-stationary covariates (respective elements of n_basis_non_stationary_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional non-stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_non_stationary_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional non-stationary covariates (respective elements of degrees_basis_non_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional non-stationary covariates (element knots_non_stationary_cov).
+*                                                            - "basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional non-stationary covariates (respective elements of coeff_non_stationary_cov).
+*                                                            - "penalizations": vector containing the penalizations of the non-stationary covariates (respective elements of penalization_non_stationary_cov)
+*                                                            - "coordinates": UTM coordinates of the non-stationary sites of the training data (element coordinates_non_stationary).
+*                                                            - "kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the non-stationary sites (element kernel_bandwith_non_stationary).
+*                                              - "beta_NonStationary": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element n_basis_beta_non_stationary_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_non_stationary_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element degrees_basis_beta_non_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element knots_beta_non_stationary_cov).
+*                                              - "a": domain left extreme  (element left_extreme_domain).
+*                                              - "b": domain right extreme (element right_extreme_domain).
+*                                              - "abscissa": abscissa for which the evaluations of the functional data are available (element t_points).
+* @param n_knots_smoothing_pred number of knots used to smooth predicted response and non-stationary, obtaining basis expansion coefficients with respect to the training basis (default: 100).
+* @param n_intervals_quadrature number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100).
+* @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine.
+* @return an R list containing:
+*         - "FGWR_predictor": string containing the model used to predict ("predictor_FGWR")
+*         - "prediction": list containing:
+*                         - "evaluation": list containing the evaluation of the prediction:
+*                                          - "prediction_ev": list containing, for each unit to be predicted, the raw evaluations of the predicted response.
+*                                          - "abscissa_ev": the abscissa points for which the prediction evaluation is available (element abscissa_ev).
+*                         - "fd": list containing the prediction functional description:
+*                                          - "prediction_basis_coeff": matrix containing the prediction basis expansion coefficients (each row a basis, each column a new statistical unit)
+*                                          - "prediction_basis_type": basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_basis_num": number of basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_basis_deg": degree of basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_knots": knots used for the predicted response smoothing (n_knots_smoothing_pred equally spaced knots in the functional datum domain)
+*         - "Bnc_pred": list containing, for each non-stationary covariate:
+*                      - "basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.
+*                      - "basis_num": number of basis used for the beta basis expansion (from model_fitted).
+*                      - "basis_type": type of basis used for the beta basis expansion (from model_fitted).
+*                      - "knots": knots used for the beta basis expansion (from model_fitted).
+*         - "Beta_nc_pred": list containing, for each non-stationary covariate:
+*                           - "Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.
+*                           - "Abscissa": grid (element abscissa_ev).
+* @details NB: Covariates of units to be predicted have to be sampled in the same sample points for which the training data have been (t_points).
+*              Covariates basis expansion for the units to be predicted has to be done with respect to the basis used for the covariates in the training set
 */
 //
 // [[Rcpp::export]]
@@ -4629,7 +5064,80 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
 
 
 /*!
-* @brief
+* @brief Fitting a Functional Mixed Geographically Weighted Regression model. The covariates are functional objects, divided into
+*        two categories: stationary covariates (C), constant over geographical space, and non-stationary covariates (NC), that vary depending on spatial coordinates. Regression coefficients are estimated 
+*        in the following order: C, NC. The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024) (link below)
+* @param y_points matrix of double containing the raw response: each row represents a specific abscissa for which the response evaluation is available, each column a statistical unit. Response is a already reconstructed.
+* @param t_points vector of double with the abscissa points with respect of the raw evaluations of y_points are available (length of t_points is equal to the number of rows of y_points).
+* @param left_extreme_domain double indicating the left extreme of the functional data domain (not necessarily the smaller element in t_points).
+* @param right_extreme_domain double indicating the right extreme of the functional data domain (not necessarily the biggest element in t_points).
+* @param coeff_y_points matrix of double containing the coefficient of response's basis expansion: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
+* @param knots_y_points vector of double with the abscissa points with respect which the basis expansions of the response and response reconstruction weights are performed (all elements contained in [a,b]). 
+* @param degree_basis_y_points non-negative integer: the degree of the basis used for the basis expansion of the (functional) response. Default explained below (can be NULL).
+* @param n_basis_y_points positive integer: number of basis for the basis expansion of the (functional) response. It must match number of rows of coeff_y_points. Default explained below (can be NULL).
+* @param coeff_rec_weights_y_points matrix of double containing the coefficients of the basis expansion of the weights to reconstruct the (functional) response: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
+* @param degree_basis_rec_weights_y_points non-negative integer: the degree of the basis used for response reconstruction weights. Default explained below (can be NULL).
+* @param n_basis_rec_weights_y_points positive integer: number of basis for the basis expansion of response reconstruction weights. It must match number of rows of coeff_rec_weights_y_points. Default explained below (can be NULL).
+* @param coeff_stationary_cov list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
+*                             The name of the i-th element is the name of the i-th stationary covariate (default: "reg.Ci" if no name present).
+* @param basis_types_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariate basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param knots_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the stationary covariates are performed (all elements contained in [a,b]). 
+* @param degrees_basis_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stationary covariate. Default explained below (can be NULL).
+* @param n_basis_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stationary covariate. It must match number of rows of the i-th element of coeff_stationary_cov. Default explained below (can be NULL).
+* @param penalization_stationary_cov vector of non-negative double: element i-th is the penalization used for the i-th stationary covariate.
+* @param knots_beta_stationary_cov vector of double with the abscissa points with respect which the basis expansions of the stationary covariates functional regression coefficients are performed (all elements contained in [a,b]). 
+* @param degrees_basis_beta_stationary_cov vector of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th stationary covariate functional regression coefficients. Default explained below (can be NULL).
+* @param n_basis_beta_stationary_cov vector of positive integers: element i-th is the number of basis for the basis expansion of the i-th stationary covariate functional regression coefficients. Default explained below (can be NULL).
+* @param n_intervals_quadrature number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100).
+* @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine.
+* @param basis_type_y_points string containing the type of basis used for the functional response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_type_rec_weights_y_points string containing the type of basis used for the weights to reconstruct the functional response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @param basis_types_beta_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
+* @return an R list containing:
+*         - "FGWR": string containing the type of fgwr used ("FWR")
+*         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
+*                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)
+*         - "Beta_c": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
+*                 - "Beta_eval": a vector of double containing the discrete evaluations of the stationary beta
+*                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)
+*         - "predictor_info": a list containing information of the fitted model to perform predictions for new statistical units:
+*                             - "inputs_info": a list containing information about the data used to fit the model:
+*                                              - "Response": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response (element knots_y_points).
+*                                              - "cov_Stationary": list:
+*                                                            - "number_covariates": number of stationary covariates (length of coeff_stationary_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).
+*                                              - "beta_Stationary": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov).                                                            
+*                                              - "a": domain left extreme  (element left_extreme_domain).
+*                                              - "b": domain right extreme (element right_extreme_domain).
+*                                              - "abscissa": abscissa for which the evaluations of the functional data are available (element t_points).
+* @details constant basis are used, for a covariate, if it resembles a scalar shape. It consists of a straight line with y-value equal to 1 all over the data domain.
+*          Can be seen as a B-spline basis with degree 0, number of basis 1, using one knot, consequently having only one coefficient for the only basis for each statistical unit.
+*          fdagwr sets all the feats accordingly if reads constant basis.
+*          However, recall that the response is a functional datum, as the regressors coefficients. Since the package's basis variety could be hopefully enlarged in the future 
+*          (for example, introducing Fourier basis for handling data that present periodical behaviors), the input parameters regarding basis types for response, response reconstruction
+*          weights and regressors coefficients are left at the end of the input list, and defaulted as NULL. Consequently they will use a B-spline basis system, and should NOT use a constant basis,
+*          Recall to perform externally the basis expansion before using the package, and afterwards passing basis types, degree and number and basis expansion coefficients and knots coherently
+* @note a little excursion about degree and number of basis passed as input. For each specific covariate, or the response, if using B-spline basis, remember that number of knots = number of basis - degree + 1. 
+*       By default, if passing NULL, fdagwr uses a cubic B-spline system of basis, the number of basis is computed coherently from the number of knots (that is the only mandatory input parameter).
+*       Passing only the degree of the bsplines, the number of basis used will be set accordingly, and viceversa if passing only the number of basis. 
+*       But, take care that the number of basis used has to match the number of rows of coefficients matrix (for EACH type of basis). If not, an exception is thrown. No problems arise if letting fdagwr defaulting the number of basis.
+*       For response and response reconstruction weights, degree and number of basis consist of integer, and can be NULL. For all the regressors, and their coefficients, the inputs consist of vector of integers: 
+*       if willing to pass a default parameter, all the vector has to be defaulted (if passing NULL, a vector with all 3 for the degrees is passed, for example)
+* @link https://www.researchgate.net/publication/377251714_Weighted_Functional_Data_Analysis_for_the_Calibration_of_a_Ground_Motion_Model_in_Italy @endlink
 */
 //
 // [[Rcpp::export]]
@@ -4968,7 +5476,65 @@ Rcpp::List FWR(Rcpp::NumericMatrix y_points,
 
 
 /*!
-* @brief Predict FWR
+* @brief Function to perform predictions on new statistical units using a fitted Functional Weighted Regression model.
+* @param coeff_stationary_cov_to_pred list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted.
+* @param units_to_be_predicted number of units to be predicted
+* @param abscissa_ev abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed
+* @param model_fitted: output of FWR: an R list containing:
+*         - "FGWR": string containing the type of fgwr used ("FWR")
+*         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
+*                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
+*                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)
+*                 - "basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)
+*                 - "knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)
+*         - "Beta_c": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
+*                 - "Beta_eval": a vector of double containing the discrete evaluations of the stationary beta
+*                 - "Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)
+*         - "predictor_info": a list containing information of the fitted model to perform predictions for new statistical units:
+*                             - "inputs_info": a list containing information about the data used to fit the model:
+*                                              - "Response": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).
+*                                                            - "knots": knots used to make the basis expansion of the functional response (element knots_y_points).
+*                                              - "cov_Stationary": list:
+*                                                            - "number_covariates": number of stationary covariates (length of coeff_stationary_cov).
+*                                                            - "basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).
+*                                                            - "basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).
+*                                                            - "basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).
+*                                              - "beta_Stationary": list:
+*                                                            - "basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).
+*                                                            - "basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).
+*                                                            - "basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).
+*                                                            - "knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov).                                                            
+*                                              - "a": domain left extreme  (element left_extreme_domain).
+*                                              - "b": domain right extreme (element right_extreme_domain).
+*                                              - "abscissa": abscissa for which the evaluations of the functional data are available (element t_points).
+* @param n_knots_smoothing_pred number of knots used to smooth predicted response and non-stationary, obtaining basis expansion coefficients with respect to the training basis (default: 100).
+* @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine.
+* @return an R list containing:
+*         - "FGWR_predictor": string containing the model used to predict ("predictor_FWR")
+*         - "prediction": list containing:
+*                         - "evaluation": list containing the evaluation of the prediction:
+*                                          - "prediction_ev": list containing, for each unit to be predicted, the raw evaluations of the predicted response.
+*                                          - "abscissa_ev": the abscissa points for which the prediction evaluation is available (element abscissa_ev).
+*                         - "fd": list containing the prediction functional description:
+*                                          - "prediction_basis_coeff": matrix containing the prediction basis expansion coefficients (each row a basis, each column a new statistical unit)
+*                                          - "prediction_basis_type": basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_basis_num": number of basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_basis_deg": degree of basis used for the predicted response basis expansion (from model_fitted)
+*                                          - "prediction_knots": knots used for the predicted response smoothing (n_knots_smoothing_pred equally spaced knots in the functional datum domain)
+*         - "Bc_pred": list containing, for each stationary covariate:
+*                      - "basis_coeff": coefficients of the basis expansion of the beta (from model_fitted).
+*                      - "basis_num": number of basis used for the beta basis epxnasion (from model_fitted).
+*                      - "basis_type": type of basis used for the beta basis expansion (from model_fitted).
+*                      - "knots": knots used for the beta basis expansion (from model_fitted).
+*         - "Beta_c_pred": list containing, for each stationary covariate:
+*                           - "Beta_eval": evaluation of the beta along a grid.
+*                           - "Abscissa": grid (element abscissa_ev).
+* @details NB: Covariates of units to be predicted have to be sampled in the same sample points for which the training data have been (t_points).
+*              Covariates basis expansion for the units to be predicted has to be done with respect to the basis used for the covariates in the training set
 */
 //
 // [[Rcpp::export]]
