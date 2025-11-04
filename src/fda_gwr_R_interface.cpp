@@ -76,7 +76,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr15 has been installed"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr1 has been installed"<< std::endl;}
 
 
 
@@ -301,15 +301,10 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
                       Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_events_cov = R_NilValue,
                       Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_stations_cov = R_NilValue)
 {
-    //funzione per il multi-source gwr
-    //  !!!!!!!! NB: l'ordine delle basi su c++ corrisponde al degree su R !!!!!
     Rcout << "Functional Multi-Source Geographically Weighted Regression ESC" << std::endl;
 
-
-    //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
-    //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
-
-    //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
+    //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
+    //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
 
     using _DATA_TYPE_ = double;                                                     //data type
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
@@ -343,7 +338,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
 
     //  RESPONSE
     //raw data
-    auto response_ = reader_data<_DATA_TYPE_,_NAN_REM_>(y_points);       //Eigen dense matrix type (auto is necessary )
+    auto response_ = reader_data<_DATA_TYPE_,_NAN_REM_>(y_points);       //Eigen dense matrix type
     //number of statistical units
     std::size_t number_of_statistical_units_ = response_.cols();
     //coefficients matrix
@@ -560,7 +555,6 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     using response_basis_tmp_t = extract_template_t< decltype(basis_response_)::element_type >;   
     functional_data< _DOMAIN_, response_basis_tmp_t::template_type > y_fd_(std::move(coefficients_response_),std::move(basis_response_));
     
-
     //response reconstruction weights
     std::unique_ptr<basis_base_class<_DOMAIN_>> basis_rec_weights_response_ = basis_fac.create(basis_type_rec_weights_response_,knots_response_eigen_w_,degree_basis_rec_weights_response_,number_basis_rec_weights_response_);
     //extracting the template param of the basis for fd (access it in the template params list with ::template_type)  
@@ -647,41 +641,41 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
 
-    //fgwr algorithm
+    //fwr model 
     auto fgwr_algo = fwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
-                                                                                    std::move(phi),
-                                                                                    std::move(c),
-                                                                                    number_basis_response_,
-                                                                                    std::move(basis_y),
-                                                                                    std::move(knots_smoothing),
-                                                                                    std::move(Xc),
-                                                                                    std::move(Wc),
-                                                                                    std::move(R_C.PenalizationMatrix()),
-                                                                                    std::move(omega),
-                                                                                    q_C,
-                                                                                    Lc,
-                                                                                    Lc_j,
-                                                                                    std::move(Xe),
-                                                                                    std::move(We),
-                                                                                    std::move(R_E.PenalizationMatrix()),
-                                                                                    std::move(theta),
-                                                                                    q_E,
-                                                                                    Le,
-                                                                                    Le_j,
-                                                                                    std::move(Xs),
-                                                                                    std::move(Ws),
-                                                                                    std::move(R_S.PenalizationMatrix()),
-                                                                                    std::move(psi),
-                                                                                    q_S,
-                                                                                    Ls,
-                                                                                    Ls_j,
-                                                                                    a,
-                                                                                    b,
-                                                                                    n_intervals,
-                                                                                    abscissa_points_,
-                                                                                    number_of_statistical_units_,
-                                                                                    number_threads,
-                                                                                    in_cascade_estimation);
+                                                                                   std::move(phi),
+                                                                                   std::move(c),
+                                                                                   number_basis_response_,
+                                                                                   std::move(basis_y),
+                                                                                   std::move(knots_smoothing),
+                                                                                   std::move(Xc),
+                                                                                   std::move(Wc),
+                                                                                   std::move(R_C.PenalizationMatrix()),
+                                                                                   std::move(omega),
+                                                                                   q_C,
+                                                                                   Lc,
+                                                                                   Lc_j,
+                                                                                   std::move(Xe),
+                                                                                   std::move(We),
+                                                                                   std::move(R_E.PenalizationMatrix()),
+                                                                                   std::move(theta),
+                                                                                   q_E,
+                                                                                   Le,
+                                                                                   Le_j,
+                                                                                   std::move(Xs),
+                                                                                   std::move(Ws),
+                                                                                   std::move(R_S.PenalizationMatrix()),
+                                                                                   std::move(psi),
+                                                                                   q_S,
+                                                                                   Ls,
+                                                                                   Ls_j,
+                                                                                   a,
+                                                                                   b,
+                                                                                   n_intervals,
+                                                                                   abscissa_points_,
+                                                                                   number_of_statistical_units_,
+                                                                                   number_threads,
+                                                                                   in_cascade_estimation);
 
     Rcout << "Model fitting" << std::endl;    
     
@@ -690,7 +684,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
     //evaluating the betas   
     fgwr_algo->evalBetas();
 
-    Rcout << "Model fitting done" << std::endl; 
+    Rcout << "Model fitted" << std::endl; 
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -1028,10 +1022,8 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 {
     Rcout << "Functional Multi-Source Geographically Weighted Regression ESC predictor" << std::endl;
 
-    //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
-    //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
-
-    //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
+    //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
+    //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
 
 
     using _DATA_TYPE_ = double;                                                     //data type
@@ -1431,7 +1423,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
         {std::string{covariate_type<_STATION_>()},Ws_pred}};
 
 
-    //fgwr predictor
+    //fwr predictor
     auto fwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
                                                                                                  std::move(Bs),
                                                                                                  std::move(omega),
@@ -1767,15 +1759,10 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
                       Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_events_cov = R_NilValue,
                       Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_stations_cov = R_NilValue)
 {
-    //funzione per il multi-source gwr
-    //  !!!!!!!! NB: l'ordine delle basi su c++ corrisponde al degree su R !!!!!
     Rcout << "Functional Multi-Source Geographically Weighted Regression SEC" << std::endl;
 
-
-    //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
-    //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
-
-    //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
+    //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
+    //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
 
     using _DATA_TYPE_ = double;                                                     //data type
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
@@ -2113,41 +2100,41 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
 
-    //fgwr algorithm
+    //fwr algorithm
     auto fgwr_algo = fwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
-                                                                                    std::move(phi),
-                                                                                    std::move(c),
-                                                                                    number_basis_response_,
-                                                                                    std::move(basis_y),
-                                                                                    std::move(knots_smoothing),
-                                                                                    std::move(Xc),
-                                                                                    std::move(Wc),
-                                                                                    std::move(R_C.PenalizationMatrix()),
-                                                                                    std::move(omega),
-                                                                                    q_C,
-                                                                                    Lc,
-                                                                                    Lc_j,
-                                                                                    std::move(Xe),
-                                                                                    std::move(We),
-                                                                                    std::move(R_E.PenalizationMatrix()),
-                                                                                    std::move(theta),
-                                                                                    q_E,
-                                                                                    Le,
-                                                                                    Le_j,
-                                                                                    std::move(Xs),
-                                                                                    std::move(Ws),
-                                                                                    std::move(R_S.PenalizationMatrix()),
-                                                                                    std::move(psi),
-                                                                                    q_S,
-                                                                                    Ls,
-                                                                                    Ls_j,
-                                                                                    a,
-                                                                                    b,
-                                                                                    n_intervals,
-                                                                                    abscissa_points_,
-                                                                                    number_of_statistical_units_,
-                                                                                    number_threads,
-                                                                                    in_cascade_estimation);
+                                                                                   std::move(phi),
+                                                                                   std::move(c),
+                                                                                   number_basis_response_,
+                                                                                   std::move(basis_y),
+                                                                                   std::move(knots_smoothing),
+                                                                                   std::move(Xc),
+                                                                                   std::move(Wc),
+                                                                                   std::move(R_C.PenalizationMatrix()),
+                                                                                   std::move(omega),
+                                                                                   q_C,
+                                                                                   Lc,
+                                                                                   Lc_j,
+                                                                                   std::move(Xe),
+                                                                                   std::move(We),
+                                                                                   std::move(R_E.PenalizationMatrix()),
+                                                                                   std::move(theta),
+                                                                                   q_E,
+                                                                                   Le,
+                                                                                   Le_j,
+                                                                                   std::move(Xs),
+                                                                                   std::move(Ws),
+                                                                                   std::move(R_S.PenalizationMatrix()),
+                                                                                   std::move(psi),
+                                                                                   q_S,
+                                                                                   Ls,
+                                                                                   Ls_j,
+                                                                                   a,
+                                                                                   b,
+                                                                                   n_intervals,
+                                                                                   abscissa_points_,
+                                                                                   number_of_statistical_units_,
+                                                                                   number_threads,
+                                                                                   in_cascade_estimation);
 
     Rcout << "Model fitting" << std::endl;                                                                                    
 
@@ -2156,7 +2143,7 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
     //evaluating the betas   
     fgwr_algo->evalBetas();
 
-    Rcout << "Model fitting done" << std::endl; 
+    Rcout << "Model fitted" << std::endl; 
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -2495,10 +2482,8 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
 {
     Rcout << "Functional Multi-Source Geographically Weighted Regression SEC predictor" << std::endl;
 
-    //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
-    //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
-
-    //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
+    //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
+    //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
 
 
     using _DATA_TYPE_ = double;                                                     //data type
@@ -2898,7 +2883,7 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
         {std::string{covariate_type<_STATION_>()},Ws_pred}};
 
 
-    //fgwr predictor
+    //fwr predictor
     auto fwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
                                                                                                  std::move(Be),
                                                                                                  std::move(omega),
@@ -3182,15 +3167,10 @@ Rcpp::List FMGWR(Rcpp::NumericMatrix y_points,
                  Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_stationary_cov = R_NilValue,
                  Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_non_stationary_cov = R_NilValue)
 {
-    //funzione per il multi-source gwr
-    //  !!!!!!!! NB: l'ordine delle basi su c++ corrisponde al degree su R !!!!!
     Rcout << "Functional Mixed Geographically Weighted Regression" << std::endl;
 
-
-    //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
-    //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
-
-    //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
+    //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
+    //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
 
     using _DATA_TYPE_ = double;                                                     //data type
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
@@ -3464,7 +3444,7 @@ Rcpp::List FMGWR(Rcpp::NumericMatrix y_points,
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> eta = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_NC);
 
 
-    //fgwr algorithm
+    //fwr algorithm
     auto fgwr_algo = fwr_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(y),
                                                                                    std::move(phi),
                                                                                    std::move(c),
@@ -3500,7 +3480,7 @@ Rcpp::List FMGWR(Rcpp::NumericMatrix y_points,
     //evaluating the betas   
     fgwr_algo->evalBetas();
 
-    Rcout << "Model fitting done" << std::endl; 
+    Rcout << "Model fitted" << std::endl; 
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -3774,10 +3754,8 @@ Rcpp::List predict_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
 {
     Rcout << "Functional Mixed Geographically Weighted Regression predictor" << std::endl;
 
-    //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
-    //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
-
-    //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
+    //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
+    //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
 
 
     using _DATA_TYPE_ = double;                                                     //data type
@@ -4305,15 +4283,10 @@ Rcpp::List FGWR(Rcpp::NumericMatrix y_points,
                 Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_stationary_cov = R_NilValue,
                 Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_non_stationary_cov = R_NilValue)
 {
-    //funzione per il multi-source gwr
-    //  !!!!!!!! NB: l'ordine delle basi su c++ corrisponde al degree su R !!!!!
     Rcout << "Functional Geographically Weighted Regression" << std::endl;
 
-
-    //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
-    //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
-
-    //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
+    //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
+    //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
 
     using _DATA_TYPE_ = double;                                                     //data type
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
@@ -4542,7 +4515,7 @@ Rcpp::List FGWR(Rcpp::NumericMatrix y_points,
     //evaluating the betas   
     fgwr_algo->evalBetas();
 
-    Rcout << "Model fitting done" << std::endl;    
+    Rcout << "Model fitted" << std::endl;    
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -4748,10 +4721,8 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
 {
     Rcout << "Functional Geographically Weighted Regression predictor" << std::endl;
 
-    //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
-    //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
-
-    //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
+    //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
+    //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
 
 
     using _DATA_TYPE_ = double;                                                     //data type
@@ -4791,8 +4762,8 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
     ////////////////////////////////////////////////////////////
     //names main outputs
     std::string _model_name_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::model_name};          //FWR model used
-    std::string _bnc_               = std::string{FDAGWR_B_NAMES::bnc};                                 //bc
-    std::string _beta_nc_           = std::string{FDAGWR_BETAS_NAMES::beta_nc};                         //beta_c
+    std::string _bnc_               = std::string{FDAGWR_B_NAMES::bnc};                                //bc
+    std::string _beta_nc_           = std::string{FDAGWR_BETAS_NAMES::beta_nc};                        //beta_c
     std::string _elem_for_pred_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred};       //elements used to predict (reconstructing training data and partial residuals)
     std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
     //names secondary outputs, contained in the main ones
@@ -4979,7 +4950,7 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
         {std::string{covariate_type<_NON_STATIONARY_>()},Wnc_pred}};
 
 
-    //fgwr predictor
+    //fwr predictor
     auto fwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(eta),
                                                                                                  q_NC,
                                                                                                  Lnc,
@@ -5167,15 +5138,10 @@ Rcpp::List FWR(Rcpp::NumericMatrix y_points,
                 std::string basis_type_rec_weights_y_points = "bsplines",
                 Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_stationary_cov = R_NilValue)
 {
-    //funzione per il multi-source gwr
-    //  !!!!!!!! NB: l'ordine delle basi su c++ corrisponde al degree su R !!!!!
     Rcout << "Functional Weighted Regression" << std::endl;
 
-
-    //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
-    //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
-
-    //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
+    //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
+    //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
 
     using _DATA_TYPE_ = double;                                                     //data type
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
@@ -5373,7 +5339,7 @@ Rcpp::List FWR(Rcpp::NumericMatrix y_points,
     //evaluating the betas   
     fgwr_algo->evalBetas();
 
-    Rcout << "Model fitting done" << std::endl; 
+    Rcout << "Model fitted" << std::endl; 
 
     //retrieving the results, wrapping them in order to be returned into R
     //b                                                                        
@@ -5547,10 +5513,8 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
 {
     Rcout << "Functional Weighted Regression predictor" << std::endl;
 
-    //COME VENGONO PASSATE LE COSE: OGNI COLONNA E' UN'UNITA', OGNI RIGA UNA VALUTAZIONE FUNZIONALE/COEFFICIENTE DI BASE 
-    //  (ANCHE PER LE COVARIATE DELLO STESSO TIPO, PUO' ESSERCI UN NUMERO DI BASI DIFFERENTE)
-
-    //SOLO PER LE COORDINATE OGNI RIGA E' UN'UNITA'
+    //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
+    //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
 
 
     using _DATA_TYPE_ = double;                                                     //data type
@@ -5703,7 +5667,7 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
 
 
 
-    //fgwr predictor
+    //fwr predictor
     auto fwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
                                                                                                  std::move(omega),
                                                                                                  q_C,
