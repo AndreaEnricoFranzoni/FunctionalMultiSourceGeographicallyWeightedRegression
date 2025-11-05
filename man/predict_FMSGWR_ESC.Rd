@@ -19,128 +19,128 @@
 \item{model_fitted}{\strong{\code{list}} containing:
 \itemize{
 \item 'FGWR': \strong{\code{string}}: the type of fgwr used (\strong{\code{"FMSGWR_ESC"}});
-\item 'EstimationTechnique': \strong{\code{string}}: \strong{\code{"Exact"}} if \p in_cascade_estimation false, \strong{\code{"Cascade"}} if \p in_cascade_estimation true
-\item 'Bc': \strong{\code{list}} containing, for each stationary covariate regression coefficient (each element is named with the element names in the list \p coeff_stationary_cov (default, if not given: \strong{\code{"CovC*"}})):
+\item 'EstimationTechnique': \strong{\code{string}}: \strong{\code{"Exact"}} if in_cascade_estimation false, \strong{\code{"Cascade"}} if in_cascade_estimation true
+\item 'Bc': \strong{\code{list}} containing, for each stationary covariate regression coefficient (each element is named with the element names in the list coeff_stationary_cov (default, if not given: \strong{\code{"CovC*"}})):
 \itemize{
 \item 'basis_coeff': \strong{\verb{numeric vector}} of double, dimension Lc_jx1,containing the coefficients of the basis expansion of the beta.
-\item 'basis_type': \strong{\code{string}} containing the basis type over which the beta basis expansion is performed. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}}. (Respective element of \p basis_types_beta_stationary_cov).
-\item 'basis_num': \strong{\verb{positive integer}}: the number of basis used for performing the beta basis expansion (respective elements of \p n_basis_beta_stationary_cov).
-\item 'knots': \strong{\verb{numeric vector}} of double: knots used to create the basis system for the beta (it is the input \p knots_beta_stationary_cov).
+\item 'basis_type': \strong{\code{string}} containing the basis type over which the beta basis expansion is performed. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}}. (Respective element of basis_types_beta_stationary_cov).
+\item 'basis_num': \strong{\verb{positive integer}}: the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov).
+\item 'knots': \strong{\verb{numeric vector}} of double: knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov).
 }
 \item 'Beta_c': \strong{\code{list}} containing, for each stationary covariate regression coefficient (each element is named with the element names in the list coeff_stationary_cov (default, if not given: \strong{\code{"CovC*"}})) a list with:
 \itemize{
 \item 'Beta_eval': \strong{\verb{numeric vector}} of double containing the discrete evaluations of the stationary beta.
-\item 'Abscissa': \strong{\verb{numeric vector}} of double containing the domain points for which the evaluation of the beta is available (it is the input \p t_points).
+\item 'Abscissa': \strong{\verb{numeric vector}} of double containing the domain points for which the evaluation of the beta is available (it is the input t_points).
 }
-\item 'Be': \strong{\code{list}} containing, for each event-dependent covariate regression coefficient (each element is named with the element names in the list \p coeff_events_cov (default, if not given: \strong{\code{"CovE*"}})):
+\item 'Be': \strong{\code{list}} containing, for each event-dependent covariate regression coefficient (each element is named with the element names in the list coeff_events_cov (default, if not given: \strong{\code{"CovE*"}})):
 \itemize{
 \item 'basis_coeff': \strong{\code{list}}, containing, for each statistical unit, a \strong{\verb{numeric vector}} of double, dimension Le_jx1,containing the coefficients of the basis expansion of the beta for that unit.
-\item 'basis_type': \strong{\code{string}} containing the basis type over which the beta basis expansion is performed. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}}. (Respective element of \p basis_types_beta_events_cov).
-\item 'basis_num': \strong{\verb{positive integer}}: the number of basis used for performing the beta basis expansion (respective elements of \p n_basis_beta_events_cov).
-\item 'knots': \strong{\verb{numeric vector}} of double: knots used to create the basis system for the beta (it is the input \p knots_beta_events_cov).
+\item 'basis_type': \strong{\code{string}} containing the basis type over which the beta basis expansion is performed. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}}. (Respective element of basis_types_beta_events_cov).
+\item 'basis_num': \strong{\verb{positive integer}}: the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_events_cov).
+\item 'knots': \strong{\verb{numeric vector}} of double: knots used to create the basis system for the beta (it is the input knots_beta_events_cov).
 }
-\item 'Beta_e': \strong{\code{list}} containing, for each event-dependent covariate regression coefficient (each element is named with the element names in the list \p coeff_events_cov (default, if not given: \strong{\code{"CovE*"}})) a list with:
+\item 'Beta_e': \strong{\code{list}} containing, for each event-dependent covariate regression coefficient (each element is named with the element names in the list coeff_events_cov (default, if not given: \strong{\code{"CovE*"}})) a list with:
 \itemize{
 \item 'Beta_eval': \strong{\code{list}}, containing, for each statistical unit, a \strong{\verb{numeric vector}} of double containing the discrete evaluations of the non-stationary beta, one for each unit.
-\item 'Abscissa': \strong{\verb{numeric vector}} of double containing the domain points for which the evaluation of the beta is available (it is the input \p t_points).
+\item 'Abscissa': \strong{\verb{numeric vector}} of double containing the domain points for which the evaluation of the beta is available (it is the input t_points).
 }
-\item 'Bs': \strong{\code{list}} containing, for each station-dependent covariate regression coefficient (each element is named with the element names in the list \p coeff_stations_cov (default, if not given: \strong{\code{"CovS*"}})):
+\item 'Bs': \strong{\code{list}} containing, for each station-dependent covariate regression coefficient (each element is named with the element names in the list coeff_stations_cov (default, if not given: \strong{\code{"CovS*"}})):
 \itemize{
 \item 'basis_coeff': \strong{\code{list}}, containing, for each statistical unit, a \strong{\verb{numeric vector}} of double, dimension Ls_jx1,containing the coefficients of the basis expansion of the beta for that unit.
-\item 'basis_type': \strong{\code{string}} containing the basis type over which the beta basis expansion is performed. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}}. (Respective element of \p basis_types_beta_stations_cov).
-\item 'basis_num': \strong{\verb{positive integer}}: the number of basis used for performing the beta basis expansion (respective elements of \p n_basis_beta_stations_cov).
-\item 'knots': \strong{\verb{numeric vector}} of double: knots used to create the basis system for the beta (it is the input \p knots_beta_stations_cov).
+\item 'basis_type': \strong{\code{string}} containing the basis type over which the beta basis expansion is performed. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}}. (Respective element of basis_types_beta_stations_cov).
+\item 'basis_num': \strong{\verb{positive integer}}: the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stations_cov).
+\item 'knots': \strong{\verb{numeric vector}} of double: knots used to create the basis system for the beta (it is the input knots_beta_stations_cov).
 }
-\item 'Beta_e': \strong{\code{list}} containing, for each station-dependent covariate regression coefficient (each element is named with the element names in the list \p coeff_stations_cov (default, if not given: \strong{\code{"CovS*"}})) a list with:
+\item 'Beta_e': \strong{\code{list}} containing, for each station-dependent covariate regression coefficient (each element is named with the element names in the list coeff_stations_cov (default, if not given: \strong{\code{"CovS*"}})) a list with:
 \itemize{
 \item 'Beta_eval': \strong{\code{list}}, containing, for each statistical unit, a \strong{\verb{numeric vector}} of double containing the discrete evaluations of the non-stationary beta, one for each unit.
-\item 'Abscissa': \strong{\verb{numeric vector}} of double containing the domain points for which the evaluation of the beta is available (it is the input \p t_points).
+\item 'Abscissa': \strong{\verb{numeric vector}} of double containing the domain points for which the evaluation of the beta is available (it is the input t_points).
 }
 \item 'predictor_info': \strong{\code{list}} containing partial residuals and information of the fitted model to perform predictions for new statistical units:
 \itemize{
 \item 'partial_res': \strong{\code{list}} containing information to compute the partial residuals:
 \itemize{
-\item 'c_tilde_hat': \strong{\verb{numeric vector}} of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if \p in_cascade_estimation is true, contains only 0s).
-\item 'A__': \strong{\verb{list of numeric matrices}}, containing the operator A_e for each statistical unit (if \p in_cascade_estimation is true, each matrix contains only 0s).
-\item 'B__for_K': \strong{\verb{list of numeric matrices}}, containing the operator B_e used for the K_e_s(t) computation, for each statistical unit (if \p in_cascade_estimation is true, each matrix contains only 0s).
+\item 'c_tilde_hat': \strong{\verb{numeric vector}} of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).
+\item 'A__': \strong{\verb{list of numeric matrices}}, containing the operator A_e for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
+\item 'B__for_K': \strong{\verb{list of numeric matrices}}, containing the operator B_e used for the K_e_s(t) computation, for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
 }
 \item 'inputs_info': \strong{\code{list}} containing information about the data used to fit the model:
 \itemize{
 \item 'Response': \strong{\code{list}}:
 \itemize{
-\item 'basis_num': \strong{\verb{positive integer}}: number of basis used to make the basis expansion of the functional response (element \p n_basis_y_points).
-\item 'basis_type': \strong{\code{string}}: basis used to make the basis expansion of the functional response. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (element \p basis_type_y_points).
-\item 'basis_deg': \strong{\verb{positive integer}}: degree of basis used to make the basis expansion of the functional response (element \p degree_basis_y_points).
-\item 'knots': \strong{\verb{numeric vector}}: knots used to make the basis expansion of the functional response (element \p knots_y_points).
-\item 'basis_coeff': \strong{\verb{numeric matrix}}: coefficients of the basis expansion of the functional response (element \p coeff_y_points).
+\item 'basis_num': \strong{\verb{positive integer}}: number of basis used to make the basis expansion of the functional response (element n_basis_y_points).
+\item 'basis_type': \strong{\code{string}}: basis used to make the basis expansion of the functional response. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (element basis_type_y_points).
+\item 'basis_deg': \strong{\verb{positive integer}}: degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).
+\item 'knots': \strong{\verb{numeric vector}}: knots used to make the basis expansion of the functional response (element knots_y_points).
+\item 'basis_coeff': \strong{\verb{numeric matrix}}: coefficients of the basis expansion of the functional response (element coeff_y_points).
 }
 \item 'ResponseReconstructionWeights': \strong{\code{list}}:
 \itemize{
-\item 'basis_num': \strong{\verb{positive integer}}: number of basis used to make the basis expansion of the functional response (element \p n_basis_rec_weights_y_points).
-\item 'basis_type': \strong{\code{string}}: basis used to make the basis expansion of the functional response. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (element \p basis_type_rec_weights_y_points).
-\item 'basis_deg': \strong{\verb{positive integer}}: degree of basis used to make the basis expansion of the functional response (element \p degree_basis_rec_weights_y_points).
-\item 'knots': \strong{\verb{numeric vector}}: knots used to make the basis expansion of the functional response (element \p knots_y_points).
-\item 'basis_coeff': \strong{\verb{numeric matrix}}: coefficients of the basis expansion of the functional response (element \p coeff_rec_weights_y_points).
+\item 'basis_num': \strong{\verb{positive integer}}: number of basis used to make the basis expansion of the functional response (element n_basis_rec_weights_y_points).
+\item 'basis_type': \strong{\code{string}}: basis used to make the basis expansion of the functional response. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (element basis_type_rec_weights_y_points).
+\item 'basis_deg': \strong{\verb{positive integer}}: degree of basis used to make the basis expansion of the functional response (element degree_basis_rec_weights_y_points).
+\item 'knots': \strong{\verb{numeric vector}}: knots used to make the basis expansion of the functional response (element knots_y_points).
+\item 'basis_coeff': \strong{\verb{numeric matrix}}: coefficients of the basis expansion of the functional response (element coeff_rec_weights_y_points).
 }
 \item 'cov_Stationary': \strong{\code{list}}:
 \itemize{
-\item 'number_covariates': \strong{\verb{positive integer}}: number of stationary covariates (length of \p coeff_stationary_cov).
-\item 'basis_num': \strong{\verb{integer vector}} of positive integer: numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of \p n_basis_stationary_cov).
-\item 'basis_type': \strong{\verb{vector of strings}}: types of basis used to make the basis expansion of the functional stationary covariates. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (respective elements of \p basis_types_stationary_cov).
-\item 'basis_deg': \strong{\verb{integer vector}} of positive integers: degrees of basis used to make the basis expansion of the functional stationary covariates (respective elements of \p degrees_basis_stationary_cov).
-\item 'knots': \strong{\verb{numeric vector}}: knots used to make the basis expansion of the functional stationary covariates (respective elements of \p knots_stationary_cov).
-\item 'basis_coeff': \strong{\verb{list of numeric matrices}}: coefficients of the basis expansion of the functional stationary covariates  (respective elements of \p coeff_stationary_cov).
+\item 'number_covariates': \strong{\verb{positive integer}}: number of stationary covariates (length of coeff_stationary_cov).
+\item 'basis_num': \strong{\verb{integer vector}} of positive integer: numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).
+\item 'basis_type': \strong{\verb{vector of strings}}: types of basis used to make the basis expansion of the functional stationary covariates. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (respective elements of basis_types_stationary_cov).
+\item 'basis_deg': \strong{\verb{integer vector}} of positive integers: degrees of basis used to make the basis expansion of the functional stationary covariates (respective elements of degrees_basis_stationary_cov).
+\item 'knots': \strong{\verb{numeric vector}}: knots used to make the basis expansion of the functional stationary covariates (respective elements of knots_stationary_cov).
+\item 'basis_coeff': \strong{\verb{list of numeric matrices}}: coefficients of the basis expansion of the functional stationary covariates  (respective elements of coeff_stationary_cov).
 }
 \item 'beta_Stationary': \strong{\code{list}}:
 \itemize{
-\item 'basis_num': \strong{\verb{integer vector}} of positive integer: numbers of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (respective elements of \p n_basis_beta_stationary_cov).
-\item 'basis_type': \strong{\verb{vector of strings}}: types of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (respective elements of \p basis_types_beta_stationary_cov).
-\item 'basis_deg': \strong{\verb{integer vector}} of positive integers: degrees of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (respective elements \p degrees_basis_beta_stationary_cov).
-\item 'knots': knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element \p knots_beta_stationary_cov).
+\item 'basis_num': \strong{\verb{integer vector}} of positive integer: numbers of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (respective elements of n_basis_beta_stationary_cov).
+\item 'basis_type': \strong{\verb{vector of strings}}: types of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (respective elements of basis_types_beta_stationary_cov).
+\item 'basis_deg': \strong{\verb{integer vector}} of positive integers: degrees of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (respective elements degrees_basis_beta_stationary_cov).
+\item 'knots': knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov).
 }
 \item 'cov_Event': \strong{\code{list}}:
 \itemize{
-\item 'number_covariates': \strong{\verb{positive integer}}: number of event-dependent covariates (length of \p coeff_events_cov).
-\item 'basis_num': \strong{\verb{integer vector}} of positive integer: numbers of basis used to make the basis expansion of the functional event-dependent covariates (respective elements of \p n_basis_events_cov).
-\item 'basis_type': \strong{\verb{vector of strings}}: types of basis used to make the basis expansion of the functional event-dependent covariates. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (respective elements of \p basis_types_events_cov).
-\item 'basis_deg': \strong{\verb{integer vector}} of positive integers: degrees of basis used to make the basis expansion of the functional event-dependent covariates (respective elements \p degrees_basis_events_cov).
-\item 'knots': \strong{\verb{numeric vector}}: knots used to make the basis expansion of the functional event-dependent covariates (respective elements of \p knots_events_cov).
-\item 'basis_coeff': \strong{\verb{list of numeric matrices}}: coefficients of the basis expansion of the functional event-dependent covariates  (respective elements of \p coeff_events_cov).
-\item 'penalizations': \strong{\verb{numeric vector}} of positive double: penalizations of the event-dependent covariates (respective elements of \p penalization_events_cov)
-\item 'coordinates': \strong{\verb{numeric matrix}}: UTM coordinates of the events of the training data (element \p coordinates_events).
-\item 'kernel_bwd': \strong{\code{double}}: bandwith of the gaussian kernel used to smooth distances of the events (element \p kernel_bandwith_events).
+\item 'number_covariates': \strong{\verb{positive integer}}: number of event-dependent covariates (length of coeff_events_cov).
+\item 'basis_num': \strong{\verb{integer vector}} of positive integer: numbers of basis used to make the basis expansion of the functional event-dependent covariates (respective elements of n_basis_events_cov).
+\item 'basis_type': \strong{\verb{vector of strings}}: types of basis used to make the basis expansion of the functional event-dependent covariates. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (respective elements of basis_types_events_cov).
+\item 'basis_deg': \strong{\verb{integer vector}} of positive integers: degrees of basis used to make the basis expansion of the functional event-dependent covariates (respective elements degrees_basis_events_cov).
+\item 'knots': \strong{\verb{numeric vector}}: knots used to make the basis expansion of the functional event-dependent covariates (respective elements of knots_events_cov).
+\item 'basis_coeff': \strong{\verb{list of numeric matrices}}: coefficients of the basis expansion of the functional event-dependent covariates  (respective elements of coeff_events_cov).
+\item 'penalizations': \strong{\verb{numeric vector}} of positive double: penalizations of the event-dependent covariates (respective elements of penalization_events_cov)
+\item 'coordinates': \strong{\verb{numeric matrix}}: UTM coordinates of the events of the training data (element coordinates_events).
+\item 'kernel_bwd': \strong{\code{double}}: bandwith of the gaussian kernel used to smooth distances of the events (element kernel_bandwith_events).
 }
 \item 'beta_Event': \strong{\code{list}}:
 \itemize{
-\item 'basis_num': \strong{\verb{integer vector}} of positive integer: numbers of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (respective elements of \p n_basis_beta_events_cov).
-\item 'basis_type': \strong{\verb{vector of strings}}: types of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (respective elements of \p basis_types_beta_events_cov).
-\item 'basis_deg': \strong{\verb{integer vector}} of positive integers: degrees of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element \p degrees_basis_beta_events_cov).
-\item 'knots': knots used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element \p knots_beta_events_cov).
+\item 'basis_num': \strong{\verb{integer vector}} of positive integer: numbers of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (respective elements of n_basis_beta_events_cov).
+\item 'basis_type': \strong{\verb{vector of strings}}: types of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (respective elements of basis_types_beta_events_cov).
+\item 'basis_deg': \strong{\verb{integer vector}} of positive integers: degrees of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element degrees_basis_beta_events_cov).
+\item 'knots': knots used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element knots_beta_events_cov).
 }
 \item 'cov_Station': \strong{\code{list}}:
 \itemize{
-\item 'number_covariates': \strong{\verb{positive integer}}: number of station-dependent covariates (length of \p coeff_stations_cov).
-\item 'basis_num': \strong{\verb{integer vector}} of positive integer: numbers of basis used to make the basis expansion of the functional station-dependent covariates (respective elements of \p n_basis_stations_cov).
-\item 'basis_type': \strong{\verb{vector of strings}}: types of basis used to make the basis expansion of the functional station-dependent covariates. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (respective elements of \p basis_types_stations_cov).
-\item 'basis_deg': \strong{\verb{integer vector}} of positive integers: degrees of basis used to make the basis expansion of the functional station-dependent covariates (respective elements \p degrees_basis_stations_cov).
-\item 'knots': \strong{\verb{numeric vector}}: knots used to make the basis expansion of the functional station-dependent covariates (respective elements of \p knots_stations_cov).
-\item 'basis_coeff': \strong{\verb{list of numeric matrices}}: coefficients of the basis expansion of the functional station-dependent covariates  (respective elements of \p coeff_stations_cov).
-\item 'penalizations': \strong{\verb{numeric vector}} of positive double: penalizations of the station-dependent covariates (respective elements of \p penalization_stations_cov)
-\item 'coordinates': \strong{\verb{numeric matrix}}: UTM coordinates of the stations of the training data (element \p coordinates_stations).
-\item 'kernel_bwd': \strong{\code{double}}: bandwith of the gaussian kernel used to smooth distances of the stations (element \p kernel_bandwith_stations).
+\item 'number_covariates': \strong{\verb{positive integer}}: number of station-dependent covariates (length of coeff_stations_cov).
+\item 'basis_num': \strong{\verb{integer vector}} of positive integer: numbers of basis used to make the basis expansion of the functional station-dependent covariates (respective elements of n_basis_stations_cov).
+\item 'basis_type': \strong{\verb{vector of strings}}: types of basis used to make the basis expansion of the functional station-dependent covariates. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (respective elements of basis_types_stations_cov).
+\item 'basis_deg': \strong{\verb{integer vector}} of positive integers: degrees of basis used to make the basis expansion of the functional station-dependent covariates (respective elements degrees_basis_stations_cov).
+\item 'knots': \strong{\verb{numeric vector}}: knots used to make the basis expansion of the functional station-dependent covariates (respective elements of knots_stations_cov).
+\item 'basis_coeff': \strong{\verb{list of numeric matrices}}: coefficients of the basis expansion of the functional station-dependent covariates  (respective elements of coeff_stations_cov).
+\item 'penalizations': \strong{\verb{numeric vector}} of positive double: penalizations of the station-dependent covariates (respective elements of penalization_stations_cov)
+\item 'coordinates': \strong{\verb{numeric matrix}}: UTM coordinates of the stations of the training data (element coordinates_stations).
+\item 'kernel_bwd': \strong{\code{double}}: bandwith of the gaussian kernel used to smooth distances of the stations (element kernel_bandwith_stations).
 }
 \item 'beta_Station': \strong{\code{list}}:
 \itemize{
-\item 'basis_num': \strong{\verb{integer vector}} of positive integer: numbers of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (respective elements of \p n_basis_beta_stations_cov).
-\item 'basis_type': \strong{\verb{vector of strings}}: types of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (respective elements of \p basis_types_beta_stations_cov).
-\item 'basis_deg': \strong{\verb{integer vector}} of positive integers: degrees of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element \p degrees_basis_beta_stations_cov).
-\item 'knots': knots used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element \p knots_beta_stations_cov).
+\item 'basis_num': \strong{\verb{integer vector}} of positive integer: numbers of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (respective elements of n_basis_beta_stations_cov).
+\item 'basis_type': \strong{\verb{vector of strings}}: types of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates. Possible values: \strong{\code{"bsplines"}}, \strong{\code{"constant"}} (respective elements of basis_types_beta_stations_cov).
+\item 'basis_deg': \strong{\verb{integer vector}} of positive integers: degrees of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element degrees_basis_beta_stations_cov).
+\item 'knots': knots used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element knots_beta_stations_cov).
 }
 }
-\item 'a': \strong{\code{double}}: domain left extreme  (element \p left_extreme_domain).
-\item 'b': \strong{\code{double}}: domain right extreme  (element \p right_extreme_domain).
-\item 'abscissa': \strong{\verb{numeric vector}} of double: abscissa for which the evaluations of the functional data are available (element \p t_points).
-\item 'InCascadeEstimation': element \p in_cascade_estimation.
+\item 'a': \strong{\code{double}}: domain left extreme  (element left_extreme_domain).
+\item 'b': \strong{\code{double}}: domain right extreme  (element right_extreme_domain).
+\item 'abscissa': \strong{\verb{numeric vector}} of double: abscissa for which the evaluations of the functional data are available (element t_points).
+\item 'InCascadeEstimation': element in_cascade_estimation.
 }
 }}
 
@@ -154,58 +154,58 @@
 \strong{\code{list}} containing:
 \itemize{
 \item 'FGWR_predictor': \strong{\code{string}}: model used to predict (\strong{\code{"predictor_FMSGWR_ESC"}}).
-\item 'EstimationTechnique': \strong{\code{string}}: \strong{\code{"Exact"}} if \emph{in_cascade_estimation} \p model_fitted false, \strong{\code{"Cascade"}} if \emph{in_cascade_estimation} \p model_fitted true.
+\item 'EstimationTechnique': \strong{\code{string}}: \strong{\code{"Exact"}} if \emph{in_cascade_estimation} model_fitted false, \strong{\code{"Cascade"}} if \emph{in_cascade_estimation} model_fitted true.
 \item 'prediction': \strong{\code{list}} containing:
 \itemize{
 \item 'evaluation': \strong{\code{list}} containing the evaluation of the prediction:
 \itemize{
 \item 'prediction_ev': \strong{\code{list}} containing, for each unit to be predicted, the raw evaluations of the predicted response.
-\item 'abscissa_ev': \strong{\verb{numeric vector}} containing the abscissa points for which the prediction evaluation is available (element \p abscissa_ev).
+\item 'abscissa_ev': \strong{\verb{numeric vector}} containing the abscissa points for which the prediction evaluation is available (element abscissa_ev).
 }
 \item 'fd': \strong{\code{list}} containing the prediction functional description:
 \itemize{
 \item 'prediction_basis_coeff': \strong{\verb{numeric matrix}} containing the prediction basis expansion coefficients (each row a basis, each column a new statistical unit).
-\item 'prediction_basis_type': \strong{\code{string}}: basis type used for the predicted response basis expansion (from \p model_fitted).
-\item 'prediction_basis_num': \strong{\verb{positive integer}}: number of basis used for the predicted response basis expansion (from \p model_fitted).
-\item 'prediction_basis_deg': \strong{\verb{positive integer}}: degree of basis used for the predicted response basis expansion (from \p model_fitted)
-\item 'prediction_knots': \strong{\verb{numeric vector}}: knots used for the predicted response smoothing (\p n_knots_smoothing_pred equally spaced knots in the functional datum domain)
+\item 'prediction_basis_type': \strong{\code{string}}: basis type used for the predicted response basis expansion (from model_fitted).
+\item 'prediction_basis_num': \strong{\verb{positive integer}}: number of basis used for the predicted response basis expansion (from model_fitted).
+\item 'prediction_basis_deg': \strong{\verb{positive integer}}: degree of basis used for the predicted response basis expansion (from model_fitted)
+\item 'prediction_knots': \strong{\verb{numeric vector}}: knots used for the predicted response smoothing (n_knots_smoothing_pred equally spaced knots in the functional datum domain)
 }
 }
 \item 'Bc_pred': \strong{\code{list}} containing, for each stationary covariate:
 \itemize{
-\item 'basis_coeff': \strong{\verb{numeric matrix}} of double containing the fitted basis expansion coefficients of the beta (from \p model_fitted).
-\item 'basis_num': \strong{\verb{positive integer}}: number of basis used for the beta basis expansion (from \p model_fitted).
-\item 'basis_type': type of basis used for the beta basis expansion (from \p model_fitted).
-\item 'knots': knots used for the beta basis expansion (from \p model_fitted).
+\item 'basis_coeff': \strong{\verb{numeric matrix}} of double containing the fitted basis expansion coefficients of the beta (from model_fitted).
+\item 'basis_num': \strong{\verb{positive integer}}: number of basis used for the beta basis expansion (from model_fitted).
+\item 'basis_type': type of basis used for the beta basis expansion (from model_fitted).
+\item 'knots': knots used for the beta basis expansion (from model_fitted).
 }
 \item 'Beta_c_pred': \strong{\code{list}} containing, for each stationary covariate:
 \itemize{
 \item 'Beta_eval': \strong{\verb{numeric vector}} of double containing the evaluation of the beta along a grid.
-\item 'basis_coeff': \strong{\verb{numeric vector}} of double containing the grid (element \p abscissa_ev).
+\item 'basis_coeff': \strong{\verb{numeric vector}} of double containing the grid (element abscissa_ev).
 }
 \item 'Be_pred': \strong{\code{list}} containing, for each event-dependent covariate:
 \itemize{
 \item 'basis_coeff': \strong{\verb{list of numeric matrix}} of double: one element for each unit to be predicted containing the recomputed basis expansion coefficients of the beta on the locations of the predicted units.
-\item 'basis_num': \strong{\verb{positive integer}}: number of basis used for the beta basis expansion (from \p model_fitted).
-\item 'basis_type': type of basis used for the beta basis expansion (from \p model_fitted).
-\item 'knots': knots used for the beta basis expansion (from \p model_fitted).
+\item 'basis_num': \strong{\verb{positive integer}}: number of basis used for the beta basis expansion (from model_fitted).
+\item 'basis_type': type of basis used for the beta basis expansion (from model_fitted).
+\item 'knots': knots used for the beta basis expansion (from model_fitted).
 }
 \item 'Beta_e_pred': \strong{\code{list}} containing, for each event-dependent covariate:
 \itemize{
 \item 'Beta_eval': \strong{\verb{list of numeric vector}} of double containing, for each unit to be predicted, the evaluation of the beta along a grid.
-\item 'basis_coeff': \strong{\verb{numeric vector}} of double containing the grid (element \p abscissa_ev).
+\item 'basis_coeff': \strong{\verb{numeric vector}} of double containing the grid (element abscissa_ev).
 }
 \item 'Bs_pred': \strong{\code{list}} containing, for each station-dependent covariate:
 \itemize{
 \item 'basis_coeff': \strong{\verb{list of numeric matrix}} of double: one element for each unit to be predicted containing the recomputed basis expansion coefficients of the beta on the locations of the predicted units.
-\item 'basis_num': \strong{\verb{positive integer}}: number of basis used for the beta basis expansion (from \p model_fitted).
-\item 'basis_type': type of basis used for the beta basis expansion (from \p model_fitted).
-\item 'knots': knots used for the beta basis expansion (from \p model_fitted).
+\item 'basis_num': \strong{\verb{positive integer}}: number of basis used for the beta basis expansion (from model_fitted).
+\item 'basis_type': type of basis used for the beta basis expansion (from model_fitted).
+\item 'knots': knots used for the beta basis expansion (from model_fitted).
 }
 \item 'Beta_s_pred': \strong{\code{list}} containing, for each station-dependent covariate:
 \itemize{
 \item 'Beta_eval': \strong{\verb{list of numeric vector}} of double containing, for each unit to be predicted, the evaluation of the beta along a grid.
-\item 'basis_coeff': \strong{\verb{numeric vector}} of double containing the grid (element \p abscissa_ev).
+\item 'basis_coeff': \strong{\verb{numeric vector}} of double containing the grid (element abscissa_ev).
 }
 }
 }
