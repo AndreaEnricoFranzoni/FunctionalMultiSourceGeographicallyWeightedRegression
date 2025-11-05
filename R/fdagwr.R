@@ -33,9 +33,10 @@
 #'\item Functional Weighted Regression:
 #'\itemize{
 #'\item model fitting: \code{\link{FWR}}
-#'\item predictor: \code{\link{predict_FWR}}}}
+#'\item predictor: \code{\link{predict_FWR}}}
+#'\item Package installation check: \code{\link{installation_fdagwr}}}
 #'
 #'
-#'#'@docType package
+#'@docType package
 #'@name fdagwr
 NULL

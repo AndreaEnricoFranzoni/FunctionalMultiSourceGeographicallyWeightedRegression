@@ -76,7 +76,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr18 has been installed"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr2 has been installed"<< std::endl;}
 
 
 
@@ -1629,8 +1629,8 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 *         - "predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:
 *                             - "partial_res": a list containing information to compute the partial residuals:
 *                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).
-*                                              - "A__": vector of matrices with the operator A_e for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
-*                                              - "B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
+*                                              - "A__": vector of matrices with the operator A_s for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
+*                                              - "B__for_K": vector of matrices with the operator B_s used for the K_s_e(t) computation, for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
 *                             - "inputs_info": a list containing information about the data used to fit the model:
 *                                              - "Response": list:
 *                                                            - "basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).
@@ -2362,8 +2362,8 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
 *         - "predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:
 *                             - "partial_res": a list containing information to compute the partial residuals:
 *                                              - "c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).
-*                                              - "A__": vector of matrices with the operator A_e for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
-*                                              - "B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
+*                                              - "A__": vector of matrices with the operator A_s for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
+*                                              - "B__for_K": vector of matrices with the operator B_s used for the K_s_e(t) computation, for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).
 *                             - "inputs_info": a list containing information about the data used to fit the model:
 *                                              - "Response": list:
 *                                                            - "basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).
@@ -2427,7 +2427,7 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
 * @param n_intervals_quadrature number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100).
 * @param num_threads number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine.
 * @return an R list containing:
-*         - "FGWR_predictor": string containing the model used to predict ("predictor_FMSGWR_ESC")
+*         - "FGWR_predictor": string containing the model used to predict ("predictor_FMSGWR_SEC")
 *         - "EstimationTechnique": "Exact" if in_cascade_estimation in the fitted model false, "Cascade" if in_cascade_estimation in the fitted model true 
 *         - "prediction": list containing:
 *                         - "evaluation": list containing the evaluation of the prediction:
@@ -5035,9 +5035,8 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
 
 
 /*!
-* @brief Fitting a Functional Mixed Geographically Weighted Regression model. The covariates are functional objects, divided into
-*        two categories: stationary covariates (C), constant over geographical space, and non-stationary covariates (NC), that vary depending on spatial coordinates. Regression coefficients are estimated 
-*        in the following order: C, NC. The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024) (link below)
+* @brief Fitting a Functional Geographically Weighted Regression model. The covariates are functional objects, stationary covariates (C), constant over geographical space. 
+*        The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024) (link below)
 * @param y_points matrix of double containing the raw response: each row represents a specific abscissa for which the response evaluation is available, each column a statistical unit. Response is a already reconstructed.
 * @param t_points vector of double with the abscissa points with respect of the raw evaluations of y_points are available (length of t_points is equal to the number of rows of y_points).
 * @param left_extreme_domain double indicating the left extreme of the functional data domain (not necessarily the smaller element in t_points).
