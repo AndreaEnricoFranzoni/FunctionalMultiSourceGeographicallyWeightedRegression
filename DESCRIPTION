@@ -15,3 +15,4 @@ SystemRequirements: C++20, BLAS, LAPACK
 Suggests: testthat (>= 3.0.0)
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
+URL: https://github.com/AndreaEnricoFranzoni/FunctionalMultiSourceGeographicallyWeightedRegression https://doi.org/10.5281/zenodo.17534834
