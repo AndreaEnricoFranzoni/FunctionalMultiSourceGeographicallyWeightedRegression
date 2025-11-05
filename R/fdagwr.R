@@ -36,4 +36,6 @@
 #'\item predictor: \code{\link{predict_FWR}}}}
 #'
 #'
+#'#'@docType package
+#'@name fdagwr
 NULL
