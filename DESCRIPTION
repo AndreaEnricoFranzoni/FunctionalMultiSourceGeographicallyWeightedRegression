@@ -7,6 +7,7 @@ Author: Andrea Enrico Franzoni [aut, cre], Alessandra Menafoglio [aut]
 Maintainer: Andrea Enrico Franzoni <andreaenrico.franzoni@gmail.com>
 Description: fdagwr fits Functional Weighted Regression (FWR) models, for 1D domains, constructing the respective predictors. Regression coefficients can be stationary and non-stationary, with at most two sources of non-stationarity. 
 License: GPL-3
+Encoding: UTF-8
 Imports: Rcpp (>= 1.0.12), ggplot2, grid, gridExtra, viridis, patchwork, latex2exp
 LinkingTo: Rcpp, RcppEigen
 Depends: R (>= 4.0)
