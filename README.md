@@ -128,7 +128,7 @@ could be useful
 ~~~
 opens up the documentation of R-interfaced functions, if digited on the R console.
 
-The documentation of all fdagwr C++ internal code can be found PUT DOXYGEN.
+The documentation of all fdagwr C++ internal code can be found [here](https://andreaenricofranzoni.github.io/FunctionalMultiSourceGeographicallyWeightedRegression/).
 
 
 
