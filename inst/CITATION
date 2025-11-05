@@ -1,0 +1,22 @@
+citHeader("To quote fdagwr:")
+
+citEntry(
+  entry = "manual",
+  title = "fdagwr: a package for Functional Weighted Regression",
+  author = personList(
+    person("Andrea Enrico", "Franzoni", email = "andreaenrico.franzoni@gmail.com", role = c("aut", "cre")),
+    person("Alessandra", "Menafoglio", role = "aut")
+  ),
+  year  = "2025",
+  note  = "R package version 1.0.0. DOI: 10.5281/zenodo.17534834",
+  url   = "https://github.com/AndreaEnricoFranzoni/FunctionalMultiSourceGeographicallyWeightedRegression",
+  doi   = "10.5281/zenodo.17534834",
+  textVersion = paste(
+    "Franzoni, A. E. and Menafoglio, A. (2025).",
+    "fdagwr: a package for Functional Weighted Regression",
+    "R package version 1.0.0.",
+    "DOI: 10.5281/zenodo.17534834.",
+    "On GitHub",
+    "https://github.com/AndreaEnricoFranzoni/FunctionalMultiSourceGeographicallyWeightedRegression"
+  )
+)
