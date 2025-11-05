@@ -24,7 +24,7 @@
 
 \item{degree_basis_rec_weights_y_points}{\strong{\verb{non-negative integer}}: the degree of the basis used for response reconstruction weights. Default explained below (can be \strong{\code{NULL}}).}
 
-\item{n_basis_rec_weights_y_points}{\strong{\verb{positive integer}}: number of basis for the basis expansion of response reconstruction weights. It must match number of rows of \p coeff_rec_weights_y_points. Default explained below (can be \strong{\code{NULL}}).}
+\item{n_basis_rec_weights_y_points}{\strong{\verb{positive integer}}: number of basis for the basis expansion of response reconstruction weights. It must match number of rows of coeff_rec_weights_y_points. Default explained below (can be \strong{\code{NULL}}).}
 
 \item{coeff_stationary_cov}{\strong{\verb{list of numeric matrices}} of double: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit.
 The name of the i-th element is the name of the i-th stationary covariate (default: \strong{\code{"reg.Ci"}} if no name present).}
@@ -54,7 +54,7 @@ The name of the i-th element is the name of the i-th events-dependent covariate 
 
 \item{degrees_basis_events_cov}{\strong{\verb{integer vector}} of non-negative integers: element i-th is the degree of the basis used for the basis expansion of the i-th events-dependent covariate. Default explained below (can be \strong{\code{NULL}}).}
 
-\item{n_basis_events_cov}{\strong{\verb{integer vector}} of positive integers: element i-th is the number of basis for the basis expansion of the i-th events-dependent covariate. It must match number of rows of the i-th element of \p coeff_events_cov. Default explained below (can be \strong{\code{NULL}}).}
+\item{n_basis_events_cov}{\strong{\verb{integer vector}} of positive integers: element i-th is the number of basis for the basis expansion of the i-th events-dependent covariate. It must match number of rows of the i-th element of coeff_events_cov. Default explained below (can be \strong{\code{NULL}}).}
 
 \item{penalization_events_cov}{\strong{\verb{numeric vector}} of non-negative double: element i-th is the penalization used for the i-th events-dependent covariate.}
 
