@@ -310,7 +310,7 @@ public:
 
         assert(Xc_new.rows() == Xnc_new.rows());
         std::size_t n_pred = Xc_new.rows();
-        assert((n_pred == m_BetaE.size()) && (n_pred == m_BetaS.size()));
+        assert(n_pred == m_BetaNC.size());
         assert((Xc_new.cols() == m_qc) && (Xnc_new.cols() == m_qnc));
 
 

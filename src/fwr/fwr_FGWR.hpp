@@ -130,7 +130,7 @@ public:
                 for(std::size_t i = 0; i < m_Wnc.size(); ++i){   assert((m_Wnc[i].rows() == this->n()) && (m_Wnc[i].cols() == this->n()));}
                 assert((m_Rnc.rows() == m_Lnc) && (m_Rnc.cols() == m_Lnc));
                 assert((m_eta.rows() == m_qnc) && (m_eta.cols() == m_Lnc));
-                assert((m_Lnc_j.size() == m_qnc) && (std::reduce(m_Lnc_j.cebgin(),m_Lnc_j.cend(),static_cast<std::size_t>(0)) == m_Lnc));
+                assert((m_Lnc_j.size() == m_qnc) && (std::reduce(m_Lnc_j.cbegin(),m_Lnc_j.cend(),static_cast<std::size_t>(0)) == m_Lnc));
 
                 //compute all the transpost necessary for the computations
                 m_Xnc_t = m_Xnc.transpose();

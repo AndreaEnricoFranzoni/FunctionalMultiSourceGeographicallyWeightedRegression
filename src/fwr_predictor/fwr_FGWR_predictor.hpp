@@ -225,7 +225,7 @@ public:
         auto Xnc_new = X_new.at(std::string{fwr_FGWR_predictor<INPUT,OUTPUT>::id_NC});
 
         std::size_t n_pred = Xnc_new.rows();
-        assert((n_pred == m_BetaE.size()) && (n_pred == m_BetaS.size()));
+        assert(n_pred == m_BetaNC.size());
         assert(Xnc_new.cols() == m_qnc);
 
 

@@ -261,7 +261,7 @@ public:
                 assert((m_c_tilde_hat.rows() == (this->n_train()*m_Ly)) && (m_c_tilde_hat.cols() == 1));
                 assert(m_A_s.size() == this->n_train());
                 for(std::size_t i = 0; i < this->n_train(); ++i){   assert((m_A_s[i].rows() == m_Le) && (m_A_s[i].cols() == (this->n_train()*m_Ly)));}
-                assert(m_B_e_for_K_e_s.size() == this->n_train());
+                assert(m_B_s_for_K_s_e.size() == this->n_train());
                 for(std::size_t i = 0; i < this->n_train(); ++i){   assert((m_B_s_for_K_s_e[i].rows() == m_Le) && (m_B_s_for_K_s_e[i].cols() == m_Ls));}
 
                 //compute the transpost

@@ -72,11 +72,11 @@ using namespace Rcpp;
 
 
 /*!
-* @brief Function to check fdagwr package installation
+* @brief Check fdagwr package installation
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr1 has been installed"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr12 has been installed"<< std::endl;}
 
 
 
@@ -142,7 +142,7 @@ void installation_fdagwr(){   Rcout << "fdagwr1 has been installed"<< std::endl;
 * @param basis_types_beta_events_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param basis_types_beta_stations_cov vector of strings, element i-th containing the type of basis used for the i-th stations-dependent covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @return an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FMSGWR_ESC")
+*         - "FGWR": string containing the type of fwr used ("FMSGWR_ESC")
 *         - "EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true 
 *         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
 *                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
@@ -873,7 +873,7 @@ Rcpp::List FMSGWR_ESC(Rcpp::NumericMatrix y_points,
 * @param units_to_be_predicted number of units to be predicted
 * @param abscissa_ev abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed
 * @param model_fitted: output of FMSGWR_ESC: an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FMSGWR_ESC")
+*         - "FGWR": string containing the type of fwr used ("FMSGWR_ESC")
 *         - "EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true 
 *         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
 *                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
@@ -1600,7 +1600,7 @@ Rcpp::List predict_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
 * @param basis_types_beta_events_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param basis_types_beta_stations_cov vector of strings, element i-th containing the type of basis used for the i-th stations-dependent covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @return an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FMSGWR_SEC")
+*         - "FGWR": string containing the type of fwr used ("FMSGWR_SEC")
 *         - "EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true 
 *         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
 *                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
@@ -2333,7 +2333,7 @@ Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points,
 * @param units_to_be_predicted number of units to be predicted
 * @param abscissa_ev abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed
 * @param model_fitted: output of FMSGWR_SEC: an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FMSGWR_SEC")
+*         - "FGWR": string containing the type of fwr used ("FMSGWR_SEC")
 *         - "EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true 
 *         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
 *                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
@@ -3045,7 +3045,7 @@ Rcpp::List predict_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
 * @param basis_types_beta_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param basis_types_beta_non_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @return an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FMGWR")
+*         - "FGWR": string containing the type of fwr used ("FMGWR")
 *         - "EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true 
 *         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
 *                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
@@ -3640,7 +3640,7 @@ Rcpp::List FMGWR(Rcpp::NumericMatrix y_points,
 * @param units_to_be_predicted number of units to be predicted
 * @param abscissa_ev abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed
 * @param model_fitted: output of FMGWR: an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FMGWR")
+*         - "FGWR": string containing the type of fwr used ("FMGWR")
 *         - "EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true 
 *         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
 *                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
@@ -4196,7 +4196,7 @@ Rcpp::List predict_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
 * @param basis_type_rec_weights_y_points string containing the type of basis used for the weights to reconstruct the functional response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param basis_types_beta_non_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th events-dependent covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @return an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FGWR")
+*         - "FGWR": string containing the type of fwr used ("FGWR")
 *         - "Bnc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:
 *                 - "basis_coeff": a list, containg, for each unit, a Lnc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
 *                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_non_stationary_cov)
@@ -4641,7 +4641,7 @@ Rcpp::List FGWR(Rcpp::NumericMatrix y_points,
 * @param units_to_be_predicted number of units to be predicted
 * @param abscissa_ev abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed
 * @param model_fitted: output of FGWR: an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FGWR")
+*         - "FGWR": string containing the type of fwr used ("FGWR")
 *         - "Bnc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:
 *                 - "basis_coeff": a list, containg, for each unit, a Lnc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
 *                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_non_stationary_cov)
@@ -5065,7 +5065,7 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
 * @param basis_type_rec_weights_y_points string containing the type of basis used for the weights to reconstruct the functional response basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @param basis_types_beta_stationary_cov vector of strings, element i-th containing the type of basis used for the i-th stationary covariate functional regression coefficients basis expansion. Possible values: "bsplines", "constant". Defalut: "bsplines".
 * @return an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FWR")
+*         - "FGWR": string containing the type of fwr used ("FWR")
 *         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
 *                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
 *                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)
@@ -5447,7 +5447,7 @@ Rcpp::List FWR(Rcpp::NumericMatrix y_points,
 * @param units_to_be_predicted number of units to be predicted
 * @param abscissa_ev abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed
 * @param model_fitted: output of FWR: an R list containing:
-*         - "FGWR": string containing the type of fgwr used ("FWR")
+*         - "FGWR": string containing the type of fwr used ("FWR")
 *         - "Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:
 *                 - "basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta
 *                 - "basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)

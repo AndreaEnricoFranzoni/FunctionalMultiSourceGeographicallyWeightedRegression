@@ -123,7 +123,7 @@ public:
                 m_basis(this->knots(),this->degree())
                 {
                     //cheack input consistency
-                    assert((void("Number of knots != number of basis - degree + 1"), this->number_knots() == (m_number_of_basis - m_degree + static_cast<std::size_t>(1))));
+                    assert((void("Number of knots != number of basis - degree + 1"), this->number_knots() == (this->number_of_basis() - this->degree() + static_cast<std::size_t>(1))));
                 }
     
     /*!

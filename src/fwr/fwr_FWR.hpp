@@ -129,7 +129,7 @@ public:
                 assert((m_Wc.rows() == this->n()) && (m_Wc.cols() == this->n()));
                 assert((m_Rc.rows() == m_Lc) && (m_Rc.cols() == m_Lc));
                 assert((m_omega.rows() == m_qc) && (m_omega.cols() == m_Lc));
-                assert((m_Lc_j.size() == m_qc) && (std::reduce(m_Lc_j.cebgin(),m_Lc_j.cend(),static_cast<std::size_t>(0)) == m_Lc));
+                assert((m_Lc_j.size() == m_qc) && (std::reduce(m_Lc_j.cbegin(),m_Lc_j.cend(),static_cast<std::size_t>(0)) == m_Lc));
 
                 //compute all the transpost necessary for the computations
                 m_Xc_t = m_Xc.transpose();

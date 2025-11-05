@@ -70,7 +70,7 @@ private:
     /*!Number of basis for each basis system*/
     std::vector<std::size_t> m_Lj;
 
-    /*!Number of total basis (sum of the number of basis of all basis systems) (penalization matrix is a m_L x m_L)*/;
+    /*!Number of total basis (sum of the number of basis of all basis systems) (penalization matrix is a m_L x m_L)*/
     std::size_t m_L;
 
 

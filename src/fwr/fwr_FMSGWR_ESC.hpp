@@ -273,21 +273,21 @@ public:
                 assert((m_Wc.rows() == this->n()) && (m_Wc.cols() == this->n()));
                 assert((m_Rc.rows() == m_Lc) && (m_Rc.cols() == m_Lc));
                 assert((m_omega.rows() == m_qc) && (m_omega.cols() == m_Lc));
-                assert((m_Lc_j.size() == m_qc) && (std::reduce(m_Lc_j.cebgin(),m_Lc_j.cend(),static_cast<std::size_t>(0)) == m_Lc));
+                assert((m_Lc_j.size() == m_qc) && (std::reduce(m_Lc_j.cbegin(),m_Lc_j.cend(),static_cast<std::size_t>(0)) == m_Lc));
                 //event-dependent covariates
                 assert((m_Xe.rows() == this->n()) && (m_Xe.cols() == m_qe));
                 assert(m_We.size() == this->n());
                 for(std::size_t i = 0; i < m_We.size(); ++i){   assert((m_We[i].rows() == this->n()) && (m_We[i].cols() == this->n()));}
                 assert((m_Re.rows() == m_Le) && (m_Re.cols() == m_Le));
                 assert((m_theta.rows() == m_qe) && (m_theta.cols() == m_Le));
-                assert((m_Le_j.size() == m_qe) && (std::reduce(m_Le_j.cebgin(),m_Le_j.cend(),static_cast<std::size_t>(0)) == m_Le));
+                assert((m_Le_j.size() == m_qe) && (std::reduce(m_Le_j.cbegin(),m_Le_j.cend(),static_cast<std::size_t>(0)) == m_Le));
                 //station-dependent covariates
                 assert((m_Xs.rows() == this->n()) && (m_Xs.cols() == m_qs));
                 assert(m_Ws.size() == this->n());
                 for(std::size_t i = 0; i < m_Ws.size(); ++i){   assert((m_Ws[i].rows() == this->n()) && (m_Ws[i].cols() == this->n()));}
                 assert((m_Rs.rows() == m_Ls) && (m_Rs.cols() == m_Ls));
                 assert((m_psi.rows() == m_qs) && (m_psi.cols() == m_Ls));
-                assert((m_Ls_j.size() == m_qs) && (std::reduce(m_Ls_j.cebgin(),m_Ls_j.cend(),static_cast<std::size_t>(0)) == m_Ls));
+                assert((m_Ls_j.size() == m_qs) && (std::reduce(m_Ls_j.cbegin(),m_Ls_j.cend(),static_cast<std::size_t>(0)) == m_Ls));
 
                 //compute all the transpost necessary for the computations
                 m_Xc_t = m_Xc.transpose();
