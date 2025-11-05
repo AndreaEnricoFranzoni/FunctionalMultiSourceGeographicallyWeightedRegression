@@ -1,19 +1,41 @@
 # Functional Multi-Source Geographically Weighted Regression
 
-**`fdagwr`**  is a C++ based R package for performing geographically weighted regression in the case of a functional response and functional covariates. The model has been proposed in a scalar setting by [Caramenti et Al.](#ref-caramenti). [Bortolotti et Al.](#ref-bortolotti) extended the work for the functional case if having only stationary coefficients (i.e. not varying with respect to the geographical position). [Fervari, Menafoglio and Bortolotti](#ref-fervari) propose a union of the previous twos, in the form of:
+**`fdagwr`**  is a C++ based R package for Functional Weighted Regression models. 
 
-$y_i(t) = \sum_{j \in C} x_{C,ij}(t) \beta_{C,j}(t) + \sum_{j \in E} x_{E,ij}(t) \beta_{E,j}(p_{E,i},t) + \sum_{j \in S} x_{S,ij}(t) \beta_{S,j}(p_{S,i},t) + \epsilon_i (t) \quad t \in T, \quad i \in 1,\dots,n$  
+Different models, with fitting and predicting functions, are implemented, depending on functional regression coefficients stationarity over the geographical space. Response and covariates are univariate data over 1D domain.
 
+- Functional Weighted Regression (FWR): only stationary covariates
 
-The geographical domains of events (where the event occurs) and stations (where the events is measured) are $D_E$ and $D_S$, and may not necessarily coincide. Consequently,
-the specific spatial location of the i-th event $p_{E,i} = (u_{E,i},v_{E,i}) \in D_E$ and i-th station $p_{S,i} = (u_{S,i},v_{S,i}) \in D_S$.
+$$
+y_i(t) = \sum_{j \in C} x_{C,ij}(t) \beta_{C,j}(t) + \epsilon_i (t) \quad t \in T, \quad i \in 1,\dots,n
+$$
 
+- Functional Geographically Weighted Regression (FGWR): only non-stationary covariates
+
+$$
+y_i(t) = \sum_{j \in NC} x_{NC,ij}(t) \beta_{NC,j}(p_{NC,i},t) + \epsilon_i (t) \quad t \in T, \quad i \in 1,\dots,n
+$$ 
+
+- Functional Mixed Geographically Weighted Regression (FMGWR): both stationary and non-stationary (one source) covariates
+
+$$
+y_i(t) = \sum_{j \in C} x_{C,ij}(t) \beta_{C,j}(t) + \sum_{j \in NC} x_{NC,ij}(t) \beta_{NC,j}(p_{NC,i},t) + \epsilon_i (t) \quad t \in T, \quad i \in 1,\dots,n
+$$ 
+
+- Functional Multi-Source Geographically Weighted Regression (FMSGWR): both stationary and non-stationary (two sources) covariates. (Location where an event occurs (E) and location where a station measures it (S). Locations domains $D_E$ and $D_S$ not coinciding a priori.)
+
+$$
+y_i(t) = \sum_{j \in C} x_{C,ij}(t) \beta_{C,j}(t) + \sum_{j \in E} x_{E,ij}(t) \beta_{E,j}(p_{E,i},t) + \sum_{j \in S} x_{S,ij}(t) \beta_{S,j}(p_{S,i},t) + \epsilon_i (t) \quad t \in T, \quad i \in 1,\dots,n
+$$  
+
+FMSGWR formulation in [Fervari, Menafoglio and Bortolotti](#ref-fervari). For both FMSGWR and FMGWR, stationary functional regression coefficients are estimated firstly. For FMSGWR, ESC indicates when functional regression coefficients estimation order is C, S and E, while SEC C, E and S.
+Functional response is reconstructed as in [Bortolotti et Al.](#ref-bortolotti).
 
 
 
 # Prerequisites
 
-R has to be updated at least to 4.0.0 version. If Windows is used, R version has to be at least 4.4.0.
+R has to be updated at least to 4.0.0 version. If Windows is used, R version has to be at least 4.5.0.
 
 On R console:
 ~~~
@@ -26,9 +48,9 @@ install.packages("devtools")
 library(devtools)
 ~~~
 
-**`fdagwr`** depends also on having Fortran, Lapack, BLAS and OpenMP installed. For Linux and Windows, GCC compiler version needed is 13.0.0.. On the other hand, for macOS, clang compiler version has to be at least 19.0.0.. Depending on the operative system, the instructions to set up everything can be found [here below](#prerequisites-depending-on-operative-system).
+**`fdagwr`** depends also on having Fortran, Lapack, BLAS and OpenMP installed. For Linux and Windows, GCC compiler version needed is 14.0.0.. On the other hand, for macOS, clang compiler version has to be at least 19.0.0.. Depending on the operative system, the instructions to set up everything can be found [here below](#prerequisites-depending-on-operative-system).
 
-C++ version used is c++20 (the most recent within the stable versions used by Rcpp).
+C++ version used is C++20 (the most recent within the stable versions used by Rcpp).
 
 
 
@@ -80,6 +102,12 @@ library(fdagwr)
 ~~~
 
 
+Check package installation
+~~~
+installation_fdagwr()
+~~~
+
+
 
 Due to the high number of warnings, to disable them can be useful adding as argument of `install_github`
 ~~~
@@ -93,6 +121,34 @@ dependencies = TRUE
 ~~~
 could be useful
 
+
+# Documentation
+~~~
+?fdagwr
+~~~
+opens up the documentation of R-interfaced functions, if digited on the R console.
+
+The documentation of all fdagwr C++ internal code can be found PUT DOXYGEN.
+
+
+
+# Citation
+To cite **`fdagwr`** on BibTex, please use:
+   ~~~
+@Manual{,
+        title = {fdagwr: a package for Functional Weighted Regression},
+        author = {Andrea Enrico Franzoni and Alessandra Menafoglio},
+        year = {2025},
+        note = {R package version 1.0.0},
+        doi = {10.5281/zenodo.17534834},
+        url = {https://github.com/AndreaEnricoFranzoni/FunctionalMultiSourceGeographicallyWeightedRegression},
+      }
+   ~~~
+
+In R, the citation can be retrieved, after package installation, by
+   ~~~
+citation("fdagwr")
+   ~~~
 
 
 # Prerequisites: depending on operative system
@@ -169,7 +225,7 @@ library(RcppEigen)
 
 ## Windows
 
-- **Rtools**: can be installed from [here](https://cran.r-project.org/bin/windows/Rtools/). Version 4.4 is needed to install parallel version.
+- **Rtools**: can be installed from [here](https://cran.r-project.org/bin/windows/Rtools/). Version 4.5 is needed to install parallel version.
 
 
 ## Linux
