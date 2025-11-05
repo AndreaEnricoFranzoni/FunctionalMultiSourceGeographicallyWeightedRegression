@@ -105,7 +105,7 @@ The name of the i-th element is the name of the i-th stationary covariate (defau
 }
 }
 \description{
-Fitting a Functional Geographically Weighted Regression model. The covariates are functional objects, stationary covariates (C), constant over geographical space.
+Fitting a Functional Weighted Regression model. The covariates are functional objects, stationary covariates (C), constant over geographical space.
 The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024)
 }
 \details{

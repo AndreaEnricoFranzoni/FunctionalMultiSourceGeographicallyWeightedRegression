@@ -1,8 +1,9 @@
 #'@title Functional Multi-Source Geographically Weighted Regression
-#'@description fdagwr provides the tools for fitting, depending on the non-stationary and, eventually, the number of sources of non-stationarity
-#' a Functional Weighted Regression (FWR), a Functional Geographically Weighted Regression (FGWR), a Functional Mixed Geographically Weighted Regression (FMGWR) 
-#' or a Functional Multi-Source Geographically Weighted Regression (FMSGWR) model.
-#' The package provides also the predictor for each one of the previous mentioned models. 
+#'@description fdagwr fits Functional Weighted Regression models, providing the corresponding predictor. 
+#' Covariates can be stationary and, if varying over geographical space, non-stationary. At most two different sources
+#' of non stationarity (where an event happens and where it is measured) can be handled.
+#' Available models: Functional Weighted Regression (FWR), Functional Geographically Weighted Regression (FGWR),
+#' Functional Mixed Geographically Weighted Regression (FGWR), Functional Multi-Source Geographically Weighted Regression (FMSGWR), both ESC and SEC versions.
 #' Functional data, over a 1D domain, rather than response reconstruction weights, have to be represented as basis expansion in advance.
 #'
 #'@references

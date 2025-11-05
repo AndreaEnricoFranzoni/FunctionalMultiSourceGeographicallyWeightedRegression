@@ -1415,7 +1415,7 @@ NULL
 #' @title FWR
 #' @name FWR
 #' @description
-#' Fitting a Functional Geographically Weighted Regression model. The covariates are functional objects, stationary covariates (C), constant over geographical space. 
+#' Fitting a Functional Weighted Regression model. The covariates are functional objects, stationary covariates (C), constant over geographical space. 
 #' The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024)
 #' @param y_points **`numeric matrix`** of double containing the raw response: each row represents a specific abscissa for which the response evaluation is available, each column a statistical unit. Response is a already reconstructed.
 #' @param t_points **`numeric vector`** of double with the abscissa points with respect of the raw evaluations of y_points are available (length of t_points is equal to the number of rows of y_points).
@@ -1518,7 +1518,7 @@ NULL
 #' @title predict_FWR
 #' @name predict_FWR
 #' @description
-#' Function to perform predictions on new statistical units using a fitted Functional Mixed Geographically Weighted Regression model. Non-stationary betas have to be recomputed in the new locations.
+#' Function to perform predictions on new statistical units using a fitted Functional Weighted Regression model. Non-stationary betas have to be recomputed in the new locations.
 #' @param coeff_stationary_cov_to_pred **`list of numeric matrices`** of double: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted.
 #' @param units_to_be_predicted **`positive integer`**: number of units to be predicted
 #' @param abscissa_ev **`numeric vector`** of double: abscissa for which then evaluating the predicted response and betas, stationary and non-stationary, which have to be recomputed

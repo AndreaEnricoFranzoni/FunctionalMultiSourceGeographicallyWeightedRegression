@@ -76,7 +76,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr2 has been installed"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr3 has been installed"<< std::endl;}
 
 
 
@@ -5035,7 +5035,7 @@ Rcpp::List predict_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
 
 
 /*!
-* @brief Fitting a Functional Geographically Weighted Regression model. The covariates are functional objects, stationary covariates (C), constant over geographical space. 
+* @brief Fitting a Functional Weighted Regression model. The covariates are functional objects, stationary covariates (C), constant over geographical space. 
 *        The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024) (link below)
 * @param y_points matrix of double containing the raw response: each row represents a specific abscissa for which the response evaluation is available, each column a statistical unit. Response is a already reconstructed.
 * @param t_points vector of double with the abscissa points with respect of the raw evaluations of y_points are available (length of t_points is equal to the number of rows of y_points).
