@@ -76,7 +76,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr5 installation successful"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr installation successful"<< std::endl;}
 
 
 
