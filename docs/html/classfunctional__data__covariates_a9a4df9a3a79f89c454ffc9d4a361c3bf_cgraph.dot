@@ -1,0 +1,13 @@
+digraph "functional_data_covariates::functional_data_covariates"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="functional_data_covariates\l::functional_data_covariates",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Constructor."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="generic_factory::Factory\l::create",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classgeneric__factory_1_1_factory.html#aeef6e1427b610c3c4505bf39bd9f531b",tooltip="Getting the rule with given name. The pointer is null if no rule is present."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="functional_data_covariates::q",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__data__covariates.html#aeec53a94fed27d046e4637faef21f085",tooltip="Getter for the number of covariates."];
+}

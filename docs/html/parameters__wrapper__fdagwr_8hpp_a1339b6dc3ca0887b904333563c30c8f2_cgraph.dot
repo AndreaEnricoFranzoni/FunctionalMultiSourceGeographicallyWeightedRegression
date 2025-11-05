@@ -1,0 +1,17 @@
+digraph "wrap_and_check_basis_type"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="wrap_and_check_basis_type",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Wrapping the string indicating the basis type for response and response reconstruction weights."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="cbegin",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$functional__matrix_8hpp.html#a7159088f851732a31354c1c40a6e6466",tooltip="Function to use range for loops over the stored functions, const begin iterator."];
+  Node2 -> Node2 [id="edge2_Node000002_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node3 [id="edge3_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="cend",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$functional__matrix_8hpp.html#aa8b6dd2ac34eb5aa097e731f418f49c5",tooltip="Function to use range for loops over the stored functions, const end iterator."];
+  Node3 -> Node3 [id="edge4_Node000003_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node4 [id="edge5_Node000001_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="covariate_type",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$traits__fdagwr_8hpp.html#a064bbee0ab24cc46c8a1557a28b575d4",tooltip="Function to return covariate type name."];
+}

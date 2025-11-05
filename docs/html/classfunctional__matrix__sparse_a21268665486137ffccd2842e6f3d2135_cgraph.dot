@@ -1,0 +1,15 @@
+digraph "functional_matrix_sparse::functional_matrix_sparse"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="functional_matrix_sparse\l::functional_matrix_sparse",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Constructor."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="functional_matrix_sparse\l::cols_idx",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__matrix__sparse.html#a77178e874ada860d947feaa14a964f39",tooltip="Cumulative number of elements up to column i-th."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="functional_matrix_sparse\l::rows_idx",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__matrix__sparse.html#af02a9f1aec9fc17d2a195d845d5f7848",tooltip="Row indices of the non-zero elements."];
+  Node1 -> Node4 [id="edge3_Node000001_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="functional_matrix_sparse\l::size",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__matrix__sparse.html#a3afe9ca2f74b2951722650f164f94372",tooltip="Number of elements stored."];
+}

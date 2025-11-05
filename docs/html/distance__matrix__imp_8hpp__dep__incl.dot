@@ -1,0 +1,19 @@
+digraph "src/weight_matrix/distance_matrix_imp.hpp"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  Node1 [id="Node000001",label="src/weight_matrix/distance\l_matrix_imp.hpp",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Implementation of distance matrix class."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="src/weight_matrix/distance\l_matrix.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$distance__matrix_8hpp.html",tooltip="Class for computing the distances within the statistical units."];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="src/fda_gwr_R_interface.cpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$fda__gwr___r__interface_8cpp.html",tooltip="Contains the R-interfaced main functions of the package 'fdagwr', which implement Functional Geograph..."];
+  Node2 -> Node1 [id="edge3_Node000002_Node000001",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 -> Node4 [id="edge4_Node000002_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="src/weight_matrix/functional\l_weight_matrix_no_stat.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$functional__weight__matrix__no__stat_8hpp.html",tooltip="Construct the non-stationary weight matrix for performing the geographically weighted regression...."];
+  Node4 -> Node3 [id="edge5_Node000004_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 -> Node5 [id="edge6_Node000004_Node000005",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="src/weight_matrix/functional\l_weight_matrix_kernel_functions\l_eval.hpp",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$functional__weight__matrix__kernel__functions__eval_8hpp.html",tooltip="Implementation of tag-dispatched function for evaluating the kernel functions."];
+  Node5 -> Node4 [id="edge7_Node000005_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+}

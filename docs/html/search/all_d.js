@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['n_0',['N',['../structintegration__test.html#a088704ac7e0437e0f6c6c588c083b6ea',1,'integration_test::N'],['../classlagrangian__basis__test.html#ae4b31203fcd55e2d890c5627db70dde9',1,'lagrangian_basis_test::N'],['../structpoint__location__test.html#ac2a0110d0009abdd967a97a62de2bb10',1,'point_location_test::N']]],
+  ['n_1',['n',['../struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a53eca0f3331d87507faf03f7e688f8e0',1,'FDAGWR_HELPERS_for_PRED_NAMES::n'],['../classfunctional__data.html#a63a30bb3bab1b4f0e2c0bc9e01966605',1,'functional_data::n()'],['../classfunctional__data__covariates.html#ab0ed7486337c770017128b7e5659b9c1',1,'functional_data_covariates::n()'],['../classfwr.html#a11f8e0a2225290d746a656a5ef722c4a',1,'fwr::n()'],['../classfunctional__weight__matrix__base.html#a54bd6a05239004e91ad004ff292ef45c',1,'functional_weight_matrix_base::n()']]],
+  ['n_5f_2',['n_',['../classapsc_1_1_numerical_integration_1_1_standard_quadrature_rule.html#ae4707eec68363eca9214caa5567290be',1,'apsc::NumericalIntegration::StandardQuadratureRule']]],
+  ['n_5fbasis_3',['n_basis',['../classlagrangian__basis__test.html#aa3398b4b143dab8385a65bd5409816e9',1,'lagrangian_basis_test::n_basis'],['../struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a09958bf09f3b960078cf0ad92e8ed236',1,'FDAGWR_HELPERS_for_PRED_NAMES::n_basis']]],
+  ['n_5fbasis_5fstring_4',['n_basis_string',['../struct_f_d_a_g_w_r___f_e_a_t_s.html#a036a34b79724a59cfd6af42cb0c6b233',1,'FDAGWR_FEATS']]],
+  ['n_5fpred_5',['n_pred',['../classdistance__matrix__pred.html#a4d2e0d03912efc86544e9c3f4fdf420b',1,'distance_matrix_pred']]],
+  ['n_5ftrain_6',['n_train',['../classfwr__predictor.html#a791c8ce7b0d2abad83958e2b0d4bd897',1,'fwr_predictor::n_train()'],['../classdistance__matrix__pred.html#a20011b4a524b658df4bccb3106c2ff3d',1,'distance_matrix_pred::n_train()']]],
+  ['name_7',['name',['../classapsc_1_1_numerical_integration_1_1_quadrature_rule_base.html#a90360a0064b63517b39d6c9d76247b3f',1,'apsc::NumericalIntegration::QuadratureRuleBase::name()'],['../classapsc_1_1_numerical_integration_1_1_standard_quadrature_rule.html#a355c3343ead4b9b8cb021922f09404f4',1,'apsc::NumericalIntegration::StandardQuadratureRule::name() const override']]],
+  ['node_8',['node',['../classapsc_1_1_numerical_integration_1_1_standard_quadrature_rule.html#a34b3b67b72cdd21c00065bfed3383cfd',1,'apsc::NumericalIntegration::StandardQuadratureRule']]],
+  ['nodes_9',['nodes',['../class_geometry_1_1_mesh1_d.html#a07429fc0b2f6c86d926162476f70acd2',1,'Geometry::Mesh1D']]],
+  ['non_5fstationary_10',['NON_STATIONARY',['../traits__fdagwr_8hpp.html#a08d9e0781a1fdf2ea8fd8b185a55ad04a3e661ae49497c0c0123d7b36737c0687',1,'traits_fdagwr.hpp']]],
+  ['nonstationary_11',['Nonstationary',['../struct_c_o_v_a_r_i_a_t_e_s___n_a_m_e_s.html#a09ad8c6811b34a2fd3ed61882b1831df',1,'COVARIATES_NAMES']]],
+  ['not_5feigen_12',['not_eigen',['../conceptfm__utils_1_1not__eigen.html',1,'fm_utils']]],
+  ['nr_13',['NR',['../traits__fdagwr_8hpp.html#afa4925cff1b958a9a81b7f300da7bfe3abfaeccb8ac6d8070a096bd833aed6972',1,'traits_fdagwr.hpp']]],
+  ['num_5fnodes_14',['num_nodes',['../classapsc_1_1_numerical_integration_1_1_standard_quadrature_rule.html#a1d84f1e1916d20a704293963e94d3c2a',1,'apsc::NumericalIntegration::StandardQuadratureRule']]],
+  ['number_5fknots_15',['number_knots',['../classbasis__base__class.html#aa5fb2ac169afb126d8a27cd1adf49bb5',1,'basis_base_class']]],
+  ['number_5fof_5fbasis_16',['number_of_basis',['../classbasis__base__class.html#ade4292de806d1fb68f5c9211905ae8a9',1,'basis_base_class']]],
+  ['number_5fof_5fbasis_5fconstant_5fbasis_17',['number_of_basis_constant_basis',['../classconstant__basis.html#a9722337f8c0a46e8678857db59d7605e',1,'constant_basis']]],
+  ['number_5fof_5fgeographical_5fcoordinates_18',['number_of_geographical_coordinates',['../struct_f_d_a_g_w_r___f_e_a_t_s.html#a62c1e3c7b3f6301f1f273c2854102794',1,'FDAGWR_FEATS']]],
+  ['number_5fthreads_19',['number_threads',['../classfwr.html#a1b493a9ae9d926f0f56e4a92409206b5',1,'fwr::number_threads()'],['../classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea',1,'fwr_predictor::number_threads()'],['../classfunctional__weight__matrix__base.html#ac36221d5f5e2fee5bd402a01bb697b17',1,'functional_weight_matrix_base::number_threads()']]],
+  ['numbers_5fof_5fbasis_20',['numbers_of_basis',['../classbasis__systems.html#a96cc93aae17b20c6ceda8e2fac604709',1,'basis_systems']]],
+  ['numerical_5fintegration_2ehpp_21',['numerical_integration.hpp',['../numerical__integration_8hpp.html',1,'']]],
+  ['numnodes_22',['numNodes',['../class_geometry_1_1_mesh1_d.html#a43c069687f081b56b3f3670b2a4f5d80',1,'Geometry::Mesh1D']]]
+];

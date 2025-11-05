@@ -1,0 +1,28 @@
+var struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s =
+[
+    [ "a", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#ac4433c74052690e6a1fca0943378dc27", null ],
+    [ "abscissa", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a335652baeb59fc25b6b8f3d47c93ea32", null ],
+    [ "b", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#aa9a91d0d0925d8dfd75db75c43f045e4", null ],
+    [ "basis_deg", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#acb95843eddfe376f69951d4341907f5b", null ],
+    [ "basis_knots", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#af4f458b2ad6a629f84a0404452a62a69", null ],
+    [ "basis_t", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a4a0e5bbbaf9a9d4226648d94e2f5ebb8", null ],
+    [ "bdw_ker", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a4298bc13c4b6164d378857de4e660773", null ],
+    [ "beta", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#aff1d0e97b37ae02e598527271e20953f", null ],
+    [ "cascade_estimate", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a2477fb7a95a90493977eaa633e8d3bef", null ],
+    [ "coeff_basis", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#aaddeb0f8e7441c43527a0d731393d738", null ],
+    [ "coords", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a23c44508103500cede29387f5e01a477", null ],
+    [ "cov", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#acfb6da8ff5181505c55a600412e1f221", null ],
+    [ "elem_for_pred", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#adb0108e199c4bda59a825af70d6c4d28", null ],
+    [ "estimation_iter", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#ac91f2b32480f7c5053bea6ddd511a730", null ],
+    [ "inputs_info", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a79a4c830180ad77d318bbfc7cad14894", null ],
+    [ "model_name", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a3d5613e4dcd1729e1f19b386fd7cf446", null ],
+    [ "n", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a53eca0f3331d87507faf03f7e688f8e0", null ],
+    [ "n_basis", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a09958bf09f3b960078cf0ad92e8ed236", null ],
+    [ "p_res", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#aef1d799caadd10a40c2b611981764df8", null ],
+    [ "p_res_A__", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a01a58ec379021a9df6a3c33467f7a686", null ],
+    [ "p_res_B__for_K", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a0064b8ecb600c9d50a9ff2712ced384f", null ],
+    [ "p_res_c_tilde_hat", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#af947e921ae3e439fc9963f56ecc3ab1a", null ],
+    [ "penalties", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a50cb6b918d153acbc018ad5626165425", null ],
+    [ "pred", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#aecdb624052383bf6071f0b6ef137c812", null ],
+    [ "q", "struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a7e242df9c140a6e44944986c07678668", null ]
+];

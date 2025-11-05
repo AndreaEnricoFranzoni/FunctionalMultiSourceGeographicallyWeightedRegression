@@ -1,0 +1,13 @@
+digraph "ZeroDerivativePenalty::operator()"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="ZeroDerivativePenalty\l::operator()",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Compute the scalar product of the zero order derivative within the basis."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="basis_systems::knots",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classbasis__systems.html#af428b843b8698868fb954906aa845bb7",tooltip="Getter for the geometry over which the basis systems are constructed."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="basis_systems::systems\l_of_basis",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classbasis__systems.html#a65d325567f10d3eb693bde5b9664bb06",tooltip="Getter for the systems of basis (returning a reference since fdaPDE stores the basis as a pointer to ..."];
+}

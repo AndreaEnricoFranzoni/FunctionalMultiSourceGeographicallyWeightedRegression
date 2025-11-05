@@ -1,0 +1,9 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node0 [id="Node000000",label="basis_systems\< domain\l_type, basis_type \>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classbasis__systems.html",tooltip="class for a collection of systems of basis of a given type"];
+}

@@ -1,0 +1,13 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node0 [id="Node000000",label="Expr\< functional_matrix\l_diagonal\< double, double\l \>, double, double \>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$struct_expr.html",tooltip=" "];
+  Node0 -> Node1 [id="edge21_Node000000_Node000001",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node1 [id="Node000001",label="functional_matrix_diagonal\l\< double, double \>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__matrix__diagonal.html",tooltip=" "];
+  Node0 -> Node2 [id="edge22_Node000000_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="functional_matrix_diagonal\l\< INPUT, OUTPUT \>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__matrix__diagonal.html",tooltip="Class for diagonal matrices storing univariate 1D domain std::function objects."];
+}

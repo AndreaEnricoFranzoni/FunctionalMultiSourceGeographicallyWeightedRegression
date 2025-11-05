@@ -1,0 +1,13 @@
+digraph "wrap_into_fm"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="wrap_into_fm",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Function to wrap a functional stationary weight matrix object functional_weight_matrix_stationary int..."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="functional_weight_matrix\l_base::n",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__weight__matrix__base.html#a54bd6a05239004e91ad004ff292ef45c",tooltip="Getter for the number of statistical units."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="functional_weight_matrix\l_stationary::weights",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__weight__matrix__stationary.html#ae10f909b5ed2b06d14121c3b44a5a7c0",tooltip="Getter for the functional stationary weight matrix."];
+}

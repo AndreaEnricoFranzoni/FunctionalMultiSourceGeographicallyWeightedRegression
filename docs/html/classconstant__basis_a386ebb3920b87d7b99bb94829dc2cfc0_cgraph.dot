@@ -1,0 +1,16 @@
+digraph "constant_basis::operator="
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="constant_basis::operator=",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Move assignment."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="constant_basis::constant\l_basis",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classconstant__basis.html#aa9758ae910df3c1fad6f4316bf2e23be",tooltip="Constructor."];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="basis_base_class\< FDAGWR\l_TRAITS::basis_geometry\l \>::basis_base_class",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classbasis__base__class.html#a1595468a567d76479873dc109065b4b3",tooltip=" "];
+  Node2 -> Node2 [id="edge3_Node000002_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 -> Node4 [id="edge4_Node000002_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="basis_base_class\< FDAGWR\l_TRAITS::basis_geometry\l \>::knots",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classbasis__base__class.html#ae126e3615360e451fccca86d4cb3b6b9",tooltip=" "];
+}

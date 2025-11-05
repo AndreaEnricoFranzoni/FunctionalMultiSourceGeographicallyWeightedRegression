@@ -1,0 +1,21 @@
+digraph "bsplines_basis::operator="
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="bsplines_basis::operator=",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Move assignment."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="bsplines_basis::bsplines\l_basis",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classbsplines__basis.html#a4c6a70a20ce94cb2095ee4d70ab69206",tooltip="Constructor."];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="basis_base_class\< FDAGWR\l_TRAITS::basis_geometry\l \>::basis_base_class",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classbasis__base__class.html#a1595468a567d76479873dc109065b4b3",tooltip=" "];
+  Node2 -> Node4 [id="edge3_Node000002_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="basis_base_class\< FDAGWR\l_TRAITS::basis_geometry\l \>::degree",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classbasis__base__class.html#a09ada4cb6919e4002daa0c440c88a633",tooltip=" "];
+  Node2 -> Node5 [id="edge4_Node000002_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="basis_base_class\< FDAGWR\l_TRAITS::basis_geometry\l \>::knots",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classbasis__base__class.html#ae126e3615360e451fccca86d4cb3b6b9",tooltip=" "];
+  Node2 -> Node6 [id="edge5_Node000002_Node000006",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="basis_base_class\< FDAGWR\l_TRAITS::basis_geometry\l \>::number_knots",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classbasis__base__class.html#aa5fb2ac169afb126d8a27cd1adf49bb5",tooltip=" "];
+  Node2 -> Node7 [id="edge6_Node000002_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="basis_base_class\< FDAGWR\l_TRAITS::basis_geometry\l \>::number_of_basis",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classbasis__base__class.html#ade4292de806d1fb68f5c9211905ae8a9",tooltip=" "];
+}

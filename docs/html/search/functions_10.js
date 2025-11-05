@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['q_0',['q',['../classbasis__systems.html#aba24589e1fae220ae2c828e79e105790',1,'basis_systems::q()'],['../classfunctional__data__covariates.html#aeec53a94fed27d046e4637faef21f085',1,'functional_data_covariates::q()']]],
+  ['quadrature_1',['Quadrature',['../classapsc_1_1_numerical_integration_1_1_quadrature.html#adeb73d2d154630962c7ce2d890e59795',1,'apsc::NumericalIntegration::Quadrature::Quadrature(QuadHandler &amp;&amp;rule, MESH &amp;&amp;mesh)'],['../classapsc_1_1_numerical_integration_1_1_quadrature.html#a978ca08597624b57de7fdbeeb016cf35',1,'apsc::NumericalIntegration::Quadrature::Quadrature(const QuadratureRuleBase &amp;rule, MESH &amp;&amp;mesh)'],['../classapsc_1_1_numerical_integration_1_1_quadrature.html#ac030edbdd01c00a592d7b22d8d3f7146',1,'apsc::NumericalIntegration::Quadrature::Quadrature(Quadrature const &amp;rhs)=default'],['../classapsc_1_1_numerical_integration_1_1_quadrature.html#adda4e9d25258385e0ffc020d21d34d0e',1,'apsc::NumericalIntegration::Quadrature::Quadrature(Quadrature &amp;&amp;rhs)=default']]]
+];

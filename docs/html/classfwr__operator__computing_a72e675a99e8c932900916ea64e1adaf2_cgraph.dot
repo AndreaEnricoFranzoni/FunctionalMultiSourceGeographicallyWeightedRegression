@@ -1,0 +1,13 @@
+digraph "fwr_operator_computing::eval_func_betas"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="fwr_operator_computing\l::eval_func_betas",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Evaluating the stationary betas, as functional matrix, over a grid of points."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="functional_matrix::cols",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__matrix.html#ad428919ba1bce43d020af0eef595e223",tooltip="Columns size."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="functional_matrix::rows",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__matrix.html#a08e1da679d37d9974ed71301cd894b85",tooltip="Rows size."];
+}

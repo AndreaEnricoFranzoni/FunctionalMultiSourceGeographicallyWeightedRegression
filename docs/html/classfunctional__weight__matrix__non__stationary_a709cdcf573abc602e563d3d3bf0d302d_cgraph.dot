@@ -1,0 +1,13 @@
+digraph "functional_weight_matrix_non_stationary::compute_weights_pred"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="functional_weight_matrix\l_non_stationary::compute\l_weights_pred",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Computing the weights within trainin and prediction set."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="functional_data::eval",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__data.html#ac3b8ad688ca818504951642a250c1330",tooltip="Evaluating a specific unit in a given location."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="functional_weight_matrix\l_base\< functional_weight\l_matrix_non_stationary\< double,\l double, FDAGWR_TRAITS::basis\l_geometry, bsplines_basis, FDAGWR\l_COVARIATES_TYPES::NON_STATIONARY,\l KERNEL_FUNC::GAUSSIAN, DISTANCE_MEASURE\l::EUCLIDEAN \>, double, double, FDAGWR\l_TRAITS::basis_geometry, bsplines_basis\l \>::y_recostruction_weights_fd",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__weight__matrix__base.html#a688ab2445166dc0fd367b204e4134c64",tooltip=" "];
+}

@@ -1,0 +1,13 @@
+digraph "fm_prod"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="fm_prod",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Matrix product within two functional matrices D1*D2, D1 diagonal and D2 diagonal."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="functional_matrix_diagonal\l::cols",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__matrix__diagonal.html#a6f88bd72afc68695eafc538119664ce3",tooltip="Columns size."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="functional_matrix_diagonal\l::rows",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__matrix__diagonal.html#aa3800647f2adee1b97ea436e101ec139",tooltip="Rows size."];
+}

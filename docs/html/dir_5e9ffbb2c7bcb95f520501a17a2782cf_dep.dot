@@ -1,0 +1,16 @@
+digraph "src/fdaPDE-core/test"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  compound=true
+  subgraph clusterdir_d37841570597a786484b5933f4ef8051 {
+    graph [ bgcolor="#edf0f7", pencolor="grey50", label="fdaPDE-core", fontname=Helvetica,fontsize=10 style="filled,dashed", URL="dir_d37841570597a786484b5933f4ef8051.html",tooltip=""]
+  subgraph clusterdir_5e9ffbb2c7bcb95f520501a17a2782cf {
+    graph [ bgcolor="#edf0f7", pencolor="grey25", label="", fontname=Helvetica,fontsize=10 style="filled,bold", URL="dir_5e9ffbb2c7bcb95f520501a17a2782cf.html",tooltip=""]
+    dir_5e9ffbb2c7bcb95f520501a17a2782cf [shape=plaintext, label="test"];
+  dir_a3ed4d2b83fdc7b062eed068b5bc4110 [label="src", fillcolor="#a2b4d6", color="grey25", style="filled", URL="dir_a3ed4d2b83fdc7b062eed068b5bc4110.html",tooltip=""];
+  }
+  }
+}

@@ -1,0 +1,19 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node0 [id="Node000000",label="fwr\< double, double \>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfwr.html",tooltip=" "];
+  Node0 -> Node1 [id="edge32_Node000000_Node000001",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node1 [id="Node000001",label="fwr_FGWR\< INPUT, OUTPUT \>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfwr___f_g_w_r.html",tooltip="Concrete class for the Functional Geographically Weighted Regression model, estimating non-stationary..."];
+  Node0 -> Node2 [id="edge33_Node000000_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="fwr_FMGWR\< INPUT, OUTPUT \>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfwr___f_m_g_w_r.html",tooltip="Concrete class for the Functional Mixed Geographically Weighted Regression model, estimating,..."];
+  Node0 -> Node3 [id="edge34_Node000000_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="fwr_FMSGWR_ESC\< INPUT,\l OUTPUT \>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfwr___f_m_s_g_w_r___e_s_c.html",tooltip="Concrete class for the Functional Multi-Source Geographically Weighted Regression ESC model,..."];
+  Node0 -> Node4 [id="edge35_Node000000_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="fwr_FMSGWR_SEC\< INPUT,\l OUTPUT \>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfwr___f_m_s_g_w_r___s_e_c.html",tooltip="Concrete class for the Functional Multi-Source Geographically Weighted Regression SEC model,..."];
+  Node0 -> Node5 [id="edge36_Node000000_Node000005",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="fwr_FWR\< INPUT, OUTPUT \>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfwr___f_w_r.html",tooltip="Concrete class for the Functional Weighted Regression model, estimating stationary functional regress..."];
+}

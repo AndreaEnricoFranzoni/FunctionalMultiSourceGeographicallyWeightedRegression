@@ -1,0 +1,27 @@
+digraph "fwr_FWR_predictor::predict"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="fwr_FWR_predictor::\lpredict",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Compute prediction."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="fm_prod",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869",tooltip="Matrix product within two functional matrices M1*M2."];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="ColView::cbegin",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$struct_col_view.html#a1e659c9562c23c171bd8fad0599b503d",tooltip="Getter for the start of the column, const verion."];
+  Node2 -> Node4 [id="edge3_Node000002_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="RowView::cbegin",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$struct_row_view.html#a31a3024f41d57c24b1449787b120e535",tooltip="Getter for the start of the row, const verion."];
+  Node2 -> Node5 [id="edge4_Node000002_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="RowView::cend",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$struct_row_view.html#abdcaf65a4f67f136927a95951f056d69",tooltip="Getter for the end of the row, const verion."];
+  Node2 -> Node6 [id="edge5_Node000002_Node000006",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="functional_matrix::col",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__matrix.html#a20ad538096ea4bf2be35bf7739c6649b",tooltip="View of the idx-th column, non-const."];
+  Node2 -> Node7 [id="edge6_Node000002_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="functional_matrix::cols",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__matrix.html#ad428919ba1bce43d020af0eef595e223",tooltip="Columns size."];
+  Node2 -> Node8 [id="edge7_Node000002_Node000008",color="steelblue1",style="solid",tooltip=" "];
+  Node8 [id="Node000008",label="functional_matrix::row",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__matrix.html#a2fe5a9c6e60487aa2939b40bf0a92b6f",tooltip="View of the idx-th row, non-const."];
+  Node2 -> Node9 [id="edge8_Node000002_Node000009",color="steelblue1",style="solid",tooltip=" "];
+  Node9 [id="Node000009",label="functional_matrix::rows",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfunctional__matrix.html#a08e1da679d37d9974ed71301cd894b85",tooltip="Rows size."];
+  Node1 -> Node10 [id="edge9_Node000001_Node000010",color="steelblue1",style="solid",tooltip=" "];
+  Node10 [id="Node000010",label="fwr_predictor\< double,\l double \>::number_threads",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea",tooltip=" "];
+}

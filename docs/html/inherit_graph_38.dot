@@ -1,0 +1,17 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node0 [id="Node000000",label="fm_utils::function\l_traits\< R(Arg)\>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$structfm__utils_1_1function__traits.html",tooltip=" "];
+  Node0 -> Node1 [id="edge26_Node000000_Node000001",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node1 [id="Node000001",label="fm_utils::function\l_traits\< R(*)(Arg)\>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$structfm__utils_1_1function__traits.html",tooltip="specialization for pointer to function"];
+  Node0 -> Node2 [id="edge27_Node000000_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="fm_utils::function\l_traits\< R(C::*)(Arg)\l const \>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$structfm__utils_1_1function__traits.html",tooltip="specialization for member function of C (const version)"];
+  Node0 -> Node3 [id="edge28_Node000000_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="fm_utils::function\l_traits\< R(C::*)(Arg)\>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$structfm__utils_1_1function__traits.html",tooltip="specialization for member function of C (non-const version)"];
+  Node0 -> Node4 [id="edge29_Node000000_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="fm_utils::function\l_traits\< std::function\l\< R(Arg)\> \>",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$structfm__utils_1_1function__traits.html",tooltip="specialization for std::function"];
+}

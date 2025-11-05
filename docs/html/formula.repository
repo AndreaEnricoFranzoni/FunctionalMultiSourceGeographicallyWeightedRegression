@@ -1,0 +1,5 @@
+\_form#0=58x19:$ \int_{-1}^{1} f(y) dy$
+\_form#1=34x14:$[-1,1]$
+\_form#2=151x19:$ \int_{-1}^{1} f(y) dy \simeq  \sum_{i=0}^{m-1}w_i f(y_i)$
+\_form#3=60x14:$y_i\in[-1,1]$
+\_form#4=14x9:$w_i$

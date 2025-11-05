@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['b_0',['b',['../struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#aa9a91d0d0925d8dfd75db75c43f045e4',1,'FDAGWR_HELPERS_for_PRED_NAMES']]],
+  ['b_5f_1',['b_',['../struct_triangle.html#ab7aa708d75f8df39b4080e216bbd6f8f',1,'Triangle']]],
+  ['base_2',['base',['../struct_row_view.html#a26af8a35fbc3a284523c6f80a586a7cc',1,'RowView::base'],['../struct_col_view.html#a89f2335d2ea430ec1e388f9a6009cdeb',1,'ColView::base']]],
+  ['basis_5fdeg_3',['basis_deg',['../struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#acb95843eddfe376f69951d4341907f5b',1,'FDAGWR_HELPERS_for_PRED_NAMES']]],
+  ['basis_5fknots_4',['basis_knots',['../struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#af4f458b2ad6a629f84a0404452a62a69',1,'FDAGWR_HELPERS_for_PRED_NAMES']]],
+  ['basis_5ft_5',['basis_t',['../struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a4a0e5bbbaf9a9d4226648d94e2f5ebb8',1,'FDAGWR_HELPERS_for_PRED_NAMES']]],
+  ['bc_6',['bc',['../struct_f_d_a_g_w_r___b___n_a_m_e_s.html#a8ada0dfdceaae066275a292871bfa1bc',1,'FDAGWR_B_NAMES']]],
+  ['bdw_5fker_7',['bdw_ker',['../struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#a4298bc13c4b6164d378857de4e660773',1,'FDAGWR_HELPERS_for_PRED_NAMES']]],
+  ['be_8',['be',['../struct_f_d_a_g_w_r___b___n_a_m_e_s.html#a1234771f1ac0ccb4bf21ff7b3b617e77',1,'FDAGWR_B_NAMES']]],
+  ['beta_9',['beta',['../struct_f_d_a_g_w_r___h_e_l_p_e_r_s__for___p_r_e_d___n_a_m_e_s.html#aff1d0e97b37ae02e598527271e20953f',1,'FDAGWR_HELPERS_for_PRED_NAMES']]],
+  ['beta_5fc_10',['beta_c',['../struct_f_d_a_g_w_r___b_e_t_a_s___n_a_m_e_s.html#ad4e4c9418957ab4bc2a5829c582576c4',1,'FDAGWR_BETAS_NAMES']]],
+  ['beta_5fe_11',['beta_e',['../struct_f_d_a_g_w_r___b_e_t_a_s___n_a_m_e_s.html#a34c322f83678a433a6e0326ccdda3db3',1,'FDAGWR_BETAS_NAMES']]],
+  ['beta_5fnc_12',['beta_nc',['../struct_f_d_a_g_w_r___b_e_t_a_s___n_a_m_e_s.html#a0b4edfc3764b320b07f99e02c3baedde',1,'FDAGWR_BETAS_NAMES']]],
+  ['beta_5fs_13',['beta_s',['../struct_f_d_a_g_w_r___b_e_t_a_s___n_a_m_e_s.html#aaa563211b014214780201b35a586a650',1,'FDAGWR_BETAS_NAMES']]],
+  ['bnc_14',['bnc',['../struct_f_d_a_g_w_r___b___n_a_m_e_s.html#affa3d5e0543d73a52c5d81b89798ddc1',1,'FDAGWR_B_NAMES']]],
+  ['bs_15',['bs',['../struct_f_d_a_g_w_r___b___n_a_m_e_s.html#aa3317e1232cd99abc8597accee82f897',1,'FDAGWR_B_NAMES']]],
+  ['bsplines_5fdegree_5fdefault_16',['bsplines_degree_default',['../classbsplines__basis.html#a219adcc6b6f13236815bed1bac61fe77',1,'bsplines_basis']]]
+];

@@ -1,0 +1,25 @@
+var classfwr__operator__computing =
+[
+    [ "fwr_operator_computing", "classfwr__operator__computing.html#a06b64319fb52d7ae4e974d634e726ef1", null ],
+    [ "compute_functional_operator", "classfwr__operator__computing.html#a2b15bc86a2d8daaef9934398adcd7116", null ],
+    [ "compute_operator", "classfwr__operator__computing.html#a244d1696c290c92e368999c4ac7c50c1", null ],
+    [ "compute_operator", "classfwr__operator__computing.html#a1969dab480695ed4b5127a5a7ed71838", null ],
+    [ "compute_operator", "classfwr__operator__computing.html#a89a4b981848bde4c0801fb1accc74496", null ],
+    [ "compute_operator", "classfwr__operator__computing.html#ae991174a286a8e2df8c4e551c111d917", null ],
+    [ "compute_operator", "classfwr__operator__computing.html#a0639842962ed1aff6d1842d8ac4ad9b0", null ],
+    [ "compute_operator", "classfwr__operator__computing.html#a20202c6ca2e008c6f37014232c9d8506", null ],
+    [ "compute_operator", "classfwr__operator__computing.html#a347e8cf6b149f3edd93be4370c376e6d", null ],
+    [ "compute_operator", "classfwr__operator__computing.html#a8f907af0a410a506ab9ab00d5874fe2f", null ],
+    [ "compute_penalty", "classfwr__operator__computing.html#af5dffd52e6171ec5215e6c88df7d037a", null ],
+    [ "compute_penalty", "classfwr__operator__computing.html#a07376f2d9f52ca4aa2dc1eb0751c7ac4", null ],
+    [ "compute_penalty", "classfwr__operator__computing.html#a047bdd074eb94352ed4a68d1a8e34420", null ],
+    [ "compute_penalty", "classfwr__operator__computing.html#a634f00fe47b21671fb008f732eb7ec89", null ],
+    [ "dewrap_operator", "classfwr__operator__computing.html#ab63b635a1edc829c2652e54a66f446b2", null ],
+    [ "dewrap_operator", "classfwr__operator__computing.html#ab3120096261e2ba6c7536b9006dc3419", null ],
+    [ "eval_func_betas", "classfwr__operator__computing.html#a72e675a99e8c932900916ea64e1adaf2", null ],
+    [ "eval_func_betas", "classfwr__operator__computing.html#a7d3e3832d6fbac64669ab9e0d2a5f2ac", null ],
+    [ "eval_func_betas", "classfwr__operator__computing.html#a4f01e517f32329c8355b33d4f56505d9", null ],
+    [ "eval_func_betas", "classfwr__operator__computing.html#a24d06525c20434ebdf4ae0abd1c5f9a4", null ],
+    [ "wrap_operator", "classfwr__operator__computing.html#a0f9fba8f012107fd443b687ba90b9886", null ],
+    [ "wrap_operator", "classfwr__operator__computing.html#a5a6ab857c0278a75a5b97b9496603de0", null ]
+];

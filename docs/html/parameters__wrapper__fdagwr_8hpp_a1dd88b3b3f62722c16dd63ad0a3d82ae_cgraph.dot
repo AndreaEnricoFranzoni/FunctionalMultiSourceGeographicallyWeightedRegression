@@ -1,0 +1,15 @@
+digraph "wrap_covariates_coefficients"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="wrap_covariates_coefficients",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Wrapping the matrices containing the coefficientes of the basis expansion of a given type of covariat..."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="reader_data",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$data__reader_8hpp.html#a4a9e8df9b1b54e0bf8c480419f28317b",tooltip="Function that reads data from R containers, substitute actual NaNs, handle dummy NaNs,..."];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="removing_nan::data",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classremoving__nan.html#a3633d0e5e291bbd29aecec419f79323f",tooltip="Getter for the data matrix."];
+  Node2 -> Node4 [id="edge3_Node000002_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="removing_nan::remove_nan",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$classremoving__nan.html#a2d198ad4913d7e3671594b9759f0293c",tooltip="Function to remove the row (dummy NaNs)"];
+}

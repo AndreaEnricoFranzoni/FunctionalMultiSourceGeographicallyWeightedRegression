@@ -1,0 +1,12 @@
+digraph "apsc::NumericalIntegration::Quadrature"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  Node1 [id="Node000001",label="apsc::NumericalIntegration\l::Quadrature",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Quadrature."];
+  Node2 -> Node1 [id="edge1_Node000001_Node000002",dir="back",color="darkorchid3",style="dashed",tooltip=" ",label=" rule_",fontcolor="grey" ];
+  Node2 [id="Node000002",label="apsc::PointerWrapper\l\< QuadratureRuleBase \>",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classapsc_1_1_pointer_wrapper.html",tooltip=" "];
+  Node3 -> Node1 [id="edge2_Node000001_Node000003",dir="back",color="darkorchid3",style="dashed",tooltip=" ",label=" mesh_",fontcolor="grey" ];
+  Node3 [id="Node000003",label="Geometry::Mesh1D",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$class_geometry_1_1_mesh1_d.html",tooltip="Conat Defines a 1D domain."];
+}
