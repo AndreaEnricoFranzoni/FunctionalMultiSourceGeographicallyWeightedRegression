@@ -463,6 +463,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// y_new_FMGWR
+Rcpp::List y_new_FMGWR(Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_non_stationary_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_knots_smoothing_pred, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_y_new_FMGWR(SEXP coeff_stationary_cov_to_predSEXP, SEXP coeff_non_stationary_cov_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP model_fittedSEXP, SEXP n_knots_smoothing_predSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stationary_cov_to_pred(coeff_stationary_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_non_stationary_cov_to_pred(coeff_non_stationary_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
+    Rcpp::traits::input_parameter< int >::type n_knots_smoothing_pred(n_knots_smoothing_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(y_new_FMGWR(coeff_stationary_cov_to_pred, coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_knots_smoothing_pred, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_installation_fdagwr", (DL_FUNC) &_fdagwr_installation_fdagwr, 0},
@@ -482,6 +499,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_beta_new_FGWR", (DL_FUNC) &_fdagwr_beta_new_FGWR, 6},
     {"_fdagwr_y_new_FMSGWR_ESC", (DL_FUNC) &_fdagwr_y_new_FMSGWR_ESC, 9},
     {"_fdagwr_y_new_FMSGWR_SEC", (DL_FUNC) &_fdagwr_y_new_FMSGWR_SEC, 9},
+    {"_fdagwr_y_new_FMGWR", (DL_FUNC) &_fdagwr_y_new_FMGWR, 7},
     {NULL, NULL, 0}
 };
 
