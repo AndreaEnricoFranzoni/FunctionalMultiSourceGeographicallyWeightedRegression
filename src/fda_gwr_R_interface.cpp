@@ -6319,8 +6319,6 @@ Rcpp::List tune_new_betas_FMSGWR_SEC(Rcpp::NumericMatrix coordinates_events_to_p
     _FD_INPUT_TYPE_ b   = training_input[_b_];
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ev_ = wrap_abscissas(abscissa_ev,a,b);      //abscissa points for which the evaluation of the prediction is required
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ = training_input[_abscissa_];              //abscissa point for which the training data are discretized
-    //knots for performing smoothing of the prediction(n_knots_smoothing_y_new knots equally spaced in (a,b))
-    FDAGWR_TRAITS::Dense_Matrix knots_smoothing_pred = FDAGWR_TRAITS::Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
     //RESPONSE
     std::size_t number_basis_response_ = response_input[_n_basis_];
     std::string basis_type_response_   = response_input[_t_basis_];
@@ -7048,8 +7046,6 @@ Rcpp::List tune_new_betas_FGWR(Rcpp::NumericMatrix coordinates_non_stationary_to
 
     //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
-    // NUMBER OF KNOTS TO PERFORM SMOOTHING ON THE RESPONSE WITHOUT THE NON-STATIONARY COMPONENTS
-    int n_knots_smoothing_y_new = wrap_and_check_n_knots_smoothing(n_knots_smoothing_pred);
     // NUMBER OF INTERVALS FOR INTEGRATING VIA MIDPOINT QUADRATURE RULE
     int n_intervals = wrap_and_check_n_intervals_quadrature(n_intervals_quadrature);
 
@@ -7271,14 +7267,7 @@ Rcpp::List tune_new_betas_FGWR(Rcpp::NumericMatrix coordinates_non_stationary_to
                                            names_non_stationary_cov_,
                                            {},
                                            {});
-    //predictions evaluations
-    Rcpp::List y_pred_ev_R = wrap_prediction_to_R_list<_FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_>(y_pred_ev,
-                                                                                          abscissa_points_ev_,
-                                                                                          y_pred_smooth_coeff,
-                                                                                          basis_type_response_,
-                                                                                          number_basis_response_,
-                                                                                          degree_basis_response_,
-                                                                                          knots_smoothing_pred);
+
 
     //returning element                                       
     Rcpp::List l;
