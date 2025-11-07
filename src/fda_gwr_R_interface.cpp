@@ -7626,7 +7626,9 @@ std::cout << "Quasi nel New constructor" << std::endl;
                                                                                                  1,
                                                                                                  n_train,
                                                                                                  8,
-/*                                                                                               in_cascade_estimation);
+                                                                                              in_cascade_estimation);
+
+/* 
 Rcout << "betaC" << std::endl;
     //compute the beta for stationary covariates
     fwr_predictor->computeStationaryBetas();  
