@@ -7999,6 +7999,7 @@ Rcpp::List y_new_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
                        Rcpp::List coeff_non_stationary_cov_to_pred,  
                        int units_to_be_predicted,
                        Rcpp::NumericVector abscissa_ev,
+                       Rcpp::List new_beta,
                        Rcpp::List model_fitted,
                        int n_knots_smoothing_pred = 100,
                        Rcpp::Nullable<int> num_threads = R_NilValue)
@@ -8184,8 +8185,8 @@ Rcpp::List y_new_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
     std::size_t Lc = std::reduce(number_basis_beta_stationary_cov_.cbegin(),number_basis_beta_stationary_cov_.cend(),static_cast<std::size_t>(0));
     std::vector<std::size_t> Lc_j = number_basis_beta_stationary_cov_;
     //non-stationary
-    std::size_t Lc = std::reduce(number_basis_beta_non_stationary_cov_.cbegin(),number_basis_beta_non_stationary_cov_.cend(),static_cast<std::size_t>(0));
-    std::vector<std::size_t> Lc_j = number_basis_beta_non_stationary_cov_;
+    std::size_t Lnc = std::reduce(number_basis_beta_non_stationary_cov_.cbegin(),number_basis_beta_non_stationary_cov_.cend(),static_cast<std::size_t>(0));
+    std::vector<std::size_t> Lnc_j = number_basis_beta_non_stationary_cov_;
 
 
     //wrapping all the functional elements in a functional_matrix
