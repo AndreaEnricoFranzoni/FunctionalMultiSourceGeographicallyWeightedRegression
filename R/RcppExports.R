@@ -61,7 +61,7 @@ tune_new_betas_FGWR <- function(coordinates_non_stationary_to_pred, units_to_be_
     .Call(`_fdagwr_tune_new_betas_FGWR`, coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
 }
 
-new_y_FMSGWR_ESC <- function(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred = 100L, num_threads = NULL) {
-    .Call(`_fdagwr_new_y_FMSGWR_ESC`, coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads)
+new_y_FMSGWR_ESC <- function(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred = 100L) {
+    .Call(`_fdagwr_new_y_FMSGWR_ESC`, coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred)
 }
 
