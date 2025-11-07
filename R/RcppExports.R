@@ -49,3 +49,15 @@ tune_new_betas_FMSGWR_ESC <- function(coordinates_events_to_pred, coordinates_st
     .Call(`_fdagwr_tune_new_betas_FMSGWR_ESC`, coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
 }
 
+tune_new_betas_FMSGWR_SEC <- function(coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature = 100L, num_threads = NULL) {
+    .Call(`_fdagwr_tune_new_betas_FMSGWR_SEC`, coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
+}
+
+tune_new_betas_FMGWR <- function(coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature = 100L, num_threads = NULL) {
+    .Call(`_fdagwr_tune_new_betas_FMGWR`, coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
+}
+
+tune_new_betas_FGWR <- function(coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature = 100L, num_threads = NULL) {
+    .Call(`_fdagwr_tune_new_betas_FGWR`, coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
+}
+
