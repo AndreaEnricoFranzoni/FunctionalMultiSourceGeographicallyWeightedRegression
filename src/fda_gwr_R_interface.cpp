@@ -5751,15 +5751,15 @@ Rcpp::List predict_FWR(Rcpp::List coeff_stationary_cov_to_pred,
 
 //
 // [[Rcpp::export]]
-Rcpp::List tune_new_betas_FMSGWR_ESC(Rcpp::NumericMatrix coordinates_events_to_pred,   
-                                     Rcpp::NumericMatrix coordinates_stations_to_pred,
-                                     int units_to_be_predicted,
-                                     Rcpp::NumericVector abscissa_ev,
-                                     Rcpp::List model_fitted,
-                                     int n_intervals_quadrature = 100,
-                                     Rcpp::Nullable<int> num_threads = R_NilValue)
+Rcpp::List beta_new_FMSGWR_ESC(Rcpp::NumericMatrix coordinates_events_to_pred,   
+                               Rcpp::NumericMatrix coordinates_stations_to_pred,
+                               int units_to_be_predicted,
+                               Rcpp::NumericVector abscissa_ev,
+                               Rcpp::List model_fitted,
+                               int n_intervals_quadrature = 100,
+                               Rcpp::Nullable<int> num_threads = R_NilValue)
 {
-    Rcout << "Functional Multi-Source Geographically Weighted Regression ESC new betas tuning" << std::endl;
+    Rcout << "Functional Multi-Source Geographically Weighted Regression ESC beta new" << std::endl;
 
     //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
     //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
@@ -6197,15 +6197,15 @@ Rcpp::List tune_new_betas_FMSGWR_ESC(Rcpp::NumericMatrix coordinates_events_to_p
 
 //
 // [[Rcpp::export]]
-Rcpp::List tune_new_betas_FMSGWR_SEC(Rcpp::NumericMatrix coordinates_events_to_pred,   
-                                     Rcpp::NumericMatrix coordinates_stations_to_pred,
-                                     int units_to_be_predicted,
-                                     Rcpp::NumericVector abscissa_ev,
-                                     Rcpp::List model_fitted,                              
-                                     int n_intervals_quadrature = 100,
-                                     Rcpp::Nullable<int> num_threads = R_NilValue)
+Rcpp::List beta_new_FMSGWR_SEC(Rcpp::NumericMatrix coordinates_events_to_pred,   
+                               Rcpp::NumericMatrix coordinates_stations_to_pred,
+                               int units_to_be_predicted,
+                               Rcpp::NumericVector abscissa_ev,
+                               Rcpp::List model_fitted,                              
+                               int n_intervals_quadrature = 100,
+                               Rcpp::Nullable<int> num_threads = R_NilValue)
 {
-    Rcout << "Functional Multi-Source Geographically Weighted Regression SEC new betas tuning" << std::endl;
+    Rcout << "Functional Multi-Source Geographically Weighted Regression SEC beta new" << std::endl;
 
     //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
     //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
@@ -6647,14 +6647,14 @@ Rcpp::List tune_new_betas_FMSGWR_SEC(Rcpp::NumericMatrix coordinates_events_to_p
 
 //
 // [[Rcpp::export]]
-Rcpp::List tune_new_betas_FMGWR(Rcpp::NumericMatrix coordinates_non_stationary_to_pred,   
-                                int units_to_be_predicted,
-                                Rcpp::NumericVector abscissa_ev,
-                                Rcpp::List model_fitted,
-                                int n_intervals_quadrature = 100,
-                                Rcpp::Nullable<int> num_threads = R_NilValue)
+Rcpp::List beta_new_FMGWR(Rcpp::NumericMatrix coordinates_non_stationary_to_pred,   
+                          int units_to_be_predicted,
+                          Rcpp::NumericVector abscissa_ev,
+                          Rcpp::List model_fitted,
+                          int n_intervals_quadrature = 100,
+                          Rcpp::Nullable<int> num_threads = R_NilValue)
 {
-    Rcout << "Functional Mixed Geographically Weighted Regression new betas tuning" << std::endl;
+    Rcout << "Functional Mixed Geographically Weighted Regression beta new" << std::endl;
 
     //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
     //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
@@ -7005,14 +7005,14 @@ Rcpp::List tune_new_betas_FMGWR(Rcpp::NumericMatrix coordinates_non_stationary_t
 
 //
 // [[Rcpp::export]]
-Rcpp::List tune_new_betas_FGWR(Rcpp::NumericMatrix coordinates_non_stationary_to_pred,   
-                               int units_to_be_predicted,
-                               Rcpp::NumericVector abscissa_ev,
-                               Rcpp::List model_fitted,
-                               int n_intervals_quadrature = 100,
-                               Rcpp::Nullable<int> num_threads = R_NilValue)
+Rcpp::List beta_new_FGWR(Rcpp::NumericMatrix coordinates_non_stationary_to_pred,   
+                         int units_to_be_predicted,
+                         Rcpp::NumericVector abscissa_ev,
+                         Rcpp::List model_fitted,
+                         int n_intervals_quadrature = 100,
+                         Rcpp::Nullable<int> num_threads = R_NilValue)
 {
-    Rcout << "Functional Geographically Weighted Regression bew betas tuning" << std::endl;
+    Rcout << "Functional Geographically Weighted Regression beta new" << std::endl;
 
     //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
     //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
@@ -7281,7 +7281,7 @@ Rcpp::List tune_new_betas_FGWR(Rcpp::NumericMatrix coordinates_non_stationary_to
 
 //
 // [[Rcpp::export]]
-Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
+Rcpp::List y_new_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                             Rcpp::List coeff_events_cov_to_pred,  
                             Rcpp::List coeff_stations_cov_to_pred,
                             int units_to_be_predicted,
@@ -7291,7 +7291,7 @@ Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                             int n_knots_smoothing_pred = 100,
                             Rcpp::Nullable<int> num_threads = R_NilValue)
 {
-    Rcout << "Functional Multi-Source Geographically Weighted Regression ESC new y2" << std::endl;
+    Rcout << "Functional Multi-Source Geographically Weighted Regression ESC y new" << std::endl;
 
     //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
     //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
@@ -7307,30 +7307,24 @@ Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;              //enum for stationary covariates
     constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;                        //enum for event covariates
     constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;                    //enum for station covariates
-    constexpr auto _DERVIATIVE_PENALIZED_ = PENALIZED_DERIVATIVE::SECOND;           //enum for the penalization order
-    constexpr auto _DISTANCE_ = DISTANCE_MEASURE::EUCLIDEAN;                        //enum for euclidean distance within statistical units locations
-    constexpr auto _KERNEL_ = KERNEL_FUNC::GAUSSIAN;                                //kernel function to smooth the distances within statistcal units locations
     constexpr auto _NAN_REM_ = REM_NAN::MR;                                         //how to remove nan (with mean of non-nans)
     
     if(units_to_be_predicted <= 0){ Rcout << "Number of unit to be predicted has to be a positive number" << std::endl;}
     //checking that the model_fitted contains a fit from FMSGWR_ESC
     wrap_predict_input<_FGWR_ALGO_>(model_fitted);
-Rcout << "Creation basis factory" << std::endl;    
+  
     //instance of the factory for the basis
     basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());    
 
     ///////////////////////////////////////////////////////
     /////   CHECKING and WRAPPING INPUT PARAMETERS  ///////
     ///////////////////////////////////////////////////////
-Rcout << "Wrap first parameters" << std::endl;
     //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
     // NUMBER OF KNOTS TO PERFORM SMOOTHING ON THE RESPONSE WITHOUT THE NON-STATIONARY COMPONENTS
-Rcout << "Wrap n_knots_smoothing_pred" << std::endl;
     int n_knots_smoothing_y_new = wrap_and_check_n_knots_smoothing(n_knots_smoothing_pred);
 
 
-Rcout << "Strings" << std::endl;
     ////////////////////////////////////////////////////////////
     /////// RETRIEVING INFORMATION FROM THE MODEL FITTED ///////
     ////////////////////////////////////////////////////////////
@@ -7393,7 +7387,7 @@ Rcout << "Strings" << std::endl;
     Rcpp::List stations_cov_input        = training_input[_cov_station_];
     //list with elements of the beta of stations-dependent covariates
     Rcpp::List beta_stations_cov_input   = training_input[_beta_station_];
-Rcout << "Reading from the model_fitted" << std::endl;
+
     //ESTIMATION TECHNIQUE
     bool in_cascade_estimation = training_input[_cascade_estimate_];
     //DOMAIN INFORMATION
@@ -7460,8 +7454,7 @@ Rcout << "Reading from the model_fitted" << std::endl;
     std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stations_cov_ = beta_stations_cov_input[_knots_basis_];
     FDAGWR_TRAITS::Dense_Vector knots_beta_stations_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stations_cov_.data(),knots_beta_stations_cov_.size());
     
-    
-Rcout << "Reading from new_beta" << std::endl;    
+        
     //TUNED NON-STATIONARY BETAS
     //saving the betas basis expansion coefficients for tuned event-dependent covariates
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix>> Be_tuned; //vettore esterno: per ogni covariata S. Interno: per ogni unità di training
@@ -7482,25 +7475,6 @@ Rcout << "Reading from new_beta" << std::endl;
 
 
 
-Rcout << "Be_fitted" << std::endl;
-for(std::size_t i = 0; i < Be_tuned.size(); ++i){
-    Rcout << "CovE " << i << std::endl;
-    for(std::size_t j = 0; j < Be_tuned[i].size(); ++j){
-        Rcout << Be_tuned[i][j] << std::endl;
-    }
-}
-
-
-Rcout << "Bs_fitted" << std::endl;
-for(std::size_t i = 0; i < Bs_tuned.size(); ++i){
-    Rcout << "CovS " << i << std::endl;
-    for(std::size_t j = 0; j < Bs_tuned[i].size(); ++j){
-        Rcout << Bs_tuned[i][j] << std::endl;
-    }
-}
-
-
-Rcout << "Creating the basis systems for the betas" << std::endl;
     //BASIS SYSTEMS OF THE BETAS
     //stationary (Omega)
     basis_systems< _DOMAIN_, bsplines_basis > bs_C(knots_beta_stationary_cov_eigen_w_, 
@@ -7538,7 +7512,7 @@ Rcout << "Creating the basis systems for the betas" << std::endl;
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
 
-Rcout << "Covariates to be pred" << std::endl;
+
     //////////////////////////////////////////////
     ///// WRAPPING COVARIATES TO BE PREDICTED ////
     //////////////////////////////////////////////
@@ -7605,8 +7579,7 @@ Rcout << "Covariates to be pred" << std::endl;
         {std::string{covariate_type<_STATION_>()},   Xs_new}};
 
 
-std::cout << "Quasi nel New constructor" << std::endl;    
-    //MI SERVE
+
     //fwr predictor
     auto fwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
                                                                                                  std::move(Be_tuned),
@@ -7632,24 +7605,17 @@ std::cout << "Quasi nel New constructor" << std::endl;
                                                                                                  in_cascade_estimation);
 
 
-Rcout << "betaC" << std::endl;
-    //compute the beta for stationary covariates
-    fwr_predictor->computeStationaryBetas();  
 
-Rcout << "betaNC" << std::endl;          
+    //compute the beta for stationary covariates
+    fwr_predictor->computeStationaryBetas();           
     //compute the beta for non-stationary covariates
     fwr_predictor->computeNonStationaryBetas(); 
- 
-Rcout << "Pred" << std::endl;  
     //perform prediction
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fwr_predictor->predict(X_new);
-Rcout << "Pred ev" << std::endl;
     //evaluating the prediction
     std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fwr_predictor->evalPred(y_pred,abscissa_points_ev_);
-Rcout << "Pred smoothing" << std::endl;
     //smoothing of the prediction
     auto y_pred_smooth_coeff = fwr_predictor->smoothPred<_DOMAIN_>(y_pred,*basis_pred,knots_smoothing_pred);
-Rcout << "Wrap out" << std::endl;
     //predictions evaluations
     Rcpp::List y_pred_ev_R = wrap_prediction_to_R_list<_FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_>(y_pred_ev,
                                                                                           abscissa_points_ev_,
@@ -7668,13 +7634,362 @@ Rcout << "Wrap out" << std::endl;
     l[std::string{FDAGWR_HELPERS_for_PRED_NAMES::pred}] = y_pred_ev_R;
 
     return l;
+}
 
-   /* 
+
+//
+// [[Rcpp::export]]
+Rcpp::List y_new_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
+                            Rcpp::List coeff_events_cov_to_pred,  
+                            Rcpp::List coeff_stations_cov_to_pred,
+                            int units_to_be_predicted,
+                            Rcpp::NumericVector abscissa_ev,
+                            Rcpp::List new_beta,
+                            Rcpp::List model_fitted,
+                            int n_knots_smoothing_pred = 100,
+                            Rcpp::Nullable<int> num_threads = R_NilValue)
+{
+    Rcout << "Functional Multi-Source Geographically Weighted Regression SEC y new" << std::endl;
+
+    //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
+    //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
+
+
+    using _DATA_TYPE_ = double;                                                     //data type
+    using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
+    using _FD_OUTPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_y_type;                          //data type for the image of fdata (double)
+    using _DOMAIN_ = FDAGWR_TRAITS::basis_geometry;                                 //domain geometry
+    constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::_FMSGWR_SEC_;                         //fgwr type (estimating stationary -> station-dependent -> event-dependent)
+    constexpr auto _RESPONSE_ = FDAGWR_COVARIATES_TYPES::RESPONSE;                  //enum for the response
+    constexpr auto _REC_WEIGHTS_ = FDAGWR_COVARIATES_TYPES::REC_WEIGHTS;            //enum for the response reconstruction weights
+    constexpr auto _STATIONARY_ = FDAGWR_COVARIATES_TYPES::STATIONARY;              //enum for stationary covariates
+    constexpr auto _EVENT_ = FDAGWR_COVARIATES_TYPES::EVENT;                        //enum for event covariates
+    constexpr auto _STATION_ = FDAGWR_COVARIATES_TYPES::STATION;                    //enum for station covariates
+    constexpr auto _NAN_REM_ = REM_NAN::MR;                                         //how to remove nan (with mean of non-nans)
+    
+    if(units_to_be_predicted <= 0){ Rcout << "Number of unit to be predicted has to be a positive number" << std::endl;}
+    //checking that the model_fitted contains a fit from FMSGWR_SEC
+    wrap_predict_input<_FGWR_ALGO_>(model_fitted);
+  
+    //instance of the factory for the basis
+    basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());    
+
+    ///////////////////////////////////////////////////////
+    /////   CHECKING and WRAPPING INPUT PARAMETERS  ///////
+    ///////////////////////////////////////////////////////
+    //  NUMBER OF THREADS
+    int number_threads = wrap_num_thread(num_threads);
+    // NUMBER OF KNOTS TO PERFORM SMOOTHING ON THE RESPONSE WITHOUT THE NON-STATIONARY COMPONENTS
+    int n_knots_smoothing_y_new = wrap_and_check_n_knots_smoothing(n_knots_smoothing_pred);
+
+
+    ////////////////////////////////////////////////////////////
+    /////// RETRIEVING INFORMATION FROM THE MODEL FITTED ///////
+    ////////////////////////////////////////////////////////////
+    // NAME OF THE LIST ELEMENT COMING FROM THE FITTING MODEL FUNCTION
+    //names main outputs
+    std::string _model_name_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::model_name};          //FWR model used
+    std::string _estimation_iter_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::estimation_iter};     //Exact or Cascade estimation
+    std::string _bc_                = std::string{FDAGWR_B_NAMES::bc};                                 //bc
+    std::string _beta_c_            = std::string{FDAGWR_BETAS_NAMES::beta_c};                         //beta_c
+    std::string _be_                = std::string{FDAGWR_B_NAMES::be};                                 //be
+    std::string _beta_e_            = std::string{FDAGWR_BETAS_NAMES::beta_e};                         //beta_e
+    std::string _bs_                = std::string{FDAGWR_B_NAMES::bs};                                 //bs
+    std::string _beta_s_            = std::string{FDAGWR_BETAS_NAMES::beta_s};                         //beta_s
+    std::string _elem_for_pred_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::elem_for_pred};       //elements used to predict (reconstructing training data and partial residuals)
+    std::string _partial_residuals_ = std::string{FDAGWR_HELPERS_for_PRED_NAMES::p_res};               //partial residuals 
+    std::string _input_info_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::inputs_info};         //training data information needed for prediction
+    //names secondary outputs, contained in the main ones
+    //the different covariates
+    std::string _response_       = std::string{covariate_type<_RESPONSE_>()};                                                        //response
+    std::string _response_rec_w_ = std::string{covariate_type<_REC_WEIGHTS_>()};                                                     //response reconstruction weights
+    std::string _cov_stat_       = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATIONARY_>()};   //stationary training covariates
+    std::string _beta_stat_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATIONARY_>()};   //stationary betas
+    std::string _cov_event_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_EVENT_>()};        //event-dependent training covariates
+    std::string _beta_event_     = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_EVENT_>()};        //event-dependent betas
+    std::string _cov_station_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cov}  + std::string{covariate_type<_STATION_>()};      //station-dependent training covariates
+    std::string _beta_station_   = std::string{FDAGWR_HELPERS_for_PRED_NAMES::beta} + std::string{covariate_type<_STATION_>()};      //station-dependent training covariates    
+    //training data features
+    std::string _q_              = std::string{FDAGWR_HELPERS_for_PRED_NAMES::q};                   //number of covariate
+    std::string _n_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n_basis};             //number of basis
+    std::string _t_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_t};             //type of basis
+    std::string _deg_basis_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_deg};           //degree of basis
+    std::string _knots_basis_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_knots};         //knots of basis
+    std::string _coeff_basis_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis};         //coefficients of basis expansion
+    std::string _penalties_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::penalties};           //lambdas for penalization
+    std::string _coords_         = std::string{FDAGWR_HELPERS_for_PRED_NAMES::coords};              //location UTM coordinates
+    std::string _bdw_ker_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::bdw_ker};             //kernel bandwith 
+    //domain
+    std::string _n_                = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n};                   //number of training units
+    std::string _a_                = std::string{FDAGWR_HELPERS_for_PRED_NAMES::a};                   //left domain extreme
+    std::string _b_                = std::string{FDAGWR_HELPERS_for_PRED_NAMES::b};                   //right domain extreme
+    std::string _abscissa_         = std::string{FDAGWR_HELPERS_for_PRED_NAMES::abscissa};            //abscissa of training data raw evaluations
+    std::string _cascade_estimate_ = std::string{FDAGWR_HELPERS_for_PRED_NAMES::cascade_estimate};         //if using in cascade-estimation
+
+
+    //list with the fitted model
+    Rcpp::List fitted_model      = model_fitted[_elem_for_pred_];
+    //lists with the input of the training
+    Rcpp::List training_input    = fitted_model[_input_info_];
+    //list with elements of the response
+    Rcpp::List response_input            = training_input[_response_];
+    //list with elements of stationary covariates
+    Rcpp::List stationary_cov_input      = training_input[_cov_stat_];
+    //list with elements of the beta of stationary covariates
+    Rcpp::List beta_stationary_cov_input = training_input[_beta_stat_];
+    //list with elements of events-dependent covariates
+    Rcpp::List events_cov_input          = training_input[_cov_event_];
+    //list with elements of the beta of events-dependent covariates
+    Rcpp::List beta_events_cov_input     = training_input[_beta_event_];
+    //list with elements of stations-dependent covariates
+    Rcpp::List stations_cov_input        = training_input[_cov_station_];
+    //list with elements of the beta of stations-dependent covariates
+    Rcpp::List beta_stations_cov_input   = training_input[_beta_station_];
+
+    //ESTIMATION TECHNIQUE
+    bool in_cascade_estimation = training_input[_cascade_estimate_];
+    //DOMAIN INFORMATION
+    std::size_t n_train = training_input[_n_];
+    _FD_INPUT_TYPE_ a   = training_input[_a_];
+    _FD_INPUT_TYPE_ b   = training_input[_b_];
+    std::vector<_FD_INPUT_TYPE_> abscissa_points_ev_ = wrap_abscissas(abscissa_ev,a,b);     //abscissa points for which the evaluation of the prediction is required
+    //knots for performing smoothing of the prediction(n_knots_smoothing_y_new knots equally spaced in (a,b))
+    FDAGWR_TRAITS::Dense_Matrix knots_smoothing_pred = FDAGWR_TRAITS::Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
+    //RESPONSE
+    std::size_t number_basis_response_ = response_input[_n_basis_];
+    std::string basis_type_response_   = response_input[_t_basis_];
+    std::size_t degree_basis_response_ = response_input[_deg_basis_];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_response_ = response_input[_knots_basis_];
+    FDAGWR_TRAITS::Dense_Vector knots_response_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_response_.data(),knots_response_.size());
+    auto coefficients_response_                               = reader_data<_DATA_TYPE_,_NAN_REM_>(response_input[_coeff_basis_]); 
+    //basis used for doing prediction basis expansion are the same used to smooth the response of the training data
+    std::unique_ptr<basis_base_class<_DOMAIN_>> basis_pred = basis_fac.create(basis_type_response_,knots_response_eigen_w_,degree_basis_response_,number_basis_response_); 
+    //STATIONARY COV        
+    std::size_t q_C                                       = stationary_cov_input[_q_];
+    std::vector<std::size_t> number_basis_stationary_cov_ = stationary_cov_input[_n_basis_];
+    std::vector<std::string> basis_types_stationary_cov_  = stationary_cov_input[_t_basis_];
+    std::vector<std::size_t> degree_basis_stationary_cov_ = stationary_cov_input[_deg_basis_];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_stationary_cov_       = stationary_cov_input[_knots_basis_];
+    FDAGWR_TRAITS::Dense_Vector knots_stationary_cov_eigen_w_             = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_stationary_cov_.data(),knots_stationary_cov_.size());
+    //EVENTS COV    
+    std::size_t q_E                                   = events_cov_input[_q_];
+    std::vector<std::size_t> number_basis_events_cov_ = events_cov_input[_n_basis_];
+    std::vector<std::string> basis_types_events_cov_  = events_cov_input[_t_basis_];
+    std::vector<std::size_t> degree_basis_events_cov_ = events_cov_input[_deg_basis_];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_events_cov_       = events_cov_input[_knots_basis_];
+    FDAGWR_TRAITS::Dense_Vector knots_events_cov_eigen_w_             = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_events_cov_.data(),knots_events_cov_.size());
+    //STATIONS COV  
+    std::size_t q_S                                     = stations_cov_input[_q_];
+    std::vector<std::size_t> number_basis_stations_cov_ = stations_cov_input[_n_basis_];
+    std::vector<std::string> basis_types_stations_cov_  = stations_cov_input[_t_basis_];
+    std::vector<std::size_t> degree_basis_stations_cov_ = stations_cov_input[_deg_basis_];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_stations_cov_       = stations_cov_input[_knots_basis_];
+    FDAGWR_TRAITS::Dense_Vector knots_stations_cov_eigen_w_             = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_stations_cov_.data(),knots_stations_cov_.size());    
+    //STATIONARY BETAS
+    std::vector<std::size_t> number_basis_beta_stationary_cov_ = beta_stationary_cov_input[_n_basis_];
+    std::vector<std::string> basis_types_beta_stationary_cov_  = beta_stationary_cov_input[_t_basis_];
+    std::vector<std::size_t> degree_basis_beta_stationary_cov_ = beta_stationary_cov_input[_deg_basis_];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stationary_cov_ = beta_stationary_cov_input[_knots_basis_];
+    FDAGWR_TRAITS::Dense_Vector knots_beta_stationary_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stationary_cov_.data(),knots_beta_stationary_cov_.size());
+    //saving the betas basis expansion coefficients for stationary covariates
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> Bc;
+    Bc.reserve(q_C);
+    Rcpp::List Bc_list = model_fitted[_bc_];
+    for(std::size_t i = 0; i < q_C; ++i){
+        Rcpp::List Bc_i_list = Bc_list[i];
+        auto Bc_i = reader_data<_DATA_TYPE_,_NAN_REM_>(Bc_i_list[_coeff_basis_]);  //Lc_j x 1
+        Bc.push_back(Bc_i);}
+    //EVENTS BETAS  
+    std::vector<std::size_t> number_basis_beta_events_cov_ = beta_events_cov_input[_n_basis_];
+    std::vector<std::string> basis_types_beta_events_cov_  = beta_events_cov_input[_t_basis_];
+    std::vector<std::size_t> degree_basis_beta_events_cov_ = beta_events_cov_input[_deg_basis_];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_events_cov_ = beta_events_cov_input[_knots_basis_];
+    FDAGWR_TRAITS::Dense_Vector knots_beta_events_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_events_cov_.data(),knots_beta_events_cov_.size()); 
+    //STATIONS BETAS    
+    std::vector<std::size_t> number_basis_beta_stations_cov_ = beta_stations_cov_input[_n_basis_];
+    std::vector<std::string> basis_types_beta_stations_cov_  = beta_stations_cov_input[_t_basis_];
+    std::vector<std::size_t> degree_basis_beta_stations_cov_ = beta_stations_cov_input[_deg_basis_];
+    std::vector<FDAGWR_TRAITS::fd_obj_x_type> knots_beta_stations_cov_ = beta_stations_cov_input[_knots_basis_];
+    FDAGWR_TRAITS::Dense_Vector knots_beta_stations_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stations_cov_.data(),knots_beta_stations_cov_.size());
+    
+        
+    //TUNED NON-STATIONARY BETAS
+    //saving the betas basis expansion coefficients for tuned event-dependent covariates
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix>> Be_tuned; //vettore esterno: per ogni covariata S. Interno: per ogni unità di training
+    Be_tuned.reserve(q_E);
+    Rcpp::List Be_tuned_list = new_beta[_be_ + "_pred"];
+    for(std::size_t i = 0; i < q_E; ++i){
+        Rcpp::List Be_tuned_i_list = Be_tuned_list[i];
+        auto Be_tuned_i = wrap_covariates_coefficients<_EVENT_>(Be_tuned_i_list[_coeff_basis_]);  //Le_j x 1
+        Be_tuned.push_back(Be_tuned_i);}
+    //saving the betas basis expansion coefficients for tuned station-dependent covariates
+    std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix>> Bs_tuned; //vettore esterno: per ogni covariata S. Interno: per ogni unità di training
+    Bs_tuned.reserve(q_S);
+    Rcpp::List Bs_tuned_list = new_beta[_bs_ + "_pred"];
+    for(std::size_t i = 0; i < q_S; ++i){
+        Rcpp::List Bs_tuned_i_list = Bs_tuned_list[i];
+        auto Bs_tuned_i = wrap_covariates_coefficients<_STATION_>(Bs_tuned_i_list[_coeff_basis_]);  //Ls_j x 1
+        Bs_tuned.push_back(Bs_tuned_i);}
+
+
+
+    //BASIS SYSTEMS OF THE BETAS
+    //stationary (Omega)
+    basis_systems< _DOMAIN_, bsplines_basis > bs_C(knots_beta_stationary_cov_eigen_w_, 
+                                                   degree_basis_beta_stationary_cov_, 
+                                                   number_basis_beta_stationary_cov_, 
+                                                   q_C);
+    //events (Theta)
+    basis_systems< _DOMAIN_, bsplines_basis > bs_E(knots_beta_events_cov_eigen_w_, 
+                                                   degree_basis_beta_events_cov_, 
+                                                   number_basis_beta_events_cov_, 
+                                                   q_E);
+    //stations (Psi)
+    basis_systems< _DOMAIN_, bsplines_basis > bs_S(knots_beta_stations_cov_eigen_w_,  
+                                                   degree_basis_beta_stations_cov_, 
+                                                   number_basis_beta_stations_cov_, 
+                                                   q_S);
+
+    //basis numbers beta
+    //stationary
+    std::size_t Lc = std::reduce(number_basis_beta_stationary_cov_.cbegin(),number_basis_beta_stationary_cov_.cend(),static_cast<std::size_t>(0));
+    std::vector<std::size_t> Lc_j = number_basis_beta_stationary_cov_;
+    //events
+    std::size_t Le = std::reduce(number_basis_beta_events_cov_.cbegin(),number_basis_beta_events_cov_.cend(),static_cast<std::size_t>(0));
+    std::vector<std::size_t> Le_j = number_basis_beta_events_cov_;
+    //stations
+    std::size_t Ls = std::reduce(number_basis_beta_stations_cov_.cbegin(),number_basis_beta_stations_cov_.cend(),static_cast<std::size_t>(0));
+    std::vector<std::size_t> Ls_j = number_basis_beta_stations_cov_;
+
+    //wrapping all the functional elements in a functional_matrix
+    //omega: a sparse functional matrix of dimension qcxLc
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> omega = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_C);
+    //theta: a sparse functional matrix of dimension qexLe
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> theta = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_E);
+    //psi: a sparse functional matrix of dimension qsxLs
+    functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
+
+
+
+    //////////////////////////////////////////////
+    ///// WRAPPING COVARIATES TO BE PREDICTED ////
+    //////////////////////////////////////////////
+    // stationary
+    //covariates names
+    std::vector<std::string> names_stationary_cov_ = wrap_covariates_names<_STATIONARY_>(coeff_stationary_cov_to_pred);
+    //covariates basis expansion coefficients
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_stationary_cov_to_be_pred_ = wrap_covariates_coefficients<_STATIONARY_>(coeff_stationary_cov_to_pred); 
+    for(std::size_t i = 0; i < q_C; ++i){   
+        check_dim_input<_STATIONARY_>(number_basis_stationary_cov_[i],coefficients_stationary_cov_to_be_pred_[i].rows(),"covariate " + std::to_string(i+1) + " coefficients matrix rows");
+        check_dim_input<_STATIONARY_>(units_to_be_predicted,coefficients_stationary_cov_to_be_pred_[i].cols(),"covariate " + std::to_string(i+1) + " coefficients matrix columns");}
+    //events
+    //covariates names
+    std::vector<std::string> names_events_cov_ = wrap_covariates_names<_EVENT_>(coeff_events_cov_to_pred);
+    //covariates basis expansion coefficients
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_events_cov_to_be_pred_ = wrap_covariates_coefficients<_EVENT_>(coeff_events_cov_to_pred); 
+    for(std::size_t i = 0; i < q_E; ++i){   
+        check_dim_input<_EVENT_>(number_basis_events_cov_[i],coefficients_events_cov_to_be_pred_[i].rows(),"covariate " + std::to_string(i+1) + " coefficients matrix rows");
+        check_dim_input<_EVENT_>(units_to_be_predicted,coefficients_events_cov_to_be_pred_[i].cols(),"covariate " + std::to_string(i+1) + " coefficients matrix columns");}
+    //stations
+    //covariates names
+    std::vector<std::string> names_stations_cov_ = wrap_covariates_names<_STATION_>(coeff_stations_cov_to_pred);
+    //covariates basis expansion coefficients
+    std::vector<FDAGWR_TRAITS::Dense_Matrix> coefficients_stations_cov_to_be_pred_ = wrap_covariates_coefficients<_STATION_>(coeff_stations_cov_to_pred);
+    for(std::size_t i = 0; i < q_S; ++i){   
+        check_dim_input<_STATION_>(number_basis_stations_cov_[i],coefficients_stations_cov_to_be_pred_[i].rows(),"covariate " + std::to_string(i+1) + " coefficients matrix rows");
+        check_dim_input<_STATION_>(units_to_be_predicted,coefficients_stations_cov_to_be_pred_[i].cols(),"covariate " + std::to_string(i+1) + " coefficients matrix columns");}
+    
+    //TO BE PREDICTED COVARIATES  
+    //stationary covariates
+    functional_data_covariates<_DOMAIN_,_STATIONARY_> x_C_fd_to_be_pred_(coefficients_stationary_cov_to_be_pred_,
+                                                                         q_C,
+                                                                         basis_types_stationary_cov_,
+                                                                         degree_basis_stationary_cov_,
+                                                                         number_basis_stationary_cov_,
+                                                                         knots_stationary_cov_eigen_w_,
+                                                                         basis_fac);
+    //events covariates
+    functional_data_covariates<_DOMAIN_,_EVENT_>   x_E_fd_to_be_pred_(coefficients_events_cov_to_be_pred_,
+                                                                      q_E,
+                                                                      basis_types_events_cov_,
+                                                                      degree_basis_events_cov_,
+                                                                      number_basis_events_cov_,
+                                                                      knots_events_cov_eigen_w_,
+                                                                      basis_fac);
+    //stations covariates
+    functional_data_covariates<_DOMAIN_,_STATION_> x_S_fd_to_be_pred_(coefficients_stations_cov_to_be_pred_,
+                                                                      q_S,
+                                                                      basis_types_stations_cov_,
+                                                                      degree_basis_stations_cov_,
+                                                                      number_basis_stations_cov_,
+                                                                      knots_stations_cov_eigen_w_,
+                                                                      basis_fac);
+    //Xc_new: a functional matrix of dimension n_newxqc
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xc_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATIONARY_>(x_C_fd_to_be_pred_,number_threads);                                                               
+    //Xe_new: a functional matrix of dimension n_newxqe
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xe_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_EVENT_>(x_E_fd_to_be_pred_,number_threads);
+    //Xs_new: a functional matrix of dimension n_newxqs
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xs_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_to_be_pred_,number_threads);
+    //map containing the X
+    std::map<std::string,functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>> X_new = {
+        {std::string{covariate_type<_STATIONARY_>()},Xc_new},
+        {std::string{covariate_type<_EVENT_>()},     Xe_new},
+        {std::string{covariate_type<_STATION_>()},   Xs_new}};
+
+
+
+    //fwr predictor
+    auto fwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
+                                                                                                 std::move(Be_tuned),
+                                                                                                 std::move(Bs_tuned),
+                                                                                                 std::move(omega),
+                                                                                                 q_C,
+                                                                                                 Lc,
+                                                                                                 Lc_j,
+                                                                                                 std::move(theta),
+                                                                                                 q_E,
+                                                                                                 Le,
+                                                                                                 Le_j,
+                                                                                                 std::move(psi),
+                                                                                                 q_S,
+                                                                                                 Ls,
+                                                                                                 Ls_j,
+                                                                                                 units_to_be_predicted,
+                                                                                                 a,
+                                                                                                 b,
+                                                                                                 1,
+                                                                                                 n_train,
+                                                                                                 number_threads,
+                                                                                                 in_cascade_estimation);
+
+
+
+    //compute the beta for stationary covariates
+    fwr_predictor->computeStationaryBetas();           
+    //compute the beta for non-stationary covariates
+    fwr_predictor->computeNonStationaryBetas(); 
+    //perform prediction
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fwr_predictor->predict(X_new);
+    //evaluating the prediction
+    std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fwr_predictor->evalPred(y_pred,abscissa_points_ev_);
+    //smoothing of the prediction
+    auto y_pred_smooth_coeff = fwr_predictor->smoothPred<_DOMAIN_>(y_pred,*basis_pred,knots_smoothing_pred);
+    //predictions evaluations
+    Rcpp::List y_pred_ev_R = wrap_prediction_to_R_list<_FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_>(y_pred_ev,
+                                                                                          abscissa_points_ev_,
+                                                                                          y_pred_smooth_coeff,
+                                                                                          basis_type_response_,
+                                                                                          number_basis_response_,
+                                                                                          degree_basis_response_,
+                                                                                          knots_smoothing_pred);
+
+    //returning element                                       
     Rcpp::List l;
     //predictor
     l[_model_name_ + "_predictor"] = "predictor_" + std::string{algo_type<_FGWR_ALGO_>()};
     l[_estimation_iter_]           = estimation_iter(in_cascade_estimation);
-    return l;
-    */
-}
+    //predictions
+    l[std::string{FDAGWR_HELPERS_for_PRED_NAMES::pred}] = y_pred_ev_R;
 
+    return l;
+}

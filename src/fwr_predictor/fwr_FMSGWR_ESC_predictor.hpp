@@ -324,9 +324,7 @@ public:
                     m_qs(qs),
                     m_Ls(Ls),
                     m_Ls_j(Ls_j)
-
             {
-                std::cout << "New constructor" << std::endl;
                 //input coherency
                 assert(m_Bc_fitted.size() == m_qc);
                 assert(m_Be_pred.size() == m_qs);
@@ -343,22 +341,6 @@ public:
                 m_be_pred = this->operator_comp().dewrap_operator(m_Be_pred,m_Le_j,n_pred);
                 //bs_fitted
                 m_bs_pred = this->operator_comp().dewrap_operator(m_Bs_pred,m_Ls_j,n_pred);
-
-
-                std::cout << "Bc: " << m_bc_fitted.rows() << "x" << m_bc_fitted.cols() << std::endl;
-                std::cout << m_bc_fitted << std::endl;
-
-                std::cout << "Be:" << std::endl;
-                for(std::size_t i = 0; i < m_be_pred.size(); ++i){
-                    std::cout << "unit " << i+1 << ": " << m_be_pred[i].rows() << "x" << m_be_pred[i].cols() << std::endl;
-                    std::cout << m_be_pred[i] << std::endl;
-                }
-
-                std::cout << "Bs:" << std::endl;
-                for(std::size_t i = 0; i < m_bs_pred.size(); ++i){
-                    std::cout << "unit " << i+1 << ": " << m_bs_pred[i].rows() << "x" << m_bs_pred[i].cols() << std::endl;
-                    std::cout << m_bs_pred[i] << std::endl;
-                }
             }
 
     /*!
@@ -474,13 +456,6 @@ public:
     override
     {
         m_BetaC = fm_prod(m_omega,m_bc_fitted); //qc x 1
-
-        double loc = 0.3;
-        for(std::size_t i = 0; i < m_BetaC.rows(); ++i){
-            for(std::size_t j = 0; j < m_BetaC.cols(); ++j){
-                std::cout << "betac(" << i << "," << j << "): " << m_BetaC(i,j)(loc) << std::endl;
-            }
-        }
     }
 
     /*!

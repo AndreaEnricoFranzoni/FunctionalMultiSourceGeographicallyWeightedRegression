@@ -278,6 +278,70 @@ public:
             }
 
     /*!
+    * @brief Constructor if beta already tuned
+    */
+    template<typename FUNC_SPARSE_MATRIX_OBJ,
+             typename SCALAR_MATRIX_OBJ_VEC,
+             typename SCALAR_MATRIX_OBJ_VEC_VEC>
+    fwr_FMSGWR_SEC_predictor(SCALAR_MATRIX_OBJ_VEC &&Bc_fitted,
+                             SCALAR_MATRIX_OBJ_VEC_VEC &&Be_tuned,
+                             SCALAR_MATRIX_OBJ_VEC_VEC &&Bs_tuned,
+                             FUNC_SPARSE_MATRIX_OBJ &&omega,
+                             std::size_t qc,
+                             std::size_t Lc,
+                             const std::vector<std::size_t> &Lc_j,
+                             FUNC_SPARSE_MATRIX_OBJ &&theta,
+                             std::size_t qe,
+                             std::size_t Le,
+                             const std::vector<std::size_t> &Le_j,
+                             FUNC_SPARSE_MATRIX_OBJ &&psi,
+                             std::size_t qs,
+                             std::size_t Ls,
+                             const std::vector<std::size_t> &Ls_j,
+                             std::size_t n_pred,
+                             INPUT a, 
+                             INPUT b, 
+                             int n_intervals_integration, 
+                             std::size_t n_train, 
+                             int number_threads,
+                             bool in_cascade_estimation)
+                :
+                    fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,n_train,number_threads,in_cascade_estimation),
+                    m_Bc_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC>(Bc_fitted)},
+                    m_Be_pred{std::forward<SCALAR_MATRIX_OBJ_VEC_VEC>(Be_tuned)},
+                    m_Bs_pred{std::forward<SCALAR_MATRIX_OBJ_VEC_VEC>(Bs_tuned)},
+                    m_omega{std::forward<FUNC_SPARSE_MATRIX_OBJ>(omega)},
+                    m_qc(qc),
+                    m_Lc(Lc),
+                    m_Lc_j(Lc_j),
+                    m_theta{std::forward<FUNC_SPARSE_MATRIX_OBJ>(theta)},
+                    m_qe(qe),
+                    m_Le(Le),
+                    m_Le_j(Le_j),
+                    m_psi{std::forward<FUNC_SPARSE_MATRIX_OBJ>(psi)},
+                    m_qs(qs),
+                    m_Ls(Ls),
+                    m_Ls_j(Ls_j)
+            {
+                //input coherency
+                assert(m_Bc_fitted.size() == m_qc);
+                assert(m_Be_pred.size() == m_qs);
+                assert(m_Bs_pred.size() == m_qs);
+                for(std::size_t j = 0; j < m_qe; ++j){  assert(m_Be_pred[j].size() == n_pred);}
+                for(std::size_t j = 0; j < m_qs; ++j){  assert(m_Bs_pred[j].size() == n_pred);}
+                assert((m_omega.rows() == m_qc) && (m_omega.cols() == Lc));
+                assert((m_theta.rows() == m_qe) && (m_theta.cols() == Le));
+                assert((m_psi.rows() == m_qs) && (m_psi.cols() == Ls));
+
+                //dewrappare i b_train (li incolonna)
+                m_bc_fitted = this->operator_comp().dewrap_operator(m_Bc_fitted,m_Lc_j);
+                //be_pred
+                m_be_pred = this->operator_comp().dewrap_operator(m_Be_pred,m_Le_j,n_pred);
+                //bs_fitted
+                m_bs_pred = this->operator_comp().dewrap_operator(m_Bs_pred,m_Ls_j,n_pred);
+            }
+
+    /*!
     * @brief Function to compute the partial residuals accordingly to the fitted model
     */
     inline 
