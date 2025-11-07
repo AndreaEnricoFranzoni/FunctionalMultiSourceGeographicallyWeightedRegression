@@ -284,8 +284,7 @@ public:
     */
     template<typename FUNC_SPARSE_MATRIX_OBJ,
              typename SCALAR_MATRIX_OBJ_VEC,
-             typename SCALAR_MATRIX_OBJ_VEC_VEC,
-             typename SCALAR_SPARSE_MATRIX_OBJ>
+             typename SCALAR_MATRIX_OBJ_VEC_VEC>
     fwr_FMSGWR_ESC_predictor(SCALAR_MATRIX_OBJ_VEC &&Bc_fitted,
                              SCALAR_MATRIX_OBJ_VEC_VEC &&Be_tuned,
                              SCALAR_MATRIX_OBJ_VEC_VEC &&Bs_tuned,
