@@ -340,7 +340,7 @@ public:
                 //dewrappare i b_train (li incolonna)
                 m_bc_fitted = this->operator_comp().dewrap_operator(m_Bc_fitted,m_Lc_j);
                 //be_pred
-                m_be_pred = this->operator_comp().dewrap_operator(m_Be_pred,m_Ls_j,n_pred);
+                m_be_pred = this->operator_comp().dewrap_operator(m_Be_pred,m_Le_j,n_pred);
                 //bs_fitted
                 m_bs_pred = this->operator_comp().dewrap_operator(m_Bs_pred,m_Ls_j,n_pred);
 
