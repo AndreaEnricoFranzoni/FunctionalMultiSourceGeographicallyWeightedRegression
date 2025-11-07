@@ -73,3 +73,7 @@ y_new_FMGWR <- function(coeff_stationary_cov_to_pred, coeff_non_stationary_cov_t
     .Call(`_fdagwr_y_new_FMGWR`, coeff_stationary_cov_to_pred, coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads)
 }
 
+y_new_FGWR <- function(coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred = 100L, num_threads = NULL) {
+    .Call(`_fdagwr_y_new_FGWR`, coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads)
+}
+

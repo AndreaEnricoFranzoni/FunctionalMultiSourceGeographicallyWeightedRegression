@@ -136,6 +136,40 @@ public:
             }
 
     /*!
+    * @brief Constructor if beta already tuned
+    */
+    template<typename FUNC_SPARSE_MATRIX_OBJ,
+             typename SCALAR_MATRIX_OBJ_VEC,
+             typename SCALAR_MATRIX_OBJ_VEC_VEC>
+    fwr_FMGWR_predictor(SCALAR_MATRIX_OBJ_VEC_VEC &&Bnc_tuned,
+                        FUNC_SPARSE_MATRIX_OBJ &&eta,
+                        std::size_t qnc,
+                        std::size_t Lnc,
+                        const std::vector<std::size_t> &Lnc_j,
+                        std::size_t n_pred,
+                        INPUT a, 
+                        INPUT b, 
+                        int n_intervals_integration, 
+                        std::size_t n_train, 
+                        int number_threads)
+                :
+                    fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,n_train,number_threads,false),
+                    m_Bnc_pred{std::forward<SCALAR_MATRIX_OBJ_VEC_VEC>(Bnc_tuned)},
+                    m_eta{std::forward<FUNC_SPARSE_MATRIX_OBJ>(eta)},
+                    m_qnc(qnc),
+                    m_Lnc(Lnc),
+                    m_Lnc_j(Lnc_j)
+            {
+                //input coherency
+                assert(m_Bnc_pred.size() == m_qnc);
+                for(std::size_t j = 0; j < m_qnc; ++j){  assert(m_Bnc_pred[j].size() == n_pred);}
+                assert((m_eta.rows() == m_qnc) && (m_eta.cols() == Lnc));
+
+                //bnc_pred
+                m_bnc_pred = this->operator_comp().dewrap_operator(m_Bnc_pred,m_Lnc_j,n_pred);
+            }
+
+    /*!
     * @brief Function to compute the partial residuals accordingly to the fitted model
     * @note no partial residuals to be computed
     */
