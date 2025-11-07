@@ -7315,21 +7315,21 @@ Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     if(units_to_be_predicted <= 0){ Rcout << "Number of unit to be predicted has to be a positive number" << std::endl;}
     //checking that the model_fitted contains a fit from FMSGWR_ESC
     wrap_predict_input<_FGWR_ALGO_>(model_fitted);
-    
+Rcout << "Creation basis factory" << std::endl;    
     //instance of the factory for the basis
     basis_factory::basisFactory& basis_fac(basis_factory::basisFactory::Instance());    
 
     ///////////////////////////////////////////////////////
     /////   CHECKING and WRAPPING INPUT PARAMETERS  ///////
     ///////////////////////////////////////////////////////
-
+Rcout << "Wrap first parameters" << std::endl;
     //  NUMBER OF THREADS
     int number_threads = wrap_num_thread(num_threads);
     // NUMBER OF KNOTS TO PERFORM SMOOTHING ON THE RESPONSE WITHOUT THE NON-STATIONARY COMPONENTS
     int n_knots_smoothing_y_new = wrap_and_check_n_knots_smoothing(n_knots_smoothing_pred);
 
 
-
+Rcout << "Strings" << std::endl;
     ////////////////////////////////////////////////////////////
     /////// RETRIEVING INFORMATION FROM THE MODEL FITTED ///////
     ////////////////////////////////////////////////////////////
