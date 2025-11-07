@@ -76,7 +76,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr5 installation successful"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr6 installation successful"<< std::endl;}
 
 
 
@@ -7601,6 +7601,7 @@ Rcout << "Covariates to be pred" << std::endl;
         {std::string{covariate_type<_EVENT_>()},     Xe_new},
         {std::string{covariate_type<_STATION_>()},   Xs_new}};
 
+/*
 std::cout << "Quasi nel New constructor" << std::endl;    
     //MI SERVE
     //fwr predictor
@@ -7659,6 +7660,13 @@ Rcout << "Wrap out" << std::endl;
     //predictions
     l[std::string{FDAGWR_HELPERS_for_PRED_NAMES::pred}] = y_pred_ev_R;
 
+    return l;
+*/
+
+    Rcpp::List l;
+    //predictor
+    l[_model_name_ + "_predictor"] = "predictor_" + std::string{algo_type<_FGWR_ALGO_>()};
+    l[_estimation_iter_]           = estimation_iter(in_cascade_estimation);
     return l;
 }
 
