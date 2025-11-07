@@ -139,19 +139,18 @@ public:
     * @brief Constructor if beta already tuned
     */
     template<typename FUNC_SPARSE_MATRIX_OBJ,
-             typename SCALAR_MATRIX_OBJ_VEC,
              typename SCALAR_MATRIX_OBJ_VEC_VEC>
-    fwr_FMGWR_predictor(SCALAR_MATRIX_OBJ_VEC_VEC &&Bnc_tuned,
-                        FUNC_SPARSE_MATRIX_OBJ &&eta,
-                        std::size_t qnc,
-                        std::size_t Lnc,
-                        const std::vector<std::size_t> &Lnc_j,
-                        std::size_t n_pred,
-                        INPUT a, 
-                        INPUT b, 
-                        int n_intervals_integration, 
-                        std::size_t n_train, 
-                        int number_threads)
+    fwr_FGWR_predictor(SCALAR_MATRIX_OBJ_VEC_VEC &&Bnc_tuned,
+                       FUNC_SPARSE_MATRIX_OBJ &&eta,
+                       std::size_t qnc,
+                       std::size_t Lnc,
+                       const std::vector<std::size_t> &Lnc_j,
+                       std::size_t n_pred,
+                       INPUT a, 
+                       INPUT b, 
+                       int n_intervals_integration, 
+                       std::size_t n_train, 
+                       int number_threads)
                 :
                     fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,n_train,number_threads,false),
                     m_Bnc_pred{std::forward<SCALAR_MATRIX_OBJ_VEC_VEC>(Bnc_tuned)},
