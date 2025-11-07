@@ -359,6 +359,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// tune_new_betas_FMSGWR_ESC
+Rcpp::List tune_new_betas_FMSGWR_ESC(Rcpp::NumericMatrix coordinates_events_to_pred, Rcpp::NumericMatrix coordinates_stations_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_quadrature, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_tune_new_betas_FMSGWR_ESC(SEXP coordinates_events_to_predSEXP, SEXP coordinates_stations_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP model_fittedSEXP, SEXP n_intervals_quadratureSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_events_to_pred(coordinates_events_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_stations_to_pred(coordinates_stations_to_predSEXP);
+    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
+    Rcpp::traits::input_parameter< int >::type n_intervals_quadrature(n_intervals_quadratureSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(tune_new_betas_FMSGWR_ESC(coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_installation_fdagwr", (DL_FUNC) &_fdagwr_installation_fdagwr, 0},
@@ -372,6 +389,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_predict_FGWR", (DL_FUNC) &_fdagwr_predict_FGWR, 8},
     {"_fdagwr_FWR", (DL_FUNC) &_fdagwr_FWR, 25},
     {"_fdagwr_predict_FWR", (DL_FUNC) &_fdagwr_predict_FWR, 6},
+    {"_fdagwr_tune_new_betas_FMSGWR_ESC", (DL_FUNC) &_fdagwr_tune_new_betas_FMSGWR_ESC, 7},
     {NULL, NULL, 0}
 };
 

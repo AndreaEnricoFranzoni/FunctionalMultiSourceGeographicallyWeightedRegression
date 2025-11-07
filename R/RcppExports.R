@@ -45,3 +45,7 @@ predict_FWR <- function(coeff_stationary_cov_to_pred, units_to_be_predicted, abs
     .Call(`_fdagwr_predict_FWR`, coeff_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_knots_smoothing_pred, num_threads)
 }
 
+tune_new_betas_FMSGWR_ESC <- function(coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature = 100L, num_threads = NULL) {
+    .Call(`_fdagwr_tune_new_betas_FMSGWR_ESC`, coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
+}
+
