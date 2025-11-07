@@ -426,8 +426,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // new_y_FMSGWR_ESC
-Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_events_cov_to_pred, Rcpp::List coeff_stations_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred);
-RcppExport SEXP _fdagwr_new_y_FMSGWR_ESC(SEXP coeff_stationary_cov_to_predSEXP, SEXP coeff_events_cov_to_predSEXP, SEXP coeff_stations_cov_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP new_betaSEXP, SEXP model_fittedSEXP, SEXP n_knots_smoothing_predSEXP) {
+Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_events_cov_to_pred, Rcpp::List coeff_stations_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_new_y_FMSGWR_ESC(SEXP coeff_stationary_cov_to_predSEXP, SEXP coeff_events_cov_to_predSEXP, SEXP coeff_stations_cov_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP new_betaSEXP, SEXP model_fittedSEXP, SEXP n_knots_smoothing_predSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -439,7 +439,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::List >::type new_beta(new_betaSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
     Rcpp::traits::input_parameter< int >::type n_knots_smoothing_pred(n_knots_smoothing_predSEXP);
-    rcpp_result_gen = Rcpp::wrap(new_y_FMSGWR_ESC(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred));
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(new_y_FMSGWR_ESC(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -460,7 +461,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_tune_new_betas_FMSGWR_SEC", (DL_FUNC) &_fdagwr_tune_new_betas_FMSGWR_SEC, 7},
     {"_fdagwr_tune_new_betas_FMGWR", (DL_FUNC) &_fdagwr_tune_new_betas_FMGWR, 6},
     {"_fdagwr_tune_new_betas_FGWR", (DL_FUNC) &_fdagwr_tune_new_betas_FGWR, 6},
-    {"_fdagwr_new_y_FMSGWR_ESC", (DL_FUNC) &_fdagwr_new_y_FMSGWR_ESC, 8},
+    {"_fdagwr_new_y_FMSGWR_ESC", (DL_FUNC) &_fdagwr_new_y_FMSGWR_ESC, 9},
     {NULL, NULL, 0}
 };
 

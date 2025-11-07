@@ -343,6 +343,22 @@ public:
                 m_be_pred = this->operator_comp().dewrap_operator(m_Be_pred,m_Ls_j,n_pred);
                 //bs_fitted
                 m_bs_pred = this->operator_comp().dewrap_operator(m_Bs_pred,m_Ls_j,n_pred);
+
+
+                std::cout << "Bc: " << m_bc_fitted.rows() << "x" << m_bc_fitted.cols() << std::endl;
+                std::cout << m_bc_fitted << std::endl;
+
+                std::cout << "Be:" << std::endl;
+                for(std::size_t i = 0; i < m_be_pred.size(); ++i){
+                    std::cout << "unit " << i+1 << ": " << m_be_pred[i].rows() << "x" << m_be_pred[i].cols() << std::endl;
+                    std::cout << m_be_pred[i] << std::endl;
+                }
+
+                std::cout << "Bs:" << std::endl;
+                for(std::size_t i = 0; i < m_bs_pred.size(); ++i){
+                    std::cout << "unit " << i+1 << ": " << m_bs_pred[i].rows() << "x" << m_bs_pred[i].cols() << std::endl;
+                    std::cout << m_bs_pred[i] << std::endl;
+                }
             }
 
     /*!
