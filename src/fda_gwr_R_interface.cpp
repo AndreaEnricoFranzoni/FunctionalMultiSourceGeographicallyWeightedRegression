@@ -7506,7 +7506,7 @@ Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::vector<std::size_t> Lc_j = number_basis_beta_stationary_cov_;
     //events
     std::size_t Le = std::reduce(number_basis_beta_events_cov_.cbegin(),number_basis_beta_events_cov_.cend(),static_cast<std::size_t>(0));
-    std::vector<std::size_t> Lc_j = number_basis_beta_events_cov_;
+    std::vector<std::size_t> Le_j = number_basis_beta_events_cov_;
     //stations
     std::size_t Ls = std::reduce(number_basis_beta_stations_cov_.cbegin(),number_basis_beta_stations_cov_.cend(),static_cast<std::size_t>(0));
     std::vector<std::size_t> Ls_j = number_basis_beta_stations_cov_;
@@ -7589,7 +7589,7 @@ Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     //MI SERVE
     //fwr predictor
     auto fwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
-                                                                                                 std::move(Be_tuned)
+                                                                                                 std::move(Be_tuned),
                                                                                                  std::move(Bs_tuned),
                                                                                                  std::move(omega),
                                                                                                  q_C,
