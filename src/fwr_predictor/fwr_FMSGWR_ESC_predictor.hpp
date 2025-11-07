@@ -474,6 +474,13 @@ public:
     override
     {
         m_BetaC = fm_prod(m_omega,m_bc_fitted); //qc x 1
+
+        double loc = 0.3;
+        for(std::size_t i = 0; i < m_BetaC.rows(); ++i){
+            for(std::size_t j = 0; j < m_BetaC.cols(); ++j){
+                std::cout << "betac(" << i << "," << j << "): " << m_BetaC(i,j)(loc) << std::endl;
+            }
+        }
     }
 
     /*!
