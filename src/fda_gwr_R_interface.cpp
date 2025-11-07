@@ -76,7 +76,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr89 installation successful"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr9 installation successful"<< std::endl;}
 
 
 
@@ -7639,7 +7639,7 @@ Rcout << "betaC" << std::endl;
 Rcout << "betaNC" << std::endl;          
     //compute the beta for non-stationary covariates
     fwr_predictor->computeNonStationaryBetas(); 
-    /* 
+ 
 Rcout << "Pred" << std::endl;  
     //perform prediction
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fwr_predictor->predict(X_new);
@@ -7668,12 +7668,13 @@ Rcout << "Wrap out" << std::endl;
     l[std::string{FDAGWR_HELPERS_for_PRED_NAMES::pred}] = y_pred_ev_R;
 
     return l;
-*/
 
+   /* 
     Rcpp::List l;
     //predictor
     l[_model_name_ + "_predictor"] = "predictor_" + std::string{algo_type<_FGWR_ALGO_>()};
     l[_estimation_iter_]           = estimation_iter(in_cascade_estimation);
     return l;
+    */
 }
 
