@@ -205,6 +205,55 @@ public:
             }
 
     /*!
+    * @brief Constructor if beta already tuned
+    */
+    template<typename FUNC_SPARSE_MATRIX_OBJ,
+             typename SCALAR_MATRIX_OBJ_VEC,
+             typename SCALAR_MATRIX_OBJ_VEC_VEC>
+    fwr_FMGWR_predictor(SCALAR_MATRIX_OBJ_VEC &&Bc_fitted,
+                        SCALAR_MATRIX_OBJ_VEC_VEC &&Bnc_tuned,
+                        FUNC_SPARSE_MATRIX_OBJ &&omega,
+                        std::size_t qc,
+                        std::size_t Lc,
+                        const std::vector<std::size_t> &Lc_j,
+                        FUNC_SPARSE_MATRIX_OBJ &&eta,
+                        std::size_t qnc,
+                        std::size_t Lnc,
+                        const std::vector<std::size_t> &Lnc_j,
+                        std::size_t n_pred,
+                        INPUT a, 
+                        INPUT b, 
+                        int n_intervals_integration, 
+                        std::size_t n_train, 
+                        int number_threads,
+                        bool in_cascade_estimation)
+                :
+                    fwr_predictor<INPUT,OUTPUT>(a,b,n_intervals_integration,n_train,number_threads,in_cascade_estimation),
+                    m_Bc_fitted{std::forward<SCALAR_MATRIX_OBJ_VEC>(Bc_fitted)},
+                    m_Bnc_pred{std::forward<SCALAR_MATRIX_OBJ_VEC_VEC>(Bnc_tuned)},
+                    m_omega{std::forward<FUNC_SPARSE_MATRIX_OBJ>(omega)},
+                    m_qc(qc),
+                    m_Lc(Lc),
+                    m_Lc_j(Lc_j),
+                    m_eta{std::forward<FUNC_SPARSE_MATRIX_OBJ>(eta)},
+                    m_qnc(qnc),
+                    m_Lnc(Lnc),
+                    m_Lnc_j(Lnc_j)
+            {
+                //input coherency
+                assert(m_Bc_fitted.size() == m_qc);
+                assert(m_Bnc_pred.size() == m_qnc);
+                for(std::size_t j = 0; j < m_qnc; ++j){  assert(m_Bnc_pred[j].size() == n_pred);}
+                assert((m_omega.rows() == m_qc) && (m_omega.cols() == Lc));
+                assert((m_eta.rows() == m_qnc) && (m_eta.cols() == Lnc));
+
+                //dewrappare i b_train (li incolonna)
+                m_bc_fitted = this->operator_comp().dewrap_operator(m_Bc_fitted,m_Lc_j);
+                //bnc_pred
+                m_bnc_pred = this->operator_comp().dewrap_operator(m_Bnc_pred,m_Lnc_j,n_pred);
+            }
+
+    /*!
     * @brief Function to compute the partial residuals accordingly to the fitted model
     */
     inline 
