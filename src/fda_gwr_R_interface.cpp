@@ -76,7 +76,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr3 installation successful"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr installation successful"<< std::endl;}
 
 
 
@@ -7288,8 +7288,7 @@ Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                             Rcpp::NumericVector abscissa_ev,
                             Rcpp::List new_beta,
                             Rcpp::List model_fitted,
-                            int n_knots_smoothing_pred = 100,
-                            Rcpp::Nullable<int> num_threads = R_NilValue)
+                            int n_knots_smoothing_pred = 100)
 {
     Rcout << "Functional Multi-Source Geographically Weighted Regression ESC new y2" << std::endl;
 
@@ -7323,9 +7322,6 @@ Rcout << "Creation basis factory" << std::endl;
     /////   CHECKING and WRAPPING INPUT PARAMETERS  ///////
     ///////////////////////////////////////////////////////
 Rcout << "Wrap first parameters" << std::endl;
-    //  NUMBER OF THREADS
-Rcout << "Wrap number threads" << std::endl;
-    int number_threads = wrap_num_thread(num_threads);
     // NUMBER OF KNOTS TO PERFORM SMOOTHING ON THE RESPONSE WITHOUT THE NON-STATIONARY COMPONENTS
 Rcout << "Wrap n_knots_smoothing_pred" << std::endl;
     int n_knots_smoothing_y_new = wrap_and_check_n_knots_smoothing(n_knots_smoothing_pred);
@@ -7598,11 +7594,11 @@ Rcout << "Covariates to be pred" << std::endl;
                                                                       knots_stations_cov_eigen_w_,
                                                                       basis_fac);
     //Xc_new: a functional matrix of dimension n_newxqc
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xc_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATIONARY_>(x_C_fd_to_be_pred_,number_threads);                                                               
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xc_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATIONARY_>(x_C_fd_to_be_pred_,8);                                                               
     //Xe_new: a functional matrix of dimension n_newxqe
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xe_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_EVENT_>(x_E_fd_to_be_pred_,number_threads);
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xe_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_EVENT_>(x_E_fd_to_be_pred_,8);
     //Xs_new: a functional matrix of dimension n_newxqs
-    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xs_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_to_be_pred_,number_threads);
+    functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> Xs_new = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,_STATION_>(x_S_fd_to_be_pred_,8);
     //map containing the X
     std::map<std::string,functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_>> X_new = {
         {std::string{covariate_type<_STATIONARY_>()},Xc_new},
@@ -7632,7 +7628,7 @@ std::cout << "Quasi nel New constructor" << std::endl;
                                                                                                  b,
                                                                                                  1,
                                                                                                  n_train,
-                                                                                                 number_threads,
+                                                                                                 8,
                                                                                                  in_cascade_estimation);
 Rcout << "betaC" << std::endl;
     //compute the beta for stationary covariates
