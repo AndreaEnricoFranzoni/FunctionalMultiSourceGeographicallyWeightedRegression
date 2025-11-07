@@ -8279,20 +8279,18 @@ Rcpp::List y_new_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
                       int n_knots_smoothing_pred = 100,
                       Rcpp::Nullable<int> num_threads = R_NilValue)
 {
-    Rcout << "Functional Mixed Geographically Weighted Regression y new" << std::endl;
+    Rcout << "Functional Geographically Weighted Regression y new" << std::endl;
 
     //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
     //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
 
 
-    using _DATA_TYPE_ = double;                                                     //data type
     using _FD_INPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_x_type;                           //data type for the abscissa of fdata (double)
     using _FD_OUTPUT_TYPE_ = FDAGWR_TRAITS::fd_obj_y_type;                          //data type for the image of fdata (double)
     using _DOMAIN_ = FDAGWR_TRAITS::basis_geometry;                                 //domain geometry
     constexpr auto _FGWR_ALGO_ = FDAGWR_ALGO::_FGWR_;                               //fgwr type (estimating stationary -> station-dependent -> event-dependent)
     constexpr auto _RESPONSE_ = FDAGWR_COVARIATES_TYPES::RESPONSE;                  //enum for the response
     constexpr auto _NON_STATIONARY_ = FDAGWR_COVARIATES_TYPES::NON_STATIONARY;      //enum for non-stationary covariates
-    constexpr auto _NAN_REM_ = REM_NAN::MR;                                         //how to remove nan (with mean of non-nans)
     
     if(units_to_be_predicted <= 0){ Rcout << "Number of unit to be predicted has to be a positive number" << std::endl;}
     //checking that the model_fitted contains a fit from FMSGWR_ESC
