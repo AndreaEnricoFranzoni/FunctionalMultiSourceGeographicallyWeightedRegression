@@ -76,7 +76,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr2 installation successful"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr3 installation successful"<< std::endl;}
 
 
 
@@ -7324,8 +7324,10 @@ Rcout << "Creation basis factory" << std::endl;
     ///////////////////////////////////////////////////////
 Rcout << "Wrap first parameters" << std::endl;
     //  NUMBER OF THREADS
+Rcout << "Wrap number threads" << std::endl;
     int number_threads = wrap_num_thread(num_threads);
     // NUMBER OF KNOTS TO PERFORM SMOOTHING ON THE RESPONSE WITHOUT THE NON-STATIONARY COMPONENTS
+Rcout << "Wrap n_knots_smoothing_pred" << std::endl;
     int n_knots_smoothing_y_new = wrap_and_check_n_knots_smoothing(n_knots_smoothing_pred);
 
 
