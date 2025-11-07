@@ -6757,8 +6757,6 @@ Rcpp::List tune_new_betas_FMGWR(Rcpp::NumericMatrix coordinates_non_stationary_t
     _FD_INPUT_TYPE_ b   = training_input[_b_];
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ev_ = wrap_abscissas(abscissa_ev,a,b);      //abscissa points for which the evaluation of the prediction is required
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ = training_input[_abscissa_];              //abscissa point for which the training data are discretized
-    //knots for performing smoothing of the prediction(n_knots_smoothing_y_new knots equally spaced in (a,b))
-    FDAGWR_TRAITS::Dense_Matrix knots_smoothing_pred = FDAGWR_TRAITS::Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
     //RESPONSE
     std::size_t number_basis_response_ = response_input[_n_basis_];
     std::string basis_type_response_   = response_input[_t_basis_];
@@ -7101,8 +7099,6 @@ Rcpp::List tune_new_betas_FGWR(Rcpp::NumericMatrix coordinates_non_stationary_to
     _FD_INPUT_TYPE_ b   = training_input[_b_];
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ev_ = wrap_abscissas(abscissa_ev,a,b);     //abscissa points for which the evaluation of the prediction is required
     std::vector<_FD_INPUT_TYPE_> abscissa_points_ = training_input[_abscissa_];             //abscissa point for which the training data are discretized
-    //knots for performing smoothing of the prediction(n_knots_smoothing_y_new knots equally spaced in (a,b))
-    FDAGWR_TRAITS::Dense_Matrix knots_smoothing_pred = FDAGWR_TRAITS::Dense_Vector::LinSpaced(n_knots_smoothing_y_new, a, b);
     //RESPONSE
     std::size_t number_basis_response_ = response_input[_n_basis_];
     std::string basis_type_response_   = response_input[_t_basis_];
