@@ -7635,11 +7635,11 @@ std::cout << "Quasi nel New constructor" << std::endl;
 Rcout << "betaC" << std::endl;
     //compute the beta for stationary covariates
     fwr_predictor->computeStationaryBetas();  
-    /*
+
 Rcout << "betaNC" << std::endl;          
     //compute the beta for non-stationary covariates
     fwr_predictor->computeNonStationaryBetas(); 
- 
+    /* 
 Rcout << "Pred" << std::endl;  
     //perform prediction
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fwr_predictor->predict(X_new);
