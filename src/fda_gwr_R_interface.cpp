@@ -8482,7 +8482,6 @@ Rcpp::List y_new_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
     Rcpp::List l;
     //predictor
     l[_model_name_ + "_predictor"] = "predictor_" + std::string{algo_type<_FGWR_ALGO_>()};
-    l[_estimation_iter_] = estimation_iter(in_cascade_estimation);
     //predictions
     l[std::string{FDAGWR_HELPERS_for_PRED_NAMES::pred}] = y_pred_ev_R;
 
