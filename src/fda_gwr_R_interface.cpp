@@ -76,7 +76,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr9 installation successful"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr89 installation successful"<< std::endl;}
 
 
 
@@ -7629,12 +7629,13 @@ std::cout << "Quasi nel New constructor" << std::endl;
                                                                                                  1,
                                                                                                  n_train,
                                                                                                  number_threads,
-                                                                                              in_cascade_estimation);
+                                                                                                 in_cascade_estimation);
 
-/* 
+
 Rcout << "betaC" << std::endl;
     //compute the beta for stationary covariates
     fwr_predictor->computeStationaryBetas();  
+/* 
 Rcout << "betaNC" << std::endl;          
     //compute the beta for non-stationary covariates
     fwr_predictor->computeNonStationaryBetas(); 
