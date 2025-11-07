@@ -326,6 +326,7 @@ public:
                     m_Ls_j(Ls_j)
 
             {
+                std::cout << "New constructor" << std::endl;
                 //input coherency
                 assert(m_Bc_fitted.size() == m_qc);
                 assert(m_Be_pred.size() == m_qs);

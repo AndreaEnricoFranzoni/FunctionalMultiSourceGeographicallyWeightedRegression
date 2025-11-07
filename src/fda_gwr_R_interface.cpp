@@ -7291,7 +7291,7 @@ Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                             int n_knots_smoothing_pred = 100,
                             Rcpp::Nullable<int> num_threads = R_NilValue)
 {
-    Rcout << "Functional Multi-Source Geographically Weighted Regression ESC new y" << std::endl;
+    Rcout << "Functional Multi-Source Geographically Weighted Regression ESC new y2" << std::endl;
 
     //EVERY COLUMN A UNIT, EVERY ROW A RAW EVALUATION/BASIS COEFFICIENT
     //ONLY FOR COORDINATES, EVERY ROW IS A UNIT
@@ -7392,7 +7392,7 @@ Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     Rcpp::List stations_cov_input        = training_input[_cov_station_];
     //list with elements of the beta of stations-dependent covariates
     Rcpp::List beta_stations_cov_input   = training_input[_beta_station_];
-
+Rcout << "Reading from the model_fitted" << std::endl;
     //ESTIMATION TECHNIQUE
     bool in_cascade_estimation = training_input[_cascade_estimate_];
     //DOMAIN INFORMATION
@@ -7460,7 +7460,7 @@ Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     FDAGWR_TRAITS::Dense_Vector knots_beta_stations_cov_eigen_w_       = Eigen::Map<FDAGWR_TRAITS::Dense_Vector>(knots_beta_stations_cov_.data(),knots_beta_stations_cov_.size());
     
     
-    
+Rcout << "Reading from new_beta" << std::endl;    
     //TUNED NON-STATIONARY BETAS
     //saving the betas basis expansion coefficients for tuned event-dependent covariates
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix>> Be_tuned; //vettore esterno: per ogni covariata S. Interno: per ogni unità di training
@@ -7479,11 +7479,32 @@ Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
         auto Bs_tuned_i = wrap_covariates_coefficients<_STATION_>(Bs_tuned_i_list[_coeff_basis_]);  //Ls_j x 1
         Bs_tuned.push_back(Bs_tuned_i);}
 
+Rcout << "Bc_fitted" << std::endl;
+for(std::size_t i = 0; i < Bc.size(); ++i){
+    Rcout << "CovC " << i << std::endl;
+    Rcout << Bc[i] << std::endl;
+}
 
-    ////////////////////////////////////////
-    /////   TRAINING OBJECT CREATION   /////
-    ////////////////////////////////////////
-    //BASIS SYSTEMS FOR THE BETAS
+Rcout << "Be_fitted" << std::endl;
+for(std::size_t i = 0; i < Be_tuned.size(); ++i){
+    Rcout << "CovE " << i << std::endl;
+    for(std::size_t j = 0; j < Be_tuned[i].size(); ++j){
+        Rcout << Be_tuned[i][j] << std::endl;
+    }
+}
+
+
+Rcout << "Bs_fitted" << std::endl;
+for(std::size_t i = 0; i < Bs_tuned.size(); ++i){
+    Rcout << "CovS " << i << std::endl;
+    for(std::size_t j = 0; j < Bs_tuned[i].size(); ++j){
+        Rcout << Bs_tuned[i][j] << std::endl;
+    }
+}
+
+
+Rcout << "Creating the basis systems for the betas" << std::endl;
+    //BASIS SYSTEMS OF THE BETAS
     //stationary (Omega)
     basis_systems< _DOMAIN_, bsplines_basis > bs_C(knots_beta_stationary_cov_eigen_w_, 
                                                    degree_basis_beta_stationary_cov_, 
@@ -7520,6 +7541,7 @@ Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     functional_matrix_sparse<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> psi = wrap_into_fm<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_,_DOMAIN_,bsplines_basis>(bs_S);
 
 
+Rcout << "Covariates to be pred" << std::endl;
     //////////////////////////////////////////////
     ///// WRAPPING COVARIATES TO BE PREDICTED ////
     //////////////////////////////////////////////
@@ -7585,7 +7607,7 @@ Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
         {std::string{covariate_type<_EVENT_>()},     Xe_new},
         {std::string{covariate_type<_STATION_>()},   Xs_new}};
 
-    
+std::cout << "Quasi nel New constructor" << std::endl;    
     //MI SERVE
     //fwr predictor
     auto fwr_predictor = fwr_predictor_factory< _FGWR_ALGO_, _FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_ >(std::move(Bc),
@@ -7610,18 +7632,22 @@ Rcpp::List new_y_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
                                                                                                  n_train,
                                                                                                  number_threads,
                                                                                                  in_cascade_estimation);
-
+Rcout << "betaC" << std::endl;
     //compute the beta for stationary covariates
-    fwr_predictor->computeStationaryBetas();            
+    fwr_predictor->computeStationaryBetas();  
+Rcout << "betaNC" << std::endl;          
     //compute the beta for non-stationary covariates
-    fwr_predictor->computeNonStationaryBetas();   
+    fwr_predictor->computeNonStationaryBetas(); 
+Rcout << "Pred" << std::endl;  
     //perform prediction
     functional_matrix<_FD_INPUT_TYPE_,_FD_OUTPUT_TYPE_> y_pred = fwr_predictor->predict(X_new);
+Rcout << "Pred ev" << std::endl;
     //evaluating the prediction
     std::vector< std::vector< _FD_OUTPUT_TYPE_>> y_pred_ev = fwr_predictor->evalPred(y_pred,abscissa_points_ev_);
+Rcout << "Pred smoothing" << std::endl;
     //smoothing of the prediction
     auto y_pred_smooth_coeff = fwr_predictor->smoothPred<_DOMAIN_>(y_pred,*basis_pred,knots_smoothing_pred);
-
+Rcout << "Wrap out" << std::endl;
     //predictions evaluations
     Rcpp::List y_pred_ev_R = wrap_prediction_to_R_list<_FD_INPUT_TYPE_, _FD_OUTPUT_TYPE_>(y_pred_ev,
                                                                                           abscissa_points_ev_,
