@@ -7352,6 +7352,7 @@ Rcpp::List y_new_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred,
     std::string _t_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_t};             //type of basis
     std::string _deg_basis_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_deg};           //degree of basis
     std::string _knots_basis_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_knots};         //knots of basis
+    std::string _coeff_basis_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis};         //coefficients of basis expansion
     //domain
     std::string _n_                = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n};                   //number of training units
     std::string _a_                = std::string{FDAGWR_HELPERS_for_PRED_NAMES::a};                   //left domain extreme
@@ -7702,6 +7703,7 @@ Rcpp::List y_new_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred,
     std::string _t_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_t};             //type of basis
     std::string _deg_basis_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_deg};           //degree of basis
     std::string _knots_basis_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_knots};         //knots of basis
+    std::string _coeff_basis_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis};         //coefficients of basis expansion
     //domain
     std::string _n_                = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n};                   //number of training units
     std::string _a_                = std::string{FDAGWR_HELPERS_for_PRED_NAMES::a};                   //left domain extreme
@@ -8046,6 +8048,7 @@ Rcpp::List y_new_FMGWR(Rcpp::List coeff_stationary_cov_to_pred,
     std::string _t_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_t};             //type of basis
     std::string _deg_basis_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_deg};           //degree of basis
     std::string _knots_basis_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_knots};         //knots of basis
+    std::string _coeff_basis_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis};         //coefficients of basis expansion
     //domain
     std::string _n_                = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n};                   //number of training units
     std::string _a_                = std::string{FDAGWR_HELPERS_for_PRED_NAMES::a};                   //left domain extreme
@@ -8328,6 +8331,7 @@ Rcpp::List y_new_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred,
     std::string _t_basis_        = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_t};             //type of basis
     std::string _deg_basis_      = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_deg};           //degree of basis
     std::string _knots_basis_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::basis_knots};         //knots of basis
+    std::string _coeff_basis_    = std::string{FDAGWR_HELPERS_for_PRED_NAMES::coeff_basis};         //coefficients of basis expansion
     //domain
     std::string _n_                = std::string{FDAGWR_HELPERS_for_PRED_NAMES::n};                   //number of training units
     std::string _a_                = std::string{FDAGWR_HELPERS_for_PRED_NAMES::a};                   //left domain extreme
