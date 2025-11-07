@@ -76,7 +76,7 @@ using namespace Rcpp;
 */
 //
 // [[Rcpp::export]]
-void installation_fdagwr(){   Rcout << "fdagwr installation successful"<< std::endl;}
+void installation_fdagwr(){   Rcout << "fdagwr5 installation successful"<< std::endl;}
 
 
 
@@ -7466,7 +7466,7 @@ Rcout << "Reading from new_beta" << std::endl;
     Rcpp::List Be_tuned_list = new_beta[_be_ + "_pred"];
     for(std::size_t i = 0; i < q_E; ++i){
         Rcpp::List Be_tuned_i_list = Be_tuned_list[i];
-        auto Be_tuned_i = wrap_covariates_coefficients<_EVENT_>(Be_tuned_i_list[_coeff_basis_]);  //Ls_j x 1
+        auto Be_tuned_i = wrap_covariates_coefficients<_EVENT_>(Be_tuned_i_list[_coeff_basis_]);  //Le_j x 1
         Be_tuned.push_back(Be_tuned_i);}
     //saving the betas basis expansion coefficients for tuned station-dependent covariates
     std::vector< std::vector< FDAGWR_TRAITS::Dense_Matrix>> Bs_tuned; //vettore esterno: per ogni covariata S. Interno: per ogni unità di training
@@ -7477,11 +7477,7 @@ Rcout << "Reading from new_beta" << std::endl;
         auto Bs_tuned_i = wrap_covariates_coefficients<_STATION_>(Bs_tuned_i_list[_coeff_basis_]);  //Ls_j x 1
         Bs_tuned.push_back(Bs_tuned_i);}
 
-Rcout << "Bc_fitted" << std::endl;
-for(std::size_t i = 0; i < Bc.size(); ++i){
-    Rcout << "CovC " << i << std::endl;
-    Rcout << Bc[i] << std::endl;
-}
+
 
 Rcout << "Be_fitted" << std::endl;
 for(std::size_t i = 0; i < Be_tuned.size(); ++i){
