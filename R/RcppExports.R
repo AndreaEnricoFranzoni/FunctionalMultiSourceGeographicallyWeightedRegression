@@ -13,12 +13,28 @@ predict_FMSGWR_ESC <- function(coeff_stationary_cov_to_pred, coeff_events_cov_to
     .Call(`_fdagwr_predict_FMSGWR_ESC`, coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coordinates_events_to_pred, coeff_stations_cov_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_knots_smoothing_pred, n_intervals_quadrature, num_threads)
 }
 
+beta_new_FMSGWR_ESC <- function(coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature = 100L, num_threads = NULL) {
+    .Call(`_fdagwr_beta_new_FMSGWR_ESC`, coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
+}
+
+y_new_FMSGWR_ESC <- function(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred = 100L, num_threads = NULL) {
+    .Call(`_fdagwr_y_new_FMSGWR_ESC`, coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads)
+}
+
 FMSGWR_SEC <- function(y_points, t_points, left_extreme_domain, right_extreme_domain, coeff_y_points, knots_y_points, degree_basis_y_points, n_basis_y_points, coeff_rec_weights_y_points, degree_basis_rec_weights_y_points, n_basis_rec_weights_y_points, coeff_stationary_cov, basis_types_stationary_cov, knots_stationary_cov, degrees_basis_stationary_cov, n_basis_stationary_cov, penalization_stationary_cov, knots_beta_stationary_cov, degrees_basis_beta_stationary_cov, n_basis_beta_stationary_cov, coeff_events_cov, basis_types_events_cov, knots_events_cov, degrees_basis_events_cov, n_basis_events_cov, penalization_events_cov, coordinates_events, kernel_bandwith_events, knots_beta_events_cov, degrees_basis_beta_events_cov, n_basis_beta_events_cov, coeff_stations_cov, basis_types_stations_cov, knots_stations_cov, degrees_basis_stations_cov, n_basis_stations_cov, penalization_stations_cov, coordinates_stations, kernel_bandwith_stations, knots_beta_stations_cov, degrees_basis_beta_stations_cov, n_basis_beta_stations_cov, in_cascade_estimation = FALSE, n_knots_smoothing = 100L, n_intervals_quadrature = 100L, num_threads = NULL, basis_type_y_points = "bsplines", basis_type_rec_weights_y_points = "bsplines", basis_types_beta_stationary_cov = NULL, basis_types_beta_events_cov = NULL, basis_types_beta_stations_cov = NULL) {
     .Call(`_fdagwr_FMSGWR_SEC`, y_points, t_points, left_extreme_domain, right_extreme_domain, coeff_y_points, knots_y_points, degree_basis_y_points, n_basis_y_points, coeff_rec_weights_y_points, degree_basis_rec_weights_y_points, n_basis_rec_weights_y_points, coeff_stationary_cov, basis_types_stationary_cov, knots_stationary_cov, degrees_basis_stationary_cov, n_basis_stationary_cov, penalization_stationary_cov, knots_beta_stationary_cov, degrees_basis_beta_stationary_cov, n_basis_beta_stationary_cov, coeff_events_cov, basis_types_events_cov, knots_events_cov, degrees_basis_events_cov, n_basis_events_cov, penalization_events_cov, coordinates_events, kernel_bandwith_events, knots_beta_events_cov, degrees_basis_beta_events_cov, n_basis_beta_events_cov, coeff_stations_cov, basis_types_stations_cov, knots_stations_cov, degrees_basis_stations_cov, n_basis_stations_cov, penalization_stations_cov, coordinates_stations, kernel_bandwith_stations, knots_beta_stations_cov, degrees_basis_beta_stations_cov, n_basis_beta_stations_cov, in_cascade_estimation, n_knots_smoothing, n_intervals_quadrature, num_threads, basis_type_y_points, basis_type_rec_weights_y_points, basis_types_beta_stationary_cov, basis_types_beta_events_cov, basis_types_beta_stations_cov)
 }
 
 predict_FMSGWR_SEC <- function(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coordinates_events_to_pred, coeff_stations_cov_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_knots_smoothing_pred = 100L, n_intervals_quadrature = 100L, num_threads = NULL) {
     .Call(`_fdagwr_predict_FMSGWR_SEC`, coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coordinates_events_to_pred, coeff_stations_cov_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_knots_smoothing_pred, n_intervals_quadrature, num_threads)
+}
+
+beta_new_FMSGWR_SEC <- function(coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature = 100L, num_threads = NULL) {
+    .Call(`_fdagwr_beta_new_FMSGWR_SEC`, coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
+}
+
+y_new_FMSGWR_SEC <- function(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred = 100L, num_threads = NULL) {
+    .Call(`_fdagwr_y_new_FMSGWR_SEC`, coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads)
 }
 
 FMGWR <- function(y_points, t_points, left_extreme_domain, right_extreme_domain, coeff_y_points, knots_y_points, degree_basis_y_points, n_basis_y_points, coeff_rec_weights_y_points, degree_basis_rec_weights_y_points, n_basis_rec_weights_y_points, coeff_stationary_cov, basis_types_stationary_cov, knots_stationary_cov, degrees_basis_stationary_cov, n_basis_stationary_cov, penalization_stationary_cov, knots_beta_stationary_cov, degrees_basis_beta_stationary_cov, n_basis_beta_stationary_cov, coeff_non_stationary_cov, basis_types_non_stationary_cov, knots_non_stationary_cov, degrees_basis_non_stationary_cov, n_basis_non_stationary_cov, penalization_non_stationary_cov, coordinates_non_stationary, kernel_bandwith_non_stationary, knots_beta_non_stationary_cov, degrees_basis_beta_non_stationary_cov, n_basis_beta_non_stationary_cov, in_cascade_estimation = FALSE, n_knots_smoothing = 100L, n_intervals_quadrature = 100L, num_threads = NULL, basis_type_y_points = "bsplines", basis_type_rec_weights_y_points = "bsplines", basis_types_beta_stationary_cov = NULL, basis_types_beta_non_stationary_cov = NULL) {
@@ -29,6 +45,14 @@ predict_FMGWR <- function(coeff_stationary_cov_to_pred, coeff_non_stationary_cov
     .Call(`_fdagwr_predict_FMGWR`, coeff_stationary_cov_to_pred, coeff_non_stationary_cov_to_pred, coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_knots_smoothing_pred, n_intervals_quadrature, num_threads)
 }
 
+beta_new_FMGWR <- function(coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature = 100L, num_threads = NULL) {
+    .Call(`_fdagwr_beta_new_FMGWR`, coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
+}
+
+y_new_FMGWR <- function(coeff_stationary_cov_to_pred, coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred = 100L, num_threads = NULL) {
+    .Call(`_fdagwr_y_new_FMGWR`, coeff_stationary_cov_to_pred, coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads)
+}
+
 FGWR <- function(y_points, t_points, left_extreme_domain, right_extreme_domain, coeff_y_points, knots_y_points, degree_basis_y_points, n_basis_y_points, coeff_rec_weights_y_points, degree_basis_rec_weights_y_points, n_basis_rec_weights_y_points, coeff_non_stationary_cov, basis_types_non_stationary_cov, knots_non_stationary_cov, degrees_basis_non_stationary_cov, n_basis_non_stationary_cov, penalization_non_stationary_cov, coordinates_non_stationary, kernel_bandwith_non_stationary, knots_beta_non_stationary_cov, degrees_basis_beta_non_stationary_cov, n_basis_beta_non_stationary_cov, n_intervals_quadrature = 100L, num_threads = NULL, basis_type_y_points = "bsplines", basis_type_rec_weights_y_points = "bsplines", basis_types_beta_stationary_cov = NULL, basis_types_beta_non_stationary_cov = NULL) {
     .Call(`_fdagwr_FGWR`, y_points, t_points, left_extreme_domain, right_extreme_domain, coeff_y_points, knots_y_points, degree_basis_y_points, n_basis_y_points, coeff_rec_weights_y_points, degree_basis_rec_weights_y_points, n_basis_rec_weights_y_points, coeff_non_stationary_cov, basis_types_non_stationary_cov, knots_non_stationary_cov, degrees_basis_non_stationary_cov, n_basis_non_stationary_cov, penalization_non_stationary_cov, coordinates_non_stationary, kernel_bandwith_non_stationary, knots_beta_non_stationary_cov, degrees_basis_beta_non_stationary_cov, n_basis_beta_non_stationary_cov, n_intervals_quadrature, num_threads, basis_type_y_points, basis_type_rec_weights_y_points, basis_types_beta_stationary_cov, basis_types_beta_non_stationary_cov)
 }
@@ -37,43 +61,19 @@ predict_FGWR <- function(coeff_non_stationary_cov_to_pred, coordinates_non_stati
     .Call(`_fdagwr_predict_FGWR`, coeff_non_stationary_cov_to_pred, coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_knots_smoothing_pred, n_intervals_quadrature, num_threads)
 }
 
+beta_new_FGWR <- function(coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature = 100L, num_threads = NULL) {
+    .Call(`_fdagwr_beta_new_FGWR`, coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
+}
+
+y_new_FGWR <- function(coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred = 100L, num_threads = NULL) {
+    .Call(`_fdagwr_y_new_FGWR`, coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads)
+}
+
 FWR <- function(y_points, t_points, left_extreme_domain, right_extreme_domain, coeff_y_points, knots_y_points, degree_basis_y_points, n_basis_y_points, coeff_rec_weights_y_points, degree_basis_rec_weights_y_points, n_basis_rec_weights_y_points, coeff_stationary_cov, basis_types_stationary_cov, knots_stationary_cov, degrees_basis_stationary_cov, n_basis_stationary_cov, penalization_stationary_cov, knots_beta_stationary_cov, degrees_basis_beta_stationary_cov, n_basis_beta_stationary_cov, n_intervals_quadrature = 100L, num_threads = NULL, basis_type_y_points = "bsplines", basis_type_rec_weights_y_points = "bsplines", basis_types_beta_stationary_cov = NULL) {
     .Call(`_fdagwr_FWR`, y_points, t_points, left_extreme_domain, right_extreme_domain, coeff_y_points, knots_y_points, degree_basis_y_points, n_basis_y_points, coeff_rec_weights_y_points, degree_basis_rec_weights_y_points, n_basis_rec_weights_y_points, coeff_stationary_cov, basis_types_stationary_cov, knots_stationary_cov, degrees_basis_stationary_cov, n_basis_stationary_cov, penalization_stationary_cov, knots_beta_stationary_cov, degrees_basis_beta_stationary_cov, n_basis_beta_stationary_cov, n_intervals_quadrature, num_threads, basis_type_y_points, basis_type_rec_weights_y_points, basis_types_beta_stationary_cov)
 }
 
 predict_FWR <- function(coeff_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_knots_smoothing_pred = 100L, num_threads = NULL) {
     .Call(`_fdagwr_predict_FWR`, coeff_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_knots_smoothing_pred, num_threads)
-}
-
-beta_new_FMSGWR_ESC <- function(coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature = 100L, num_threads = NULL) {
-    .Call(`_fdagwr_beta_new_FMSGWR_ESC`, coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
-}
-
-beta_new_FMSGWR_SEC <- function(coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature = 100L, num_threads = NULL) {
-    .Call(`_fdagwr_beta_new_FMSGWR_SEC`, coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
-}
-
-beta_new_FMGWR <- function(coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature = 100L, num_threads = NULL) {
-    .Call(`_fdagwr_beta_new_FMGWR`, coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
-}
-
-beta_new_FGWR <- function(coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature = 100L, num_threads = NULL) {
-    .Call(`_fdagwr_beta_new_FGWR`, coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads)
-}
-
-y_new_FMSGWR_ESC <- function(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred = 100L, num_threads = NULL) {
-    .Call(`_fdagwr_y_new_FMSGWR_ESC`, coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads)
-}
-
-y_new_FMSGWR_SEC <- function(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred = 100L, num_threads = NULL) {
-    .Call(`_fdagwr_y_new_FMSGWR_SEC`, coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads)
-}
-
-y_new_FMGWR <- function(coeff_stationary_cov_to_pred, coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred = 100L, num_threads = NULL) {
-    .Call(`_fdagwr_y_new_FMGWR`, coeff_stationary_cov_to_pred, coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads)
-}
-
-y_new_FGWR <- function(coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred = 100L, num_threads = NULL) {
-    .Call(`_fdagwr_y_new_FGWR`, coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads)
 }
 

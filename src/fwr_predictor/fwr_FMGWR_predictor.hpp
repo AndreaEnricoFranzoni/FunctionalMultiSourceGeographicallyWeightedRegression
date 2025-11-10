@@ -205,7 +205,25 @@ public:
             }
 
     /*!
-    * @brief Constructor if beta already tuned
+    * @brief Constructor if betas in the new locations have been already tuned
+    * @param Bc_fitted coefficients of the basis expansion for stationary regressors coefficients: n_train elements Lc_jx1
+    * @param Bnc_tuned Coefficients of the basis expansion for non-stationary regressors coefficients on the locations of the units to be predicted: every of the qnc elements are n_pred 1xLnc_j matrices, one for each statistical unit to be predicted
+    * @param omega functional sparse matrix containing the basis of the functional regression coefficients of the stationary covariates (qcxLc, row i-th contains zeros and the basis of the i-th stationary covariate, their position shifted of sum_i_0_to_i(Lc_i))
+    * @param qc number of stationary covariates
+    * @param Lc total number of basis used for the stationary covariates functional regression coefficients
+    * @param Lc_j vector containing in element i-th the number of basis for the stationary covariate i-th functional regression coefficients
+    * @param eta functional sparse matrix containing the basis of the functional regression coefficients of the non-stationary covariates (qncxLnc, row i-th contains zeros and the basis of the i-th non-stationary covariate, their position shifted of sum_i_0_to_i(Lnc_i))
+    * @param qnc number of non-stationary covariates
+    * @param Lnc total number of basis used for the non-stationary covariates functional regression coefficients
+    * @param Lnc_j vector containing in element i-th the number of basis for the non-stationary covariate i-th functional regression coefficients
+    * @param n_pred number of units to be predicted
+    * @param a left extreme functional data domain 
+    * @param b right extreme functional data domain 
+    * @param n_intervals_integration number of intervals used by the midpoint quadrature rule
+    * @param n_train number of training statistical units
+    * @param number_threads number of threads for OMP
+    * @param in_cascade_estimation if true, for more than one source covariates, the estimation is made in cascade. If false, exact
+    * @note input dimensions check and transpose computation
     */
     template<typename FUNC_SPARSE_MATRIX_OBJ,
              typename SCALAR_MATRIX_OBJ_VEC,

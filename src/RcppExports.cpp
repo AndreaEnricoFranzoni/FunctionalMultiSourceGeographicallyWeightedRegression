@@ -102,6 +102,42 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// beta_new_FMSGWR_ESC
+Rcpp::List beta_new_FMSGWR_ESC(Rcpp::NumericMatrix coordinates_events_to_pred, Rcpp::NumericMatrix coordinates_stations_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_quadrature, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_beta_new_FMSGWR_ESC(SEXP coordinates_events_to_predSEXP, SEXP coordinates_stations_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP model_fittedSEXP, SEXP n_intervals_quadratureSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_events_to_pred(coordinates_events_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_stations_to_pred(coordinates_stations_to_predSEXP);
+    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
+    Rcpp::traits::input_parameter< int >::type n_intervals_quadrature(n_intervals_quadratureSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(beta_new_FMSGWR_ESC(coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// y_new_FMSGWR_ESC
+Rcpp::List y_new_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_events_cov_to_pred, Rcpp::List coeff_stations_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_y_new_FMSGWR_ESC(SEXP coeff_stationary_cov_to_predSEXP, SEXP coeff_events_cov_to_predSEXP, SEXP coeff_stations_cov_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP new_betaSEXP, SEXP model_fittedSEXP, SEXP n_knots_smoothing_predSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stationary_cov_to_pred(coeff_stationary_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_events_cov_to_pred(coeff_events_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stations_cov_to_pred(coeff_stations_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type new_beta(new_betaSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
+    Rcpp::traits::input_parameter< int >::type n_knots_smoothing_pred(n_knots_smoothing_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(y_new_FMSGWR_ESC(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 // FMSGWR_SEC
 Rcpp::List FMSGWR_SEC(Rcpp::NumericMatrix y_points, Rcpp::NumericVector t_points, double left_extreme_domain, double right_extreme_domain, Rcpp::NumericMatrix coeff_y_points, Rcpp::NumericVector knots_y_points, Rcpp::Nullable<int> degree_basis_y_points, Rcpp::Nullable<int> n_basis_y_points, Rcpp::NumericMatrix coeff_rec_weights_y_points, Rcpp::Nullable<int> degree_basis_rec_weights_y_points, Rcpp::Nullable<int> n_basis_rec_weights_y_points, Rcpp::List coeff_stationary_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_stationary_cov, Rcpp::NumericVector knots_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stationary_cov, Rcpp::NumericVector penalization_stationary_cov, Rcpp::NumericVector knots_beta_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_beta_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_stationary_cov, Rcpp::List coeff_events_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_events_cov, Rcpp::NumericVector knots_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_events_cov, Rcpp::NumericVector penalization_events_cov, Rcpp::NumericMatrix coordinates_events, double kernel_bandwith_events, Rcpp::NumericVector knots_beta_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_beta_events_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_events_cov, Rcpp::List coeff_stations_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_stations_cov, Rcpp::NumericVector knots_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stations_cov, Rcpp::NumericVector penalization_stations_cov, Rcpp::NumericMatrix coordinates_stations, double kernel_bandwith_stations, Rcpp::NumericVector knots_beta_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_beta_stations_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_stations_cov, bool in_cascade_estimation, int n_knots_smoothing, int n_intervals_quadrature, Rcpp::Nullable<int> num_threads, std::string basis_type_y_points, std::string basis_type_rec_weights_y_points, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_stationary_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_events_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_stations_cov);
 RcppExport SEXP _fdagwr_FMSGWR_SEC(SEXP y_pointsSEXP, SEXP t_pointsSEXP, SEXP left_extreme_domainSEXP, SEXP right_extreme_domainSEXP, SEXP coeff_y_pointsSEXP, SEXP knots_y_pointsSEXP, SEXP degree_basis_y_pointsSEXP, SEXP n_basis_y_pointsSEXP, SEXP coeff_rec_weights_y_pointsSEXP, SEXP degree_basis_rec_weights_y_pointsSEXP, SEXP n_basis_rec_weights_y_pointsSEXP, SEXP coeff_stationary_covSEXP, SEXP basis_types_stationary_covSEXP, SEXP knots_stationary_covSEXP, SEXP degrees_basis_stationary_covSEXP, SEXP n_basis_stationary_covSEXP, SEXP penalization_stationary_covSEXP, SEXP knots_beta_stationary_covSEXP, SEXP degrees_basis_beta_stationary_covSEXP, SEXP n_basis_beta_stationary_covSEXP, SEXP coeff_events_covSEXP, SEXP basis_types_events_covSEXP, SEXP knots_events_covSEXP, SEXP degrees_basis_events_covSEXP, SEXP n_basis_events_covSEXP, SEXP penalization_events_covSEXP, SEXP coordinates_eventsSEXP, SEXP kernel_bandwith_eventsSEXP, SEXP knots_beta_events_covSEXP, SEXP degrees_basis_beta_events_covSEXP, SEXP n_basis_beta_events_covSEXP, SEXP coeff_stations_covSEXP, SEXP basis_types_stations_covSEXP, SEXP knots_stations_covSEXP, SEXP degrees_basis_stations_covSEXP, SEXP n_basis_stations_covSEXP, SEXP penalization_stations_covSEXP, SEXP coordinates_stationsSEXP, SEXP kernel_bandwith_stationsSEXP, SEXP knots_beta_stations_covSEXP, SEXP degrees_basis_beta_stations_covSEXP, SEXP n_basis_beta_stations_covSEXP, SEXP in_cascade_estimationSEXP, SEXP n_knots_smoothingSEXP, SEXP n_intervals_quadratureSEXP, SEXP num_threadsSEXP, SEXP basis_type_y_pointsSEXP, SEXP basis_type_rec_weights_y_pointsSEXP, SEXP basis_types_beta_stationary_covSEXP, SEXP basis_types_beta_events_covSEXP, SEXP basis_types_beta_stations_covSEXP) {
@@ -184,6 +220,42 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// beta_new_FMSGWR_SEC
+Rcpp::List beta_new_FMSGWR_SEC(Rcpp::NumericMatrix coordinates_events_to_pred, Rcpp::NumericMatrix coordinates_stations_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_quadrature, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_beta_new_FMSGWR_SEC(SEXP coordinates_events_to_predSEXP, SEXP coordinates_stations_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP model_fittedSEXP, SEXP n_intervals_quadratureSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_events_to_pred(coordinates_events_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_stations_to_pred(coordinates_stations_to_predSEXP);
+    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
+    Rcpp::traits::input_parameter< int >::type n_intervals_quadrature(n_intervals_quadratureSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(beta_new_FMSGWR_SEC(coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// y_new_FMSGWR_SEC
+Rcpp::List y_new_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_events_cov_to_pred, Rcpp::List coeff_stations_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_y_new_FMSGWR_SEC(SEXP coeff_stationary_cov_to_predSEXP, SEXP coeff_events_cov_to_predSEXP, SEXP coeff_stations_cov_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP new_betaSEXP, SEXP model_fittedSEXP, SEXP n_knots_smoothing_predSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stationary_cov_to_pred(coeff_stationary_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_events_cov_to_pred(coeff_events_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stations_cov_to_pred(coeff_stations_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type new_beta(new_betaSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
+    Rcpp::traits::input_parameter< int >::type n_knots_smoothing_pred(n_knots_smoothing_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(y_new_FMSGWR_SEC(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 // FMGWR
 Rcpp::List FMGWR(Rcpp::NumericMatrix y_points, Rcpp::NumericVector t_points, double left_extreme_domain, double right_extreme_domain, Rcpp::NumericMatrix coeff_y_points, Rcpp::NumericVector knots_y_points, Rcpp::Nullable<int> degree_basis_y_points, Rcpp::Nullable<int> n_basis_y_points, Rcpp::NumericMatrix coeff_rec_weights_y_points, Rcpp::Nullable<int> degree_basis_rec_weights_y_points, Rcpp::Nullable<int> n_basis_rec_weights_y_points, Rcpp::List coeff_stationary_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_stationary_cov, Rcpp::NumericVector knots_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stationary_cov, Rcpp::NumericVector penalization_stationary_cov, Rcpp::NumericVector knots_beta_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_beta_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_stationary_cov, Rcpp::List coeff_non_stationary_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_non_stationary_cov, Rcpp::NumericVector knots_non_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_non_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_non_stationary_cov, Rcpp::NumericVector penalization_non_stationary_cov, Rcpp::NumericMatrix coordinates_non_stationary, double kernel_bandwith_non_stationary, Rcpp::NumericVector knots_beta_non_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_beta_non_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_non_stationary_cov, bool in_cascade_estimation, int n_knots_smoothing, int n_intervals_quadrature, Rcpp::Nullable<int> num_threads, std::string basis_type_y_points, std::string basis_type_rec_weights_y_points, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_stationary_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_non_stationary_cov);
 RcppExport SEXP _fdagwr_FMGWR(SEXP y_pointsSEXP, SEXP t_pointsSEXP, SEXP left_extreme_domainSEXP, SEXP right_extreme_domainSEXP, SEXP coeff_y_pointsSEXP, SEXP knots_y_pointsSEXP, SEXP degree_basis_y_pointsSEXP, SEXP n_basis_y_pointsSEXP, SEXP coeff_rec_weights_y_pointsSEXP, SEXP degree_basis_rec_weights_y_pointsSEXP, SEXP n_basis_rec_weights_y_pointsSEXP, SEXP coeff_stationary_covSEXP, SEXP basis_types_stationary_covSEXP, SEXP knots_stationary_covSEXP, SEXP degrees_basis_stationary_covSEXP, SEXP n_basis_stationary_covSEXP, SEXP penalization_stationary_covSEXP, SEXP knots_beta_stationary_covSEXP, SEXP degrees_basis_beta_stationary_covSEXP, SEXP n_basis_beta_stationary_covSEXP, SEXP coeff_non_stationary_covSEXP, SEXP basis_types_non_stationary_covSEXP, SEXP knots_non_stationary_covSEXP, SEXP degrees_basis_non_stationary_covSEXP, SEXP n_basis_non_stationary_covSEXP, SEXP penalization_non_stationary_covSEXP, SEXP coordinates_non_stationarySEXP, SEXP kernel_bandwith_non_stationarySEXP, SEXP knots_beta_non_stationary_covSEXP, SEXP degrees_basis_beta_non_stationary_covSEXP, SEXP n_basis_beta_non_stationary_covSEXP, SEXP in_cascade_estimationSEXP, SEXP n_knots_smoothingSEXP, SEXP n_intervals_quadratureSEXP, SEXP num_threadsSEXP, SEXP basis_type_y_pointsSEXP, SEXP basis_type_rec_weights_y_pointsSEXP, SEXP basis_types_beta_stationary_covSEXP, SEXP basis_types_beta_non_stationary_covSEXP) {
@@ -252,6 +324,40 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// beta_new_FMGWR
+Rcpp::List beta_new_FMGWR(Rcpp::NumericMatrix coordinates_non_stationary_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_quadrature, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_beta_new_FMGWR(SEXP coordinates_non_stationary_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP model_fittedSEXP, SEXP n_intervals_quadratureSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_non_stationary_to_pred(coordinates_non_stationary_to_predSEXP);
+    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
+    Rcpp::traits::input_parameter< int >::type n_intervals_quadrature(n_intervals_quadratureSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(beta_new_FMGWR(coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// y_new_FMGWR
+Rcpp::List y_new_FMGWR(Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_non_stationary_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_y_new_FMGWR(SEXP coeff_stationary_cov_to_predSEXP, SEXP coeff_non_stationary_cov_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP new_betaSEXP, SEXP model_fittedSEXP, SEXP n_knots_smoothing_predSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stationary_cov_to_pred(coeff_stationary_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_non_stationary_cov_to_pred(coeff_non_stationary_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type new_beta(new_betaSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
+    Rcpp::traits::input_parameter< int >::type n_knots_smoothing_pred(n_knots_smoothing_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(y_new_FMGWR(coeff_stationary_cov_to_pred, coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 // FGWR
 Rcpp::List FGWR(Rcpp::NumericMatrix y_points, Rcpp::NumericVector t_points, double left_extreme_domain, double right_extreme_domain, Rcpp::NumericMatrix coeff_y_points, Rcpp::NumericVector knots_y_points, Rcpp::Nullable<int> degree_basis_y_points, Rcpp::Nullable<int> n_basis_y_points, Rcpp::NumericMatrix coeff_rec_weights_y_points, Rcpp::Nullable<int> degree_basis_rec_weights_y_points, Rcpp::Nullable<int> n_basis_rec_weights_y_points, Rcpp::List coeff_non_stationary_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_non_stationary_cov, Rcpp::NumericVector knots_non_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_non_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_non_stationary_cov, Rcpp::NumericVector penalization_non_stationary_cov, Rcpp::NumericMatrix coordinates_non_stationary, double kernel_bandwith_non_stationary, Rcpp::NumericVector knots_beta_non_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_beta_non_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_non_stationary_cov, int n_intervals_quadrature, Rcpp::Nullable<int> num_threads, std::string basis_type_y_points, std::string basis_type_rec_weights_y_points, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_stationary_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_non_stationary_cov);
 RcppExport SEXP _fdagwr_FGWR(SEXP y_pointsSEXP, SEXP t_pointsSEXP, SEXP left_extreme_domainSEXP, SEXP right_extreme_domainSEXP, SEXP coeff_y_pointsSEXP, SEXP knots_y_pointsSEXP, SEXP degree_basis_y_pointsSEXP, SEXP n_basis_y_pointsSEXP, SEXP coeff_rec_weights_y_pointsSEXP, SEXP degree_basis_rec_weights_y_pointsSEXP, SEXP n_basis_rec_weights_y_pointsSEXP, SEXP coeff_non_stationary_covSEXP, SEXP basis_types_non_stationary_covSEXP, SEXP knots_non_stationary_covSEXP, SEXP degrees_basis_non_stationary_covSEXP, SEXP n_basis_non_stationary_covSEXP, SEXP penalization_non_stationary_covSEXP, SEXP coordinates_non_stationarySEXP, SEXP kernel_bandwith_non_stationarySEXP, SEXP knots_beta_non_stationary_covSEXP, SEXP degrees_basis_beta_non_stationary_covSEXP, SEXP n_basis_beta_non_stationary_covSEXP, SEXP n_intervals_quadratureSEXP, SEXP num_threadsSEXP, SEXP basis_type_y_pointsSEXP, SEXP basis_type_rec_weights_y_pointsSEXP, SEXP basis_types_beta_stationary_covSEXP, SEXP basis_types_beta_non_stationary_covSEXP) {
@@ -308,6 +414,39 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// beta_new_FGWR
+Rcpp::List beta_new_FGWR(Rcpp::NumericMatrix coordinates_non_stationary_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_quadrature, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_beta_new_FGWR(SEXP coordinates_non_stationary_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP model_fittedSEXP, SEXP n_intervals_quadratureSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_non_stationary_to_pred(coordinates_non_stationary_to_predSEXP);
+    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
+    Rcpp::traits::input_parameter< int >::type n_intervals_quadrature(n_intervals_quadratureSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(beta_new_FGWR(coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// y_new_FGWR
+Rcpp::List y_new_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred, Rcpp::Nullable<int> num_threads);
+RcppExport SEXP _fdagwr_y_new_FGWR(SEXP coeff_non_stationary_cov_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP new_betaSEXP, SEXP model_fittedSEXP, SEXP n_knots_smoothing_predSEXP, SEXP num_threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_non_stationary_cov_to_pred(coeff_non_stationary_cov_to_predSEXP);
+    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type new_beta(new_betaSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
+    Rcpp::traits::input_parameter< int >::type n_knots_smoothing_pred(n_knots_smoothing_predSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(y_new_FGWR(coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads));
+    return rcpp_result_gen;
+END_RCPP
+}
 // FWR
 Rcpp::List FWR(Rcpp::NumericMatrix y_points, Rcpp::NumericVector t_points, double left_extreme_domain, double right_extreme_domain, Rcpp::NumericMatrix coeff_y_points, Rcpp::NumericVector knots_y_points, Rcpp::Nullable<int> degree_basis_y_points, Rcpp::Nullable<int> n_basis_y_points, Rcpp::NumericMatrix coeff_rec_weights_y_points, Rcpp::Nullable<int> degree_basis_rec_weights_y_points, Rcpp::Nullable<int> n_basis_rec_weights_y_points, Rcpp::List coeff_stationary_cov, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_stationary_cov, Rcpp::NumericVector knots_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_stationary_cov, Rcpp::NumericVector penalization_stationary_cov, Rcpp::NumericVector knots_beta_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> degrees_basis_beta_stationary_cov, Rcpp::Nullable<Rcpp::IntegerVector> n_basis_beta_stationary_cov, int n_intervals_quadrature, Rcpp::Nullable<int> num_threads, std::string basis_type_y_points, std::string basis_type_rec_weights_y_points, Rcpp::Nullable<Rcpp::CharacterVector> basis_types_beta_stationary_cov);
 RcppExport SEXP _fdagwr_FWR(SEXP y_pointsSEXP, SEXP t_pointsSEXP, SEXP left_extreme_domainSEXP, SEXP right_extreme_domainSEXP, SEXP coeff_y_pointsSEXP, SEXP knots_y_pointsSEXP, SEXP degree_basis_y_pointsSEXP, SEXP n_basis_y_pointsSEXP, SEXP coeff_rec_weights_y_pointsSEXP, SEXP degree_basis_rec_weights_y_pointsSEXP, SEXP n_basis_rec_weights_y_pointsSEXP, SEXP coeff_stationary_covSEXP, SEXP basis_types_stationary_covSEXP, SEXP knots_stationary_covSEXP, SEXP degrees_basis_stationary_covSEXP, SEXP n_basis_stationary_covSEXP, SEXP penalization_stationary_covSEXP, SEXP knots_beta_stationary_covSEXP, SEXP degrees_basis_beta_stationary_covSEXP, SEXP n_basis_beta_stationary_covSEXP, SEXP n_intervals_quadratureSEXP, SEXP num_threadsSEXP, SEXP basis_type_y_pointsSEXP, SEXP basis_type_rec_weights_y_pointsSEXP, SEXP basis_types_beta_stationary_covSEXP) {
@@ -359,166 +498,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// beta_new_FMSGWR_ESC
-Rcpp::List beta_new_FMSGWR_ESC(Rcpp::NumericMatrix coordinates_events_to_pred, Rcpp::NumericMatrix coordinates_stations_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_quadrature, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_beta_new_FMSGWR_ESC(SEXP coordinates_events_to_predSEXP, SEXP coordinates_stations_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP model_fittedSEXP, SEXP n_intervals_quadratureSEXP, SEXP num_threadsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_events_to_pred(coordinates_events_to_predSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_stations_to_pred(coordinates_stations_to_predSEXP);
-    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
-    Rcpp::traits::input_parameter< int >::type n_intervals_quadrature(n_intervals_quadratureSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(beta_new_FMSGWR_ESC(coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads));
-    return rcpp_result_gen;
-END_RCPP
-}
-// beta_new_FMSGWR_SEC
-Rcpp::List beta_new_FMSGWR_SEC(Rcpp::NumericMatrix coordinates_events_to_pred, Rcpp::NumericMatrix coordinates_stations_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_quadrature, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_beta_new_FMSGWR_SEC(SEXP coordinates_events_to_predSEXP, SEXP coordinates_stations_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP model_fittedSEXP, SEXP n_intervals_quadratureSEXP, SEXP num_threadsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_events_to_pred(coordinates_events_to_predSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_stations_to_pred(coordinates_stations_to_predSEXP);
-    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
-    Rcpp::traits::input_parameter< int >::type n_intervals_quadrature(n_intervals_quadratureSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(beta_new_FMSGWR_SEC(coordinates_events_to_pred, coordinates_stations_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads));
-    return rcpp_result_gen;
-END_RCPP
-}
-// beta_new_FMGWR
-Rcpp::List beta_new_FMGWR(Rcpp::NumericMatrix coordinates_non_stationary_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_quadrature, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_beta_new_FMGWR(SEXP coordinates_non_stationary_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP model_fittedSEXP, SEXP n_intervals_quadratureSEXP, SEXP num_threadsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_non_stationary_to_pred(coordinates_non_stationary_to_predSEXP);
-    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
-    Rcpp::traits::input_parameter< int >::type n_intervals_quadrature(n_intervals_quadratureSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(beta_new_FMGWR(coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads));
-    return rcpp_result_gen;
-END_RCPP
-}
-// beta_new_FGWR
-Rcpp::List beta_new_FGWR(Rcpp::NumericMatrix coordinates_non_stationary_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_quadrature, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_beta_new_FGWR(SEXP coordinates_non_stationary_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP model_fittedSEXP, SEXP n_intervals_quadratureSEXP, SEXP num_threadsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type coordinates_non_stationary_to_pred(coordinates_non_stationary_to_predSEXP);
-    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
-    Rcpp::traits::input_parameter< int >::type n_intervals_quadrature(n_intervals_quadratureSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(beta_new_FGWR(coordinates_non_stationary_to_pred, units_to_be_predicted, abscissa_ev, model_fitted, n_intervals_quadrature, num_threads));
-    return rcpp_result_gen;
-END_RCPP
-}
-// y_new_FMSGWR_ESC
-Rcpp::List y_new_FMSGWR_ESC(Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_events_cov_to_pred, Rcpp::List coeff_stations_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_y_new_FMSGWR_ESC(SEXP coeff_stationary_cov_to_predSEXP, SEXP coeff_events_cov_to_predSEXP, SEXP coeff_stations_cov_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP new_betaSEXP, SEXP model_fittedSEXP, SEXP n_knots_smoothing_predSEXP, SEXP num_threadsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stationary_cov_to_pred(coeff_stationary_cov_to_predSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_events_cov_to_pred(coeff_events_cov_to_predSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stations_cov_to_pred(coeff_stations_cov_to_predSEXP);
-    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type new_beta(new_betaSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
-    Rcpp::traits::input_parameter< int >::type n_knots_smoothing_pred(n_knots_smoothing_predSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(y_new_FMSGWR_ESC(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads));
-    return rcpp_result_gen;
-END_RCPP
-}
-// y_new_FMSGWR_SEC
-Rcpp::List y_new_FMSGWR_SEC(Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_events_cov_to_pred, Rcpp::List coeff_stations_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_y_new_FMSGWR_SEC(SEXP coeff_stationary_cov_to_predSEXP, SEXP coeff_events_cov_to_predSEXP, SEXP coeff_stations_cov_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP new_betaSEXP, SEXP model_fittedSEXP, SEXP n_knots_smoothing_predSEXP, SEXP num_threadsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stationary_cov_to_pred(coeff_stationary_cov_to_predSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_events_cov_to_pred(coeff_events_cov_to_predSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stations_cov_to_pred(coeff_stations_cov_to_predSEXP);
-    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type new_beta(new_betaSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
-    Rcpp::traits::input_parameter< int >::type n_knots_smoothing_pred(n_knots_smoothing_predSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(y_new_FMSGWR_SEC(coeff_stationary_cov_to_pred, coeff_events_cov_to_pred, coeff_stations_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads));
-    return rcpp_result_gen;
-END_RCPP
-}
-// y_new_FMGWR
-Rcpp::List y_new_FMGWR(Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_non_stationary_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_y_new_FMGWR(SEXP coeff_stationary_cov_to_predSEXP, SEXP coeff_non_stationary_cov_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP new_betaSEXP, SEXP model_fittedSEXP, SEXP n_knots_smoothing_predSEXP, SEXP num_threadsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_stationary_cov_to_pred(coeff_stationary_cov_to_predSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_non_stationary_cov_to_pred(coeff_non_stationary_cov_to_predSEXP);
-    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type new_beta(new_betaSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
-    Rcpp::traits::input_parameter< int >::type n_knots_smoothing_pred(n_knots_smoothing_predSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(y_new_FMGWR(coeff_stationary_cov_to_pred, coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads));
-    return rcpp_result_gen;
-END_RCPP
-}
-// y_new_FGWR
-Rcpp::List y_new_FGWR(Rcpp::List coeff_non_stationary_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred, Rcpp::Nullable<int> num_threads);
-RcppExport SEXP _fdagwr_y_new_FGWR(SEXP coeff_non_stationary_cov_to_predSEXP, SEXP units_to_be_predictedSEXP, SEXP abscissa_evSEXP, SEXP new_betaSEXP, SEXP model_fittedSEXP, SEXP n_knots_smoothing_predSEXP, SEXP num_threadsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type coeff_non_stationary_cov_to_pred(coeff_non_stationary_cov_to_predSEXP);
-    Rcpp::traits::input_parameter< int >::type units_to_be_predicted(units_to_be_predictedSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type abscissa_ev(abscissa_evSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type new_beta(new_betaSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type model_fitted(model_fittedSEXP);
-    Rcpp::traits::input_parameter< int >::type n_knots_smoothing_pred(n_knots_smoothing_predSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Nullable<int> >::type num_threads(num_threadsSEXP);
-    rcpp_result_gen = Rcpp::wrap(y_new_FGWR(coeff_non_stationary_cov_to_pred, units_to_be_predicted, abscissa_ev, new_beta, model_fitted, n_knots_smoothing_pred, num_threads));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_fdagwr_installation_fdagwr", (DL_FUNC) &_fdagwr_installation_fdagwr, 0},
     {"_fdagwr_FMSGWR_ESC", (DL_FUNC) &_fdagwr_FMSGWR_ESC, 51},
     {"_fdagwr_predict_FMSGWR_ESC", (DL_FUNC) &_fdagwr_predict_FMSGWR_ESC, 11},
+    {"_fdagwr_beta_new_FMSGWR_ESC", (DL_FUNC) &_fdagwr_beta_new_FMSGWR_ESC, 7},
+    {"_fdagwr_y_new_FMSGWR_ESC", (DL_FUNC) &_fdagwr_y_new_FMSGWR_ESC, 9},
     {"_fdagwr_FMSGWR_SEC", (DL_FUNC) &_fdagwr_FMSGWR_SEC, 51},
     {"_fdagwr_predict_FMSGWR_SEC", (DL_FUNC) &_fdagwr_predict_FMSGWR_SEC, 11},
+    {"_fdagwr_beta_new_FMSGWR_SEC", (DL_FUNC) &_fdagwr_beta_new_FMSGWR_SEC, 7},
+    {"_fdagwr_y_new_FMSGWR_SEC", (DL_FUNC) &_fdagwr_y_new_FMSGWR_SEC, 9},
     {"_fdagwr_FMGWR", (DL_FUNC) &_fdagwr_FMGWR, 39},
     {"_fdagwr_predict_FMGWR", (DL_FUNC) &_fdagwr_predict_FMGWR, 9},
+    {"_fdagwr_beta_new_FMGWR", (DL_FUNC) &_fdagwr_beta_new_FMGWR, 6},
+    {"_fdagwr_y_new_FMGWR", (DL_FUNC) &_fdagwr_y_new_FMGWR, 8},
     {"_fdagwr_FGWR", (DL_FUNC) &_fdagwr_FGWR, 28},
     {"_fdagwr_predict_FGWR", (DL_FUNC) &_fdagwr_predict_FGWR, 8},
+    {"_fdagwr_beta_new_FGWR", (DL_FUNC) &_fdagwr_beta_new_FGWR, 6},
+    {"_fdagwr_y_new_FGWR", (DL_FUNC) &_fdagwr_y_new_FGWR, 7},
     {"_fdagwr_FWR", (DL_FUNC) &_fdagwr_FWR, 25},
     {"_fdagwr_predict_FWR", (DL_FUNC) &_fdagwr_predict_FWR, 6},
-    {"_fdagwr_beta_new_FMSGWR_ESC", (DL_FUNC) &_fdagwr_beta_new_FMSGWR_ESC, 7},
-    {"_fdagwr_beta_new_FMSGWR_SEC", (DL_FUNC) &_fdagwr_beta_new_FMSGWR_SEC, 7},
-    {"_fdagwr_beta_new_FMGWR", (DL_FUNC) &_fdagwr_beta_new_FMGWR, 6},
-    {"_fdagwr_beta_new_FGWR", (DL_FUNC) &_fdagwr_beta_new_FGWR, 6},
-    {"_fdagwr_y_new_FMSGWR_ESC", (DL_FUNC) &_fdagwr_y_new_FMSGWR_ESC, 9},
-    {"_fdagwr_y_new_FMSGWR_SEC", (DL_FUNC) &_fdagwr_y_new_FMSGWR_SEC, 9},
-    {"_fdagwr_y_new_FMGWR", (DL_FUNC) &_fdagwr_y_new_FMGWR, 8},
-    {"_fdagwr_y_new_FGWR", (DL_FUNC) &_fdagwr_y_new_FGWR, 7},
     {NULL, NULL, 0}
 };
 
