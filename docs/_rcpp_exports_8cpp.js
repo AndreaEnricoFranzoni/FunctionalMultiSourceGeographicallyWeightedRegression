@@ -1,5 +1,9 @@
 var _rcpp_exports_8cpp =
 [
+    [ "_fdagwr_beta_new_FGWR", "_rcpp_exports_8cpp.html#afd1580a3bc7a8db55ba4474802fc954e", null ],
+    [ "_fdagwr_beta_new_FMGWR", "_rcpp_exports_8cpp.html#a12e8b2691a2d67c727c598319b329232", null ],
+    [ "_fdagwr_beta_new_FMSGWR_ESC", "_rcpp_exports_8cpp.html#ae98769700ef07fad8236530fab0cc0e7", null ],
+    [ "_fdagwr_beta_new_FMSGWR_SEC", "_rcpp_exports_8cpp.html#a86fbde550140b04b5f7552286512a1ec", null ],
     [ "_fdagwr_FGWR", "_rcpp_exports_8cpp.html#aa6821616c6e0f4847386bd337cf5a1db", null ],
     [ "_fdagwr_FMGWR", "_rcpp_exports_8cpp.html#a968d4e5c3f0ce66fdc88cc53e89bfed8", null ],
     [ "_fdagwr_FMSGWR_ESC", "_rcpp_exports_8cpp.html#a9b4183ababcc74f2b7d4fe0bc78397d9", null ],
@@ -11,6 +15,14 @@ var _rcpp_exports_8cpp =
     [ "_fdagwr_predict_FMSGWR_ESC", "_rcpp_exports_8cpp.html#aff50587e5dd068e7843b3ea114414c4d", null ],
     [ "_fdagwr_predict_FMSGWR_SEC", "_rcpp_exports_8cpp.html#a38d7ed0157a3ed12cae1c0e6bef4be3f", null ],
     [ "_fdagwr_predict_FWR", "_rcpp_exports_8cpp.html#a4b91919feeb9e9eb2bd5f8e392fcf979", null ],
+    [ "_fdagwr_y_new_FGWR", "_rcpp_exports_8cpp.html#a58ca8d2c634453f01fe5bd550fc0321a", null ],
+    [ "_fdagwr_y_new_FMGWR", "_rcpp_exports_8cpp.html#aeaff1e7df85fb6fac9156e28149c9a0e", null ],
+    [ "_fdagwr_y_new_FMSGWR_ESC", "_rcpp_exports_8cpp.html#a0ebb66c1d27b3ff5458309ec153dfcb6", null ],
+    [ "_fdagwr_y_new_FMSGWR_SEC", "_rcpp_exports_8cpp.html#a0ed96efd1804791d23e455e8413a4021", null ],
+    [ "beta_new_FGWR", "_rcpp_exports_8cpp.html#a6539acbc1c29e7f6c8cbbf07acca8a36", null ],
+    [ "beta_new_FMGWR", "_rcpp_exports_8cpp.html#afeee20a94b9d5ea47b1d8f41a6f2a6b2", null ],
+    [ "beta_new_FMSGWR_ESC", "_rcpp_exports_8cpp.html#a68898e1c30d29a975938e9156da9274a", null ],
+    [ "beta_new_FMSGWR_SEC", "_rcpp_exports_8cpp.html#a2f8027fe82b720895a10044d821e342d", null ],
     [ "FGWR", "_rcpp_exports_8cpp.html#a91834887d801422551c43135fea2d7ae", null ],
     [ "FMGWR", "_rcpp_exports_8cpp.html#a8bb6a2c057e985851c49e13c6d126cd1", null ],
     [ "FMSGWR_ESC", "_rcpp_exports_8cpp.html#a15d30b43e47e46e39247fe45dca831d7", null ],
@@ -23,5 +35,9 @@ var _rcpp_exports_8cpp =
     [ "predict_FMSGWR_SEC", "_rcpp_exports_8cpp.html#a44173da389e84f7fc45a4f9505fcb1dd", null ],
     [ "predict_FWR", "_rcpp_exports_8cpp.html#aa99a2c19c6870d03cfdd737fa1e5eb64", null ],
     [ "R_init_fdagwr", "_rcpp_exports_8cpp.html#ad76da5a74cffcd2c782c82dbacef8e57", null ],
+    [ "y_new_FGWR", "_rcpp_exports_8cpp.html#a6143ab213bf9009adc446ff5ad054892", null ],
+    [ "y_new_FMGWR", "_rcpp_exports_8cpp.html#ab931befd3519b1b1dc61eaf672d002e1", null ],
+    [ "y_new_FMSGWR_ESC", "_rcpp_exports_8cpp.html#a8faee092e57551561ddaff9a65e850f6", null ],
+    [ "y_new_FMSGWR_SEC", "_rcpp_exports_8cpp.html#ab51e129b2897e3df4b838ce65f85722f", null ],
     [ "CallEntries", "_rcpp_exports_8cpp.html#acc66047eee9f1e8112081542de22411c", null ]
 ];

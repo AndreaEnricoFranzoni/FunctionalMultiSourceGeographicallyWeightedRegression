@@ -130,6 +130,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a41e10c5fb3e69124cfb08d7d0266b051"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a41e10c5fb3e69124cfb08d7d0266b051">fwr_FMSGWR_ESC_predictor</a> (SCALAR_MATRIX_OBJ_VEC &amp;&amp;Bc_fitted, SCALAR_MATRIX_OBJ_VEC_VEC &amp;&amp;Bs_fitted, FUNC_SPARSE_MATRIX_OBJ &amp;&amp;omega, std::size_t qc, std::size_t Lc, const std::vector&lt; std::size_t &gt; &amp;Lc_j, FUNC_SPARSE_MATRIX_OBJ &amp;&amp;theta, std::size_t qe, std::size_t Le, const std::vector&lt; std::size_t &gt; &amp;Le_j, FUNC_SPARSE_MATRIX_OBJ &amp;&amp;psi, std::size_t qs, std::size_t Ls, const std::vector&lt; std::size_t &gt; &amp;Ls_j, FUNC_SPARSE_MATRIX_OBJ &amp;&amp;phi, std::size_t Ly, SCALAR_MATRIX_OBJ &amp;&amp;c_tilde_hat, SCALAR_MATRIX_OBJ_VEC &amp;&amp;A_e, SCALAR_MATRIX_OBJ_VEC &amp;&amp;B_e_for_K_e_s, FUNC_MATRIX_OBJ &amp;&amp;y_train, FUNC_MATRIX_OBJ &amp;&amp;Xc_train, FUNC_MATRIX_OBJ &amp;&amp;Xe_train, SCALAR_SPARSE_MATRIX_OBJ &amp;&amp;Re, FUNC_MATRIX_OBJ &amp;&amp;Xs_train, SCALAR_SPARSE_MATRIX_OBJ &amp;&amp;Rs, INPUT a, INPUT b, int n_intervals_integration, std::size_t <a class="el" href="classfwr__predictor.html#a791c8ce7b0d2abad83958e2b0d4bd897">n_train</a>, int <a class="el" href="classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea">number_threads</a>, bool <a class="el" href="classfwr__predictor.html#afbb4c294f5a39e05998baf3d31d78b0f">in_cascade_estimation</a>)</td></tr>
 <tr class="memdesc:a41e10c5fb3e69124cfb08d7d0266b051"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <br /></td></tr>
 <tr class="separator:a41e10c5fb3e69124cfb08d7d0266b051"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4211990ffc83e2d0ea3b42960acff9fe" id="r_a4211990ffc83e2d0ea3b42960acff9fe"><td class="memTemplParams" colspan="2">template&lt;typename FUNC_SPARSE_MATRIX_OBJ, typename SCALAR_MATRIX_OBJ_VEC, typename SCALAR_MATRIX_OBJ_VEC_VEC&gt; </td></tr>
+<tr class="memitem:a4211990ffc83e2d0ea3b42960acff9fe"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a4211990ffc83e2d0ea3b42960acff9fe">fwr_FMSGWR_ESC_predictor</a> (SCALAR_MATRIX_OBJ_VEC &amp;&amp;Bc_fitted, SCALAR_MATRIX_OBJ_VEC_VEC &amp;&amp;Be_tuned, SCALAR_MATRIX_OBJ_VEC_VEC &amp;&amp;Bs_tuned, FUNC_SPARSE_MATRIX_OBJ &amp;&amp;omega, std::size_t qc, std::size_t Lc, const std::vector&lt; std::size_t &gt; &amp;Lc_j, FUNC_SPARSE_MATRIX_OBJ &amp;&amp;theta, std::size_t qe, std::size_t Le, const std::vector&lt; std::size_t &gt; &amp;Le_j, FUNC_SPARSE_MATRIX_OBJ &amp;&amp;psi, std::size_t qs, std::size_t Ls, const std::vector&lt; std::size_t &gt; &amp;Ls_j, std::size_t n_pred, INPUT a, INPUT b, int n_intervals_integration, std::size_t <a class="el" href="classfwr__predictor.html#a791c8ce7b0d2abad83958e2b0d4bd897">n_train</a>, int <a class="el" href="classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea">number_threads</a>, bool <a class="el" href="classfwr__predictor.html#afbb4c294f5a39e05998baf3d31d78b0f">in_cascade_estimation</a>)</td></tr>
+<tr class="memdesc:a4211990ffc83e2d0ea3b42960acff9fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor if betas in the new locations have been already tuned.  <br /></td></tr>
+<tr class="separator:a4211990ffc83e2d0ea3b42960acff9fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a034646c25546eee6df4667a07d1d5a2d" id="r_a034646c25546eee6df4667a07d1d5a2d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a034646c25546eee6df4667a07d1d5a2d">computePartialResiduals</a> () override</td></tr>
 <tr class="memdesc:a034646c25546eee6df4667a07d1d5a2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to compute the partial residuals accordingly to the fitted model.  <br /></td></tr>
 <tr class="separator:a034646c25546eee6df4667a07d1d5a2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -218,7 +222,7 @@ class fwr_FMSGWR_ESC_predictor&lt; INPUT, OUTPUT &gt;</div><p>Concrete class for
 </dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a41e10c5fb3e69124cfb08d7d0266b051" name="a41e10c5fb3e69124cfb08d7d0266b051"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41e10c5fb3e69124cfb08d7d0266b051">&#9670;&#160;</a></span>fwr_FMSGWR_ESC_predictor()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a41e10c5fb3e69124cfb08d7d0266b051">&#9670;&#160;</a></span>fwr_FMSGWR_ESC_predictor() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -435,6 +439,174 @@ template&lt;typename FUNC_MATRIX_OBJ, typename FUNC_SPARSE_MATRIX_OBJ, typename 
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classfwr___f_m_s_g_w_r___e_s_c__predictor_a41e10c5fb3e69124cfb08d7d0266b051_cgraph.png" border="0" usemap="#aclassfwr___f_m_s_g_w_r___e_s_c__predictor_a41e10c5fb3e69124cfb08d7d0266b051_cgraph" alt=""/></div>
+</div>
+
+</div>
+</div>
+<a id="a4211990ffc83e2d0ea3b42960acff9fe" name="a4211990ffc83e2d0ea3b42960acff9fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4211990ffc83e2d0ea3b42960acff9fe">&#9670;&#160;</a></span>fwr_FMSGWR_ESC_predictor() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename INPUT = double, typename OUTPUT = double&gt; </div>
+<div class="memtemplate">
+template&lt;typename FUNC_SPARSE_MATRIX_OBJ, typename SCALAR_MATRIX_OBJ_VEC, typename SCALAR_MATRIX_OBJ_VEC_VEC&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classfwr___f_m_s_g_w_r___e_s_c__predictor.html">fwr_FMSGWR_ESC_predictor</a>&lt; INPUT, OUTPUT &gt;<a class="el" href="classfwr___f_m_s_g_w_r___e_s_c__predictor.html">::fwr_FMSGWR_ESC_predictor</a> </td>
+          <td>(</td>
+          <td class="paramtype">SCALAR_MATRIX_OBJ_VEC &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>Bc_fitted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SCALAR_MATRIX_OBJ_VEC_VEC &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>Be_tuned</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SCALAR_MATRIX_OBJ_VEC_VEC &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>Bs_tuned</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FUNC_SPARSE_MATRIX_OBJ &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>omega</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>qc</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>Lc</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>Lc_j</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FUNC_SPARSE_MATRIX_OBJ &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>theta</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>qe</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>Le</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>Le_j</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FUNC_SPARSE_MATRIX_OBJ &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>psi</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>qs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>Ls</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>Ls_j</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">INPUT</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">INPUT</td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>n_intervals_integration</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_train</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>number_threads</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>in_cascade_estimation</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor if betas in the new locations have been already tuned. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Bc_fitted</td><td>coefficients of the basis expansion for stationary regressors coefficients: n_train elements Lc_jx1 </td></tr>
+    <tr><td class="paramname">Be_tuned</td><td>Coefficients of the basis expansion for event-dependent regressors coefficients on the locations of the units to be predicted: every of the qe elements are n_pred 1xLe_j matrices, one for each statistical unit to be predicted </td></tr>
+    <tr><td class="paramname">Bs_tuned</td><td>Coefficients of the basis expansion for station-dependent regressors coefficients on the locations of the units to be predicted: every of the qs elements are n_pred 1xLs_j matrices, one for each statistical unit to be predicted </td></tr>
+    <tr><td class="paramname">omega</td><td>functional sparse matrix containing the basis of the functional regression coefficients of the stationary covariates (qcxLc, row i-th contains zeros and the basis of the i-th stationary covariate, their position shifted of sum_i_0_to_i(Lc_i)) </td></tr>
+    <tr><td class="paramname">qc</td><td>number of stationary covariates </td></tr>
+    <tr><td class="paramname">Lc</td><td>total number of basis used for the stationary covariates functional regression coefficients </td></tr>
+    <tr><td class="paramname">Lc_j</td><td>vector containing in element i-th the number of basis for the stationary covariate i-th functional regression coefficients </td></tr>
+    <tr><td class="paramname">theta</td><td>functional sparse matrix containing the basis of the functional regression coefficients of the event-dependent covariates (qexLe, row i-th contains zeros and the basis of the i-th event-dependent covariate, their position shifted of sum_i_0_to_i(Le_i)) </td></tr>
+    <tr><td class="paramname">qe</td><td>number of event-dependent covariates </td></tr>
+    <tr><td class="paramname">Le</td><td>total number of basis used for the event-dependent covariates functional regression coefficients </td></tr>
+    <tr><td class="paramname">Le_j</td><td>vector containing in element i-th the number of basis for the event-dependent covariate i-th functional regression coefficients </td></tr>
+    <tr><td class="paramname">psi</td><td>functional sparse matrix containing the basis of the functional regression coefficients of the station-dependent covariates (qsxLs, row i-th contains zeros and the basis of the i-th station-dependent covariate, their position shifted of sum_i_0_to_i(Ls_i)) </td></tr>
+    <tr><td class="paramname">qs</td><td>number of station-dependent covariates </td></tr>
+    <tr><td class="paramname">Ls</td><td>total number of basis used for the station-dependent covariates functional regression coefficients </td></tr>
+    <tr><td class="paramname">Ls_j</td><td>vector containing in element i-th the number of basis for the station-dependent covariate i-th functional regression coefficients </td></tr>
+    <tr><td class="paramname">n_pred</td><td>number of units to be predicted </td></tr>
+    <tr><td class="paramname">a</td><td>left extreme functional data domain </td></tr>
+    <tr><td class="paramname">b</td><td>right extreme functional data domain </td></tr>
+    <tr><td class="paramname">n_intervals_integration</td><td>number of intervals used by the midpoint quadrature rule </td></tr>
+    <tr><td class="paramname">n_train</td><td>number of training statistical units </td></tr>
+    <tr><td class="paramname">number_threads</td><td>number of threads for OMP </td></tr>
+    <tr><td class="paramname">in_cascade_estimation</td><td>if true, for more than one source covariates, the estimation is made in cascade. If false, exact </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>input dimensions check and transpose computation </dd></dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classfwr___f_m_s_g_w_r___e_s_c__predictor_a4211990ffc83e2d0ea3b42960acff9fe_cgraph.png" border="0" usemap="#aclassfwr___f_m_s_g_w_r___e_s_c__predictor_a4211990ffc83e2d0ea3b42960acff9fe_cgraph" alt=""/></div>
 </div>
 
 </div>

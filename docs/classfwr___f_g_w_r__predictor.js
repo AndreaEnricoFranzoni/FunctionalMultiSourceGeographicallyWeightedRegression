@@ -1,6 +1,7 @@
 var classfwr___f_g_w_r__predictor =
 [
     [ "fwr_FGWR_predictor", "classfwr___f_g_w_r__predictor.html#a5a42fb2a5480bea3c2edb05a5b21e7e8", null ],
+    [ "fwr_FGWR_predictor", "classfwr___f_g_w_r__predictor.html#a66b679bba863637453942af4f4734ba7", null ],
     [ "bCoefficients", "classfwr___f_g_w_r__predictor.html#a1a41811fac9a5b3bd685364f78d6c199", null ],
     [ "betas", "classfwr___f_g_w_r__predictor.html#ac6c1e428b3ade2b15d21130b2e599ebd", null ],
     [ "computeBNew", "classfwr___f_g_w_r__predictor.html#a8c347560bef80f7e2da40ab5269c0492", null ],

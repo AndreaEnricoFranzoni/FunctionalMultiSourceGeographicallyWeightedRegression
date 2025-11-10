@@ -253,173 +253,222 @@ $(function(){initNavTree('fwr___f_m_g_w_r__predictor_8hpp_source.html',''); init
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>            }</div>
 </div>
 <div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span></div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    <span class="keyword">inline</span> </div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    <span class="keywordtype">void</span></div>
-<div class="foldopen" id="foldopen00212" data-start="{" data-end="}">
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a7b98cc2e9915f8b35c65caaa207ec7df">  212</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a7b98cc2e9915f8b35c65caaa207ec7df">computePartialResiduals</a>()<span class="keyword"></span></div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="keyword">    override</span></div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        <span class="keywordflow">if</span> (!this-&gt;<a class="code hl_function" href="classfwr__predictor.html#afbb4c294f5a39e05998baf3d31d78b0f">in_cascade_estimation</a>())</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        {</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>            <span class="comment">//y_tilde_new(t) n_trainx1</span></div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>            m_y_tilde_new = <a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(m_phi,m_c_tilde_hat);</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>        }</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>        <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>        {</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>            m_y_tilde_new = m_y_train - <a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(<a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(m_Xc_train,m_omega),m_bc_fitted,this-&gt;<a class="code hl_function" href="classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea">number_threads</a>());</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>        }</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        </div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    }</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> FUNC_SPARSE_MATRIX_OBJ,</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>             <span class="keyword">typename</span> SCALAR_MATRIX_OBJ_VEC,</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>             <span class="keyword">typename</span> SCALAR_MATRIX_OBJ_VEC_VEC&gt;</div>
+<div class="foldopen" id="foldopen00231" data-start="{" data-end="}">
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a9bbc7308f1dcfe282173fdc95da220d8">  231</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a9bbc7308f1dcfe282173fdc95da220d8">fwr_FMGWR_predictor</a>(SCALAR_MATRIX_OBJ_VEC &amp;&amp;Bc_fitted,</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>                        SCALAR_MATRIX_OBJ_VEC_VEC &amp;&amp;Bnc_tuned,</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>                        FUNC_SPARSE_MATRIX_OBJ &amp;&amp;omega,</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>                        std::size_t qc,</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>                        std::size_t Lc,</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>                        <span class="keyword">const</span> std::vector&lt;std::size_t&gt; &amp;Lc_j,</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>                        FUNC_SPARSE_MATRIX_OBJ &amp;&amp;eta,</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>                        std::size_t qnc,</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>                        std::size_t Lnc,</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>                        <span class="keyword">const</span> std::vector&lt;std::size_t&gt; &amp;Lnc_j,</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>                        std::size_t n_pred,</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>                        INPUT a, </div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>                        INPUT b, </div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>                        <span class="keywordtype">int</span> n_intervals_integration, </div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>                        std::size_t <a class="code hl_function" href="classfwr__predictor.html#a791c8ce7b0d2abad83958e2b0d4bd897">n_train</a>, </div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>                        <span class="keywordtype">int</span> <a class="code hl_function" href="classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea">number_threads</a>,</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>                        <span class="keywordtype">bool</span> <a class="code hl_function" href="classfwr__predictor.html#afbb4c294f5a39e05998baf3d31d78b0f">in_cascade_estimation</a>)</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>                :</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>                    <a class="code hl_function" href="classfwr__predictor.html#ae9ee9cbcbee1efe901f1b5a6f7c515eb">fwr_predictor</a>&lt;INPUT,OUTPUT&gt;(a,b,n_intervals_integration,<a class="code hl_function" href="classfwr__predictor.html#a791c8ce7b0d2abad83958e2b0d4bd897">n_train</a>,<a class="code hl_function" href="classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea">number_threads</a>,<a class="code hl_function" href="classfwr__predictor.html#afbb4c294f5a39e05998baf3d31d78b0f">in_cascade_estimation</a>),</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>                    m_Bc_fitted{std::forward&lt;SCALAR_MATRIX_OBJ_VEC&gt;(Bc_fitted)},</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>                    m_Bnc_pred{std::forward&lt;SCALAR_MATRIX_OBJ_VEC_VEC&gt;(Bnc_tuned)},</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>                    m_omega{std::forward&lt;FUNC_SPARSE_MATRIX_OBJ&gt;(omega)},</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>                    m_qc(qc),</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>                    m_Lc(Lc),</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>                    m_Lc_j(Lc_j),</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>                    m_eta{std::forward&lt;FUNC_SPARSE_MATRIX_OBJ&gt;(eta)},</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>                    m_qnc(qnc),</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>                    m_Lnc(Lnc),</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>                    m_Lnc_j(Lnc_j)</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>            {</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>                <span class="comment">//input coherency</span></div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>                assert(m_Bc_fitted.size() == m_qc);</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>                assert(m_Bnc_pred.size() == m_qnc);</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>                <span class="keywordflow">for</span>(std::size_t j = 0; j &lt; m_qnc; ++j){  assert(m_Bnc_pred[j].size() == n_pred);}</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>                assert((m_omega.rows() == m_qc) &amp;&amp; (m_omega.cols() == Lc));</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>                assert((m_eta.rows() == m_qnc) &amp;&amp; (m_eta.cols() == Lnc));</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span> </div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>                <span class="comment">//dewrappare i b_train (li incolonna)</span></div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                m_bc_fitted = this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a90504b3de8d264389848ad14dd0b1d19">operator_comp</a>().<a class="code hl_function" href="classfwr__operator__computing.html#ab63b635a1edc829c2652e54a66f446b2">dewrap_operator</a>(m_Bc_fitted,m_Lc_j);</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>                <span class="comment">//bnc_pred</span></div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                m_bnc_pred = this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a90504b3de8d264389848ad14dd0b1d19">operator_comp</a>().<a class="code hl_function" href="classfwr__operator__computing.html#ab63b635a1edc829c2652e54a66f446b2">dewrap_operator</a>(m_Bnc_pred,m_Lnc_j,n_pred);</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>            }</div>
 </div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    <span class="keyword">inline</span></div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    <span class="keywordtype">void</span></div>
-<div class="foldopen" id="foldopen00234" data-start="{" data-end="}">
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a9d3defd1cba68f8619e38adc0ded4a56">  234</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a9d3defd1cba68f8619e38adc0ded4a56">computeBNew</a>(<span class="keyword">const</span> std::map&lt;std::string,std::vector&lt; <a class="code hl_class" href="classfunctional__matrix__diagonal.html">functional_matrix_diagonal&lt;INPUT,OUTPUT&gt;</a> &gt;&gt; &amp;W)<span class="keyword"></span></div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span><span class="keyword">    override</span></div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>        assert(W.size() == 1);</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>        <span class="keyword">auto</span> Wnc_new = W.at(std::string{<a class="code hl_variable" href="classfwr__predictor.html#aba21c2b885d42be010767d0e9a7d338a">fwr_FMGWR_predictor&lt;INPUT,OUTPUT&gt;::id_NC</a>});</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>        <span class="comment">//input coherency</span></div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>        <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; Wnc_new.size(); ++i){</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>            assert((Wnc_new[i].rows() == this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a791c8ce7b0d2abad83958e2b0d4bd897">n_train</a>()) &amp;&amp; (Wnc_new[i].cols() == this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a791c8ce7b0d2abad83958e2b0d4bd897">n_train</a>()));}</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>        <span class="comment">//number of units to be predicted</span></div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        std::size_t n_pred = Wnc_new.size();</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        <span class="comment">//compute the non-stationary betas in the new locations</span></div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>        <span class="comment">//penalties in the new locations</span></div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>        <span class="comment">//(j_tilde + Rnc)^-1 (LncxLnc)</span></div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        std::vector&lt; Eigen::PartialPivLU&lt;FDAGWR_TRAITS::Dense_Matrix&gt; &gt; j_tilde_Rnc_inv = this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a90504b3de8d264389848ad14dd0b1d19">operator_comp</a>().<a class="code hl_function" href="classfwr__operator__computing.html#a634f00fe47b21671fb008f732eb7ec89">compute_penalty</a>(m_eta_t,m_Xnc_train_t,Wnc_new,m_Xnc_train,m_eta,m_Rnc);     <span class="comment">//per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M</span></div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>        <span class="comment">//COMPUTING all the m_bnc in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE NON-STATIONARY BETAS (n_pred elements Lncx1)</span></div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        m_bnc_pred = this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a90504b3de8d264389848ad14dd0b1d19">operator_comp</a>().<a class="code hl_function" href="classfwr__operator__computing.html#a20202c6ca2e008c6f37014232c9d8506">compute_operator</a>(m_eta_t,m_Xnc_train_t,Wnc_new,m_y_tilde_new,j_tilde_Rnc_inv);</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span> </div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span> </div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        <span class="comment">//</span></div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>        <span class="comment">//wrapping the b from the shape useful for the computation into a more useful format for reporting the results: TENERE</span></div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>        <span class="comment">//</span></div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>        <span class="comment">//non-stationary covariates (qnc elements of n_pred elements 1xLnc_i)</span></div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>        m_Bnc_pred = this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a90504b3de8d264389848ad14dd0b1d19">operator_comp</a>().<a class="code hl_function" href="classfwr__operator__computing.html#a0f9fba8f012107fd443b687ba90b9886">wrap_operator</a>(m_bnc_pred,m_Lnc_j,m_qnc,n_pred);</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span> </div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>    }</div>
-</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span></div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>    <span class="keyword">inline</span></div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>    <span class="keywordtype">void</span> </div>
-<div class="foldopen" id="foldopen00267" data-start="{" data-end="}">
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a5eecb9a76dd65b71b442c7bfa67b63d7">  267</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a5eecb9a76dd65b71b442c7bfa67b63d7">computeStationaryBetas</a>()<span class="keyword"></span></div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span><span class="keyword">    override</span></div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>        m_BetaC = <a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(m_omega,m_bc_fitted); <span class="comment">//qcx1</span></div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>    }</div>
-</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span></div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>    <span class="keyword">inline</span></div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>    <span class="keywordtype">void</span> </div>
-<div class="foldopen" id="foldopen00278" data-start="{" data-end="}">
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a953c66bc3f50fbe1696c359cd48070d9">  278</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a953c66bc3f50fbe1696c359cd48070d9">computeNonStationaryBetas</a>()<span class="keyword"></span></div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span><span class="keyword">    override</span></div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>        std::size_t n_pred = m_bnc_pred.size();</div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>        m_BetaNC.resize(n_pred);</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span> </div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span><span class="preprocessor">#ifdef _OPENMP</span></div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span><span class="preprocessor">#pragma omp parallel for shared(m_BetaNC,m_eta,m_bnc_pred,n_pred) num_threads(this-&gt;number_threads())</span></div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>        <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; n_pred; ++i)</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span></div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>    <span class="keyword">inline</span> </div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>    <span class="keywordtype">void</span></div>
+<div class="foldopen" id="foldopen00279" data-start="{" data-end="}">
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a7b98cc2e9915f8b35c65caaa207ec7df">  279</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a7b98cc2e9915f8b35c65caaa207ec7df">computePartialResiduals</a>()<span class="keyword"></span></div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span><span class="keyword">    override</span></div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>        <span class="keywordflow">if</span> (!this-&gt;<a class="code hl_function" href="classfwr__predictor.html#afbb4c294f5a39e05998baf3d31d78b0f">in_cascade_estimation</a>())</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>        {</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>            <span class="comment">//y_tilde_new(t) n_trainx1</span></div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>            m_y_tilde_new = <a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(m_phi,m_c_tilde_hat);</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        }</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>        <span class="keywordflow">else</span></div>
 <div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>        {</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>            m_BetaNC[i] = <a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(m_eta,m_bnc_pred[i]); <span class="comment">//n_pred elems qnc x 1</span></div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>            m_y_tilde_new = m_y_train - <a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(<a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(m_Xc_train,m_omega),m_bc_fitted,this-&gt;<a class="code hl_function" href="classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea">number_threads</a>());</div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>        }</div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    }</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>        </div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    }</div>
 </div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span></div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span> </div>
 <div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    <span class="keyword">inline</span></div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    <a class="code hl_class" href="classfunctional__matrix.html">functional_matrix&lt;INPUT,OUTPUT&gt;</a></div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    <span class="keywordtype">void</span></div>
 <div class="foldopen" id="foldopen00301" data-start="{" data-end="}">
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a4225dbc9186fea1cd62cf3e07a1e43ee">  301</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a4225dbc9186fea1cd62cf3e07a1e43ee">predict</a>(<span class="keyword">const</span> std::map&lt;std::string,<a class="code hl_class" href="classfunctional__matrix.html">functional_matrix&lt;INPUT,OUTPUT&gt;</a>&gt; &amp;X_new)<span class="keyword"></span></div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span><span class="keyword">    const</span></div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span><span class="keyword">    override</span></div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>        <span class="comment">//input coherence</span></div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>        assert(X_new.size() == 2);</div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span> </div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>        <span class="keyword">auto</span> Xc_new  = X_new.at(std::string{<a class="code hl_variable" href="classfwr__predictor.html#a05d0a177c2bf4cc2fcf179349b7d096c">fwr_FMGWR_predictor&lt;INPUT,OUTPUT&gt;::id_C</a>});</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>        <span class="keyword">auto</span> Xnc_new = X_new.at(std::string{<a class="code hl_variable" href="classfwr__predictor.html#aba21c2b885d42be010767d0e9a7d338a">fwr_FMGWR_predictor&lt;INPUT,OUTPUT&gt;::id_NC</a>});</div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span> </div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>        assert(Xc_new.rows() == Xnc_new.rows());</div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>        std::size_t n_pred = Xc_new.rows();</div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>        assert(n_pred == m_BetaNC.size());</div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>        assert((Xc_new.cols() == m_qc) &amp;&amp; (Xnc_new.cols() == m_qnc));</div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span> </div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span> </div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>        <span class="comment">//y_new = X_new*beta = Xc_new*beta_c + Xnc_new*beta_nc</span></div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>        <a class="code hl_class" href="classfunctional__matrix.html">functional_matrix&lt;INPUT,OUTPUT&gt;</a> y_new_C = <a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(Xc_new,m_BetaC,this-&gt;<a class="code hl_function" href="classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea">number_threads</a>());    <span class="comment">//n_pred x 1</span></div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>        <a class="code hl_class" href="classfunctional__matrix.html">functional_matrix&lt;INPUT,OUTPUT&gt;</a> y_new_NC(n_pred,1);</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a9d3defd1cba68f8619e38adc0ded4a56">  301</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a9d3defd1cba68f8619e38adc0ded4a56">computeBNew</a>(<span class="keyword">const</span> std::map&lt;std::string,std::vector&lt; <a class="code hl_class" href="classfunctional__matrix__diagonal.html">functional_matrix_diagonal&lt;INPUT,OUTPUT&gt;</a> &gt;&gt; &amp;W)<span class="keyword"></span></div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span><span class="keyword">    override</span></div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>        assert(W.size() == 1);</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>        <span class="keyword">auto</span> Wnc_new = W.at(std::string{<a class="code hl_variable" href="classfwr__predictor.html#aba21c2b885d42be010767d0e9a7d338a">fwr_FMGWR_predictor&lt;INPUT,OUTPUT&gt;::id_NC</a>});</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>        <span class="comment">//input coherency</span></div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>        <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; Wnc_new.size(); ++i){</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>            assert((Wnc_new[i].rows() == this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a791c8ce7b0d2abad83958e2b0d4bd897">n_train</a>()) &amp;&amp; (Wnc_new[i].cols() == this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a791c8ce7b0d2abad83958e2b0d4bd897">n_train</a>()));}</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>        <span class="comment">//number of units to be predicted</span></div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>        std::size_t n_pred = Wnc_new.size();</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span> </div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span> </div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>        <span class="comment">//compute the non-stationary betas in the new locations</span></div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>        <span class="comment">//penalties in the new locations</span></div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>        <span class="comment">//(j_tilde + Rnc)^-1 (LncxLnc)</span></div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>        std::vector&lt; Eigen::PartialPivLU&lt;FDAGWR_TRAITS::Dense_Matrix&gt; &gt; j_tilde_Rnc_inv = this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a90504b3de8d264389848ad14dd0b1d19">operator_comp</a>().<a class="code hl_function" href="classfwr__operator__computing.html#a634f00fe47b21671fb008f732eb7ec89">compute_penalty</a>(m_eta_t,m_Xnc_train_t,Wnc_new,m_Xnc_train,m_eta,m_Rnc);     <span class="comment">//per applicarlo: j_double_tilde_RE_inv[i].solve(M) equivale a ([J_i_tilde_tilde + Re]^-1)*M</span></div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>        <span class="comment">//COMPUTING all the m_bnc in the new locations, SO THE COEFFICIENTS FOR THE BASIS EXPANSION OF THE NON-STATIONARY BETAS (n_pred elements Lncx1)</span></div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>        m_bnc_pred = this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a90504b3de8d264389848ad14dd0b1d19">operator_comp</a>().<a class="code hl_function" href="classfwr__operator__computing.html#a20202c6ca2e008c6f37014232c9d8506">compute_operator</a>(m_eta_t,m_Xnc_train_t,Wnc_new,m_y_tilde_new,j_tilde_Rnc_inv);</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span> </div>
 <div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span> </div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>        </div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span><span class="preprocessor">#ifdef _OPENMP</span></div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span><span class="preprocessor">#pragma omp parallel for shared(Xnc_new,m_BetaNC,y_new_NC,n_pred,m_qnc) num_threads(this-&gt;number_threads())</span></div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>        <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; n_pred; ++i)</div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>        {</div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>            std::vector&lt; FUNC_OBJ&lt;INPUT,OUTPUT&gt; &gt; xnc_new_i(Xnc_new.row(i).cbegin(),Xnc_new.row(i).cend()); <span class="comment">//1xqnc</span></div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>            <a class="code hl_class" href="classfunctional__matrix.html">functional_matrix&lt;INPUT,OUTPUT&gt;</a> Xnc_new_i(xnc_new_i,1,m_qnc);</div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>            y_new_NC(i,0) = <a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(Xnc_new_i,m_BetaNC[i],this-&gt;<a class="code hl_function" href="classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea">number_threads</a>())(0,0);</div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>        }</div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span> </div>
-<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>        <span class="keywordflow">return</span> y_new_C + y_new_NC;</div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>    }</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>        <span class="comment">//</span></div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>        <span class="comment">//wrapping the b from the shape useful for the computation into a more useful format for reporting the results: TENERE</span></div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>        <span class="comment">//</span></div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>        <span class="comment">//non-stationary covariates (qnc elements of n_pred elements 1xLnc_i)</span></div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>        m_Bnc_pred = this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a90504b3de8d264389848ad14dd0b1d19">operator_comp</a>().<a class="code hl_function" href="classfwr__operator__computing.html#a0f9fba8f012107fd443b687ba90b9886">wrap_operator</a>(m_bnc_pred,m_Lnc_j,m_qnc,n_pred);</div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span> </div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>    }</div>
 </div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span></div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>    <span class="keyword">inline</span> </div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>    <span class="keywordtype">void</span> </div>
-<div class="foldopen" id="foldopen00341" data-start="{" data-end="}">
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a57d87b317da6c627be540417e503d824">  341</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a57d87b317da6c627be540417e503d824">evalBetas</a>(<span class="keyword">const</span> std::vector&lt;INPUT&gt; &amp;abscissa)<span class="keyword"></span></div>
-<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span><span class="keyword">    override</span></div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>        m_BetaC_ev  = this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a90504b3de8d264389848ad14dd0b1d19">operator_comp</a>().<a class="code hl_function" href="classfwr__operator__computing.html#a7d3e3832d6fbac64669ab9e0d2a5f2ac">eval_func_betas</a>(m_BetaC,m_qc,abscissa);</div>
-<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>        m_BetaNC_ev = this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a90504b3de8d264389848ad14dd0b1d19">operator_comp</a>().<a class="code hl_function" href="classfwr__operator__computing.html#a7d3e3832d6fbac64669ab9e0d2a5f2ac">eval_func_betas</a>(m_BetaNC,m_qnc,abscissa);</div>
-<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>    }</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span></div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>    <span class="keyword">inline</span></div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>    <span class="keywordtype">void</span> </div>
+<div class="foldopen" id="foldopen00334" data-start="{" data-end="}">
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a5eecb9a76dd65b71b442c7bfa67b63d7">  334</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a5eecb9a76dd65b71b442c7bfa67b63d7">computeStationaryBetas</a>()<span class="keyword"></span></div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span><span class="keyword">    override</span></div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>        m_BetaC = <a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(m_omega,m_bc_fitted); <span class="comment">//qcx1</span></div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>    }</div>
 </div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span></div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    <span class="keyword">inline</span> </div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>    <a class="code hl_typedef" href="traits__fdagwr_8hpp.html#a670d3a0e6ef05f2a20ef0fc6ee35d07f">BTuple</a> </div>
-<div class="foldopen" id="foldopen00354" data-start="{" data-end="}">
-<div class="line"><a id="l00354" name="l00354"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#ab45ca12560bdadfb73065784c06b49c5">  354</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#ab45ca12560bdadfb73065784c06b49c5">bCoefficients</a>()<span class="keyword"></span></div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span><span class="keyword">    const </span></div>
-<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span><span class="keyword">    override</span></div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>        <span class="keywordflow">return</span> std::tuple{m_Bc_fitted,m_Bnc_pred};</div>
-<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>    }</div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span></div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>    <span class="keyword">inline</span></div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>    <span class="keywordtype">void</span> </div>
+<div class="foldopen" id="foldopen00345" data-start="{" data-end="}">
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a953c66bc3f50fbe1696c359cd48070d9">  345</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a953c66bc3f50fbe1696c359cd48070d9">computeNonStationaryBetas</a>()<span class="keyword"></span></div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span><span class="keyword">    override</span></div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>        std::size_t n_pred = m_bnc_pred.size();</div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>        m_BetaNC.resize(n_pred);</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span> </div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span><span class="preprocessor">#ifdef _OPENMP</span></div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span><span class="preprocessor">#pragma omp parallel for shared(m_BetaNC,m_eta,m_bnc_pred,n_pred) num_threads(this-&gt;number_threads())</span></div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>        <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; n_pred; ++i)</div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>        {</div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>            m_BetaNC[i] = <a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(m_eta,m_bnc_pred[i]); <span class="comment">//n_pred elems qnc x 1</span></div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>        }</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>    }</div>
 </div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span></div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>    <span class="keyword">inline</span> </div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>    <a class="code hl_typedef" href="traits__fdagwr_8hpp.html#a288e0acbf9f4e77bb41bc4a6a619fc48">BetasTuple</a> </div>
-<div class="foldopen" id="foldopen00367" data-start="{" data-end="}">
-<div class="line"><a id="l00367" name="l00367"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a58f556d6e59252a90685f38c4f7dbb3c">  367</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a58f556d6e59252a90685f38c4f7dbb3c">betas</a>()<span class="keyword"> </span></div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span><span class="keyword">    const</span></div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span><span class="keyword">    override</span></div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>        <span class="keywordflow">return</span> std::tuple{m_BetaC_ev,m_BetaNC_ev};</div>
-<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>    }</div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span></div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>    <span class="keyword">inline</span></div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>    <a class="code hl_class" href="classfunctional__matrix.html">functional_matrix&lt;INPUT,OUTPUT&gt;</a></div>
+<div class="foldopen" id="foldopen00368" data-start="{" data-end="}">
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a4225dbc9186fea1cd62cf3e07a1e43ee">  368</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a4225dbc9186fea1cd62cf3e07a1e43ee">predict</a>(<span class="keyword">const</span> std::map&lt;std::string,<a class="code hl_class" href="classfunctional__matrix.html">functional_matrix&lt;INPUT,OUTPUT&gt;</a>&gt; &amp;X_new)<span class="keyword"></span></div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span><span class="keyword">    const</span></div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span><span class="keyword">    override</span></div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>        <span class="comment">//input coherence</span></div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>        assert(X_new.size() == 2);</div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span> </div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>        <span class="keyword">auto</span> Xc_new  = X_new.at(std::string{<a class="code hl_variable" href="classfwr__predictor.html#a05d0a177c2bf4cc2fcf179349b7d096c">fwr_FMGWR_predictor&lt;INPUT,OUTPUT&gt;::id_C</a>});</div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>        <span class="keyword">auto</span> Xnc_new = X_new.at(std::string{<a class="code hl_variable" href="classfwr__predictor.html#aba21c2b885d42be010767d0e9a7d338a">fwr_FMGWR_predictor&lt;INPUT,OUTPUT&gt;::id_NC</a>});</div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span> </div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>        assert(Xc_new.rows() == Xnc_new.rows());</div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>        std::size_t n_pred = Xc_new.rows();</div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>        assert(n_pred == m_BetaNC.size());</div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>        assert((Xc_new.cols() == m_qc) &amp;&amp; (Xnc_new.cols() == m_qnc));</div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span> </div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span> </div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>        <span class="comment">//y_new = X_new*beta = Xc_new*beta_c + Xnc_new*beta_nc</span></div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>        <a class="code hl_class" href="classfunctional__matrix.html">functional_matrix&lt;INPUT,OUTPUT&gt;</a> y_new_C = <a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(Xc_new,m_BetaC,this-&gt;<a class="code hl_function" href="classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea">number_threads</a>());    <span class="comment">//n_pred x 1</span></div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>        <a class="code hl_class" href="classfunctional__matrix.html">functional_matrix&lt;INPUT,OUTPUT&gt;</a> y_new_NC(n_pred,1);</div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span> </div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>        </div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span><span class="preprocessor">#ifdef _OPENMP</span></div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span><span class="preprocessor">#pragma omp parallel for shared(Xnc_new,m_BetaNC,y_new_NC,n_pred,m_qnc) num_threads(this-&gt;number_threads())</span></div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>        <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; n_pred; ++i)</div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>        {</div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>            std::vector&lt; FUNC_OBJ&lt;INPUT,OUTPUT&gt; &gt; xnc_new_i(Xnc_new.row(i).cbegin(),Xnc_new.row(i).cend()); <span class="comment">//1xqnc</span></div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>            <a class="code hl_class" href="classfunctional__matrix.html">functional_matrix&lt;INPUT,OUTPUT&gt;</a> Xnc_new_i(xnc_new_i,1,m_qnc);</div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>            y_new_NC(i,0) = <a class="code hl_function" href="functional__matrix__product_8hpp.html#aeb98bde348f8f5eb62e272fb771ce869">fm_prod</a>(Xnc_new_i,m_BetaNC[i],this-&gt;<a class="code hl_function" href="classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea">number_threads</a>())(0,0);</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>        }</div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span> </div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>        <span class="keywordflow">return</span> y_new_C + y_new_NC;</div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>    }</div>
 </div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span> </div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>};</div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span></div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>    <span class="keyword">inline</span> </div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>    <span class="keywordtype">void</span> </div>
+<div class="foldopen" id="foldopen00408" data-start="{" data-end="}">
+<div class="line"><a id="l00408" name="l00408"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a57d87b317da6c627be540417e503d824">  408</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a57d87b317da6c627be540417e503d824">evalBetas</a>(<span class="keyword">const</span> std::vector&lt;INPUT&gt; &amp;abscissa)<span class="keyword"></span></div>
+<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span><span class="keyword">    override</span></div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>        m_BetaC_ev  = this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a90504b3de8d264389848ad14dd0b1d19">operator_comp</a>().<a class="code hl_function" href="classfwr__operator__computing.html#a7d3e3832d6fbac64669ab9e0d2a5f2ac">eval_func_betas</a>(m_BetaC,m_qc,abscissa);</div>
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>        m_BetaNC_ev = this-&gt;<a class="code hl_function" href="classfwr__predictor.html#a90504b3de8d264389848ad14dd0b1d19">operator_comp</a>().<a class="code hl_function" href="classfwr__operator__computing.html#a7d3e3832d6fbac64669ab9e0d2a5f2ac">eval_func_betas</a>(m_BetaNC,m_qnc,abscissa);</div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>    }</div>
 </div>
-<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span> </div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span><span class="preprocessor">#endif  </span><span class="comment">/*FWR_FMGWR_PREDICT_HPP*/</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span></div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>    <span class="keyword">inline</span> </div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>    <a class="code hl_typedef" href="traits__fdagwr_8hpp.html#a670d3a0e6ef05f2a20ef0fc6ee35d07f">BTuple</a> </div>
+<div class="foldopen" id="foldopen00421" data-start="{" data-end="}">
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#ab45ca12560bdadfb73065784c06b49c5">  421</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#ab45ca12560bdadfb73065784c06b49c5">bCoefficients</a>()<span class="keyword"></span></div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span><span class="keyword">    const </span></div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span><span class="keyword">    override</span></div>
+<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>        <span class="keywordflow">return</span> std::tuple{m_Bc_fitted,m_Bnc_pred};</div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>    }</div>
+</div>
+<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span></div>
+<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>    <span class="keyword">inline</span> </div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>    <a class="code hl_typedef" href="traits__fdagwr_8hpp.html#a288e0acbf9f4e77bb41bc4a6a619fc48">BetasTuple</a> </div>
+<div class="foldopen" id="foldopen00434" data-start="{" data-end="}">
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno"><a class="line" href="classfwr___f_m_g_w_r__predictor.html#a58f556d6e59252a90685f38c4f7dbb3c">  434</a></span>    <a class="code hl_function" href="classfwr___f_m_g_w_r__predictor.html#a58f556d6e59252a90685f38c4f7dbb3c">betas</a>()<span class="keyword"> </span></div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span><span class="keyword">    const</span></div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span><span class="keyword">    override</span></div>
+<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>        <span class="keywordflow">return</span> std::tuple{m_BetaC_ev,m_BetaNC_ev};</div>
+<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>    }</div>
+</div>
+<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span> </div>
+<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span>};</div>
+</div>
+<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span> </div>
+<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span><span class="preprocessor">#endif  </span><span class="comment">/*FWR_FMGWR_PREDICT_HPP*/</span><span class="preprocessor"></span></div>
 <div class="ttc" id="aclassfunctional__matrix__diagonal_html"><div class="ttname"><a href="classfunctional__matrix__diagonal.html">functional_matrix_diagonal</a></div><div class="ttdoc">Class for diagonal matrices storing univariate 1D domain std::function objects.</div><div class="ttdef"><b>Definition</b> functional_matrix_diagonal.hpp:49</div></div>
 <div class="ttc" id="aclassfunctional__matrix__sparse_html"><div class="ttname"><a href="classfunctional__matrix__sparse.html">functional_matrix_sparse</a></div><div class="ttdoc">Class for sparse matrices storing, column-wise, in compress format (CSC), univariate 1D domain std::f...</div><div class="ttdef"><b>Definition</b> functional_matrix_sparse.hpp:55</div></div>
 <div class="ttc" id="aclassfunctional__matrix_html"><div class="ttname"><a href="classfunctional__matrix.html">functional_matrix</a></div><div class="ttdoc">Class for dense matrices storing, column-wise, univariate 1D domain std::function objects.</div><div class="ttdef"><b>Definition</b> functional_matrix.hpp:56</div></div>
 <div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a09a34049cc8a50f83b6191e62a07b4a5"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a09a34049cc8a50f83b6191e62a07b4a5">fwr_FMGWR_predictor::fwr_FMGWR_predictor</a></div><div class="ttdeci">fwr_FMGWR_predictor(SCALAR_MATRIX_OBJ_VEC &amp;&amp;Bc_fitted, FUNC_SPARSE_MATRIX_OBJ &amp;&amp;omega, std::size_t qc, std::size_t Lc, const std::vector&lt; std::size_t &gt; &amp;Lc_j, FUNC_SPARSE_MATRIX_OBJ &amp;&amp;eta, std::size_t qnc, std::size_t Lnc, const std::vector&lt; std::size_t &gt; &amp;Lnc_j, FUNC_SPARSE_MATRIX_OBJ &amp;&amp;phi, std::size_t Ly, SCALAR_MATRIX_OBJ &amp;&amp;c_tilde_hat, FUNC_MATRIX_OBJ &amp;&amp;y_train, FUNC_MATRIX_OBJ &amp;&amp;Xc_train, FUNC_MATRIX_OBJ &amp;&amp;Xnc_train, SCALAR_SPARSE_MATRIX_OBJ &amp;&amp;Rnc, INPUT a, INPUT b, int n_intervals_integration, std::size_t n_train, int number_threads, bool in_cascade_estimation)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:150</div></div>
-<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a4225dbc9186fea1cd62cf3e07a1e43ee"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a4225dbc9186fea1cd62cf3e07a1e43ee">fwr_FMGWR_predictor::predict</a></div><div class="ttdeci">functional_matrix&lt; INPUT, OUTPUT &gt; predict(const std::map&lt; std::string, functional_matrix&lt; INPUT, OUTPUT &gt; &gt; &amp;X_new) const override</div><div class="ttdoc">Compute prediction.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:301</div></div>
-<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a57d87b317da6c627be540417e503d824"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a57d87b317da6c627be540417e503d824">fwr_FMGWR_predictor::evalBetas</a></div><div class="ttdeci">void evalBetas(const std::vector&lt; INPUT &gt; &amp;abscissa) override</div><div class="ttdoc">Evaluating the functional betas along a grid.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:341</div></div>
-<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a58f556d6e59252a90685f38c4f7dbb3c"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a58f556d6e59252a90685f38c4f7dbb3c">fwr_FMGWR_predictor::betas</a></div><div class="ttdeci">BetasTuple betas() const override</div><div class="ttdoc">Function to return the the betas evaluated, tuple of different dimension depending on the model fitte...</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:367</div></div>
-<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a5eecb9a76dd65b71b442c7bfa67b63d7"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a5eecb9a76dd65b71b442c7bfa67b63d7">fwr_FMGWR_predictor::computeStationaryBetas</a></div><div class="ttdeci">void computeStationaryBetas() override</div><div class="ttdoc">Compute stationary betas as functional matrices.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:267</div></div>
-<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a7b98cc2e9915f8b35c65caaa207ec7df"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a7b98cc2e9915f8b35c65caaa207ec7df">fwr_FMGWR_predictor::computePartialResiduals</a></div><div class="ttdeci">void computePartialResiduals() override</div><div class="ttdoc">Function to compute the partial residuals accordingly to the fitted model.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:212</div></div>
-<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a953c66bc3f50fbe1696c359cd48070d9"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a953c66bc3f50fbe1696c359cd48070d9">fwr_FMGWR_predictor::computeNonStationaryBetas</a></div><div class="ttdeci">void computeNonStationaryBetas() override</div><div class="ttdoc">Compute non-stationary betas on the to-be-predicted units as functional matrices.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:278</div></div>
-<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a9d3defd1cba68f8619e38adc0ded4a56"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a9d3defd1cba68f8619e38adc0ded4a56">fwr_FMGWR_predictor::computeBNew</a></div><div class="ttdeci">void computeBNew(const std::map&lt; std::string, std::vector&lt; functional_matrix_diagonal&lt; INPUT, OUTPUT &gt; &gt; &gt; &amp;W) override</div><div class="ttdoc">Updating the non-stationary betas on the units to be predicted.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:234</div></div>
-<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_ab45ca12560bdadfb73065784c06b49c5"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#ab45ca12560bdadfb73065784c06b49c5">fwr_FMGWR_predictor::bCoefficients</a></div><div class="ttdeci">BTuple bCoefficients() const override</div><div class="ttdoc">Function to return the coefficients of the betas basis expansion.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:354</div></div>
+<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a4225dbc9186fea1cd62cf3e07a1e43ee"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a4225dbc9186fea1cd62cf3e07a1e43ee">fwr_FMGWR_predictor::predict</a></div><div class="ttdeci">functional_matrix&lt; INPUT, OUTPUT &gt; predict(const std::map&lt; std::string, functional_matrix&lt; INPUT, OUTPUT &gt; &gt; &amp;X_new) const override</div><div class="ttdoc">Compute prediction.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:368</div></div>
+<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a57d87b317da6c627be540417e503d824"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a57d87b317da6c627be540417e503d824">fwr_FMGWR_predictor::evalBetas</a></div><div class="ttdeci">void evalBetas(const std::vector&lt; INPUT &gt; &amp;abscissa) override</div><div class="ttdoc">Evaluating the functional betas along a grid.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:408</div></div>
+<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a58f556d6e59252a90685f38c4f7dbb3c"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a58f556d6e59252a90685f38c4f7dbb3c">fwr_FMGWR_predictor::betas</a></div><div class="ttdeci">BetasTuple betas() const override</div><div class="ttdoc">Function to return the the betas evaluated, tuple of different dimension depending on the model fitte...</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:434</div></div>
+<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a5eecb9a76dd65b71b442c7bfa67b63d7"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a5eecb9a76dd65b71b442c7bfa67b63d7">fwr_FMGWR_predictor::computeStationaryBetas</a></div><div class="ttdeci">void computeStationaryBetas() override</div><div class="ttdoc">Compute stationary betas as functional matrices.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:334</div></div>
+<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a7b98cc2e9915f8b35c65caaa207ec7df"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a7b98cc2e9915f8b35c65caaa207ec7df">fwr_FMGWR_predictor::computePartialResiduals</a></div><div class="ttdeci">void computePartialResiduals() override</div><div class="ttdoc">Function to compute the partial residuals accordingly to the fitted model.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:279</div></div>
+<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a953c66bc3f50fbe1696c359cd48070d9"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a953c66bc3f50fbe1696c359cd48070d9">fwr_FMGWR_predictor::computeNonStationaryBetas</a></div><div class="ttdeci">void computeNonStationaryBetas() override</div><div class="ttdoc">Compute non-stationary betas on the to-be-predicted units as functional matrices.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:345</div></div>
+<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a9bbc7308f1dcfe282173fdc95da220d8"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a9bbc7308f1dcfe282173fdc95da220d8">fwr_FMGWR_predictor::fwr_FMGWR_predictor</a></div><div class="ttdeci">fwr_FMGWR_predictor(SCALAR_MATRIX_OBJ_VEC &amp;&amp;Bc_fitted, SCALAR_MATRIX_OBJ_VEC_VEC &amp;&amp;Bnc_tuned, FUNC_SPARSE_MATRIX_OBJ &amp;&amp;omega, std::size_t qc, std::size_t Lc, const std::vector&lt; std::size_t &gt; &amp;Lc_j, FUNC_SPARSE_MATRIX_OBJ &amp;&amp;eta, std::size_t qnc, std::size_t Lnc, const std::vector&lt; std::size_t &gt; &amp;Lnc_j, std::size_t n_pred, INPUT a, INPUT b, int n_intervals_integration, std::size_t n_train, int number_threads, bool in_cascade_estimation)</div><div class="ttdoc">Constructor if betas in the new locations have been already tuned.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:231</div></div>
+<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_a9d3defd1cba68f8619e38adc0ded4a56"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#a9d3defd1cba68f8619e38adc0ded4a56">fwr_FMGWR_predictor::computeBNew</a></div><div class="ttdeci">void computeBNew(const std::map&lt; std::string, std::vector&lt; functional_matrix_diagonal&lt; INPUT, OUTPUT &gt; &gt; &gt; &amp;W) override</div><div class="ttdoc">Updating the non-stationary betas on the units to be predicted.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:301</div></div>
+<div class="ttc" id="aclassfwr___f_m_g_w_r__predictor_html_ab45ca12560bdadfb73065784c06b49c5"><div class="ttname"><a href="classfwr___f_m_g_w_r__predictor.html#ab45ca12560bdadfb73065784c06b49c5">fwr_FMGWR_predictor::bCoefficients</a></div><div class="ttdeci">BTuple bCoefficients() const override</div><div class="ttdoc">Function to return the coefficients of the betas basis expansion.</div><div class="ttdef"><b>Definition</b> fwr_FMGWR_predictor.hpp:421</div></div>
 <div class="ttc" id="aclassfwr__operator__computing_html_a0f9fba8f012107fd443b687ba90b9886"><div class="ttname"><a href="classfwr__operator__computing.html#a0f9fba8f012107fd443b687ba90b9886">fwr_operator_computing::wrap_operator</a></div><div class="ttdeci">std::vector&lt; FDAGWR_TRAITS::Dense_Matrix &gt; wrap_operator(const FDAGWR_TRAITS::Dense_Matrix &amp;b, const std::vector&lt; std::size_t &gt; &amp;L_j, std::size_t q) const</div><div class="ttdoc">For stationary covariates, wrap the basis expansion coefficients of the functional regression coeffic...</div><div class="ttdef"><b>Definition</b> fwr_operator_computing_imp.hpp:507</div></div>
 <div class="ttc" id="aclassfwr__operator__computing_html_a20202c6ca2e008c6f37014232c9d8506"><div class="ttname"><a href="classfwr__operator__computing.html#a20202c6ca2e008c6f37014232c9d8506">fwr_operator_computing::compute_operator</a></div><div class="ttdeci">std::vector&lt; FDAGWR_TRAITS::Dense_Matrix &gt; compute_operator(const functional_matrix_sparse&lt; INPUT, OUTPUT &gt; &amp;base_lhs, const functional_matrix&lt; INPUT, OUTPUT &gt; &amp;X_lhs, const std::vector&lt; functional_matrix_diagonal&lt; INPUT, OUTPUT &gt; &gt; &amp;W, const functional_matrix&lt; INPUT, OUTPUT &gt; &amp;X_rhs, const functional_matrix_sparse&lt; INPUT, OUTPUT &gt; &amp;base_rhs, const std::vector&lt; Eigen::PartialPivLU&lt; FDAGWR_TRAITS::Dense_Matrix &gt; &gt; &amp;penalty) const</div><div class="ttdoc">Compute a scalar (matrix) operator as, for each unit [J_i + R]^(-1) * int_a_b(base_lhs * X_lhs * W_i ...</div><div class="ttdef"><b>Definition</b> fwr_operator_computing_imp.hpp:189</div></div>
 <div class="ttc" id="aclassfwr__operator__computing_html_a634f00fe47b21671fb008f732eb7ec89"><div class="ttname"><a href="classfwr__operator__computing.html#a634f00fe47b21671fb008f732eb7ec89">fwr_operator_computing::compute_penalty</a></div><div class="ttdeci">std::vector&lt; Eigen::PartialPivLU&lt; FDAGWR_TRAITS::Dense_Matrix &gt; &gt; compute_penalty(const functional_matrix_sparse&lt; INPUT, OUTPUT &gt; &amp;base_t, const functional_matrix&lt; INPUT, OUTPUT &gt; &amp;X_t, const std::vector&lt; functional_matrix_diagonal&lt; INPUT, OUTPUT &gt; &gt; &amp;W, const functional_matrix&lt; INPUT, OUTPUT &gt; &amp;X, const functional_matrix_sparse&lt; INPUT, OUTPUT &gt; &amp;base, const FDAGWR_TRAITS::Sparse_Matrix &amp;R) const</div><div class="ttdoc">Compute [J_i + R]^(-1), where, for each unit i-th:</div><div class="ttdef"><b>Definition</b> fwr_operator_computing_imp.hpp:47</div></div>

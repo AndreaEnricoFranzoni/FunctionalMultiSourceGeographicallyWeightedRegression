@@ -130,6 +130,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5a42fb2a5480bea3c2edb05a5b21e7e8"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a5a42fb2a5480bea3c2edb05a5b21e7e8">fwr_FGWR_predictor</a> (FUNC_SPARSE_MATRIX_OBJ &amp;&amp;eta, std::size_t qnc, std::size_t Lnc, const std::vector&lt; std::size_t &gt; &amp;Lnc_j, FUNC_MATRIX_OBJ &amp;&amp;y_train, FUNC_MATRIX_OBJ &amp;&amp;Xnc_train, SCALAR_SPARSE_MATRIX_OBJ &amp;&amp;Rnc, INPUT a, INPUT b, int n_intervals_integration, std::size_t <a class="el" href="classfwr__predictor.html#a791c8ce7b0d2abad83958e2b0d4bd897">n_train</a>, int <a class="el" href="classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea">number_threads</a>)</td></tr>
 <tr class="memdesc:a5a42fb2a5480bea3c2edb05a5b21e7e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <br /></td></tr>
 <tr class="separator:a5a42fb2a5480bea3c2edb05a5b21e7e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66b679bba863637453942af4f4734ba7" id="r_a66b679bba863637453942af4f4734ba7"><td class="memTemplParams" colspan="2">template&lt;typename FUNC_SPARSE_MATRIX_OBJ, typename SCALAR_MATRIX_OBJ_VEC_VEC&gt; </td></tr>
+<tr class="memitem:a66b679bba863637453942af4f4734ba7"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a66b679bba863637453942af4f4734ba7">fwr_FGWR_predictor</a> (SCALAR_MATRIX_OBJ_VEC_VEC &amp;&amp;Bnc_tuned, FUNC_SPARSE_MATRIX_OBJ &amp;&amp;eta, std::size_t qnc, std::size_t Lnc, const std::vector&lt; std::size_t &gt; &amp;Lnc_j, std::size_t n_pred, INPUT a, INPUT b, int n_intervals_integration, std::size_t <a class="el" href="classfwr__predictor.html#a791c8ce7b0d2abad83958e2b0d4bd897">n_train</a>, int <a class="el" href="classfwr__predictor.html#aa15b8555b5f52e772ce874a910ce24ea">number_threads</a>)</td></tr>
+<tr class="memdesc:a66b679bba863637453942af4f4734ba7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor if betas in the new locations have been already tuned.  <br /></td></tr>
+<tr class="separator:a66b679bba863637453942af4f4734ba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf4310773157c820fa26758c84596cfe" id="r_adf4310773157c820fa26758c84596cfe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf4310773157c820fa26758c84596cfe">computePartialResiduals</a> () override</td></tr>
 <tr class="memdesc:adf4310773157c820fa26758c84596cfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to compute the partial residuals accordingly to the fitted model.  <br /></td></tr>
 <tr class="separator:adf4310773157c820fa26758c84596cfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -218,7 +222,7 @@ class fwr_FGWR_predictor&lt; INPUT, OUTPUT &gt;</div><p>Concrete class for the F
 </dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5a42fb2a5480bea3c2edb05a5b21e7e8" name="a5a42fb2a5480bea3c2edb05a5b21e7e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a42fb2a5480bea3c2edb05a5b21e7e8">&#9670;&#160;</a></span>fwr_FGWR_predictor()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a42fb2a5480bea3c2edb05a5b21e7e8">&#9670;&#160;</a></span>fwr_FGWR_predictor() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -322,6 +326,109 @@ template&lt;typename FUNC_MATRIX_OBJ, typename FUNC_SPARSE_MATRIX_OBJ, typename 
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classfwr___f_g_w_r__predictor_a5a42fb2a5480bea3c2edb05a5b21e7e8_cgraph.png" border="0" usemap="#aclassfwr___f_g_w_r__predictor_a5a42fb2a5480bea3c2edb05a5b21e7e8_cgraph" alt=""/></div>
+</div>
+
+</div>
+</div>
+<a id="a66b679bba863637453942af4f4734ba7" name="a66b679bba863637453942af4f4734ba7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66b679bba863637453942af4f4734ba7">&#9670;&#160;</a></span>fwr_FGWR_predictor() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename INPUT = double, typename OUTPUT = double&gt; </div>
+<div class="memtemplate">
+template&lt;typename FUNC_SPARSE_MATRIX_OBJ, typename SCALAR_MATRIX_OBJ_VEC_VEC&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classfwr___f_g_w_r__predictor.html">fwr_FGWR_predictor</a>&lt; INPUT, OUTPUT &gt;<a class="el" href="classfwr___f_g_w_r__predictor.html">::fwr_FGWR_predictor</a> </td>
+          <td>(</td>
+          <td class="paramtype">SCALAR_MATRIX_OBJ_VEC_VEC &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>Bnc_tuned</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FUNC_SPARSE_MATRIX_OBJ &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>eta</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>qnc</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>Lnc</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>Lnc_j</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">INPUT</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">INPUT</td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>n_intervals_integration</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_train</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>number_threads</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor if betas in the new locations have been already tuned. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Bnc_tuned</td><td>Coefficients of the basis expansion for non-stationary regressors coefficients on the locations of the units to be predicted: every of the qnc elements are n_pred 1xLnc_j matrices, one for each statistical unit to be predicted </td></tr>
+    <tr><td class="paramname">eta</td><td>functional sparse matrix containing the basis of the functional regression coefficients of the non-stationary covariates (qncxLnc, row i-th contains zeros and the basis of the i-th non-stationary covariate, their position shifted of sum_i_0_to_i(Lnc_i)) </td></tr>
+    <tr><td class="paramname">qnc</td><td>number of non-stationary covariates </td></tr>
+    <tr><td class="paramname">Lnc</td><td>total number of basis used for the non-stationary covariates functional regression coefficients </td></tr>
+    <tr><td class="paramname">Lnc_j</td><td>vector containing in element i-th the number of basis for the non-stationary covariate i-th functional regression coefficients </td></tr>
+    <tr><td class="paramname">n_pred</td><td>number of units to be predicted </td></tr>
+    <tr><td class="paramname">a</td><td>left extreme functional data domain </td></tr>
+    <tr><td class="paramname">b</td><td>right extreme functional data domain </td></tr>
+    <tr><td class="paramname">n_intervals_integration</td><td>number of intervals used by the midpoint quadrature rule </td></tr>
+    <tr><td class="paramname">n_train</td><td>number of training statistical units </td></tr>
+    <tr><td class="paramname">number_threads</td><td>number of threads for OMP </td></tr>
+    <tr><td class="paramname">in_cascade_estimation</td><td>if true, for more than one source covariates, the estimation is made in cascade. If false, exact </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>input dimensions check and transpose computation </dd></dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classfwr___f_g_w_r__predictor_a66b679bba863637453942af4f4734ba7_cgraph.png" border="0" usemap="#aclassfwr___f_g_w_r__predictor_a66b679bba863637453942af4f4734ba7_cgraph" alt=""/></div>
 </div>
 
 </div>

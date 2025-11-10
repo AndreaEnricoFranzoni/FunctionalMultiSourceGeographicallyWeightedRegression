@@ -152,24 +152,48 @@ Functions</h2></td></tr>
 <tr class="memitem:ab00c87d9118ac0d945788764202c01e3" id="r_ab00c87d9118ac0d945788764202c01e3"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab00c87d9118ac0d945788764202c01e3">predict_FMSGWR_ESC</a> (Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_events_cov_to_pred, Rcpp::NumericMatrix coordinates_events_to_pred, Rcpp::List coeff_stations_cov_to_pred, Rcpp::NumericMatrix coordinates_stations_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_knots_smoothing_pred=100, int n_intervals_quadrature=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue)</td></tr>
 <tr class="memdesc:ab00c87d9118ac0d945788764202c01e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to perform predictions on new statistical units using a fitted Functional Multi-Source Geographically Weighted Regression ESC model. Non-stationary betas have to be recomputed in the new locations.  <br /></td></tr>
 <tr class="separator:ab00c87d9118ac0d945788764202c01e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ffbc6ef6b424f1f78cd177f5a1b202b" id="r_a8ffbc6ef6b424f1f78cd177f5a1b202b"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ffbc6ef6b424f1f78cd177f5a1b202b">beta_new_FMSGWR_ESC</a> (Rcpp::NumericMatrix coordinates_events_to_pred, Rcpp::NumericMatrix coordinates_stations_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_quadrature=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue)</td></tr>
+<tr class="memdesc:a8ffbc6ef6b424f1f78cd177f5a1b202b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to compute the non-stationary functional regression coefficients of a fitted Functional Multi-Source Geographically Weighted Regression ESC model on the locations of the new statistical units.  <br /></td></tr>
+<tr class="separator:a8ffbc6ef6b424f1f78cd177f5a1b202b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa87edeea15b57f97d64bb961916b3cfa" id="r_aa87edeea15b57f97d64bb961916b3cfa"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa87edeea15b57f97d64bb961916b3cfa">y_new_FMSGWR_ESC</a> (Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_events_cov_to_pred, Rcpp::List coeff_stations_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue)</td></tr>
+<tr class="memdesc:aa87edeea15b57f97d64bb961916b3cfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to perform predictions on new statistical units using a fitted Functional Multi-Source Geographically Weighted Regression ESC model. Non-stationary betas have already been recomputed in the new locations.  <br /></td></tr>
+<tr class="separator:aa87edeea15b57f97d64bb961916b3cfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa047822d2daf52e16fc2bd9d55fa38ff" id="r_aa047822d2daf52e16fc2bd9d55fa38ff"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa047822d2daf52e16fc2bd9d55fa38ff">FMSGWR_SEC</a> (Rcpp::NumericMatrix y_points, Rcpp::NumericVector t_points, double left_extreme_domain, double right_extreme_domain, Rcpp::NumericMatrix coeff_y_points, Rcpp::NumericVector knots_y_points, Rcpp::Nullable&lt; int &gt; degree_basis_y_points, Rcpp::Nullable&lt; int &gt; n_basis_y_points, Rcpp::NumericMatrix coeff_rec_weights_y_points, Rcpp::Nullable&lt; int &gt; degree_basis_rec_weights_y_points, Rcpp::Nullable&lt; int &gt; n_basis_rec_weights_y_points, Rcpp::List coeff_stationary_cov, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_stationary_cov, Rcpp::NumericVector knots_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_stationary_cov, Rcpp::NumericVector penalization_stationary_cov, Rcpp::NumericVector knots_beta_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_beta_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_beta_stationary_cov, Rcpp::List coeff_events_cov, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_events_cov, Rcpp::NumericVector knots_events_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_events_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_events_cov, Rcpp::NumericVector penalization_events_cov, Rcpp::NumericMatrix coordinates_events, double kernel_bandwith_events, Rcpp::NumericVector knots_beta_events_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_beta_events_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_beta_events_cov, Rcpp::List coeff_stations_cov, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_stations_cov, Rcpp::NumericVector knots_stations_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_stations_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_stations_cov, Rcpp::NumericVector penalization_stations_cov, Rcpp::NumericMatrix coordinates_stations, double kernel_bandwith_stations, Rcpp::NumericVector knots_beta_stations_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_beta_stations_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_beta_stations_cov, bool in_cascade_estimation=false, int n_knots_smoothing=100, int n_intervals_quadrature=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue, std::string basis_type_y_points=&quot;bsplines&quot;, std::string basis_type_rec_weights_y_points=&quot;bsplines&quot;, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_beta_stationary_cov=R_NilValue, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_beta_events_cov=R_NilValue, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_beta_stations_cov=R_NilValue)</td></tr>
 <tr class="memdesc:aa047822d2daf52e16fc2bd9d55fa38ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fitting a Functional Multi-Source Geographically Weighted Regression SEC model. The covariates are functional objects, divided into three categories: stationary covariates (C), constant over geographical space, event-dependent covariates (E), that vary depending on the spatial coordinates of the event, station-dependent covariates (S), that vary depending on the spatial coordinates of the stations that measure the event. Regression coefficients are estimated in the following order: C, E, S. The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024) (link below)  <br /></td></tr>
 <tr class="separator:aa047822d2daf52e16fc2bd9d55fa38ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab96430b819b4aca0b81fad6da2b4ff26" id="r_ab96430b819b4aca0b81fad6da2b4ff26"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab96430b819b4aca0b81fad6da2b4ff26">predict_FMSGWR_SEC</a> (Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_events_cov_to_pred, Rcpp::NumericMatrix coordinates_events_to_pred, Rcpp::List coeff_stations_cov_to_pred, Rcpp::NumericMatrix coordinates_stations_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_knots_smoothing_pred=100, int n_intervals_quadrature=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue)</td></tr>
 <tr class="memdesc:ab96430b819b4aca0b81fad6da2b4ff26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to perform predictions on new statistical units using a fitted Functional Multi-Source Geographically Weighted Regression SEC model. Non-stationary betas have to be recomputed in the new locations.  <br /></td></tr>
 <tr class="separator:ab96430b819b4aca0b81fad6da2b4ff26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a662028f6586e1bbfc9e31f151504ae66" id="r_a662028f6586e1bbfc9e31f151504ae66"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a662028f6586e1bbfc9e31f151504ae66">beta_new_FMSGWR_SEC</a> (Rcpp::NumericMatrix coordinates_events_to_pred, Rcpp::NumericMatrix coordinates_stations_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_quadrature=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue)</td></tr>
+<tr class="memdesc:a662028f6586e1bbfc9e31f151504ae66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to compute the non-stationary functional regression coefficients of a fitted Functional Multi-Source Geographically Weighted Regression SEC model on the locations of the new statistical units.  <br /></td></tr>
+<tr class="separator:a662028f6586e1bbfc9e31f151504ae66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f7eee8dfd35eba1ec9baebf915a183a" id="r_a9f7eee8dfd35eba1ec9baebf915a183a"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f7eee8dfd35eba1ec9baebf915a183a">y_new_FMSGWR_SEC</a> (Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_events_cov_to_pred, Rcpp::List coeff_stations_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue)</td></tr>
+<tr class="memdesc:a9f7eee8dfd35eba1ec9baebf915a183a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to perform predictions on new statistical units using a fitted Functional Multi-Source Geographically Weighted Regression SEC model. Non-stationary betas have already been recomputed in the new locations.  <br /></td></tr>
+<tr class="separator:a9f7eee8dfd35eba1ec9baebf915a183a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7ee1755500ce419168740a317a5552c" id="r_ac7ee1755500ce419168740a317a5552c"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7ee1755500ce419168740a317a5552c">FMGWR</a> (Rcpp::NumericMatrix y_points, Rcpp::NumericVector t_points, double left_extreme_domain, double right_extreme_domain, Rcpp::NumericMatrix coeff_y_points, Rcpp::NumericVector knots_y_points, Rcpp::Nullable&lt; int &gt; degree_basis_y_points, Rcpp::Nullable&lt; int &gt; n_basis_y_points, Rcpp::NumericMatrix coeff_rec_weights_y_points, Rcpp::Nullable&lt; int &gt; degree_basis_rec_weights_y_points, Rcpp::Nullable&lt; int &gt; n_basis_rec_weights_y_points, Rcpp::List coeff_stationary_cov, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_stationary_cov, Rcpp::NumericVector knots_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_stationary_cov, Rcpp::NumericVector penalization_stationary_cov, Rcpp::NumericVector knots_beta_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_beta_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_beta_stationary_cov, Rcpp::List coeff_non_stationary_cov, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_non_stationary_cov, Rcpp::NumericVector knots_non_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_non_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_non_stationary_cov, Rcpp::NumericVector penalization_non_stationary_cov, Rcpp::NumericMatrix coordinates_non_stationary, double kernel_bandwith_non_stationary, Rcpp::NumericVector knots_beta_non_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_beta_non_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_beta_non_stationary_cov, bool in_cascade_estimation=false, int n_knots_smoothing=100, int n_intervals_quadrature=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue, std::string basis_type_y_points=&quot;bsplines&quot;, std::string basis_type_rec_weights_y_points=&quot;bsplines&quot;, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_beta_stationary_cov=R_NilValue, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_beta_non_stationary_cov=R_NilValue)</td></tr>
 <tr class="memdesc:ac7ee1755500ce419168740a317a5552c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fitting a Functional Mixed Geographically Weighted Regression model. The covariates are functional objects, divided into two categories: stationary covariates (C), constant over geographical space, and non-stationary covariates (NC), that vary depending on spatial coordinates. Regression coefficients are estimated in the following order: C, NC. The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024) (link below)  <br /></td></tr>
 <tr class="separator:ac7ee1755500ce419168740a317a5552c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58e1b7194996c682ee8a9c80162c4433" id="r_a58e1b7194996c682ee8a9c80162c4433"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58e1b7194996c682ee8a9c80162c4433">predict_FMGWR</a> (Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_non_stationary_cov_to_pred, Rcpp::NumericMatrix coordinates_non_stationary_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_knots_smoothing_pred=100, int n_intervals_quadrature=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue)</td></tr>
 <tr class="memdesc:a58e1b7194996c682ee8a9c80162c4433"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to perform predictions on new statistical units using a fitted Functional Mixed Geographically Weighted Regression model. Non-stationary betas have to be recomputed in the new locations.  <br /></td></tr>
 <tr class="separator:a58e1b7194996c682ee8a9c80162c4433"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad67b2ae8304a8f67728211f0075b270f" id="r_ad67b2ae8304a8f67728211f0075b270f"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad67b2ae8304a8f67728211f0075b270f">beta_new_FMGWR</a> (Rcpp::NumericMatrix coordinates_non_stationary_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_quadrature=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue)</td></tr>
+<tr class="memdesc:ad67b2ae8304a8f67728211f0075b270f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to compute the non-stationary functional regression coefficients of a fitted Functional Mixed Geographically Weighted Regression model on the locations of the new statistical units.  <br /></td></tr>
+<tr class="separator:ad67b2ae8304a8f67728211f0075b270f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8927ff30410ad8b09841c9bfd2d63d5" id="r_ad8927ff30410ad8b09841c9bfd2d63d5"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8927ff30410ad8b09841c9bfd2d63d5">y_new_FMGWR</a> (Rcpp::List coeff_stationary_cov_to_pred, Rcpp::List coeff_non_stationary_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue)</td></tr>
+<tr class="memdesc:ad8927ff30410ad8b09841c9bfd2d63d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to perform predictions on new statistical units using a fitted Functional Mixed Geographically Weighted Regression model. Non-stationary betas have already been recomputed in the new locations.  <br /></td></tr>
+<tr class="separator:ad8927ff30410ad8b09841c9bfd2d63d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af05363791c6e68d6b6ef38bdd2957df7" id="r_af05363791c6e68d6b6ef38bdd2957df7"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af05363791c6e68d6b6ef38bdd2957df7">FGWR</a> (Rcpp::NumericMatrix y_points, Rcpp::NumericVector t_points, double left_extreme_domain, double right_extreme_domain, Rcpp::NumericMatrix coeff_y_points, Rcpp::NumericVector knots_y_points, Rcpp::Nullable&lt; int &gt; degree_basis_y_points, Rcpp::Nullable&lt; int &gt; n_basis_y_points, Rcpp::NumericMatrix coeff_rec_weights_y_points, Rcpp::Nullable&lt; int &gt; degree_basis_rec_weights_y_points, Rcpp::Nullable&lt; int &gt; n_basis_rec_weights_y_points, Rcpp::List coeff_non_stationary_cov, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_non_stationary_cov, Rcpp::NumericVector knots_non_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_non_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_non_stationary_cov, Rcpp::NumericVector penalization_non_stationary_cov, Rcpp::NumericMatrix coordinates_non_stationary, double kernel_bandwith_non_stationary, Rcpp::NumericVector knots_beta_non_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_beta_non_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_beta_non_stationary_cov, int n_intervals_quadrature=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue, std::string basis_type_y_points=&quot;bsplines&quot;, std::string basis_type_rec_weights_y_points=&quot;bsplines&quot;, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_beta_stationary_cov=R_NilValue, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_beta_non_stationary_cov=R_NilValue)</td></tr>
 <tr class="memdesc:af05363791c6e68d6b6ef38bdd2957df7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fitting a Functional Geographically Weighted Regression model. The covariates are functional objects, non-stationary covariates (NC), that vary depending on spatial coordinates. The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024) (link below)  <br /></td></tr>
 <tr class="separator:af05363791c6e68d6b6ef38bdd2957df7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1232970b791dea772ef48d61fc329d87" id="r_a1232970b791dea772ef48d61fc329d87"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1232970b791dea772ef48d61fc329d87">predict_FGWR</a> (Rcpp::List coeff_non_stationary_cov_to_pred, Rcpp::NumericMatrix coordinates_non_stationary_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_knots_smoothing_pred=100, int n_intervals_quadrature=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue)</td></tr>
 <tr class="memdesc:a1232970b791dea772ef48d61fc329d87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to perform predictions on new statistical units using a fitted Functional Geographically Weighted Regression model. Non-stationary betas have to be recomputed in the new locations.  <br /></td></tr>
 <tr class="separator:a1232970b791dea772ef48d61fc329d87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac84ebfbe594e2fd37a96592eeb0522ba" id="r_ac84ebfbe594e2fd37a96592eeb0522ba"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac84ebfbe594e2fd37a96592eeb0522ba">beta_new_FGWR</a> (Rcpp::NumericMatrix coordinates_non_stationary_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List model_fitted, int n_intervals_quadrature=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue)</td></tr>
+<tr class="memdesc:ac84ebfbe594e2fd37a96592eeb0522ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to compute the non-stationary functional regression coefficients of a fitted Functional Geographically Weighted Regression model on the locations of the new statistical units.  <br /></td></tr>
+<tr class="separator:ac84ebfbe594e2fd37a96592eeb0522ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad82eca977d1533dc94ac32ec38042d7e" id="r_ad82eca977d1533dc94ac32ec38042d7e"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad82eca977d1533dc94ac32ec38042d7e">y_new_FGWR</a> (Rcpp::List coeff_non_stationary_cov_to_pred, int units_to_be_predicted, Rcpp::NumericVector abscissa_ev, Rcpp::List new_beta, Rcpp::List model_fitted, int n_knots_smoothing_pred=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue)</td></tr>
+<tr class="memdesc:ad82eca977d1533dc94ac32ec38042d7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to perform predictions on new statistical units using a fitted Functional Geographically Weighted Regression model. Non-stationary betas have to be recomputed in the new locations.  <br /></td></tr>
+<tr class="separator:ad82eca977d1533dc94ac32ec38042d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ca1a9836bffb181af6fc761393d23f1" id="r_a1ca1a9836bffb181af6fc761393d23f1"><td class="memItemLeft" align="right" valign="top">Rcpp::List&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ca1a9836bffb181af6fc761393d23f1">FWR</a> (Rcpp::NumericMatrix y_points, Rcpp::NumericVector t_points, double left_extreme_domain, double right_extreme_domain, Rcpp::NumericMatrix coeff_y_points, Rcpp::NumericVector knots_y_points, Rcpp::Nullable&lt; int &gt; degree_basis_y_points, Rcpp::Nullable&lt; int &gt; n_basis_y_points, Rcpp::NumericMatrix coeff_rec_weights_y_points, Rcpp::Nullable&lt; int &gt; degree_basis_rec_weights_y_points, Rcpp::Nullable&lt; int &gt; n_basis_rec_weights_y_points, Rcpp::List coeff_stationary_cov, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_stationary_cov, Rcpp::NumericVector knots_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_stationary_cov, Rcpp::NumericVector penalization_stationary_cov, Rcpp::NumericVector knots_beta_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; degrees_basis_beta_stationary_cov, Rcpp::Nullable&lt; Rcpp::IntegerVector &gt; n_basis_beta_stationary_cov, int n_intervals_quadrature=100, Rcpp::Nullable&lt; int &gt; num_threads=R_NilValue, std::string basis_type_y_points=&quot;bsplines&quot;, std::string basis_type_rec_weights_y_points=&quot;bsplines&quot;, Rcpp::Nullable&lt; Rcpp::CharacterVector &gt; basis_types_beta_stationary_cov=R_NilValue)</td></tr>
 <tr class="memdesc:a1ca1a9836bffb181af6fc761393d23f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fitting a Functional Weighted Regression model. The covariates are functional objects, stationary covariates (C), constant over geographical space. The functional response is already reconstructed according to the method proposed by Bortolotti et Al. (2024) (link below)  <br /></td></tr>
 <tr class="separator:a1ca1a9836bffb181af6fc761393d23f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,6 +205,793 @@ Functions</h2></td></tr>
 <div class="textblock"><p>Contains the R-interfaced main functions of the package 'fdagwr', which implement Functional Geographical Weighted Regression coefficients estimation, for different (multi-source (FMSGWR), mixed (FMGWR), geographically weighted (FGWR) and weighted (FWR)) functional regression models. </p>
 <dl class="section author"><dt>Author</dt><dd>Andrea Enrico Franzoni </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="ac84ebfbe594e2fd37a96592eeb0522ba" name="ac84ebfbe594e2fd37a96592eeb0522ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac84ebfbe594e2fd37a96592eeb0522ba">&#9670;&#160;</a></span>beta_new_FGWR()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rcpp::List beta_new_FGWR </td>
+          <td>(</td>
+          <td class="paramtype">Rcpp::NumericMatrix</td>          <td class="paramname"><span class="paramname"><em>coordinates_non_stationary_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>units_to_be_predicted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::NumericVector</td>          <td class="paramname"><span class="paramname"><em>abscissa_ev</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>model_fitted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>n_intervals_quadrature</em></span><span class="paramdefsep"> = </span><span class="paramdefval">100</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::Nullable&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>num_threads</em></span><span class="paramdefsep"> = </span><span class="paramdefval">R_NilValue</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function to compute the non-stationary functional regression coefficients of a fitted Functional Geographically Weighted Regression model on the locations of the new statistical units. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coordinates_non_stationary_to_pred</td><td>matrix of double containing the UTM coordinates of the non-stationary site of new statistical units: each row represents a statistical unit to be predicted, each column a coordinate (2 columns). </td></tr>
+    <tr><td class="paramname">units_to_be_predicted</td><td>number of units to be predicted </td></tr>
+    <tr><td class="paramname">abscissa_ev</td><td>abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed </td></tr>
+    <tr><td class="paramname">model_fitted</td><td>output of FGWR: an R list containing:<ul>
+<li>"FGWR": string containing the type of fwr used ("FGWR")</li>
+<li>"Bnc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:<ul>
+<li>"basis_coeff": a list, containg, for each unit, a Lnc_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_non_stationary_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_non_stationary_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_non_stationary_cov)</li>
+</ul>
+</li>
+<li>"Beta_nc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:<ul>
+<li>"Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points) <br  />
+</li>
+</ul>
+</li>
+<li>"predictor_info": a list containing information of the fitted model to perform predictions for new statistical units:<ul>
+<li>"inputs_info": a list containing information about the data used to fit the model:<ul>
+<li>"Response": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).</li>
+</ul>
+</li>
+<li>"ResponseReconstructionWeights": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points). <br  />
+</li>
+</ul>
+</li>
+<li>"cov_NonStationary": list:<ul>
+<li>"number_covariates": number of non-stationary covariates (length of coeff_non_stationary_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional non-stationary covariates (respective elements of n_basis_non_stationary_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional non-stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_non_stationary_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional non-stationary covariates (respective elements of degrees_basis_non_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional non-stationary covariates (element knots_non_stationary_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional non-stationary covariates (respective elements of coeff_non_stationary_cov).</li>
+<li>"penalizations": vector containing the penalizations of the non-stationary covariates (respective elements of penalization_non_stationary_cov)</li>
+<li>"coordinates": UTM coordinates of the non-stationary sites of the training data (element coordinates_non_stationary).</li>
+<li>"kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the non-stationary sites (element kernel_bandwith_non_stationary).</li>
+</ul>
+</li>
+<li>"beta_NonStationary": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element n_basis_beta_non_stationary_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_non_stationary_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element degrees_basis_beta_non_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element knots_beta_non_stationary_cov).</li>
+</ul>
+</li>
+<li>"a": domain left extreme (element left_extreme_domain).</li>
+<li>"b": domain right extreme (element right_extreme_domain).</li>
+<li>"abscissa": abscissa for which the evaluations of the functional data are available (element t_points). </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">n_intervals_quadrature</td><td>number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100). </td></tr>
+    <tr><td class="paramname">num_threads</td><td>number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an R list containing:<ul>
+<li>"FGWR_predictor": string containing the model used to predict ("predictor_FGWR")</li>
+<li>"Bnc_pred": list containing, for each non-stationary covariate:<ul>
+<li>"basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.</li>
+<li>"basis_num": number of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_nc_pred": list containing, for each non-stationary covariate:<ul>
+<li>"Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev). </li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="fda__gwr___r__interface_8cpp_ac84ebfbe594e2fd37a96592eeb0522ba_cgraph.png" border="0" usemap="#afda__gwr___r__interface_8cpp_ac84ebfbe594e2fd37a96592eeb0522ba_cgraph" alt=""/></div>
+</div>
+
+</div>
+</div>
+<a id="ad67b2ae8304a8f67728211f0075b270f" name="ad67b2ae8304a8f67728211f0075b270f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad67b2ae8304a8f67728211f0075b270f">&#9670;&#160;</a></span>beta_new_FMGWR()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rcpp::List beta_new_FMGWR </td>
+          <td>(</td>
+          <td class="paramtype">Rcpp::NumericMatrix</td>          <td class="paramname"><span class="paramname"><em>coordinates_non_stationary_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>units_to_be_predicted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::NumericVector</td>          <td class="paramname"><span class="paramname"><em>abscissa_ev</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>model_fitted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>n_intervals_quadrature</em></span><span class="paramdefsep"> = </span><span class="paramdefval">100</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::Nullable&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>num_threads</em></span><span class="paramdefsep"> = </span><span class="paramdefval">R_NilValue</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function to compute the non-stationary functional regression coefficients of a fitted Functional Mixed Geographically Weighted Regression model on the locations of the new statistical units. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coordinates_non_stationary_to_pred</td><td>matrix of double containing the UTM coordinates of the non-stationary site of new statistical units: each row represents a statistical unit to be predicted, each column a coordinate (2 columns). </td></tr>
+    <tr><td class="paramname">units_to_be_predicted</td><td>number of units to be predicted </td></tr>
+    <tr><td class="paramname">abscissa_ev</td><td>abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed </td></tr>
+    <tr><td class="paramname">model_fitted</td><td>output of FMGWR: an R list containing:<ul>
+<li>"FGWR": string containing the type of fwr used ("FMGWR")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true</li>
+<li>"Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:<ul>
+<li>"basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)</li>
+</ul>
+</li>
+<li>"Beta_c": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:<ul>
+<li>"Beta_eval": a vector of double containing the discrete evaluations of the stationary beta</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)</li>
+</ul>
+</li>
+<li>"Bnc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:<ul>
+<li>"basis_coeff": a list, containg, for each unit, a Lnc_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_non_stationary_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_non_stationary_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_non_stationary_cov)</li>
+</ul>
+</li>
+<li>"Beta_nc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:<ul>
+<li>"Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points) <br  />
+</li>
+</ul>
+</li>
+<li>"predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:<ul>
+<li>"partial_res": a list containing information to compute the partial residuals:<ul>
+<li>"c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).</li>
+</ul>
+</li>
+<li>"inputs_info": a list containing information about the data used to fit the model:<ul>
+<li>"Response": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).</li>
+</ul>
+</li>
+<li>"ResponseReconstructionWeights": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).</li>
+</ul>
+</li>
+<li>"cov_Stationary": list:<ul>
+<li>"number_covariates": number of stationary covariates (length of coeff_stationary_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional stationary covariates (respective elements of coeff_stationary_cov).</li>
+</ul>
+</li>
+<li>"beta_Stationary": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov). <br  />
+</li>
+</ul>
+</li>
+<li>"cov_NonStationary": list:<ul>
+<li>"number_covariates": number of non-stationary covariates (length of coeff_non_stationary_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional non-stationary covariates (respective elements of n_basis_non_stationary_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional non-stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_non_stationary_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional non-stationary covariates (respective elements of degrees_basis_non_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional non-stationary covariates (element knots_non_stationary_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional non-stationary covariates (respective elements of coeff_non_stationary_cov).</li>
+<li>"penalizations": vector containing the penalizations of the non-stationary covariates (respective elements of penalization_non_stationary_cov)</li>
+<li>"coordinates": UTM coordinates of the non-stationary sites of the training data (element coordinates_non_stationary).</li>
+<li>"kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the non-stationary sites (element kernel_bandwith_non_stationary).</li>
+</ul>
+</li>
+<li>"beta_NonStationary": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element n_basis_beta_non_stationary_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_non_stationary_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element degrees_basis_beta_non_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element knots_beta_non_stationary_cov).</li>
+</ul>
+</li>
+<li>"a": domain left extreme (element left_extreme_domain).</li>
+<li>"b": domain right extreme (element right_extreme_domain).</li>
+<li>"abscissa": abscissa for which the evaluations of the functional data are available (element t_points).</li>
+<li>"InCascadeEstimation": element in_cascade_estimation. </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">n_intervals_quadrature</td><td>number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100). </td></tr>
+    <tr><td class="paramname">num_threads</td><td>number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an R list containing:<ul>
+<li>"FGWR_predictor": string containing the model used to predict ("predictor_FMGWR")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation in the fitted model false, "Cascade" if in_cascade_estimation in the fitted model true</li>
+<li>"Bc_pred": list containing, for each stationary covariate:<ul>
+<li>"basis_coeff": coefficients of the basis expansion of the beta (from model_fitted).</li>
+<li>"basis_num": number of basis used for the beta basis epxnasion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_c_pred": list containing, for each stationary covariate:<ul>
+<li>"Beta_eval": evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"Bnc_pred": list containing, for each non-stationary covariate:<ul>
+<li>"basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.</li>
+<li>"basis_num": number of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_nc_pred": list containing, for each non-stationary covariate:<ul>
+<li>"Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev). </li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="fda__gwr___r__interface_8cpp_ad67b2ae8304a8f67728211f0075b270f_cgraph.png" border="0" usemap="#afda__gwr___r__interface_8cpp_ad67b2ae8304a8f67728211f0075b270f_cgraph" alt=""/></div>
+</div>
+
+</div>
+</div>
+<a id="a8ffbc6ef6b424f1f78cd177f5a1b202b" name="a8ffbc6ef6b424f1f78cd177f5a1b202b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ffbc6ef6b424f1f78cd177f5a1b202b">&#9670;&#160;</a></span>beta_new_FMSGWR_ESC()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rcpp::List beta_new_FMSGWR_ESC </td>
+          <td>(</td>
+          <td class="paramtype">Rcpp::NumericMatrix</td>          <td class="paramname"><span class="paramname"><em>coordinates_events_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::NumericMatrix</td>          <td class="paramname"><span class="paramname"><em>coordinates_stations_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>units_to_be_predicted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::NumericVector</td>          <td class="paramname"><span class="paramname"><em>abscissa_ev</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>model_fitted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>n_intervals_quadrature</em></span><span class="paramdefsep"> = </span><span class="paramdefval">100</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::Nullable&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>num_threads</em></span><span class="paramdefsep"> = </span><span class="paramdefval">R_NilValue</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function to compute the non-stationary functional regression coefficients of a fitted Functional Multi-Source Geographically Weighted Regression ESC model on the locations of the new statistical units. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coordinates_events_to_pred</td><td>matrix of double containing the UTM coordinates of the event of new statistical units: each row represents a statistical unit to be predicted, each column a coordinate (2 columns). </td></tr>
+    <tr><td class="paramname">coordinates_stations_to_pred</td><td>matrix of double containing the UTM coordinates of the station of new statistical units: each row represents a statistical unit to be predicted, each column a coordinate (2 columns). </td></tr>
+    <tr><td class="paramname">units_to_be_predicted</td><td>number of units to be predicted </td></tr>
+    <tr><td class="paramname">abscissa_ev</td><td>abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed </td></tr>
+    <tr><td class="paramname">model_fitted</td><td>output of FMSGWR_ESC: an R list containing:<ul>
+<li>"FGWR": string containing the type of fwr used ("FMSGWR_ESC")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true</li>
+<li>"Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:<ul>
+<li>"basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)</li>
+</ul>
+</li>
+<li>"Beta_c": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:<ul>
+<li>"Beta_eval": a vector of double containing the discrete evaluations of the stationary beta</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)</li>
+</ul>
+</li>
+<li>"Be": a list containing, for each event-dependent covariate regression coefficent (each element is named with the element names in the list coeff_events_cov (default, if not given: "CovE*")) a list with:<ul>
+<li>"basis_coeff": a list, containg, for each unit, a Le_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_events_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_events_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_events_cov)</li>
+</ul>
+</li>
+<li>"Beta_e": a list containing, for each event-dependent covariate regression coefficent (each element is named with the element names in the list coeff_events_cov (default, if not given: "CovE*")) a list with:<ul>
+<li>"Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points) <br  />
+</li>
+</ul>
+</li>
+<li>"Bs": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:<ul>
+<li>"basis_coeff": a list, containg, for each unit, a Ls_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_stations_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stations_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_stations_cov)</li>
+</ul>
+</li>
+<li>"Beta_s": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:<ul>
+<li>"Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)</li>
+</ul>
+</li>
+<li>"predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:<ul>
+<li>"partial_res": a list containing information to compute the partial residuals:<ul>
+<li>"c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).</li>
+<li>"A__": vector of matrices with the operator A_e for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).</li>
+<li>"B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).</li>
+</ul>
+</li>
+<li>"inputs_info": a list containing information about the data used to fit the model:<ul>
+<li>"Response": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).</li>
+</ul>
+</li>
+<li>"ResponseReconstructionWeights": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).</li>
+</ul>
+</li>
+<li>"cov_Stationary": list:<ul>
+<li>"number_covariates": number of stationary covariates (length of coeff_stationary_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional stationary covariates (respective elements of coeff_stationary_cov).</li>
+</ul>
+</li>
+<li>"beta_Stationary": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov). <br  />
+</li>
+</ul>
+</li>
+<li>"cov_Event": list:<ul>
+<li>"number_covariates": number of event-dependent covariates (length of coeff_events_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional event-dependent covariates (respective elements of n_basis_events_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional event-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_events_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional event-dependent covariates (respective elements of degrees_basis_events_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional event-dependent covariates (element knots_events_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional event-dependent covariates (respective elements of coeff_events_cov).</li>
+<li>"penalizations": vector containing the penalizations of the event-dependent covariates (respective elements of penalization_events_cov)</li>
+<li>"coordinates": UTM coordinates of the events of the training data (element coordinates_events).</li>
+<li>"kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the events (element kernel_bandwith_events).</li>
+</ul>
+</li>
+<li>"beta_Event": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element n_basis_beta_events_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_events_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element degrees_basis_beta_events_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element knots_beta_events_cov).</li>
+</ul>
+</li>
+<li>"cov_Station": list:<ul>
+<li>"number_covariates": number of station-dependent covariates (length of coeff_stations_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional station-dependent covariates (respective elements of n_basis_stations_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional station-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stations_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional station-dependent covariates (respective elements of degrees_basis_stations_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional station-dependent covariates (element knots_stations_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional station-dependent covariates (respective elements of coeff_stations_cov).</li>
+<li>"penalizations": vector containing the penalizations of the station-dependent covariates (respective elements of penalization_stations_cov)</li>
+<li>"coordinates": UTM coordinates of the stations of the training data (element coordinates_stations).</li>
+<li>"kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the stations (element kernel_bandwith_stations).</li>
+</ul>
+</li>
+<li>"beta_Station": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element n_basis_beta_stations_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stations_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element degrees_basis_beta_stations_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element knots_beta_stations_cov).</li>
+</ul>
+</li>
+<li>"a": domain left extreme (element left_extreme_domain).</li>
+<li>"b": domain right extreme (element right_extreme_domain).</li>
+<li>"abscissa": abscissa for which the evaluations of the functional data are available (element t_points).</li>
+<li>"InCascadeEstimation": element in_cascade_estimation. </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">n_intervals_quadrature</td><td>number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100). </td></tr>
+    <tr><td class="paramname">num_threads</td><td>number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an R list containing:<ul>
+<li>"FGWR_predictor": string containing the model used to predict ("predictor_FMSGWR_ESC")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation in the fitted model false, "Cascade" if in_cascade_estimation in the fitted model true</li>
+<li>"Bc_pred": list containing, for each stationary covariate:<ul>
+<li>"basis_coeff": coefficients of the basis expansion of the beta (from model_fitted).</li>
+<li>"basis_num": number of basis used for the beta basis epxnasion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_c_pred": list containing, for each stationary covariate:<ul>
+<li>"Beta_eval": evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"Be_pred": list containing, for each event-dependent covariate:<ul>
+<li>"basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.</li>
+<li>"basis_num": number of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_e_pred": list containing, for each event-dependent covariate:<ul>
+<li>"Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"Bs_pred": list containing, for each station-dependent covariate:<ul>
+<li>"basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.</li>
+<li>"basis_num": number of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_s_pred": list containing, for each station-dependent covariate:<ul>
+<li>"Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev). </li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="fda__gwr___r__interface_8cpp_a8ffbc6ef6b424f1f78cd177f5a1b202b_cgraph.png" border="0" usemap="#afda__gwr___r__interface_8cpp_a8ffbc6ef6b424f1f78cd177f5a1b202b_cgraph" alt=""/></div>
+</div>
+
+</div>
+</div>
+<a id="a662028f6586e1bbfc9e31f151504ae66" name="a662028f6586e1bbfc9e31f151504ae66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a662028f6586e1bbfc9e31f151504ae66">&#9670;&#160;</a></span>beta_new_FMSGWR_SEC()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rcpp::List beta_new_FMSGWR_SEC </td>
+          <td>(</td>
+          <td class="paramtype">Rcpp::NumericMatrix</td>          <td class="paramname"><span class="paramname"><em>coordinates_events_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::NumericMatrix</td>          <td class="paramname"><span class="paramname"><em>coordinates_stations_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>units_to_be_predicted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::NumericVector</td>          <td class="paramname"><span class="paramname"><em>abscissa_ev</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>model_fitted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>n_intervals_quadrature</em></span><span class="paramdefsep"> = </span><span class="paramdefval">100</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::Nullable&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>num_threads</em></span><span class="paramdefsep"> = </span><span class="paramdefval">R_NilValue</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function to compute the non-stationary functional regression coefficients of a fitted Functional Multi-Source Geographically Weighted Regression SEC model on the locations of the new statistical units. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coordinates_events_to_pred</td><td>matrix of double containing the UTM coordinates of the event of new statistical units: each row represents a statistical unit to be predicted, each column a coordinate (2 columns). </td></tr>
+    <tr><td class="paramname">coordinates_stations_to_pred</td><td>matrix of double containing the UTM coordinates of the station of new statistical units: each row represents a statistical unit to be predicted, each column a coordinate (2 columns). </td></tr>
+    <tr><td class="paramname">units_to_be_predicted</td><td>number of units to be predicted </td></tr>
+    <tr><td class="paramname">abscissa_ev</td><td>abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed </td></tr>
+    <tr><td class="paramname">model_fitted</td><td>output of FMSGWR_SEC: an R list containing:<ul>
+<li>"FGWR": string containing the type of fwr used ("FMSGWR_SEC")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true</li>
+<li>"Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:<ul>
+<li>"basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)</li>
+</ul>
+</li>
+<li>"Beta_c": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:<ul>
+<li>"Beta_eval": a vector of double containing the discrete evaluations of the stationary beta</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)</li>
+</ul>
+</li>
+<li>"Be": a list containing, for each event-dependent covariate regression coefficent (each element is named with the element names in the list coeff_events_cov (default, if not given: "CovE*")) a list with:<ul>
+<li>"basis_coeff": a list, containg, for each unit, a Le_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_events_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_events_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_events_cov)</li>
+</ul>
+</li>
+<li>"Beta_e": a list containing, for each event-dependent covariate regression coefficent (each element is named with the element names in the list coeff_events_cov (default, if not given: "CovE*")) a list with:<ul>
+<li>"Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points) <br  />
+</li>
+</ul>
+</li>
+<li>"Bs": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:<ul>
+<li>"basis_coeff": a list, containg, for each unit, a Ls_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_stations_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stations_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_stations_cov)</li>
+</ul>
+</li>
+<li>"Beta_s": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:<ul>
+<li>"Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)</li>
+</ul>
+</li>
+<li>"predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:<ul>
+<li>"partial_res": a list containing information to compute the partial residuals:<ul>
+<li>"c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).</li>
+<li>"A__": vector of matrices with the operator A_s for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).</li>
+<li>"B__for_K": vector of matrices with the operator B_s used for the K_s_e(t) computation, for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).</li>
+</ul>
+</li>
+<li>"inputs_info": a list containing information about the data used to fit the model:<ul>
+<li>"Response": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).</li>
+</ul>
+</li>
+<li>"ResponseReconstructionWeights": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).</li>
+</ul>
+</li>
+<li>"cov_Stationary": list:<ul>
+<li>"number_covariates": number of stationary covariates (length of coeff_stationary_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional stationary covariates (respective elements of coeff_stationary_cov).</li>
+</ul>
+</li>
+<li>"beta_Stationary": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov). <br  />
+</li>
+</ul>
+</li>
+<li>"cov_Event": list:<ul>
+<li>"number_covariates": number of event-dependent covariates (length of coeff_events_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional event-dependent covariates (respective elements of n_basis_events_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional event-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_events_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional event-dependent covariates (respective elements of degrees_basis_events_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional event-dependent covariates (element knots_events_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional event-dependent covariates (respective elements of coeff_events_cov).</li>
+<li>"penalizations": vector containing the penalizations of the event-dependent covariates (respective elements of penalization_events_cov)</li>
+<li>"coordinates": UTM coordinates of the events of the training data (element coordinates_events).</li>
+<li>"kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the events (element kernel_bandwith_events).</li>
+</ul>
+</li>
+<li>"beta_Event": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element n_basis_beta_events_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_events_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element degrees_basis_beta_events_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element knots_beta_events_cov).</li>
+</ul>
+</li>
+<li>"cov_Station": list:<ul>
+<li>"number_covariates": number of station-dependent covariates (length of coeff_stations_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional station-dependent covariates (respective elements of n_basis_stations_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional station-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stations_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional station-dependent covariates (respective elements of degrees_basis_stations_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional station-dependent covariates (element knots_stations_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional station-dependent covariates (respective elements of coeff_stations_cov).</li>
+<li>"penalizations": vector containing the penalizations of the station-dependent covariates (respective elements of penalization_stations_cov)</li>
+<li>"coordinates": UTM coordinates of the stations of the training data (element coordinates_stations).</li>
+<li>"kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the stations (element kernel_bandwith_stations).</li>
+</ul>
+</li>
+<li>"beta_Station": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element n_basis_beta_stations_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stations_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element degrees_basis_beta_stations_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element knots_beta_stations_cov).</li>
+</ul>
+</li>
+<li>"a": domain left extreme (element left_extreme_domain).</li>
+<li>"b": domain right extreme (element right_extreme_domain).</li>
+<li>"abscissa": abscissa for which the evaluations of the functional data are available (element t_points).</li>
+<li>"InCascadeEstimation": element in_cascade_estimation. </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">n_intervals_quadrature</td><td>number of intervals used while performing integration via midpoint (rectangles) quadrature rule (default: 100). </td></tr>
+    <tr><td class="paramname">num_threads</td><td>number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an R list containing:<ul>
+<li>"FGWR_predictor": string containing the model used to predict ("predictor_FMSGWR_SEC")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation in the fitted model false, "Cascade" if in_cascade_estimation in the fitted model true</li>
+<li>"Bc_pred": list containing, for each stationary covariate:<ul>
+<li>"basis_coeff": coefficients of the basis expansion of the beta (from model_fitted).</li>
+<li>"basis_num": number of basis used for the beta basis epxnasion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_c_pred": list containing, for each stationary covariate:<ul>
+<li>"Beta_eval": evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"Be_pred": list containing, for each event-dependent covariate:<ul>
+<li>"basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.</li>
+<li>"basis_num": number of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_e_pred": list containing, for each event-dependent covariate:<ul>
+<li>"Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"Bs_pred": list containing, for each station-dependent covariate:<ul>
+<li>"basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.</li>
+<li>"basis_num": number of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_s_pred": list containing, for each station-dependent covariate:<ul>
+<li>"Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev). </li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="fda__gwr___r__interface_8cpp_a662028f6586e1bbfc9e31f151504ae66_cgraph.png" border="0" usemap="#afda__gwr___r__interface_8cpp_a662028f6586e1bbfc9e31f151504ae66_cgraph" alt=""/></div>
+</div>
+
+</div>
+</div>
 <a id="af05363791c6e68d6b6ef38bdd2957df7" name="af05363791c6e68d6b6ef38bdd2957df7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af05363791c6e68d6b6ef38bdd2957df7">&#9670;&#160;</a></span>FGWR()</h2>
 
@@ -3015,6 +3826,918 @@ Here is the call graph for this function:</div>
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="fda__gwr___r__interface_8cpp_a051f0f57690b5a9ff81b9008b4bcee84_cgraph.png" border="0" usemap="#afda__gwr___r__interface_8cpp_a051f0f57690b5a9ff81b9008b4bcee84_cgraph" alt=""/></div>
+</div>
+
+</div>
+</div>
+<a id="ad82eca977d1533dc94ac32ec38042d7e" name="ad82eca977d1533dc94ac32ec38042d7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad82eca977d1533dc94ac32ec38042d7e">&#9670;&#160;</a></span>y_new_FGWR()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rcpp::List y_new_FGWR </td>
+          <td>(</td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>coeff_non_stationary_cov_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>units_to_be_predicted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::NumericVector</td>          <td class="paramname"><span class="paramname"><em>abscissa_ev</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>new_beta</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>model_fitted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>n_knots_smoothing_pred</em></span><span class="paramdefsep"> = </span><span class="paramdefval">100</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::Nullable&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>num_threads</em></span><span class="paramdefsep"> = </span><span class="paramdefval">R_NilValue</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function to perform predictions on new statistical units using a fitted Functional Geographically Weighted Regression model. Non-stationary betas have to be recomputed in the new locations. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coeff_non_stationary_cov_to_pred</td><td>list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th non-stationary covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted. </td></tr>
+    <tr><td class="paramname">units_to_be_predicted</td><td>number of units to be predicted </td></tr>
+    <tr><td class="paramname">abscissa_ev</td><td>abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed </td></tr>
+    <tr><td class="paramname">new_beta</td><td>list containing the non-stationary functional regression coefficients computed on the locations of the units to be predicted:<ul>
+<li>"FGWR_predictor": string containing the model used to predict ("predictor_FGWR")</li>
+<li>"Bnc_pred": list containing, for each non-stationary covariate:<ul>
+<li>"basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.</li>
+<li>"basis_num": number of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_nc_pred": list containing, for each non-stationary covariate:<ul>
+<li>"Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev). </li>
+</ul>
+</li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">model_fitted</td><td>output of FGWR: an R list containing:<ul>
+<li>"FGWR": string containing the type of fwr used ("FGWR")</li>
+<li>"Bnc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:<ul>
+<li>"basis_coeff": a list, containg, for each unit, a Lnc_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_non_stationary_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_non_stationary_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_non_stationary_cov)</li>
+</ul>
+</li>
+<li>"Beta_nc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:<ul>
+<li>"Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points) <br  />
+</li>
+</ul>
+</li>
+<li>"predictor_info": a list containing information of the fitted model to perform predictions for new statistical units:<ul>
+<li>"inputs_info": a list containing information about the data used to fit the model:<ul>
+<li>"Response": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).</li>
+</ul>
+</li>
+<li>"ResponseReconstructionWeights": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points). <br  />
+</li>
+</ul>
+</li>
+<li>"cov_NonStationary": list:<ul>
+<li>"number_covariates": number of non-stationary covariates (length of coeff_non_stationary_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional non-stationary covariates (respective elements of n_basis_non_stationary_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional non-stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_non_stationary_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional non-stationary covariates (respective elements of degrees_basis_non_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional non-stationary covariates (element knots_non_stationary_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional non-stationary covariates (respective elements of coeff_non_stationary_cov).</li>
+<li>"penalizations": vector containing the penalizations of the non-stationary covariates (respective elements of penalization_non_stationary_cov)</li>
+<li>"coordinates": UTM coordinates of the non-stationary sites of the training data (element coordinates_non_stationary).</li>
+<li>"kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the non-stationary sites (element kernel_bandwith_non_stationary).</li>
+</ul>
+</li>
+<li>"beta_NonStationary": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element n_basis_beta_non_stationary_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_non_stationary_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element degrees_basis_beta_non_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element knots_beta_non_stationary_cov).</li>
+</ul>
+</li>
+<li>"a": domain left extreme (element left_extreme_domain).</li>
+<li>"b": domain right extreme (element right_extreme_domain).</li>
+<li>"abscissa": abscissa for which the evaluations of the functional data are available (element t_points). </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">n_knots_smoothing_pred</td><td>number of knots used to smooth predicted response and non-stationary, obtaining basis expansion coefficients with respect to the training basis (default: 100). </td></tr>
+    <tr><td class="paramname">num_threads</td><td>number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an R list containing:<ul>
+<li>"FGWR_predictor": string containing the model used to predict ("predictor_FGWR")</li>
+<li>"prediction": list containing:<ul>
+<li>"evaluation": list containing the evaluation of the prediction:<ul>
+<li>"prediction_ev": list containing, for each unit to be predicted, the raw evaluations of the predicted response.</li>
+<li>"abscissa_ev": the abscissa points for which the prediction evaluation is available (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"fd": list containing the prediction functional description:<ul>
+<li>"prediction_basis_coeff": matrix containing the prediction basis expansion coefficients (each row a basis, each column a new statistical unit)</li>
+<li>"prediction_basis_type": basis used for the predicted response basis expansion (from model_fitted)</li>
+<li>"prediction_basis_num": number of basis used for the predicted response basis expansion (from model_fitted)</li>
+<li>"prediction_basis_deg": degree of basis used for the predicted response basis expansion (from model_fitted)</li>
+<li>"prediction_knots": knots used for the predicted response smoothing (n_knots_smoothing_pred equally spaced knots in the functional datum domain)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<p>NB: Covariates of units to be predicted have to be sampled in the same sample points for which the training data have been (t_points). Covariates basis expansion for the units to be predicted has to be done with respect to the basis used for the covariates in the training set </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="fda__gwr___r__interface_8cpp_ad82eca977d1533dc94ac32ec38042d7e_cgraph.png" border="0" usemap="#afda__gwr___r__interface_8cpp_ad82eca977d1533dc94ac32ec38042d7e_cgraph" alt=""/></div>
+</div>
+
+</div>
+</div>
+<a id="ad8927ff30410ad8b09841c9bfd2d63d5" name="ad8927ff30410ad8b09841c9bfd2d63d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8927ff30410ad8b09841c9bfd2d63d5">&#9670;&#160;</a></span>y_new_FMGWR()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rcpp::List y_new_FMGWR </td>
+          <td>(</td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>coeff_stationary_cov_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>coeff_non_stationary_cov_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>units_to_be_predicted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::NumericVector</td>          <td class="paramname"><span class="paramname"><em>abscissa_ev</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>new_beta</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>model_fitted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>n_knots_smoothing_pred</em></span><span class="paramdefsep"> = </span><span class="paramdefval">100</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::Nullable&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>num_threads</em></span><span class="paramdefsep"> = </span><span class="paramdefval">R_NilValue</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function to perform predictions on new statistical units using a fitted Functional Mixed Geographically Weighted Regression model. Non-stationary betas have already been recomputed in the new locations. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coeff_stationary_cov_to_pred</td><td>list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted. </td></tr>
+    <tr><td class="paramname">coeff_non_stationary_cov_to_pred</td><td>list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th non-stationary covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted. </td></tr>
+    <tr><td class="paramname">units_to_be_predicted</td><td>number of units to be predicted </td></tr>
+    <tr><td class="paramname">abscissa_ev</td><td>abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed </td></tr>
+    <tr><td class="paramname">new_beta</td><td>list containing the non-stationary functional regression coefficients computed on the locations of the units to be predicted:<ul>
+<li>"FGWR_predictor": string containing the model used to predict ("predictor_FMGWR")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation in the fitted model false, "Cascade" if in_cascade_estimation in the fitted model true</li>
+<li>"Bc_pred": list containing, for each stationary covariate:<ul>
+<li>"basis_coeff": coefficients of the basis expansion of the beta (from model_fitted).</li>
+<li>"basis_num": number of basis used for the beta basis epxnasion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_c_pred": list containing, for each stationary covariate:<ul>
+<li>"Beta_eval": evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"Bnc_pred": list containing, for each non-stationary covariate:<ul>
+<li>"basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.</li>
+<li>"basis_num": number of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_nc_pred": list containing, for each non-stationary covariate:<ul>
+<li>"Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev). </li>
+</ul>
+</li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">model_fitted</td><td>output of FMGWR: an R list containing:<ul>
+<li>"FGWR": string containing the type of fwr used ("FMGWR")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true</li>
+<li>"Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:<ul>
+<li>"basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)</li>
+</ul>
+</li>
+<li>"Beta_c": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:<ul>
+<li>"Beta_eval": a vector of double containing the discrete evaluations of the stationary beta</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)</li>
+</ul>
+</li>
+<li>"Bnc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:<ul>
+<li>"basis_coeff": a list, containg, for each unit, a Lnc_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_non_stationary_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_non_stationary_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_non_stationary_cov)</li>
+</ul>
+</li>
+<li>"Beta_nc": a list containing, for each non-stationary covariate regression coefficent (each element is named with the element names in the list coeff_non_stationary_cov (default, if not given: "CovNC*")) a list with:<ul>
+<li>"Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points) <br  />
+</li>
+</ul>
+</li>
+<li>"predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:<ul>
+<li>"partial_res": a list containing information to compute the partial residuals:<ul>
+<li>"c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).</li>
+</ul>
+</li>
+<li>"inputs_info": a list containing information about the data used to fit the model:<ul>
+<li>"Response": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).</li>
+</ul>
+</li>
+<li>"ResponseReconstructionWeights": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).</li>
+</ul>
+</li>
+<li>"cov_Stationary": list:<ul>
+<li>"number_covariates": number of stationary covariates (length of coeff_stationary_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional stationary covariates (respective elements of coeff_stationary_cov).</li>
+</ul>
+</li>
+<li>"beta_Stationary": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov). <br  />
+</li>
+</ul>
+</li>
+<li>"cov_NonStationary": list:<ul>
+<li>"number_covariates": number of non-stationary covariates (length of coeff_non_stationary_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional non-stationary covariates (respective elements of n_basis_non_stationary_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional non-stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_non_stationary_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional non-stationary covariates (respective elements of degrees_basis_non_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional non-stationary covariates (element knots_non_stationary_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional non-stationary covariates (respective elements of coeff_non_stationary_cov).</li>
+<li>"penalizations": vector containing the penalizations of the non-stationary covariates (respective elements of penalization_non_stationary_cov)</li>
+<li>"coordinates": UTM coordinates of the non-stationary sites of the training data (element coordinates_non_stationary).</li>
+<li>"kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the non-stationary sites (element kernel_bandwith_non_stationary).</li>
+</ul>
+</li>
+<li>"beta_NonStationary": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element n_basis_beta_non_stationary_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_non_stationary_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element degrees_basis_beta_non_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the non-stationary covariates (element knots_beta_non_stationary_cov).</li>
+</ul>
+</li>
+<li>"a": domain left extreme (element left_extreme_domain).</li>
+<li>"b": domain right extreme (element right_extreme_domain).</li>
+<li>"abscissa": abscissa for which the evaluations of the functional data are available (element t_points).</li>
+<li>"InCascadeEstimation": element in_cascade_estimation. </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">n_knots_smoothing_pred</td><td>number of knots used to smooth predicted response and non-stationary, obtaining basis expansion coefficients with respect to the training basis (default: 100). </td></tr>
+    <tr><td class="paramname">num_threads</td><td>number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an R list containing:<ul>
+<li>"FGWR_predictor": string containing the model used to predict ("predictor_FMGWR")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation in the fitted model false, "Cascade" if in_cascade_estimation in the fitted model true</li>
+<li>"prediction": list containing:<ul>
+<li>"evaluation": list containing the evaluation of the prediction:<ul>
+<li>"prediction_ev": list containing, for each unit to be predicted, the raw evaluations of the predicted response.</li>
+<li>"abscissa_ev": the abscissa points for which the prediction evaluation is available (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"fd": list containing the prediction functional description:<ul>
+<li>"prediction_basis_coeff": matrix containing the prediction basis expansion coefficients (each row a basis, each column a new statistical unit)</li>
+<li>"prediction_basis_type": basis used for the predicted response basis expansion (from model_fitted)</li>
+<li>"prediction_basis_num": number of basis used for the predicted response basis expansion (from model_fitted)</li>
+<li>"prediction_basis_deg": degree of basis used for the predicted response basis expansion (from model_fitted)</li>
+<li>"prediction_knots": knots used for the predicted response smoothing (n_knots_smoothing_pred equally spaced knots in the functional datum domain)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<p>NB: Covariates of units to be predicted have to be sampled in the same sample points for which the training data have been (t_points). Covariates basis expansion for the units to be predicted has to be done with respect to the basis used for the covariates in the training set </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="fda__gwr___r__interface_8cpp_ad8927ff30410ad8b09841c9bfd2d63d5_cgraph.png" border="0" usemap="#afda__gwr___r__interface_8cpp_ad8927ff30410ad8b09841c9bfd2d63d5_cgraph" alt=""/></div>
+</div>
+
+</div>
+</div>
+<a id="aa87edeea15b57f97d64bb961916b3cfa" name="aa87edeea15b57f97d64bb961916b3cfa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa87edeea15b57f97d64bb961916b3cfa">&#9670;&#160;</a></span>y_new_FMSGWR_ESC()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rcpp::List y_new_FMSGWR_ESC </td>
+          <td>(</td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>coeff_stationary_cov_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>coeff_events_cov_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>coeff_stations_cov_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>units_to_be_predicted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::NumericVector</td>          <td class="paramname"><span class="paramname"><em>abscissa_ev</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>new_beta</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>model_fitted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>n_knots_smoothing_pred</em></span><span class="paramdefsep"> = </span><span class="paramdefval">100</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::Nullable&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>num_threads</em></span><span class="paramdefsep"> = </span><span class="paramdefval">R_NilValue</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function to perform predictions on new statistical units using a fitted Functional Multi-Source Geographically Weighted Regression ESC model. Non-stationary betas have already been recomputed in the new locations. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coeff_stationary_cov_to_pred</td><td>list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted. </td></tr>
+    <tr><td class="paramname">coeff_events_cov_to_pred</td><td>list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th event-dependent covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted. </td></tr>
+    <tr><td class="paramname">coeff_stations_cov_to_pred</td><td>list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th station-dependent covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a new statistical unit. </td></tr>
+    <tr><td class="paramname">units_to_be_predicted</td><td>number of units to be predicted </td></tr>
+    <tr><td class="paramname">abscissa_ev</td><td>abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed </td></tr>
+    <tr><td class="paramname">new_beta</td><td>list containing the non-stationary functional regression coefficients computed on the locations of the units to be predicted:<ul>
+<li>"FGWR_predictor": string containing the model used to predict ("predictor_FMSGWR_ESC")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation in the fitted model false, "Cascade" if in_cascade_estimation in the fitted model true</li>
+<li>"Bc_pred": list containing, for each stationary covariate:<ul>
+<li>"basis_coeff": coefficients of the basis expansion of the beta (from model_fitted).</li>
+<li>"basis_num": number of basis used for the beta basis epxnasion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_c_pred": list containing, for each stationary covariate:<ul>
+<li>"Beta_eval": evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"Be_pred": list containing, for each event-dependent covariate:<ul>
+<li>"basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.</li>
+<li>"basis_num": number of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_e_pred": list containing, for each event-dependent covariate:<ul>
+<li>"Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"Bs_pred": list containing, for each station-dependent covariate:<ul>
+<li>"basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.</li>
+<li>"basis_num": number of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_s_pred": list containing, for each station-dependent covariate:<ul>
+<li>"Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev). </li>
+</ul>
+</li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">model_fitted</td><td>output of FMSGWR_ESC: an R list containing:<ul>
+<li>"FGWR": string containing the type of fwr used ("FMSGWR_ESC")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true</li>
+<li>"Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:<ul>
+<li>"basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)</li>
+</ul>
+</li>
+<li>"Beta_c": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:<ul>
+<li>"Beta_eval": a vector of double containing the discrete evaluations of the stationary beta</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)</li>
+</ul>
+</li>
+<li>"Be": a list containing, for each event-dependent covariate regression coefficent (each element is named with the element names in the list coeff_events_cov (default, if not given: "CovE*")) a list with:<ul>
+<li>"basis_coeff": a list, containg, for each unit, a Le_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_events_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_events_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_events_cov)</li>
+</ul>
+</li>
+<li>"Beta_e": a list containing, for each event-dependent covariate regression coefficent (each element is named with the element names in the list coeff_events_cov (default, if not given: "CovE*")) a list with:<ul>
+<li>"Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points) <br  />
+</li>
+</ul>
+</li>
+<li>"Bs": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:<ul>
+<li>"basis_coeff": a list, containg, for each unit, a Ls_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_stations_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stations_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_stations_cov)</li>
+</ul>
+</li>
+<li>"Beta_s": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:<ul>
+<li>"Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)</li>
+</ul>
+</li>
+<li>"predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:<ul>
+<li>"partial_res": a list containing information to compute the partial residuals:<ul>
+<li>"c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).</li>
+<li>"A__": vector of matrices with the operator A_e for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).</li>
+<li>"B__for_K": vector of matrices with the operator B_e used for the K_e_s(t) computation, for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).</li>
+</ul>
+</li>
+<li>"inputs_info": a list containing information about the data used to fit the model:<ul>
+<li>"Response": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).</li>
+</ul>
+</li>
+<li>"ResponseReconstructionWeights": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).</li>
+</ul>
+</li>
+<li>"cov_Stationary": list:<ul>
+<li>"number_covariates": number of stationary covariates (length of coeff_stationary_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional stationary covariates (respective elements of coeff_stationary_cov).</li>
+</ul>
+</li>
+<li>"beta_Stationary": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov). <br  />
+</li>
+</ul>
+</li>
+<li>"cov_Event": list:<ul>
+<li>"number_covariates": number of event-dependent covariates (length of coeff_events_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional event-dependent covariates (respective elements of n_basis_events_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional event-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_events_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional event-dependent covariates (respective elements of degrees_basis_events_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional event-dependent covariates (element knots_events_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional event-dependent covariates (respective elements of coeff_events_cov).</li>
+<li>"penalizations": vector containing the penalizations of the event-dependent covariates (respective elements of penalization_events_cov)</li>
+<li>"coordinates": UTM coordinates of the events of the training data (element coordinates_events).</li>
+<li>"kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the events (element kernel_bandwith_events).</li>
+</ul>
+</li>
+<li>"beta_Event": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element n_basis_beta_events_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_events_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element degrees_basis_beta_events_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element knots_beta_events_cov).</li>
+</ul>
+</li>
+<li>"cov_Station": list:<ul>
+<li>"number_covariates": number of station-dependent covariates (length of coeff_stations_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional station-dependent covariates (respective elements of n_basis_stations_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional station-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stations_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional station-dependent covariates (respective elements of degrees_basis_stations_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional station-dependent covariates (element knots_stations_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional station-dependent covariates (respective elements of coeff_stations_cov).</li>
+<li>"penalizations": vector containing the penalizations of the station-dependent covariates (respective elements of penalization_stations_cov)</li>
+<li>"coordinates": UTM coordinates of the stations of the training data (element coordinates_stations).</li>
+<li>"kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the stations (element kernel_bandwith_stations).</li>
+</ul>
+</li>
+<li>"beta_Station": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element n_basis_beta_stations_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stations_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element degrees_basis_beta_stations_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element knots_beta_stations_cov).</li>
+</ul>
+</li>
+<li>"a": domain left extreme (element left_extreme_domain).</li>
+<li>"b": domain right extreme (element right_extreme_domain).</li>
+<li>"abscissa": abscissa for which the evaluations of the functional data are available (element t_points).</li>
+<li>"InCascadeEstimation": element in_cascade_estimation. </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">n_knots_smoothing_pred</td><td>number of knots used to smooth predicted response and non-stationary, obtaining basis expansion coefficients with respect to the training basis (default: 100). </td></tr>
+    <tr><td class="paramname">num_threads</td><td>number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an R list containing:<ul>
+<li>"FGWR_predictor": string containing the model used to predict ("predictor_FMSGWR_ESC")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation in the fitted model false, "Cascade" if in_cascade_estimation in the fitted model true</li>
+<li>"prediction": list containing:<ul>
+<li>"evaluation": list containing the evaluation of the prediction:<ul>
+<li>"prediction_ev": list containing, for each unit to be predicted, the raw evaluations of the predicted response.</li>
+<li>"abscissa_ev": the abscissa points for which the prediction evaluation is available (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"fd": list containing the prediction functional description:<ul>
+<li>"prediction_basis_coeff": matrix containing the prediction basis expansion coefficients (each row a basis, each column a new statistical unit)</li>
+<li>"prediction_basis_type": basis used for the predicted response basis expansion (from model_fitted)</li>
+<li>"prediction_basis_num": number of basis used for the predicted response basis expansion (from model_fitted)</li>
+<li>"prediction_basis_deg": degree of basis used for the predicted response basis expansion (from model_fitted)</li>
+<li>"prediction_knots": knots used for the predicted response smoothing (n_knots_smoothing_pred equally spaced knots in the functional datum domain)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<p>NB: Covariates of units to be predicted have to be sampled in the same sample points for which the training data have been (t_points). Covariates basis expansion for the units to be predicted has to be done with respect to the basis used for the covariates in the training set </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="fda__gwr___r__interface_8cpp_aa87edeea15b57f97d64bb961916b3cfa_cgraph.png" border="0" usemap="#afda__gwr___r__interface_8cpp_aa87edeea15b57f97d64bb961916b3cfa_cgraph" alt=""/></div>
+</div>
+
+</div>
+</div>
+<a id="a9f7eee8dfd35eba1ec9baebf915a183a" name="a9f7eee8dfd35eba1ec9baebf915a183a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f7eee8dfd35eba1ec9baebf915a183a">&#9670;&#160;</a></span>y_new_FMSGWR_SEC()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rcpp::List y_new_FMSGWR_SEC </td>
+          <td>(</td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>coeff_stationary_cov_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>coeff_events_cov_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>coeff_stations_cov_to_pred</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>units_to_be_predicted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::NumericVector</td>          <td class="paramname"><span class="paramname"><em>abscissa_ev</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>new_beta</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::List</td>          <td class="paramname"><span class="paramname"><em>model_fitted</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>n_knots_smoothing_pred</em></span><span class="paramdefsep"> = </span><span class="paramdefval">100</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rcpp::Nullable&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>num_threads</em></span><span class="paramdefsep"> = </span><span class="paramdefval">R_NilValue</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function to perform predictions on new statistical units using a fitted Functional Multi-Source Geographically Weighted Regression SEC model. Non-stationary betas have already been recomputed in the new locations. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coeff_stationary_cov_to_pred</td><td>list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th stationary covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted. </td></tr>
+    <tr><td class="paramname">coeff_events_cov_to_pred</td><td>list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th event-dependent covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a statistical unit to be predicted. </td></tr>
+    <tr><td class="paramname">coeff_stations_cov_to_pred</td><td>list of matrices of doubles: element i-th containing the coefficients for the basis expansion of the i-th station-dependent covariate to be predicted: each row represents a specific basis (by default: B-spline) of the basis system used, each column a new statistical unit. </td></tr>
+    <tr><td class="paramname">units_to_be_predicted</td><td>number of units to be predicted </td></tr>
+    <tr><td class="paramname">abscissa_ev</td><td>abscissa for which then evaluating the predicted reponse and betas, stationary and non-stationary, which have to be recomputed </td></tr>
+    <tr><td class="paramname">new_beta</td><td>list containing the non-stationary functional regression coefficients computed on the locations of the units to be predicted:<ul>
+<li>"FGWR_predictor": string containing the model used to predict ("predictor_FMSGWR_SEC")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation in the fitted model false, "Cascade" if in_cascade_estimation in the fitted model true</li>
+<li>"Bc_pred": list containing, for each stationary covariate:<ul>
+<li>"basis_coeff": coefficients of the basis expansion of the beta (from model_fitted).</li>
+<li>"basis_num": number of basis used for the beta basis epxnasion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_c_pred": list containing, for each stationary covariate:<ul>
+<li>"Beta_eval": evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"Be_pred": list containing, for each event-dependent covariate:<ul>
+<li>"basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.</li>
+<li>"basis_num": number of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_e_pred": list containing, for each event-dependent covariate:<ul>
+<li>"Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"Bs_pred": list containing, for each station-dependent covariate:<ul>
+<li>"basis_coeff": list, one element for each unit to be predicted, with the recomputed coefficients of the basis expansion of the beta.</li>
+<li>"basis_num": number of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"basis_type": type of basis used for the beta basis expansion (from model_fitted).</li>
+<li>"knots": knots used for the beta basis expansion (from model_fitted).</li>
+</ul>
+</li>
+<li>"Beta_s_pred": list containing, for each station-dependent covariate:<ul>
+<li>"Beta_eval": list containing, for each unit to be predicted, the evaluation of the beta along a grid.</li>
+<li>"Abscissa": grid (element abscissa_ev). </li>
+</ul>
+</li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">model_fitted</td><td>output of FMSGWR_SEC: an R list containing:<ul>
+<li>"FGWR": string containing the type of fwr used ("FMSGWR_SEC")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation false, "Cascade" if in_cascade_estimation true</li>
+<li>"Bc": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:<ul>
+<li>"basis_coeff": a Lc_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective element of basis_types_beta_stationary_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stationary_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_stationary_cov)</li>
+</ul>
+</li>
+<li>"Beta_c": a list containing, for each stationary covariate regression coefficent (each element is named with the element names in the list coeff_stationary_cov (default, if not given: "CovC*")) a list with:<ul>
+<li>"Beta_eval": a vector of double containing the discrete evaluations of the stationary beta</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)</li>
+</ul>
+</li>
+<li>"Be": a list containing, for each event-dependent covariate regression coefficent (each element is named with the element names in the list coeff_events_cov (default, if not given: "CovE*")) a list with:<ul>
+<li>"basis_coeff": a list, containg, for each unit, a Le_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_events_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_events_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_events_cov)</li>
+</ul>
+</li>
+<li>"Beta_e": a list containing, for each event-dependent covariate regression coefficent (each element is named with the element names in the list coeff_events_cov (default, if not given: "CovE*")) a list with:<ul>
+<li>"Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points) <br  />
+</li>
+</ul>
+</li>
+<li>"Bs": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:<ul>
+<li>"basis_coeff": a list, containg, for each unit, a Ls_jx1 vector of double, containing the coefficients of the basis expansion of the beta</li>
+<li>"basis_type": a string containing the basis type over which the beta basis expansion is performed. Possible values: "bsplines", "constant". (Respective elements of basis_types_beta_stations_cov)</li>
+<li>"basis_num": the number of basis used for performing the beta basis expansion (respective elements of n_basis_beta_stations_cov)</li>
+<li>"knots": the knots used to create the basis system for the beta (it is the input knots_beta_stations_cov)</li>
+</ul>
+</li>
+<li>"Beta_s": a list containing, for each station-dependent covariate regression coefficent (each element is named with the element names in the list coeff_stations_cov (default, if not given: "CovS*")) a list with:<ul>
+<li>"Beta_eval": a list containing vectors of double with the discrete evaluation of the non-stationary beta, one for each statistical unit</li>
+<li>"Abscissa": the domain points for which the evaluation of the beta is available (it is the input t_points)</li>
+</ul>
+</li>
+<li>"predictor_info": a list containing partial residuals and information of the fitted model to perform predictions for new statistical units:<ul>
+<li>"partial_res": a list containing information to compute the partial residuals:<ul>
+<li>"c_tilde_hat": vector of double with the basis expansion coefficients of the response minus the stationary component of the phenomenon (if in_cascade_estimation is true, contains only 0s).</li>
+<li>"A__": vector of matrices with the operator A_s for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).</li>
+<li>"B__for_K": vector of matrices with the operator B_s used for the K_s_e(t) computation, for each statistical unit (if in_cascade_estimation is true, each matrix contains only 0s).</li>
+</ul>
+</li>
+<li>"inputs_info": a list containing information about the data used to fit the model:<ul>
+<li>"Response": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response (element n_basis_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response. Possible values: "bsplines", "constant". (element basis_type_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response (element degree_basis_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response (element coeff_y_points).</li>
+</ul>
+</li>
+<li>"ResponseReconstructionWeights": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional response reconstruction weights (element n_basis_rec_weights_y_points).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional response reconstruction weights. Possible values: "bsplines", "constant". (element basis_type_rec_weights_y_points).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional response reconstruction weights (element degree_basis_rec_weights_y_points).</li>
+<li>"knots": knots used to make the basis expansion of the functional response reconstruction weights (element knots_y_points).</li>
+<li>"basis_coeff": matrix containing the coefficients of the basis expansion of the functional response reconstruction weights (element coeff_rec_weights_y_points).</li>
+</ul>
+</li>
+<li>"cov_Stationary": list:<ul>
+<li>"number_covariates": number of stationary covariates (length of coeff_stationary_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional stationary covariates (respective elements of n_basis_stationary_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional stationary covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stationary_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional stationary covariates (respective elements of degrees_basis_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional stationary covariates (element knots_stationary_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional stationary covariates (respective elements of coeff_stationary_cov).</li>
+</ul>
+</li>
+<li>"beta_Stationary": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element n_basis_beta_stationary_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the stationary covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stationary_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the stationary covariates (element degrees_basis_beta_stationary_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the stationary covariates (element knots_beta_stationary_cov). <br  />
+</li>
+</ul>
+</li>
+<li>"cov_Event": list:<ul>
+<li>"number_covariates": number of event-dependent covariates (length of coeff_events_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional event-dependent covariates (respective elements of n_basis_events_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional event-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_events_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional event-dependent covariates (respective elements of degrees_basis_events_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional event-dependent covariates (element knots_events_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional event-dependent covariates (respective elements of coeff_events_cov).</li>
+<li>"penalizations": vector containing the penalizations of the event-dependent covariates (respective elements of penalization_events_cov)</li>
+<li>"coordinates": UTM coordinates of the events of the training data (element coordinates_events).</li>
+<li>"kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the events (element kernel_bandwith_events).</li>
+</ul>
+</li>
+<li>"beta_Event": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element n_basis_beta_events_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_events_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element degrees_basis_beta_events_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the event-dependent covariates (element knots_beta_events_cov).</li>
+</ul>
+</li>
+<li>"cov_Station": list:<ul>
+<li>"number_covariates": number of station-dependent covariates (length of coeff_stations_cov).</li>
+<li>"basis_num": vector with the numbers of basis used to make the basis expansion of the functional station-dependent covariates (respective elements of n_basis_stations_cov).</li>
+<li>"basis_type": vector with type of basis used to make the basis expansion of the functional station-dependent covariates. Possible values: "bsplines", "constant". (respective elements of basis_types_stations_cov).</li>
+<li>"basis_deg": vector with the degree of basis used to make the basis expansion of functional station-dependent covariates (respective elements of degrees_basis_stations_cov).</li>
+<li>"knots": knots used to make the basis expansion of functional station-dependent covariates (element knots_stations_cov).</li>
+<li>"basis_coeff": list containing the matrices with the coefficients of the basis expansion of the functional station-dependent covariates (respective elements of coeff_stations_cov).</li>
+<li>"penalizations": vector containing the penalizations of the station-dependent covariates (respective elements of penalization_stations_cov)</li>
+<li>"coordinates": UTM coordinates of the stations of the training data (element coordinates_stations).</li>
+<li>"kernel_bwd": bandwith of the gaussian kernel used to smooth distances of the stations (element kernel_bandwith_stations).</li>
+</ul>
+</li>
+<li>"beta_Station": list:<ul>
+<li>"basis_num": number of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element n_basis_beta_stations_cov).</li>
+<li>"basis_type": basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates. Possible values: "bsplines", "constant". (element basis_types_beta_stations_cov).</li>
+<li>"basis_deg": degree of basis used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element degrees_basis_beta_stations_cov).</li>
+<li>"knots": knots used to make the basis expansion of the functional regression coefficients of the station-dependent covariates (element knots_beta_stations_cov).</li>
+</ul>
+</li>
+<li>"a": domain left extreme (element left_extreme_domain).</li>
+<li>"b": domain right extreme (element right_extreme_domain).</li>
+<li>"abscissa": abscissa for which the evaluations of the functional data are available (element t_points).</li>
+<li>"InCascadeEstimation": element in_cascade_estimation. </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">n_knots_smoothing_pred</td><td>number of knots used to smooth predicted response and non-stationary, obtaining basis expansion coefficients with respect to the training basis (default: 100). </td></tr>
+    <tr><td class="paramname">num_threads</td><td>number of threads to be used in OMP parallel directives. Default: maximum number of cores available in the machine. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an R list containing:<ul>
+<li>"FGWR_predictor": string containing the model used to predict ("predictor_FMSGWR_SEC")</li>
+<li>"EstimationTechnique": "Exact" if in_cascade_estimation in the fitted model false, "Cascade" if in_cascade_estimation in the fitted model true</li>
+<li>"prediction": list containing:<ul>
+<li>"evaluation": list containing the evaluation of the prediction:<ul>
+<li>"prediction_ev": list containing, for each unit to be predicted, the raw evaluations of the predicted response.</li>
+<li>"abscissa_ev": the abscissa points for which the prediction evaluation is available (element abscissa_ev).</li>
+</ul>
+</li>
+<li>"fd": list containing the prediction functional description:<ul>
+<li>"prediction_basis_coeff": matrix containing the prediction basis expansion coefficients (each row a basis, each column a new statistical unit)</li>
+<li>"prediction_basis_type": basis used for the predicted response basis expansion (from model_fitted)</li>
+<li>"prediction_basis_num": number of basis used for the predicted response basis expansion (from model_fitted)</li>
+<li>"prediction_basis_deg": degree of basis used for the predicted response basis expansion (from model_fitted)</li>
+<li>"prediction_knots": knots used for the predicted response smoothing (n_knots_smoothing_pred equally spaced knots in the functional datum domain)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+<p>NB: Covariates of units to be predicted have to be sampled in the same sample points for which the training data have been (t_points). Covariates basis expansion for the units to be predicted has to be done with respect to the basis used for the covariates in the training set </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="fda__gwr___r__interface_8cpp_a9f7eee8dfd35eba1ec9baebf915a183a_cgraph.png" border="0" usemap="#afda__gwr___r__interface_8cpp_a9f7eee8dfd35eba1ec9baebf915a183a_cgraph" alt=""/></div>
 </div>
 
 </div>
