@@ -166,7 +166,7 @@
 Function to perform predictions on new statistical units using a fitted Functional Mixed Geographically Weighted Regression model. Non-stationary betas have to be recomputed in the new locations.
 }
 \details{
-Covariates of units to be predicted have to be sampled in the same sample points for which the training data have been (t_points of FMSGWR_ESC).
+Covariates of units to be predicted have to be sampled in the same sample points for which the training data have been (t_points of FMGWR).
 Covariates basis expansion for the units to be predicted has to be done with respect to the basis used for the covariates in the training set
 }
 \references{

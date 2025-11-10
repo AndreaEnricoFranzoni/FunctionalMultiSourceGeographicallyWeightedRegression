@@ -18,19 +18,27 @@
 #'\item Functional Multi-Source Geographically Weighted Regression ESC:
 #'\itemize{
 #'\item model fitting: \code{\link{FMSGWR_ESC}}
-#'\item predictor: \code{\link{predict_FMSGWR_ESC}}}
+#'\item predictor: \code{\link{predict_FMSGWR_ESC}}
+#'\item beta tuner: \code{\link{beta_new_FMSGWR_ESC}}
+#'\item prediction: \code{\link{y_new_FMSGWR_ESC}}}
 #'\item Functional Multi-Source Geographically Weighted Regression SEC:
 #'\itemize{
 #'\item model fitting: \code{\link{FMSGWR_SEC}}
-#'\item predictor: \code{\link{predict_FMSGWR_SEC}}}
+#'\item predictor: \code{\link{predict_FMSGWR_SEC}}
+#'\item beta tuner: \code{\link{beta_new_FMSGWR_SEC}}
+#'\item prediction: \code{\link{y_new_FMSGWR_SEC}}}
 #'\item Functional Mixed Geographically Weighted Regression:
 #'\itemize{
 #'\item model fitting: \code{\link{FMGWR}}
-#'\item predictor: \code{\link{predict_FMGWR}}}
+#'\item predictor: \code{\link{predict_FMGWR}}
+#'\item beta tuner: \code{\link{beta_new_FMGWR}}
+#'\item prediction: \code{\link{y_new_FMGWR}}}
 #'\item Functional Geographically Weighted Regression:
 #'\itemize{
 #'\item model fitting: \code{\link{FGWR}}
-#'\item predictor: \code{\link{predict_FGWR}}}
+#'\item predictor: \code{\link{predict_FGWR}}
+#'\item beta tuner: \code{\link{beta_new_FGWR}}
+#'\item prediction: \code{\link{y_new_FGWR}}}
 #'\item Functional Weighted Regression:
 #'\itemize{
 #'\item model fitting: \code{\link{FWR}}
