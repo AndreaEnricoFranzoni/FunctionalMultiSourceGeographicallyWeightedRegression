@@ -54,3 +54,6 @@ Functional data, over a 1D domain, rather than response reconstruction weights, 
 \item predictor: \code{\link{predict_FWR}}}
 \item Package installation check: \code{\link{installation_fdagwr}}}
 }
+\author{
+Andrea Enrico Franzoni, Alessandra Menafoglio
+}

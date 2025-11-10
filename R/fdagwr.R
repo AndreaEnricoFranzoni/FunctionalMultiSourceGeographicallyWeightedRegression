@@ -46,6 +46,7 @@
 #'\item predictor: \code{\link{predict_FWR}}}
 #'\item Package installation check: \code{\link{installation_fdagwr}}}
 #'
+#'@author Andrea Enrico Franzoni, Alessandra Menafoglio
 #'
 #'@docType package
 #'@name fdagwr
