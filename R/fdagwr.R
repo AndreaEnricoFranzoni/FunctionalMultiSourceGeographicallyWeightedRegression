@@ -45,6 +45,24 @@
 #'\item predictor: \code{\link{predict_FWR}}}
 #'\item Package installation check: \code{\link{installation_fdagwr}}}
 #'
+#'@section To cite the package, please use:
+#'
+#'\preformatted{
+#'citation("fdagwr")
+#'}
+#'
+#'that will display on the R console:
+#'\preformatted{
+#'@Manual{,
+#'  title = {fdagwr: a package for Functional Weighted Regression},
+#'  author = {Andrea Enrico Franzoni and Alessandra Menafoglio},
+#'  year = {2025},
+#'  note = {R package version 1.0.0},
+#'  doi = {10.5281/zenodo.17534834},
+#'  url = {https://github.com/AndreaEnricoFranzoni/FunctionalMultiSourceGeographicallyWeightedRegression}
+#'}  
+#'}
+#'
 #'
 #'@docType package
 #'@name fdagwr
