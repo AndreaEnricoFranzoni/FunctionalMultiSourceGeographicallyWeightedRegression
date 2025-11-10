@@ -13,23 +13,13 @@ Available models: Functional Weighted Regression (FWR), Functional Geographicall
 Functional Mixed Geographically Weighted Regression (FGWR), Functional Multi-Source Geographically Weighted Regression (FMSGWR), both ESC and SEC versions.
 Functional data, over a 1D domain, rather than response reconstruction weights, have to be represented as basis expansion in advance.
 }
-\section{To cite the package, please use}{
-
-
-\preformatted{
-citation("fdagwr")
-}
-
-that will display on the R console:
-\preformatted{
-}
-
 \references{
 \itemize{
 \item M. Fervari, A. Menafoglio and T. Bortolotti, \emph{"A Functional Multi-Source Geographically Weighted Regression for Ground Motion Modelling in Italy"}.2025.
 \item T. Bortolotti, R. Peli, G. Lanzano, S. Sgobba and A. Menafoglio, \emph{"Weighted functional data analysis for the calibration of a ground motion model in italy"}. Journal of the American Statistical Association, 119(547):1697–1708, 2024.
 \item L. Caramenti, A. Menafoglio, S. Sgobba and G. Lanzano, \emph{"Multi-source geographically weighted regression for regionalized ground-motion models"}. Spatial Statistics, 47:100610, 2022.
 \item Source code: \href{https://github.com/AndreaEnricoFranzoni/FunctionalMultiSourceGeographicallyWeightedRegression}{fdagwr implementation}
+\item To cite the package, please use: \preformatted{citation("fdagwr")}
 }
 }
 \seealso{

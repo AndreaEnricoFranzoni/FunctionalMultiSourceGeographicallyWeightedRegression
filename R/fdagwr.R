@@ -12,6 +12,7 @@
 #'\item T. Bortolotti, R. Peli, G. Lanzano, S. Sgobba and A. Menafoglio, \emph{"Weighted functional data analysis for the calibration of a ground motion model in italy"}. Journal of the American Statistical Association, 119(547):1697–1708, 2024.
 #'\item L. Caramenti, A. Menafoglio, S. Sgobba and G. Lanzano, \emph{"Multi-source geographically weighted regression for regionalized ground-motion models"}. Spatial Statistics, 47:100610, 2022.
 #'\item Source code: \href{https://github.com/AndreaEnricoFranzoni/FunctionalMultiSourceGeographicallyWeightedRegression}{fdagwr implementation}
+#'\item To cite the package, please use: \preformatted{citation("fdagwr")}
 #'}
 #'@seealso
 #'\itemize{
@@ -44,24 +45,6 @@
 #'\item model fitting: \code{\link{FWR}}
 #'\item predictor: \code{\link{predict_FWR}}}
 #'\item Package installation check: \code{\link{installation_fdagwr}}}
-#'
-#'@section To cite the package, please use:
-#'
-#'\preformatted{
-#'citation("fdagwr")
-#'}
-#'
-#'that will display on the R console:
-#'\preformatted{
-#'@Manual{,
-#'  title = {fdagwr: a package for Functional Weighted Regression},
-#'  author = {Andrea Enrico Franzoni and Alessandra Menafoglio},
-#'  year = {2025},
-#'  note = {R package version 1.0.0},
-#'  doi = {10.5281/zenodo.17534834},
-#'  url = {https://github.com/AndreaEnricoFranzoni/FunctionalMultiSourceGeographicallyWeightedRegression}
-#'}  
-#'}
 #'
 #'
 #'@docType package
