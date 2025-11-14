@@ -256,8 +256,8 @@ sudo apt install -y libfreetype6-dev libfontconfig1-dev libharfbuzz-dev libcairo
 
 
 # Bibliography 
-1. <a id="ref-fervari"></a> **Fervari M., Menafoglio A., Bortolotti T.**, `A Functional Multi-Source Geographically Weighted Regression for
-Ground Motion Modelling in Italy`, 2025
+1. <a id="ref-fervari"></a> **Fervari M.**, `A Functional Multi-Source Geographically Weighted Regression for
+Ground Motion Modelling in Italy`, Master Thesis, Politecnico di Milano, 2025, https://hdl.handle.net/10589/235461
 
 2. <a id="ref-bortolotti"></a> **Bortolotti T., Peli R., Lanzano G., Sgobba S., Menafoglio A.**, `Weighted
 functional data analysis for the calibration of a ground motion model in italy`, *RJournal of the American
